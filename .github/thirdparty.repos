@@ -1,0 +1,6 @@
+repositories:
+  ThirdParty/EasyNavigation:
+    type: git
+    url: https://github.com/EasyNavigation/EasyNavigation.git
+    version: rolling
+    

@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="gps_localizer">
+    <class name="easynav_gps_localizer/GpsLocalizer"  type="easynav::GpsLocalizer" base_class_type="easynav::LocalizerMethodBase">
+      <description>
+      A GPS implementation for the Localizer Method.
+      </description>
+    </class>
+  </library>
+</class_libraries>

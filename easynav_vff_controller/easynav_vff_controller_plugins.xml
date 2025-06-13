@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="vff_controller">
+    <class name="easynav_vff_controller/VffController"  type="easynav::VffController" base_class_type="easynav::ControllerMethodBase">
+      <description>
+      A VFF implementation for the Controller Method.
+      </description>
+    </class>
+  </library>
+</class_libraries>
