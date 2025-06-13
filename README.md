@@ -1,0 +1,1 @@
+# easynav_plugins
