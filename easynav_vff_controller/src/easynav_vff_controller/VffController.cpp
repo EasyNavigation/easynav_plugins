@@ -23,9 +23,14 @@
 #include <expected>
 
 #include "easynav_vff_controller/VffController.hpp"
+#include "easynav_common/types/NavState.hpp"
+#include "easynav_common/types/PointPerception.hpp"
 
-#include <tf2/LinearMath/Quaternion.h>
-#include <tf2/LinearMath/Matrix3x3.h>
+#include "nav_msgs/msg/odometry.hpp"
+#include "nav_msgs/msg/goals.hpp"
+
+#include <tf2/LinearMath/Quaternion.hpp>
+#include <tf2/LinearMath/Matrix3x3.hpp>
 
 namespace easynav
 {
@@ -73,11 +78,6 @@ std::expected<void, std::string> VffController::on_initialize()
     "vff/markers_vff", 10);
 
   return {};
-}
-
-geometry_msgs::msg::TwistStamped VffController::get_cmd_vel()
-{
-  return cmd_vel_;
 }
 
 visualization_msgs::msg::MarkerArray
@@ -208,14 +208,17 @@ VFFVectors VffController::get_vff(
   return vff_vector;
 }
 
-void VffController::update_rt(const NavState & nav_state)
+void VffController::update_rt(NavState & nav_state)
 {
-  nav_msgs::msg::Goals all_goals = nav_state.goals;
-  nav_msgs::msg::Odometry odom = nav_state.odom;
+  if (!nav_state.has("goals")) {return;}
+  if (!nav_state.has("robot_pose")) {return;}
+
+  const auto & all_goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
 
   // Current position
-  double current_x_ = odom.pose.pose.position.x;
-  double current_y_ = odom.pose.pose.position.y;
+  double current_x_ = robot_pose.pose.pose.position.x;
+  double current_y_ = robot_pose.pose.pose.position.y;
 
   // If a goal is set
   if (!all_goals.goals.empty()) {
@@ -249,8 +252,8 @@ void VffController::update_rt(const NavState & nav_state)
 
     // Extract the yaw angle from the NavState
     tf2::Quaternion q(
-      nav_state.odom.pose.pose.orientation.x, nav_state.odom.pose.pose.orientation.y,
-      nav_state.odom.pose.pose.orientation.z, nav_state.odom.pose.pose.orientation.w);
+      robot_pose.pose.pose.orientation.x, robot_pose.pose.pose.orientation.y,
+      robot_pose.pose.pose.orientation.z, robot_pose.pose.pose.orientation.w);
 
     tf2::Matrix3x3 imu(q);
     double roll, pitch, yaw;
@@ -272,8 +275,10 @@ void VffController::update_rt(const NavState & nav_state)
       target_reached_ = false;
     }
 
+    const auto perceptions = nav_state.get<PointPerceptions>("points");
+
     auto fused =
-      PerceptionsOpsView(nav_state.perceptions)
+      PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
       .fuse(cmd_vel_.header.frame_id)
       ->filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
@@ -289,11 +294,13 @@ void VffController::update_rt(const NavState & nav_state)
     double module = sqrt(v[0] * v[0] + v[1] * v[1]);
 
     // Calculate the linear and angular velocities
-    cmd_vel_.header.stamp = nav_state.timestamp;
+    cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = std::clamp(module, 0.0, max_speed_);
     cmd_vel_.twist.angular.z = std::clamp(angle, -max_angular_speed_, max_angular_speed_);
     RCLCPP_INFO(get_node()->get_logger(), "[distance: %.2f, yaw_error: %.2f]", distance,
         angle_error);
+
+    nav_state.set("cmd_vel", cmd_vel_);
   }
 }
 

@@ -67,14 +67,16 @@ public:
   virtual std::expected<void, std::string> on_initialize() override;
 
   /**
-   * @brief Retrieve the current robot odometry.
+   * @brief Updates the localization estimate based on the current navigation state.
    *
-   * Returns the last stored odometry message representing the estimated robot pose.
-   * This method should not perform any actual localization computation.
+   * This method is intended to run the localization logic and update the odometry.
+   * In this implementation, the method updates the odometry based on the latest GPS data.
+   * GPS data is used to set the robot's position in the UTM coordinate system.
+   * The origin of the UTM coordinates is set when the first GPS message is received.
    *
-   * @return nav_msgs::msg::Odometry Current localization estimate.
+   * @param nav_state The current navigation state of the system.
    */
-  [[nodiscard]] virtual nav_msgs::msg::Odometry get_odom() override;
+  virtual void update_rt(NavState & nav_state) override;
 
   /**
    * @brief Updates the localization estimate based on the current navigation state.
@@ -86,19 +88,7 @@ public:
    *
    * @param nav_state The current navigation state of the system.
    */
-  virtual void update_rt(const NavState & nav_state) override;
-
-  /**
-   * @brief Updates the localization estimate based on the current navigation state.
-   *
-   * This method is intended to run the localization logic and update the odometry.
-   * In this implementation, the method updates the odometry based on the latest GPS data.
-   * GPS data is used to set the robot's position in the UTM coordinate system.
-   * The origin of the UTM coordinates is set when the first GPS message is received.
-   *
-   * @param nav_state The current navigation state of the system.
-   */
-  virtual void update(const NavState & nav_state) override;
+  virtual void update(NavState & nav_state) override;
 
 private:
   /**

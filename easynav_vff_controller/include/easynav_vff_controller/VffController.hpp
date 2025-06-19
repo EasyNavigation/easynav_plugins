@@ -25,8 +25,12 @@
 
 #include <expected>
 
-#include "geometry_msgs/msg/twist_stamped.hpp"
+#include "pcl/point_cloud.h"
+
 #include "easynav_core/ControllerMethodBase.hpp"
+#include "easynav_common/types/PointPerception.hpp"
+
+#include "geometry_msgs/msg/twist_stamped.hpp"
 #include "visualization_msgs/msg/marker.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
 
@@ -87,16 +91,6 @@ public:
   virtual std::expected<void, std::string> on_initialize() override;
 
   /**
-   * @brief Get the current control command.
-   *
-   * This method should return the last control command computed.
-   * It should not run the control algorithm (see update method).
-   *
-   * @return A TwistStamped message with the current control command.
-   */
-  [[nodiscard]] virtual geometry_msgs::msg::TwistStamped get_cmd_vel() override;
-
-  /**
    * @brief Updates the localization estimate based on the current navigation state.
    *
    * This method is intended to run the localization logic and update the odometry.
@@ -104,7 +98,7 @@ public:
    *
    * @param nav_state The current navigation state of the system.
    */
-  virtual void update_rt(const NavState & nav_state) override;
+  virtual void update_rt(NavState & nav_state) override;
 
 private:
   /**
