@@ -13,6 +13,7 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
   <depend>easynav_core</depend>
+  <depend>easynav_common</depend>
   <depend>pluginlib</depend>
   <depend>geographiclib</depend>
   <depend>geographic_msgs</depend>

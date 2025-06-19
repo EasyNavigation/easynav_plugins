@@ -23,6 +23,8 @@
 #include <expected>
 #include "easynav_gps_localizer/GpsLocalizer.hpp"
 
+#include "easynav_common/RTTFBuffer.hpp"
+
 namespace easynav
 {
 
@@ -61,6 +63,9 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
   transform.transform.rotation.z = 0.0;
   transform.transform.rotation.w = 1.0;
   static_broadcaster_->sendTransform(transform);
+
+  RTTFBuffer::getInstance()->setTransform(transform, "easynav", true);
+
   return {};
 }
 
@@ -75,17 +80,12 @@ void GpsLocalizer::imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
   imu_msg_ = std::move(*msg);
 }
 
-nav_msgs::msg::Odometry GpsLocalizer::get_odom()
+
+void GpsLocalizer::update_rt(NavState & nav_state)
 {
-  return odom_;
 }
 
-void GpsLocalizer::update(const NavState & nav_state)
-{
-  update_rt(nav_state);
-}
-
-void GpsLocalizer::update_rt(const NavState & nav_state)
+void GpsLocalizer::update(NavState & nav_state)
 {
   // Convert GPS coordinates to UTM
   double lat = gps_msg_.latitude;
@@ -106,7 +106,7 @@ void GpsLocalizer::update_rt(const NavState & nav_state)
   }
 
   // Get XY cartesian coordinates respect to the origin
-  odom_.header.stamp = nav_state.timestamp;
+  odom_.header.stamp = gps_msg_.header.stamp;
   odom_.header.frame_id = "map";
   odom_.child_frame_id = "base_link";
   odom_.pose.pose.position.x = utm_x - origin_utm_.x;
@@ -114,6 +114,8 @@ void GpsLocalizer::update_rt(const NavState & nav_state)
 
   // Extract the yaw angle from the IMU data
   odom_.pose.pose.orientation = imu_msg_.orientation;
+
+  nav_state.set("robot_pose", odom_);
 }
 
 }  // namespace easynav

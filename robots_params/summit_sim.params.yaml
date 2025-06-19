@@ -30,5 +30,7 @@ sensors_node:
     perception_default_frame: odom
     lidar:
       topic: /front_laser_sensor/points
-      type: PointCloud
+      type: sensor_msgs/msg/PointCloud2
+      group: points
+
 

@@ -12,7 +12,10 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
   <depend>pluginlib</depend>
+  <depend>easynav_common</depend>
+  <depend>nav_msgs</depend>
   <depend>easynav_core</depend>
+  <depend>pcl_ros</depend>
   <depend>visualization_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>

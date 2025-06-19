@@ -38,13 +38,10 @@ target_include_directories(gps_localizer PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
 )
-ament_target_dependencies(gps_localizer
-  easynav_core
-  pluginlib
-  geographic_msgs
-)
-
 target_link_libraries(gps_localizer
+  easynav_core::easynav_core
+  pluginlib::pluginlib
+  ${geographic_msgs_TARGETS}
   GeographicLib
   ${GeographicLib_LIBRARIES}
 )

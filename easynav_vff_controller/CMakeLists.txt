@@ -13,6 +13,9 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(easynav_core REQUIRED)
+find_package(easynav_common REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(PCL REQUIRED COMPONENTS common io)
 find_package(pluginlib REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(tf2 REQUIRED)
@@ -21,6 +24,7 @@ set(dependencies
   rclcpp
   rclcpp_lifecycle
   easynav_core
+  easynav_common
   pluginlib
   visualization_msgs
   tf2
@@ -32,11 +36,15 @@ add_library(vff_controller SHARED
 target_include_directories(vff_controller PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
+  ${PCL_INCLUDE_DIRS}
 )
-ament_target_dependencies(vff_controller
-  easynav_core
-  pluginlib
-  visualization_msgs
+target_link_libraries(vff_controller
+  easynav_core::easynav_core
+  easynav_common::easynav_common
+  pluginlib::pluginlib
+  ${nav_msgs_TARGETS}
+  ${visualization_msgs_TARGETS}
+  ${PCL_LIBRARIES}
 )
 
 install(DIRECTORY include/
