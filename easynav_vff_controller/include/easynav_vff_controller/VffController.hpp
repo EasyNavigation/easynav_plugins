@@ -164,29 +164,12 @@ private:
     std::string frame_id);
 
   /**
-   * @brief If the target is reached.
-   */
-  bool target_reached_ = false;
-
-  /**
-   * @brief Previous goal.
-   */
-  geometry_msgs::msg::Point previous_goal_;
-  bool has_previous_goal_ = false;
-
-  /**
    * @brief Distance to the obstacle.
    *
    * This parameter defines the distance which the obstacle is taken into account.
    * If the distance to the obstacle is less than this value, the robot will stop.
    */
   float distance_obstacle_detection_;
-
-  /**
-   * @brief Distance to the goal.
-   *
-   */
-  float distance_to_goal_;
 
   /**
    * @brief Obstacle detection parameters.
