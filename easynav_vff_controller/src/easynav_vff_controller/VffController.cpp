@@ -28,6 +28,7 @@
 
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/goals.hpp"
+#include "nav_msgs/msg/path.hpp"
 
 #include <tf2/LinearMath/Quaternion.hpp>
 #include <tf2/LinearMath/Matrix3x3.hpp>
@@ -53,7 +54,6 @@ std::expected<void, std::string> VffController::on_initialize()
 
   node->get_parameter<float>(plugin_name + ".distance_obstacle_detection",
       distance_obstacle_detection_);
-  node->get_parameter<float>(plugin_name + ".distance_to_goal", distance_to_goal_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_x_min", obstacle_detection_x_min_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_x_max", obstacle_detection_x_max_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_y_min", obstacle_detection_y_min_);
@@ -185,7 +185,7 @@ VFFVectors VffController::get_vff(
   if (marker_array_pub_->get_subscription_count() > 0) {
     // Publish debug markers
     visualization_msgs::msg::Marker marker;
-    marker.header.frame_id = cmd_vel_.header.frame_id;
+    marker.header.frame_id = "base_link";
     marker.header.stamp = get_node()->now();
     marker.type = visualization_msgs::msg::Marker::SPHERE;
     marker.id = 456;
@@ -214,6 +214,16 @@ void VffController::update_rt(NavState & nav_state)
   if (!nav_state.has("robot_pose")) {return;}
 
   const auto & all_goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+
+  if (all_goals.goals.empty()) {
+    cmd_vel_.header.frame_id = "map";
+    cmd_vel_.header.stamp = get_node()->now();
+    cmd_vel_.twist.linear.x = 0.0;
+    cmd_vel_.twist.angular.z = 0.0;
+    nav_state.set("cmd_vel", cmd_vel_);
+    return;
+  }
+
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
 
   // Current position
@@ -222,23 +232,9 @@ void VffController::update_rt(NavState & nav_state)
 
   // If a goal is set
   if (!all_goals.goals.empty()) {
-    // Nuevo goal recibido
-    geometry_msgs::msg::Point new_goal;
-    new_goal.x = all_goals.goals[0].pose.position.x;
-    new_goal.y = all_goals.goals[0].pose.position.y;
 
-    // Comprobar si es diferente al anterior
-    bool new_goal_received = !has_previous_goal_ ||
-      std::hypot(new_goal.x - previous_goal_.x, new_goal.y - previous_goal_.y) > 0.01;
-
-    if (new_goal_received) {
-      RCLCPP_INFO(get_node()->get_logger(), "New goal [%f, %f]", new_goal.x, new_goal.y);
-      target_reached_ = false;
-      previous_goal_ = new_goal;
-      has_previous_goal_ = true;
-    }
-
-    goal_ = new_goal;
+    goal_.x = all_goals.goals[0].pose.position.x;
+    goal_.y = all_goals.goals[0].pose.position.y;
 
     // Calculate the difference in position
     double dx = goal_.x - current_x_;
@@ -262,31 +258,18 @@ void VffController::update_rt(NavState & nav_state)
     // Calculate the angle error
     double angle_error = normalize_angle(bearing - yaw);
 
-    if (distance < distance_to_goal_) {
-      if (target_reached_) {return;}
-      // Target reached → stop the robot
-      RCLCPP_INFO(get_node()->get_logger(), "Target reached");
-      cmd_vel_.twist.linear.x = 0.0;
-      cmd_vel_.twist.angular.z = 0.0;
-      goal_ = geometry_msgs::msg::Point();
-      target_reached_ = true;
-      return;
-    } else {
-      target_reached_ = false;
-    }
-
     const auto perceptions = nav_state.get<PointPerceptions>("points");
 
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
-      .fuse(cmd_vel_.header.frame_id)
+      .fuse("base_link")
       ->filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
           obstacle_detection_z_max_}).as_points();
 
     // Get VFF vectors
-    const VFFVectors & vff = get_vff(angle_error, fused, cmd_vel_.header.frame_id);
+    const VFFVectors & vff = get_vff(angle_error, fused, "base_link");
 
     // Use result vector to calculate output speed
     const auto & v = vff.result;

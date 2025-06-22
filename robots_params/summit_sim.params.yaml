@@ -1,3 +1,20 @@
+system_node:
+  ros__parameters:
+    use_sim_time: true
+    position_tolerance: 1.0
+    angle_tolerance: 3.14
+
+sensors_node:
+  ros__parameters:
+    use_sim_time: true
+    forget_time: 0.5
+    sensors: [lidar]
+    perception_default_frame: odom
+    lidar:
+      topic: /front_laser_sensor/points
+      type: sensor_msgs/msg/PointCloud2
+      group: points
+
 controller_node:
   ros__parameters:
     use_sim_time: true
@@ -5,7 +22,6 @@ controller_node:
     vff:
       plugin: easynav_vff_controller/VffController
       distance_obstacle_detection_: 3.0
-      distance_to_goal_: 1.0
       obstacle_detection_x_min_: 0.5
       obstacle_detection_x_max_: 10.0
       obstacle_detection_y_min_: -10.0
@@ -22,15 +38,5 @@ localizer_node:
     gps:
       plugin: easynav_gps_localizer/GpsLocalizer
 
-sensors_node:
-  ros__parameters:
-    use_sim_time: true
-    forget_time: 0.5
-    sensors: [lidar]
-    perception_default_frame: odom
-    lidar:
-      topic: /front_laser_sensor/points
-      type: sensor_msgs/msg/PointCloud2
-      group: points
 
 
