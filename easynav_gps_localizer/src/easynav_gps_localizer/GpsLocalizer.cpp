@@ -66,6 +66,9 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
 
   RTTFBuffer::getInstance()->setTransform(transform, "easynav", true);
 
+  time_1_ = get_node()->now().seconds();
+  alpha_ = 0.98;
+
   return {};
 }
 
@@ -90,7 +93,7 @@ void GpsLocalizer::update(NavState & nav_state)
   // Convert GPS coordinates to UTM
   double lat = gps_msg_.latitude;
   double lon = gps_msg_.longitude;
-  double utm_x, utm_y;
+  double utm_x, utm_y, roll, pitch, yaw_imu;
   int zone;
   bool northp;
 
@@ -113,7 +116,30 @@ void GpsLocalizer::update(NavState & nav_state)
   odom_.pose.pose.position.y = utm_y - origin_utm_.y;
 
   // Extract the yaw angle from the IMU data
-  odom_.pose.pose.orientation = imu_msg_.orientation;
+  dt_ = get_node()->now().seconds() - time_1_;
+  yaw_gyro_ = yaw_1_ + imu_msg_.angular_velocity.z * dt_;
+
+  // Yaw angle filtered using a complementary filter
+  yaw_filtered_ = (yaw_gyro_ * alpha_) + (yaw_imu * (1 - alpha_));
+
+  tf2::Quaternion q(
+    imu_msg_.orientation.x,
+    imu_msg_.orientation.y,
+    imu_msg_.orientation.z,
+    imu_msg_.orientation.w);
+  tf2::Matrix3x3 m(q);
+  m.getRPY(roll, pitch, yaw_imu);
+
+  // Extract the yaw angle from the IMU data
+  tf2::Quaternion q_filtered;
+  q_filtered.setRPY(roll, pitch, yaw_filtered_);
+  odom_.pose.pose.orientation.x = q_filtered.x();
+  odom_.pose.pose.orientation.y = q_filtered.y();
+  odom_.pose.pose.orientation.z = q_filtered.z();
+  odom_.pose.pose.orientation.w = q_filtered.w();
+  // odom_.pose.pose.orientation = imu_msg_.orientation;
+  yaw_1_ = yaw_filtered_;
+  time_1_ = get_node()->now().seconds();
 
   nav_state.set("robot_pose", odom_);
 }

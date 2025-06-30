@@ -31,6 +31,8 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_ros/static_transform_broadcaster.h"
 #include "sensor_msgs/msg/imu.hpp"
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
 #include <GeographicLib/UTMUPS.hpp>
 
 namespace easynav
@@ -166,6 +168,8 @@ private:
    * @param msg The IMU data message.
    */
   void imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg);
+
+  double alpha_, yaw_gyro_, dt_, yaw_1_, yaw_filtered_, time_1_;
 };
 
 }  // namespace easynav
