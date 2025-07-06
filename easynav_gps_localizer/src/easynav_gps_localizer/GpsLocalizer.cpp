@@ -132,7 +132,7 @@ void GpsLocalizer::update(NavState & nav_state)
   m.getRPY(roll, pitch, yaw_imu);
 
   // Yaw angle filtered using a complementary filter
-  yaw_filtered = (yaw_imu * alpha_) + (yaw_gyro * (1 - alpha_));
+  yaw_filtered = (yaw_gyro * alpha_) + (yaw_imu * (1 - alpha_));
 
   // Extract the yaw angle from the IMU data
   tf2::Quaternion q_filtered;
@@ -142,7 +142,7 @@ void GpsLocalizer::update(NavState & nav_state)
   odom_.pose.pose.orientation.z = q_filtered.z();
   odom_.pose.pose.orientation.w = q_filtered.w();
   // odom_.pose.pose.orientation = imu_msg_.orientation;
-  yaw_1_ = yaw_filtered;
+  yaw_1_ = yaw_gyro;
   time_1_ = get_node()->now().seconds();
 
   nav_state.set("robot_pose", odom_);
