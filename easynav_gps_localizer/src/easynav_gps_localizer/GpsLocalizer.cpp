@@ -52,7 +52,7 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
 
   // Create publisher
   odom_pub_ = node->create_publisher<nav_msgs::msg::Odometry>(
-    "robot/odom_gps", 10);
+    "robot/odom_gps", rclcpp::SensorDataQoS().reliable());
 
   // Create static transform
   geometry_msgs::msg::TransformStamped transform;
@@ -141,7 +141,6 @@ void GpsLocalizer::update(NavState & nav_state)
   odom_.pose.pose.orientation.y = q_filtered.y();
   odom_.pose.pose.orientation.z = q_filtered.z();
   odom_.pose.pose.orientation.w = q_filtered.w();
-  // odom_.pose.pose.orientation = imu_msg_.orientation;
   yaw_1_ = yaw_gyro;
   time_1_ = get_node()->now().seconds();
 
