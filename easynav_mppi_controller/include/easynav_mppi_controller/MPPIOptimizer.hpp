@@ -1,0 +1,118 @@
+// Copyright 2025 Intelligent Robotics Lab
+//
+// This file is part of the project Easy Navigation (EasyNav in short)
+// licensed under the GNU General Public License v3.0.
+// See <http://www.gnu.org/licenses/> for details.
+
+// #pragma once
+#ifndef EASYNAV_MPPI_CONTROLLER__MPPIOPTIMIZER_HPP_
+#define EASYNAV_MPPI_CONTROLLER__MPPIOPTIMIZER_HPP_
+
+#include <utility>
+#include <vector>
+#include <random>
+
+#include "geometry_msgs/msg/pose.hpp"
+#include "nav_msgs/msg/path.hpp"
+
+namespace easynav
+{
+
+/// \brief Result structure for MPPI optimization containing control commands and trajectories.
+struct MPPIResult
+{
+  double v; ///< Linear velocity command.
+  double w; ///< Angular velocity command.
+  std::vector<std::vector<std::pair<double, double>>> all_trajectories; ///< All sampled trajectories.
+  std::vector<std::pair<double, double>> best_trajectory; ///< Best trajectory found during optimization.
+};
+
+struct TrajectorySample
+{
+  double v;     ///< Linear velocity for this sample.
+  double w;     ///< Angular velocity for this sample.
+  double cost;  ///< Cost associated with this trajectory sample.
+};
+
+class MPPIOptimizer
+{
+public:
+  /// \brief Constructor for MPPIOptimizer.
+  /// \param num_samples Number of samples to generate for MPPI.
+  /// \param horizon_steps Number of steps in the prediction horizon.
+  /// \param dt Time step for the simulation.
+  /// \param lambda Temperature parameter for MPPI.
+  MPPIOptimizer(
+    double num_samples, double horizon_steps, double dt, double lambda,
+    double max_lin_vel = 1.0, double max_ang_vel = 1.0, double fov = M_PI / 2.0);
+
+  /// \brief Computes the control commands using MPPI optimization.
+  /// \param current_pose Current pose of the robot.
+  /// \param path Planned path to follow.
+  /// \return MPPIResult containing the best control commands and trajectories.
+  MPPIResult compute_control(
+    const geometry_msgs::msg::Pose & current_pose,
+    const nav_msgs::msg::Path & path);
+
+private:
+  const double ANGLE_THRESHOLD = 0.35; ///< Threshold for angle alignment with the goal in radians.
+  const double ROT_SPEED = 0.5; ///< Maximum angular speed in radians per second.
+
+  double num_samples_;    ///< Number of samples to generate for MPPI.
+  double horizon_steps_;  ///< Number of steps in the prediction horizon.
+  double dt_;             ///< Time step for the simulation.
+  double lambda_;         ///< Temperature parameter for MPPI.
+
+  double max_lin_vel_; ///< Maximum linear velocity in m/s.
+  double max_ang_vel_; ///< Maximum angular velocity in rad/s.
+  double fov_;  //< Field of view in radians for trajectory sampling.
+
+  std::default_random_engine rng_; ///< Random number generator for sampling.
+  std::normal_distribution<double> normal_ = std::normal_distribution<double>(0.0, 0.5); ///< Normal distribution for noise in sampling.
+
+  /// \brief Computes the cost of a trajectory based on its distance to the path and heading error.
+  /// \param trajectory The trajectory to evaluate.
+  /// \param path The planned path to follow.
+  /// \param v Linear velocity of the trajectory.
+  /// \param w Angular velocity of the trajectory.
+  /// \param initial_yaw Initial yaw orientation of the robot.
+  /// \return The computed cost of the trajectory.
+  double compute_cost(
+    const std::vector<std::pair<double, double>> & trajectory,
+    const nav_msgs::msg::Path & path,
+    double v, double w, double initial_yaw);
+
+  /// \brief Simulates a trajectory based on initial position, orientation, and velocities.
+  /// \param x Initial x position.
+  /// \param y Initial y position.
+  /// \param yaw Initial yaw orientation.
+  /// \param v Linear velocity.
+  /// \param w Angular velocity.
+  /// \return The simulated trajectory.
+  std::vector<std::pair<double, double>> simulate_trajectory(
+    double x, double y, double yaw,
+    double v, double w);
+
+  /// \brief Computes the heading error between the robot's current orientation and the target point.
+  /// \param robot_yaw Current yaw orientation of the robot.
+  /// \param target_x X coordinate of the target point.
+  /// \param target_y Y coordinate of the target point.
+  /// \param robot_x X coordinate of the robot's current position.
+  /// \param robot_y Y coordinate of the robot's current position.
+  /// \return The heading error in radians.
+  double heading_error(
+    double robot_yaw,
+    double target_x, double target_y,
+    double robot_x, double robot_y);
+
+  /// \brief Computes the shortest angular distance between two angles.
+  /// \param from Starting angle in radians.
+  /// \param to Ending angle in radians.
+  /// \return The shortest angular distance in radians.
+  double shortest_angular_distance(double from, double to);
+
+};
+
+}  // namespace easynav
+
+#endif  // EASYNAV_MPPI_CONTROLLER__MPPIOPTIMIZER_HPP_
