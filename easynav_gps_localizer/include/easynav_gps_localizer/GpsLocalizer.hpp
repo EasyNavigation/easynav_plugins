@@ -31,6 +31,8 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_ros/static_transform_broadcaster.h"
 #include "sensor_msgs/msg/imu.hpp"
+#include "tf2/LinearMath/Quaternion.hpp"
+#include "tf2/LinearMath/Matrix3x3.hpp"
 #include <GeographicLib/UTMUPS.hpp>
 
 namespace easynav
@@ -106,6 +108,14 @@ private:
    */
   geometry_msgs::msg::Point origin_utm_;
 
+  /** 
+   * @brief odometry publisher
+   * 
+   * This publisher publsh in a topic the odom value
+   * It is used to validate the localization
+  */
+  rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub_;
+
   /**
    * @brief Subscriber for GPS data.
    *
@@ -166,6 +176,8 @@ private:
    * @param msg The IMU data message.
    */
   void imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg);
+
+  double alpha_, dt_, yaw_1_, time_1_;
 };
 
 }  // namespace easynav
