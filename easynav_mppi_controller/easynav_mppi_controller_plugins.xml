@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_mppi_controller">
+    <class name="easynav_mppi_controller/MPPIController"  type="easynav::MPPIController" base_class_type="easynav::ControllerMethodBase">
+      <description>
+      A MPPI implementation for a Controller.
+      </description>
+    </class>
+  </library>
+</class_libraries>

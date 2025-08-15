@@ -1,0 +1,175 @@
+// Copyright 2025 Intelligent Robotics Lab
+//
+// This file is part of the project Easy Navigation (EasyNav in short)
+// licensed under the GNU General Public License v3.0.
+// See <http://www.gnu.org/licenses/> for details.
+//
+// Easy Navigation program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+/// \file
+/// \brief Implementation of the MPPIController class.
+
+#include <expected>
+
+#include "tf2/utils.hpp"
+
+#include "easynav_mppi_controller/MPPIController.hpp"
+
+#include "nav_msgs/msg/odometry.hpp"
+
+namespace easynav
+{
+
+MPPIController::MPPIController() {}
+
+MPPIController::~MPPIController() = default;
+
+std::expected<void, std::string>
+MPPIController::on_initialize()
+{
+  auto node = get_node();
+  const auto & plugin_name = get_plugin_name();
+
+  node->declare_parameter<int>(plugin_name + ".num_samples", num_samples_);
+  node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
+  node->declare_parameter<double>(plugin_name + ".dt", dt_);
+  node->declare_parameter<double>(plugin_name + ".lambda", lambda_);
+
+  node->get_parameter<int>(plugin_name + ".num_samples", num_samples_);
+  node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
+  node->get_parameter<double>(plugin_name + ".dt", dt_);
+  node->get_parameter<double>(plugin_name + ".lambda", lambda_);
+
+  optimizer_ = std::make_unique<MPPIOptimizer>(num_samples_, horizon_steps_, dt_, lambda_);
+
+  mppi_candidates_pub_ =
+    node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/candidates", 10);
+  mppi_optimal_pub_ =
+    node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/optimal_path", 10);
+
+  return {};
+}
+
+void MPPIController::publish_mppi_markers(
+  const std::vector<std::vector<std::pair<double, double>>> & all_trajs,
+  const std::vector<std::pair<double, double>> & best_traj)
+{
+  visualization_msgs::msg::MarkerArray candidates;
+  visualization_msgs::msg::MarkerArray optimal;
+  int id = 0;
+
+  // Candidates in blue
+  for (const auto & traj : all_trajs) {
+    visualization_msgs::msg::Marker marker;
+    marker.header.frame_id = "map";
+    marker.header.stamp = rclcpp::Clock().now();
+    marker.ns = "mppi_candidates";
+    marker.id = id++;
+    marker.type = visualization_msgs::msg::Marker::LINE_STRIP;
+    marker.action = visualization_msgs::msg::Marker::ADD;
+    marker.scale.x = 0.02;
+    marker.color.r = 0.0;
+    marker.color.g = 0.0;
+    marker.color.b = 1.0;
+    marker.color.a = 0.5;
+
+    for (const auto & [x, y] : traj) {
+      geometry_msgs::msg::Point p;
+      p.x = x;
+      p.y = y;
+      p.z = 0.05;
+      marker.points.push_back(p);
+    }
+
+    candidates.markers.push_back(marker);
+  }
+
+  // Best trajectory in red
+  visualization_msgs::msg::Marker best_marker;
+  best_marker.header.frame_id = "map";
+  best_marker.header.stamp = rclcpp::Clock().now();
+  best_marker.ns = "mppi_optimal_path";
+  best_marker.id = id++;
+  best_marker.type = visualization_msgs::msg::Marker::LINE_STRIP;
+  best_marker.action = visualization_msgs::msg::Marker::ADD;
+  best_marker.scale.x = 0.05;
+  best_marker.color.r = 1.0;
+  best_marker.color.g = 0.0;
+  best_marker.color.b = 0.0;
+  best_marker.color.a = 0.8;
+
+  for (const auto & [x, y] : best_traj) {
+    geometry_msgs::msg::Point p;
+    p.x = x;
+    p.y = y;
+    p.z = 0.1;
+    best_marker.points.push_back(p);
+  }
+
+  optimal.markers.push_back(best_marker);
+
+  // Publish the markers
+  mppi_candidates_pub_->publish(candidates);
+  mppi_optimal_pub_->publish(optimal);
+}
+
+
+void
+MPPIController::update_rt(NavState & nav_state)
+{
+  if (!nav_state.has("path") || !nav_state.has("robot_pose")) {
+    return;
+  }
+
+  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+
+  if (path.poses.empty()) {
+    // If the path is empty, stop the robot and clear markers
+    twist_stamped_.header.frame_id = path.header.frame_id;
+    twist_stamped_.header.stamp = get_node()->now();
+    twist_stamped_.twist.linear.x = 0.0;
+    twist_stamped_.twist.angular.z = 0.0;
+    nav_state.set("cmd_vel", twist_stamped_);
+
+    visualization_msgs::msg::MarkerArray clear_markers;
+    visualization_msgs::msg::Marker delete_all;
+    delete_all.action = visualization_msgs::msg::Marker::DELETEALL;
+    clear_markers.markers.push_back(delete_all);
+
+    mppi_candidates_pub_->publish(clear_markers);
+    mppi_optimal_pub_->publish(clear_markers);
+    return;
+  }
+
+  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+
+  // Compute the control using MPPI
+  auto result = optimizer_->compute_control(pose, path);
+
+  // Publish the computed velocity command
+  twist_stamped_.header.frame_id = path.header.frame_id;
+  twist_stamped_.header.stamp = get_node()->now();
+  twist_stamped_.twist.linear.x = result.v;
+  twist_stamped_.twist.angular.z = result.w;
+
+  nav_state.set("cmd_vel", twist_stamped_);
+
+  // Publish the MPPI markers
+  publish_mppi_markers(result.all_trajectories, result.best_trajectory);
+}
+
+}  // namespace easynav
+
+#include <pluginlib/class_list_macros.hpp>
+PLUGINLIB_EXPORT_CLASS(easynav::MPPIController, easynav::ControllerMethodBase)
