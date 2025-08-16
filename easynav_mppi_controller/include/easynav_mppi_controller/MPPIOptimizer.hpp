@@ -14,6 +14,8 @@
 
 #include "geometry_msgs/msg/pose.hpp"
 #include "nav_msgs/msg/path.hpp"
+#include "pcl/point_cloud.h"
+#include "pcl/point_types.h"
 
 namespace easynav
 {
@@ -42,30 +44,34 @@ public:
   /// \param horizon_steps Number of steps in the prediction horizon.
   /// \param dt Time step for the simulation.
   /// \param lambda Temperature parameter for MPPI.
+  /// \param max_lin_vel Maximum linear velocity in m/s.
+  /// \param max_ang_vel Maximum angular velocity in rad/s.
+  /// \param fov Field of view in radians for trajectory sampling.
+  /// \param safety_radius Safety radius for obstacle avoidance in meters.
   MPPIOptimizer(
     double num_samples, double horizon_steps, double dt, double lambda,
-    double max_lin_vel = 1.0, double max_ang_vel = 1.0, double fov = M_PI / 2.0);
+    double max_lin_vel = 1.0, double max_ang_vel = 1.0, double fov = M_PI / 2.0,
+    double safety_radius = 0.6);
 
   /// \brief Computes the control commands using MPPI optimization.
   /// \param current_pose Current pose of the robot.
   /// \param path Planned path to follow.
+  /// \param points Point cloud of the environment.
   /// \return MPPIResult containing the best control commands and trajectories.
   MPPIResult compute_control(
     const geometry_msgs::msg::Pose & current_pose,
-    const nav_msgs::msg::Path & path);
+    const nav_msgs::msg::Path & path,
+    const pcl::PointCloud<pcl::PointXYZ> & points);
 
 private:
-  const double ANGLE_THRESHOLD = 0.35; ///< Threshold for angle alignment with the goal in radians.
-  const double ROT_SPEED = 0.5; ///< Maximum angular speed in radians per second.
-
   double num_samples_;    ///< Number of samples to generate for MPPI.
   double horizon_steps_;  ///< Number of steps in the prediction horizon.
   double dt_;             ///< Time step for the simulation.
   double lambda_;         ///< Temperature parameter for MPPI.
-
-  double max_lin_vel_; ///< Maximum linear velocity in m/s.
-  double max_ang_vel_; ///< Maximum angular velocity in rad/s.
-  double fov_;  //< Field of view in radians for trajectory sampling.
+  double max_lin_vel_;    ///< Maximum linear velocity in m/s.
+  double max_ang_vel_;    ///< Maximum angular velocity in rad/s.
+  double fov_;            ///< Field of view in radians for trajectory sampling.
+  double safety_radius_;  ///< Safety radius for obstacle avoidance in meters.
 
   std::default_random_engine rng_; ///< Random number generator for sampling.
   std::normal_distribution<double> normal_ = std::normal_distribution<double>(0.0, 0.5); ///< Normal distribution for noise in sampling.
@@ -76,11 +82,13 @@ private:
   /// \param v Linear velocity of the trajectory.
   /// \param w Angular velocity of the trajectory.
   /// \param initial_yaw Initial yaw orientation of the robot.
+  /// \param points The point cloud of the environment.
   /// \return The computed cost of the trajectory.
   double compute_cost(
     const std::vector<std::pair<double, double>> & trajectory,
     const nav_msgs::msg::Path & path,
-    double v, double w, double initial_yaw);
+    double v, double w, double initial_yaw,
+    const pcl::PointCloud<pcl::PointXYZ> & points);
 
   /// \brief Simulates a trajectory based on initial position, orientation, and velocities.
   /// \param x Initial x position.

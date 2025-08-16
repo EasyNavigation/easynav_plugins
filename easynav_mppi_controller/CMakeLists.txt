@@ -17,6 +17,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
+find_package(PCL REQUIRED COMPONENTS common io)
 
 
 add_library(${PROJECT_NAME} SHARED
@@ -26,6 +27,7 @@ add_library(${PROJECT_NAME} SHARED
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+  ${PCL_INCLUDE_DIRS}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
@@ -35,6 +37,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
   ${visualization_msgs_TARGETS}
+  ${PCL_LIBRARIES}
 )
 
 install(
@@ -75,6 +78,6 @@ ament_export_dependencies(
   geometry_msgs
   nav_msgs
   visualization_msgs
-
 )
+
 ament_package()

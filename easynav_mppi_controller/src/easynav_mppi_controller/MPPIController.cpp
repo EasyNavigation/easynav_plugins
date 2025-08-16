@@ -25,6 +25,8 @@
 #include "tf2/utils.hpp"
 
 #include "easynav_mppi_controller/MPPIController.hpp"
+#include "easynav_common/types/Perceptions.hpp"
+#include "easynav_common/types/PointPerception.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
 
@@ -45,13 +47,22 @@ MPPIController::on_initialize()
   node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->declare_parameter<double>(plugin_name + ".dt", dt_);
   node->declare_parameter<double>(plugin_name + ".lambda", lambda_);
+  node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
+  node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  node->declare_parameter<double>(plugin_name + ".fov", fov_);
+  node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
 
   node->get_parameter<int>(plugin_name + ".num_samples", num_samples_);
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
   node->get_parameter<double>(plugin_name + ".lambda", lambda_);
+  node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
+  node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  node->get_parameter<double>(plugin_name + ".fov", fov_);
+  node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
 
-  optimizer_ = std::make_unique<MPPIOptimizer>(num_samples_, horizon_steps_, dt_, lambda_);
+  optimizer_ = std::make_unique<MPPIOptimizer>(num_samples_, horizon_steps_, dt_, lambda_,
+    max_lin_vel_, max_ang_vel_, fov_, safety_radius_);
 
   mppi_candidates_pub_ =
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/candidates", 10);
@@ -153,9 +164,23 @@ MPPIController::update_rt(NavState & nav_state)
   }
 
   const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto perceptions = nav_state.get<PointPerceptions>("points");
 
-  // Compute the control using MPPI
-  auto result = optimizer_->compute_control(pose, path);
+  const auto & filtered = PointPerceptionsOpsView(perceptions)
+    .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})
+    .fuse("map")
+    ->filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .collapse({NAN, NAN, 0.1})
+    ->downsample(0.1)
+    .as_points();
+
+  if (filtered.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(),
+        "No valid points available for MPPI optimization, using the path only.");
+  }
+
+  // Compute the control using MPPI with points
+  auto result = optimizer_->compute_control(pose, path, filtered);
 
   // Publish the computed velocity command
   twist_stamped_.header.frame_id = path.header.frame_id;
