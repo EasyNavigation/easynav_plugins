@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_serest_controller">
+    <class name="easynav_serest_controller/SerestController"  type="easynav::SerestController" base_class_type="easynav::ControllerMethodBase">
+      <description>
+      A implementation of the SeReST Controller.
+      </description>
+    </class>
+  </library>
+</class_libraries>
