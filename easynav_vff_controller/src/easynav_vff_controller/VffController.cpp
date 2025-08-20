@@ -65,7 +65,7 @@ std::expected<void, std::string> VffController::on_initialize()
 
   // Initialize the odometry message
   cmd_vel_.header.stamp = node->now();
-  cmd_vel_.header.frame_id = "base_link";
+  cmd_vel_.header.frame_id = get_tf_prefix() + "base_link";
   cmd_vel_.twist.linear.x = 0.0;
   cmd_vel_.twist.linear.y = 0.0;
   cmd_vel_.twist.linear.z = 0.0;
@@ -185,7 +185,7 @@ VFFVectors VffController::get_vff(
   if (marker_array_pub_->get_subscription_count() > 0) {
     // Publish debug markers
     visualization_msgs::msg::Marker marker;
-    marker.header.frame_id = "base_link";
+    marker.header.frame_id = frame_id;
     marker.header.stamp = get_node()->now();
     marker.type = visualization_msgs::msg::Marker::SPHERE;
     marker.id = 456;
@@ -216,7 +216,7 @@ void VffController::update_rt(NavState & nav_state)
   const auto & all_goals = nav_state.get<nav_msgs::msg::Goals>("goals");
 
   if (all_goals.goals.empty()) {
-    cmd_vel_.header.frame_id = "map";
+    cmd_vel_.header.frame_id = get_tf_prefix() + "map";
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = 0.0;
     cmd_vel_.twist.angular.z = 0.0;
@@ -263,13 +263,13 @@ void VffController::update_rt(NavState & nav_state)
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
-      .fuse("base_link")
+      .fuse(get_tf_prefix() + "base_link")
       ->filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
           obstacle_detection_z_max_}).as_points();
 
     // Get VFF vectors
-    const VFFVectors & vff = get_vff(angle_error, fused, "base_link");
+    const VFFVectors & vff = get_vff(angle_error, fused, get_tf_prefix() + "base_link");
 
     // Use result vector to calculate output speed
     const auto & v = vff.result;
