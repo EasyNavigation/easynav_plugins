@@ -49,6 +49,8 @@ MPPIController::on_initialize()
   node->declare_parameter<double>(plugin_name + ".lambda", lambda_);
   node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  node->declare_parameter<double>(plugin_name + ".max_linear_acceleration", max_lin_acc_);
+  node->declare_parameter<double>(plugin_name + ".max_angular_acceleration", max_ang_acc_);
   node->declare_parameter<double>(plugin_name + ".fov", fov_);
   node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
 
@@ -58,6 +60,8 @@ MPPIController::on_initialize()
   node->get_parameter<double>(plugin_name + ".lambda", lambda_);
   node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  node->get_parameter<double>(plugin_name + ".max_linear_acceleration", max_lin_acc_);
+  node->get_parameter<double>(plugin_name + ".max_angular_acceleration", max_ang_acc_);
   node->get_parameter<double>(plugin_name + ".fov", fov_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
 

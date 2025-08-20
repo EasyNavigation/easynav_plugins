@@ -52,6 +52,8 @@ protected:
   double lambda_{0.1};        ///< Temperature parameter for MPPI.
   double max_lin_vel_{1.0};   ///< Maximum linear velocity for MPPI.
   double max_ang_vel_{1.0};   ///< Maximum angular velocity for MPPI.
+  double max_lin_acc_{0.5};   ///< Maximum linear acceleration for MPPI.
+  double max_ang_acc_{1.0};   ///< Maximum angular acceleration for MPPI.
   double fov_{M_PI / 2.0};    ///< Field of view for MPPI.
   double safety_radius_{0.6}; ///< Safety radius for obstacle avoidance.
 

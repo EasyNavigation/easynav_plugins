@@ -46,12 +46,14 @@ public:
   /// \param lambda Temperature parameter for MPPI.
   /// \param max_lin_vel Maximum linear velocity in m/s.
   /// \param max_ang_vel Maximum angular velocity in rad/s.
+  /// \param max_lin_acc Maximum linear acceleration in m/s^2.
+  /// \param max_ang_acc Maximum angular acceleration in rad/s^2.
   /// \param fov Field of view in radians for trajectory sampling.
   /// \param safety_radius Safety radius for obstacle avoidance in meters.
   MPPIOptimizer(
     double num_samples, double horizon_steps, double dt, double lambda,
-    double max_lin_vel = 1.0, double max_ang_vel = 1.0, double fov = M_PI / 2.0,
-    double safety_radius = 0.6);
+    double max_lin_vel = 1.0, double max_ang_vel = 1.0, double max_lin_acc = 1.0, 
+    double max_ang_acc = 1.0, double fov = M_PI / 2.0, double safety_radius = 0.6);
 
   /// \brief Computes the control commands using MPPI optimization.
   /// \param current_pose Current pose of the robot.
@@ -70,11 +72,17 @@ private:
   double lambda_;         ///< Temperature parameter for MPPI.
   double max_lin_vel_;    ///< Maximum linear velocity in m/s.
   double max_ang_vel_;    ///< Maximum angular velocity in rad/s.
+  double max_lin_acc_;    ///< Maximum linear acceleration in m/s^2.
+  double max_ang_acc_;    ///< Maximum angular acceleration in rad/s^2.
   double fov_;            ///< Field of view in radians for trajectory sampling.
   double safety_radius_;  ///< Safety radius for obstacle avoidance in meters.
+  double last_v_ = 0.0;   ///< Last linear velocity command for smoothing.
+  double last_w_ = 0.0;   ///< Last angular velocity command for smoothing.
 
   std::default_random_engine rng_; ///< Random number generator for sampling.
-  std::normal_distribution<double> normal_ = std::normal_distribution<double>(0.0, 0.5); ///< Normal distribution for noise in sampling.
+  std::normal_distribution<double> normal_ = std::normal_distribution<double>(0.0, 0.5);    ///< Normal distribution for noise in sampling.
+  std::normal_distribution<double> v_noise_ = std::normal_distribution<double>(0.0, 0.05);  ///< Normal distribution for noise in linear velocity.
+  std::normal_distribution<double> w_noise_ = std::normal_distribution<double>(0.0, 0.02);  ///< Normal distribution for noise in angular velocity.
 
   /// \brief Computes the cost of a trajectory based on its distance to the path and heading error.
   /// \param trajectory The trajectory to evaluate.
@@ -96,10 +104,12 @@ private:
   /// \param yaw Initial yaw orientation.
   /// \param v Linear velocity.
   /// \param w Angular velocity.
+  /// \param path The planned path to follow.
+  /// \param steps Number of steps to simulate.
   /// \return The simulated trajectory.
   std::vector<std::pair<double, double>> simulate_trajectory(
     double x, double y, double yaw,
-    double v, double w);
+    double v, double w, const nav_msgs::msg::Path & path, int steps);
 
   /// \brief Computes the heading error between the robot's current orientation and the target point.
   /// \param robot_yaw Current yaw orientation of the robot.
