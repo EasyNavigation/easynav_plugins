@@ -610,85 +610,84 @@ SerestController::publish_stop(NavState & nav_state, const std::string & frame_i
 void
 SerestController::update_rt(NavState & nav_state)
 {
-  // 0) Tiempo
+  // 0) Time step
   const double dt = compute_dt_and_update_clock();
 
-  // 1) Entradas requeridas
+  // 1) Required inputs
   nav_msgs::msg::Path path;
   nav_msgs::msg::Odometry odom;
   if (!fetch_required_inputs(nav_state, path, odom)) { return; }
 
-  // 2) Estado del robot
+  // 2) Robot state (position + yaw)
   Vec2 robot_xy; double yaw = 0.0;
   robot_state_from_odom(odom, robot_xy, yaw);
 
-  // 3) Polilínea, proyección y cinemática de referencia
+  // 3) Path primitives, closest-point projection, and local reference kinematics
   PathData pd = build_path_data(path);
   Projection prj = project_on_path(pd, robot_xy);
   RefKinematics rk = ref_heading_and_curvature(pd, prj, last_vlin_);
 
-  // 4) Errores en Frenet
+  // 4) Frenet errors: lateral offset and heading error w.r.t. reference tangent
   double e_y = 0.0, e_theta = 0.0;
   frenet_errors(robot_xy, yaw, prj, rk.psi_ref, e_y, e_theta);
 
-  // 5) Goal y zonas lenta/stop
+  // 5) Goal-related terms and slow/stop zone shaping
   double dist_xy_goal = 0.0, e_theta_goal = 0.0, stop_r = 0.0, slow_r = 0.0, gamma_slow = 1.0;
   Vec2 goal_xy; double yaw_goal = 0.0;
   compute_goal_zone(path, robot_xy, yaw, dist_xy_goal, e_theta_goal,
                     stop_r, slow_r, gamma_slow, goal_xy, yaw_goal);
 
-  // 6) Límites de seguridad globales
+  // 6) Global safety limits derived from sensors and curvature
   double d_closest = 0.0, v_safe = 0.0, v_curv = 0.0;
   safety_limits(nav_state, rk, d_closest, v_safe, v_curv);
 
-  // 6.5) Giro-en-sitio TEMPRANO con histéresis y gate de inicio
+  // 6.5) Early turn-in-place with hysteresis (start-of-path aware)
   {
     const double PI = 3.14159265358979323846;
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 
-    // Umbrales internos (no expuestos): entra 60°, sale 35°
+    // Internal angular thresholds (enter/exit)
     const double thr_enter = 60.0 * PI / 180.0;
     const double thr_exit  = 35.0 * PI / 180.0;
-    const double near_start_s = 0.30; // 30 cm desde el inicio de la ruta
+    const double near_start_s = 0.30;  // treat the first 30 cm as the start region
 
-    // Petición base (tu criterio existente) con umbral de entrada
+    // Base request from the regular criterion (using the provided threshold)
     bool tip_request = should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end, thr_enter);
 
-    // Gate de ARRANQUE: si aún muy cerca del inicio y muy desalineado → forzar TiP
+    // Additional start-of-path gate: enforce TiP if still near s*=0 and yaw misalignment is large
     if (!allow_reverse_ && prj.s_star < near_start_s && std::fabs(e_theta) > thr_enter) {
       tip_request = true;
     }
 
-    // Histéresis de estado
+    // Hysteresis on the TiP state
     if (!tip_active_ && tip_request && std::fabs(e_theta) > thr_enter) {
       tip_active_ = true;
     } else if (tip_active_ && (std::fabs(e_theta) < thr_exit || prj.s_star > (near_start_s - 0.10))) {
       tip_active_ = false;
     }
 
-    // Ejecución temprana: v=0 duro (sin arrastre), giro proporcional limitado y RETURN
+    // TiP execution branch: publish v=0 and a bounded angular command, then return
     if (tip_active_) {
-      // Control puro de orientación + succión lateral limitada (suave)
       double w_cmd = -k_theta_ * e_theta
                    - k_y_ * std::atan(e_y / std::max(ell_, 1e-3));
 
       const double gamma_omega = std::max(0.25, gamma_slow);
       w_cmd *= gamma_omega;
 
-      // Limitar por aceleración angular
+      // Angular acceleration limit
       const double max_dvrot = max_angular_acc_ * dt;
       w_cmd = std::clamp(w_cmd, last_vrot_ - max_dvrot, last_vrot_ + max_dvrot);
 
-      // Saturar por velocidad angular máxima
+      // Angular speed saturation
       double vlin = 0.0;
       double vrot = std::clamp(w_cmd, -max_angular_speed_, max_angular_speed_);
 
-      // Actualizar estado interno (evita arrastre lineal en el siguiente ciclo)
+      // Persist current command to avoid linear “drag” on the next cycle
       last_vlin_ = vlin;
       last_vrot_ = vrot;
 
-      // Publica y SAL temprano (evita que nada reabra v > 0)
+      // Publish early; avoid any later block reopening v > 0
       publish_cmd_and_debug(
         nav_state, path, vlin, vrot,
         e_y, e_theta, rk.kappa_hat,
@@ -700,34 +699,34 @@ SerestController::update_rt(NavState & nav_state)
     }
   }
 
-  // 7) Control nominal SeReST-LGS
+  // 7) SeReST-LGS nominal tracking
   const double cos_et = std::cos(e_theta);
   const double cos_et_pos = std::max(0.0, cos_et);
   const double denom = std::max(1e-3, 1.0 - rk.kappa_hat * e_y);
 
-  // Progreso de referencia libre y con slow-zone
+  // Progress reference limited by curvature, safety and configured v_ref
   double v_prog_ref_free = std::min({max_linear_speed_, v_curv, v_safe, v_ref_});
   double v_prog_ref = v_prog_ref_free * gamma_slow;
 
-  // Crucero mínimo si está alineado y fuera de stop-zone (sin reverse)
+  // Maintain a small cruising speed when roughly aligned and outside the stop zone (no reverse)
   const double PI = 3.14159265358979323846;
   const double align_thr = 30.0 * PI / 180.0;
   if (!allow_reverse_ && (dist_xy_goal > stop_r) && std::fabs(e_theta) < align_thr) {
     v_prog_ref = std::max(v_prog_ref, std::min(slow_min_speed_, v_prog_ref_free));
   }
 
-  // Corner‑guard
+  // Corner guard: reduce progress and optionally boost omega near tight corners
   double omega_boost = 1.0, ey_apex_term = 0.0;
   apply_corner_guard(rk, e_y, e_theta, v_prog_ref, omega_boost, ey_apex_term);
 
-  // Avance nominal por la ruta + succión lateral limitada
+  // Nominal progress along the path with bounded lateral “suction”
   double forward_term = ((allow_reverse_ ? std::fabs(cos_et) : cos_et_pos) * v_prog_ref) / denom;
   double lateral_term = k_s_ * e_y;
   double lateral_cap = k_s_share_max_ * std::max(1e-3, forward_term);
   lateral_term = std::clamp(lateral_term, -lateral_cap, lateral_cap);
   double s_dot_nom = forward_term - lateral_term;
 
-  // Giro nominal
+  // Nominal angular rate: curvature feedforward + heading/lateral corrective terms
   double omega_nom = rk.kappa_hat * s_dot_nom
                    - k_theta_ * e_theta
                    - k_y_ * std::atan(e_y / std::max(ell_, 1e-3))
@@ -736,13 +735,13 @@ SerestController::update_rt(NavState & nav_state)
   const double gamma_omega = std::max(0.25, gamma_slow);
   omega_nom *= (omega_boost * gamma_omega);
 
-  // 8) Alineación final en stop‑zone (publica y sale si aplica)
+  // 8) Final alignment inside stop zone (publishes and returns if active)
   if (maybe_final_align_and_publish(
         nav_state, path, dist_xy_goal, stop_r, e_theta_goal, gamma_slow, dt)) {
     return;
   }
 
-  // 9) Reparametrización temporal y reconstrucción de v
+  // 9) Time reparameterization and reconstruction of linear speed
   const double alpha = std::min(1.0, (v_ref_ > 1e-6) ? (v_safe / v_ref_) : 1.0);
   double s_dot = allow_reverse_ ? (alpha * s_dot_nom) : std::max(0.0, alpha * s_dot_nom);
   const double cos_for_v = allow_reverse_
@@ -759,7 +758,7 @@ SerestController::update_rt(NavState & nav_state)
     v_cmd_raw = std::max(0.0, v_cmd_raw);
   }
 
-  // (Opcional) Giro en el sitio “clásico” como salvaguarda (umbral 60° coherente)
+  // Optional classic TiP safeguard using the same angular threshold
   {
     const double turn_in_place_thr = (60.0 * PI / 180.0);
     const double s_total = pd.s_acc.back();
@@ -772,7 +771,7 @@ SerestController::update_rt(NavState & nav_state)
     }
   }
 
-  // 10) Emergencia
+  // 10) Emergency override (hard distance or time-to-collision condition)
   const double v_prev = last_vlin_;
   double vlin = v_cmd_raw;
   double vrot = omega_nom + rk.kappa_hat * (s_dot - s_dot_nom);
@@ -788,12 +787,12 @@ SerestController::update_rt(NavState & nav_state)
     vrot = 0.0;
   }
 
-  // 11) Rate‑limit y saturaciones
+  // 11) Rate limiting and saturations
   rate_limit_and_saturate(dt, vlin, vrot);
   last_vlin_ = vlin;
   last_vrot_ = vrot;
 
-  // 12) Publicación y depuración
+  // 12) Publication and debug values
   const double s_total = pd.s_acc.back();
   const double dist_to_end = s_total - prj.s_star;
   publish_cmd_and_debug(
