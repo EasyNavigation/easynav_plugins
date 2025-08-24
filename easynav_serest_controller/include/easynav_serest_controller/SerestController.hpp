@@ -202,6 +202,67 @@ private:
    */
   double v_curvature_limit(double kappa_hat) const;
 
+ // Gestiona dt y actualiza last_update_ts_. Devuelve dt robusto.
+ double compute_dt_and_update_clock();
+
+  // Comprueba entradas mínimas. Publica stop si faltan y devuelve false.
+  // Si todo ok, rellena 'path' y 'odom' y devuelve true.
+  bool fetch_required_inputs(
+    NavState & nav_state,
+    nav_msgs::msg::Path & path,
+    nav_msgs::msg::Odometry & odom);
+
+  // Extrae estado del robot (xy, yaw) desde la odometría.
+  void robot_state_from_odom(
+    const nav_msgs::msg::Odometry & odom,
+    Vec2 & robot_xy, double & yaw) const;
+
+  // Calcula información de goal y zonas slow/stop.
+  void compute_goal_zone(
+    const nav_msgs::msg::Path & path,
+    const Vec2 & robot_xy, double robot_yaw,
+    double & dist_xy_goal, double & e_theta_goal,
+    double & stop_r, double & slow_r, double & gamma_slow,
+    Vec2 & goal_xy, double & yaw_goal) const;
+
+  // Calcula límites de seguridad globales (distancia obstáculo, v_safe, v_curv).
+  void safety_limits(
+    const NavState & nav_state,
+    const RefKinematics & rk,
+    double & d_closest, double & v_safe, double & v_curv) const;
+
+  // Aplica corner‑guard: ajusta v_prog_ref y obtiene omega_boost + término ápice.
+  void apply_corner_guard(
+    const RefKinematics & rk, double e_y, double e_theta,
+    double & v_prog_ref, double & omega_boost, double & ey_apex_term) const;
+
+  // Determina si debe hacerse giro en el sitio en esta iteración.
+  bool should_turn_in_place(
+    bool allow_reverse, double e_theta, double e_theta_goal,
+    double dist_to_end, double turn_in_place_thr) const;
+
+  // Fase de alineación final: publica y devuelve true si se ha gestionado aquí.
+  bool maybe_final_align_and_publish(
+    NavState & nav_state, const nav_msgs::msg::Path & path,
+    double dist_xy_goal, double stop_r, double e_theta_goal,
+    double gamma_slow, double dt);
+
+  // Aplica rate‑limit y saturaciones finales sobre (vlin, vrot) y actualiza last_*.
+  void rate_limit_and_saturate(double dt, double & vlin, double & vrot);
+
+  // Publica cmd_vel y variables de depuración comunes del final de update_rt.
+  void publish_cmd_and_debug(
+    NavState & nav_state, const nav_msgs::msg::Path & path,
+    double vlin, double vrot,
+    double e_y, double e_theta, double kappa_hat,
+    double d_closest, double v_safe, double v_curv, double alpha,
+    bool allow_reverse, double dist_to_end,
+    double dist_xy_goal, double gamma_slow,
+    int in_final_align, int arrived);
+
+  // Publica parada inmediata con frame y stamp actuales.
+  void publish_stop(NavState & nav_state, const std::string & frame_id);
+
   // --- Parameters ---
 
   /// @brief Allow reverse motion (if false, forward-only).
@@ -234,11 +295,11 @@ private:
   /// @brief Max admissible lateral acceleration (m/s^2).
   double a_lat_max_{1.5};
   /// @brief Geometric safety margin added to obstacle distance (m).
-  double d0_margin_{0.20};
+  double d0_margin_{0.30};
   /// @brief Perception + control latency (s).
   double tau_latency_{0.10};
   /// @brief Hard stop distance threshold (m).
-  double d_hard_{0.15};
+  double d_hard_{0.20};
   /// @brief Time-to-collision emergency threshold (s).
   double t_emerg_{0.25};
 
@@ -284,6 +345,11 @@ private:
   double a_lat_soft_{1.1};
 
   // --- Internal state ---
+
+  bool startup_anchor_active_{true};
+  geometry_msgs::msg::Pose goal_pose_last_{};
+  // Activa/desactiva giro en el sitio con histéresis
+  bool tip_active_{false};
 
   /// @brief Last commanded linear speed (m/s).
   double last_vlin_{0.0};
