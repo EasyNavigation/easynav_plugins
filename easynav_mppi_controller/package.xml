@@ -16,6 +16,7 @@
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>visualization_msgs</depend>
+  <depend>pcl_ros</depend>
 
   <test_depend>rclcpp_lifecycle</test_depend>
   <test_depend>easynav_simple_common</test_depend>
