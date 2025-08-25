@@ -186,6 +186,21 @@ MPPIController::update_rt(NavState & nav_state)
   // Compute the control using MPPI with points
   auto result = optimizer_->compute_control(pose, path, filtered);
 
+  // Prevent abrupt changes in velocity
+  const auto & current_twist = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  double dv = result.v - current_twist.twist.linear.x;
+  double dw = result.w - current_twist.twist.angular.z;
+  double max_dv = max_lin_acc_ * dt_;
+  double max_dw = max_ang_acc_ * dt_;
+  if (std::abs(dv) > max_dv) {
+    result.v = current_twist.twist.linear.x + (dv > 0 ? max_dv : -max_dv);
+  }
+  if (std::abs(dw) > max_dw) {
+    result.w = current_twist.twist.angular.z + (dw > 0 ? max_dw : -max_dw);
+  }
+  result.v = std::clamp(result.v, -max_lin_vel_, max_lin_vel_);
+  result.w = std::clamp(result.w, -max_ang_vel_, max_ang_vel_);
+
   // Publish the computed velocity command
   twist_stamped_.header.frame_id = path.header.frame_id;
   twist_stamped_.header.stamp = get_node()->now();
