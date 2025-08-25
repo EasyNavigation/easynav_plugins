@@ -17,7 +17,8 @@ MPPIOptimizer::MPPIOptimizer(
   double max_lin_vel, double max_ang_vel, double max_lin_acc, double max_ang_acc,
   double fov, double safety_radius)
 : num_samples_(num_samples), horizon_steps_(horizon_steps), dt_(dt), lambda_(lambda),
-  max_lin_vel_(max_lin_vel), max_ang_vel_(max_ang_vel), max_lin_acc_(max_lin_acc), max_ang_acc_(max_ang_acc),
+  max_lin_vel_(max_lin_vel), max_ang_vel_(max_ang_vel), max_lin_acc_(max_lin_acc),
+  max_ang_acc_(max_ang_acc),
   fov_(fov), safety_radius_(safety_radius)
 {
 }
@@ -219,14 +220,14 @@ MPPIResult MPPIOptimizer::compute_control(
     v_scale = 0.5;                       // move moderately
   }
 
-  // Base velocities 
-  // Scale linear velocity based on distance to goal: closer to goal, faster we go 
-  double base_v = max_lin_vel_ * std::min(dist_to_goal, 1.0) * v_scale; 
-  base_v = std::clamp(base_v, 0.0, max_lin_vel_); 
-  
-  // Angular velocity is proportional to the heading error: turn faster if more misaligned 
-  double w_scale = std::min(1.0, 2.0 * angle_mag / M_PI); 
-  double base_w = std::clamp(w_scale * angle_error, -max_ang_vel_, max_ang_vel_); 
+  // Base velocities
+  // Scale linear velocity based on distance to goal: closer to goal, faster we go
+  double base_v = max_lin_vel_ * std::min(dist_to_goal, 1.0) * v_scale;
+  base_v = std::clamp(base_v, 0.0, max_lin_vel_);
+
+  // Angular velocity is proportional to the heading error: turn faster if more misaligned
+  double w_scale = std::min(1.0, 2.0 * angle_mag / M_PI);
+  double base_w = std::clamp(w_scale * angle_error, -max_ang_vel_, max_ang_vel_);
 
   // Generate candidate trajectories
   for (int i = 0; i < num_samples_; ++i) {
