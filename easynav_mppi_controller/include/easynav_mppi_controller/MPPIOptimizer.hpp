@@ -52,7 +52,7 @@ public:
   /// \param safety_radius Safety radius for obstacle avoidance in meters.
   MPPIOptimizer(
     double num_samples, double horizon_steps, double dt, double lambda,
-    double max_lin_vel = 1.0, double max_ang_vel = 1.0, double max_lin_acc = 1.0, 
+    double max_lin_vel = 1.0, double max_ang_vel = 1.0, double max_lin_acc = 1.0,
     double max_ang_acc = 1.0, double fov = M_PI / 2.0, double safety_radius = 0.6);
 
   /// \brief Computes the control commands using MPPI optimization.
