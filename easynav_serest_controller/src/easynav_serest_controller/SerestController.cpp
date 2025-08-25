@@ -76,7 +76,7 @@ SerestController::on_initialize()
   node->declare_parameter<double>(ns + ".kappa_max", kappa_max_);
 
   // For obstacle detection
-  node->declare_parameter<double>(ns + ".dist_search_radius",  dist_search_radius_);
+  node->declare_parameter<double>(ns + ".dist_search_radius", dist_search_radius_);
 
   node->declare_parameter<double>(ns + ".goal_pos_tol", goal_pos_tol_);
   node->declare_parameter<double>(ns + ".goal_yaw_tol_deg", goal_yaw_tol_deg_);
@@ -124,7 +124,7 @@ SerestController::on_initialize()
   node->get_parameter<double>(ns + ".blend_k_per_v", blend_k_per_v_);
   node->get_parameter<double>(ns + ".kappa_max", kappa_max_);
 
-  node->get_parameter<double>(ns + ".dist_search_radius",  dist_search_radius_);
+  node->get_parameter<double>(ns + ".dist_search_radius", dist_search_radius_);
 
   node->get_parameter<double>(ns + ".goal_pos_tol", goal_pos_tol_);
   node->get_parameter<double>(ns + ".goal_yaw_tol_deg", goal_yaw_tol_deg_);
@@ -353,7 +353,7 @@ SerestController::compute_dt_and_update_clock()
 {
   auto now = get_node()->now();
   double dt = (now - last_update_ts_).seconds();
-  if (dt <= 0.0) { dt = 1.0 / 30.0; }
+  if (dt <= 0.0) {dt = 1.0 / 30.0;}
   last_update_ts_ = now;
   return dt;
 }
@@ -457,8 +457,8 @@ SerestController::apply_corner_guard(
   const double kap = std::fabs(rk.kappa_hat);
 
   const double penal = corner_gain_ey_ * e_y_out +
-                       corner_gain_eth_ * eth +
-                       corner_gain_kappa_ * kap;
+    corner_gain_eth_ * eth +
+    corner_gain_kappa_ * kap;
 
   alpha_corner = std::clamp(1.0 / (1.0 + penal), corner_min_alpha_, 1.0);
   omega_boost = 1.0 + corner_boost_omega_ * std::min(1.0, e_y_out / std::max(1e-3, ell_));
@@ -482,7 +482,7 @@ SerestController::should_turn_in_place(
   // y usamos dos umbrales internos sin exponer parámetros.
   const double PI = 3.14159265358979323846;
   const double thr_enter = 60.0 * PI / 180.0; // entra a girar si |e_theta| > 60°
-  const double thr_exit  = 35.0 * PI / 180.0; // sale de girar si |e_theta| < 35°
+  const double thr_exit = 35.0 * PI / 180.0; // sale de girar si |e_theta| < 35°
 
   // No permitimos “atajo” marcha atrás en esta decisión: si no permites reverse,
   // el criterio es más estricto.
@@ -523,8 +523,8 @@ SerestController::maybe_final_align_and_publish(
   } else {
     in_final_align = true;
     double w_cmd = -final_align_k_ * e_theta_goal;
-    if (w_cmd > final_align_wmax_) { w_cmd = final_align_wmax_; }
-    if (w_cmd < -final_align_wmax_) { w_cmd = -final_align_wmax_; }
+    if (w_cmd > final_align_wmax_) {w_cmd = final_align_wmax_;}
+    if (w_cmd < -final_align_wmax_) {w_cmd = -final_align_wmax_;}
 
     const double max_dvrot = max_angular_acc_ * dt;
     w_cmd = std::clamp(w_cmd, last_vrot_ - max_dvrot, last_vrot_ + max_dvrot);
@@ -616,7 +616,7 @@ SerestController::update_rt(NavState & nav_state)
   // 1) Required inputs
   nav_msgs::msg::Path path;
   nav_msgs::msg::Odometry odom;
-  if (!fetch_required_inputs(nav_state, path, odom)) { return; }
+  if (!fetch_required_inputs(nav_state, path, odom)) {return;}
 
   // 2) Robot state (position + yaw)
   Vec2 robot_xy; double yaw = 0.0;
@@ -649,11 +649,12 @@ SerestController::update_rt(NavState & nav_state)
 
     // Internal angular thresholds (enter/exit)
     const double thr_enter = 60.0 * PI / 180.0;
-    const double thr_exit  = 35.0 * PI / 180.0;
+    const double thr_exit = 35.0 * PI / 180.0;
     const double near_start_s = 0.30;  // treat the first 30 cm as the start region
 
     // Base request from the regular criterion (using the provided threshold)
-    bool tip_request = should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end, thr_enter);
+    bool tip_request = should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end,
+      thr_enter);
 
     // Additional start-of-path gate: enforce TiP if still near s*=0 and yaw misalignment is large
     if (!allow_reverse_ && prj.s_star < near_start_s && std::fabs(e_theta) > thr_enter) {
@@ -663,14 +664,16 @@ SerestController::update_rt(NavState & nav_state)
     // Hysteresis on the TiP state
     if (!tip_active_ && tip_request && std::fabs(e_theta) > thr_enter) {
       tip_active_ = true;
-    } else if (tip_active_ && (std::fabs(e_theta) < thr_exit || prj.s_star > (near_start_s - 0.10))) {
+    } else if (tip_active_ &&
+      (std::fabs(e_theta) < thr_exit || prj.s_star > (near_start_s - 0.10)))
+    {
       tip_active_ = false;
     }
 
     // TiP execution branch: publish v=0 and a bounded angular command, then return
     if (tip_active_) {
-      double w_cmd = -k_theta_ * e_theta
-                   - k_y_ * std::atan(e_y / std::max(ell_, 1e-3));
+      double w_cmd = -k_theta_ * e_theta -
+        k_y_ * std::atan(e_y / std::max(ell_, 1e-3));
 
       const double gamma_omega = std::max(0.25, gamma_slow);
       w_cmd *= gamma_omega;
@@ -727,26 +730,27 @@ SerestController::update_rt(NavState & nav_state)
   double s_dot_nom = forward_term - lateral_term;
 
   // Nominal angular rate: curvature feedforward + heading/lateral corrective terms
-  double omega_nom = rk.kappa_hat * s_dot_nom
-                   - k_theta_ * e_theta
-                   - k_y_ * std::atan(e_y / std::max(ell_, 1e-3))
-                   + ey_apex_term;
+  double omega_nom = rk.kappa_hat * s_dot_nom -
+    k_theta_ * e_theta -
+    k_y_ * std::atan(e_y / std::max(ell_, 1e-3)) +
+    ey_apex_term;
 
   const double gamma_omega = std::max(0.25, gamma_slow);
   omega_nom *= (omega_boost * gamma_omega);
 
   // 8) Final alignment inside stop zone (publishes and returns if active)
   if (maybe_final_align_and_publish(
-        nav_state, path, dist_xy_goal, stop_r, e_theta_goal, gamma_slow, dt)) {
+        nav_state, path, dist_xy_goal, stop_r, e_theta_goal, gamma_slow, dt))
+  {
     return;
   }
 
   // 9) Time reparameterization and reconstruction of linear speed
   const double alpha = std::min(1.0, (v_ref_ > 1e-6) ? (v_safe / v_ref_) : 1.0);
   double s_dot = allow_reverse_ ? (alpha * s_dot_nom) : std::max(0.0, alpha * s_dot_nom);
-  const double cos_for_v = allow_reverse_
-      ? std::max(1e-3, std::fabs(cos_et))
-      : std::max(1e-3, cos_et_pos);
+  const double cos_for_v = allow_reverse_ ?
+    std::max(1e-3, std::fabs(cos_et)) :
+    std::max(1e-3, cos_et_pos);
   double v_track = s_dot * denom / cos_for_v;
 
   double v_cmd_raw = 0.0;
@@ -764,7 +768,9 @@ SerestController::update_rt(NavState & nav_state)
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 
-    if (should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end, turn_in_place_thr)) {
+    if (should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end,
+      turn_in_place_thr))
+    {
       v_cmd_raw = 0.0;
       omega_nom = -k_theta_ * e_theta - k_y_ * std::atan(e_y / std::max(ell_, 1e-3));
       omega_nom *= gamma_omega;

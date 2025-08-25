@@ -108,9 +108,9 @@ private:
    */
   geometry_msgs::msg::Point origin_utm_;
 
-  /** 
+  /**
    * @brief odometry publisher
-   * 
+   *
    * This publisher publsh in a topic the odom value
    * It is used to validate the localization
   */

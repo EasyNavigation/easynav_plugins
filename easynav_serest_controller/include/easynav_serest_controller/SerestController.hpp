@@ -202,8 +202,8 @@ private:
    */
   double v_curvature_limit(double kappa_hat) const;
 
- // Gestiona dt y actualiza last_update_ts_. Devuelve dt robusto.
- double compute_dt_and_update_clock();
+  // Gestiona dt y actualiza last_update_ts_. Devuelve dt robusto.
+  double compute_dt_and_update_clock();
 
   // Comprueba entradas mínimas. Publica stop si faltan y devuelve false.
   // Si todo ok, rellena 'path' y 'odom' y devuelve true.
