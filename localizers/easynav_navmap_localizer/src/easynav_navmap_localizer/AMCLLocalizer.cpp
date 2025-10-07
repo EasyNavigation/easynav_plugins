@@ -645,7 +645,7 @@ static ScoreAgg score_particle_sensor_cloud(
   using Bonxai::CoordT;
   ScoreAgg s;
   const auto n = cloud_sensor.points.size();
-  if (n == 0) return s;
+  if (n == 0) {return s;}
 
   s.possible = static_cast<float>(n);
 
@@ -661,11 +661,11 @@ static ScoreAgg score_particle_sensor_cloud(
 
   for (const auto & pt : cloud_sensor.points) {
     // pw = R * pt + O  (sin tf2::Vector3 temporales)
-    const double xw = R[0].x()*pt.x + R[0].y()*pt.y + R[0].z()*pt.z + O.x();
-    const double yw = R[1].x()*pt.x + R[1].y()*pt.y + R[1].z()*pt.z + O.y();
-    const double zw = R[2].x()*pt.x + R[2].y()*pt.y + R[2].z()*pt.z + O.z();
+    const double xw = R[0].x() * pt.x + R[0].y() * pt.y + R[0].z() * pt.z + O.x();
+    const double yw = R[1].x() * pt.x + R[1].y() * pt.y + R[1].z() * pt.z + O.y();
+    const double zw = R[2].x() * pt.x + R[2].y() * pt.y + R[2].z() * pt.z + O.z();
 
-    if (!std::isfinite(xw)) continue;
+    if (!std::isfinite(xw)) {continue;}
 
     // Una sola conversión a voxel, y réusala para ambos mapas (misma rejilla)
     const CoordT key_end = inf_map.grid().posToCoord({xw, yw, zw});
@@ -678,7 +678,7 @@ static ScoreAgg score_particle_sensor_cloud(
     }
 
     const float p_ray_min = 0.4f;
-    if (p_end < p_ray_min) { s.hits += p_end; continue; }
+    if (p_end < p_ray_min) {s.hits += p_end; continue;}
 
     const bool blocked = ray_occluded_dda(occ_map, acc_occ, key_origin, key_end, tail_skip);
     s.hits += blocked ? 0.0f : p_end;

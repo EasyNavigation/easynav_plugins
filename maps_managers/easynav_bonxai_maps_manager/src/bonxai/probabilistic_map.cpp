@@ -98,8 +98,8 @@ float ProbabilisticMap::queryProbability(const Eigen::Vector3f & p_world) const
 {
   // Tu grid usa Vector3D (double). Convertimos y mapeamos a coord de voxel.
   const Vector3D pw_d(static_cast<double>(p_world.x()),
-                      static_cast<double>(p_world.y()),
-                      static_cast<double>(p_world.z()));
+    static_cast<double>(p_world.y()),
+    static_cast<double>(p_world.z()));
   const Bonxai::CoordT key = _grid.posToCoord(pw_d);
   return queryProbability(key);
 }

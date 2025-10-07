@@ -11,10 +11,10 @@
   <maintainer email="juan.cely@urjc.es">Juan Sebastián Cely Gutiérrez</maintainer>
   <maintainer email="josemiguel.guerrero@urjc.es">José Miguel Guerrero Hernández</maintainer>
 
+  <license>GPL-3.0-only</license>
+
   <author email="fmrico@gmail.com">Francisco Martín Rico</author>
   <author email="franciscom.moreno@urjc.es">Francisco Miguel Moreno Olivo</author>
-
-  <license>GPL-3.0-only</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
