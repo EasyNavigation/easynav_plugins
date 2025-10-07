@@ -37,6 +37,9 @@ jobs:
               "build": {
                 "packages-up-to": true,
                 "mixin": ["coverage-gcc"]
+              },
+              "test": {
+                "parallel-workers" : 1
               }
             }
           colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
