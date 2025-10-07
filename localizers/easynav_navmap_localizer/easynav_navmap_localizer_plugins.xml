@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_navmap_localizer">
+    <class name="easynav_navmap_localizer/AMCLLocalizer"  type="easynav::navmap::AMCLLocalizer" base_class_type="easynav::LocalizerMethodBase">
+      <description>
+      A default "navmap" implementation for the AMCL localizer.
+      </description>
+    </class>
+  </library>
+</class_libraries>

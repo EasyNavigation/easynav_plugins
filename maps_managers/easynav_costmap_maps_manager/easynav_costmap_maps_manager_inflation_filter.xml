@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_costmap_maps_manager">
+    <class name="easynav_costmap_maps_manager/CostmapMapsManager/InflationFilter"  type="easynav::InflationFilter" base_class_type="easynav::CostmapFilter">
+      <description>
+      A filter which inflate obstacles
+      </description>
+    </class>
+  </library>
+</class_libraries>

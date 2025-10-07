@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_octomap_maps_manager">
+    <class name="easynav_octomap_maps_manager/OctomapMapsManager/InflationFilter"  type="easynav::octomap::InflationFilter" base_class_type="easynav::octomap::OctomapFilter">
+      <description>
+      A filter which inflate obstacles
+      </description>
+    </class>
+  </library>
+</class_libraries>

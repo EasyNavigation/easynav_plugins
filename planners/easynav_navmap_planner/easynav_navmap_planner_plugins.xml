@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_navmap_planner">
+    <class name="easynav_navmap_planner/AStarPlanner"  type="easynav::navmap::AStarPlanner" base_class_type="easynav::PlannerMethodBase">
+      <description>
+      A default "navmap" implementation for the A* path planner.
+      </description>
+    </class>
+  </library>
+</class_libraries>

@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_costmap_localizer">
+    <class name="easynav_costmap_localizer/AMCLLocalizer"  type="easynav::AMCLLocalizer" base_class_type="easynav::LocalizerMethodBase">
+      <description>
+      A default "costmap" implementation for the AMCL localizer.
+      </description>
+    </class>
+  </library>
+</class_libraries>

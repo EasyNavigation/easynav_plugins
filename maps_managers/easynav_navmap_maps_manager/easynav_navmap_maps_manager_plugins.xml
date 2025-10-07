@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_navmap_maps_manager">
+    <class name="easynav_navmap_maps_manager/NavMapMapsManager"  type="easynav::navmap::NavMapMapsManager" base_class_type="easynav::MapsManagerBase">
+      <description>
+      A "navmap" implementation for the Maps Manager.
+      </description>
+    </class>
+  </library>
+</class_libraries>
