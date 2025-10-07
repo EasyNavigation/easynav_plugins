@@ -1,0 +1,11 @@
+<map id="Costmap2D" name="Costmap2D">
+<area shape="rect" id="Node000001" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;." alt="" coords="109,124,199,150"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,44,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="27,46,31,73,45,98,58,110,74,119,109,129,108,134,72,124,55,114,40,102,26,75,21,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="70,5,129,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="97,46,98,73,105,99,116,111,129,121,126,126,112,115,101,101,92,74,92,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="153,5,262,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="198,46,162,125,157,122,193,44"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="286,5,387,31"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="320,45,292,75,257,102,229,116,200,127,198,122,227,112,254,98,288,71,316,41"/>
+</map>

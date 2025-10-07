@@ -1,0 +1,41 @@
+<map id="planners/easynav_navmap_planner/src/easynav_navmap_planner/AStarPlanner.cpp" name="planners/easynav_navmap_planner/src/easynav_navmap_planner/AStarPlanner.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the AStarPlanner class using A* on ::navmap::NavMap (triangle graph)." alt="" coords="559,5,756,61"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,116,62,142"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="558,41,457,48,335,61,204,81,76,112,72,113,70,108,74,106,203,76,334,55,456,42,558,35"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="86,116,197,142"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="559,50,394,76,209,112,197,115,195,109,208,106,393,70,558,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="220,116,324,142"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="559,58,337,112,327,114,326,109,336,106,558,53"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="348,116,405,142"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="559,64,417,112,415,112,413,108,415,106,558,59"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="429,116,481,142"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="598,64,495,111,494,112,491,107,492,107,595,59"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="505,116,554,142"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="622,64,560,109,557,105,619,59"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="578,116,644,142"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="646,63,626,104,621,102,642,60"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="668,116,743,142"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="674,60,695,102,690,104,669,63"/>
+<area shape="rect" id="Node000010" href="$AStarPlanner_8hpp.html" title="Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap." alt="" coords="817,109,988,150"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="729,59,839,101,837,106,728,64"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="520,205,683,231"/>
+<area shape="poly" id="edge18_Node000001_Node000013" title=" " alt="" coords="708,59,733,78,754,101,764,125,763,138,757,151,743,168,725,183,685,202,683,197,722,178,739,165,753,148,758,137,758,126,749,103,730,82,705,64"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1284,205,1460,231"/>
+<area shape="poly" id="edge19_Node000001_Node000015" title=" " alt="" coords="757,41,876,64,940,82,1001,107,1017,117,1028,127,1038,138,1053,147,1145,168,1297,199,1295,204,1144,173,1051,152,1035,142,1024,131,1014,121,999,111,938,87,875,69,756,47"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="1064,116,1233,142"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="757,51,1070,110,1069,116,756,56"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="1256,116,1448,142"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="757,43,981,70,1246,106,1273,111,1272,116,1245,112,980,75,756,48"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="1472,109,1600,150"/>
+<area shape="poly" id="edge20_Node000001_Node000019" title=" " alt="" coords="757,36,1065,58,1259,78,1457,106,1457,111,1259,83,1065,63,756,41"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="708,205,775,231"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="867,153,779,200,776,195,865,148"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="800,205,857,231"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="888,152,850,195,846,192,884,148"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="835,153,659,203,658,198,833,148"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="881,198,1074,238"/>
+<area shape="poly" id="edge13_Node000010_Node000014" title=" " alt="" coords="922,148,953,184,949,188,918,152"/>
+<area shape="poly" id="edge14_Node000010_Node000015" title=" " alt="" coords="990,144,1007,147,1273,195,1294,199,1293,204,1272,200,1006,152,989,149"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="1098,198,1260,238"/>
+<area shape="poly" id="edge15_Node000010_Node000016" title=" " alt="" coords="967,148,1103,190,1101,195,965,153"/>
+</map>

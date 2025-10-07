@@ -1,0 +1,5 @@
+<map id="planners/easynav_costmap_planner/include/easynav_costmap_planner/CostmapPlanner.hpp" name="planners/easynav_costmap_planner/include/easynav_costmap_planner/CostmapPlanner.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the CostmapPlanner class implementing A* path planning using Costmap2D." alt="" coords="5,5,257,61"/>
+<area shape="rect" id="Node000002" href="$CostmapPlanner_8cpp.html" title="Implementation of the CostmapPlanner class using A* on Costmap2D." alt="" coords="30,109,232,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,77,134,108,128,108,128,77"/>
+</map>

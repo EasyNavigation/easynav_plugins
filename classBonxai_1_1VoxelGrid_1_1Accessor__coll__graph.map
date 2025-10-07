@@ -1,0 +1,15 @@
+<map id="VoxelGrid&lt; DataT &gt;::Accessor" name="VoxelGrid&lt; DataT &gt;::Accessor">
+<area shape="rect" id="Node000001" title="Class to be used to set and get values of a cell of the Grid." alt="" coords="191,318,325,358"/>
+<area shape="rect" id="Node000002" href="$classBonxai_1_1VoxelGrid_1_1ConstAccessor.html" title=" " alt="" coords="203,243,313,268"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="260,284,260,318,255,318,255,284"/>
+<area shape="rect" id="Node000003" href="$classBonxai_1_1VoxelGrid.html" title=" " alt="" coords="5,132,140,157"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,168,118,193,148,216,175,230,204,240,202,245,173,235,145,221,114,197,90,171"/>
+<area shape="rect" id="Node000004" href="$structBonxai_1_1CoordT.html" title=" " alt="" coords="164,132,227,157"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="189,173,187,196,193,217,204,230,220,240,217,244,201,234,188,220,181,196,184,172"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="165,5,225,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="198,47,198,131,192,131,192,47"/>
+<area shape="rect" id="Node000006" href="$classBonxai_1_1Grid.html" title=" " alt="" coords="258,124,399,165"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="321,180,301,220,277,244,273,240,297,217,316,178"/>
+<area shape="rect" id="Node000007" href="$classBonxai_1_1Grid.html" title="The Grid class is used to store data in a cube." alt="" coords="423,132,525,157"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="461,172,440,198,413,221,364,242,314,252,313,247,362,237,410,216,436,194,457,169"/>
+</map>

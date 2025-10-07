@@ -1,0 +1,11 @@
+<map id="ControllerMethodBase" name="ControllerMethodBase">
+<area shape="rect" id="Node000001" title=" " alt="" coords="121,5,271,31"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1MPPIController.html" title="A MPPI Controller." alt="" coords="5,79,115,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,41,84,81,82,76,158,36"/>
+<area shape="rect" id="Node000003" href="$classeasynav_1_1SerestController.html" title="SeReST (Safe Reparameterized Time) controller for path tracking." alt="" coords="139,79,253,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,46,199,79,193,79,193,46"/>
+<area shape="rect" id="Node000004" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="278,79,394,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,36,313,76,311,81,232,41"/>
+<area shape="rect" id="Node000005" href="$classFriendAMCLLocalizer.html" title=" " alt="" coords="263,153,409,178"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="339,120,339,152,333,152,333,120"/>
+</map>

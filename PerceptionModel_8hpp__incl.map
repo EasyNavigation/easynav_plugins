@@ -1,0 +1,7 @@
+<map id="localizers/easynav_navmap_localizer/include/easynav_navmap_localizer/PerceptionModel.hpp" name="localizers/easynav_navmap_localizer/include/easynav_navmap_localizer/PerceptionModel.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="92,5,272,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,124,167,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,78,117,115,113,111,148,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="190,132,368,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,74,259,118,256,122,213,78"/>
+</map>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>EasyNav Costmap Stack: easynav_plugins</title>
+<title>EasyNav Plugins: EasyNav Plugins</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">EasyNav Costmap Stack
+   <div id="projectname">EasyNav Plugins
    </div>
   </td>
  </tr>
@@ -84,25 +84,86 @@ $(function(){ initResizable(false); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">easynav_plugins </div></div>
+  <div class="headertitle"><div class="title">EasyNav Plugins </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_README"></a></p>
+<p>"" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
-VFF-based outdoor navigation system</h1>
-<p>This repository contains the <b>VFF-based outdoor navigation system</b> for robots using <b>GPS input</b>.</p>
-<p>To test the system, use the following simulation repository: <a href="https://github.com/EasyNavigation/easynav_playground_summit.git">https://github.com/EasyNavigation/easynav_playground_summit.git</a></p>
-<p>Running the Simulation:</p>
-<ol type="1">
-<li>Launch the simulation environment using the <code>easynav_playground_summit</code> repo.</li>
-<li>In a new terminal, run the navigation system with:</li>
-</ol>
-<div class="fragment"><div class="line">ros2 run easynav_system system_main \</div>
-<div class="line">  --ros-args \</div>
-<div class="line">  --params-file &lt;your_workspace&gt;/src/easynav_outdoor_stack/robots_params/summit_sim.params.yaml</div>
-</div><!-- fragment --><ol type="1">
-<li>Send a Goal from the <code>2D Goal Pose</code> button on RViz2 </li>
-</ol>
+Description</h1>
+<p><b>EasyNav Plugins</b> provides the official collection of plugins for the <a href="https://github.com/EasyNavigation">Easy Navigation (EasyNav)</a> framework. <br  />
+ These plugins extend the navigation core with planners, controllers, map managers, and localizers compatible with ROS 2.</p>
+<p>Each plugin resides in its own ROS 2 package and is registered via <code>pluginlib</code>, allowing dynamic loading at runtime.</p>
+<hr  />
+<h1><a class="anchor" id="autotoc_md3"></a>
+Repository Structure</h1>
+<h2><a class="anchor" id="autotoc_md4"></a>
+🧭 Planners</h2>
+<p>Path planning plugins implementing A*, costmap, or NavMap–based methods.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Package   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Link    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_costmap_planner</code>   </td><td class="markdownTableBodyNone">A* planner over <code><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></code>.   </td><td class="markdownTableBodyNone"><a class="el" href="planners_2easynav__costmap__planner_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>easynav_simple_planner</code>   </td><td class="markdownTableBodyNone">Simple A* planner for <code>SimpleMap</code>.   </td><td class="markdownTableBodyNone"><a class="el" href="planners_2easynav__simple__planner_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_navmap_planner</code>   </td><td class="markdownTableBodyNone">A* planner over a NavMap mesh.   </td><td class="markdownTableBodyNone"><a class="el" href="planners_2easynav__navmap__planner_2README_8md.html">README</a>   </td></tr>
+</table>
+<hr  />
+<h2><a class="anchor" id="autotoc_md6"></a>
+⚙️ Controllers</h2>
+<p>Motion controllers for trajectory tracking and reactive behaviors.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Package   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Link    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_vff_controller</code>   </td><td class="markdownTableBodyNone">Vector Field Force (VFF) reactive controller.   </td><td class="markdownTableBodyNone"><a class="el" href="controllers_2easynav__vff__controller_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>easynav_mppi_controller</code>   </td><td class="markdownTableBodyNone">Model Predictive Path Integral (MPPI) controller.   </td><td class="markdownTableBodyNone"><a class="el" href="controllers_2easynav__mppi__controller_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_simple_controller</code>   </td><td class="markdownTableBodyNone">Simple proportional controller for testing.   </td><td class="markdownTableBodyNone"><a class="el" href="controllers_2easynav__simple__controller_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>easynav_serest_controller</code>   </td><td class="markdownTableBodyNone">SeReST (Safe Reactive Steering) controller.   </td><td class="markdownTableBodyNone"><a class="el" href="controllers_2easynav__serest__controller_2README_8md.html">README</a>   </td></tr>
+</table>
+<hr  />
+<h2><a class="anchor" id="autotoc_md8"></a>
+🗺️ Maps Managers</h2>
+<p>Map management plugins that provide, update, and store different environment representations.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Package   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Link    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_navmap_maps_manager</code>   </td><td class="markdownTableBodyNone">Manages NavMap mesh layers.   </td><td class="markdownTableBodyNone"><a class="el" href="maps__managers_2easynav__navmap__maps__manager_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>easynav_bonxai_maps_manager</code>   </td><td class="markdownTableBodyNone">Manages <a class="el" href="namespaceBonxai.html">Bonxai</a> probabilistic voxel maps.   </td><td class="markdownTableBodyNone"><a class="el" href="maps__managers_2easynav__bonxai__maps__manager_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_octomap_maps_manager</code>   </td><td class="markdownTableBodyNone">Manages OctoMap 3D occupancy trees.   </td><td class="markdownTableBodyNone"><a class="el" href="maps__managers_2easynav__octomap__maps__manager_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>easynav_costmap_maps_manager</code>   </td><td class="markdownTableBodyNone">Manages <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a> layers with filters.   </td><td class="markdownTableBodyNone"><a class="el" href="maps__managers_2easynav__costmap__maps__manager_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_simple_maps_manager</code>   </td><td class="markdownTableBodyNone">Minimal example map manager (SimpleMap).   </td><td class="markdownTableBodyNone"><a class="el" href="maps__managers_2easynav__simple__maps__manager_2README_8md.html">README</a>   </td></tr>
+</table>
+<hr  />
+<h2><a class="anchor" id="autotoc_md10"></a>
+📍 Localizers</h2>
+<p>Localization plugins based on different map types and sensors.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Package   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Link    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_gps_localizer</code>   </td><td class="markdownTableBodyNone">GPS-based localizer for outdoor navigation.   </td><td class="markdownTableBodyNone"><a class="el" href="localizers_2easynav__gps__localizer_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>easynav_simple_localizer</code>   </td><td class="markdownTableBodyNone">Basic localizer for SimpleMap–based setups.   </td><td class="markdownTableBodyNone"><a class="el" href="localizers_2easynav__simple__localizer_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>easynav_navmap_localizer</code>   </td><td class="markdownTableBodyNone">AMCL-like localizer operating on NavMap meshes.   </td><td class="markdownTableBodyNone"><a class="el" href="localizers_2easynav__navmap__localizer_2README_8md.html">README</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>easynav_costmap_localizer</code>   </td><td class="markdownTableBodyNone">AMCL-like localizer using <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a>.   </td><td class="markdownTableBodyNone"><a class="el" href="localizers_2easynav__costmap__localizer_2README_8md.html">README</a>   </td></tr>
+</table>
+<hr  />
+<h1><a class="anchor" id="autotoc_md12"></a>
+License</h1>
+<p>All packages in this repository are released under <b>GPL-3.0-only</b> unless stated otherwise in the individual package. </p>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->

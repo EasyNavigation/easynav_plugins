@@ -1,0 +1,38 @@
+<map id="FriendAMCLLocalizer" name="FriendAMCLLocalizer">
+<area shape="rect" id="Node000001" title=" " alt="" coords="536,828,683,854"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="371,239,487,264"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="441,279,607,827,602,829,436,280"/>
+<area shape="rect" id="Node000003" href="$classControllerMethodBase.html" title=" " alt="" coords="19,9,169,35"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="179,5,221,3,266,6,309,18,348,39,371,60,389,86,413,143,425,198,430,238,424,239,420,199,408,145,384,88,367,64,345,43,307,23,265,12,221,8,179,10"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="23,59,165,100"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="180,68,222,69,265,75,308,87,348,107,380,137,403,173,418,209,427,237,422,239,413,211,398,176,376,140,345,111,307,92,264,80,221,75,180,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="64,435,124,460"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="135,426,206,398,246,392,280,392,310,389,345,373,373,348,394,318,420,264,425,266,399,321,377,352,348,377,312,394,280,397,247,397,207,404,137,431"/>
+<area shape="rect" id="Node000008" href="$classeasynav_1_1AMCLLocalizer.html" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="374,828,484,854"/>
+<area shape="poly" id="edge15_Node000008_Node000005" title=" " alt="" coords="122,468,161,498,208,524,228,530,247,532,281,529,314,531,331,537,348,550,376,582,397,619,412,659,422,700,431,775,431,828,426,828,425,776,417,701,407,661,392,621,372,585,345,554,328,542,313,536,281,535,247,537,227,535,206,529,158,502,119,472"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="69,656,119,682"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="135,668,253,666,309,658,330,652,345,643,364,615,381,572,394,518,405,458,418,343,424,265,429,265,424,343,410,459,399,519,386,573,369,618,348,647,333,657,310,664,253,672,135,673"/>
+<area shape="poly" id="edge18_Node000008_Node000006" title=" " alt="" coords="135,673,259,696,316,709,348,720,376,745,398,774,425,827,420,829,393,777,372,748,345,725,315,714,258,701,134,678"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="41,124,147,150"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="162,127,205,127,253,130,302,140,348,157,373,175,394,196,423,237,418,240,390,200,370,179,345,162,300,145,252,135,205,132,162,133"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="473,854,528,856,580,852,581,857,528,862,473,859"/>
+<area shape="poly" id="edge19_Node000001_Node000008" title=" " alt="" coords="500,838,536,838,536,844,500,844"/>
+<area shape="poly" id="edge20_Node000001_Node000008" title=" " alt="" coords="473,823,528,820,581,825,580,830,528,826,473,828"/>
+<area shape="rect" id="Node000009" href="$classLocalizerMethodBase.html" title=" " alt="" coords="21,961,167,987"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="182,978,264,965,306,952,345,935,370,917,392,895,421,853,425,856,396,898,374,921,348,939,308,957,265,970,183,983"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="182,957,264,941,306,928,345,911,382,882,410,852,414,856,386,886,348,915,308,933,265,947,183,962"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="10,897,178,937"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="193,918,269,911,308,904,346,893,383,874,412,852,415,856,385,879,348,898,309,909,270,917,193,923"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="54,585,134,611"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="149,596,261,602,313,611,348,625,371,648,389,674,413,732,425,787,430,827,424,828,420,788,408,733,384,676,367,651,345,630,312,616,261,607,149,601"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="5,1011,183,1036"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="198,1026,235,1023,274,1015,311,1003,345,984,376,954,398,918,413,882,422,853,427,855,418,883,403,920,380,958,348,989,313,1008,275,1021,236,1028,198,1031"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="16,1060,172,1086"/>
+<area shape="poly" id="edge13_Node000008_Node000013" title=" " alt="" coords="187,1083,227,1083,269,1078,309,1066,345,1046,366,1025,384,1001,407,946,420,893,424,854,429,855,425,894,412,948,388,1004,370,1029,348,1050,311,1071,270,1083,228,1088,187,1089"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="55,797,133,823"/>
+<area shape="poly" id="edge14_Node000008_Node000014" title=" " alt="" coords="148,812,373,833,373,839,148,818"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="71,748,117,774"/>
+<area shape="poly" id="edge16_Node000008_Node000015" title=" " alt="" coords="133,761,231,772,290,783,348,798,406,825,404,830,346,803,288,788,230,777,132,766"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="54,847,134,872"/>
+<area shape="poly" id="edge17_Node000008_Node000016" title=" " alt="" coords="150,866,242,873,294,873,346,867,397,852,398,857,347,872,295,878,242,878,149,871"/>
+</map>

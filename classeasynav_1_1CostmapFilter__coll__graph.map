@@ -1,0 +1,7 @@
+<map id="CostmapFilter" name="CostmapFilter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="111,124,214,150"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,181,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,59,124,98,147,122,143,125,119,102,100,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="205,13,258,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,54,218,78,204,102,181,125,177,122,200,98,213,76,222,52"/>
+</map>

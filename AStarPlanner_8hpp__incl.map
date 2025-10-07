@@ -1,0 +1,15 @@
+<map id="planners/easynav_navmap_planner/include/easynav_navmap_planner/AStarPlanner.hpp" name="planners/easynav_navmap_planner/include/easynav_navmap_planner/AStarPlanner.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap." alt="" coords="246,5,474,61"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,116,73,142"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="247,64,85,112,81,113,79,108,84,106,246,59"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,116,154,142"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="288,64,168,111,166,112,164,107,166,107,286,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="179,116,342,142"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="333,63,286,108,282,104,330,60"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="366,109,558,150"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="391,60,431,97,428,100,388,64"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="582,116,758,142"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="451,59,616,109,614,114,449,64"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="782,109,944,150"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="476,52,768,106,767,111,475,57"/>
+</map>

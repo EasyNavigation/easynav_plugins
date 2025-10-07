@@ -1,0 +1,15 @@
+<map id="InflationFilter" name="InflationFilter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="293,273,389,298"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1navmap_1_1NavMapFilter.html" title=" " alt="" coords="182,124,281,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="252,160,334,270,330,274,247,164"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,181,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,57,128,79,147,98,168,111,190,121,188,126,165,116,144,102,124,82,108,60"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="205,13,258,38"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="234,54,234,124,229,124,229,54"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="322,13,368,38"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="342,55,333,79,318,102,299,116,279,126,277,121,297,111,314,98,328,77,337,53"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="306,124,376,150"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="344,165,344,272,338,272,338,165"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="401,124,460,150"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="431,166,423,208,415,230,403,250,389,264,373,274,370,270,386,260,399,247,410,228,418,206,426,165"/>
+</map>

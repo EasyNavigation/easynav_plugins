@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['easynav_5fplugins_0',['easynav_plugins',['../index.html',1,'']]]
+  ['easynav_20plugins_0',['EasyNav Plugins',['../index.html',1,'']]]
 ];

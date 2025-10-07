@@ -1,0 +1,22 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,230,86,255"/>
+<area shape="rect" id="Node000001" href="$structBonxai_1_1type__has__member__x_3_01T_00_01std_1_1void__t_3_01decltype_07T_1_1x_08_4_01_4.html" title=" " alt="" coords="147,215,304,270"/>
+<area shape="poly" id="edge12_Node000000_Node000001" title=" " alt="" coords="101,240,146,240,146,245,101,245"/>
+<area shape="rect" id="Node000003" href="$structBonxai_1_1type__has__method__x_3_01T_00_01std_1_1void__t_3_01decltype_07T_07_08_8x_07_08_08_4_01_4.html" title=" " alt="" coords="147,5,304,61"/>
+<area shape="poly" id="edge13_Node000000_Node000003" title=" " alt="" coords="58,215,132,71,147,60,150,64,136,75,62,217"/>
+<area shape="rect" id="Node000004" href="$structBonxai_1_1type__is__vector_3_01std_1_1array_3_01T_00_013_01_4_01_4.html" title=" " alt="" coords="158,85,292,126"/>
+<area shape="poly" id="edge14_Node000000_Node000004" title=" " alt="" coords="61,215,91,175,132,136,157,123,159,127,135,141,95,179,65,218"/>
+<area shape="rect" id="Node000005" href="$structBonxai_1_1type__is__vector_3_01std_1_1vector_3_01T_00_01A_01_4_01_4.html" title=" " alt="" coords="158,150,292,191"/>
+<area shape="poly" id="edge15_Node000000_Node000005" title=" " alt="" coords="87,220,133,200,162,189,163,194,135,205,89,225"/>
+<area shape="rect" id="Node000006" href="$structBonxai_1_1type__has__member__x.html" title=" " alt="" coords="151,294,300,335"/>
+<area shape="poly" id="edge16_Node000000_Node000006" title=" " alt="" coords="89,260,135,280,163,291,162,296,133,285,87,265"/>
+<area shape="rect" id="Node000007" href="$structBonxai_1_1type__has__method__x.html" title=" " alt="" coords="153,360,298,400"/>
+<area shape="poly" id="edge17_Node000000_Node000007" title=" " alt="" coords="65,267,95,306,135,344,157,357,154,361,132,349,91,310,61,270"/>
+<area shape="rect" id="Node000008" href="$structBonxai_1_1type__is__vector.html" title=" " alt="" coords="134,424,317,450"/>
+<area shape="poly" id="edge18_Node000000_Node000008" title=" " alt="" coords="56,270,67,302,83,340,106,378,135,410,155,421,152,426,132,414,101,381,78,343,62,304,51,271"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="8,126,83,151"/>
+<area shape="poly" id="edge19_Node000002_Node000001" title=" " alt="" coords="76,159,135,200,157,212,154,216,132,205,73,163"/>
+<area shape="poly" id="edge20_Node000002_Node000003" title=" " alt="" coords="72,114,132,71,154,59,157,64,135,75,75,118"/>
+<area shape="poly" id="edge21_Node000002_Node000004" title=" " alt="" coords="98,126,157,115,158,120,99,131"/>
+<area shape="poly" id="edge22_Node000002_Node000005" title=" " alt="" coords="98,145,158,156,157,161,98,150"/>
+</map>

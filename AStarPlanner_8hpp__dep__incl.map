@@ -1,0 +1,5 @@
+<map id="planners/easynav_navmap_planner/include/easynav_navmap_planner/AStarPlanner.hpp" name="planners/easynav_navmap_planner/include/easynav_navmap_planner/AStarPlanner.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap." alt="" coords="5,5,234,61"/>
+<area shape="rect" id="Node000002" href="$AStarPlanner_8cpp.html" title="Implementation of the AStarPlanner class using A* on ::navmap::NavMap (triangle graph)." alt="" coords="21,109,218,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,77,122,108,117,108,117,77"/>
+</map>

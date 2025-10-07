@@ -1,0 +1,17 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,153,53,179"/>
+<area shape="rect" id="Node000001" href="$classAMCLLocalizerTest.html" title="Fixture for SimpleController tests (minimal)" alt="" coords="139,5,275,31"/>
+<area shape="poly" id="edge38_Node000000_Node000001" title=" " alt="" coords="36,137,59,87,77,62,99,40,117,29,137,22,139,27,120,34,102,44,81,65,64,90,41,140"/>
+<area shape="rect" id="Node000002" href="$classCostmap2DTest.html" title=" " alt="" coords="149,55,264,80"/>
+<area shape="poly" id="edge39_Node000000_Node000002" title=" " alt="" coords="46,139,69,113,99,89,123,79,148,72,150,77,125,84,102,94,73,116,50,142"/>
+<area shape="rect" id="Node000003" href="$classCostmapMapsManagerTest.html" title="Fixture for CostmapMapsManager tests." alt="" coords="116,104,298,130"/>
+<area shape="poly" id="edge40_Node000000_Node000003" title=" " alt="" coords="66,149,100,138,141,128,142,133,101,143,68,154"/>
+<area shape="rect" id="Node000004" href="$classNavMapMapsManagerTest.html" title="Fixture for NavMapMapsManager tests." alt="" coords="118,153,296,179"/>
+<area shape="poly" id="edge41_Node000000_Node000004" title=" " alt="" coords="68,164,117,164,117,169,68,169"/>
+<area shape="rect" id="Node000005" href="$classNavMapMapsManagerUtilsTests.html" title="Fixture for NavMapMapsManager tests." alt="" coords="101,203,313,228"/>
+<area shape="poly" id="edge42_Node000000_Node000005" title=" " alt="" coords="68,178,101,189,142,200,141,205,100,194,66,183"/>
+<area shape="rect" id="Node000006" href="$classSimpleMapTest.html" title="Fixture for SimpleMap tests (minimal)" alt="" coords="151,252,263,278"/>
+<area shape="poly" id="edge43_Node000000_Node000006" title=" " alt="" coords="50,190,73,216,102,239,126,249,151,256,150,261,124,254,99,243,69,220,46,193"/>
+<area shape="rect" id="Node000007" href="$classSimpleMapsManagerTest.html" title="Fixture for SimpleMapsManager tests (minimal)" alt="" coords="122,301,292,327"/>
+<area shape="poly" id="edge44_Node000000_Node000007" title=" " alt="" coords="41,193,64,242,81,267,102,288,123,300,121,304,99,292,77,271,59,245,36,195"/>
+</map>

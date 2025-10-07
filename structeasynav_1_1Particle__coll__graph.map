@@ -1,0 +1,9 @@
+<map id="Particle" name="Particle">
+<area shape="rect" id="Node000001" title="Structure representing a single particle in the AMCL algorithm." alt="" coords="97,109,162,135"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,86,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="64,42,95,83,118,107,114,110,91,87,60,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="110,5,149,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,47,132,109,127,109,127,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="206,5,266,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="232,47,223,68,209,87,187,103,164,114,162,109,185,98,205,83,218,65,227,45"/>
+</map>

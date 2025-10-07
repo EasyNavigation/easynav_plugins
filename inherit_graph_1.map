@@ -1,0 +1,15 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classControllerMethodBase.html" title=" " alt="" coords="5,55,155,80"/>
+<area shape="rect" id="Node000001" href="$classeasynav_1_1MPPIController.html" title="A MPPI Controller." alt="" coords="206,5,316,31"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="144,47,210,29,212,34,145,53"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1SerestController.html" title="SeReST (Safe Reparameterized Time) controller for path tracking." alt="" coords="204,55,318,80"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="170,65,203,65,203,70,170,70"/>
+<area shape="rect" id="Node000003" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="203,104,319,130"/>
+<area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="145,82,212,101,210,106,144,88"/>
+<area shape="rect" id="Node000004" href="$classFriendAMCLLocalizer.html" title=" " alt="" coords="367,129,513,155"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="335,125,367,129,367,134,334,130"/>
+<area shape="rect" id="Node000006" href="$classLocalizerMethodBase.html" title=" " alt="" coords="7,153,153,179"/>
+<area shape="rect" id="Node000005" href="$classeasynav_1_1AMCLLocalizer.html" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="206,153,316,179"/>
+<area shape="poly" id="edge5_Node000006_Node000005" title=" " alt="" coords="169,164,205,164,205,169,169,169"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="331,154,366,149,367,155,332,159"/>
+</map>

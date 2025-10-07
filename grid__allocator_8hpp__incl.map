@@ -1,0 +1,23 @@
+<map id="maps_managers/easynav_bonxai_maps_manager/include/bonxai/grid_allocator.hpp" name="maps_managers/easynav_bonxai_maps_manager/include/bonxai/grid_allocator.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="151,5,364,61"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,109,70,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,64,83,105,81,100,188,59"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="93,109,160,135"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,64,159,103,156,98,215,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="184,109,240,135"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="246,62,228,96,223,94,241,60"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="264,109,342,135"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="274,60,292,94,287,96,269,62"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="366,109,443,135"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="305,59,372,99,370,103,302,64"/>
+<area shape="rect" id="Node000007" href="$mask_8hpp.html" title=" " alt="" coords="467,109,544,135"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="337,59,457,101,456,106,335,64"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="338,183,412,208"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="485,138,411,177,409,173,482,133"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="436,183,493,208"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="501,136,481,171,476,168,496,134"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="517,183,577,208"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="515,134,535,168,530,171,510,136"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="601,183,652,208"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="527,133,594,172,592,177,525,138"/>
+</map>

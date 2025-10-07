@@ -1,0 +1,11 @@
+<map id="SimplePlanner" name="SimplePlanner">
+<area shape="rect" id="Node000001" title="A planner implementing the A* algorithm on a SimpleMap grid." alt="" coords="216,124,322,150"/>
+<area shape="rect" id="Node000002" href="$classPlannerMethodBase.html" title=" " alt="" coords="5,5,144,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,39,140,68,185,98,236,121,234,126,183,102,137,73,98,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="168,5,227,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,46,193,73,200,99,212,112,228,121,225,126,209,116,196,101,187,74,188,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="318,5,367,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="339,47,330,74,315,102,290,126,286,122,311,98,325,72,334,45"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="416,5,496,31"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="453,47,443,76,423,102,400,117,374,127,323,137,322,132,373,122,397,112,419,98,438,73,448,45"/>
+</map>

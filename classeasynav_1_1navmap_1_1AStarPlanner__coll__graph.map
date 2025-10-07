@@ -1,0 +1,19 @@
+<map id="AStarPlanner" name="AStarPlanner">
+<area shape="rect" id="Node000001" title="A planner implementing the A* algorithm on a ::navmap::NavMap grid." alt="" coords="456,139,554,165"/>
+<area shape="rect" id="Node000002" href="$classPlannerMethodBase.html" title=" " alt="" coords="5,5,144,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,41,138,79,164,98,191,113,241,125,312,135,456,146,455,151,312,140,240,131,190,117,161,102,135,83,93,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="168,5,227,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,46,203,82,210,99,221,113,238,123,261,131,324,142,393,147,456,148,456,154,393,152,323,147,260,136,235,128,218,117,206,101,198,83,193,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="300,5,353,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="326,46,329,81,335,98,344,113,362,123,390,132,456,143,455,148,388,137,360,128,341,117,330,101,324,82,321,47"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="410,5,456,31"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="429,46,427,80,430,98,436,114,448,127,464,136,461,141,445,131,432,116,424,99,421,80,424,45"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="554,5,603,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="577,47,568,82,551,117,527,140,523,136,547,113,563,80,572,46"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="666,5,718,31"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="692,47,683,83,674,101,662,117,637,134,610,144,555,154,554,149,609,139,635,129,658,113,670,99,678,81,687,46"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="764,5,844,31"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="806,46,798,83,789,102,776,117,760,127,737,134,679,145,555,153,555,148,678,140,736,129,758,122,773,113,785,99,793,81,801,45"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="867,5,938,31"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="904,47,895,84,886,102,872,117,855,124,825,130,739,140,555,151,555,146,739,135,824,125,853,119,869,113,881,99,890,82,899,45"/>
+</map>
