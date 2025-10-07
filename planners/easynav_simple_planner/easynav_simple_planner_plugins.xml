@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_simple_planner">
+    <class name="easynav_simple_planner/SimplePlanner"  type="easynav::SimplePlanner" base_class_type="easynav::PlannerMethodBase">
+      <description>
+      A default "simple" implementation for the A* path planner.
+      </description>
+    </class>
+  </library>
+</class_libraries>

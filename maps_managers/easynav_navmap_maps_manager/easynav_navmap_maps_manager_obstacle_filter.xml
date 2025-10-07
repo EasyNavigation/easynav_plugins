@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_navmap_maps_manager">
+    <class name="easynav_navmap_maps_manager/NavMapMapsManager/ObstaclesFilter"  type="easynav::navmap::ObstacleFilter" base_class_type="easynav::navmap::NavMapFilter">
+      <description>
+      A filter which detects obstacles with sensors
+      </description>
+    </class>
+  </library>
+</class_libraries>

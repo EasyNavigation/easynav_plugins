@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_simple_controller">
+    <class name="easynav_simple_controller/SimpleController"  type="easynav::SimpleController" base_class_type="easynav::ControllerMethodBase">
+      <description>
+      A default "simple" implementation for a Controller.
+      </description>
+    </class>
+  </library>
+</class_libraries>

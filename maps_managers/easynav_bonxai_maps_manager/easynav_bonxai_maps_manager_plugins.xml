@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_bonxai_maps_manager">
+    <class name="easynav_bonxai_maps_manager/BonxaiMapsManager"  type="easynav_bonxai::BonxaiMapsManager" base_class_type="easynav::MapsManagerBase">
+      <description>
+      A "bonxai" implementation for the Maps Manager.
+      </description>
+    </class>
+  </library>
+</class_libraries>

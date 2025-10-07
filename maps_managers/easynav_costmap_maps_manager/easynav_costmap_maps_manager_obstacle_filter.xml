@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_costmap_maps_manager">
+    <class name="easynav_costmap_maps_manager/CostmapMapsManager/ObstaclesFilter"  type="easynav::ObstacleFilter" base_class_type="easynav::CostmapFilter">
+      <description>
+      A filter which detects obstacles with sensors
+      </description>
+    </class>
+  </library>
+</class_libraries>

@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_costmap_planner">
+    <class name="easynav_costmap_planner/CostmapPlanner"  type="easynav::CostmapPlanner" base_class_type="easynav::PlannerMethodBase">
+      <description>
+      A default "costmap" implementation for the A* path planner.
+      </description>
+    </class>
+  </library>
+</class_libraries>
