@@ -3,6 +3,8 @@
 [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#)
 [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
 
+[![rolling](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/rolling.yaml/badge.svg)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/rolling.yaml)
+
 ## Description
 **EasyNav Plugins** provides the official collection of plugins for the [Easy Navigation (EasyNav)](https://github.com/EasyNavigation) framework.  
 These plugins extend the navigation core with planners, controllers, map managers, and localizers compatible with ROS 2.
