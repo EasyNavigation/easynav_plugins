@@ -64,7 +64,3 @@ Localization plugins based on different map types and sensors.
 ## License
 All packages in this repository are released under **GPL-3.0-only** unless stated otherwise in the individual package.
 
----
-
-© 2025 Intelligent Robotics Lab – Universidad Rey Juan Carlos  
-Maintainer: [Francisco Martín Rico](mailto:fmrico@gmail.com)
