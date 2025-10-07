@@ -7,3 +7,7 @@ repositories:
     type: git
     url: https://github.com/fmrico/yaets.git
     version: rolling
+  ThirdParty/NavMap:
+    type: git
+    url: https://github.com/EasyNavigation/NavMap.git
+    version: rolling
