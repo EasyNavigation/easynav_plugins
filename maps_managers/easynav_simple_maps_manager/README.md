@@ -3,7 +3,9 @@
 [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
 
 ## Description
-Simple (no-op) Maps Manager that demonstrates the Maps Manager API. It forwards/republishes a basic occupancy map flow and exposes standard topics and a save-map service.
+Simple Maps Manager that demonstrates the Maps Manager API. It forwards/republishes a basic occupancy map flow and exposes standard topics and a save-map service.
+
+At the heart of this stack is the SimpleMap data structure. It represents the environment as a 2D occupancy grid where each cell can be either 0 (free), 1 (occupied), or -1 (unknown).
 
 ## Authors and Maintainers
 - **Authors:** Intelligent Robotics Lab
