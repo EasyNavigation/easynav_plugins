@@ -129,6 +129,13 @@ Directories</h2></td></tr>
 <h1><a class="anchor" id="autotoc_md117"></a>
 Description</h1>
 <p>Maps Manager that maintains 2D costmaps (static and dynamic), supports filter plugins (such as inflation and obstacle filters), and exposes maps through ROS topics and NavState integration.</p>
+<p>At the core of this stack lies the <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a> data structure. <code><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></code> extends the binary occupancy grid into a graded cost representation with values in the range [0–255]:</p><ul>
+<li>0: Free space, no cost to traverse.</li>
+<li>1–252: Gradual cost values, representing increasing difficulty or proximity to obstacles.</li>
+<li>253: “Near obstacle” (inscribed obstacle) cost, traversal strongly discouraged.</li>
+<li>254: Lethal obstacle, occupied cell.</li>
+<li>255: Unknown space.</li>
+</ul>
 <h1><a class="anchor" id="autotoc_md118"></a>
 Authors and Maintainers</h1>
 <ul>
