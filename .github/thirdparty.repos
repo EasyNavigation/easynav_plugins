@@ -2,12 +2,12 @@ repositories:
   ThirdParty/EasyNavigation:
     type: git
     url: https://github.com/EasyNavigation/EasyNavigation.git
-    version: rolling
+    version: kilted
   ThirdParty/yaets:
     type: git
     url: https://github.com/fmrico/yaets.git
-    version: rolling
+    version: kilted
   ThirdParty/NavMap:
     type: git
     url: https://github.com/EasyNavigation/NavMap.git
-    version: rolling
+    version: kilted
