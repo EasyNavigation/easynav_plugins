@@ -3,7 +3,7 @@
 [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
 
 ## Description
-Maps Manager that maintains an **OctoMap** (probabilistic 3D occupancy tree), supports filter plugins (e.g., inflation and obstacle filters), and exposes the map through ROS 2 topics. This README documents **plugin-level parameters only**.
+Maps Manager that maintains an [OctoMap](https://octomap.github.io/) (probabilistic 3D occupancy tree), supports filter plugins (e.g., inflation and obstacle filters), and exposes the map through ROS 2 topics. This README documents **plugin-level parameters only**.
 
 ## Authors and Maintainers
 - **Authors:** Intelligent Robotics Lab  

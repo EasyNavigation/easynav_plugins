@@ -5,6 +5,13 @@
 ## Description
 Maps Manager that maintains 2D costmaps (static and dynamic), supports filter plugins (such as inflation and obstacle filters), and exposes maps through ROS topics and NavState integration.
 
+At the core of this stack lies the Costmap2D data structure. `Costmap2D` extends the binary occupancy grid into a graded cost representation with values in the range [0–255]:
+- 0: Free space, no cost to traverse.
+- 1–252: Gradual cost values, representing increasing difficulty or proximity to obstacles.
+- 253: “Near obstacle” (inscribed obstacle) cost, traversal strongly discouraged.
+- 254: Lethal obstacle, occupied cell.
+- 255: Unknown space.
+
 ## Authors and Maintainers
 - **Authors:** Intelligent Robotics Lab  
 - **Maintainers:** Francisco Martín Rico <fmrico@gmail.com>

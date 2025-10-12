@@ -3,7 +3,7 @@
 [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
 
 ## Description
-Maps Manager that maintains a Bonxai probabilistic 3D occupancy map and exposes it via ROS topics, NavState, and a save-map service.
+Maps Manager that maintains a [Bonxai](https://github.com/facontidavide/Bonxai) probabilistic 3D occupancy map and exposes it via ROS topics, NavState, and a save-map service.
 
 ## Authors and Maintainers
 - **Authors:** Intelligent Robotics Lab
