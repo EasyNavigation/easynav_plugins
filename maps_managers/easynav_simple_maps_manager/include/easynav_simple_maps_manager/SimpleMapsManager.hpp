@@ -33,8 +33,8 @@
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "std_srvs/srv/trigger.hpp"
 
-#include "tf2_ros/buffer.h"
-#include "tf2_ros/transform_listener.h"
+#include "tf2_ros/buffer.hpp"
+#include "tf2_ros/transform_listener.hpp"
 
 #include "easynav_core/MapsManagerBase.hpp"
 #include "easynav_simple_common/SimpleMap.hpp"
