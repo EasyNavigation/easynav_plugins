@@ -60,9 +60,6 @@ static constexpr unsigned char INSCRIBED_INFLATED_OBSTACLE = 253;
 static constexpr unsigned char MAX_NON_OBSTACLE = 252;
 static constexpr unsigned char FREE_SPACE = 0;
 
-// ---------- math helpers ----------
-static inline double sqr(double x) {return x * x;}
-
 // ---------- stats over particles ----------
 tf2::Vector3 computeMean(
   const std::vector<Particle> & particles, std::size_t start,
@@ -640,7 +637,7 @@ static ScoreAgg score_particle_sensor_cloud(
   const Bonxai::ProbabilisticMap & occ_map,
   const Bonxai::ProbabilisticMap & inf_map,
   int tail_skip,
-  bool debug = false)
+  [[maybe_unused]] bool debug = false)
 {
   using Bonxai::CoordT;
   ScoreAgg s;
@@ -749,7 +746,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
       try {
         T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(b.frame_id);
 
-        const tf2::Transform & t = T_bf_sensor_cache[b.frame_id];
+        // const tf2::Transform & t = T_bf_sensor_cache[b.frame_id];
 
       } catch (const tf2::TransformException & ex) {
         RCLCPP_WARN(get_node()->get_logger(), "TF bf->%s failed: %s", b.frame_id.c_str(),

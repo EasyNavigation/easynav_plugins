@@ -234,8 +234,6 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   open.push(Node{cid_start, h(cid_start, cid_goal)});
   in_open[cid_start] = 1;
 
-  const size_t surface_goal = sidx_g;
-
   while (!open.empty()) {
     const auto cur = open.top(); open.pop();
     const NavCelId u = cur.cid;
@@ -243,6 +241,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
     if (u == cid_goal) {break;}
 
     // Optional: restrict to the goal surface (comment if you want cross-surface paths via explicit neighbors)
+    // const size_t surface_goal = sidx_g;
     // if (surface_goal != sidx_s) {
     //   // do nothing special; graph neighbors already encode connectivity
     // }
