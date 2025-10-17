@@ -99,7 +99,11 @@ BonxaiMapsManager::on_initialize()
         if (!std::isfinite(p.x()) || !std::isfinite(p.y()) || !std::isfinite(p.z())) {continue;}
 
         bonxai_map_->addHitPoint(p);
-        pcl_out.push_back({p.x(), p.y(), p.z()});
+        pcl_out.push_back({
+            static_cast<float>(p.x()),
+            static_cast<float>(p.y()),
+            static_cast<float>(p.z())
+        });
       }
 
       bonxai_msg_.data.clear();
@@ -209,7 +213,11 @@ BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
   bonxai_result.clear();
   bonxai_map_->getOccupiedVoxels(bonxai_result);
   for (const auto & voxel : bonxai_result) {
-    pcl_out.push_back({voxel.x(), voxel.y(), voxel.z()});
+    pcl_out.push_back({
+        static_cast<float>(voxel.x()),
+        static_cast<float>(voxel.y()),
+        static_cast<float>(voxel.z())
+    });
   }
 
   bonxai_msg_.data.clear();
@@ -267,7 +275,11 @@ BonxaiMapsManager::update_from_occ(const nav_msgs::msg::OccupancyGrid & occ)
   bonxai_result.clear();
   bonxai_map_->getOccupiedVoxels(bonxai_result);
   for (const auto & voxel : bonxai_result) {
-    pcl_out.push_back({voxel.x(), voxel.y(), voxel.z()});
+    pcl_out.push_back({
+        static_cast<float>(voxel.x()),
+        static_cast<float>(voxel.y()),
+        static_cast<float>(voxel.z())
+    });
   }
 
   bonxai_msg_.data.clear();

@@ -205,7 +205,7 @@ NavMapMapsManager::on_initialize()
 }
 
 void
-NavMapMapsManager::set_static_map(const ::navmap::NavMap & new_map)
+NavMapMapsManager::set_static_map([[maybe_unused]] const ::navmap::NavMap & new_map)
 {
   // navmap_ = new_map;
 }
