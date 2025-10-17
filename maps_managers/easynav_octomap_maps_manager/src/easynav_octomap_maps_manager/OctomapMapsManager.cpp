@@ -253,7 +253,7 @@ OctomapMapsManager::on_initialize()
 }
 
 void
-OctomapMapsManager::update(::easynav::NavState & nav_state)
+OctomapMapsManager::update([[maybe_unused]] ::easynav::NavState & nav_state)
 {
   EASYNAV_TRACE_EVENT;
 
