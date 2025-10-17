@@ -1,10 +1,9 @@
 # EasyNav Plugins
 
-[![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#)
-[![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
-
+[![Doxygen Deployment](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/doxygen-doc.yml/badge.svg)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/doxygen-doc.yml)
 [![rolling](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/rolling.yaml/badge.svg)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/rolling.yaml)
 [![kilted](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/kilted.yaml/badge.svg)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/kilted.yaml)
+[![jazzy](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/jazzy.yaml/badge.svg)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/jazzy.yaml)
 
 ## Description
 **EasyNav Plugins** provides the official collection of plugins for the [Easy Navigation (EasyNav)](https://github.com/EasyNavigation) framework.  
