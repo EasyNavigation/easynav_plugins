@@ -10,7 +10,7 @@ var searchData=
   ['clamp_5fmax_5flog_7',['clamp_max_log',['../structBonxai_1_1ProbabilisticMap_1_1Options.html#a878067f8123ad33e8e81489b751800cb',1,'Bonxai::ProbabilisticMap::Options']]],
   ['clamp_5fmin_5flog_8',['clamp_min_log',['../structBonxai_1_1ProbabilisticMap_1_1Options.html#aaf9d16c3c90721cfc4b8e25601176b89',1,'Bonxai::ProbabilisticMap::Options']]],
   ['clearance_5fdistance_5f_9',['clearance_distance_',['../classeasynav_1_1SimplePlanner.html#ad7416beee4bf13e959b0728084b548ee',1,'easynav::SimplePlanner']]],
-  ['cloud_10',['cloud',['../structeasynav_1_1navmap_1_1SensorBundle.html#a1a9ec76eddd92c10b771ab91fde78950',1,'easynav::navmap::SensorBundle']]],
+  ['cloud_10',['cloud',['../structeasynav_1_1navmap_1_1SensorBundle.html#adb4add18344f6e293fa2e36abc52f451',1,'easynav::navmap::SensorBundle']]],
   ['compute_5fodom_5ffrom_5ftf_5f_11',['compute_odom_from_tf_',['../classeasynav_1_1AMCLLocalizer.html#af402f8786d4f74cc9a70e1ccb8884a76',1,'easynav::AMCLLocalizer::compute_odom_from_tf_'],['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#af402f8786d4f74cc9a70e1ccb8884a76',1,'easynav::navmap::AMCLLocalizer::compute_odom_from_tf_']]],
   ['continuous_5freplan_5f_12',['continuous_replan_',['../classeasynav_1_1CostmapPlanner.html#a35e94cf5823e535adf42e15573b348d8',1,'easynav::CostmapPlanner::continuous_replan_'],['../classeasynav_1_1navmap_1_1AStarPlanner.html#a35e94cf5823e535adf42e15573b348d8',1,'easynav::navmap::AStarPlanner::continuous_replan_']]],
   ['correct_5fmax_5fpoints_5f_13',['correct_max_points_',['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#aa223ca5cf6a240bd2321641c8e264c87',1,'easynav::navmap::AMCLLocalizer']]],

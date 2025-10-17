@@ -23,7 +23,7 @@ var searchData=
   ['clear_5fmemory_20',['CLEAR_MEMORY',['../namespaceBonxai.html#a73552f1ac7f3ddd1dcc476f665708735a1cec88f1b6874c99918ced51c77342d2',1,'Bonxai']]],
   ['clearance_5fdistance_5f_21',['clearance_distance_',['../classeasynav_1_1SimplePlanner.html#ad7416beee4bf13e959b0728084b548ee',1,'easynav::SimplePlanner']]],
   ['clearoption_22',['ClearOption',['../namespaceBonxai.html#a73552f1ac7f3ddd1dcc476f665708735',1,'Bonxai']]],
-  ['cloud_23',['cloud',['../structeasynav_1_1navmap_1_1SensorBundle.html#a1a9ec76eddd92c10b771ab91fde78950',1,'easynav::navmap::SensorBundle']]],
+  ['cloud_23',['cloud',['../structeasynav_1_1navmap_1_1SensorBundle.html#adb4add18344f6e293fa2e36abc52f451',1,'easynav::navmap::SensorBundle']]],
   ['combinationmethod_24',['CombinationMethod',['../namespaceeasynav.html#a7a97a116707da5eb8ba2e97825d41814',1,'easynav']]],
   ['compute_5fcontrol_25',['compute_control',['../classeasynav_1_1MPPIOptimizer.html#a2d6d9ff5ec9333e929e451bc8b6bdb55',1,'easynav::MPPIOptimizer']]],
   ['compute_5fodom_5ffrom_5ftf_5f_26',['compute_odom_from_tf_',['../classeasynav_1_1AMCLLocalizer.html#af402f8786d4f74cc9a70e1ccb8884a76',1,'easynav::AMCLLocalizer::compute_odom_from_tf_'],['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#af402f8786d4f74cc9a70e1ccb8884a76',1,'easynav::navmap::AMCLLocalizer::compute_odom_from_tf_']]],

@@ -130,8 +130,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a632f8cfdae9bb0bc92f5fc57c6bfdc57" id="r_a632f8cfdae9bb0bc92f5fc57c6bfdc57"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a632f8cfdae9bb0bc92f5fc57c6bfdc57">ProgressCallback</a> = std::function&lt;void(float)&gt;</td></tr>
-<tr class="separator:a632f8cfdae9bb0bc92f5fc57c6bfdc57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38a5ef5d8850a2e3d4ec867c65a79d63" id="r_a38a5ef5d8850a2e3d4ec867c65a79d63"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38a5ef5d8850a2e3d4ec867c65a79d63">ProgressCallback</a> = std::function&lt;void(float)&gt;</td></tr>
+<tr class="separator:a38a5ef5d8850a2e3d4ec867c65a79d63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -161,18 +161,16 @@ Functions</h2></td></tr>
 <tr class="memitem:ab45afe9fed54b1caaab473a662139309" id="r_ab45afe9fed54b1caaab473a662139309"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab45afe9fed54b1caaab473a662139309">expand_user_home_dir_if_needed</a> (std::string yaml_filename, std::string home_dir)</td></tr>
 <tr class="memdesc:ab45afe9fed54b1caaab473a662139309"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expand ~/ to home user dir.  <br /></td></tr>
 <tr class="separator:ab45afe9fed54b1caaab473a662139309"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a451c2322e6a5d1b0e8831d963907bca0" id="r_a451c2322e6a5d1b0e8831d963907bca0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a451c2322e6a5d1b0e8831d963907bca0">extractYaw</a> (const tf2::Transform &amp;transform)</td></tr>
-<tr class="separator:a451c2322e6a5d1b0e8831d963907bca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acba4add0adbb3396cfa75fc903193cf4" id="r_acba4add0adbb3396cfa75fc903193cf4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acba4add0adbb3396cfa75fc903193cf4">extractYaw</a> (const tf2::Transform &amp;T)</td></tr>
+<tr class="separator:acba4add0adbb3396cfa75fc903193cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcd1e85e181f9a1b71aefb6d573a974b" id="r_afcd1e85e181f9a1b71aefb6d573a974b"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcd1e85e181f9a1b71aefb6d573a974b">get_home_dir</a> ()</td></tr>
 <tr class="separator:afcd1e85e181f9a1b71aefb6d573a974b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27199b6c5c41cd0c496807946d16ad83" id="r_a27199b6c5c41cd0c496807946d16ad83"><td class="memItemLeft" align="right" valign="top">std::optional&lt; tf2::Quaternion &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27199b6c5c41cd0c496807946d16ad83">get_latest_imu_quat</a> (const NavState &amp;nav_state)</td></tr>
 <tr class="separator:a27199b6c5c41cd0c496807946d16ad83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40727e2c1519ca6567c750b3df27efe0" id="r_a40727e2c1519ca6567c750b3df27efe0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Triangle &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40727e2c1519ca6567c750b3df27efe0">grow_surface_from_seed</a> (const pcl::PointCloud&lt; pcl::PointXYZ &gt; &amp;cloud, int seed_idx, const Params &amp;P)</td></tr>
 <tr class="separator:a40727e2c1519ca6567c750b3df27efe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35867297cad920bff058e95579302fbf" id="r_a35867297cad920bff058e95579302fbf"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classBonxai_1_1ProbabilisticMap.html">Bonxai::ProbabilisticMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35867297cad920bff058e95579302fbf">inflate_map</a> (const std::shared_ptr&lt; <a class="el" href="classBonxai_1_1ProbabilisticMap.html">Bonxai::ProbabilisticMap</a> &gt; &amp;src, double sigma, double p_min, <a class="el" href="#a632f8cfdae9bb0bc92f5fc57c6bfdc57">ProgressCallback</a> progress)</td></tr>
-<tr class="separator:a35867297cad920bff058e95579302fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0be5ff2554d44d8f8693d00fc36ae03" id="r_ac0be5ff2554d44d8f8693d00fc36ae03"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0be5ff2554d44d8f8693d00fc36ae03">is_ray_occluded</a> (const <a class="el" href="classBonxai_1_1ProbabilisticMap.html">Bonxai::ProbabilisticMap</a> &amp;map, const <a class="el" href="structBonxai_1_1CoordT.html">Bonxai::CoordT</a> &amp;key_origin, const <a class="el" href="structBonxai_1_1CoordT.html">Bonxai::CoordT</a> &amp;key_end, int tail_skip_voxels=1)</td></tr>
-<tr class="separator:ac0be5ff2554d44d8f8693d00fc36ae03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bdbcb6e84e8bb320d00f1ece63dcf4e" id="r_a2bdbcb6e84e8bb320d00f1ece63dcf4e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classBonxai_1_1ProbabilisticMap.html">Bonxai::ProbabilisticMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bdbcb6e84e8bb320d00f1ece63dcf4e">inflate_map</a> (const std::shared_ptr&lt; <a class="el" href="classBonxai_1_1ProbabilisticMap.html">Bonxai::ProbabilisticMap</a> &gt; &amp;src, double sigma, double p_min, <a class="el" href="#a38a5ef5d8850a2e3d4ec867c65a79d63">ProgressCallback</a> progress=nullptr)</td></tr>
+<tr class="separator:a2bdbcb6e84e8bb320d00f1ece63dcf4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad65be2857c82bbadf9e7eb59ad067f63" id="r_ad65be2857c82bbadf9e7eb59ad067f63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad65be2857c82bbadf9e7eb59ad067f63">loadMapFromFile</a> (const <a class="el" href="structeasynav_1_1navmap_1_1LoadParameters.html">LoadParameters</a> &amp;load_parameters, nav_msgs::msg::OccupancyGrid &amp;map)</td></tr>
 <tr class="memdesc:ad65be2857c82bbadf9e7eb59ad067f63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the image from map file and generate an OccupancyGrid.  <br /></td></tr>
 <tr class="separator:ad65be2857c82bbadf9e7eb59ad067f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,8 +191,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a6a442a5fec850c953734564959a562ba" id="r_a6a442a5fec850c953734564959a562ba"><td class="memItemLeft" align="right" valign="top">geometry_msgs::msg::Quaternion&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a442a5fec850c953734564959a562ba">orientationAroundZAxis</a> (double angle)</td></tr>
 <tr class="memdesc:a6a442a5fec850c953734564959a562ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a geometry_msgs Quaternion from a yaw angle.  <br /></td></tr>
 <tr class="separator:a6a442a5fec850c953734564959a562ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afac22b36fad17acea17ac83c1394b644" id="r_afac22b36fad17acea17ac83c1394b644"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afac22b36fad17acea17ac83c1394b644">printTransform</a> (const tf2::Transform &amp;tf)</td></tr>
-<tr class="separator:afac22b36fad17acea17ac83c1394b644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a640e338d206263877fd036bb388006a6" id="r_a640e338d206263877fd036bb388006a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a640e338d206263877fd036bb388006a6">saveMapToFile</a> (const nav_msgs::msg::OccupancyGrid &amp;map, const <a class="el" href="structeasynav_1_1navmap_1_1SaveParameters.html">SaveParameters</a> &amp;save_parameters)</td></tr>
 <tr class="memdesc:a640e338d206263877fd036bb388006a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write OccupancyGrid map to file.  <br /></td></tr>
 <tr class="separator:a640e338d206263877fd036bb388006a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,14 +209,14 @@ Functions</h2></td></tr>
 <tr class="separator:a707e7fc5553ae52ca715c50536f19b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="a632f8cfdae9bb0bc92f5fc57c6bfdc57" name="a632f8cfdae9bb0bc92f5fc57c6bfdc57"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a632f8cfdae9bb0bc92f5fc57c6bfdc57">&#9670;&#160;</a></span>ProgressCallback</h2>
+<a id="a38a5ef5d8850a2e3d4ec867c65a79d63" name="a38a5ef5d8850a2e3d4ec867c65a79d63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38a5ef5d8850a2e3d4ec867c65a79d63">&#9670;&#160;</a></span>ProgressCallback</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::function&lt; void(float)&gt; <a class="el" href="#a632f8cfdae9bb0bc92f5fc57c6bfdc57">ProgressCallback</a> = std::function&lt;void(float)&gt;</td>
+          <td class="memname">using <a class="el" href="#a38a5ef5d8850a2e3d4ec867c65a79d63">ProgressCallback</a> = std::function&lt;void(float)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -424,8 +420,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a451c2322e6a5d1b0e8831d963907bca0" name="a451c2322e6a5d1b0e8831d963907bca0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a451c2322e6a5d1b0e8831d963907bca0">&#9670;&#160;</a></span>extractYaw()</h2>
+<a id="acba4add0adbb3396cfa75fc903193cf4" name="acba4add0adbb3396cfa75fc903193cf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acba4add0adbb3396cfa75fc903193cf4">&#9670;&#160;</a></span>extractYaw()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -433,7 +429,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">double extractYaw </td>
           <td>(</td>
-          <td class="paramtype">const tf2::Transform &amp;</td>          <td class="paramname"><span class="paramname"><em>transform</em></span></td><td>)</td>
+          <td class="paramtype">const tf2::Transform &amp;</td>          <td class="paramname"><span class="paramname"><em>T</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -501,8 +497,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a35867297cad920bff058e95579302fbf" name="a35867297cad920bff058e95579302fbf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35867297cad920bff058e95579302fbf">&#9670;&#160;</a></span>inflate_map()</h2>
+<a id="a2bdbcb6e84e8bb320d00f1ece63dcf4e" name="a2bdbcb6e84e8bb320d00f1ece63dcf4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bdbcb6e84e8bb320d00f1ece63dcf4e">&#9670;&#160;</a></span>inflate_map()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -525,38 +521,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a632f8cfdae9bb0bc92f5fc57c6bfdc57">ProgressCallback</a></td>          <td class="paramname"><span class="paramname"><em>progress</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac0be5ff2554d44d8f8693d00fc36ae03" name="ac0be5ff2554d44d8f8693d00fc36ae03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0be5ff2554d44d8f8693d00fc36ae03">&#9670;&#160;</a></span>is_ray_occluded()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool is_ray_occluded </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classBonxai_1_1ProbabilisticMap.html">Bonxai::ProbabilisticMap</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>map</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="structBonxai_1_1CoordT.html">Bonxai::CoordT</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>key_origin</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="structBonxai_1_1CoordT.html">Bonxai::CoordT</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>key_end</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>tail_skip_voxels</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="#a38a5ef5d8850a2e3d4ec867c65a79d63">ProgressCallback</a></td>          <td class="paramname"><span class="paramname"><em>progress</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -775,23 +740,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>geometry_msgs Quaternion </dd></dl>
-
-</div>
-</div>
-<a id="afac22b36fad17acea17ac83c1394b644" name="afac22b36fad17acea17ac83c1394b644"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afac22b36fad17acea17ac83c1394b644">&#9670;&#160;</a></span>printTransform()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void printTransform </td>
-          <td>(</td>
-          <td class="paramtype">const tf2::Transform &amp;</td>          <td class="paramname"><span class="paramname"><em>tf</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
