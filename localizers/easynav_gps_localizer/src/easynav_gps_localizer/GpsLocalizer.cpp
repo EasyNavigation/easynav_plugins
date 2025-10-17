@@ -88,7 +88,7 @@ void GpsLocalizer::imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
 }
 
 
-void GpsLocalizer::update_rt(NavState & nav_state)
+void GpsLocalizer::update_rt([[maybe_unused]] NavState & nav_state)
 {
 }
 

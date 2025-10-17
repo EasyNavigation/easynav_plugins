@@ -476,13 +476,13 @@ SerestController::apply_corner_guard(
 bool
 SerestController::should_turn_in_place(
   bool allow_reverse, double e_theta, double e_theta_goal,
-  double dist_to_end, double turn_in_place_thr) const
+  double dist_to_end, [[maybe_unused]] double turn_in_place_thr) const
 {
   // Mantenemos compatibilidad con la firma, pero ignoramos turn_in_place_thr
   // y usamos dos umbrales internos sin exponer parámetros.
   const double PI = 3.14159265358979323846;
   const double thr_enter = 60.0 * PI / 180.0; // entra a girar si |e_theta| > 60°
-  const double thr_exit = 35.0 * PI / 180.0; // sale de girar si |e_theta| < 35°
+  // const double thr_exit = 35.0 * PI / 180.0; // sale de girar si |e_theta| < 35°
 
   // No permitimos “atajo” marcha atrás en esta decisión: si no permites reverse,
   // el criterio es más estricto.
