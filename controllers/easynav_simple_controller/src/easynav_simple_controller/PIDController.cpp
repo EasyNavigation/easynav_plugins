@@ -27,9 +27,10 @@ PIDController::PIDController(double min_ref, double max_ref, double min_output, 
   max_output_ = max_output;
   prev_error_ = int_error_ = 0.0;
 
-  KP_ = 0.70;
-  KI_ = 0.15;
-  KD_ = 0.15;
+  KP_ = 0.7;
+  KI_ = 0.0; // start with no integral to avoid windup
+  KD_ = 0.0;
+  integral_limit_ = max_output_ * 2.0; // default integral clamp
 }
 
 void
@@ -41,35 +42,51 @@ PIDController::set_pid(double n_KP, double n_KI, double n_KD)
 }
 
 double
-PIDController::get_output(double new_reference)
+PIDController::get_output(double new_reference, double dt)
 {
-  double ref = new_reference;
-  double output = 0.0;
-
-  // Proportional Error
-  double direction = 0.0;
-  if (ref != 0.0) {
-    direction = ref / fabs(ref);
+  if (dt <= 0.0) {
+    return 0.0;
   }
 
-  if (fabs(ref) < min_ref_) {
-    output = 0.0;
-  } else if (fabs(ref) > max_ref_) {
-    output = direction * max_output_;
-  } else {
-    output = direction * min_output_ + ref * (max_output_ - min_output_);
+  double error = new_reference;
+
+  // ignore very small errors
+  if (std::fabs(error) < min_ref_) {
+    // decay integrator slightly
+    int_error_ *= 0.9;
+    prev_error_ = error;
+    return 0.0;
   }
 
-  // Integral Error
-  int_error_ = (int_error_ + output) * 2.0 / 3.0;
+  // Proportional term
+  double p = KP_ * error;
 
-  // Derivative Error
-  double deriv_error = output - prev_error_;
-  prev_error_ = output;
+  // Integral term with anti-windup
+  int_error_ += error * dt;
+  if (integral_limit_ > 0.0) {
+    if (int_error_ * KI_ > integral_limit_) {int_error_ = integral_limit_ / KI_;}
+    if (int_error_ * KI_ < -integral_limit_) {int_error_ = -integral_limit_ / KI_;}
+  }
+  double i = KI_ * int_error_;
 
-  output = KP_ * output + KI_ * int_error_ + KD_ * deriv_error;
+  // Derivative term
+  double deriv = (error - prev_error_) / dt;
+  double d = KD_ * deriv;
+  prev_error_ = error;
 
-  return std::clamp(output, -max_output_, max_output_);
+  double output = p + i + d;
+
+  // Saturate output to configured limits
+  output = std::clamp(output, -max_output_, max_output_);
+
+  return output;
+}
+
+void
+PIDController::reset()
+{
+  prev_error_ = 0.0;
+  int_error_ = 0.0;
 }
 
 }  // namespace easynav
