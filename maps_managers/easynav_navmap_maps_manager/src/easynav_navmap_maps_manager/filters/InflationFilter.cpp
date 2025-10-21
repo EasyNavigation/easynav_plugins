@@ -95,7 +95,7 @@ bool InflationFilter::inflate_layer_u8(
 
   const size_t N = nm.navcels.size();
   const float R = inflation_radius;
-  const float k = cost_scaling_factor;
+  // const float k = cost_scaling_factor;
   const float r_ins = std::clamp(inscribed_radius, 0.0f, R);
 
   // Precomputar centroides XY
