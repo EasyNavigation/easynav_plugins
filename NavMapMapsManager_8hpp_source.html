@@ -132,67 +132,69 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#include &quot;easynav_core/MapsManagerBase.hpp&quot;</span></div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#include &quot;navmap_core/NavMap.hpp&quot;</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#include &quot;<a class="code" href="NavMapFilter_8hpp.html">easynav_navmap_maps_manager/filters/NavMapFilter.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#include &quot;pluginlib/class_loader.hpp&quot;</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">#include &quot;yaets/tracing.hpp&quot;</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>{</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav_1_1navmap.html">navmap</a></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>{</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span></div>
-<div class="foldopen" id="foldopen00063" data-start="{" data-end="};">
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html">   63</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a8dfd720a6f4a06ea73bb7fafdf6c50ad">NavMapMapsManager</a> : <span class="keyword">public</span> easynav::MapsManagerBase</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>{</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a8dfd720a6f4a06ea73bb7fafdf6c50ad">NavMapMapsManager</a>();</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#ab3e71a03f0557bce04f6f28303bac739">~NavMapMapsManager</a>();</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <span class="keyword">virtual</span> std::expected&lt;void, std::string&gt; <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa09f4316ce265b452c96e6d74101cd76">on_initialize</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#adf7e4756c0a96f191d0978a0b10a9d5a">update</a>(::easynav::NavState &amp; nav_state) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a357f0d14543847891c6fc743482c4f99">set_static_map</a>(const ::navmap::NavMap &amp; new_map);</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">  106</a></span>  std::string <a class="code hl_variable" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">map_path_</a>;</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  ::navmap::NavMap navmap_;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  rclcpp::Publisher&lt;navmap_ros_interfaces::msg::NavMap&gt;::SharedPtr navmap_pub_;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>  rclcpp::Publisher&lt;navmap_ros_interfaces::msg::NavMapLayer&gt;::SharedPtr layer_updates_pub_;</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  rclcpp::Subscription&lt;nav_msgs::msg::OccupancyGrid&gt;::SharedPtr incoming_occ_map_sub_;</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  rclcpp::Subscription&lt;sensor_msgs::msg::PointCloud2&gt;::SharedPtr incoming_pc2_map_sub_;</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  rclcpp::Service&lt;std_srvs::srv::Trigger&gt;::SharedPtr savemap_srv_;</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  navmap_ros_interfaces::msg::NavMap navmap_msg_;</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>  std::unique_ptr&lt;pluginlib::ClassLoader&lt;NavMapFilter&gt;&gt; navmap_filters_loader_;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  std::vector&lt;std::shared_ptr&lt;NavMapFilter&gt;&gt; navmap_filters_;</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  <span class="keywordtype">double</span> resolution_ {1.0};</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>};</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#include &quot;navmap_ros/conversions.hpp&quot;</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#include &quot;<a class="code" href="NavMapFilter_8hpp.html">easynav_navmap_maps_manager/filters/NavMapFilter.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">#include &quot;pluginlib/class_loader.hpp&quot;</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">#include &quot;yaets/tracing.hpp&quot;</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>{</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav_1_1navmap.html">navmap</a></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>{</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span></div>
+<div class="foldopen" id="foldopen00064" data-start="{" data-end="};">
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html">   64</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a8dfd720a6f4a06ea73bb7fafdf6c50ad">NavMapMapsManager</a> : <span class="keyword">public</span> easynav::MapsManagerBase</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>{</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a8dfd720a6f4a06ea73bb7fafdf6c50ad">NavMapMapsManager</a>();</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#ab3e71a03f0557bce04f6f28303bac739">~NavMapMapsManager</a>();</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <span class="keyword">virtual</span> std::expected&lt;void, std::string&gt; <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa09f4316ce265b452c96e6d74101cd76">on_initialize</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#adf7e4756c0a96f191d0978a0b10a9d5a">update</a>(::easynav::NavState &amp; nav_state) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a357f0d14543847891c6fc743482c4f99">set_static_map</a>(const ::navmap::NavMap &amp; new_map);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">  107</a></span>  std::string <a class="code hl_variable" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">map_path_</a>;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  ::navmap::NavMap navmap_;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  rclcpp::Publisher&lt;navmap_ros_interfaces::msg::NavMap&gt;::SharedPtr navmap_pub_;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  rclcpp::Publisher&lt;navmap_ros_interfaces::msg::NavMapLayer&gt;::SharedPtr layer_updates_pub_;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  rclcpp::Subscription&lt;nav_msgs::msg::OccupancyGrid&gt;::SharedPtr incoming_occ_map_sub_;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  rclcpp::Subscription&lt;sensor_msgs::msg::PointCloud2&gt;::SharedPtr incoming_pc2_map_sub_;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  rclcpp::Service&lt;std_srvs::srv::Trigger&gt;::SharedPtr savemap_srv_;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>  navmap_ros_interfaces::msg::NavMap navmap_msg_;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  std::unique_ptr&lt;pluginlib::ClassLoader&lt;NavMapFilter&gt;&gt; navmap_filters_loader_;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  std::vector&lt;std::shared_ptr&lt;NavMapFilter&gt;&gt; navmap_filters_;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  navmap_ros::BuildParams mapping_params_;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>  <span class="keywordtype">double</span> resolution_ {1.0};</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>};</div>
 </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>}  <span class="comment">// namespace navmap</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>}  <span class="comment">// namespace easynav</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span> </div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>}  <span class="comment">// namespace navmap</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>}  <span class="comment">// namespace easynav</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_</span></div>
 <div class="ttc" id="aNavMapFilter_8hpp_html"><div class="ttname"><a href="NavMapFilter_8hpp.html">NavMapFilter.hpp</a></div></div>
-<div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_a357f0d14543847891c6fc743482c4f99"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a357f0d14543847891c6fc743482c4f99">easynav::navmap::NavMapMapsManager::set_static_map</a></div><div class="ttdeci">void set_static_map(const ::navmap::NavMap &amp;new_map)</div><div class="ttdoc">Replaces the current static map.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.cpp:208</div></div>
+<div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_a357f0d14543847891c6fc743482c4f99"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a357f0d14543847891c6fc743482c4f99">easynav::navmap::NavMapMapsManager::set_static_map</a></div><div class="ttdeci">void set_static_map(const ::navmap::NavMap &amp;new_map)</div><div class="ttdoc">Replaces the current static map.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.cpp:236</div></div>
 <div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_a8dfd720a6f4a06ea73bb7fafdf6c50ad"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#a8dfd720a6f4a06ea73bb7fafdf6c50ad">easynav::navmap::NavMapMapsManager::NavMapMapsManager</a></div><div class="ttdeci">NavMapMapsManager()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.cpp:44</div></div>
 <div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_aa09f4316ce265b452c96e6d74101cd76"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa09f4316ce265b452c96e6d74101cd76">easynav::navmap::NavMapMapsManager::on_initialize</a></div><div class="ttdeci">virtual std::expected&lt; void, std::string &gt; on_initialize() override</div><div class="ttdoc">Initializes the maps manager.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.cpp:62</div></div>
-<div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_aa77083dd3e9128e426594ca1674a90e2"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">easynav::navmap::NavMapMapsManager::map_path_</a></div><div class="ttdeci">std::string map_path_</div><div class="ttdoc">Full path to the map file.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.hpp:106</div></div>
+<div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_aa77083dd3e9128e426594ca1674a90e2"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">easynav::navmap::NavMapMapsManager::map_path_</a></div><div class="ttdeci">std::string map_path_</div><div class="ttdoc">Full path to the map file.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.hpp:107</div></div>
 <div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_ab3e71a03f0557bce04f6f28303bac739"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#ab3e71a03f0557bce04f6f28303bac739">easynav::navmap::NavMapMapsManager::~NavMapMapsManager</a></div><div class="ttdeci">~NavMapMapsManager()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.cpp:59</div></div>
-<div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_adf7e4756c0a96f191d0978a0b10a9d5a"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#adf7e4756c0a96f191d0978a0b10a9d5a">easynav::navmap::NavMapMapsManager::update</a></div><div class="ttdeci">virtual void update(::easynav::NavState &amp;nav_state) override</div><div class="ttdoc">Updates the internal maps using the current navigation state.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.cpp:214</div></div>
+<div class="ttc" id="aclasseasynav_1_1navmap_1_1NavMapMapsManager_html_adf7e4756c0a96f191d0978a0b10a9d5a"><div class="ttname"><a href="classeasynav_1_1navmap_1_1NavMapMapsManager.html#adf7e4756c0a96f191d0978a0b10a9d5a">easynav::navmap::NavMapMapsManager::update</a></div><div class="ttdeci">virtual void update(::easynav::NavState &amp;nav_state) override</div><div class="ttdoc">Updates the internal maps using the current navigation state.</div><div class="ttdef"><b>Definition</b> NavMapMapsManager.cpp:242</div></div>
 <div class="ttc" id="anamespaceeasynav_1_1navmap_html"><div class="ttname"><a href="namespaceeasynav_1_1navmap.html">easynav::navmap</a></div><div class="ttdef"><b>Definition</b> AMCLLocalizer.hpp:49</div></div>
 <div class="ttc" id="anamespaceeasynav_html"><div class="ttname"><a href="namespaceeasynav.html">easynav</a></div><div class="ttdoc">Provides a mapping for often used cost values.</div><div class="ttdef"><b>Definition</b> cost_values.hpp:41</div></div>
 </div><!-- fragment --></div><!-- contents -->
