@@ -74,12 +74,10 @@ std::expected<void, std::string> AStarPlanner::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<std::string>(plugin_name + ".layer", "inflated_obstacles");
   node->declare_parameter<double>(plugin_name + ".cost_factor", 2.0);
   node->declare_parameter<double>(plugin_name + ".inflation_penalty", 5.0);
   node->declare_parameter<bool>(plugin_name + ".continuous_replan", true);
 
-  node->get_parameter(plugin_name + ".layer", layer_name_);
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
   node->get_parameter(plugin_name + ".inflation_penalty", inflation_penalty_);
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);
@@ -92,9 +90,10 @@ std::expected<void, std::string> AStarPlanner::on_initialize()
 void AStarPlanner::update(NavState & nav_state)
 {
   current_path_.poses.clear();
-  if (!nav_state.has("goals") || !nav_state.has("robot_pose") || !nav_state.has("map")) {
+  if (!nav_state.has("goals") || !nav_state.has("robot_pose") || !nav_state.has("map.navmap")) {
     return;
   }
+
 
   const auto goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty()) {
@@ -102,7 +101,7 @@ void AStarPlanner::update(NavState & nav_state)
     return;
   }
 
-  navmap_ = nav_state.get<::navmap::NavMap>("map");
+  navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
 
   const auto robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
@@ -122,7 +121,6 @@ void AStarPlanner::update(NavState & nav_state)
   }
 
   current_goal_ = goal;
-
   auto poses = a_star_path(navmap_, robot_pose.pose.pose, goal);
   if (!poses.empty()) {
     current_path_.header.stamp = get_node()->now();
@@ -170,32 +168,13 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
     if (!nm.closest_navcel(pG, sidx_g, cid_goal, q, d2)) {return {};}
   }
 
-  // 2) Choose layer to query
-  std::string layer = layer_name_;
-  if (!nm.has_layer(layer)) {
-    if (!nm.has_layer(layer)) {
-      RCLCPP_WARN(get_node()->get_logger(), "No layer '%s' nor 'obstacles' found",
-            layer_name_.c_str());
-      return {};
-    }
-  }
-
-  // Impassable predicate
-  auto blocked = [&](NavCelId c) -> bool {
-      uint8_t v = nm.layer_get<uint8_t>(layer, c, FREE_SPACE);
-      return (v == NO_INFORMATION) || (v >= LETHAL_OBSTACLE);
-    };
-  if (blocked(cid_start) || blocked(cid_goal)) {
-    return {};
-  }
-
   const size_t N = nm.navcels.size();
 
   // 3) Precompute centroids (2D) for consistent metric and heuristic
-  std::vector<Eigen::Vector2f> C(N);
+  std::vector<Eigen::Vector3f> C(N);
   for (NavCelId c = 0; c < N; ++c) {
     const auto cc = nm.navcel_centroid(c);
-    C[c] = {cc.x(), cc.y()};
+    C[c] = {cc.x(), cc.y(), cc.z()};
   }
 
   auto h = [&](NavCelId a, NavCelId b) -> double {
@@ -205,20 +184,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
 
   auto step_cost = [&](NavCelId from, NavCelId to) -> double {
       const double dist = static_cast<double>((C[from] - C[to]).norm());
-      const uint8_t cost_to = nm.layer_get<uint8_t>(layer, to, FREE_SPACE);
-      if (cost_to >= LETHAL_OBSTACLE || cost_to == NO_INFORMATION) {
-        return std::numeric_limits<double>::infinity();
-      }
-      const double norm = static_cast<double>(cost_to) / static_cast<double>(LETHAL_OBSTACLE);
-      double c = dist * (1.0 + cost_factor_ * norm);
-      if (cost_to >= INSCRIBED_INFLATED_OBSTACLE) {
-      // extra penalty near obstacles
-        const double ratio =
-          static_cast<double>(cost_to - INSCRIBED_INFLATED_OBSTACLE) /
-          static_cast<double>(LETHAL_OBSTACLE - INSCRIBED_INFLATED_OBSTACLE);
-        c += inflation_penalty_ * std::max(0.0, ratio);
-      }
-      return c;
+      return dist;
     };
 
   // 4) A* on triangle graph
@@ -249,7 +215,6 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
     for (NavCelId v : nm.navcel_neighbors(u)) {
       const size_t vidx = static_cast<size_t>(v);
       if (vidx >= N) {continue;}
-      if (blocked(v)) {continue;}
 
       const double sc = step_cost(u, v);
       if (!std::isfinite(sc)) {continue;}
@@ -275,7 +240,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
     geometry_msgs::msg::Pose p;
     p.position.x = C[c].x();
     p.position.y = C[c].y();
-    p.position.z = 0.0;
+    p.position.z = C[c].z();
     p.orientation = goal.orientation;
     path.push_back(std::move(p));
     if (c == cid_start) {break;}
