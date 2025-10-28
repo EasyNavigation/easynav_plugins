@@ -104,7 +104,7 @@ protected:
    *                        to disable. Default: 0 (disabled).
    * @return nav_msgs::msg::Path Smoothed path, same frame_id and header stamp as input.
    */
-  inline nav_msgs::msg::Path path_smoother(
+  nav_msgs::msg::Path path_smoother(
     const nav_msgs::msg::Path & in_path,
     const ::navmap::NavMap & navmap,
     int iterations = 5,
