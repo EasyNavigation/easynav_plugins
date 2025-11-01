@@ -215,7 +215,8 @@ AStarPlanner::path_smoother(
     };
 
   // Helper: clamp a 3D point to the triangle of a given cid (closest point)
-  auto clamp_to_triangle = [&](const Eigen::Vector3f & p, ::navmap::NavCelId cid) -> Eigen::Vector3f {
+  auto clamp_to_triangle = [&](const Eigen::Vector3f & p,
+    ::navmap::NavCelId cid) -> Eigen::Vector3f {
       const auto V = get_triangle_vertices(cid);
       return ::navmap::closest_point_on_triangle(p, V[0], V[1], V[2]);
     };
