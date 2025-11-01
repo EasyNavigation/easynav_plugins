@@ -69,29 +69,9 @@ NavMapMapsManager::on_initialize()
   node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->declare_parameter(plugin_name + ".navmap_path_file", navmap_path_file);
 
-  node->declare_parameter(plugin_name + ".resolution", mapping_params_.resolution);
-  node->declare_parameter(plugin_name + ".max_edge_len", mapping_params_.max_edge_len);
-  node->declare_parameter(plugin_name + ".neighbor_radius", mapping_params_.neighbor_radius);
-  node->declare_parameter(plugin_name + ".max_dz", mapping_params_.max_dz);
-  node->declare_parameter(plugin_name + ".max_slope_deg", mapping_params_.max_slope_deg);
-  node->declare_parameter(plugin_name + ".min_area", mapping_params_.min_area);
-  node->declare_parameter(plugin_name + ".max_surfaces", mapping_params_.max_surfaces);
-  node->declare_parameter(plugin_name + ".k_neighbors", mapping_params_.k_neighbors);
-  node->declare_parameter(plugin_name + ".min_angle_deg", mapping_params_.min_angle_deg);
-
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->get_parameter(plugin_name + ".navmap_path_file", navmap_path_file);
-
-  node->get_parameter(plugin_name + ".resolution", mapping_params_.resolution);
-  node->get_parameter(plugin_name + ".max_edge_len", mapping_params_.max_edge_len);
-  node->get_parameter(plugin_name + ".neighbor_radius", mapping_params_.neighbor_radius);
-  node->get_parameter(plugin_name + ".max_dz", mapping_params_.max_dz);
-  node->get_parameter(plugin_name + ".max_slope_deg", mapping_params_.max_slope_deg);
-  node->get_parameter(plugin_name + ".min_area", mapping_params_.min_area);
-  node->get_parameter(plugin_name + ".max_surfaces", mapping_params_.max_surfaces);
-  node->get_parameter(plugin_name + ".k_neighbors", mapping_params_.k_neighbors);
-  node->get_parameter(plugin_name + ".min_angle_deg", mapping_params_.min_angle_deg);
 
   std::vector<std::string> navmap_filters;
   node->declare_parameter(plugin_name + ".filters", navmap_filters);
@@ -197,19 +177,11 @@ NavMapMapsManager::on_initialize()
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
-    [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
-
+    [this](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
       navmap_ros::BuildParams params;
-      params.resolution = 1.0f;
-      params.max_edge_len = 2.5f;
-      params.neighbor_radius = 2.5f;
-      params.max_dz = 0.4;
-      params.max_slope_deg = 30;
-      params.min_area = 0.25;
-      params.max_surfaces = 1;
-
       navmap_ = navmap_ros::from_pointcloud2(*msg, navmap_msg_, params);
+
 
       navmap_msg_.header.frame_id = "map";
       navmap_msg_.header.stamp = this->get_node()->now();
