@@ -41,7 +41,6 @@
 
 #include "easynav_core/MapsManagerBase.hpp"
 #include "navmap_core/NavMap.hpp"
-#include "navmap_ros/conversions.hpp"
 
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
 #include "pluginlib/class_loader.hpp"
@@ -146,7 +145,6 @@ private:
 
   std::vector<std::shared_ptr<NavMapFilter>> navmap_filters_;
 
-  navmap_ros::BuildParams mapping_params_;
   double resolution_ {1.0};
 };
 

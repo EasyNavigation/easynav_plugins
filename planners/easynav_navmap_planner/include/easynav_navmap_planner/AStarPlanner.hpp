@@ -84,6 +84,34 @@ protected:
   rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_pub_;
 
   /**
+   * @brief Smooth a Path in XY while keeping every waypoint inside its original NavCel.
+   *
+   * The algorithm performs several iterations of Laplacian smoothing on XY:
+   *   p_i' = (1 - alpha) * p_i + alpha * 0.5 * (p_{i-1} + p_{i+1})
+   * For each i, the candidate point is clamped to the original triangle (NavCel)
+   * using closest-point-on-triangle, so it never leaves that NavCel. The final z'
+   * is the triangle height at the resulting (x', y').
+   *
+   * Endpoints are kept fixed. Optionally, points forming a sharp angle are also
+   * kept (see `corner_keep_deg`).
+   *
+   * @param in_path         Input nav_msgs::msg::Path (world coordinates).
+   * @param navmap          The NavMap where the path lies on.
+   * @param iterations      Number of smoothing iterations (>= 1). Default: 5.
+   * @param alpha           Smoothing factor in (0, 0.5]. Default: 0.4.
+   * @param corner_keep_deg Angle threshold (degrees): if the interior angle at a point
+   *                        is below this value, the point is kept as an anchor. Set <= 0
+   *                        to disable. Default: 0 (disabled).
+   * @return nav_msgs::msg::Path Smoothed path, same frame_id and header stamp as input.
+   */
+  nav_msgs::msg::Path path_smoother(
+    const nav_msgs::msg::Path & in_path,
+    const ::navmap::NavMap & navmap,
+    int iterations = 5,
+    float alpha = 0.4f,
+    float corner_keep_deg = 0.0f);
+
+  /**
    * @brief Internal A* path planning routine.
    *
    * Computes a path on the given costmap from the start pose to the goal pose.

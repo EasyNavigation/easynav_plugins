@@ -69,7 +69,7 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
   manager->initialize(node, "test");
 
   auto tf_buffer = easynav::RTTFBuffer::getInstance(node->get_clock());
-  tf2_ros::TransformListener tf_listener(*tf_buffer, *node, true);
+  tf2_ros::TransformListener tf_listener(*tf_buffer, node, true);
 
   easynav::SimpleMap static_map;
   static_map.initialize(30, 30, 0.1, -1.5, -1.5, 0.0);
