@@ -15,7 +15,10 @@ var searchData=
   ['last_5fvrot_5f_12',['last_vrot_',['../classeasynav_1_1SimpleController.html#a6449b46aa66318f3afd1904dafa3e8e2',1,'easynav::SimpleController']]],
   ['layer_5fname_5f_13',['layer_name_',['../classeasynav_1_1navmap_1_1AStarPlanner.html#a6aebe3bf30640adc22c8787dea894c8c',1,'easynav::navmap::AStarPlanner']]],
   ['leaf_5fbits_14',['leaf_bits',['../structBonxai_1_1HeaderInfo.html#af80331e9828a7b1ad0f8d4254835f879',1,'Bonxai::HeaderInfo']]],
-  ['linear_5fpid_5f_15',['linear_pid_',['../classeasynav_1_1SimpleController.html#a4fd0eb0d7ce323984e5ff8782300d335',1,'easynav::SimpleController']]],
-  ['log2dim_5f_16',['log2dim_',['../classBonxai_1_1GridBlockAllocator.html#a5765eef43f314366e8a7f8743ff772b3',1,'Bonxai::GridBlockAllocator']]],
-  ['look_5fahead_5fdist_5f_17',['look_ahead_dist_',['../classeasynav_1_1SimpleController.html#aafe39db8fdd7f0300e7696422f6247f1',1,'easynav::SimpleController']]]
+  ['linear_5fkd_5f_15',['linear_kd_',['../classeasynav_1_1SimpleController.html#a00f79b2bae9c0ae7f5f201271dad50b6',1,'easynav::SimpleController']]],
+  ['linear_5fki_5f_16',['linear_ki_',['../classeasynav_1_1SimpleController.html#a2166a79b4ab49505feca5117a35ce43e',1,'easynav::SimpleController']]],
+  ['linear_5fkp_5f_17',['linear_kp_',['../classeasynav_1_1SimpleController.html#ae07a5505626308c312ee26886c482966',1,'easynav::SimpleController']]],
+  ['linear_5fpid_5f_18',['linear_pid_',['../classeasynav_1_1SimpleController.html#a4fd0eb0d7ce323984e5ff8782300d335',1,'easynav::SimpleController']]],
+  ['log2dim_5f_19',['log2dim_',['../classBonxai_1_1GridBlockAllocator.html#a5765eef43f314366e8a7f8743ff772b3',1,'Bonxai::GridBlockAllocator']]],
+  ['look_5fahead_5fdist_5f_20',['look_ahead_dist_',['../classeasynav_1_1SimpleController.html#aafe39db8fdd7f0300e7696422f6247f1',1,'easynav::SimpleController']]]
 ];

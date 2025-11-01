@@ -121,94 +121,95 @@ Directories</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>"" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
+<p>"" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)" "" "![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)"</p>
 <h1><a class="anchor" id="autotoc_md38"></a>
 Description</h1>
-<p>Vector Field Histogram (VFF) controller for obstacle avoidance and goal tracking. <br  />
- Implements a reactive navigation approach that computes motion commands based on the vector sum of attractive and repulsive forces derived from goal and obstacle information.</p>
+<p>Simple path-following controller that uses PID controllers and a look-ahead reference pose to follow a planned path. It produces velocity commands (<code>cmd_vel</code>) based on the reference pose sampled at a look-ahead distance and limits linear/angular speeds and accelerations.</p>
 <h1><a class="anchor" id="autotoc_md39"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab <br  />
 </li>
-<li><b>Maintainers:</b> Jose Miguel Guerrero Hernández <a href="#" onclick="location.href='mai'+'lto:'+'jos'+'em'+'igu'+'el'+'.gu'+'er'+'rer'+'o@'+'urj'+'c.'+'es'; return false;">josem<span class="obfuscator">.nosp@m.</span>igue<span class="obfuscator">.nosp@m.</span>l.gue<span class="obfuscator">.nosp@m.</span>rrer<span class="obfuscator">.nosp@m.</span>o@urj<span class="obfuscator">.nosp@m.</span>c.es</a></li>
+<li><b>Maintainers:</b> Francisco Martín Rico <a href="#" onclick="location.href='mai'+'lto:'+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'; return false;">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
 <h1><a class="anchor" id="autotoc_md40"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Distribution   </th><th class="markdownTableHeadNone">Status    </th></tr>
+<th class="markdownTableHeadNone">Distribution   </th><th class="markdownTableHeadRight">Status    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">kilted   </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/kilted-supported-brightgreen" alt="kilted" class="inline"/>    </td></tr>
+<td class="markdownTableBodyNone">kilted   </td><td class="markdownTableBodyRight"><img src="https://img.shields.io/badge/kilted-supported-brightgreen" alt="kilted" class="inline"/>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">rolling   </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>   </td></tr>
+<td class="markdownTableBodyNone">rolling   </td><td class="markdownTableBodyRight"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">jazzy   </td><td class="markdownTableBodyRight"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="jazzy" class="inline"/>   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md41"></a>
 Plugin (pluginlib)</h1>
 <ul>
-<li><b>Plugin Name:</b> <code>easynav_vff_controller/VffController</code> <br  />
-</li>
-<li><b>Type:</b> <code><a class="el" href="classeasynav_1_1VffController.html" title="A default &quot;Vff&quot; implementation for the Control Method.">easynav::VffController</a></code> <br  />
-</li>
-<li><b>Base Class:</b> <code>easynav::ControllerMethodBase</code> <br  />
-</li>
-<li><b>Library:</b> <code>vff_controller</code> <br  />
-</li>
-<li><b>Description:</b> Reactive controller that generates velocity commands using the Vector Field Histogram method.</li>
+<li><b>Plugin Name:</b> <code>easynav_simple_controller/SimpleController</code></li>
+<li><b>Type:</b> <code><a class="el" href="classeasynav_1_1SimpleController.html" title="A simple path-following controller using PID and look-ahead strategy.">easynav::SimpleController</a></code></li>
+<li><b>Base Class:</b> <code>easynav::ControllerMethodBase</code></li>
+<li><b>Library:</b> <code>easynav_simple_controller</code></li>
+<li><b>Description:</b> Path-following controller using PID (linear and angular) and a look-ahead strategy.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md42"></a>
 Parameters</h1>
-<p>All parameters are declared under the plugin namespace, i.e., <code>/&lt;node_fqn&gt;/easynav_vff_controller/VffController/...</code>.</p>
+<p>All parameters are declared under the plugin namespace, i.e., <code>/&lt;node_fqn&gt;/easynav_simple_controller/SimpleController/...</code>.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Name   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadRight">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.distance_obstacle_detection</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyRight"><code>3.0</code>   </td><td class="markdownTableBodyNone">Distance threshold for obstacle detection.    </td></tr>
+<td class="markdownTableBodyNone"><code>max_linear_speed</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>1.0</code>   </td><td class="markdownTableBodyNone">Maximum linear speed (m/s).    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.distance_to_goal</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyRight"><code>1.0</code>   </td><td class="markdownTableBodyNone">Minimum distance to consider the goal reached.    </td></tr>
+<td class="markdownTableBodyNone"><code>max_angular_speed</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>1.0</code>   </td><td class="markdownTableBodyNone">Maximum angular speed (rad/s).    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.obstacle_detection_x_min</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyRight"><code>0.5</code>   </td><td class="markdownTableBodyNone">Minimum X limit for obstacle detection (m).    </td></tr>
+<td class="markdownTableBodyNone"><code>max_linear_acc</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.3</code>   </td><td class="markdownTableBodyNone">Maximum linear acceleration (m/s²).    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.obstacle_detection_x_max</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyRight"><code>10.0</code>   </td><td class="markdownTableBodyNone">Maximum X limit for obstacle detection (m).    </td></tr>
+<td class="markdownTableBodyNone"><code>max_angular_acc</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.3</code>   </td><td class="markdownTableBodyNone">Maximum angular acceleration (rad/s²).    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.obstacle_detection_y_min</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyRight"><code>-10.0</code>   </td><td class="markdownTableBodyNone">Minimum Y limit for obstacle detection (m).    </td></tr>
+<td class="markdownTableBodyNone"><code>look_ahead_dist</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>1.0</code>   </td><td class="markdownTableBodyNone">Look-ahead distance to sample the reference pose on the path (m).    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.obstacle_detection_y_max</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyRight"><code>10.0</code>   </td><td class="markdownTableBodyNone">Maximum Y limit for obstacle detection (m).    </td></tr>
+<td class="markdownTableBodyNone"><code>tolerance_dist</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.05</code>   </td><td class="markdownTableBodyNone">Distance threshold to switch to pure orientation tracking (m).    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.obstacle_detection_z_min</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyRight"><code>0.10</code>   </td><td class="markdownTableBodyNone">Minimum Z limit for obstacle detection (m).    </td></tr>
+<td class="markdownTableBodyNone"><code>final_goal_angle_tolerance</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.1</code>   </td><td class="markdownTableBodyNone">Angular tolerance (rad) used to decide final-goal arrival.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.obstacle_detection_z_max</code>   </td><td class="markdownTableBodyNone"><code>float</code>   </td><td class="markdownTableBodyRight"><code>1.00</code>   </td><td class="markdownTableBodyNone">Maximum Z limit for obstacle detection (m).    </td></tr>
+<td class="markdownTableBodyNone"><code>k_rot</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.5</code>   </td><td class="markdownTableBodyNone">Gain used to reduce linear speed based on angular velocity (higher: stronger reduction while turning).    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.max_speed</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.8</code>   </td><td class="markdownTableBodyNone">Maximum linear velocity (m/s).    </td></tr>
+<td class="markdownTableBodyNone"><code>linear_kp</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.95</code>   </td><td class="markdownTableBodyNone">Proportional gain for the linear PID controller.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.max_angular_speed</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>1.5</code>   </td><td class="markdownTableBodyNone">Maximum angular velocity (rad/s).   </td></tr>
+<td class="markdownTableBodyNone"><code>linear_ki</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.03</code>   </td><td class="markdownTableBodyNone">Integral gain for the linear PID controller.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>linear_kd</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.08</code>   </td><td class="markdownTableBodyNone">Derivative gain for the linear PID controller.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>angular_kp</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>1.5</code>   </td><td class="markdownTableBodyNone">Proportional gain for the angular PID controller.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>angular_ki</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.03</code>   </td><td class="markdownTableBodyNone">Integral gain for the angular PID controller.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>angular_kd</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.08</code>   </td><td class="markdownTableBodyNone">Derivative gain for the angular PID controller.   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md43"></a>
-Interfaces (Topics and Services)</h1>
+Interfaces (NavState, Topics and Services)</h1>
 <h2><a class="anchor" id="autotoc_md44"></a>
-Subscriptions and Publications</h2>
-<p>This controller communicates exclusively through <code>NavState</code>; it does not create direct ROS 2 publishers or subscribers.</p>
-<h2><a class="anchor" id="autotoc_md45"></a>
-Services</h2>
-<p>This package does not create service servers or clients.</p>
-<h1><a class="anchor" id="autotoc_md46"></a>
-NavState Keys</h1>
+NavState</h2>
+<p>This controller uses the shared <code>NavState</code> bag provided by the <code>easynav_core</code> framework. The following keys are used at runtime by <code>SimpleController</code>:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Key   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Access   </th><th class="markdownTableHeadNone">Notes    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>goals</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs::msg::Goals</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Target goals to reach.    </td></tr>
+<td class="markdownTableBodyNone"><code>robot_pose</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs::msg::Odometry</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Current robot odometry used to compute the robot pose and yaw.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>robot_pose</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs::msg::Odometry</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Current robot pose used to compute forces.    </td></tr>
+<td class="markdownTableBodyNone"><code>path</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs::msg::Path</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Planned path to follow. The controller samples a reference pose at <code>look_ahead_dist</code> along this path.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>points</code>   </td><td class="markdownTableBodyNone"><code>PointPerceptions</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Point cloud of obstacles.    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>cmd_vel</code>   </td><td class="markdownTableBodyNone"><code>geometry_msgs::msg::TwistStamped</code>   </td><td class="markdownTableBodyNone"><b>Write</b>   </td><td class="markdownTableBodyNone">Output velocity command computed by VFF.   </td></tr>
+<td class="markdownTableBodyNone"><code>cmd_vel</code>   </td><td class="markdownTableBodyNone"><code>geometry_msgs::msg::TwistStamped</code>   </td><td class="markdownTableBodyNone"><b>Write</b>   </td><td class="markdownTableBodyNone">Output velocity command. Header.frame_id is set to <code>path.header.frame_id</code> when available and stamp to the controller node clock.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md47"></a>
+<h2><a class="anchor" id="autotoc_md45"></a>
+Topics / Services</h2>
+<p>The controller itself does not create ROS publishers/subscribers or service servers. It interacts via the <code>NavState</code> abstraction; how <code>NavState</code> is exposed (topics or other IPC mechanisms) depends on the integrating node.</p>
+<h1><a class="anchor" id="autotoc_md46"></a>
 TF Frames</h1>
-<p>This controller reads pose from <code>nav_msgs/Odometry</code> (<code>robot_pose</code> key). No TF lookups are performed.</p>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<p>This controller reads pose from <code>nav_msgs/Odometry</code> (NavState key <code>robot_pose</code>). TF is not directly used in this plugin.</p>
+<h1><a class="anchor" id="autotoc_md47"></a>
 License</h1>
 <p>GPL-3.0-only </p>
 </div><!-- contents -->

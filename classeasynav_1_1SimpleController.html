@@ -118,17 +118,17 @@ Collaboration diagram for SimpleController:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1SimpleController__coll__graph.png" border="0" usemap="#aSimpleController_coll__map" alt="Collaboration graph"/></div>
 <map name="aSimpleController_coll__map" id="aSimpleController_coll__map">
-<area shape="rect" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="306,304,422,330"/>
+<area shape="rect" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="306,274,422,300"/>
 <area shape="rect" href="classControllerMethodBase.html" title=" " alt="" coords="5,13,155,38"/>
-<area shape="poly" title=" " alt="" coords="91,52,110,101,140,162,182,225,207,253,235,278,269,296,307,307,305,312,267,301,232,282,203,257,177,228,135,165,105,103,86,54"/>
+<area shape="poly" title=" " alt="" coords="93,51,114,94,146,148,187,202,211,226,237,248,271,265,306,275,305,281,269,270,235,252,208,230,183,205,141,151,109,97,88,54"/>
 <area shape="rect" title=" " alt="" coords="179,5,320,46"/>
-<area shape="poly" title=" " alt="" coords="246,62,242,109,244,166,255,225,267,253,282,278,296,292,313,301,311,306,293,296,278,282,262,255,250,227,238,167,237,109,241,61"/>
+<area shape="poly" title=" " alt="" coords="247,61,245,103,247,152,258,203,268,227,282,248,296,262,314,271,311,276,293,266,278,252,264,229,253,205,242,153,239,103,242,61"/>
 <area shape="rect" title=" " alt="" coords="344,13,403,38"/>
-<area shape="poly" title=" " alt="" coords="370,54,368,70,363,207,366,304,361,304,358,207,363,70,365,53"/>
-<area shape="rect" title=" " alt="" coords="471,13,521,38"/>
-<area shape="poly" title=" " alt="" coords="499,54,495,176,486,239,478,264,469,282,448,299,424,310,421,305,445,295,465,278,473,262,480,238,489,176,494,54"/>
-<area shape="rect" title=" " alt="" coords="569,13,674,38"/>
-<area shape="poly" title=" " alt="" coords="630,54,637,102,638,163,635,196,626,227,613,256,594,282,565,297,521,308,423,317,422,312,521,302,563,292,590,278,609,253,621,225,629,195,633,163,632,103,625,55"/>
+<area shape="poly" title=" " alt="" coords="370,54,368,70,364,189,366,274,361,274,358,189,363,70,365,53"/>
+<area shape="rect" title=" " alt="" coords="462,13,512,38"/>
+<area shape="poly" title=" " alt="" coords="489,54,483,161,474,215,468,236,459,252,443,266,424,276,421,272,440,262,455,248,463,234,469,214,478,160,484,54"/>
+<area shape="rect" title=" " alt="" coords="559,13,665,38"/>
+<area shape="poly" title=" " alt="" coords="620,53,625,96,625,150,614,204,602,230,584,252,558,267,516,277,423,286,422,281,515,271,556,262,581,248,597,227,608,203,620,149,620,96,615,54"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -163,10 +163,23 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr class="memitem:a22c055158bd5c1f8d96ccf5e845b118e" id="r_a22c055158bd5c1f8d96ccf5e845b118e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22c055158bd5c1f8d96ccf5e845b118e">angular_kd_</a> {0.08}</td></tr>
+<tr class="memdesc:a22c055158bd5c1f8d96ccf5e845b118e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derivative gain for angular PID.  <br /></td></tr>
+<tr class="separator:a22c055158bd5c1f8d96ccf5e845b118e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a23ff82b5b82ab14b9942bb156fe03b" id="r_a7a23ff82b5b82ab14b9942bb156fe03b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a23ff82b5b82ab14b9942bb156fe03b">angular_ki_</a> {0.03}</td></tr>
+<tr class="memdesc:a7a23ff82b5b82ab14b9942bb156fe03b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integral gain for angular PID.  <br /></td></tr>
+<tr class="separator:a7a23ff82b5b82ab14b9942bb156fe03b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a936b2b06590903d8b7d40c0c77ea1fd1" id="r_a936b2b06590903d8b7d40c0c77ea1fd1"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a936b2b06590903d8b7d40c0c77ea1fd1">angular_kp_</a> {1.5}</td></tr>
+<tr class="memdesc:a936b2b06590903d8b7d40c0c77ea1fd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proportional gain for angular PID.  <br /></td></tr>
+<tr class="separator:a936b2b06590903d8b7d40c0c77ea1fd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f879a2628142b3a73add44219543c44" id="r_a3f879a2628142b3a73add44219543c44"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classeasynav_1_1PIDController.html">PIDController</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f879a2628142b3a73add44219543c44">angular_pid_</a></td></tr>
 <tr class="memdesc:a3f879a2628142b3a73add44219543c44"><td class="mdescLeft">&#160;</td><td class="mdescRight">PID controller for angular velocity.  <br /></td></tr>
 <tr class="separator:a3f879a2628142b3a73add44219543c44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09cad982c055d29d9f1ce4ed2f04d462" id="r_a09cad982c055d29d9f1ce4ed2f04d462"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09cad982c055d29d9f1ce4ed2f04d462">final_goal_angle_tolerance_</a> {0.1}</td></tr>
+<tr class="memdesc:a09cad982c055d29d9f1ce4ed2f04d462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Angular tolerance at the final goal in radians.  <br /></td></tr>
+<tr class="separator:a09cad982c055d29d9f1ce4ed2f04d462"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a669b4b79161b086f674a427462ac64" id="r_a6a669b4b79161b086f674a427462ac64"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a669b4b79161b086f674a427462ac64">k_rot_</a> {0.5}</td></tr>
+<tr class="memdesc:a6a669b4b79161b086f674a427462ac64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gain to reduce linear speed based on angular velocity.  <br /></td></tr>
 <tr class="separator:a6a669b4b79161b086f674a427462ac64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf737907b981e04b56848b71d0305322" id="r_aaf737907b981e04b56848b71d0305322"><td class="memItemLeft" align="right" valign="top">rclcpp::Time&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf737907b981e04b56848b71d0305322">last_update_ts_</a></td></tr>
 <tr class="memdesc:aaf737907b981e04b56848b71d0305322"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timestamp of the last control update.  <br /></td></tr>
@@ -177,6 +190,15 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a6449b46aa66318f3afd1904dafa3e8e2" id="r_a6449b46aa66318f3afd1904dafa3e8e2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6449b46aa66318f3afd1904dafa3e8e2">last_vrot_</a> {0.0}</td></tr>
 <tr class="memdesc:a6449b46aa66318f3afd1904dafa3e8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Previous angular velocity for acceleration limiting.  <br /></td></tr>
 <tr class="separator:a6449b46aa66318f3afd1904dafa3e8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00f79b2bae9c0ae7f5f201271dad50b6" id="r_a00f79b2bae9c0ae7f5f201271dad50b6"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00f79b2bae9c0ae7f5f201271dad50b6">linear_kd_</a> {0.08}</td></tr>
+<tr class="memdesc:a00f79b2bae9c0ae7f5f201271dad50b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derivative gain for linear PID.  <br /></td></tr>
+<tr class="separator:a00f79b2bae9c0ae7f5f201271dad50b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2166a79b4ab49505feca5117a35ce43e" id="r_a2166a79b4ab49505feca5117a35ce43e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2166a79b4ab49505feca5117a35ce43e">linear_ki_</a> {0.03}</td></tr>
+<tr class="memdesc:a2166a79b4ab49505feca5117a35ce43e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integral gain for linear PID.  <br /></td></tr>
+<tr class="separator:a2166a79b4ab49505feca5117a35ce43e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae07a5505626308c312ee26886c482966" id="r_ae07a5505626308c312ee26886c482966"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae07a5505626308c312ee26886c482966">linear_kp_</a> {0.95}</td></tr>
+<tr class="memdesc:ae07a5505626308c312ee26886c482966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Proportional gain for linear PID.  <br /></td></tr>
+<tr class="separator:ae07a5505626308c312ee26886c482966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fd0eb0d7ce323984e5ff8782300d335" id="r_a4fd0eb0d7ce323984e5ff8782300d335"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classeasynav_1_1PIDController.html">PIDController</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fd0eb0d7ce323984e5ff8782300d335">linear_pid_</a></td></tr>
 <tr class="memdesc:a4fd0eb0d7ce323984e5ff8782300d335"><td class="mdescLeft">&#160;</td><td class="mdescRight">PID controller for linear velocity.  <br /></td></tr>
 <tr class="separator:a4fd0eb0d7ce323984e5ff8782300d335"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -468,6 +490,78 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a22c055158bd5c1f8d96ccf5e845b118e" name="a22c055158bd5c1f8d96ccf5e845b118e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22c055158bd5c1f8d96ccf5e845b118e">&#9670;&#160;</a></span>angular_kd_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double angular_kd_ {0.08}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Derivative gain for angular PID. </p>
+
+</div>
+</div>
+<a id="a7a23ff82b5b82ab14b9942bb156fe03b" name="a7a23ff82b5b82ab14b9942bb156fe03b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a23ff82b5b82ab14b9942bb156fe03b">&#9670;&#160;</a></span>angular_ki_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double angular_ki_ {0.03}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Integral gain for angular PID. </p>
+
+</div>
+</div>
+<a id="a936b2b06590903d8b7d40c0c77ea1fd1" name="a936b2b06590903d8b7d40c0c77ea1fd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a936b2b06590903d8b7d40c0c77ea1fd1">&#9670;&#160;</a></span>angular_kp_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double angular_kp_ {1.5}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Proportional gain for angular PID. </p>
+
+</div>
+</div>
 <a id="a3f879a2628142b3a73add44219543c44" name="a3f879a2628142b3a73add44219543c44"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f879a2628142b3a73add44219543c44">&#9670;&#160;</a></span>angular_pid_</h2>
 
@@ -492,6 +586,30 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a09cad982c055d29d9f1ce4ed2f04d462" name="a09cad982c055d29d9f1ce4ed2f04d462"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09cad982c055d29d9f1ce4ed2f04d462">&#9670;&#160;</a></span>final_goal_angle_tolerance_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double final_goal_angle_tolerance_ {0.1}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Angular tolerance at the final goal in radians. </p>
+
+</div>
+</div>
 <a id="a6a669b4b79161b086f674a427462ac64" name="a6a669b4b79161b086f674a427462ac64"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a669b4b79161b086f674a427462ac64">&#9670;&#160;</a></span>k_rot_</h2>
 
@@ -511,6 +629,8 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gain to reduce linear speed based on angular velocity. </p>
 
 </div>
 </div>
@@ -583,6 +703,78 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Previous angular velocity for acceleration limiting. </p>
+
+</div>
+</div>
+<a id="a00f79b2bae9c0ae7f5f201271dad50b6" name="a00f79b2bae9c0ae7f5f201271dad50b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00f79b2bae9c0ae7f5f201271dad50b6">&#9670;&#160;</a></span>linear_kd_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double linear_kd_ {0.08}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Derivative gain for linear PID. </p>
+
+</div>
+</div>
+<a id="a2166a79b4ab49505feca5117a35ce43e" name="a2166a79b4ab49505feca5117a35ce43e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2166a79b4ab49505feca5117a35ce43e">&#9670;&#160;</a></span>linear_ki_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double linear_ki_ {0.03}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Integral gain for linear PID. </p>
+
+</div>
+</div>
+<a id="ae07a5505626308c312ee26886c482966" name="ae07a5505626308c312ee26886c482966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae07a5505626308c312ee26886c482966">&#9670;&#160;</a></span>linear_kp_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double linear_kp_ {0.95}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Proportional gain for linear PID. </p>
 
 </div>
 </div>

@@ -153,6 +153,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a60dfda8e97c63a20980ba45e8cef575f" id="r_a60dfda8e97c63a20980ba45e8cef575f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; geometry_msgs::msg::Pose &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60dfda8e97c63a20980ba45e8cef575f">a_star_path</a> (const ::navmap::NavMap &amp;map, const geometry_msgs::msg::Pose &amp;start, const geometry_msgs::msg::Pose &amp;goal)</td></tr>
 <tr class="memdesc:a60dfda8e97c63a20980ba45e8cef575f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal A* path planning routine.  <br /></td></tr>
 <tr class="separator:a60dfda8e97c63a20980ba45e8cef575f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b66055e664a09df54ad4476026e4f03" id="r_a3b66055e664a09df54ad4476026e4f03"><td class="memItemLeft" align="right" valign="top">nav_msgs::msg::Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b66055e664a09df54ad4476026e4f03">path_smoother</a> (const nav_msgs::msg::Path &amp;in_path, const ::navmap::NavMap &amp;navmap, int iterations=5, float alpha=0.4f, float corner_keep_deg=0.0f)</td></tr>
+<tr class="memdesc:a3b66055e664a09df54ad4476026e4f03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Smooth a Path in XY while keeping every waypoint inside its original NavCel.  <br /></td></tr>
+<tr class="separator:a3b66055e664a09df54ad4476026e4f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -296,6 +299,65 @@ Protected Attributes</h2></td></tr>
 <p>Initializes the planner. </p>
 <p>Loads planner parameters, sets up ROS publishers, and prepares the costmap-based planning environment.</p>
 <dl class="section return"><dt>Returns</dt><dd>std::expected&lt;void, std::string&gt; A success indicator or error message. </dd></dl>
+
+</div>
+</div>
+<a id="a3b66055e664a09df54ad4476026e4f03" name="a3b66055e664a09df54ad4476026e4f03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b66055e664a09df54ad4476026e4f03">&#9670;&#160;</a></span>path_smoother()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">nav_msgs::msg::Path path_smoother </td>
+          <td>(</td>
+          <td class="paramtype">const nav_msgs::msg::Path &amp;</td>          <td class="paramname"><span class="paramname"><em>in_path</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const ::navmap::NavMap &amp;</td>          <td class="paramname"><span class="paramname"><em>navmap</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>iterations</em></span><span class="paramdefsep"> = </span><span class="paramdefval">5</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>alpha</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.4f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>corner_keep_deg</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.0f</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Smooth a Path in XY while keeping every waypoint inside its original NavCel. </p>
+<p>The algorithm performs several iterations of Laplacian smoothing on XY: p_i' = (1 - alpha) * p_i + alpha * 0.5 * (p_{i-1} + p_{i+1}) For each i, the candidate point is clamped to the original triangle (NavCel) using closest-point-on-triangle, so it never leaves that NavCel. The final z' is the triangle height at the resulting (x', y').</p>
+<p>Endpoints are kept fixed. Optionally, points forming a sharp angle are also kept (see <code>corner_keep_deg</code>).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in_path</td><td>Input nav_msgs::msg::Path (world coordinates). </td></tr>
+    <tr><td class="paramname">navmap</td><td>The NavMap where the path lies on. </td></tr>
+    <tr><td class="paramname">iterations</td><td>Number of smoothing iterations (&gt;= 1). Default: 5. </td></tr>
+    <tr><td class="paramname">alpha</td><td>Smoothing factor in (0, 0.5]. Default: 0.4. </td></tr>
+    <tr><td class="paramname">corner_keep_deg</td><td>Angle threshold (degrees): if the interior angle at a point is below this value, the point is kept as an anchor. Set &lt;= 0 to disable. Default: 0 (disabled). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>nav_msgs::msg::Path Smoothed path, same frame_id and header stamp as input. </dd></dl>
 
 </div>
 </div>
