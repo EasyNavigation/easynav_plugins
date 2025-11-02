@@ -25,7 +25,8 @@ jobs:
         uses: ros-tooling/setup-ros@0.7.15
         with:
           required-ros-distributions: humble
-
+      - name: Upgrade typing_extensions
+        run: python3 -m pip install --upgrade "typing_extensions>=4.7"
       - name: build and test
         uses: ros-tooling/action-ros-ci@0.4.5
         with:
