@@ -21,7 +21,6 @@
 /// \brief Implementation of the SimpleController class.
 
 #include <expected>
-
 #include "tf2/utils.hpp"
 
 #include "easynav_simple_controller/SimpleController.hpp"

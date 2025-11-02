@@ -95,7 +95,7 @@ NavMapMapsManager::on_initialize()
       if (!result) {
         RCLCPP_ERROR(node->get_logger(),
           "Unable to initialize [%s]. Error: %s", plugin.c_str(), result.error().c_str());
-        return std::unexpected("Unable to initialize " +
+        return std::make_unexpected("Unable to initialize " +
           plugin + " . Error: " + result.error());
       }
 
@@ -106,17 +106,17 @@ NavMapMapsManager::on_initialize()
     } catch (pluginlib::PluginlibException & ex) {
       RCLCPP_ERROR(node->get_logger(),
         "Unable to load plugin easynav::navmap::NavMapFilter. Error: %s", ex.what());
-      return std::unexpected("Unable to load plugin easynav::navmap::NavMapFilter " +
+      return std::make_unexpected("Unable to load plugin easynav::navmap::NavMapFilter " +
         navmap_filter + " . Error: " + ex.what());
     }
   }
 
   navmap_pub_ = node->create_publisher<navmap_ros_interfaces::msg::NavMap>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   layer_updates_pub_ = node->create_publisher<navmap_ros_interfaces::msg::NavMapLayer>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map_updates",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/map_updates",
     rclcpp::QoS(100));
 
   if (!package_name.empty() && !occmap_path_file.empty()) {
@@ -124,13 +124,13 @@ NavMapMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + occmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      return std::make_unexpected("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     nav_msgs::msg::OccupancyGrid occ_msg;
     if (auto ret = loadMapFromYaml(map_path_, occ_msg) != LOAD_MAP_SUCCESS) {
       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
-      return std::unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
+      return std::make_unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
     }
 
     resolution_ = occ_msg.info.resolution;
@@ -147,7 +147,7 @@ NavMapMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + navmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      return std::make_unexpected("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     if (navmap_ros::io::load_from_file(map_path_, navmap_)) {
@@ -161,7 +161,7 @@ NavMapMapsManager::on_initialize()
   }
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -175,7 +175,7 @@ NavMapMapsManager::on_initialize()
     });
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
     [this](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
@@ -190,7 +190,7 @@ NavMapMapsManager::on_initialize()
 
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

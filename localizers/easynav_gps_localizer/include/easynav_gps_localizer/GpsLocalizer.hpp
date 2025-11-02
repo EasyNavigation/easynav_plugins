@@ -24,7 +24,6 @@
 #define EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_
 
 #include <expected>
-
 #include "nav_msgs/msg/odometry.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
 #include "easynav_core/LocalizerMethodBase.hpp"

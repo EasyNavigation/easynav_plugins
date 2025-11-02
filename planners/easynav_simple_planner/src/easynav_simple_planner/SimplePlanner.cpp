@@ -98,7 +98,7 @@ SimplePlanner::on_initialize()
   node->get_parameter<double>(plugin_name + ".clearance_distance", clearance_distance_);
 
   path_pub_ = get_node()->create_publisher<nav_msgs::msg::Path>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
 
   return {};
 }

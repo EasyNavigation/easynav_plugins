@@ -83,7 +83,7 @@ std::expected<void, std::string> AStarPlanner::on_initialize()
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
   return {};
 }
 

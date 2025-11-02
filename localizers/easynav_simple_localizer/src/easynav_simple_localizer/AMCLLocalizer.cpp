@@ -257,9 +257,9 @@ AMCLLocalizer::on_initialize()
     std::bind(&AMCLLocalizer::odom_callback, this, _1), options);
 
   particles_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseArray>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/particles", 10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/particles", 10);
   estimate_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/pose", 10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/pose", 10);
 
   last_reseed_ = get_node()->now();
 

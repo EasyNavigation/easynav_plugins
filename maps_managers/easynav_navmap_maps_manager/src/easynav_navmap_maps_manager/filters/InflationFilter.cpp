@@ -41,6 +41,7 @@
 
 #include <expected>
 #include <string>
+#include <queue>
 
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_common/types/Perceptions.hpp"

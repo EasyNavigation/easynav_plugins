@@ -24,7 +24,6 @@
 #define EASYNAV_CONTROLLER__VFFCONTROLLER_HPP_
 
 #include <expected>
-
 #include "pcl/point_cloud.h"
 
 #include "easynav_core/ControllerMethodBase.hpp"

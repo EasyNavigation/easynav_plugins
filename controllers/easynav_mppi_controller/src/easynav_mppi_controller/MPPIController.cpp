@@ -21,7 +21,6 @@
 /// \brief Implementation of the MPPIController class.
 
 #include <expected>
-
 #include "tf2/utils.hpp"
 
 #include "easynav_mppi_controller/MPPIController.hpp"

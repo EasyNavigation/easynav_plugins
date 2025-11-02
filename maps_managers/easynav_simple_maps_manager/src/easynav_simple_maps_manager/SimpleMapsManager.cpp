@@ -21,7 +21,6 @@
 /// \brief Implementation of the SimpleMapsManager class.
 
 #include <expected>
-
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
 #include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
@@ -72,23 +71,23 @@ SimpleMapsManager::on_initialize()
       pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + "/" + map_path_file;
     } catch(ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      return std::make_unexpected("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     if (!static_map_.load_from_file(map_path_)) {
-      return std::unexpected("File [" + map_path_ + "] not found");
+      return std::make_unexpected("File [" + map_path_ + "] not found");
     }
   }
 
   static_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   dynamic_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/dynamic_map", 100);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/dynamic_map", 100);
 
   incoming_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
       static_map_.from_occupancy_grid(*msg);
@@ -102,7 +101,7 @@ SimpleMapsManager::on_initialize()
     });
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

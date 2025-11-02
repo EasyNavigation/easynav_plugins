@@ -21,7 +21,6 @@
 /// \brief Implementation of the VffController class.
 
 #include <expected>
-
 #include "easynav_vff_controller/VffController.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_common/types/PointPerception.hpp"
