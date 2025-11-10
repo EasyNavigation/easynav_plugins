@@ -49,7 +49,10 @@ ObstacleFilter::on_initialize()
 void
 ObstacleFilter::update(::easynav::NavState & nav_state)
 {
-  if (!nav_state.has("map")) {
+  auto t0 = parent_node_->now();
+
+  std::cerr << "ObstacleFilter::update" << std::endl;
+  if (!nav_state.has("map.navmap")) {
     return;
   }
   if (!nav_state.has("points")) {
@@ -57,35 +60,63 @@ ObstacleFilter::update(::easynav::NavState & nav_state)
   }
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
-  navmap_ = nav_state.get<::navmap::NavMap>("map");
+  navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
 
-  if (!navmap_.layer_copy<uint8_t>("occupancy", "obstacles")) {
-    RCLCPP_ERROR(parent_node_->get_logger(), "Error copying layers at ObstacleFilter");
-    return;
-  }
+  navmap_.layer_clear<float>(get_layer_name(), 0.0f);
+
+  auto t1 = parent_node_->now();
 
   auto fused = PointPerceptionsOpsView(perceptions)
-    .downsample(get_map_resolution())
+    .downsample(0.1)
     .fuse(get_tf_prefix() + "map")
-    ->filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    ->filter({-5.0, -5.0, NAN}, {5.0, 5.0, NAN})
     .as_points();
 
-  size_t sidx = 0;
-  for (const auto & p : fused) {
-    if (std::isnan(p.x)) {continue;}
-    ::navmap::NavCelId cid;
-    Eigen::Vector3f bary;
-    Eigen::Vector3f hit;
+  auto t2 = parent_node_->now();
 
-    if (navmap_.locate_navcel({p.x, p.y, p.z}, sidx, cid, bary, &hit)) {
-      uint8_t v = navmap_.layer_get<uint8_t>("occupancy", cid, 255);
-      if (v == 0) {
-        navmap_.set_area<uint8_t>(hit, 254, "obstacles", ::navmap::AreaShape::CIRCULAR, 0.1);
-      }
+  size_t sidx = 0;
+  std::optional<::navmap::NavCelId> last_cid;
+
+    auto t3 = parent_node_->now();
+
+  for (const auto & p : fused) {
+    if (std::isnan(p.x) || std::isinf(p.x)) {continue;}
+    
+    ::navmap::NavCelId cid;
+    Eigen::Vector3f bary, hit;
+    bool located = false;
+
+    {
+      ::navmap::NavMap::LocateOpts opts;
+      if (last_cid) opts.hint_cid = *last_cid;
+      located = navmap_.locate_navcel({p.x, p.y, p.z}, sidx, cid, bary, &hit, opts);
+    }
+
+    if (!located) {
+      located = navmap_.locate_navcel({p.x, p.y, p.z}, sidx, cid, bary, &hit);
+      if (!located) continue;
+    }
+
+    last_cid = cid;
+
+    const float h = static_cast<float>(p.z) - hit.z();
+    if ((h < 0.0f) || !std::isfinite(h)) continue;
+
+    if (h > 0.1) {
+      navmap_.layer_set<float>(get_layer_name(), cid, h);
     }
   }
 
-  nav_state.set("map", navmap_);
+  auto t4 = parent_node_->now();
+  nav_state.set("map.navmap", navmap_);
+
+  auto t5 = parent_node_->now();
+
+  std::cerr << "t1 = " << std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
+  std::cerr << "t2 = " << std::fixed << std::setprecision(10) << (t2 - t1).seconds() << std::endl;
+  std::cerr << "t3 = " << std::fixed << std::setprecision(10) << (t3 - t2).seconds() << std::endl;
+  std::cerr << "t4 = " << std::fixed << std::setprecision(10) << (t4 - t3).seconds() << std::endl;
+  std::cerr << "t5 = " << std::fixed << std::setprecision(10) << (t5 - t4).seconds() << std::endl;
 }
 
 }  // namespace navmap

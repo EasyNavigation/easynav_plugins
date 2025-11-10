@@ -44,8 +44,8 @@ public:
   virtual std::expected<void, std::string> on_initialize();
   virtual void update(::easynav::NavState & nav_state);
 
-  bool is_adding_layer() override {return true;}
-  std::string get_layer_name() override {return "obstacles";}
+  virtual bool is_adding_layer() override {return true;}
+  virtual std::string get_layer_name() override {return "obstacles";}
 
 private:
   ::navmap::NavMap navmap_;
