@@ -1,6 +1,6 @@
 # easynav_costmap_planner
 
-[![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
+[![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#) [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
 
 ## Description
 A planner plugin implementing a standard **A\*** path planner over a `Costmap2D` representation. It reads the dynamic costmap, goal list, and robot pose from NavState and publishes a computed path as a `nav_msgs/Path` message.
@@ -12,6 +12,8 @@ A planner plugin implementing a standard **A\*** path planner over a `Costmap2D`
 ## Supported ROS 2 Distributions
 | Distribution | Status |
 |---|---|
+| humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
+| jazzy | ![kilted](https://img.shields.io/badge/jazzy-supported-brightgreen) |
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
