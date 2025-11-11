@@ -20,6 +20,7 @@
 
 #include <expected>
 #include <string>
+#include <cstdint>
 
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_common/types/Perceptions.hpp"
@@ -51,127 +52,135 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
   auto t0 = parent_node_->now();
   std::cerr << "ObstacleFilter::update" << std::endl;
 
-  if (!nav_state.has("map.navmap")) return;
-  if (!nav_state.has("points"))     return;
+  if (!nav_state.has("map.navmap")) {return;}
+  if (!nav_state.has("points")) {return;}
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
 
-  // Si necesitas limpieza total en cada ciclo, mantén esto:
-  navmap_.layer_clear<float>(get_layer_name(), 0.0f);
+  navmap_.layer_clear<uint8_t>(get_layer_name(), 0);
 
   auto t1 = parent_node_->now();
 
-  auto fused = PointPerceptionsOpsView(perceptions)
-                 .downsample(0.3)
-                 .fuse(get_tf_prefix() + "map")
-                 ->filter({-5.0, -5.0, NAN}, {5.0, 5.0, NAN})
-                 .as_points();
-
-  // (Opcional pero muy rentable) Orden espacial para mejorar locality del hint:
-  // ordenar por una clave Morton simple 2D (x,y). Implementación ligera:
-  auto morton2D = [](float x, float y) -> uint64_t {
-    // normaliza a rejilla 1 cm en [-64,64] m => 12800 pasos (cambia a tu rango)
-    auto q = [](float v){
-      int32_t iv = static_cast<int32_t>(std::lrintf((v + 64.f) * 100.f));
-      if (iv < 0) iv = 0; else if (iv > 12800) iv = 12800;
-      return static_cast<uint32_t>(iv);
-    };
-    auto part = [](uint32_t v){
-      uint64_t x = v;
-      x = (x | (x << 16)) & 0x0000FFFF0000FFFFULL;
-      x = (x | (x << 8 )) & 0x00FF00FF00FF00FFULL;
-      x = (x | (x << 4 )) & 0x0F0F0F0F0F0F0F0FULL;
-      x = (x | (x << 2 )) & 0x3333333333333333ULL;
-      x = (x | (x << 1 )) & 0x5555555555555555ULL;
-      return x;
-    };
-    uint64_t xi = part(q(x));
-    uint64_t yi = part(q(y)) << 1;
-    return xi | yi;
-  };
-
-  std::sort(fused.begin(), fused.end(),
-            [&](const auto &a, const auto &b){
-              return morton2D(a.x, a.y) < morton2D(b.x, b.y);
-            });
+  const auto & points = PointPerceptionsOpsView(perceptions)
+    .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
+    .downsample(0.3)
+    .fuse("map")
+    ->as_points();
 
   auto t2 = parent_node_->now();
 
-  // Acumulación de h máximos por celda (reduce layer_set)
-  struct NavCelIdHash {
-    std::size_t operator()(const ::navmap::NavCelId &c) const noexcept {
-      // Si NavCelId ya es entero/struct con hash, usa ese. Si no, adapta esto.
-      return std::hash<uint64_t>{}(static_cast<uint64_t>(c));
+  const float voxel_xy = 0.30f;
+  const float voxel_z = 0.20f;
+
+  struct Accum
+  {
+    std::unordered_set<int> z_bins;
+    float max_z = -std::numeric_limits<float>::infinity();
+    float min_z = std::numeric_limits<float>::infinity();
+  };
+
+  struct Key
+  {
+    int ix, iy;
+    bool operator==(const Key & o) const noexcept {return ix == o.ix && iy == o.iy;}
+  };
+  struct KeyHash
+  {
+    std::size_t operator()(const Key & k) const noexcept
+    {
+      std::size_t h1 = std::hash<long long>{}(static_cast<long long>(k.ix));
+      std::size_t h2 = std::hash<long long>{}(static_cast<long long>(k.iy));
+      return h1 ^ (h2 + 0x9e3779b97f4a7c15ULL + (h1 << 6) + (h1 >> 2));
     }
   };
-  std::unordered_map<::navmap::NavCelId, float, NavCelIdHash> cell_max;
-  cell_max.reserve(fused.size()); // heurística
 
-  size_t sidx = 0;                             // deja que locate lo actualice
-  std::optional<::navmap::NavCelId> last_cid;  // hint
-  ::navmap::NavMap::LocateOpts opts;           // reutilizado
-  Eigen::Vector3f bary;                        // reutilizado
-  Eigen::Vector3f hit;                         // reutilizado
+  std::unordered_map<Key, Accum, KeyHash> bins;
+  bins.reserve(points.size() / 4 + 1);
 
-  // Cota inferior rápida (si procede). Ajusta a tu nivel de suelo esperado.
-  constexpr float kMinAboveGround = 0.0f;
-  constexpr float kWriteThreshold = 0.1f;
+  for (const auto & p : points.points) {
+    const float x = p.x;
+    const float y = p.y;
+    const float z = p.z;
+
+    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(z)) {continue;}
+
+    const int ix = static_cast<int>(std::floor(x / voxel_xy));
+    const int iy = static_cast<int>(std::floor(y / voxel_xy));
+    const int iz = static_cast<int>(std::floor(z / voxel_z));
+
+    auto & acc = bins[{ix, iy}];
+    acc.z_bins.insert(iz);
+    if (z > acc.max_z) {acc.max_z = z;}
+    if (z < acc.min_z) {acc.min_z = z;}
+  }
 
   auto t3 = parent_node_->now();
 
-  for (const auto & p : fused) {
-    if (!std::isfinite(p.x) || !std::isfinite(p.y) || !std::isfinite(p.z)) continue;
-    // Descarte barato: si ya sabes que p.z está por debajo del suelo esperado, sáltalo.
-    if (p.z < kMinAboveGround) continue;
+  std::optional<size_t> last_surface;
+  std::optional<::navmap::NavCelId> last_cid;
 
+  const float height_threshold = 0.25f;
+
+  for (const auto & kv : bins) {
+    const auto & key = kv.first;
+    const auto & acc = kv.second;
+
+    const float cx = (static_cast<float>(key.ix) + 0.5f) * voxel_xy;
+    const float cy = (static_cast<float>(key.iy) + 0.5f) * voxel_xy;
+    const float dz = acc.max_z - acc.min_z;
+
+    // std::cerr << "[ObstacleFilter] voxel (" << cx << ", " << cy << ") "
+    //         << "vertical_bins=" << acc.z_bins.size()
+    //         << " z_range=[" << acc.min_z << ", " << acc.max_z
+    //         << "] Δz=" << dz << std::endl;
+
+    if (acc.z_bins.size() <= 2 && dz <= height_threshold) {
+      continue;
+    }
+
+    const float cz = acc.max_z;
+    Eigen::Vector3f query(cx, cy, cz);
+
+    size_t surface_idx = 0;
     ::navmap::NavCelId cid;
-    bool located = false;
+    Eigen::Vector3f bary, hit;
 
-    // intento con hint
-    if (last_cid) {
-      opts.hint_cid = *last_cid;
-      located = navmap_.locate_navcel({p.x, p.y, p.z}, sidx, cid, bary, &hit, opts);
-    } else {
-      // evita basura en opts.hint_cid si el API la lee sin comprobar
-      opts = ::navmap::NavMap::LocateOpts{};
-      located = navmap_.locate_navcel({p.x, p.y, p.z}, sidx, cid, bary, &hit, opts);
+    ::navmap::NavMap::LocateOpts opts;
+    opts.use_downward_ray = true;
+    opts.height_eps = 0.50f;
+    if (last_surface) {opts.hint_surface = *last_surface;}
+    if (last_cid) {opts.hint_cid = *last_cid;}
+
+    bool ok = navmap_.locate_navcel(query, surface_idx, cid, bary, &hit, opts);
+
+    if (!ok) {
+      ::navmap::NavMap::LocateOpts nohint;
+      nohint.use_downward_ray = true;
+      nohint.height_eps = 0.50f;
+      ok = navmap_.locate_navcel(query, surface_idx, cid, bary, &hit, nohint);
+      if (!ok) {
+        ok = navmap_.locate_navcel(query, surface_idx, cid, bary, &hit);
+      }
     }
 
-    if (!located) {
-      // fallback sin hint
-      opts = ::navmap::NavMap::LocateOpts{};
-      located = navmap_.locate_navcel({p.x, p.y, p.z}, sidx, cid, bary, &hit, opts);
-      if (!located) continue;
-    }
-
-    last_cid = cid;
-
-    const float h = static_cast<float>(p.z) - hit.z();
-    if (!(h > kWriteThreshold)) continue;  // incluye NaN/inf y <= threshold
-
-    auto it = cell_max.find(cid);
-    if (it == cell_max.end()) {
-      cell_max.emplace(cid, h);
-    } else if (h > it->second) {
-      it->second = h;
+    if (ok) {
+      navmap_.layer_set<uint8_t>(get_layer_name(), cid, static_cast<uint8_t>(255));
+      last_surface = surface_idx;
+      last_cid = cid;
     }
   }
 
-  // Aplicar a la capa en bloque
-  for (const auto & kv : cell_max) {
-    navmap_.layer_set<float>(get_layer_name(), kv.first, kv.second);
-  }
 
   auto t4 = parent_node_->now();
   nav_state.set("map.navmap", navmap_);
   auto t5 = parent_node_->now();
 
-  std::cerr << "t1 = " << std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
-  std::cerr << "t2 = " << std::fixed << std::setprecision(10) << (t2 - t1).seconds() << std::endl;
-  std::cerr << "t3 = " << std::fixed << std::setprecision(10) << (t3 - t2).seconds() << std::endl;
-  std::cerr << "t4 = " << std::fixed << std::setprecision(10) << (t4 - t3).seconds() << std::endl;
-  std::cerr << "t5 = " << std::fixed << std::setprecision(10) << (t5 - t4).seconds() << std::endl;
+  // std::cerr << "t1 = " << std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
+  // std::cerr << "t2 = " << std::fixed << std::setprecision(10) << (t2 - t1).seconds() << std::endl;
+  // std::cerr << "t3 = " << std::fixed << std::setprecision(10) << (t3 - t2).seconds() << std::endl;
+  // std::cerr << "t4 = " << std::fixed << std::setprecision(10) << (t4 - t3).seconds() << std::endl;
+  // std::cerr << "t5 = " << std::fixed << std::setprecision(10) << (t5 - t4).seconds() << std::endl;
 }
 
 
