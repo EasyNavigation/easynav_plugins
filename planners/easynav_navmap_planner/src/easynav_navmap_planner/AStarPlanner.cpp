@@ -35,17 +35,12 @@
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/path.hpp"
 #include "navmap_core/NavMap.hpp"
+#include "navmap_ros/conversions.hpp"
 
 namespace easynav
 {
 namespace navmap
 {
-
-static constexpr uint8_t NO_INFORMATION = 255;
-static constexpr uint8_t LETHAL_OBSTACLE = 254;
-static constexpr uint8_t INSCRIBED_INFLATED_OBSTACLE = 253;
-static constexpr uint8_t MAX_NON_OBSTACLE = 252;
-static constexpr uint8_t FREE_SPACE = 0;
 
 static double compute_path_length(const nav_msgs::msg::Path & path)
 {
@@ -287,12 +282,19 @@ AStarPlanner::path_smoother(
   return out;
 }
 
+// Helper: detect if a layer exists (optional; if you already have API, adjust accordingly)
+static inline bool layer_exists(const ::navmap::NavMap & nm, const std::string & name)
+{
+  return static_cast<bool>(nm.layers.get(name));
+}
+
 std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   const ::navmap::NavMap & nm,
   const geometry_msgs::msg::Pose & start,
   const geometry_msgs::msg::Pose & goal)
 {
   using ::navmap::NavCelId;
+  using namespace navmap_ros;
 
   if (nm.navcels.empty()) {return {};}
 
@@ -317,47 +319,87 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
 
   const size_t N = nm.navcels.size();
 
-  // 2) Precompute centroids (used for cost and heuristic)
+  // 2) Precompute centroids (used for cost, heuristic, and edge lengths)
   std::vector<Eigen::Vector3f> C(N);
   for (NavCelId c = 0; c < N; ++c) {
     const auto cc = nm.navcel_centroid(c);
     C[c] = {cc.x(), cc.y(), cc.z()};
   }
 
-  auto h = [&](NavCelId a, NavCelId b) -> double {
+  auto euclid = [&](NavCelId a, NavCelId b) -> double {
       const auto d = C[a] - C[b];
       return static_cast<double>(d.norm());
     };
-  auto step_cost = [&](NavCelId from, NavCelId to) -> double {
-      return static_cast<double>((C[from] - C[to]).norm());
-    };
 
-  // 3) Read the "obstacles" layer once and cache occupancy values
+  // 3) Choose cost layer: prefer "inflated_obstacles", fallback to "obstacles"
+  const std::string cost_layer =
+    layer_exists(nm, "inflated_obstacles") ? "inflated_obstacles" : "obstacles";
+
+  // Cache per-NavCel uint8_t cost values (0..255)
   std::vector<std::uint8_t> occ(N, FREE_SPACE);
   for (NavCelId c = 0; c < N; ++c) {
     // If the cell has no stored value, assume FREE_SPACE (0)
-    occ[c] = nm.layer_get<std::uint8_t>("obstacles", c, FREE_SPACE);
+    occ[c] = nm.layer_get<std::uint8_t>(cost_layer, c, FREE_SPACE);
   }
-  auto is_free = [&](NavCelId c) -> bool {
-    // Strict policy: only 0 (FREE_SPACE) is traversable; any other value blocks
-      return occ[c] == FREE_SPACE;
+
+  // Traversability: block lethal and unknown
+  auto traversable = [&](NavCelId c) -> bool {
+      const std::uint8_t v = occ[c];
+      return (v != LETHAL_OBSTACLE) && (v != NO_INFORMATION);
     };
 
-  // If either start or goal falls in a non-free NavCel, do not plan
-  if (!is_free(cid_start) || !is_free(cid_goal)) {
+  // Normalize a uint8_t cost into [0, 1]; FREE_SPACE=0 → 0.0; INSCRIBED=253 → ~1.0
+  // Returns +inf for non-traversable (lethal/unknown).
+  auto normalized_cost = [&](NavCelId c) -> double {
+      const std::uint8_t v = occ[c];
+      if (v == LETHAL_OBSTACLE || v == NO_INFORMATION) {
+        return std::numeric_limits<double>::infinity();
+      }
+    // cap at INSCRIBED_INFLATED_OBSTACLE to avoid division by 0 at 254/255
+      const double max_cost = static_cast<double>(INSCRIBED_INFLATED_OBSTACLE); // 253
+      return static_cast<double>(v) / max_cost; // FREE=0 → 0.0, INSCRIBED=253 → 1.0
+    };
+
+  // If start or goal lands on non-traversable, do not plan
+  if (!traversable(cid_start) || !traversable(cid_goal)) {
     return {};
   }
 
-  // 4) Standard A* search on the triangle graph, skipping occupied NavCels
+  // Weighted step cost:
+  //   base geometric cost (edge length) scaled by (cost_factor_ + inflation_penalty_ * norm_cost(target))
+  // This preserves admissibility with heuristic h = Euclidean distance, since the minimal multiplier ≥ 1.
+  auto step_cost = [&](NavCelId from, NavCelId to) -> double {
+      const double base = euclid(from, to);
+      if (!std::isfinite(base) || base <= 0.0) {return std::numeric_limits<double>::infinity();}
+
+      const double ncost = normalized_cost(to);
+      if (!std::isfinite(ncost)) {return std::numeric_limits<double>::infinity();}
+
+    // Ensure the multiplier is at least 1.0 so h = euclid remains admissible.
+    // If your cost_factor_ is already ≥ 1, this holds. Otherwise we clamp.
+      const double cf = std::max(1.0, static_cast<double>(cost_factor_));
+      const double mult = cf + static_cast<double>(inflation_penalty_) * ncost;
+
+      return base * mult;
+    };
+
+  // 4) A* search on the triangle graph, using cost-aware edges
   struct Node { NavCelId cid; double f; };
   struct Cmp { bool operator()(const Node & a, const Node & b) const {return a.f > b.f;} };
 
   std::priority_queue<Node, std::vector<Node>, Cmp> open;
   std::vector<double> g(N, std::numeric_limits<double>::infinity());
   std::vector<NavCelId> parent(N, std::numeric_limits<NavCelId>::max());
+  std::vector<uint8_t> in_open(N, 0);
+
+  auto h = [&](NavCelId a, NavCelId b) -> double {
+    // Heuristic: pure Euclidean distance → admissible (never overestimates)
+      return euclid(a, b);
+    };
 
   g[cid_start] = 0.0;
   open.push(Node{cid_start, h(cid_start, cid_goal)});
+  in_open[cid_start] = 1;
 
   while (!open.empty()) {
     const auto cur = open.top(); open.pop();
@@ -369,8 +411,8 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
       const size_t vidx = static_cast<size_t>(v);
       if (vidx >= N) {continue;}
 
-      // ---- Occupancy check: skip non-free neighbors ----
-      if (!is_free(v)) {continue;}
+      // Skip non-traversable neighbors (lethal or unknown)
+      if (!traversable(v)) {continue;}
 
       const double sc = step_cost(u, v);
       if (!std::isfinite(sc)) {continue;}
@@ -381,11 +423,11 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
         parent[v] = u;
         const double f = tentative + h(v, cid_goal);
         open.push(Node{v, f});
+        in_open[v] = 1;
       }
     }
   }
 
-  // If no valid path was found, return an empty list
   if (!std::isfinite(g[cid_goal])) {
     return {};
   }
@@ -403,7 +445,6 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   }
   std::reverse(path.begin(), path.end());
 
-  // Guarantee at least the goal pose
   if (path.empty()) {path.push_back(goal);}
   return path;
 }
