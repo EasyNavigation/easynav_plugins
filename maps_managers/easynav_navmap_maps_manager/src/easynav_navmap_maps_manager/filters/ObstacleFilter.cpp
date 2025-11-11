@@ -121,11 +121,6 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     const float cy = (static_cast<float>(key.iy) + 0.5f) * voxel_xy;
     const float dz = acc.max_z - acc.min_z;
 
-    // std::cerr << "[ObstacleFilter] voxel (" << cx << ", " << cy << ") "
-    //         << "vertical_bins=" << acc.z_bins.size()
-    //         << " z_range=[" << acc.min_z << ", " << acc.max_z
-    //         << "] Δz=" << dz << std::endl;
-
     if (acc.z_bins.size() <= 2 && dz <= height_threshold) {
       continue;
     }
