@@ -228,15 +228,9 @@ NavMapMapsManager::update(::easynav::NavState & nav_state)
     filter->set_map_resolution(resolution_);
     filter->update(nav_state);
 
-    std::cerr <<
-      "plugin name: " << filter->get_plugin_name() <<
-      "\tlayer name: " << filter->get_layer_name() <<
-      "\tis_adding" << (filter->is_adding_layer() ? "True" : "False") << std::endl;
-
     navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
 
     if (filter->is_adding_layer() && navmap_.has_layer(filter->get_layer_name())) {
-      std::cerr << "Publishin layer " << filter->get_layer_name() << std::endl;
       auto update_msg = navmap_ros::to_msg(navmap_, filter->get_layer_name());
       layer_updates_pub_->publish(update_msg);
     }

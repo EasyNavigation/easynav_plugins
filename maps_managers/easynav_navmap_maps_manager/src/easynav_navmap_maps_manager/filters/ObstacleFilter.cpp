@@ -49,9 +49,6 @@ ObstacleFilter::on_initialize()
 
 void ObstacleFilter::update(::easynav::NavState & nav_state)
 {
-  auto t0 = parent_node_->now();
-  std::cerr << "ObstacleFilter::update" << std::endl;
-
   if (!nav_state.has("map.navmap")) {return;}
   if (!nav_state.has("points")) {return;}
 
@@ -60,15 +57,11 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
 
   navmap_.layer_clear<uint8_t>(get_layer_name(), 0);
 
-  auto t1 = parent_node_->now();
-
   const auto & points = PointPerceptionsOpsView(perceptions)
     .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
     .downsample(0.3)
     .fuse("map")
     ->as_points();
-
-  auto t2 = parent_node_->now();
 
   const float voxel_xy = 0.30f;
   const float voxel_z = 0.20f;
@@ -114,8 +107,6 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     if (z > acc.max_z) {acc.max_z = z;}
     if (z < acc.min_z) {acc.min_z = z;}
   }
-
-  auto t3 = parent_node_->now();
 
   std::optional<size_t> last_surface;
   std::optional<::navmap::NavCelId> last_cid;
@@ -171,16 +162,7 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     }
   }
 
-
-  auto t4 = parent_node_->now();
   nav_state.set("map.navmap", navmap_);
-  auto t5 = parent_node_->now();
-
-  // std::cerr << "t1 = " << std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
-  // std::cerr << "t2 = " << std::fixed << std::setprecision(10) << (t2 - t1).seconds() << std::endl;
-  // std::cerr << "t3 = " << std::fixed << std::setprecision(10) << (t3 - t2).seconds() << std::endl;
-  // std::cerr << "t4 = " << std::fixed << std::setprecision(10) << (t4 - t3).seconds() << std::endl;
-  // std::cerr << "t5 = " << std::fixed << std::setprecision(10) << (t5 - t4).seconds() << std::endl;
 }
 
 
