@@ -296,7 +296,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
 
   if (nm.navcels.empty()) {return {};}
 
-  // 1) Locate start & goal navcels (fallback to closest triangle)
+  // 1) Locate start and goal NavCels (fallback to closest triangle if necessary)
   size_t sidx_s = 0, sidx_g = 0;
   NavCelId cid_start = 0, cid_goal = 0;
   Eigen::Vector3f bary; Eigen::Vector3f hit;
@@ -317,7 +317,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
 
   const size_t N = nm.navcels.size();
 
-  // 3) Precompute centroids (2D) for consistent metric and heuristic
+  // 2) Precompute centroids (used for cost and heuristic)
   std::vector<Eigen::Vector3f> C(N);
   for (NavCelId c = 0; c < N; ++c) {
     const auto cc = nm.navcel_centroid(c);
@@ -328,24 +328,36 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
       const auto d = C[a] - C[b];
       return static_cast<double>(d.norm());
     };
-
   auto step_cost = [&](NavCelId from, NavCelId to) -> double {
-      const double dist = static_cast<double>((C[from] - C[to]).norm());
-      return dist;
+      return static_cast<double>((C[from] - C[to]).norm());
     };
 
-  // 4) A* on triangle graph
+  // 3) Read the "obstacles" layer once and cache occupancy values
+  std::vector<std::uint8_t> occ(N, FREE_SPACE);
+  for (NavCelId c = 0; c < N; ++c) {
+    // If the cell has no stored value, assume FREE_SPACE (0)
+    occ[c] = nm.layer_get<std::uint8_t>("obstacles", c, FREE_SPACE);
+  }
+  auto is_free = [&](NavCelId c) -> bool {
+    // Strict policy: only 0 (FREE_SPACE) is traversable; any other value blocks
+      return occ[c] == FREE_SPACE;
+    };
+
+  // If either start or goal falls in a non-free NavCel, do not plan
+  if (!is_free(cid_start) || !is_free(cid_goal)) {
+    return {};
+  }
+
+  // 4) Standard A* search on the triangle graph, skipping occupied NavCels
   struct Node { NavCelId cid; double f; };
   struct Cmp { bool operator()(const Node & a, const Node & b) const {return a.f > b.f;} };
 
   std::priority_queue<Node, std::vector<Node>, Cmp> open;
   std::vector<double> g(N, std::numeric_limits<double>::infinity());
-  std::vector<uint8_t> in_open(N, 0);
   std::vector<NavCelId> parent(N, std::numeric_limits<NavCelId>::max());
 
   g[cid_start] = 0.0;
   open.push(Node{cid_start, h(cid_start, cid_goal)});
-  in_open[cid_start] = 1;
 
   while (!open.empty()) {
     const auto cur = open.top(); open.pop();
@@ -353,15 +365,12 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
 
     if (u == cid_goal) {break;}
 
-    // Optional: restrict to the goal surface (comment if you want cross-surface paths via explicit neighbors)
-    // const size_t surface_goal = sidx_g;
-    // if (surface_goal != sidx_s) {
-    //   // do nothing special; graph neighbors already encode connectivity
-    // }
-
     for (NavCelId v : nm.navcel_neighbors(u)) {
       const size_t vidx = static_cast<size_t>(v);
       if (vidx >= N) {continue;}
+
+      // ---- Occupancy check: skip non-free neighbors ----
+      if (!is_free(v)) {continue;}
 
       const double sc = step_cost(u, v);
       if (!std::isfinite(sc)) {continue;}
@@ -372,16 +381,16 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
         parent[v] = u;
         const double f = tentative + h(v, cid_goal);
         open.push(Node{v, f});
-        in_open[v] = 1;
       }
     }
   }
 
+  // If no valid path was found, return an empty list
   if (!std::isfinite(g[cid_goal])) {
     return {};
   }
 
-  // 5) Reconstruct path (centroidal polyline)
+  // 5) Path reconstruction (centroid-based polyline)
   std::vector<geometry_msgs::msg::Pose> path;
   for (NavCelId c = cid_goal; c != std::numeric_limits<NavCelId>::max(); c = parent[c]) {
     geometry_msgs::msg::Pose p;
@@ -394,7 +403,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   }
   std::reverse(path.begin(), path.end());
 
-  // Ensure at least goal pose
+  // Guarantee at least the goal pose
   if (path.empty()) {path.push_back(goal);}
   return path;
 }
