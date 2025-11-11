@@ -27,6 +27,7 @@
 #include "easynav_common/types/PointPerception.hpp"
 
 #include "navmap_core/NavMap.hpp"
+#include "navmap_ros/conversions.hpp"
 
 #include "easynav_navmap_maps_manager/filters/ObstacleFilter.hpp"
 
@@ -55,7 +56,7 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
 
-  navmap_.layer_clear<uint8_t>(get_layer_name(), 0);
+  navmap_.layer_clear<uint8_t>(get_layer_name(), navmap_ros::FREE_SPACE);
 
   const auto & points = PointPerceptionsOpsView(perceptions)
     .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
@@ -151,7 +152,8 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     }
 
     if (ok) {
-      navmap_.layer_set<uint8_t>(get_layer_name(), cid, static_cast<uint8_t>(255));
+      navmap_.layer_set<uint8_t>(
+        get_layer_name(), cid, static_cast<uint8_t>(navmap_ros::LETHAL_OBSTACLE));
       last_surface = surface_idx;
       last_cid = cid;
     }
