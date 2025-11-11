@@ -22,6 +22,43 @@
 
 #include "easynav_mpc_controller/MPCController.hpp"
 
+Eigen::Vector3d
+kinematic_model(const Eigen::Vector3d &x, double v, double w, double dt) 
+{
+  Eigen::Vector3d x_k1;
+  x_k1(0) = x(0) + v * cos(x(2)) * dt;
+  x_k1(1) = x(1) + v * sin(x(2)) * dt;
+  x_k1(2) = x(2) + w * dt;
+  return x_k1;
+}
+
+double 
+cost_function(const std::vector<double> &u, std::vector<double> &grad, void *data)
+{
+  MPCParameters *params = reinterpret_cast<MPCParameters*>(data);
+  Eigen::Vector3d x = params->x0;
+  int N = params->N;
+  double dt = params->dt;
+  double cost = 0.0;
+  if (!grad.empty()) {
+    grad[0] = 0.0;
+    grad[1] = 0.5 / sqrt(x[1]);
+  }
+
+  for (int i = 0; i < N; ++i) {
+    double v = u[2*i];
+    double w = u[2*i + 1];
+
+    x = kinematic_model(x, v, w, dt);
+    Eigen::Vector2d pos = x.head<2>();
+    Eigen::Vector2d error = pos - params->goal;
+    cost += error.squaredNorm() + 0.1 * (v*v + w*w); // ToDo quadratic function
+  }
+
+  return cost;
+
+}
+
 namespace easynav
 {
 
@@ -49,40 +86,6 @@ MPCController::on_initialize()
 
   return {};
 }
-
-
-Eigen::Vector3d
-MPCController::kinematic_model(const Eigen::Vector3d &x, double v, double w) 
-{
-  Eigen::Vector3d x_k1;
-  x_k1(0) = x(0) + v * cos(x(2)) * dt_;
-  x_k1(1) = x(1) + v * sin(x(2)) * dt_;
-  x_k1(2) = x(2) + w * dt_;
-  return x_k1;
-}
-
-
-double 
-MPCController::cost_function(const std::vector<double> &u, std::vector<double> &grad, void *data)
-{
-    MPCParameters *params = reinterpret_cast<MPCParameters*>(data);
-    Eigen::Vector3d x = params->x0;
-    double cost = 0.0;
-
-    for (int i = 0; i < horizon_steps_; ++i) {
-        double v = u[2*i];
-        double w = u[2*i + 1];
-
-        x = kinematic_model(x, v, w);
-        Eigen::Vector2d pos = x.head<2>();
-        Eigen::Vector2d error = pos - params->goal;
-        cost += error.squaredNorm() + 0.1 * (v*v + w*w); // ToDo quadratic function
-    }
-
-    return cost;
-
-}
-
 
 void
 MPCController::update_rt(NavState & nav_state)
@@ -123,6 +126,8 @@ MPCController::update_rt(NavState & nav_state)
   const auto &last_pose = path.poses[num_elements - 1].pose.position;
   params.goal = Eigen::Vector2d(static_cast<double>(last_pose.x),
                                 static_cast<double>(last_pose.y));
+  params.N = horizon_steps_;
+  params.dt = dt_;
   double minf;
 
   nlopt::opt opt(nlopt::LD_SLSQP, 2*horizon_steps_);
@@ -136,14 +141,17 @@ MPCController::update_rt(NavState & nav_state)
 
   std::vector<double> u(2*horizon_steps_, 0.0);
 
-  nlopt::result result = opt.optimize(u, minf);
+  // nlopt::result result = opt.optimize(u, minf);
   
-  // try {
-  //     nlopt::result result = opt.optimize(u, minf);
-  // } catch (std::exception &e) {
-  //     std::cerr << "Optimization Error: " << e.what() << std::endl;
-  //     break;
-  // }
+  try {
+      nlopt::result result = opt.optimize(u, minf);
+      if (result != nlopt::SUCCESS)
+      {
+        std::cerr << "Optimization Error: " << std::endl;
+      }
+  } catch (std::exception &e) {
+      std::cerr << "Optimization Error: " << e.what() << std::endl;
+  }
 
   // Publish the computed velocity command
   cmd_vel_.header.frame_id = path.header.frame_id;

@@ -24,6 +24,13 @@
 #include "easynav_core/ControllerMethodBase.hpp"
 #include "easynav_common/types/NavState.hpp"
 
+struct MPCParameters{
+  Eigen::Vector2d goal;
+  Eigen::Vector3d x0;
+  int N;
+  double dt;
+};
+
 namespace easynav
 {
 
@@ -43,28 +50,6 @@ public:
   /// \brief Updates the controller using the given NavState.
   /// \param nav_state Current navigation state, including odometry and planned path.
   void update_rt(NavState & nav_state) override;
-
-  /// \brief Predict the kinematic model for the robot.
-  /// \param x Current state, x, y and theta angle.
-  /// \param v Linear velocity command.
-  /// \param w Angular velocity command.
-  Eigen::Vector3d kinematic_model(const Eigen::Vector3d &x, double v, double w);
-
-  /// \brief Cost function to optimize
-  /// \param u
-  /// \param grad
-  /// \param data
-  double cost_function(const std::vector<double> &u, std::vector<double> &grad, void *data);
-
-  struct MPCParameters{
-    Eigen::Vector2d goal;
-    Eigen::Vector3d x0;
-  };
-
-  struct NLoptCallbackData {
-    MPCController *controller;
-    void *user_data;
-  };
 
 protected:
   int horizon_steps_{5};      ///< Prediction horizon for MPC.
