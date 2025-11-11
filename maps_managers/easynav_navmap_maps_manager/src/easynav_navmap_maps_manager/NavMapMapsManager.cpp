@@ -25,7 +25,6 @@
 #include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 #include "easynav_common/YTSession.hpp"
-#include "easynav_common/plugin_diag.hpp"
 
 #include "navmap_core/NavMap.hpp"
 #include "navmap_ros/conversions.hpp"
@@ -61,8 +60,6 @@ NavMapMapsManager::NavMapMapsManager()
 
   navmap_filters_loader_ = std::make_unique<pluginlib::ClassLoader<NavMapFilter>>(
     "easynav_navmap_maps_manager", "easynav::navmap::NavMapFilter");
-
-  ::easynav::dump_pluginlib_diagnostics(*navmap_filters_loader_, std::cerr, /*try_load_each_class=*/false);
 }
 
 NavMapMapsManager::~NavMapMapsManager() {}
@@ -231,10 +228,10 @@ NavMapMapsManager::update(::easynav::NavState & nav_state)
     filter->set_map_resolution(resolution_);
     filter->update(nav_state);
 
-    std::cerr << 
+    std::cerr <<
       "plugin name: " << filter->get_plugin_name() <<
       "\tlayer name: " << filter->get_layer_name() <<
-      "\tis_adding" << (filter->is_adding_layer()? "True" : "False") << std::endl;
+      "\tis_adding" << (filter->is_adding_layer() ? "True" : "False") << std::endl;
 
     navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
 
@@ -243,7 +240,7 @@ NavMapMapsManager::update(::easynav::NavState & nav_state)
       auto update_msg = navmap_ros::to_msg(navmap_, filter->get_layer_name());
       layer_updates_pub_->publish(update_msg);
     }
-  }   
+  }
 }
 
 
