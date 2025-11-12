@@ -26,9 +26,9 @@ Eigen::Vector3d
 kinematic_model(const Eigen::Vector3d &x, double v, double w, double dt) 
 {
   Eigen::Vector3d x_k1;
-  x_k1(0) = x(0) + v * cos(x(2)) * dt;
-  x_k1(1) = x(1) + v * sin(x(2)) * dt;
-  x_k1(2) = x(2) + w * dt;
+  x_k1[0] = x[0] + v * cos(x[2]) * dt;
+  x_k1[1] = x[1] + v * sin(x[2]) * dt;
+  x_k1[2] = x[2] + w * dt;
   return x_k1;
 }
 
@@ -41,22 +41,38 @@ cost_function(const std::vector<double> &u, std::vector<double> &grad, void *dat
   double dt = params->dt;
   double cost = 0.0;
   if (!grad.empty()) {
-    grad[0] = 0.0;
-    grad[1] = 0.5 / sqrt(x[1]);
+    grad.assign(u.size(), 0.0);
   }
+
+  std::cout << "====="<< std::endl;
+  std::cout << "u: "<< u[0] << std::endl;
+  std::cout << "N: "<< params->N << std::endl;
 
   for (int i = 0; i < N; ++i) {
     double v = u[2*i];
     double w = u[2*i + 1];
 
+    // std::cout << "===== "<< std::endl;
+    // std::cout << "x: "<< x << std::endl;
+    // std::cout << "v: "<< v << std::endl;
+    // std::cout << "w: "<< w << std::endl;
+    // std::cout << "dt: "<< dt << std::endl;
+
     x = kinematic_model(x, v, w, dt);
     Eigen::Vector2d pos = x.head<2>();
     Eigen::Vector2d error = pos - params->goal;
-    cost += error.squaredNorm() + 0.1 * (v*v + w*w); // ToDo quadratic function
+    cost += /*error.squaredNorm() +*/ 0.1 * (v*v + w*w); // ToDo quadratic function
   }
-
+  
   return cost;
 
+}
+
+static double nlopt_cost_callback(const std::vector<double> &x,
+                                  std::vector<double> &grad,
+                                  void *data)
+{
+  return cost_function(x, grad, data);
 }
 
 namespace easynav
@@ -91,6 +107,7 @@ void
 MPCController::update_rt(NavState & nav_state)
 {
   if (!nav_state.has("path") || !nav_state.has("robot_pose")) {
+    std::cout << "No Path or No robot pose" << std::endl;
     return;
   }
 
@@ -98,6 +115,7 @@ MPCController::update_rt(NavState & nav_state)
 
   if (path.poses.empty()) {
     // If the path is empty, stop the robot
+    std::cout << "Path Empty" << std::endl;
     cmd_vel_.header.frame_id = path.header.frame_id;
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = 0.0;
@@ -107,6 +125,7 @@ MPCController::update_rt(NavState & nav_state)
   }
 
   int num_elements = path.poses.size();
+  std::cout << "num_elemnts" << std::endl;
 
   const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   double roll_, pitch_, yaw_;
@@ -121,6 +140,8 @@ MPCController::update_rt(NavState & nav_state)
 
   // MPC Code
 
+  std::cout << "MPC elements" << std::endl;
+
   MPCParameters params;
   params.x0 = {pose.position.x, pose.position.y, yaw_};
   const auto &last_pose = path.poses[num_elements - 1].pose.position;
@@ -129,9 +150,13 @@ MPCController::update_rt(NavState & nav_state)
   params.N = horizon_steps_;
   params.dt = dt_;
   double minf;
+  std::vector<double> u(2*horizon_steps_, 0.0);
 
-  nlopt::opt opt(nlopt::LD_SLSQP, 2*horizon_steps_);
-  opt.set_min_objective(cost_function, &params);
+  // nlopt::opt opt(nlopt::LD_SLSQP, static_cast<int>(u.size()));
+  nlopt::opt opt(nlopt::LN_COBYLA, static_cast<int>(u.size()));
+  opt.set_min_objective(nlopt_cost_callback, &params);
+
+  std::cout << "Set cost function" << std::endl;
 
   std::vector<double> lb(2*horizon_steps_, -max_lin_vel_);
   std::vector<double> ub(2*horizon_steps_, max_lin_vel_);
@@ -139,19 +164,21 @@ MPCController::update_rt(NavState & nav_state)
   opt.set_upper_bounds(ub);
   opt.set_xtol_rel(1e-4);
 
-  std::vector<double> u(2*horizon_steps_, 0.0);
+  std::cout << "Configurated optimizer" << std::endl;
 
-  // nlopt::result result = opt.optimize(u, minf);
+  nlopt::result result = opt.optimize(u, minf);
   
-  try {
-      nlopt::result result = opt.optimize(u, minf);
-      if (result != nlopt::SUCCESS)
-      {
-        std::cerr << "Optimization Error: " << std::endl;
-      }
-  } catch (std::exception &e) {
-      std::cerr << "Optimization Error: " << e.what() << std::endl;
-  }
+  // try {
+  //     nlopt::result result = opt.optimize(u, minf);
+  //     std::cout << "Optimizo" << std::endl;
+  //     if (result != nlopt::SUCCESS)
+  //     {
+  //       std::cerr << "Optimization Unsuccessful " << std::endl;
+  //     }
+  // } catch (std::exception &e) {
+  //     std::cerr << "Optimization Error: " << e.what() << std::endl;
+  // }
+  std::cout << u[0] << ", " << u[1] << std::endl;
 
   // Publish the computed velocity command
   cmd_vel_.header.frame_id = path.header.frame_id;
