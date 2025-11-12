@@ -36,21 +36,36 @@ double
 cost_function(const std::vector<double> &u, std::vector<double> &grad, void *data)
 {
   MPCParameters *params = reinterpret_cast<MPCParameters*>(data);
+
   Eigen::Vector3d x = params->x0;
   int N = params->N;
   double dt = params->dt;
   double cost = 0.0;
+
+  Eigen::Matrix2d R = params->R;
+  Eigen::Matrix2d Q = params->Q;
+  Eigen::Matrix2d Rd = params->Rd;
+  
   if (!grad.empty()) {
     grad.assign(u.size(), 0.0);
   }
 
-  std::cout << "====="<< std::endl;
-  std::cout << "u: "<< u[0] << std::endl;
-  std::cout << "N: "<< params->N << std::endl;
-
+  // std::cout << "====="<< std::endl;
+  // std::cout << "u: "<< u[0] << std::endl;
+  // std::cout << "N: "<< params->N << std::endl;
+  
   for (int i = 0; i < N; ++i) {
     double v = u[2*i];
     double w = u[2*i + 1];
+    double dv, dw;
+    if(i < (N-1))
+    {
+      dv = u[2*(i+1)] - u[2*i];
+      dw = u[2*(i+1) + 1] - u[2*i + 1];
+    } else {
+      dv = 0.0;
+      dw = 0.0;
+    }
 
     // std::cout << "===== "<< std::endl;
     // std::cout << "x: "<< x << std::endl;
@@ -59,9 +74,14 @@ cost_function(const std::vector<double> &u, std::vector<double> &grad, void *dat
     // std::cout << "dt: "<< dt << std::endl;
 
     x = kinematic_model(x, v, w, dt);
+
     Eigen::Vector2d pos = x.head<2>();
     Eigen::Vector2d error = pos - params->goal;
-    cost += /*error.squaredNorm() +*/ 0.1 * (v*v + w*w); // ToDo quadratic function
+    Eigen::Vector2d uk(v, w);
+    Eigen::Vector2d duk(dv, dw);
+
+    // cost += (uk.transpose()*R)*uk + (error.transpose()*Q)*error + (duk.transpose()*Rd)*duk;
+    cost += uk.dot(R * uk) + error.dot(Q * error) + duk.dot(Rd * duk);                                                                                                    
   }
   
   return cost;
@@ -149,6 +169,9 @@ MPCController::update_rt(NavState & nav_state)
                                 static_cast<double>(last_pose.y));
   params.N = horizon_steps_;
   params.dt = dt_;
+  params.R = R_;
+  params.Q = Q_;
+  params.Rd = Rd_;
   double minf;
   std::vector<double> u(2*horizon_steps_, 0.0);
 

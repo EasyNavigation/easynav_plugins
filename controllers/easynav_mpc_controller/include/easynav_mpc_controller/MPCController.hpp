@@ -27,6 +27,9 @@
 struct MPCParameters{
   Eigen::Vector2d goal;
   Eigen::Vector3d x0;
+  Eigen::Matrix2d Q;
+  Eigen::Matrix2d R;
+  Eigen::Matrix2d Rd;
   int N;
   double dt;
 };
@@ -58,6 +61,9 @@ protected:
   double max_ang_vel_{1.5};   ///< Maximum angular velocity for MPC.
 
 private:
+  Eigen::Matrix2d Q_ {{1.0, 0.0},{0.0, 1.0}};
+  Eigen::Matrix2d R_ {{0.01, 0.0},{0.0, 0.01}};
+  Eigen::Matrix2d Rd_ {{0.01, 0.0},{0.0, 1.0}};
   geometry_msgs::msg::TwistStamped cmd_vel_;  ///< Current velocity command.
 
 };
