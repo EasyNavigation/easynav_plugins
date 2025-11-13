@@ -73,8 +73,7 @@ This plugin does not create subscriptions or services directly; it retrieves all
 | `path` | `nav_msgs::msg::Path` | **Write** | Output path, computed as the lowest-cost route. |
 
 ## TF Frames
-The planner assumes frame consistency between NavMap, robot pose, and goals.  
-No TF lookups are performed internally.
+The planner assumes frame consistency between NavMap, robot pose, and goals. No TF lookups are performed internally.
 
 ## License
 GPL-3.0-only
