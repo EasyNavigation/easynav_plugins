@@ -13,6 +13,7 @@
 #include <vector>
 #include <Eigen/Core>
 #include <nlopt.hpp>
+#include <cmath>
 
 #include <tf2/LinearMath/Quaternion.hpp>
 #include <tf2/LinearMath/Matrix3x3.hpp>
@@ -30,6 +31,7 @@ struct MPCParameters{
   Eigen::Matrix2d Q;
   Eigen::Matrix2d R;
   Eigen::Matrix2d Rd;
+  double qtheta;
   int N;
   double dt;
 };
@@ -61,9 +63,10 @@ protected:
   double max_ang_vel_{1.5};   ///< Maximum angular velocity for MPC.
 
 private:
-  Eigen::Matrix2d Q_ {{1.0, 0.0},{0.0, 1.0}};
-  Eigen::Matrix2d R_ {{0.01, 0.0},{0.0, 0.01}};
-  Eigen::Matrix2d Rd_ {{0.01, 0.0},{0.0, 1.0}};
+  Eigen::Matrix2d Q_ {{2.0, 0.0},{0.0, 2.0}};
+  Eigen::Matrix2d R_ {{0.05, 0.0},{0.0, 0.05}};
+  Eigen::Matrix2d Rd_ {{0.1, 0.0},{0.0, 0.1}};
+  double qtheta_ {0.5};
   geometry_msgs::msg::TwistStamped cmd_vel_;  ///< Current velocity command.
 
 };

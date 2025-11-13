@@ -40,19 +40,12 @@ cost_function(const std::vector<double> &u, std::vector<double> &grad, void *dat
   Eigen::Vector3d x = params->x0;
   int N = params->N;
   double dt = params->dt;
+  double qtheta = params->qtheta;
   double cost = 0.0;
 
   Eigen::Matrix2d R = params->R;
   Eigen::Matrix2d Q = params->Q;
   Eigen::Matrix2d Rd = params->Rd;
-  
-  if (!grad.empty()) {
-    grad.assign(u.size(), 0.0);
-  }
-
-  // std::cout << "====="<< std::endl;
-  // std::cout << "u: "<< u[0] << std::endl;
-  // std::cout << "N: "<< params->N << std::endl;
   
   for (int i = 0; i < N; ++i) {
     double v = u[2*i];
@@ -67,21 +60,20 @@ cost_function(const std::vector<double> &u, std::vector<double> &grad, void *dat
       dw = 0.0;
     }
 
-    // std::cout << "===== "<< std::endl;
-    // std::cout << "x: "<< x << std::endl;
-    // std::cout << "v: "<< v << std::endl;
-    // std::cout << "w: "<< w << std::endl;
-    // std::cout << "dt: "<< dt << std::endl;
-
     x = kinematic_model(x, v, w, dt);
 
     Eigen::Vector2d pos = x.head<2>();
-    Eigen::Vector2d error = pos - params->goal;
+    Eigen::Vector2d error = params->goal - pos;
+    double error_theta = (atan2((error[1]),(error[0]))) - x[2]; 
     Eigen::Vector2d uk(v, w);
     Eigen::Vector2d duk(dv, dw);
-
-    // cost += (uk.transpose()*R)*uk + (error.transpose()*Q)*error + (duk.transpose()*Rd)*duk;
-    cost += uk.dot(R * uk) + error.dot(Q * error) + duk.dot(Rd * duk);                                                                                                    
+  
+    // Tracking cost
+    cost += Q(0,0)*error[0]*error[0] + Q(1,1)*error[1]*error[1] + qtheta*error_theta*error_theta;
+    // Effort Cost
+    cost += R(0,0)*v*v + R(1,1)*w*w;
+    // Smooth Cost                                                                                            
+    cost += Rd(0,0)*dv*dv + Rd(1,1)*dw*dw;
   }
   
   return cost;
@@ -118,8 +110,6 @@ MPCController::on_initialize()
   node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
 
-
-
   return {};
 }
 
@@ -135,7 +125,6 @@ MPCController::update_rt(NavState & nav_state)
 
   if (path.poses.empty()) {
     // If the path is empty, stop the robot
-    std::cout << "Path Empty" << std::endl;
     cmd_vel_.header.frame_id = path.header.frame_id;
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = 0.0;
@@ -145,7 +134,6 @@ MPCController::update_rt(NavState & nav_state)
   }
 
   int num_elements = path.poses.size();
-  std::cout << "num_elemnts" << std::endl;
 
   const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   double roll_, pitch_, yaw_;
@@ -160,11 +148,15 @@ MPCController::update_rt(NavState & nav_state)
 
   // MPC Code
 
-  std::cout << "MPC elements" << std::endl;
-
   MPCParameters params;
   params.x0 = {pose.position.x, pose.position.y, yaw_};
-  const auto &last_pose = path.poses[num_elements - 1].pose.position;
+  size_t local_horizon;
+  if (num_elements > horizon_steps_) {
+    local_horizon = horizon_steps_;
+  } else {
+    local_horizon = num_elements - 1;
+  }
+  const auto &last_pose = path.poses[local_horizon].pose.position;
   params.goal = Eigen::Vector2d(static_cast<double>(last_pose.x),
                                 static_cast<double>(last_pose.y));
   params.N = horizon_steps_;
@@ -172,36 +164,39 @@ MPCController::update_rt(NavState & nav_state)
   params.R = R_;
   params.Q = Q_;
   params.Rd = Rd_;
+  params.qtheta = qtheta_;
   double minf;
   std::vector<double> u(2*horizon_steps_, 0.0);
 
-  // nlopt::opt opt(nlopt::LD_SLSQP, static_cast<int>(u.size()));
   nlopt::opt opt(nlopt::LN_COBYLA, static_cast<int>(u.size()));
   opt.set_min_objective(nlopt_cost_callback, &params);
 
-  std::cout << "Set cost function" << std::endl;
-
-  std::vector<double> lb(2*horizon_steps_, -max_lin_vel_);
-  std::vector<double> ub(2*horizon_steps_, max_lin_vel_);
+  std::vector<double> lb(2*horizon_steps_);
+  std::vector<double> ub(2*horizon_steps_);
+  for (int k = 0; k < horizon_steps_ ; k++){
+    lb[2*k] = -max_lin_vel_;
+    lb[2*k + 1] = -max_ang_vel_;
+    ub[2*k] = max_lin_vel_;
+    ub[2*k + 1] = max_ang_vel_;
+  }
   opt.set_lower_bounds(lb);
   opt.set_upper_bounds(ub);
-  opt.set_xtol_rel(1e-4);
-
-  std::cout << "Configurated optimizer" << std::endl;
-
-  nlopt::result result = opt.optimize(u, minf);
+  opt.set_xtol_rel(1e-6);
+  opt.set_ftol_rel(1e-8);
+  opt.set_maxeval(100);
   
-  // try {
-  //     nlopt::result result = opt.optimize(u, minf);
-  //     std::cout << "Optimizo" << std::endl;
-  //     if (result != nlopt::SUCCESS)
-  //     {
-  //       std::cerr << "Optimization Unsuccessful " << std::endl;
-  //     }
-  // } catch (std::exception &e) {
-  //     std::cerr << "Optimization Error: " << e.what() << std::endl;
-  // }
-  std::cout << u[0] << ", " << u[1] << std::endl;
+  try {
+      nlopt::result result = opt.optimize(u, minf);
+      // if (result != nlopt::SUCCESS)
+      // {
+      //   std::cerr << "Optimization Unsuccessful " << std::endl;
+      //   std::cout << "Result: " << result << std::endl;
+      // } else {
+      //   std::cerr << "Optimization Successful " << std::endl;
+      // }
+  } catch (std::exception &e) {
+      std::cerr << "Optimization Error: " << e.what() << std::endl;
+  }
 
   // Publish the computed velocity command
   cmd_vel_.header.frame_id = path.header.frame_id;
