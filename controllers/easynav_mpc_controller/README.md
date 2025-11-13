@@ -1,6 +1,6 @@
 # easynav_mpc_controller
 
-[![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#)
+[![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#) 
 
 
 ## Description
@@ -13,9 +13,7 @@ A Model Predictive Controller (MPC) implementation for Easy Navigation.
 ## Supported ROS 2 Distributions
 | Distribution | Status |
 |---|---|
-| kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
-| jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
 
 ## Plugin (pluginlib)
 - **Plugin Name:** `easynav_mpc_controller/MPCController`
@@ -38,10 +36,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
-| Direction | Topic | Type | Purpose | QoS |
-|---|---|---|---|---|
-| Publisher | `/mppi/candidates` | `visualization_msgs/msg/MarkerArray` | MPPI candidate trajectories as markers. | QoS depth=10 |
-| Publisher | `/mppi/optimal_path` | `visualization_msgs/msg/MarkerArray` | Optimal MPPI trajectory as markers. | QoS depth=10 |
+This package does not create topic subscriptions or publications.
 
 
 ### Services
