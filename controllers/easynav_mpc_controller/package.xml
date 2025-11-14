@@ -8,6 +8,7 @@
   <license>GPL-3.0-only</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <build_depend>nlopt</build_depend>
 
   <depend>easynav_common</depend>
   <depend>easynav_core</depend>
@@ -15,7 +16,7 @@
   <depend>tf2_ros</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
-  <depend>NLopt</depend>
+  <depend>nlopt</depend>
 
   <test_depend>rclcpp_lifecycle</test_depend>
   <test_depend>easynav_simple_common</test_depend>
