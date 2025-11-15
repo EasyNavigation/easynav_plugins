@@ -47,6 +47,7 @@
 #include "easynav_common/types/PointPerception.hpp"
 
 #include "navmap_core/NavMap.hpp"
+#include "navmap_ros/conversions.hpp"
 
 #include "easynav_navmap_maps_manager/filters/InflationFilter.hpp"
 
@@ -56,17 +57,11 @@ namespace easynav
 namespace navmap
 {
 
-static constexpr unsigned char NO_INFORMATION = 255;
-static constexpr unsigned char LETHAL_OBSTACLE = 254;
-static constexpr unsigned char INSCRIBED_INFLATED_OBSTACLE = 253;
-static constexpr unsigned char MAX_NON_OBSTACLE = 252;
-static constexpr unsigned char FREE_SPACE = 0;
-
 InflationFilter::InflationFilter()
-: inflation_radius_(0),
-  cost_scaling_factor_(0)
-{
-}
+: inflation_radius_(0.0f),
+  cost_scaling_factor_(0.0f),
+  inscribed_radius_(0.0f)
+{}
 
 bool InflationFilter::inflate_layer_u8(
   ::navmap::NavMap & nm,
@@ -76,94 +71,118 @@ bool InflationFilter::inflate_layer_u8(
   float cost_scaling_factor,
   float inscribed_radius)
 {
-  using namespace ::navmap;
+  using ::navmap::NavCelId;
+  using namespace navmap_ros;  // bring FREE_SPACE, LETHAL_OBSTACLE, etc.
+
   if (nm.navcels.empty() || inflation_radius <= 0.0f || cost_scaling_factor <= 0.0f) {
     return false;
   }
 
-  // Capas
-  auto src_view = std::dynamic_pointer_cast<LayerView<uint8_t>>(nm.layers.get(src_layer));
+  // Source layer
+  auto src_view =
+    std::dynamic_pointer_cast<::navmap::LayerView<std::uint8_t>>(nm.layers.get(src_layer));
   if (!src_view || src_view->size() != nm.navcels.size()) {
     return false;
   }
-  auto dst_view = nm.layers.add_or_get<uint8_t>(dst_layer, nm.navcels.size(),
-        layer_type_tag<uint8_t>());
+
+  // Destination layer (create if missing)
+  auto dst_view = nm.layers.add_or_get<std::uint8_t>(dst_layer, nm.navcels.size(),
+                                                     ::navmap::layer_type_tag<std::uint8_t>());
   if (!dst_view) {return false;}
   if (dst_view->data().size() != nm.navcels.size()) {
-    const_cast<std::vector<uint8_t> &>(dst_view->data()).assign(nm.navcels.size(), FREE_SPACE);
+    const_cast<std::vector<std::uint8_t> &>(dst_view->data()).assign(nm.navcels.size(), FREE_SPACE);
   }
 
   const size_t N = nm.navcels.size();
-  const float R = inflation_radius;
-  // const float k = cost_scaling_factor;
-  const float r_ins = std::clamp(inscribed_radius, 0.0f, R);
+  const float  R = inflation_radius;
+  const float  r_ins = std::clamp(inscribed_radius, 0.0f, R);
 
-  // Precomputar centroides XY
+  // Precompute XY centroids for each NavCel
   std::vector<Eigen::Vector2f> C(N);
   for (NavCelId cid = 0; cid < N; ++cid) {
     const Eigen::Vector3f cc = nm.navcel_centroid(cid);
     C[cid] = {cc.x(), cc.y()};
   }
 
-  // Distancias y cola (Dijkstra multi-fuente)
+  // Distance map (multi-source Dijkstra)
   const float INF = std::numeric_limits<float>::infinity();
   std::vector<float> dist(N, INF);
   struct Node { float d; NavCelId cid; bool operator<(const Node & o) const {return d > o.d;} };
   std::priority_queue<Node> pq;
 
-  // Inicializar dst y semillas
-  auto & dst = dst_view->mutable_data(); // marca dirty
+  auto & dst = dst_view->mutable_data();        // mark dirty
   const auto & src = src_view->data();
 
+  // Initialize destinations and seeds
   bool any_seed = false;
   for (NavCelId cid = 0; cid < N; ++cid) {
-    const uint8_t s = src[cid];
+    const std::uint8_t s = src[cid];
+
+    // Seed 1: lethal obstacles
     if (s == LETHAL_OBSTACLE) {
       dist[cid] = 0.0f;
       pq.push({0.0f, cid});
       dst[cid] = LETHAL_OBSTACLE;
       any_seed = true;
-    } else if (s == NO_INFORMATION) {
-      dst[cid] = NO_INFORMATION; // mantener desconocido
+      continue;
+    }
+
+    // Seed 2: boundary triangles (missing neighbors)
+    if (nm.navcel_neighbors(cid).size() < 3) {
+      dist[cid] = 0.0f;
+      pq.push({0.0f, cid});
+      dst[cid] = LETHAL_OBSTACLE;
+      any_seed = true;
+      continue;
+    }
+
+    // Unknown handling
+    if (s == NO_INFORMATION) {
+      dst[cid] = NO_INFORMATION;
     } else {
-      // si dst==src (in-place), preserva el valor actual; si no, escribe 0
-      if (dst_layer != src_layer) {dst[cid] = FREE_SPACE;}
+      if (dst_layer != src_layer) {
+        dst[cid] = FREE_SPACE;
+      }
     }
   }
-  if (!any_seed) {return true;} // nada que inflar
 
-  auto cost_from_dist = [&](float d) -> uint8_t {
-      if (d <= 0.0f) {return LETHAL_OBSTACLE;}         // 254
-      if (d <= r_ins) {return INSCRIBED_INFLATED_OBSTACLE;} // 253
-      if (d > R) {return FREE_SPACE;}                  // 0
+  if (!any_seed) {
+    return true;  // nothing to inflate
+  }
 
-      const float x = d - r_ins; // >= 0
-      const double factor = -1.0 * cost_scaling_factor * x;
-      double c = std::exp(factor) * (static_cast<int>(INSCRIBED_INFLATED_OBSTACLE) - 1);
+  // Distance-to-cost conversion
+  auto cost_from_dist = [&](float d) -> std::uint8_t {
+      if (d <= 0.0f) {return LETHAL_OBSTACLE;}
+      if (d <= r_ins) {return INSCRIBED_INFLATED_OBSTACLE;}
+      if (d > R) {return FREE_SPACE;}
+
+      const float x = d - r_ins;
+      const double base = static_cast<int>(INSCRIBED_INFLATED_OBSTACLE) - 1;
+      double c = std::exp(-cost_scaling_factor * static_cast<double>(x)) * base;
       if (c < 0.0) {c = 0.0;}
-      if (c > INSCRIBED_INFLATED_OBSTACLE - 1) {c = INSCRIBED_INFLATED_OBSTACLE - 1;}
-      return static_cast<uint8_t>(std::lround(c));
+      if (c > base) {c = base;}
+      return static_cast<std::uint8_t>(std::lround(c));
     };
 
-  // Dijkstra acotado por R
+  // Bounded Dijkstra expansion
   while (!pq.empty()) {
     const auto [du, u] = pq.top(); pq.pop();
     if (du != dist[u]) {continue;}
     if (du > R) {continue;}
 
-    // Escribir coste si no es desconocido ni letal
     if (dst[u] != NO_INFORMATION && dst[u] != LETHAL_OBSTACLE) {
-      const uint8_t c = cost_from_dist(du);
-      if (c > dst[u]) {dst[u] = c;} // tomamos el máximo (monótono)
+      const std::uint8_t c = cost_from_dist(du);
+      if (c > dst[u]) {dst[u] = c;} // monotonic accumulation
     }
 
-    // Relajar vecinos
+    // Neighbor relaxation
     for (NavCelId v : nm.navcel_neighbors(u)) {
       const size_t vidx = static_cast<size_t>(v);
       if (vidx >= N) {continue;}
 
-      // Si quieres que el desconocido BLOQUEE la propagación, descomenta:
-      // if (src[v] == NO_INFORMATION) continue;
+      if (src[v] == NO_INFORMATION) {
+        continue;
+      }
 
       const float step = (C[u] - C[v]).norm();
       if (step <= 0.0f) {continue;}
@@ -183,44 +202,52 @@ InflationFilter::on_initialize()
 {
   auto node = get_node();
 
-  inflation_radius_ = 0.3;
-  cost_scaling_factor_ = 3.0;
-  inscribed_radius_ = 0.3;
+  // Defaults; may be overridden in parameters
+  inflation_radius_ = 0.30f;
+  cost_scaling_factor_ = 3.0f;
+  inscribed_radius_ = 0.30f;
 
   node->declare_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
   node->declare_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
   node->declare_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
+
   node->get_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
   node->get_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
   node->get_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
 
   RCLCPP_INFO(node->get_logger(),
-    "InflationFilter with inflation_radius = %lf  cost_scaling_factor = %lf",
-    inflation_radius_, cost_scaling_factor_);
+    "InflationFilter (NavMap): radius=%.3f cost_scaling=%.3f inscribed=%.3f",
+    inflation_radius_, cost_scaling_factor_, inscribed_radius_);
 
   return {};
 }
 
-void
-InflationFilter::update(::easynav::NavState & nav_state)
+void InflationFilter::update(::easynav::NavState & nav_state)
 {
-  if (!nav_state.has("map")) {
+  if (!nav_state.has("map.navmap")) {
     return;
   }
 
-  navmap_ = nav_state.get<::navmap::NavMap>("map");
+  auto nm = nav_state.get<::navmap::NavMap>("map.navmap");
 
-  if (!inflate_layer_u8(navmap_, "obstacles", "inflated_obstacles",
-    inflation_radius_, cost_scaling_factor_, 0.3))
-  {
-    RCLCPP_ERROR(parent_node_->get_logger(), "Error inflating at ObstacleFilter");
+  const bool ok = inflate_layer_u8(
+    nm,
+    "obstacles",
+    "inflated_obstacles",
+    inflation_radius_,
+    cost_scaling_factor_,
+    inscribed_radius_);
+
+  if (!ok) {
+    RCLCPP_ERROR(parent_node_->get_logger(), "InflationFilter: inflate_layer_u8() failed");
+    return;
   }
 
-  nav_state.set("map", navmap_);
+  nav_state.set("map.navmap", nm);
 }
-
 
 }  // namespace navmap
 }  // namespace easynav
+
 #include <pluginlib/class_list_macros.hpp>
 PLUGINLIB_EXPORT_CLASS(easynav::navmap::InflationFilter, easynav::navmap::NavMapFilter)
