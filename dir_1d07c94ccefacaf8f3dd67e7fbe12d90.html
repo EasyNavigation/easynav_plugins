@@ -118,21 +118,27 @@ Directories</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>"" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
+<p>"" "![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)" "" "![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)" "" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
 <h1><a class="anchor" id="autotoc_md138"></a>
 Description</h1>
 <p>Maps Manager that maintains a <a href="https://github.com/EasyNavigation/NavMap">NavMap</a> (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds.</p>
+<p>This package also includes map filters implemented as plugins (<code>ObstacleFilter</code> and <code>InflationFilter</code>) that operate on NavMap layers to detect obstacles and inflate their costs, enabling cost-aware path planning.</p>
 <h1><a class="anchor" id="autotoc_md139"></a>
 Authors and Maintainers</h1>
 <ul>
-<li><b>Authors:</b> Intelligent Robotics Lab</li>
-<li><b>Maintainers:</b> Francisco Martín Rico <a href="#" onclick="location.href='mai'+'lto:'+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'; return false;">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
+<li><b>Authors:</b> Intelligent Robotics Lab <br  />
+</li>
+<li><b>Maintainer:</b> Francisco Martín Rico <a href="#" onclick="location.href='mai'+'lto:'+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'; return false;">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
 <h1><a class="anchor" id="autotoc_md140"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Distribution   </th><th class="markdownTableHeadNone">Status    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">humble   </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/humble-supported-brightgreen" alt="kilted" class="inline"/>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">jazzy   </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="kilted" class="inline"/>    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">kilted   </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/kilted-supported-brightgreen" alt="kilted" class="inline"/>    </td></tr>
 <tr class="markdownTableRowEven">
@@ -142,67 +148,144 @@ Supported ROS 2 Distributions</h1>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <code>easynav_navmap_maps_manager/NavMapMapsManager</code></li>
-<li><b>Type:</b> <code>easynav::NavMapMapsManager</code></li>
+<li><b>Type:</b> <code><a class="el" href="classeasynav_1_1navmap_1_1NavMapMapsManager.html" title="A plugin-based map manager using the SimpleMap data structure.">easynav::navmap::NavMapMapsManager</a></code></li>
 <li><b>Base Class:</b> <code>easynav::MapsManagerBase</code></li>
 <li><b>Library:</b> <code>easynav_navmap_maps_manager</code></li>
-<li><b>Description:</b> Maps Manager that maintains a NavMap (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds.</li>
+<li><b>Description:</b> <br  />
+ Maps Manager that maintains a NavMap (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds, and applying dynamic filters to generate obstacle and inflated layers.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md142"></a>
 Parameters</h1>
-<p>All parameters are declared under the plugin namespace, i.e., <code>/&lt;node_fqn&gt;/easynav_navmap_maps_manager/NavMapMapsManager/...</code>.</p>
+<p>All parameters are declared under the plugin namespace, i.e. <br  />
+ <code>/&lt;node_fqn&gt;/easynav_navmap_maps_manager/NavMapMapsManager/...</code></p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Name   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadRight">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.package</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyRight"><code>""</code>   </td><td class="markdownTableBodyNone">Package name to resolve relative paths via ament index.    </td></tr>
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.package</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyRight"><code>""</code>   </td><td class="markdownTableBodyNone">Package name to resolve relative paths via <code>ament_index</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.freq</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>10.0</code>   </td><td class="markdownTableBodyNone">Update frequency (Hz) for map publishing and filter execution.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.navmap_path_file</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyRight"><code>""</code>   </td><td class="markdownTableBodyNone">Relative path (inside the package) to a <code>.navmap</code> file to load at startup.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>&lt;plugin&gt;.occmap_path_file</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyRight"><code>""</code>   </td><td class="markdownTableBodyNone">Relative path (inside the package) to a ROS YAML OccupancyGrid to import as NavMap.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.navmap_path_file</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyRight"><code>""</code>   </td><td class="markdownTableBodyNone">Relative path (inside the package) to a PCD/PLY used to build NavMap.   </td></tr>
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.pcd_path_file</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyRight"><code>""</code>   </td><td class="markdownTableBodyNone">Relative path (inside the package) to a point cloud (PCD/PLY) used to build a NavMap surface.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.filters</code>   </td><td class="markdownTableBodyNone"><code>list&lt;string&gt;</code>   </td><td class="markdownTableBodyRight"><code>[]</code>   </td><td class="markdownTableBodyNone">Ordered list of filter plugin names to be applied after map loading (e.g. <code>["obstacles", "inflation"]</code>).   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md143"></a>
+<h2><a class="anchor" id="autotoc_md143"></a>
+Filter Plugins</h2>
+<h3><a class="anchor" id="autotoc_md144"></a>
+<b>ObstacleFilter</b></h3>
+<ul>
+<li><b>Plugin Name:</b> <code>easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter</code></li>
+<li><b>Type:</b> <code><a class="el" href="classeasynav_1_1navmap_1_1ObstacleFilter.html">easynav::navmap::ObstacleFilter</a></code></li>
+<li><b>Description:</b> <br  />
+ Detects occupied NavCels from input point clouds (<code>points</code> key in <code>NavState</code>) and marks them as <code>LETHAL_OBSTACLE</code> in the <code>"obstacles"</code> layer. <br  />
+ The filter groups 3D points into voxels and marks cells as occupied if a sufficient vertical structure is detected (either multiple bins along the z-axis or a vertical span exceeding a threshold).</li>
+</ul>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadRight">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.vertical_bins_min</code>   </td><td class="markdownTableBodyNone"><code>int</code>   </td><td class="markdownTableBodyRight"><code>3</code>   </td><td class="markdownTableBodyNone">Minimum number of vertical bins required to consider a column as an obstacle.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.height_threshold</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.25</code>   </td><td class="markdownTableBodyNone">Minimum vertical height (in meters) between max and min z to mark as an obstacle.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.downsample</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.3</code>   </td><td class="markdownTableBodyNone">Voxel size used to downsample point clouds before obstacle detection.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.fuse_frame</code>   </td><td class="markdownTableBodyNone"><code>string</code>   </td><td class="markdownTableBodyRight"><code>"map"</code>   </td><td class="markdownTableBodyNone">Frame in which points are fused before projection into NavMap.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Input Key:</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Reads point clouds from <code>NavState</code> key <code>"points"</code>.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Output Layer:</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Updates or creates NavMap layer <code>"obstacles"</code>.   </td></tr>
+</table>
+<h3><a class="anchor" id="autotoc_md145"></a>
+<b>InflationFilter</b></h3>
+<ul>
+<li><b>Plugin Name:</b> <code>easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</code></li>
+<li><b>Type:</b> <code><a class="el" href="classeasynav_1_1navmap_1_1InflationFilter.html">easynav::navmap::InflationFilter</a></code></li>
+<li><b>Description:</b> <br  />
+ Expands obstacle information from the <code>"obstacles"</code> layer into an <code>"inflated_obstacles"</code> layer, assigning graded costs depending on distance to obstacles and map boundaries (NavCels with missing neighbors). <br  />
+ This filter mimics the behavior of <code>costmap_2d::InflationLayer</code> but operates on the NavMap triangular mesh.</li>
+</ul>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Parameter   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadRight">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.inflation_radius</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.3</code>   </td><td class="markdownTableBodyNone">Maximum inflation distance (m) from obstacles.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.cost_scaling_factor</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>3.0</code>   </td><td class="markdownTableBodyNone">Exponential decay rate controlling how fast cost decreases with distance.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.inscribed_radius</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>0.3</code>   </td><td class="markdownTableBodyNone">Radius of inscribed zone (constant high cost before decay).    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Input Layer:</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Reads from <code>"obstacles"</code>.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Output Layer:</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Writes to <code>"inflated_obstacles"</code>.   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md146"></a>
 Interfaces (Topics and Services)</h1>
-<h2><a class="anchor" id="autotoc_md144"></a>
+<h2><a class="anchor" id="autotoc_md147"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Direction   </th><th class="markdownTableHeadNone">Topic   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Purpose   </th><th class="markdownTableHeadNone">QoS    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Publisher   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/map</code>   </td><td class="markdownTableBodyNone"><code>navmap_ros_interfaces/msg/NavMap</code>   </td><td class="markdownTableBodyNone">Published full NavMap.   </td><td class="markdownTableBodyNone">QoS depth=1    </td></tr>
+<td class="markdownTableBodyNone">Publisher   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/map</code>   </td><td class="markdownTableBodyNone"><code>navmap_ros_interfaces/msg/NavMap</code>   </td><td class="markdownTableBodyNone">Publishes the full NavMap.   </td><td class="markdownTableBodyNone">depth=1    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Publisher   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/map_updates</code>   </td><td class="markdownTableBodyNone"><code>navmap_ros_interfaces/msg/NavMapLayer</code>   </td><td class="markdownTableBodyNone">Incremental NavMap layer updates.   </td><td class="markdownTableBodyNone">QoS depth=100    </td></tr>
+<td class="markdownTableBodyNone">Publisher   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/map_updates</code>   </td><td class="markdownTableBodyNone"><code>navmap_ros_interfaces/msg/NavMapLayer</code>   </td><td class="markdownTableBodyNone">Publishes incremental layer updates.   </td><td class="markdownTableBodyNone">depth=100    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Subscription   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_occ_map</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs/msg/OccupancyGrid</code>   </td><td class="markdownTableBodyNone">Input occupancy grid to import into NavMap.   </td><td class="markdownTableBodyNone">QoS depth=1, transient_local, reliable    </td></tr>
+<td class="markdownTableBodyNone">Subscription   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_occ_map</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs/msg/OccupancyGrid</code>   </td><td class="markdownTableBodyNone">Input occupancy grid to import into NavMap.   </td><td class="markdownTableBodyNone">depth=1, transient_local, reliable    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Subscription   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_pc2_map</code>   </td><td class="markdownTableBodyNone"><code>sensor_msgs/msg/PointCloud2</code>   </td><td class="markdownTableBodyNone">Input point cloud to build/update NavMap.   </td><td class="markdownTableBodyNone">QoS depth=100   </td></tr>
+<td class="markdownTableBodyNone">Subscription   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_pc2_map</code>   </td><td class="markdownTableBodyNone"><code>sensor_msgs/msg/PointCloud2</code>   </td><td class="markdownTableBodyNone">Input point cloud to build/update NavMap.   </td><td class="markdownTableBodyNone">depth=100   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md145"></a>
+<h2><a class="anchor" id="autotoc_md148"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Direction   </th><th class="markdownTableHeadNone">Service   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Purpose    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Service Server   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</code>   </td><td class="markdownTableBodyNone"><code>std_srvs/srv/Trigger</code>   </td><td class="markdownTableBodyNone">Save current NavMap to disk.   </td></tr>
+<td class="markdownTableBodyNone">Service Server   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</code>   </td><td class="markdownTableBodyNone"><code>std_srvs/srv/Trigger</code>   </td><td class="markdownTableBodyNone">Saves the current NavMap and layers to disk.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md146"></a>
+<h1><a class="anchor" id="autotoc_md149"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Key   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Access   </th><th class="markdownTableHeadNone">Notes    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>map</code>   </td><td class="markdownTableBodyNone"><code>::navmap::NavMap</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Existing NavMap from state, if available.    </td></tr>
+<td class="markdownTableBodyNone"><code>map.navmap</code>   </td><td class="markdownTableBodyNone"><code>::navmap::NavMap</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Reads the NavMap if already present in NavState.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>map.navmap</code>   </td><td class="markdownTableBodyNone"><code>::navmap::NavMap</code>   </td><td class="markdownTableBodyNone"><b>Write</b>   </td><td class="markdownTableBodyNone">Stores/broadcasts the maintained NavMap.   </td></tr>
+<td class="markdownTableBodyNone"><code>map.navmap</code>   </td><td class="markdownTableBodyNone"><code>::navmap::NavMap</code>   </td><td class="markdownTableBodyNone"><b>Write</b>   </td><td class="markdownTableBodyNone">Stores the maintained NavMap, including generated layers <code>"obstacles"</code> and <code>"inflated_obstacles"</code>.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md147"></a>
+<h1><a class="anchor" id="autotoc_md150"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Role   </th><th class="markdownTableHeadNone">Transform   </th><th class="markdownTableHeadNone">Notes    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Publishes   </td><td class="markdownTableBodyNone"><code>—</code>   </td><td class="markdownTableBodyNone">No TF broadcasting in this manager; outputs are stamped in their configured frame.   </td></tr>
+<td class="markdownTableBodyNone">Publishes   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">No TF broadcasting in this manager; outputs are stamped in their configured frame.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md148"></a>
+<h1><a class="anchor" id="autotoc_md151"></a>
+Example Configuration</h1>
+<div class="fragment"><div class="line">maps_manager_node:</div>
+<div class="line">  ros__parameters:</div>
+<div class="line">    use_sim_time: true</div>
+<div class="line">    map_types: [navmap]</div>
+<div class="line">    navmap:</div>
+<div class="line">      freq: 10.0</div>
+<div class="line">      plugin: easynav_navmap_maps_manager/NavMapMapsManager</div>
+<div class="line">      package: easynav_indoor_testcase</div>
+<div class="line">      navmap_path_file: maps/excavation_urjc.navmap</div>
+<div class="line">      filters: [obstacles, inflation]</div>
+<div class="line">      obstacles:</div>
+<div class="line">        plugin: easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter</div>
+<div class="line">        height_threshold: 0.25</div>
+<div class="line">      inflation:</div>
+<div class="line">        plugin: easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</div>
+<div class="line">        inflation_radius: 1.0</div>
+<div class="line">        cost_scaling_factor: 2.0</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md152"></a>
 License</h1>
 <p>GPL-3.0-only </p>
 </div><!-- contents -->
