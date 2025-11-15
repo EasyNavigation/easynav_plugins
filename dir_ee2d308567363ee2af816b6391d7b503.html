@@ -193,10 +193,12 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Direction   </th><th class="markdownTableHeadNone">Topic   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Purpose   </th><th class="markdownTableHeadNone">QoS    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Subscription   </td><td class="markdownTableBodyNone"><code>/odom</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs/msg/Odometry</code>   </td><td class="markdownTableBodyNone">Read odometry when compute_odom_from_tf=false.   </td><td class="markdownTableBodyNone">SensorDataQoS (reliable)    </td></tr>
+<td class="markdownTableBodyNone">Subscription   </td><td class="markdownTableBodyNone"><code>odom</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs/msg/Odometry</code>   </td><td class="markdownTableBodyNone">Read odometry when compute_odom_from_tf=false.   </td><td class="markdownTableBodyNone">SensorDataQoS (reliable)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Publisher   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/particles</code>   </td><td class="markdownTableBodyNone"><code>geometry_msgs/msg/PoseArray</code>   </td><td class="markdownTableBodyNone">Publishes the current particle set.   </td><td class="markdownTableBodyNone">depth=10    </td></tr>
+<td class="markdownTableBodyNone">Subscription   </td><td class="markdownTableBodyNone"><code>initialpose</code>   </td><td class="markdownTableBodyNone"><code>geometry_msgs/msg/PoseWithCovarianceStamped</code>   </td><td class="markdownTableBodyNone">Init particles pose to the received pose, using covariance   </td><td class="markdownTableBodyNone">depth=10    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Publisher   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/particles</code>   </td><td class="markdownTableBodyNone"><code>geometry_msgs/msg/PoseArray</code>   </td><td class="markdownTableBodyNone">Publishes the current particle set.   </td><td class="markdownTableBodyNone">depth=10    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Publisher   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/pose</code>   </td><td class="markdownTableBodyNone"><code>geometry_msgs/msg/PoseWithCovarianceStamped</code>   </td><td class="markdownTableBodyNone">Estimated pose with covariance.   </td><td class="markdownTableBodyNone">depth=10   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md62"></a>
