@@ -27,7 +27,7 @@ jobs:
           target-ros2-distro: jazzy
           ref: jazzy
           vcs-repo-file-url: ${GITHUB_WORKSPACE}/.github/thirdparty.repos
-          skip-tests: true
+          skip-tests: false
           colcon-defaults: |
             {
               "build": {

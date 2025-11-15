@@ -27,7 +27,7 @@ jobs:
           target-ros2-distro: rolling
           ref: rolling
           vcs-repo-file-url: ${GITHUB_WORKSPACE}/.github/thirdparty.repos
-          skip-tests: true
+          skip-tests: false
           colcon-defaults: |
             {
               "build": {
