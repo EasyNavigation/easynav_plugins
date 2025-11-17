@@ -173,9 +173,9 @@ MPPIController::update_rt(NavState & nav_state)
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})
     .fuse("map")
-    ->filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
-    ->downsample(0.1)
+    .downsample(0.1)
     .as_points();
 
   if (filtered.empty()) {
