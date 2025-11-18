@@ -304,10 +304,10 @@ SerestController::closest_obstacle_distance(
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(0.3)
     .fuse(get_tf_prefix() + "base_link")
-    ->filter({-dist_search_radius_, -dist_search_radius_, NAN},
+    .filter({-dist_search_radius_, -dist_search_radius_, NAN},
       {dist_search_radius_, dist_search_radius_, 2.0})
     .collapse({NAN, NAN, 0.1})
-    ->downsample(0.3)
+    .downsample(0.3)
     .as_points();
 
   double min_dist = std::numeric_limits<double>::infinity();
