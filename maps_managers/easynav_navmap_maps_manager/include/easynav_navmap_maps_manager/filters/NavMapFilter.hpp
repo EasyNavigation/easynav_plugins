@@ -53,11 +53,10 @@ public:
   float get_map_resolution() {return map_resolution_;}
   void set_map_resolution(float resolution) {map_resolution_ = resolution;}
 
-protected:
-  std::shared_ptr<rclcpp_lifecycle::LifecycleNode> get_node() const;
-
   const std::string & get_plugin_name() const;
 
+protected:
+  std::shared_ptr<rclcpp_lifecycle::LifecycleNode> get_node() const;
   const std::string & get_tf_prefix() const;
 
 protected:

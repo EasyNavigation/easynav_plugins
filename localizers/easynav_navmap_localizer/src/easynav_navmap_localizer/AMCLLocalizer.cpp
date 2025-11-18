@@ -800,16 +800,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
   }
 
   auto t4 = get_node()->now();
-
-  // Light profiling
-  std::cerr << "Prepare maps: " << std::fixed << std::setprecision(6) << (t1 - t0).seconds() <<
-    " s\n";
-  std::cerr << "Prep sensors: " << std::fixed << std::setprecision(6) << (t2 - t1).seconds() <<
-    " s\n";
-  std::cerr << "Scoring:      " << std::fixed << std::setprecision(6) << (t3 - t2).seconds() <<
-    " s\n";
-  std::cerr << "Weights:      " << std::fixed << std::setprecision(6) << (t4 - t3).seconds() <<
-    " s\n";
 }
 
 // ------------------- reseed -------------------

@@ -45,15 +45,21 @@ NavMapMapsManager::NavMapMapsManager()
 {
   ::easynav::NavState::register_printer<::navmap::NavMap>(
     [](const ::navmap::NavMap & map) {
-      (void)map;
       std::ostringstream oss;
-      oss << "NavMap Navcells = " << map.navcels.size() << "\tlayers = " <<
-        map.list_layers().size();
+      oss << "NavMap: navcels=" << map.navcels.size()
+          << " surfaces=" << map.surfaces.size()
+          << " layers=" << map.list_layers().size() << " (";
+
+      for (const auto & layer : map.list_layers()) {
+        oss << layer << " ";
+      }
+      oss << ")";
+
       return oss.str();
     });
 
-  // navmap_filters_loader_ = std::make_unique<pluginlib::ClassLoader<NavMapFilter>>(
-  //   "easynav_navmap_filter", "easynav::navmap::NavMapFilter");
+  navmap_filters_loader_ = std::make_unique<pluginlib::ClassLoader<NavMapFilter>>(
+    "easynav_navmap_maps_manager", "easynav::navmap::NavMapFilter");
 }
 
 NavMapMapsManager::~NavMapMapsManager() {}
@@ -85,7 +91,6 @@ NavMapMapsManager::on_initialize()
     try {
       RCLCPP_INFO(node->get_logger(),
         "Loading NavMapFilter %s [%s]", navmap_filter.c_str(), plugin.c_str());
-
       std::shared_ptr<NavMapFilter> instance;
       instance = navmap_filters_loader_->createSharedInstance(plugin);
 
@@ -219,27 +224,17 @@ NavMapMapsManager::update(::easynav::NavState & nav_state)
     nav_state.set("map.navmap", navmap_);
   }
 
-  nav_state.set("map.navmap", navmap_);
+  for (const auto & filter : navmap_filters_) {
+    filter->set_map_resolution(resolution_);
+    filter->update(nav_state);
 
-//   if (!navmap_.has_layer("occupancy")) {
-//     navmap_.add_layer<uint8_t>("occupancy", "Per-NavCel occupancy (0=free, 255=unknown)", "",
-//           static_cast<uint8_t>(0));
-//   }
-//
-//   for (const auto & filter : navmap_filters_) {
-//     filter->set_map_resolution(resolution_);
-//     filter->update(nav_state);
-//   }
-//
-//   navmap_ = nav_state.get<::navmap::NavMap>("map");
-//
-//   for (const auto & filter : navmap_filters_) {
-//
-//     if (filter->is_adding_layer() && navmap_.has_layer(filter->get_layer_name())) {
-//       auto update_msg = navmap_ros::to_msg(navmap_, filter->get_layer_name());
-//       layer_updates_pub_->publish(update_msg);
-//     }
-//   }
+    navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
+
+    if (filter->is_adding_layer() && navmap_.has_layer(filter->get_layer_name())) {
+      auto update_msg = navmap_ros::to_msg(navmap_, filter->get_layer_name());
+      layer_updates_pub_->publish(update_msg);
+    }
+  }
 }
 
 
