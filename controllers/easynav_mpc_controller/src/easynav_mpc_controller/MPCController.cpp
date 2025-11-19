@@ -111,7 +111,50 @@ MPCController::on_initialize()
   node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
 
+  mpc_path_pub_ =
+    node->create_publisher<visualization_msgs::msg::MarkerArray>("/mpc/path", 10);
+
   return {};
+}
+
+void 
+MPCController::publish_mpc_path(const Eigen::Vector3d & pose, const std::vector<double> & best_vel)
+{
+  visualization_msgs::msg::MarkerArray path;
+  visualization_msgs::msg::Marker points;
+  points.header.frame_id = "map";
+  points.header.stamp = rclcpp::Clock().now();
+  points.ns = "mpc_path";
+  points.id = 0;
+  points.type = visualization_msgs::msg::Marker::LINE_STRIP;
+  points.action = visualization_msgs::msg::Marker::ADD;
+  points.scale.x = 0.05;
+  points.color.r = 1.0;
+  points.color.g = 0.0;
+  points.color.b = 0.0;
+  points.color.a = 0.8;
+
+  Eigen::Vector3d x;
+  std::cerr << "====" << std::endl;
+      std::cerr << "Pose.X: " << pose[0]
+              << " Pose.Y: " << pose[1] <<std::endl;
+  for (size_t i = 0; i + 1 < best_vel.size(); i += 2)
+  {
+    double v = best_vel[i];
+    double w = best_vel[i + 1];
+    geometry_msgs::msg::Point p;
+    x = {pose[0], pose[1], pose[2]};
+    x = kinematic_model(x, v, w, dt_);
+    std::cerr << " x: " << x[0] 
+              << " y: " << x[1]  << std::endl;
+    p.x = x[0];
+    p.y = x[1];
+    p.z = 0.1;
+    points.points.push_back(p);
+  }
+
+  path.markers.push_back(points);
+  mpc_path_pub_->publish(path);
 }
 
 void
@@ -184,7 +227,7 @@ MPCController::update_rt(NavState & nav_state)
   opt.set_upper_bounds(ub);
   opt.set_xtol_rel(1e-6);
   opt.set_ftol_rel(1e-8);
-  opt.set_maxeval(100);
+  opt.set_maxeval(250);
 
   try {
     nlopt::result result = opt.optimize(u, minf);
@@ -206,6 +249,9 @@ MPCController::update_rt(NavState & nav_state)
   cmd_vel_.twist.angular.z = u[1];
 
   nav_state.set("cmd_vel", cmd_vel_);
+
+  // Publish the path
+  publish_mpc_path(params.x0, u);
 }
 
 }  // namespace easynav
