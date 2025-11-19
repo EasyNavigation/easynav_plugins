@@ -70,14 +70,15 @@ protected:
   double dt_{0.1};            ///< Time step for MPC.
   double max_lin_vel_{1.5};   ///< Maximum linear velocity for MPC.
   double max_ang_vel_{1.5};   ///< Maximum angular velocity for MPC.
+  bool verbose_{false};       ///< Value to debug on terminal
 
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr mpc_path_pub_;    ///< Publisher for MPC path markers.
 
 private:
-  Eigen::Matrix2d Q_ {{2.0, 0.0}, {0.0, 2.0}};
-  Eigen::Matrix2d R_ {{0.05, 0.0}, {0.0, 0.05}};
-  Eigen::Matrix2d Rd_ {{0.1, 0.0}, {0.0, 0.1}};
-  double qtheta_ {0.5};
+  Eigen::Matrix2d Q_ {{5.0, 0.0}, {0.0, 5.0}};    ///< Tracking Cost 
+  Eigen::Matrix2d R_ {{0.1, 0.0}, {0.0, 0.1}};  ///< Effort Cost
+  Eigen::Matrix2d Rd_ {{0.1, 0.0}, {0.0, 0.1}};   ///< Smooth Cost
+  double qtheta_ {2.0};
   geometry_msgs::msg::TwistStamped cmd_vel_;  ///< Current velocity command.
 
 };

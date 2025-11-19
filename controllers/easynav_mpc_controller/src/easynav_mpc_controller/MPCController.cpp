@@ -105,11 +105,13 @@ MPCController::on_initialize()
   node->declare_parameter<double>(plugin_name + ".dt", dt_);
   node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
 
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
   node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
 
   mpc_path_pub_ =
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mpc/path", 10);
@@ -161,7 +163,9 @@ void
 MPCController::update_rt(NavState & nav_state)
 {
   if (!nav_state.has("path") || !nav_state.has("robot_pose")) {
-    std::cout << "No Path or No robot pose" << std::endl;
+    if(verbose_) {
+      std::cout << "No Path or No robot pose" << std::endl;
+    }
     return;
   }
 
@@ -226,18 +230,21 @@ MPCController::update_rt(NavState & nav_state)
   opt.set_lower_bounds(lb);
   opt.set_upper_bounds(ub);
   opt.set_xtol_rel(1e-6);
-  opt.set_ftol_rel(1e-8);
-  opt.set_maxeval(250);
+  opt.set_ftol_rel(1e-6);
+  opt.set_maxeval(750);
 
   try {
     nlopt::result result = opt.optimize(u, minf);
-      // if (result != nlopt::SUCCESS)
-      // {
-      //   std::cerr << "Optimization Unsuccessful " << std::endl;
-      //   std::cout << "Result: " << result << std::endl;
-      // } else {
-      //   std::cerr << "Optimization Successful " << std::endl;
-      // }
+    if(verbose_) {
+      if (result != nlopt::SUCCESS)
+      {
+        std::cerr << "Optimization Stopped " << std::endl;
+        std::cout << "Result: " << result << std::endl;
+      } else {
+        std::cerr << "Optimization Successful " << std::endl;
+      }
+    }
+
   } catch (std::exception & e) {
     std::cerr << "Optimization Error: " << e.what() << std::endl;
   }
