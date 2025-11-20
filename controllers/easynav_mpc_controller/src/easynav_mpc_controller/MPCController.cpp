@@ -23,12 +23,12 @@
 #include "easynav_mpc_controller/MPCController.hpp"
 
 Eigen::Vector3d
-kinematic_model(const Eigen::Vector3d & x, double v, double w, double dt)
+kinematic_model(const Eigen::Vector3d & x, const Eigen::Vector3d & q, double v, double w, double dt)
 {
   Eigen::Vector3d x_k1;
-  x_k1[0] = x[0] + v * cos(x[2]) * dt;
-  x_k1[1] = x[1] + v * sin(x[2]) * dt;
-  x_k1[2] = x[2] + w * dt;
+  x_k1[0] = x[0] + v * cos(q[2]) * dt;
+  x_k1[1] = x[1] + v * sin(q[2]) * dt;
+  x_k1[2] = q[2] + w * dt;
   return x_k1;
 }
 
@@ -37,7 +37,9 @@ cost_function(const std::vector<double> & u, std::vector<double> & grad, void *d
 {
   MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
 
-  Eigen::Vector3d x = params->x0;
+  Eigen::Vector3d position = params->x0;
+  Eigen::Vector3d orientation = params->theta0;
+  Eigen::Vector3d state;
   int N = params->N;
   double dt = params->dt;
   double qtheta = params->qtheta;
@@ -59,11 +61,11 @@ cost_function(const std::vector<double> & u, std::vector<double> & grad, void *d
       dw = 0.0;
     }
 
-    x = kinematic_model(x, v, w, dt);
+    state = kinematic_model(position, orientation, v, w, dt);
 
-    Eigen::Vector2d pos = x.head<2>();
+    Eigen::Vector2d pos = state.head<2>();
     Eigen::Vector2d error = params->goal - pos;
-    double error_theta = (atan2((error[1]), (error[0]))) - x[2];
+    double error_theta = (atan2((error[1]), (error[0]))) - state[2];
     Eigen::Vector2d uk(v, w);
     Eigen::Vector2d duk(dv, dw);
 
@@ -120,7 +122,7 @@ MPCController::on_initialize()
 }
 
 void 
-MPCController::publish_mpc_path(const Eigen::Vector3d & pose, const std::vector<double> & best_vel)
+MPCController::publish_mpc_path(const Eigen::Vector3d & position, const Eigen::Vector3d & orientation, const std::vector<double> & best_vel)
 {
   visualization_msgs::msg::MarkerArray path;
   visualization_msgs::msg::Marker points;
@@ -136,22 +138,16 @@ MPCController::publish_mpc_path(const Eigen::Vector3d & pose, const std::vector<
   points.color.b = 0.0;
   points.color.a = 0.8;
 
-  Eigen::Vector3d x;
-  std::cerr << "====" << std::endl;
-      std::cerr << "Pose.X: " << pose[0]
-              << " Pose.Y: " << pose[1] <<std::endl;
+  Eigen::Vector3d state;
   for (size_t i = 0; i + 1 < best_vel.size(); i += 2)
   {
     double v = best_vel[i];
     double w = best_vel[i + 1];
     geometry_msgs::msg::Point p;
-    x = {pose[0], pose[1], pose[2]};
-    x = kinematic_model(x, v, w, dt_);
-    std::cerr << " x: " << x[0] 
-              << " y: " << x[1]  << std::endl;
-    p.x = x[0];
-    p.y = x[1];
-    p.z = 0.1;
+    state = kinematic_model(position, orientation, v, w, dt_);
+    p.x = state[0];
+    p.y = state[1];
+    p.z = position[2] + 0.5;
     points.points.push_back(p);
   }
 
@@ -197,7 +193,8 @@ MPCController::update_rt(NavState & nav_state)
   // MPC Code
 
   MPCParameters params;
-  params.x0 = {pose.position.x, pose.position.y, yaw_};
+  params.x0 = {pose.position.x, pose.position.y, pose.position.z};
+  params.theta0 = {roll_, pitch_, yaw_};
   size_t local_horizon;
   if (num_elements > horizon_steps_) {
     local_horizon = horizon_steps_;
@@ -229,9 +226,9 @@ MPCController::update_rt(NavState & nav_state)
   }
   opt.set_lower_bounds(lb);
   opt.set_upper_bounds(ub);
-  opt.set_xtol_rel(1e-6);
-  opt.set_ftol_rel(1e-6);
-  opt.set_maxeval(750);
+  opt.set_xtol_rel(1e-3);
+  opt.set_ftol_rel(1e-3);
+  // opt.set_maxeval(1000);
 
   try {
     nlopt::result result = opt.optimize(u, minf);
@@ -258,7 +255,7 @@ MPCController::update_rt(NavState & nav_state)
   nav_state.set("cmd_vel", cmd_vel_);
 
   // Publish the path
-  publish_mpc_path(params.x0, u);
+  publish_mpc_path(params.x0, params.theta0, u);
 }
 
 }  // namespace easynav
