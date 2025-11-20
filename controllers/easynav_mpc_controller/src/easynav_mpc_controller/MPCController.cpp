@@ -121,8 +121,10 @@ MPCController::on_initialize()
   return {};
 }
 
-void 
-MPCController::publish_mpc_path(const Eigen::Vector3d & position, const Eigen::Vector3d & orientation, const std::vector<double> & best_vel)
+void
+MPCController::publish_mpc_path(
+  const Eigen::Vector3d & position,
+  const Eigen::Vector3d & orientation, const std::vector<double> & best_vel)
 {
   visualization_msgs::msg::MarkerArray path;
   visualization_msgs::msg::Marker points;
@@ -139,8 +141,7 @@ MPCController::publish_mpc_path(const Eigen::Vector3d & position, const Eigen::V
   points.color.a = 0.8;
 
   Eigen::Vector3d state;
-  for (size_t i = 0; i + 1 < best_vel.size(); i += 2)
-  {
+  for (size_t i = 0; i + 1 < best_vel.size(); i += 2) {
     double v = best_vel[i];
     double w = best_vel[i + 1];
     geometry_msgs::msg::Point p;
@@ -233,8 +234,7 @@ MPCController::update_rt(NavState & nav_state)
   try {
     nlopt::result result = opt.optimize(u, minf);
     if(verbose_) {
-      if (result != nlopt::SUCCESS)
-      {
+      if (result != nlopt::SUCCESS) {
         std::cerr << "Optimization Stopped " << std::endl;
         std::cout << "Result: " << result << std::endl;
       } else {
