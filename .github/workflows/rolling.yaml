@@ -25,7 +25,7 @@ jobs:
           required-ros-distributions: rolling
 
       - name: Install nlopt
-        run:  sudo apt install -y libnlopt-dev
+        run:  sudo apt install -y libnlopt*
 
       - name: build and test
         uses: ros-tooling/action-ros-ci@0.4.5
