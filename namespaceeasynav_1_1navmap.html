@@ -167,8 +167,6 @@ Functions</h2></td></tr>
 <tr class="separator:afcd1e85e181f9a1b71aefb6d573a974b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27199b6c5c41cd0c496807946d16ad83" id="r_a27199b6c5c41cd0c496807946d16ad83"><td class="memItemLeft" align="right" valign="top">std::optional&lt; tf2::Quaternion &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27199b6c5c41cd0c496807946d16ad83">get_latest_imu_quat</a> (const NavState &amp;nav_state)</td></tr>
 <tr class="separator:a27199b6c5c41cd0c496807946d16ad83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40727e2c1519ca6567c750b3df27efe0" id="r_a40727e2c1519ca6567c750b3df27efe0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Triangle &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40727e2c1519ca6567c750b3df27efe0">grow_surface_from_seed</a> (const pcl::PointCloud&lt; pcl::PointXYZ &gt; &amp;cloud, int seed_idx, const Params &amp;P)</td></tr>
-<tr class="separator:a40727e2c1519ca6567c750b3df27efe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bdbcb6e84e8bb320d00f1ece63dcf4e" id="r_a2bdbcb6e84e8bb320d00f1ece63dcf4e"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classBonxai_1_1ProbabilisticMap.html">Bonxai::ProbabilisticMap</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bdbcb6e84e8bb320d00f1ece63dcf4e">inflate_map</a> (const std::shared_ptr&lt; <a class="el" href="classBonxai_1_1ProbabilisticMap.html">Bonxai::ProbabilisticMap</a> &gt; &amp;src, double sigma, double p_min, <a class="el" href="#a38a5ef5d8850a2e3d4ec867c65a79d63">ProgressCallback</a> progress=nullptr)</td></tr>
 <tr class="separator:a2bdbcb6e84e8bb320d00f1ece63dcf4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad65be2857c82bbadf9e7eb59ad067f63" id="r_ad65be2857c82bbadf9e7eb59ad067f63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad65be2857c82bbadf9e7eb59ad067f63">loadMapFromFile</a> (const <a class="el" href="structeasynav_1_1navmap_1_1LoadParameters.html">LoadParameters</a> &amp;load_parameters, nav_msgs::msg::OccupancyGrid &amp;map)</td></tr>
@@ -180,8 +178,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a76f80287c77094e196f4937297e064ac" id="r_a76f80287c77094e196f4937297e064ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structeasynav_1_1navmap_1_1LoadParameters.html">LoadParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76f80287c77094e196f4937297e064ac">loadMapYaml</a> (const std::string &amp;yaml_filename)</td></tr>
 <tr class="memdesc:a76f80287c77094e196f4937297e064ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load and parse the given YAML file.  <br /></td></tr>
 <tr class="separator:a76f80287c77094e196f4937297e064ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a564468dabda962aacaf59d5c959c6319" id="r_a564468dabda962aacaf59d5c959c6319"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a564468dabda962aacaf59d5c959c6319">local_tangent_basis</a> (const std::vector&lt; Eigen::Vector3f &gt; &amp;nbrs, Eigen::Vector3f &amp;t1, Eigen::Vector3f &amp;t2)</td></tr>
-<tr class="separator:a564468dabda962aacaf59d5c959c6319"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d2f4dd22af2ddf3876da9a81ac82acd" id="r_a3d2f4dd22af2ddf3876da9a81ac82acd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aa17ca8c572605df6a7d49a362f6d7534">MapMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3d2f4dd22af2ddf3876da9a81ac82acd">map_mode_from_string</a> (std::string map_mode_name)</td></tr>
 <tr class="memdesc:a3d2f4dd22af2ddf3876da9a81ac82acd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the name of a map mode to a <a class="el" href="#aa17ca8c572605df6a7d49a362f6d7534">MapMode</a> enum.  <br /></td></tr>
 <tr class="separator:a3d2f4dd22af2ddf3876da9a81ac82acd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,12 +190,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a640e338d206263877fd036bb388006a6" id="r_a640e338d206263877fd036bb388006a6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a640e338d206263877fd036bb388006a6">saveMapToFile</a> (const nav_msgs::msg::OccupancyGrid &amp;map, const <a class="el" href="structeasynav_1_1navmap_1_1SaveParameters.html">SaveParameters</a> &amp;save_parameters)</td></tr>
 <tr class="memdesc:a640e338d206263877fd036bb388006a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write OccupancyGrid map to file.  <br /></td></tr>
 <tr class="separator:a640e338d206263877fd036bb388006a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aead1c4b8b2a643351737b6097c379120" id="r_aead1c4b8b2a643351737b6097c379120"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aead1c4b8b2a643351737b6097c379120">sort_neighbors_angular</a> (const Eigen::Vector3f &amp;vpos, const std::vector&lt; std::pair&lt; int, Eigen::Vector3f &gt; &gt; &amp;nbrs, std::vector&lt; int &gt; &amp;out_ordered)</td></tr>
-<tr class="separator:aead1c4b8b2a643351737b6097c379120"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad089d6caf5156b818488bbec8de30a4b" id="r_ad089d6caf5156b818488bbec8de30a4b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad089d6caf5156b818488bbec8de30a4b">triangle_angles_deg</a> (const Eigen::Vector3f &amp;A, const Eigen::Vector3f &amp;B, const Eigen::Vector3f &amp;C, float &amp;angA, float &amp;angB, float &amp;angC)</td></tr>
-<tr class="separator:ad089d6caf5156b818488bbec8de30a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2215d5291e71a00a7bd903397e50060e" id="r_a2215d5291e71a00a7bd903397e50060e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2215d5291e71a00a7bd903397e50060e">try_add_triangle</a> (int i, int j, int k, const pcl::PointCloud&lt; pcl::PointXYZ &gt; &amp;cloud, const Params &amp;P, std::unordered_set&lt; TriKey, TriHasher &gt; &amp;tri_set, std::unordered_set&lt; EdgeKey, EdgeHasher &gt; &amp;edge_set, std::vector&lt; Triangle &gt; &amp;tris)</td></tr>
-<tr class="separator:a2215d5291e71a00a7bd903397e50060e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc6608899967214edb5d585251ac3bcc" id="r_acc6608899967214edb5d585251ac3bcc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc6608899967214edb5d585251ac3bcc">tryWriteMapToFile</a> (const nav_msgs::msg::OccupancyGrid &amp;map, const <a class="el" href="structeasynav_1_1navmap_1_1SaveParameters.html">SaveParameters</a> &amp;save_parameters)</td></tr>
 <tr class="memdesc:acc6608899967214edb5d585251ac3bcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to write map data into a file.  <br /></td></tr>
 <tr class="separator:acc6608899967214edb5d585251ac3bcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -471,32 +461,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a40727e2c1519ca6567c750b3df27efe0" name="a40727e2c1519ca6567c750b3df27efe0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40727e2c1519ca6567c750b3df27efe0">&#9670;&#160;</a></span>grow_surface_from_seed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; Triangle &gt; grow_surface_from_seed </td>
-          <td>(</td>
-          <td class="paramtype">const pcl::PointCloud&lt; pcl::PointXYZ &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>cloud</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>seed_idx</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Params &amp;</td>          <td class="paramname"><span class="paramname"><em>P</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a2bdbcb6e84e8bb320d00f1ece63dcf4e" name="a2bdbcb6e84e8bb320d00f1ece63dcf4e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2bdbcb6e84e8bb320d00f1ece63dcf4e">&#9670;&#160;</a></span>inflate_map()</h2>
 
@@ -627,32 +591,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a564468dabda962aacaf59d5c959c6319" name="a564468dabda962aacaf59d5c959c6319"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a564468dabda962aacaf59d5c959c6319">&#9670;&#160;</a></span>local_tangent_basis()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void local_tangent_basis </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; Eigen::Vector3f &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>nbrs</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Eigen::Vector3f &amp;</td>          <td class="paramname"><span class="paramname"><em>t1</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Eigen::Vector3f &amp;</td>          <td class="paramname"><span class="paramname"><em>t2</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a3d2f4dd22af2ddf3876da9a81ac82acd" name="a3d2f4dd22af2ddf3876da9a81ac82acd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3d2f4dd22af2ddf3876da9a81ac82acd">&#9670;&#160;</a></span>map_mode_from_string()</h2>
 
@@ -771,124 +709,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true or false </dd></dl>
-
-</div>
-</div>
-<a id="aead1c4b8b2a643351737b6097c379120" name="aead1c4b8b2a643351737b6097c379120"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aead1c4b8b2a643351737b6097c379120">&#9670;&#160;</a></span>sort_neighbors_angular()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void sort_neighbors_angular </td>
-          <td>(</td>
-          <td class="paramtype">const Eigen::Vector3f &amp;</td>          <td class="paramname"><span class="paramname"><em>vpos</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; std::pair&lt; int, Eigen::Vector3f &gt; &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>nbrs</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; int &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out_ordered</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad089d6caf5156b818488bbec8de30a4b" name="ad089d6caf5156b818488bbec8de30a4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad089d6caf5156b818488bbec8de30a4b">&#9670;&#160;</a></span>triangle_angles_deg()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void triangle_angles_deg </td>
-          <td>(</td>
-          <td class="paramtype">const Eigen::Vector3f &amp;</td>          <td class="paramname"><span class="paramname"><em>A</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Eigen::Vector3f &amp;</td>          <td class="paramname"><span class="paramname"><em>B</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Eigen::Vector3f &amp;</td>          <td class="paramname"><span class="paramname"><em>C</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float &amp;</td>          <td class="paramname"><span class="paramname"><em>angA</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float &amp;</td>          <td class="paramname"><span class="paramname"><em>angB</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float &amp;</td>          <td class="paramname"><span class="paramname"><em>angC</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2215d5291e71a00a7bd903397e50060e" name="a2215d5291e71a00a7bd903397e50060e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2215d5291e71a00a7bd903397e50060e">&#9670;&#160;</a></span>try_add_triangle()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool try_add_triangle </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>i</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>j</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>k</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const pcl::PointCloud&lt; pcl::PointXYZ &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>cloud</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Params &amp;</td>          <td class="paramname"><span class="paramname"><em>P</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unordered_set&lt; TriKey, TriHasher &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>tri_set</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::unordered_set&lt; EdgeKey, EdgeHasher &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>edge_set</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">std::vector&lt; Triangle &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>tris</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>

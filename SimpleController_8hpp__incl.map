@@ -1,25 +1,23 @@
 <map id="controllers/easynav_simple_controller/include/easynav_simple_controller/SimpleController.hpp" name="controllers/easynav_simple_controller/include/easynav_simple_controller/SimpleController.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="586,5,764,76"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="492,5,671,76"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,132,73,157"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="586,50,483,59,357,74,221,96,86,127,80,128,79,123,85,121,220,91,356,69,482,54,585,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="492,53,304,79,194,100,86,127,81,128,79,123,85,121,193,95,303,74,492,48"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="97,132,170,157"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="586,54,399,81,291,101,184,127,177,128,176,123,182,121,290,96,398,75,585,49"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="492,59,347,86,184,127,177,129,176,123,182,121,346,81,491,53"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="195,132,248,157"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="586,55,432,82,346,102,261,127,259,127,257,122,260,121,344,96,431,76,585,50"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="272,124,446,165"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="586,73,435,121,434,116,584,68"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="470,132,669,157"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="641,78,595,123,591,119,637,74"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="693,124,868,165"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="713,74,751,111,747,115,709,78"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="892,132,1055,157"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="765,70,924,123,922,129,764,75"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="1080,124,1283,165"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="765,57,1069,118,1068,123,764,62"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="1308,124,1469,165"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="765,49,1000,78,1293,121,1292,126,999,83,764,55"/>
-<area shape="rect" id="Node000011" href="$PIDController_8hpp.html" title="Declaration of a simple PIDController class." alt="" coords="1493,124,1668,165"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="764,46,1076,73,1275,94,1478,121,1477,126,1274,100,1076,78,764,51"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="1552,213,1609,238"/>
-<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="1583,165,1583,197,1578,197,1578,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="492,62,381,89,261,127,259,127,257,122,259,121,380,84,491,57"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="272,132,470,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="511,79,411,127,409,122,509,74"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="494,124,669,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="584,76,584,108,579,108,579,76"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="693,132,857,157"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="649,74,740,121,737,126,646,79"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="881,124,1085,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="672,62,891,117,890,122,671,67"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1109,124,1270,165"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="672,52,862,82,1095,121,1094,126,861,87,671,58"/>
+<area shape="rect" id="Node000010" href="$PIDController_8hpp.html" title="Declaration of a simple PIDController class." alt="" coords="1294,124,1469,165"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="671,48,940,76,1280,121,1279,126,939,81,671,53"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1353,213,1410,238"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="1384,165,1384,197,1379,197,1379,165"/>
 </map>

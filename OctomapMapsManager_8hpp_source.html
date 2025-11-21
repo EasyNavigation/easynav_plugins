@@ -115,78 +115,68 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#define EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAP_MAPS_MANAGER_HPP_</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;utility&gt;</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;fstream&gt;</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;nav_msgs/msg/occupancy_grid.hpp&quot;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &quot;octomap_msgs/msg/octomap.hpp&quot;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &quot;std_srvs/srv/trigger.hpp&quot;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &quot;sensor_msgs/msg/point_cloud2.hpp&quot;</span></div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &quot;nav_msgs/msg/occupancy_grid.hpp&quot;</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &quot;octomap_msgs/msg/octomap.hpp&quot;</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &quot;std_srvs/srv/trigger.hpp&quot;</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;sensor_msgs/msg/point_cloud2.hpp&quot;</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &quot;tf2_ros/buffer.hpp&quot;</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &quot;tf2_ros/transform_listener.hpp&quot;</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#include &quot;easynav_core/MapsManagerBase.hpp&quot;</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#include &quot;octomap/octomap.h&quot;</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#include &quot;<a class="code" href="OctomapFilter_8hpp.html">easynav_octomap_maps_manager/filters/OctomapFilter.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#include &quot;pluginlib/class_loader.hpp&quot;</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">#include &quot;yaets/tracing.hpp&quot;</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>{</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav_1_1octomap.html">octomap</a></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>{</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span></div>
-<div class="foldopen" id="foldopen00062" data-start="{" data-end="};">
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html">   62</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#ad0f7e42cc8fd0d43a8d85180e966113a">OctomapMapsManager</a> : <span class="keyword">public</span> easynav::MapsManagerBase</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>{</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#ad0f7e42cc8fd0d43a8d85180e966113a">OctomapMapsManager</a>();</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#a559000c085f68cbfd0338ffc8f09a22d">~OctomapMapsManager</a>();</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <span class="keyword">virtual</span> std::expected&lt;void, std::string&gt; <a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa09f4316ce265b452c96e6d74101cd76">on_initialize</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#adf7e4756c0a96f191d0978a0b10a9d5a">update</a>(::easynav::NavState &amp; nav_state) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">   98</a></span>  std::string <a class="code hl_variable" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">map_path_</a>;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  std::shared_ptr&lt;::octomap::OcTree&gt; octomap_;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &quot;easynav_core/MapsManagerBase.hpp&quot;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &quot;octomap/octomap.h&quot;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;<a class="code" href="OctomapFilter_8hpp.html">easynav_octomap_maps_manager/filters/OctomapFilter.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &quot;pluginlib/class_loader.hpp&quot;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>{</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav_1_1octomap.html">octomap</a></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>{</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span></div>
+<div class="foldopen" id="foldopen00052" data-start="{" data-end="};">
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html">   52</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#ad0f7e42cc8fd0d43a8d85180e966113a">OctomapMapsManager</a> : <span class="keyword">public</span> easynav::MapsManagerBase</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>{</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  <a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#ad0f7e42cc8fd0d43a8d85180e966113a">OctomapMapsManager</a>();</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#a559000c085f68cbfd0338ffc8f09a22d">~OctomapMapsManager</a>();</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keyword">virtual</span> std::expected&lt;void, std::string&gt; <a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa09f4316ce265b452c96e6d74101cd76">on_initialize</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#adf7e4756c0a96f191d0978a0b10a9d5a">update</a>(::easynav::NavState &amp; nav_state) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">   88</a></span>  std::string <a class="code hl_variable" href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">map_path_</a>;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  std::shared_ptr&lt;::octomap::OcTree&gt; octomap_;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  rclcpp::Publisher&lt;octomap_msgs::msg::Octomap&gt;::SharedPtr octomap_pub_;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  rclcpp::Subscription&lt;nav_msgs::msg::OccupancyGrid&gt;::SharedPtr incoming_occ_map_sub_;</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  rclcpp::Publisher&lt;octomap_msgs::msg::Octomap&gt;::SharedPtr octomap_pub_;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  rclcpp::Subscription&lt;sensor_msgs::msg::PointCloud2&gt;::SharedPtr incoming_pc2_map_sub_;</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  rclcpp::Subscription&lt;nav_msgs::msg::OccupancyGrid&gt;::SharedPtr incoming_occ_map_sub_;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  rclcpp::Service&lt;std_srvs::srv::Trigger&gt;::SharedPtr savemap_srv_;</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  rclcpp::Subscription&lt;sensor_msgs::msg::PointCloud2&gt;::SharedPtr incoming_pc2_map_sub_;</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  rclcpp::Service&lt;std_srvs::srv::Trigger&gt;::SharedPtr savemap_srv_;</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  octomap_msgs::msg::Octomap octomap_msg_;</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  std::unique_ptr&lt;pluginlib::ClassLoader&lt;OctomapFilter&gt;&gt; octomap_filters_loader_;</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  std::vector&lt;std::shared_ptr&lt;OctomapFilter&gt;&gt; octomap_filters_;</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  <span class="keywordtype">double</span> resolution_ {1.0};</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>};</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  octomap_msgs::msg::Octomap octomap_msg_;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  std::unique_ptr&lt;pluginlib::ClassLoader&lt;OctomapFilter&gt;&gt; octomap_filters_loader_;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  std::vector&lt;std::shared_ptr&lt;OctomapFilter&gt;&gt; octomap_filters_;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  <span class="keywordtype">double</span> resolution_ {1.0};</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>};</div>
 </div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>}  <span class="comment">// namespace octomap</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>}  <span class="comment">// namespace easynav</span></div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAP_MAPS_MANAGER_HPP_</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>}  <span class="comment">// namespace octomap</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>}  <span class="comment">// namespace easynav</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAP_MAPS_MANAGER_HPP_</span></div>
 <div class="ttc" id="aOctomapFilter_8hpp_html"><div class="ttname"><a href="OctomapFilter_8hpp.html">OctomapFilter.hpp</a></div></div>
-<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_a559000c085f68cbfd0338ffc8f09a22d"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#a559000c085f68cbfd0338ffc8f09a22d">easynav::octomap::OctomapMapsManager::~OctomapMapsManager</a></div><div class="ttdeci">~OctomapMapsManager()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.cpp:63</div></div>
-<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_aa09f4316ce265b452c96e6d74101cd76"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa09f4316ce265b452c96e6d74101cd76">easynav::octomap::OctomapMapsManager::on_initialize</a></div><div class="ttdeci">virtual std::expected&lt; void, std::string &gt; on_initialize() override</div><div class="ttdoc">Initializes the maps manager.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.cpp:66</div></div>
-<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_aa77083dd3e9128e426594ca1674a90e2"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">easynav::octomap::OctomapMapsManager::map_path_</a></div><div class="ttdeci">std::string map_path_</div><div class="ttdoc">Full path to the map file.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.hpp:98</div></div>
-<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_ad0f7e42cc8fd0d43a8d85180e966113a"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#ad0f7e42cc8fd0d43a8d85180e966113a">easynav::octomap::OctomapMapsManager::OctomapMapsManager</a></div><div class="ttdeci">OctomapMapsManager()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.cpp:49</div></div>
-<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_adf7e4756c0a96f191d0978a0b10a9d5a"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#adf7e4756c0a96f191d0978a0b10a9d5a">easynav::octomap::OctomapMapsManager::update</a></div><div class="ttdeci">virtual void update(::easynav::NavState &amp;nav_state) override</div><div class="ttdoc">Updates the internal maps using the current navigation state.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.cpp:256</div></div>
+<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_a559000c085f68cbfd0338ffc8f09a22d"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#a559000c085f68cbfd0338ffc8f09a22d">easynav::octomap::OctomapMapsManager::~OctomapMapsManager</a></div><div class="ttdeci">~OctomapMapsManager()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.cpp:61</div></div>
+<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_aa09f4316ce265b452c96e6d74101cd76"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa09f4316ce265b452c96e6d74101cd76">easynav::octomap::OctomapMapsManager::on_initialize</a></div><div class="ttdeci">virtual std::expected&lt; void, std::string &gt; on_initialize() override</div><div class="ttdoc">Initializes the maps manager.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.cpp:64</div></div>
+<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_aa77083dd3e9128e426594ca1674a90e2"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#aa77083dd3e9128e426594ca1674a90e2">easynav::octomap::OctomapMapsManager::map_path_</a></div><div class="ttdeci">std::string map_path_</div><div class="ttdoc">Full path to the map file.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.hpp:88</div></div>
+<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_ad0f7e42cc8fd0d43a8d85180e966113a"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#ad0f7e42cc8fd0d43a8d85180e966113a">easynav::octomap::OctomapMapsManager::OctomapMapsManager</a></div><div class="ttdeci">OctomapMapsManager()</div><div class="ttdoc">Default constructor.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.cpp:47</div></div>
+<div class="ttc" id="aclasseasynav_1_1octomap_1_1OctomapMapsManager_html_adf7e4756c0a96f191d0978a0b10a9d5a"><div class="ttname"><a href="classeasynav_1_1octomap_1_1OctomapMapsManager.html#adf7e4756c0a96f191d0978a0b10a9d5a">easynav::octomap::OctomapMapsManager::update</a></div><div class="ttdeci">virtual void update(::easynav::NavState &amp;nav_state) override</div><div class="ttdoc">Updates the internal maps using the current navigation state.</div><div class="ttdef"><b>Definition</b> OctomapMapsManager.cpp:254</div></div>
 <div class="ttc" id="anamespaceeasynav_1_1octomap_html"><div class="ttname"><a href="namespaceeasynav_1_1octomap.html">easynav::octomap</a></div><div class="ttdef"><b>Definition</b> InflationFilter.hpp:38</div></div>
 <div class="ttc" id="anamespaceeasynav_html"><div class="ttname"><a href="namespaceeasynav.html">easynav</a></div><div class="ttdoc">Provides a mapping for often used cost values.</div><div class="ttdef"><b>Definition</b> cost_values.hpp:41</div></div>
 </div><!-- fragment --></div><!-- contents -->

@@ -55,6 +55,5 @@ var searchData=
   ['grid_5fcoord_2ehpp_52',['grid_coord.hpp',['../grid__coord_8hpp.html',1,'']]],
   ['gridblockallocator_53',['GridBlockAllocator',['../classBonxai_1_1GridBlockAllocator.html',1,'GridBlockAllocator&lt; DataT &gt;'],['../classBonxai_1_1GridBlockAllocator.html#ad32641d37fc7938655a9fdb3343ed463',1,'Bonxai::GridBlockAllocator::GridBlockAllocator(size_t log2dim)'],['../classBonxai_1_1GridBlockAllocator.html#af5e04be9ab3d4cde1dc64bc0589330a1',1,'Bonxai::GridBlockAllocator::GridBlockAllocator(const GridBlockAllocator &amp;)=delete'],['../classBonxai_1_1GridBlockAllocator.html#a3a0c55e933fa47baae5d7f19bcf05146',1,'Bonxai::GridBlockAllocator::GridBlockAllocator(GridBlockAllocator &amp;&amp;)=default']]],
   ['gridblockallocator_3c_20bonxai_3a_3aprobabilisticmap_3a_3acellt_20_3e_54',['GridBlockAllocator&lt; Bonxai::ProbabilisticMap::CellT &gt;',['../classBonxai_1_1GridBlockAllocator.html',1,'Bonxai']]],
-  ['gridnode_55',['GridNode',['../structeasynav_1_1GridNode.html',1,'easynav']]],
-  ['grow_5fsurface_5ffrom_5fseed_56',['grow_surface_from_seed',['../namespaceeasynav_1_1navmap.html#a40727e2c1519ca6567c750b3df27efe0',1,'easynav::navmap']]]
+  ['gridnode_55',['GridNode',['../structeasynav_1_1GridNode.html',1,'easynav']]]
 ];

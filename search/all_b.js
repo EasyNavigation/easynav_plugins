@@ -31,10 +31,9 @@ var searchData=
   ['loadmapfromyaml_28',['loadMapFromYaml',['../namespaceeasynav__bonxai.html#adada2e5c817d3b2b022048f497912d10',1,'easynav_bonxai::loadMapFromYaml()'],['../namespaceeasynav.html#adada2e5c817d3b2b022048f497912d10',1,'easynav::loadMapFromYaml()'],['../namespaceeasynav_1_1navmap.html#adada2e5c817d3b2b022048f497912d10',1,'easynav::navmap::loadMapFromYaml()'],['../namespaceeasynav_1_1octomap.html#adada2e5c817d3b2b022048f497912d10',1,'easynav::octomap::loadMapFromYaml()']]],
   ['loadmapyaml_29',['loadMapYaml',['../namespaceeasynav__bonxai.html#a76f80287c77094e196f4937297e064ac',1,'easynav_bonxai::loadMapYaml()'],['../namespaceeasynav.html#a76f80287c77094e196f4937297e064ac',1,'easynav::loadMapYaml()'],['../namespaceeasynav_1_1navmap.html#a76f80287c77094e196f4937297e064ac',1,'easynav::navmap::loadMapYaml()'],['../namespaceeasynav_1_1octomap.html#a76f80287c77094e196f4937297e064ac',1,'easynav::octomap::loadMapYaml()']]],
   ['loadparameters_30',['LoadParameters',['../structeasynav_1_1LoadParameters.html',1,'LoadParameters'],['../structeasynav_1_1navmap_1_1LoadParameters.html',1,'LoadParameters'],['../structeasynav_1_1octomap_1_1LoadParameters.html',1,'LoadParameters'],['../structeasynav__bonxai_1_1LoadParameters.html',1,'LoadParameters']]],
-  ['local_5ftangent_5fbasis_31',['local_tangent_basis',['../namespaceeasynav_1_1navmap.html#a564468dabda962aacaf59d5c959c6319',1,'easynav::navmap']]],
-  ['localizermethodbase_32',['LocalizerMethodBase',['../classLocalizerMethodBase.html',1,'']]],
-  ['localizers_33',['📍 Localizers',['../index.html#autotoc_md10',1,'']]],
-  ['log2dim_5f_34',['log2dim_',['../classBonxai_1_1GridBlockAllocator.html#a5765eef43f314366e8a7f8743ff772b3',1,'Bonxai::GridBlockAllocator']]],
-  ['logods_35',['logods',['../classBonxai_1_1ProbabilisticMap.html#a05ff2d55c19b6c496c103e84a6d5d331',1,'Bonxai::ProbabilisticMap']]],
-  ['look_5fahead_5fdist_5f_36',['look_ahead_dist_',['../classeasynav_1_1SimpleController.html#aafe39db8fdd7f0300e7696422f6247f1',1,'easynav::SimpleController']]]
+  ['localizermethodbase_31',['LocalizerMethodBase',['../classLocalizerMethodBase.html',1,'']]],
+  ['localizers_32',['📍 Localizers',['../index.html#autotoc_md10',1,'']]],
+  ['log2dim_5f_33',['log2dim_',['../classBonxai_1_1GridBlockAllocator.html#a5765eef43f314366e8a7f8743ff772b3',1,'Bonxai::GridBlockAllocator']]],
+  ['logods_34',['logods',['../classBonxai_1_1ProbabilisticMap.html#a05ff2d55c19b6c496c103e84a6d5d331',1,'Bonxai::ProbabilisticMap']]],
+  ['look_5fahead_5fdist_5f_35',['look_ahead_dist_',['../classeasynav_1_1SimpleController.html#aafe39db8fdd7f0300e7696422f6247f1',1,'easynav::SimpleController']]]
 ];

@@ -1,7 +1,7 @@
 <map id="maps_managers/easynav_navmap_maps_manager/src/easynav_navmap_maps_manager" name="maps_managers/easynav_navmap_maps_manager/src/easynav_navmap_maps_manager">
 <area shape="rect" id="node3" href="dir_65ae76b102ebf9d58aa57d8133ab7167.html" title="include" alt="" coords="153,152,215,177"/>
 <area shape="poly" id="edge1" href="dir_000030_000076.html" alt="" coords="136,102,167,138,162,141,132,105"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000030_000076.html" title="7" alt="" coords="166,124,173,139"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000030_000076.html" title="6" alt="" coords="166,124,173,139"/>
 <area shape="rect" id="node2" href="dir_f4efc30b3c6489ffa9683a29f5d5dba0.html" title="filters" alt="" coords="223,70,276,96"/>
 <area shape="poly" id="edge2" href="dir_000061_000076.html" alt="" coords="241,98,206,141,201,138,237,95"/>
 <area shape="rect" id="edge2-headlabel" href="dir_000061_000076.html" title="3" alt="" coords="209,135,216,150"/>

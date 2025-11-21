@@ -1,21 +1,22 @@
 <map id="maps_managers/easynav_octomap_maps_manager/include/easynav_octomap_maps_manager/filters/InflationFilter.hpp" name="maps_managers/easynav_octomap_maps_manager/include/easynav_octomap_maps_manager/filters/InflationFilter.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="255,5,456,91"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="244,5,445,91"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,235,79,261"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="255,71,179,98,142,117,108,141,90,159,75,180,54,222,49,220,70,178,86,156,104,137,139,113,177,93,254,66"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="245,80,184,106,126,141,87,181,58,223,54,220,83,178,123,137,181,101,242,76"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="103,235,157,261"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="255,64,218,75,183,91,150,112,124,140,116,159,114,180,122,220,117,221,109,180,111,158,120,138,147,108,180,86,217,70,254,59"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="381,146,551,172"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="400,89,445,133,441,137,396,93"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="575,146,760,172"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="458,82,619,138,617,143,456,87"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="784,139,945,180"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="457,68,770,135,769,140,456,74"/>
-<area shape="rect" id="Node000007" href="$OctomapFilter_8hpp.html" title=" " alt="" coords="134,139,358,180"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="315,93,278,130,275,126,311,89"/>
-<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="201,183,86,231,83,226,199,178"/>
-<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="221,182,159,228,156,224,218,178"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="181,235,316,261"/>
-<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="249,180,250,220,245,220,244,180"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="340,228,501,268"/>
-<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="287,178,369,218,366,223,284,183"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,76,192,102,168,119,148,141,138,159,132,180,130,220,125,219,127,179,133,157,144,137,164,115,189,97,242,71"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="457,146,627,172"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="422,89,508,136,506,141,420,94"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="651,146,836,172"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="446,74,685,139,684,145,445,80"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="525,228,687,268"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="371,89,404,135,448,178,485,201,526,219,523,224,483,206,444,182,400,139,367,93"/>
+<area shape="rect" id="Node000007" href="$OctomapFilter_8hpp.html" title=" " alt="" coords="158,139,382,180"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="318,93,294,127,290,124,314,90"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="218,183,92,230,88,232,87,227,90,225,216,178"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="240,182,163,229,161,225,237,178"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="347,178,515,221,514,226,346,183"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="366,235,502,261"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="308,178,399,225,396,230,306,183"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="181,228,343,268"/>
+<area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="271,180,268,212,263,212,266,180"/>
 </map>

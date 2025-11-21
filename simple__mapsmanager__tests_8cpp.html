@@ -97,11 +97,11 @@ $(function(){ initResizable(false); });
 <div class="textblock"><code>#include &lt;gtest/gtest.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="SimpleMap_8hpp_source.html">easynav_simple_common/SimpleMap.hpp</a>&quot;</code><br />
 <code>#include &quot;easynav_common/RTTFBuffer.hpp&quot;</code><br />
-<code>#include &quot;easynav_common/types/Perceptions.hpp&quot;</code><br />
 <code>#include &quot;easynav_common/types/PointPerception.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="SimpleMapsManager_8hpp_source.html">easynav_simple_maps_manager/SimpleMapsManager.hpp</a>&quot;</code><br />
 <code>#include &quot;rclcpp/rclcpp.hpp&quot;</code><br />
 <code>#include &quot;rclcpp_lifecycle/lifecycle_node.hpp&quot;</code><br />
+<code>#include &quot;tf2_ros/transform_listener.hpp&quot;</code><br />
 <code>#include &quot;std_srvs/srv/trigger.hpp&quot;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
@@ -110,59 +110,40 @@ Include dependency graph for simple_mapsmanager_tests.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="simple__mapsmanager__tests_8cpp__incl.png" border="0" usemap="#amaps__managers_2easynav__simple__maps__manager_2tests_2simple__mapsmanager__tests_8cpp" alt=""/></div>
 <map name="amaps__managers_2easynav__simple__maps__manager_2tests_2simple__mapsmanager__tests_8cpp" id="amaps__managers_2easynav__simple__maps__manager_2tests_2simple__mapsmanager__tests_8cpp">
-<area shape="rect" title=" " alt="" coords="839,5,1025,76"/>
+<area shape="rect" title=" " alt="" coords="778,5,963,76"/>
 <area shape="rect" title=" " alt="" coords="5,132,99,157"/>
-<area shape="poly" title=" " alt="" coords="839,48,699,57,518,72,318,94,118,127,105,130,104,124,117,121,317,89,518,66,698,51,839,43"/>
-<area shape="rect" href="SimpleMap_8hpp.html" title="Declaration of the SimpleMap type." alt="" coords="325,213,496,253"/>
-<area shape="poly" title=" " alt="" coords="839,45,764,52,678,65,589,89,547,106,507,126,484,142,464,161,432,201,428,198,460,158,481,138,504,122,545,101,588,84,677,60,763,46,839,40"/>
-<area shape="rect" title=" " alt="" coords="154,309,219,334"/>
-<area shape="poly" title=" " alt="" coords="839,55,683,77,501,111,413,132,335,157,272,184,247,199,229,215,215,233,205,253,193,294,188,293,200,251,210,230,225,211,244,195,269,179,333,152,412,127,500,105,682,71,838,50"/>
-<area shape="rect" title=" " alt="" coords="821,132,1043,157"/>
-<area shape="poly" title=" " alt="" coords="935,76,935,116,929,116,929,76"/>
-<area shape="rect" title=" " alt="" coords="1067,124,1229,165"/>
-<area shape="poly" title=" " alt="" coords="1007,74,1094,115,1091,119,1005,79"/>
-<area shape="rect" title=" " alt="" coords="1253,124,1414,165"/>
-<area shape="poly" title=" " alt="" coords="1026,63,1242,117,1240,122,1024,68"/>
-<area shape="rect" href="SimpleMapsManager_8hpp.html" title="Declaration of the SimpleMapsManager method." alt="" coords="518,124,746,165"/>
-<area shape="poly" title=" " alt="" coords="840,76,706,121,704,116,838,71"/>
-<area shape="rect" title=" " alt="" coords="1441,220,1599,246"/>
-<area shape="poly" title=" " alt="" coords="862,79,833,98,811,120,802,142,804,152,811,163,824,171,847,178,916,189,1006,197,1108,201,1305,206,1423,210,1449,214,1448,219,1422,215,1305,211,1108,207,1006,202,915,195,846,183,822,176,807,167,799,154,797,141,807,117,829,94,859,74"/>
-<area shape="rect" title=" " alt="" coords="1438,132,1557,157"/>
-<area shape="poly" title=" " alt="" coords="1025,52,1212,81,1427,121,1441,125,1440,130,1426,127,1211,86,1025,57"/>
-<area shape="rect" title=" " alt="" coords="1581,124,1742,165"/>
-<area shape="poly" title=" " alt="" coords="1026,49,1266,78,1566,121,1565,126,1266,83,1025,54"/>
-<area shape="rect" title=" " alt="" coords="1766,132,1834,157"/>
-<area shape="poly" title=" " alt="" coords="1025,40,1168,44,1351,57,1554,81,1656,99,1755,121,1762,123,1760,128,1754,127,1655,104,1553,87,1350,62,1167,50,1025,45"/>
-<area shape="rect" title=" " alt="" coords="911,309,969,334"/>
-<area shape="poly" title=" " alt="" coords="497,246,896,311,895,316,496,251"/>
-<area shape="rect" title=" " alt="" coords="1129,309,1207,334"/>
-<area shape="poly" title=" " alt="" coords="497,243,560,251,1115,312,1114,317,560,256,496,248"/>
-<area shape="rect" title=" " alt="" coords="1299,309,1373,334"/>
-<area shape="poly" title=" " alt="" coords="497,243,560,251,745,266,890,273,1034,281,1219,299,1284,308,1283,314,1218,304,1034,286,889,278,745,271,560,256,496,249"/>
-<area shape="rect" title=" " alt="" coords="260,309,311,334"/>
-<area shape="poly" title=" " alt="" coords="384,256,317,302,314,298,381,252"/>
-<area shape="poly" title=" " alt="" coords="361,256,233,305,231,301,359,251"/>
-<area shape="rect" title=" " alt="" coords="343,309,412,334"/>
-<area shape="poly" title=" " alt="" coords="406,255,390,295,385,293,401,253"/>
-<area shape="rect" title=" " alt="" coords="440,301,616,342"/>
-<area shape="poly" title=" " alt="" coords="439,252,491,290,488,294,436,256"/>
-<area shape="poly" title=" " alt="" coords="583,168,476,209,474,204,581,163"/>
-<area shape="poly" title=" " alt="" coords="747,160,766,162,1028,173,1189,186,1247,196,1267,203,1279,211,1287,222,1289,233,1279,255,1264,264,1237,273,1157,291,985,317,984,312,1156,286,1235,268,1262,260,1275,252,1284,233,1282,224,1275,215,1265,208,1246,201,1189,191,1028,178,765,167,746,165"/>
-<area shape="poly" title=" " alt="" coords="747,160,766,162,1040,172,1208,185,1269,196,1289,203,1302,211,1311,225,1311,240,1304,253,1292,266,1259,288,1220,305,1218,300,1256,283,1289,262,1300,250,1306,239,1305,227,1298,215,1287,207,1267,201,1207,190,1040,177,765,167,746,165"/>
-<area shape="poly" title=" " alt="" coords="747,157,795,162,1065,173,1231,186,1291,196,1311,203,1324,211,1337,229,1344,251,1344,293,1338,293,1338,252,1332,232,1321,215,1309,208,1290,202,1230,191,1065,178,794,167,746,162"/>
-<area shape="poly" title=" " alt="" coords="518,157,453,166,389,178,336,194,316,204,302,214,291,232,285,252,284,293,278,293,280,252,286,230,298,211,313,199,334,189,388,173,452,161,517,152"/>
-<area shape="poly" title=" " alt="" coords="518,151,460,157,398,169,336,188,279,215,255,232,234,254,203,297,199,294,230,250,251,228,276,210,334,183,397,164,459,152,517,145"/>
-<area shape="poly" title=" " alt="" coords="518,157,456,166,396,178,346,194,328,204,315,214,310,224,308,234,315,256,331,278,351,297,347,301,327,281,311,259,303,235,305,222,311,211,325,199,344,189,394,173,455,161,517,152"/>
-<area shape="poly" title=" " alt="" coords="606,167,583,188,562,214,546,250,536,287,531,285,541,249,558,211,579,185,603,163"/>
-<area shape="poly" title=" " alt="" coords="747,160,766,162,950,177,1094,183,1239,191,1423,210,1450,214,1449,219,1422,215,1238,196,1094,189,950,183,765,167,746,165"/>
-<area shape="rect" title=" " alt="" coords="571,220,693,246"/>
-<area shape="poly" title=" " alt="" coords="635,165,635,205,629,205,629,165"/>
-<area shape="rect" title=" " alt="" coords="717,220,910,246"/>
-<area shape="poly" title=" " alt="" coords="674,163,776,211,773,216,672,168"/>
-<area shape="rect" title=" " alt="" coords="934,213,1122,253"/>
-<area shape="poly" title=" " alt="" coords="723,163,924,206,922,211,722,168"/>
-<area shape="rect" title=" " alt="" coords="1146,220,1265,246"/>
-<area shape="poly" title=" " alt="" coords="747,159,766,162,950,182,1031,192,1134,210,1149,213,1148,218,1133,215,1030,198,950,188,765,167,746,165"/>
+<area shape="poly" title=" " alt="" coords="778,50,482,74,300,96,118,127,105,130,104,124,117,121,299,91,482,69,777,44"/>
+<area shape="rect" href="SimpleMap_8hpp.html" title="Declaration of the SimpleMap type." alt="" coords="342,213,514,253"/>
+<area shape="poly" title=" " alt="" coords="778,49,610,58,416,74,249,97,193,111,174,118,163,126,152,146,153,162,166,177,189,190,253,209,327,221,326,226,252,214,186,195,163,181,148,165,146,145,159,122,172,113,191,105,248,91,416,69,610,53,777,43"/>
+<area shape="rect" title=" " alt="" coords="173,132,395,157"/>
+<area shape="poly" title=" " alt="" coords="778,61,370,131,369,126,777,55"/>
+<area shape="rect" title=" " alt="" coords="419,124,581,165"/>
+<area shape="poly" title=" " alt="" coords="778,70,587,122,586,117,777,65"/>
+<area shape="rect" href="SimpleMapsManager_8hpp.html" title="Declaration of the SimpleMapsManager method." alt="" coords="604,124,833,165"/>
+<area shape="poly" title=" " alt="" coords="820,79,762,117,759,113,817,74"/>
+<area shape="rect" title=" " alt="" coords="813,220,971,246"/>
+<area shape="poly" title=" " alt="" coords="877,76,892,205,886,205,872,77"/>
+<area shape="rect" title=" " alt="" coords="908,132,1028,157"/>
+<area shape="poly" title=" " alt="" coords="906,74,948,118,944,122,902,78"/>
+<area shape="rect" title=" " alt="" coords="1051,124,1213,165"/>
+<area shape="poly" title=" " alt="" coords="961,74,1068,115,1066,120,959,79"/>
+<area shape="rect" title=" " alt="" coords="1237,132,1430,157"/>
+<area shape="poly" title=" " alt="" coords="964,60,1264,125,1263,130,963,65"/>
+<area shape="rect" title=" " alt="" coords="1454,132,1522,157"/>
+<area shape="poly" title=" " alt="" coords="964,45,1064,55,1185,70,1315,92,1443,121,1449,123,1448,128,1442,127,1314,97,1184,75,1063,60,964,51"/>
+<area shape="rect" title=" " alt="" coords="1546,132,1611,157"/>
+<area shape="poly" title=" " alt="" coords="964,43,1080,51,1223,65,1379,88,1534,121,1540,123,1538,128,1533,127,1378,93,1222,70,1079,56,964,48"/>
+<area shape="rect" title=" " alt="" coords="321,309,378,334"/>
+<area shape="poly" title=" " alt="" coords="412,256,372,299,368,295,408,252"/>
+<area shape="rect" title=" " alt="" coords="402,309,454,334"/>
+<area shape="poly" title=" " alt="" coords="431,254,431,293,425,293,425,254"/>
+<area shape="rect" title=" " alt="" coords="477,301,654,342"/>
+<area shape="poly" title=" " alt="" coords="461,252,523,291,520,295,458,256"/>
+<area shape="poly" title=" " alt="" coords="653,168,509,210,508,205,652,163"/>
+<area shape="poly" title=" " alt="" coords="658,168,623,187,593,214,583,231,576,249,569,286,564,285,571,248,578,228,589,211,620,183,656,163"/>
+<area shape="poly" title=" " alt="" coords="759,163,856,211,853,215,757,168"/>
+<area shape="rect" title=" " alt="" coords="602,213,790,253"/>
+<area shape="poly" title=" " alt="" coords="716,166,708,198,702,197,711,165"/>
 </map>
 </div>
 </div><table class="memberdecls">
