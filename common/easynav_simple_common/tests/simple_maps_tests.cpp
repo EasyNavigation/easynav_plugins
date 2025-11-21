@@ -21,8 +21,6 @@
 
 #include "easynav_simple_common/SimpleMap.hpp"
 
-#include <memory>
-
 /// \brief Fixture for SimpleMap tests (minimal)
 class SimpleMapTest : public ::testing::Test
 {

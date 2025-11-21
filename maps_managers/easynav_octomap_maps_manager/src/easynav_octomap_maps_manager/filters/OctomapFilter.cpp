@@ -22,7 +22,6 @@
 #include <string>
 
 #include "octomap/octomap.h"
-#include "easynav_common/types/NavState.hpp"
 
 #include "easynav_octomap_maps_manager/filters/OctomapFilter.hpp"
 

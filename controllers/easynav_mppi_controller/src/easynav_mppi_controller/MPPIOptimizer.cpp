@@ -4,10 +4,6 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
-#include <iostream>
-
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
 
 namespace easynav
 {
