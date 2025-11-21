@@ -8,7 +8,9 @@
   <license>GPL-3.0-only</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <build_depend>nlopt</build_depend>
+  <build_depend>libnlopt-cxx-dev</build_depend>
+  <build_depend>libnlopt-dev</build_depend>
+  <build_depend>libnlopt0</build_depend>
 
   <depend>easynav_common</depend>
   <depend>easynav_core</depend>

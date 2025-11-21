@@ -234,11 +234,11 @@ MPCController::update_rt(NavState & nav_state)
   try {
     nlopt::result result = opt.optimize(u, minf);
     if(verbose_) {
-      if (result != nlopt::SUCCESS) {
-        std::cerr << "Optimization Stopped " << std::endl;
+      if (result > 0) {
+        std::cerr << "Optimization Successful " << std::endl;
         std::cout << "Result: " << result << std::endl;
       } else {
-        std::cerr << "Optimization Successful " << std::endl;
+        std::cerr << "Optimization Unsuccessful " << std::endl;
       }
     }
 
