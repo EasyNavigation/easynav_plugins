@@ -22,9 +22,6 @@
 
 #include "easynav_bonxai_maps_manager/BonxaiMapsManager.hpp"
 
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
-#include "easynav_common/YTSession.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "bonxai/bonxai.hpp"
@@ -34,7 +31,6 @@
 #include "pcl_conversions/pcl_conversions.h"
 #include "pcl/point_types.h"
 #include "pcl/point_cloud.h"
-#include "pcl/filters/voxel_grid.h"
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"

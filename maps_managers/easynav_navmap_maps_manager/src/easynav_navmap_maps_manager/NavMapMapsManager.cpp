@@ -22,8 +22,6 @@
 
 #include "easynav_navmap_maps_manager/NavMapMapsManager.hpp"
 
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
 #include "easynav_common/YTSession.hpp"
 
 #include "navmap_core/NavMap.hpp"

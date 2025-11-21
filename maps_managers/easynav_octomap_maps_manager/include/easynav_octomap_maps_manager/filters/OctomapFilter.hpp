@@ -25,7 +25,7 @@
 #include <string>
 
 #include "octomap/octomap.h"
-
+#include "easynav_common/types/NavState.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
 namespace easynav

@@ -41,10 +41,9 @@
 
 #include <expected>
 #include <string>
+#include <queue>
 
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
 
 #include "navmap_core/NavMap.hpp"
 #include "navmap_ros/conversions.hpp"

@@ -24,13 +24,9 @@
 #define EASYNAV_NAVMAP_LOCALIZER__AMCLLOCALIZER_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
 #include <random>
 #include <Eigen/Geometry>
+#include <bonxai/probabilistic_map.hpp>
 
 #include "geometry_msgs/msg/pose_array.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"

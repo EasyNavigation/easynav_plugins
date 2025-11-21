@@ -24,25 +24,15 @@
 #define EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "std_srvs/srv/trigger.hpp"
-
-#include "tf2_ros/buffer.hpp"
-#include "tf2_ros/transform_listener.hpp"
 
 #include "easynav_core/MapsManagerBase.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
 
 #include "easynav_costmap_maps_manager/filters/CostmapFilter.hpp"
 #include "pluginlib/class_loader.hpp"
-
-#include "yaets/tracing.hpp"
 
 namespace easynav
 {

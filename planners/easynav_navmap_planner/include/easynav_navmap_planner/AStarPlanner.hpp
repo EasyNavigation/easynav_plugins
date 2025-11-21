@@ -23,7 +23,6 @@
 #ifndef EASYNAV_NAVMAP_PLANNER__NAVMAPPLANNER_HPP_
 #define EASYNAV_NAVMAP_PLANNER__NAVMAPPLANNER_HPP_
 
-#include <memory>
 #include <vector>
 
 #include "nav_msgs/msg/path.hpp"

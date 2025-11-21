@@ -6,21 +6,14 @@
 
 #include <gtest/gtest.h>
 
-#include "navmap_core/NavMap.hpp"
-
-#include "easynav_navmap_maps_manager/NavMapMapsManager.hpp"
-#include "easynav_navmap_maps_manager/map_io.hpp"
-
-#include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
+#include "easynav_common/types/NavState.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "std_srvs/srv/trigger.hpp"
 
 #include <memory>
-#include <fstream>
 
 /// \brief Fixture for NavMapMapsManager tests
 class NavMapMapsManagerTest : public ::testing::Test

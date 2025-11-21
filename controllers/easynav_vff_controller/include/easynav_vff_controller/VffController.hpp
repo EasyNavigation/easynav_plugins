@@ -28,7 +28,6 @@
 #include "pcl/point_cloud.h"
 
 #include "easynav_core/ControllerMethodBase.hpp"
-#include "easynav_common/types/PointPerception.hpp"
 
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "visualization_msgs/msg/marker.hpp"

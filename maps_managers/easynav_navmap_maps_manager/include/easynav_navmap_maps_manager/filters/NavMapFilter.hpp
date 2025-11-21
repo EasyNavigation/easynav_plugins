@@ -24,8 +24,7 @@
 #include <expected>
 #include <string>
 
-#include "navmap_core/NavMap.hpp"
-
+#include "easynav_common/types/NavState.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
 namespace easynav

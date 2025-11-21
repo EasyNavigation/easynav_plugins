@@ -23,7 +23,6 @@
 #ifndef EASYNAV_PLANNER__SIMPLEPLANNER_HPP_
 #define EASYNAV_PLANNER__SIMPLEPLANNER_HPP_
 
-#include <memory>
 #include <vector>
 
 #include "nav_msgs/msg/path.hpp"

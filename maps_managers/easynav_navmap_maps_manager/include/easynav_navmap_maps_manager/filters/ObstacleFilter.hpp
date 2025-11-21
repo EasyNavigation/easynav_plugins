@@ -24,8 +24,6 @@
 #include <expected>
 #include <string>
 
-#include "pluginlib/class_loader.hpp"
-
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
 
@@ -41,8 +39,8 @@ class ObstacleFilter : public NavMapFilter
 public:
   ObstacleFilter();
 
-  virtual std::expected<void, std::string> on_initialize();
-  virtual void update(::easynav::NavState & nav_state);
+  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void update(::easynav::NavState & nav_state) override;
 
   virtual bool is_adding_layer() override {return true;}
   virtual std::string get_layer_name() override {return "obstacles";}
