@@ -23,7 +23,6 @@
 #include <queue>
 #include <unordered_map>
 #include <cmath>
-#include <limits>
 #include <tuple>
 
 #include "easynav_costmap_planner/CostmapPlanner.hpp"

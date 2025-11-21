@@ -16,7 +16,6 @@
 #define EASYNAV_COSTMAP_COMMON__GEOMETRY_UTILS_HPP_
 
 #include <cmath>
-#include <vector>
 
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"

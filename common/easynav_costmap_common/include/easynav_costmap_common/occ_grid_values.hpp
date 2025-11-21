@@ -35,6 +35,7 @@
 #ifndef EASYNAV_COSTMAP_COMMON__OCC_GRID_VALUES_HPP_
 #define EASYNAV_COSTMAP_COMMON__OCC_GRID_VALUES_HPP_
 
+#include <cstdint>
 namespace easynav
 {
 

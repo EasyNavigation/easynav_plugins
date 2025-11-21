@@ -23,23 +23,11 @@
 #ifndef EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
 #define EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
 
-#include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
-
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "std_srvs/srv/trigger.hpp"
 
-#include "tf2_ros/buffer.hpp"
-#include "tf2_ros/transform_listener.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
 #include "easynav_simple_common/SimpleMap.hpp"
-
-#include "yaets/tracing.hpp"
 
 namespace easynav
 {

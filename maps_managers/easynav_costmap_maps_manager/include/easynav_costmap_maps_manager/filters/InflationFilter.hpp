@@ -44,12 +44,7 @@
 
 #include <expected>
 #include <string>
-#include <map>
 #include <vector>
-#include <mutex>
-#include <memory>
-
-#include "pluginlib/class_loader.hpp"
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_common/cost_values.hpp"

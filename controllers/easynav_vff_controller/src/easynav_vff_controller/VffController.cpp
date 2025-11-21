@@ -28,7 +28,6 @@
 
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/goals.hpp"
-#include "nav_msgs/msg/path.hpp"
 
 #include <tf2/LinearMath/Quaternion.hpp>
 #include <tf2/LinearMath/Matrix3x3.hpp>

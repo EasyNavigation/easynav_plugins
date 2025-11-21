@@ -22,8 +22,6 @@
 
 #include "easynav_octomap_maps_manager/OctomapMapsManager.hpp"
 
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
 #include "easynav_common/YTSession.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 

@@ -27,7 +27,6 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 #include "easynav_simple_common/SimpleMap.hpp"
 

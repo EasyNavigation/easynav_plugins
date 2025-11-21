@@ -23,7 +23,6 @@
 #include <expected>
 
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 
 #include "ament_index_cpp/get_package_share_directory.hpp"

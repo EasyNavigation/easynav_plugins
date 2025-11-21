@@ -19,7 +19,6 @@
 
 #include <gtest/gtest.h>
 #include "easynav_costmap_common/costmap_2d.hpp"
-#include "easynav_costmap_common/cost_values.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
 
 using easynav::Costmap2D;
