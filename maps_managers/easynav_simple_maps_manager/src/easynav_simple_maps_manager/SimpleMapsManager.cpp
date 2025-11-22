@@ -23,7 +23,6 @@
 #include <expected>
 
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
@@ -156,7 +155,7 @@ SimpleMapsManager::update(NavState & nav_state)
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(dynamic_map_.resolution())
     .fuse(get_tf_prefix() + "map")
-    ->filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .as_points();
 
   for (const auto & p : fused) {

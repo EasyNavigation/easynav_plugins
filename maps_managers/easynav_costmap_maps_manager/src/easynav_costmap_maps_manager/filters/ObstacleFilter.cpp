@@ -23,7 +23,6 @@
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 
 #include "easynav_costmap_common/costmap_2d.hpp"
@@ -60,7 +59,7 @@ ObstacleFilter::update(NavState & nav_state)
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(dynamic_map.getResolution())
     .fuse(get_tf_prefix() + "map")
-    ->filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .as_points();
 
   for (const auto & p : fused) {

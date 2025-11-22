@@ -20,7 +20,6 @@
 #include <queue>
 #include <unordered_map>
 #include <cmath>
-#include <limits>
 
 #include "easynav_simple_planner/SimplePlanner.hpp"
 

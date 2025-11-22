@@ -22,12 +22,9 @@
 
 #include "easynav_costmap_maps_manager/CostmapMapsManager.hpp"
 
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
 #include "easynav_common/YTSession.hpp"
 
 #include "easynav_costmap_common/costmap_2d.hpp"
-#include "easynav_costmap_common/cost_values.hpp"
 #include "easynav_costmap_maps_manager/map_io.hpp"
 
 #include "ament_index_cpp/get_package_share_directory.hpp"

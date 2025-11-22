@@ -28,7 +28,6 @@
 
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/goals.hpp"
-#include "nav_msgs/msg/path.hpp"
 
 #include <tf2/LinearMath/Quaternion.hpp>
 #include <tf2/LinearMath/Matrix3x3.hpp>
@@ -264,9 +263,10 @@ void VffController::update_rt(NavState & nav_state)
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
       .fuse(get_tf_prefix() + "base_link")
-      ->filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
+      .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
-          obstacle_detection_z_max_}).as_points();
+          obstacle_detection_z_max_})
+      .as_points();
 
     // Get VFF vectors
     const VFFVectors & vff = get_vff(angle_error, fused, get_tf_prefix() + "base_link");

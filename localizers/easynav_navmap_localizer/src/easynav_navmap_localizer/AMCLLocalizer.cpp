@@ -28,7 +28,6 @@
 #include <string>
 #include <cmath>
 #include <iostream>
-#include <iomanip>
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -40,7 +39,6 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 #include "easynav_common/types/IMUPerception.hpp"
 

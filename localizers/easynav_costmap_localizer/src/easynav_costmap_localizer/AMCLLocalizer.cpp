@@ -27,7 +27,6 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_common/cost_values.hpp"
@@ -583,9 +582,9 @@ AMCLLocalizer::correct(NavState & nav_state)
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .downsample(map_static.getResolution())
     .fuse(get_tf_prefix() + "base_footprint")
-    ->filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
-    ->downsample(map_static.getResolution())
+    .downsample(map_static.getResolution())
     .as_points();
 
   if (filtered.empty()) {

@@ -21,11 +21,8 @@
 /// \brief Implementation of the AStarPlanner class using A* on ::navmap::NavMap (triangle graph).
 
 #include <queue>
-#include <unordered_map>
-#include <unordered_set>
 #include <cmath>
 #include <limits>
-#include <tuple>
 #include <optional>
 #include <algorithm>
 

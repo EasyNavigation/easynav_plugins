@@ -24,11 +24,7 @@
 #define EASYNAV_PLANNER__SIMPLEMAP_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
 #include <utility>
-#include <fstream>
-#include <sstream>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 

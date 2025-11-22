@@ -23,7 +23,6 @@
 #include <cstdint>
 
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 
 #include "navmap_core/NavMap.hpp"
@@ -62,7 +61,7 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
     .downsample(0.3)
     .fuse("map")
-    ->as_points();
+    .as_points();
 
   const float voxel_xy = 0.30f;
   const float voxel_z = 0.20f;
