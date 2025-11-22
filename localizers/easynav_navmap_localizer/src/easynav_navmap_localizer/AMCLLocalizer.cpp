@@ -524,7 +524,6 @@ void AMCLLocalizer::update(NavState & nav_state)
 
 void AMCLLocalizer::predict(NavState & nav_state)
 {
-  auto t0 = get_node()->now();
   if (!initialized_odom_) {if (compute_odom_from_tf_) {update_odom_from_tf();} return;}
   if (compute_odom_from_tf_) {update_odom_from_tf();}
 
@@ -548,8 +547,6 @@ void AMCLLocalizer::predict(NavState & nav_state)
     rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_);
 
   double noisy_y = yaw + n_yaw(rng_);
-
-  auto t1 = get_node()->now();
 
   for (auto & p : particles_) {
     tf2::Vector3 noisy_t(dx + n_dx(rng_), dy + n_dy(rng_), dz + n_dz(rng_));
@@ -597,21 +594,12 @@ void AMCLLocalizer::predict(NavState & nav_state)
     }
   }
 
-  auto t2 = get_node()->now();
-
   last_odom_ = odom_;
   pose_ = getEstimatedPose();
   tf2::Transform map2bf = pose_;
   tf2::Transform map2odom = map2bf * odom_.inverse();
   publishTF(map2odom);
   publishEstimatedPose(map2bf);
-
-  auto t3 = get_node()->now();
-
-  std::cerr << "t1 " << std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
-  std::cerr << "t2 " << std::fixed << std::setprecision(10) << (t2 - t1).seconds() << std::endl;
-  std::cerr << "t2* " << std::fixed << std::setprecision(10) << (t2 - t1).seconds() / particles_.size() << std::endl;
-  std::cerr << "t3 " << std::fixed << std::setprecision(10) << (t3 - t2).seconds() << std::endl;
 }
 
 // ---------- perception scoring helpers ----------
@@ -735,8 +723,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
   // Compute tail-skip coherent with inflation kernel
   const int TAIL_SKIP = compute_tail_skip(*original_map, inflation_stddev_, inflation_prob_min_);
 
-  auto t1 = get_node()->now();
-
   // Prepare per-sensor bundles (downsample/cap per sensor)
   std::vector<SensorBundle> bundles; bundles.reserve(perceptions.size());
   for (const auto & h : perceptions) {
@@ -768,8 +754,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
     }
   }
 
-  auto t2 = get_node()->now();
-
   // Score all particles against all sensors
   bool debug = false;
   for (auto & particle : particles_) {
@@ -787,8 +771,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
     particle.hits += hits;
     particle.possible_hits += possible;
   }
-
-  auto t3 = get_node()->now();
 
   // Weights update with power tau
   for (auto & particle : particles_) {
@@ -810,8 +792,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
       p.weight /= total_w;
     }
   }
-
-  auto t4 = get_node()->now();
 }
 
 // ------------------- reseed -------------------
