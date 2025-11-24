@@ -496,7 +496,7 @@ void AMCLLocalizer::update_odom_from_tf()
 std::optional<tf2::Quaternion> get_latest_imu_quat(const NavState & nav_state)
 {
   if (!nav_state.has("imu")) {return std::nullopt;}
-  const auto imus = nav_state.get<IMUPerceptions>("imu");
+  const auto & imus = nav_state.get<IMUPerceptions>("imu");
   if (imus.empty() || !imus.back()) {return std::nullopt;}
   const auto & imu_msg = imus.back()->data;
   tf2::Quaternion q(imu_msg.orientation.x, imu_msg.orientation.y,
@@ -529,7 +529,9 @@ void AMCLLocalizer::predict(NavState & nav_state)
 
   tf2::Transform delta = last_odom_.inverseTimes(odom_);
   const bool have_navmap = nav_state.has("map.navmap");
-  if (have_navmap) {navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");}
+
+  if (!have_navmap) {return;}
+  const auto & navmap = nav_state.get<::navmap::NavMap>("map.navmap");
 
   const auto imu_q_opt = get_latest_imu_quat(nav_state);
 
@@ -565,7 +567,7 @@ void AMCLLocalizer::predict(NavState & nav_state)
       Eigen::Vector3f bary, hit_eig;
 
       auto ta = get_node()->now();
-      const bool ok = navmap_.locate_navcel(
+      const bool ok = navmap.locate_navcel(
         Eigen::Vector3f(static_cast<float>(Pw.x()), static_cast<float>(Pw.y()),
             static_cast<float>(Pw.z())),
         sidx, cid, bary, &hit_eig, opts);
@@ -577,7 +579,7 @@ void AMCLLocalizer::predict(NavState & nav_state)
         if (imu_q_opt.has_value()) {
           p.pose.setRotation(*imu_q_opt);
         } else {
-          const auto & cel = navmap_.navcels[cid];
+          const auto & cel = navmap.navcels[cid];
           tf2::Vector3 n_world = to_tf(cel.normal);
           double nlen = n_world.length();
           if (nlen > 1e-9) {
@@ -692,7 +694,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
     RCLCPP_WARN(get_node()->get_logger(), "No points perceptions yet");
     return;
   }
-  const auto perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
   if (!nav_state.has("map.bonxai")) {
     RCLCPP_WARN(get_node()->get_logger(), "No Bonxai map yet");
@@ -701,7 +703,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
 
   // Build inflated map once and cache in NavState
   if (!nav_state.has("map.bonxai.inflated")) {
-    const auto original_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai");
+    const auto & original_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai");
     auto logger = get_node()->get_logger();
     auto clock = get_node()->get_clock();
     auto progress_cb = [logger, clock](float f) {
@@ -717,8 +719,8 @@ void AMCLLocalizer::correct(NavState & nav_state)
     nav_state.set("map.bonxai.inflated", inflated_map);
   }
 
-  const auto original_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai");
-  const auto inflated_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai.inflated");
+  const auto & original_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai");
+  const auto & inflated_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai.inflated");
 
   // Compute tail-skip coherent with inflation kernel
   const int TAIL_SKIP = compute_tail_skip(*original_map, inflation_stddev_, inflation_prob_min_);
