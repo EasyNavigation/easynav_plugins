@@ -15,6 +15,8 @@ find_package(easynav_core REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 
 
@@ -29,6 +31,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   easynav_core::easynav_core
   tf2_ros::tf2_ros
+  tf2::tf2
+  tf2_geometry_msgs::tf2_geometry_msgs
   pluginlib::pluginlib
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
@@ -68,6 +72,8 @@ ament_export_dependencies(
   easynav_core
   pluginlib
   tf2_ros
+  tf2
+  tf2_geometry_msgs
   geometry_msgs
   nav_msgs
 )
