@@ -110,7 +110,7 @@ SimplePlanner::update(NavState & nav_state)
   if (!nav_state.has("goals")) {return;}
   if (!nav_state.has("robot_pose")) {return;}
 
-  const auto goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+  const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
 
   if (goals.goals.empty()) {
     nav_state.set("path", current_path_);
@@ -130,7 +130,7 @@ SimplePlanner::update(NavState & nav_state)
     return;
   }
 
-  const auto robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
 
   auto downsampled_map = map_typed.downsample(0.2);

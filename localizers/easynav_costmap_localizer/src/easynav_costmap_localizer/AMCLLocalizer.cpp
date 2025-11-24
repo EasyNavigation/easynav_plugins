@@ -570,7 +570,7 @@ AMCLLocalizer::correct(NavState & nav_state)
     return;
   }
 
-  const auto perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
   if (!nav_state.has("map.static")) {
     RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.static map");

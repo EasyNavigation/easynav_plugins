@@ -257,7 +257,7 @@ void VffController::update_rt(NavState & nav_state)
     // Calculate the angle error
     double angle_error = normalize_angle(bearing - yaw);
 
-    const auto perceptions = nav_state.get<PointPerceptions>("points");
+    const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
     auto fused =
       PointPerceptionsOpsView(perceptions)

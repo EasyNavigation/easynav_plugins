@@ -234,7 +234,6 @@ protected:
    * @brief Internal static map.
    */
   std::shared_ptr<Bonxai::ProbabilisticMap> bonxai_map_;
-  ::navmap::NavMap navmap_;
   ::navmap::NavCelId last_cid_ {0};
 
   // PerceptionModel percepcion_model_;

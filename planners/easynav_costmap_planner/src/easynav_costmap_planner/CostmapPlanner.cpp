@@ -108,14 +108,14 @@ void CostmapPlanner::update(NavState & nav_state)
     return;
   }
 
-  const auto goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+  const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty()) {
     nav_state.set("path", current_path_);
     return;
   }
 
   const auto & map = nav_state.get<Costmap2D>("map.dynamic");
-  const auto robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
 
   if (goals.header.frame_id != get_tf_prefix() + "map") {

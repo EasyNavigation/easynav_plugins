@@ -301,7 +301,7 @@ SerestController::closest_obstacle_distance(
   // 2) Analizar los sensores de distancia
   if (!nav_state.has("points")) {return std::numeric_limits<double>::infinity();}
 
-  const auto perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get<PointPerceptions>("points");
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(0.3)
     .fuse(get_tf_prefix() + "base_link")

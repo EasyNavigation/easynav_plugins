@@ -227,10 +227,10 @@ void InflationFilter::update(::easynav::NavState & nav_state)
     return;
   }
 
-  auto nm = nav_state.get<::navmap::NavMap>("map.navmap");
+  navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
 
   const bool ok = inflate_layer_u8(
-    nm,
+    navmap_,
     "obstacles",
     "inflated_obstacles",
     inflation_radius_,
@@ -242,7 +242,7 @@ void InflationFilter::update(::easynav::NavState & nav_state)
     return;
   }
 
-  nav_state.set("map.navmap", nm);
+  nav_state.set("map.navmap", navmap_);
 }
 
 }  // namespace navmap
