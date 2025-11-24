@@ -184,7 +184,7 @@ protected:
   std::vector<Particle> particles_;
 
   /// Random number generator used for sampling noise.
-  std::default_random_engine rng_;
+  std::mt19937 rng_;
 
   /// Current estimated odometry-based pose.
   tf2::Transform pose_;

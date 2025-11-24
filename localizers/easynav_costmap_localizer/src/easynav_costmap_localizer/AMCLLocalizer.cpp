@@ -161,6 +161,7 @@ using namespace std::chrono_literals;
 
 
 AMCLLocalizer::AMCLLocalizer()
+: rng_(std::random_device{}())
 {
   NavState::register_printer<nav_msgs::msg::Odometry>(
     [](const nav_msgs::msg::Odometry & odom) {
@@ -527,8 +528,6 @@ AMCLLocalizer::predict([[maybe_unused]] NavState & nav_state)
   tf2::Matrix3x3(delta.getRotation()).getRPY(roll, pitch, yaw);
   double rot_len = std::abs(yaw);
 
-  std::random_device rd;
-  std::mt19937 gen(rd());
 
   for (auto & p : particles_) {
     std::normal_distribution<double> noise_dx(0.0, std::abs(dx) * noise_translation_);
@@ -540,11 +539,11 @@ AMCLLocalizer::predict([[maybe_unused]] NavState & nav_state)
       rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_);
 
     tf2::Vector3 noisy_translation(
-      dx + noise_dx(gen),
-      dy + noise_dy(gen),
-      dz + noise_dz(gen));
+      dx + noise_dx(rng_),
+      dy + noise_dy(rng_),
+      dz + noise_dz(rng_));
 
-    double noisy_yaw = yaw + noise_yaw(gen);
+    double noisy_yaw = yaw + noise_yaw(rng_);
     tf2::Quaternion noisy_q;
     noisy_q.setRPY(0.0, 0.0, noisy_yaw);
 
