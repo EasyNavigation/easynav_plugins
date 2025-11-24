@@ -101,6 +101,7 @@ $(function(){ initResizable(false); });
 <code>#include &lt;limits&gt;</code><br />
 <code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
 <code>#include &quot;<a class="el" href="AStarPlanner_8hpp_source.html">easynav_navmap_planner/AStarPlanner.hpp</a>&quot;</code><br />
 <code>#include &quot;nav_msgs/msg/goals.hpp&quot;</code><br />
 <code>#include &quot;nav_msgs/msg/odometry.hpp&quot;</code><br />
@@ -113,39 +114,44 @@ Include dependency graph for AStarPlanner.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="AStarPlanner_8cpp__incl.png" border="0" usemap="#aplanners_2easynav__navmap__planner_2src_2easynav__navmap__planner_2AStarPlanner_8cpp" alt=""/></div>
 <map name="aplanners_2easynav__navmap__planner_2src_2easynav__navmap__planner_2AStarPlanner_8cpp" id="aplanners_2easynav__navmap__planner_2src_2easynav__navmap__planner_2AStarPlanner_8cpp">
-<area shape="rect" title="Implementation of the AStarPlanner class using A* on ::navmap::NavMap (triangle graph)." alt="" coords="410,5,607,61"/>
+<area shape="rect" title="Implementation of the AStarPlanner class using A* on ::navmap::NavMap (triangle graph)." alt="" coords="471,5,668,61"/>
 <area shape="rect" title=" " alt="" coords="5,116,62,142"/>
-<area shape="poly" title=" " alt="" coords="410,47,251,70,162,88,76,112,72,113,70,108,74,106,161,83,250,65,409,41"/>
+<area shape="poly" title=" " alt="" coords="471,44,285,66,179,85,76,112,72,113,70,108,74,106,178,80,285,61,470,39"/>
 <area shape="rect" title=" " alt="" coords="86,116,144,142"/>
-<area shape="poly" title=" " alt="" coords="410,52,287,75,156,112,153,113,151,108,154,106,286,70,409,46"/>
+<area shape="poly" title=" " alt="" coords="471,47,321,71,237,89,156,112,152,113,151,108,154,106,236,84,320,66,470,42"/>
 <area shape="rect" title=" " alt="" coords="167,116,220,142"/>
-<area shape="poly" title=" " alt="" coords="410,59,323,82,233,112,231,112,229,107,231,106,321,77,408,54"/>
+<area shape="poly" title=" " alt="" coords="471,53,356,76,233,112,230,112,229,107,231,106,354,71,470,47"/>
 <area shape="rect" title=" " alt="" coords="244,116,311,142"/>
-<area shape="poly" title=" " alt="" coords="441,64,324,111,321,113,319,108,322,107,439,59"/>
+<area shape="poly" title=" " alt="" coords="472,64,324,112,320,113,318,108,322,106,471,59"/>
 <area shape="rect" title=" " alt="" coords="335,116,409,142"/>
-<area shape="poly" title=" " alt="" coords="470,64,404,110,401,105,467,59"/>
+<area shape="poly" title=" " alt="" coords="514,64,412,112,410,107,511,59"/>
+<area shape="rect" title=" " alt="" coords="13,205,73,231"/>
+<area shape="poly" title=" " alt="" coords="535,64,474,111,450,134,423,152,374,170,331,179,292,183,255,183,179,183,135,188,85,200,81,201,79,196,83,195,134,183,178,178,255,178,292,177,330,174,372,165,420,147,447,130,470,107,532,59"/>
 <area shape="rect" href="AStarPlanner_8hpp.html" title="Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap." alt="" coords="484,109,655,150"/>
-<area shape="poly" title=" " alt="" coords="528,60,551,94,546,97,524,63"/>
-<area shape="rect" title=" " alt="" coords="204,205,367,231"/>
-<area shape="poly" title=" " alt="" coords="495,63,465,107,423,152,380,180,336,201,333,197,377,176,420,148,461,104,491,60"/>
+<area shape="poly" title=" " alt="" coords="572,62,572,94,567,94,567,62"/>
+<area shape="rect" title=" " alt="" coords="689,205,852,231"/>
+<area shape="poly" title=" " alt="" coords="609,59,669,107,752,192,749,196,665,111,606,64"/>
 <area shape="rect" title=" " alt="" coords="876,205,1052,231"/>
-<area shape="poly" title=" " alt="" coords="576,59,668,107,694,128,720,147,796,173,896,199,895,204,795,178,718,152,691,132,665,111,573,64"/>
-<area shape="rect" title=" " alt="" coords="730,116,900,142"/>
-<area shape="poly" title=" " alt="" coords="598,59,761,109,760,114,596,64"/>
-<area shape="rect" title=" " alt="" coords="923,116,1114,142"/>
-<area shape="poly" title=" " alt="" coords="608,50,938,110,937,116,607,55"/>
-<area shape="rect" title=" " alt="" coords="1138,116,1329,142"/>
-<area shape="poly" title=" " alt="" coords="607,42,844,69,1127,106,1154,111,1153,116,1126,112,844,74,607,47"/>
-<area shape="rect" title=" " alt="" coords="1352,109,1480,150"/>
-<area shape="poly" title=" " alt="" coords="608,36,929,57,1131,77,1338,106,1337,111,1130,83,928,62,607,41"/>
-<area shape="rect" title=" " alt="" coords="392,205,449,231"/>
-<area shape="poly" title=" " alt="" coords="537,152,456,199,453,195,534,148"/>
-<area shape="poly" title=" " alt="" coords="505,153,341,203,339,198,504,148"/>
-<area shape="rect" title=" " alt="" coords="473,198,666,238"/>
-<area shape="poly" title=" " alt="" coords="572,150,572,182,567,182,567,150"/>
+<area shape="poly" title=" " alt="" coords="623,59,708,107,739,128,771,147,840,176,906,198,904,203,838,181,768,152,736,132,705,111,620,64"/>
+<area shape="rect" title=" " alt="" coords="781,116,950,142"/>
+<area shape="poly" title=" " alt="" coords="656,59,813,109,812,114,654,64"/>
+<area shape="rect" title=" " alt="" coords="974,116,1165,142"/>
+<area shape="poly" title=" " alt="" coords="669,50,991,111,990,116,668,56"/>
+<area shape="rect" title=" " alt="" coords="1189,116,1379,142"/>
+<area shape="poly" title=" " alt="" coords="669,42,902,69,1178,106,1205,111,1204,116,1177,112,901,74,668,48"/>
+<area shape="rect" title=" " alt="" coords="1403,109,1530,150"/>
+<area shape="poly" title=" " alt="" coords="669,36,986,57,1185,77,1388,106,1387,111,1184,83,985,62,669,41"/>
+<area shape="poly" title=" " alt="" coords="484,149,466,152,358,164,273,169,190,177,85,200,81,201,79,196,83,195,189,171,273,163,358,159,465,147,483,144"/>
+<area shape="rect" title=" " alt="" coords="608,205,665,231"/>
+<area shape="poly" title=" " alt="" coords="587,149,620,191,616,194,583,152"/>
+<area shape="rect" title=" " alt="" coords="97,205,181,231"/>
+<area shape="poly" title=" " alt="" coords="484,149,466,152,329,173,270,183,194,200,186,202,185,197,193,195,269,178,328,168,465,147,483,144"/>
+<area shape="poly" title=" " alt="" coords="616,148,730,196,728,201,614,153"/>
+<area shape="rect" title=" " alt="" coords="205,198,398,238"/>
+<area shape="poly" title=" " alt="" coords="509,153,377,195,376,190,508,148"/>
 <area shape="poly" title=" " alt="" coords="656,147,894,199,893,204,655,152"/>
-<area shape="rect" title=" " alt="" coords="690,198,852,238"/>
-<area shape="poly" title=" " alt="" coords="616,148,712,189,710,194,614,153"/>
+<area shape="rect" title=" " alt="" coords="422,198,584,238"/>
+<area shape="poly" title=" " alt="" coords="556,152,529,187,525,184,552,149"/>
 </map>
 </div>
 </div><table class="memberdecls">

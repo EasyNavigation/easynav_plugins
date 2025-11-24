@@ -1,13 +1,17 @@
 <map id="planners/easynav_navmap_planner/include/easynav_navmap_planner/AStarPlanner.hpp" name="planners/easynav_navmap_planner/include/easynav_navmap_planner/AStarPlanner.hpp">
-<area shape="rect" id="Node000001" title="Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap." alt="" coords="256,5,484,61"/>
+<area shape="rect" id="Node000001" title="Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap." alt="" coords="246,5,475,61"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,116,63,142"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="256,61,167,83,76,112,73,113,71,108,74,106,166,78,255,56"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="87,116,250,142"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="313,64,209,112,207,107,311,59"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="274,109,466,150"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="373,62,373,94,367,94,367,62"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="490,116,666,142"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="431,59,538,107,536,112,429,64"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="691,109,852,150"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="485,59,676,103,675,108,484,64"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="247,62,162,84,75,112,72,112,70,107,73,106,160,79,245,56"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="86,116,147,142"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="284,64,159,111,157,112,154,108,157,107,282,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="170,116,255,142"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="319,64,246,110,243,106,316,59"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="279,116,442,142"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="363,62,363,101,358,101,358,62"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="466,109,658,150"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="420,59,507,100,505,105,418,64"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="682,116,858,142"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="476,58,703,110,702,115,475,63"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="883,109,1044,150"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="476,47,656,72,868,106,867,111,655,77,475,52"/>
 </map>
