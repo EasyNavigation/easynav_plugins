@@ -97,8 +97,9 @@ void AStarPlanner::update(NavState & nav_state)
   const auto & goal = goals.goals.front().pose;
 
   if (goals.header.frame_id != get_tf_prefix() + "map") {
-    RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",
-                goals.header.frame_id.c_str());
+    RCLCPP_WARN(
+      get_node()->get_logger(), "Goals frame is not 'map': %s",
+      goals.header.frame_id.c_str());
     return;
   }
 
@@ -111,6 +112,7 @@ void AStarPlanner::update(NavState & nav_state)
   }
 
   current_goal_ = goal;
+  auto poses = a_star_path(navmap, robot_pose.pose.pose, goal);
   if (!poses.empty()) {
     current_path_.header.stamp = get_node()->now();
     current_path_.header.frame_id = goals.header.frame_id;
