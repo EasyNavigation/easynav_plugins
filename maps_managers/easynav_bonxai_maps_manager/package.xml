@@ -4,7 +4,7 @@
   <name>easynav_bonxai_maps_manager</name>
   <version>0.0.2</version>
   <description>Easy Navigation: Simple MapsManager package.</description>
-  <maintainer email="fmrico@gmail.com">Francisco Martín Rico</maintainer>
+  <maintainer email="juanscelyg@gmail.com">Juan S. Cely G.</maintainer>
   <license>GPL-3.0-only</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
