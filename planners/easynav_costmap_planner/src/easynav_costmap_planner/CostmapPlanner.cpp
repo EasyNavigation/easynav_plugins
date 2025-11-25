@@ -189,14 +189,11 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
       if (!map.inBounds(nx, ny)) {continue;}
 
       uint8_t cell_cost = map.getCost(nx, ny);
-      if (cell_cost >= LETHAL_OBSTACLE) {continue;}
+      // Reject cells that would cause collision (>= INSCRIBED_INFLATED_OBSTACLE = 253)
+      if (cell_cost >= INSCRIBED_INFLATED_OBSTACLE) {continue;}
 
+      // Calculate traversal cost for free and lightly inflated cells
       double traversal_cost = 1.0 + cost_factor_ * static_cast<double>(cell_cost) / LETHAL_OBSTACLE;
-      if (cell_cost >= INSCRIBED_INFLATED_OBSTACLE) {
-        double inflation_ratio = static_cast<double>(cell_cost - INSCRIBED_INFLATED_OBSTACLE) /
-          (LETHAL_OBSTACLE - INSCRIBED_INFLATED_OBSTACLE);
-        traversal_cost += inflation_penalty_ * inflation_ratio;
-      }
 
       double step_cost = (dx == 0 || dy == 0) ? cost_axial_ : cost_diagonal_;
       double new_cost = cost_so_far[idx(current.x, current.y)] + traversal_cost * step_cost;

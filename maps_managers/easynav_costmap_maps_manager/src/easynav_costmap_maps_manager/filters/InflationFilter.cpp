@@ -77,16 +77,19 @@ InflationFilter::on_initialize()
   auto node = get_node();
 
   inflation_radius_ = 0.3;
+  inscribed_radius_ = 0.25;
   cost_scaling_factor_ = 3.0;
 
   node->declare_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
+  node->declare_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
   node->declare_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
   node->get_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
+  node->get_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
   node->get_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
 
   RCLCPP_INFO(node->get_logger(),
-    "InflationFilter with inflation_radius = %lf  cost_scaling_factor = %lf",
-    inflation_radius_, cost_scaling_factor_);
+    "InflationFilter with inflation_radius = %lf  inscribed_radius = %lf  cost_scaling_factor = %lf",
+    inflation_radius_, inscribed_radius_, cost_scaling_factor_);
 
   seen_.clear();
   cached_distances_.clear();
