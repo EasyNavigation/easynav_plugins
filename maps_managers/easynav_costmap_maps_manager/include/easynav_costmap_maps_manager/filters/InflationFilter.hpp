@@ -230,10 +230,10 @@ protected:
   bool need_reinflation_;
 
   bool matchedSize_ {false};
-  
+
   Costmap2D static_inflated_;
   bool has_static_inflated_ {false};
-  
+
   struct StaticGeomSignature
   {
     unsigned int size_x {0};

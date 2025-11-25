@@ -99,19 +99,15 @@ InflationFilter::on_initialize()
 void
 InflationFilter::update(NavState & nav_state)
 {
-  auto t0 = get_node()->now();
-
   auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
   Costmap2D & dynamic_map = *dynamic_map_ptr;
 
   const auto & static_map = nav_state.get<Costmap2D>("map.static");
 
   if (needs_recompute_static_(static_map)) {
-    std::cerr << "Recomputado!!!" << std::endl;
     recompute_static_inflation_(static_map);
   }
 
-  auto t1 = get_node()->now();
   if (!matchedSize_) {
     cell_inflation_radius_ = cellDistance(dynamic_map, inflation_radius_);
     matchSize(dynamic_map);
@@ -125,14 +121,12 @@ InflationFilter::update(NavState & nav_state)
   int max_i = size_x;
   int max_j = size_y;
 
-  auto t2 = get_node()->now();
-
   if (nav_state.has("map.dynamic.obstacle_bounds")) {
     const auto & bb = nav_state.get<ObstacleBounds>("map.dynamic.obstacle_bounds");
 
     unsigned int cmin_i, cmin_j, cmax_i, cmax_j;
     if (dynamic_map.worldToMap(bb.min_x, bb.min_y, cmin_i, cmin_j) &&
-        dynamic_map.worldToMap(bb.max_x, bb.max_y, cmax_i, cmax_j))
+      dynamic_map.worldToMap(bb.max_x, bb.max_y, cmax_i, cmax_j))
     {
       min_i = static_cast<int>(cmin_i);
       min_j = static_cast<int>(cmin_j);
@@ -149,14 +143,7 @@ InflationFilter::update(NavState & nav_state)
     }
   }
 
-  auto t3 = get_node()->now();
-
-  std::cerr << "[" << min_i << " - " << max_i << "] ["  << min_j << " - " << max_j << "]" << std::endl;
-
   updateCosts(dynamic_map, min_i, min_j, max_i, max_j);
-
-    auto t4 = get_node()->now();
-
 
   for (int i = 0; i < dynamic_map.getSizeInCellsX(); i++) {
     for (int j = 0; j < dynamic_map.getSizeInCellsY(); j++) {
@@ -166,14 +153,6 @@ InflationFilter::update(NavState & nav_state)
       dynamic_map.setCost(i, j, cost);
     }
   }
-
-  auto t5 = get_node()->now();
-
-  std::cerr << "t1" << std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
-  std::cerr << "t2" << std::fixed << std::setprecision(10) << (t2 - t1).seconds() << std::endl;
-  std::cerr << "t3" << std::fixed << std::setprecision(10) << (t3 - t2).seconds() << std::endl;
-  std::cerr << "t4" << std::fixed << std::setprecision(10) << (t4 - t3).seconds() << std::endl;
-  std::cerr << "t5" << std::fixed << std::setprecision(10) << (t5 - t4).seconds() << std::endl;
 
   nav_state.set("map.dynamic.filtered", dynamic_map_ptr);
 }
@@ -239,29 +218,44 @@ InflationFilter::updateCosts(
   const unsigned int size_y = master_grid.getSizeInCellsY();
   const std::size_t cell_count = static_cast<std::size_t>(size_x) * size_y;
 
-  // Ensure seen_ matches full map size, but do NOT clear it yet
-  if (seen_.size() != cell_count) {
-    seen_.assign(cell_count, false);
+  // --------------------------------------------------------------------------
+  // Visited flags: stamp-based approach to avoid clearing a full-sized array.
+  // Each call increases current_stamp, and a cell is considered "seen" if
+  // seen_stamp[index] == current_stamp.
+  // --------------------------------------------------------------------------
+  static std::vector<uint32_t> seen_stamp;
+  static uint32_t current_stamp = 1u;
+
+  if (seen_stamp.size() != cell_count) {
+    seen_stamp.assign(cell_count, 0u);
   }
 
-  // Reuse all inflation distance bins
+  // Increment stamp; on overflow, reset the whole buffer once.
+  ++current_stamp;
+  if (current_stamp == 0u) {
+    std::fill(seen_stamp.begin(), seen_stamp.end(), 0u);
+    current_stamp = 1u;
+  }
+
+  // Reuse all inflation distance bins instead of reallocating them
   for (auto & dist_bin : inflation_cells_) {
     dist_bin.clear();
   }
 
-  // Store the original bounding box (before radius expansion)
+  // Store the original bounding box (before expansion by the inflation radius)
   const int base_min_i = min_i;
   const int base_min_j = min_j;
   const int base_max_i = max_i;
   const int base_max_j = max_j;
 
-  // Expand the window by inflation radius (in cells)
+  // Expand the region by the inflation radius (in cells). Cells up to that
+  // distance outside the original box can still influence costs inside it.
   min_i -= static_cast<int>(cell_inflation_radius_);
   min_j -= static_cast<int>(cell_inflation_radius_);
   max_i += static_cast<int>(cell_inflation_radius_);
   max_j += static_cast<int>(cell_inflation_radius_);
 
-  // Clamp to map bounds
+  // Clamp expanded region to map bounds
   min_i = std::max(0, min_i);
   min_j = std::max(0, min_j);
   max_i = std::min(static_cast<int>(size_x), max_i);
@@ -272,8 +266,8 @@ InflationFilter::updateCosts(
   }
 
   // --------------------------------------------------------------------------
-  // 1) Collect seeds (LETHAL_OBSTACLE or NO_INFORMATION if configured)
-  //    Also reset visited flags (seen_) only inside the expanded window.
+  // 1) Collect seeds (lethal obstacles and optionally unknown cells) inside
+  //    the expanded window. These go into distance bin 0.
   // --------------------------------------------------------------------------
   auto & obs_bin = inflation_cells_[0];
   obs_bin.reserve(200);
@@ -281,26 +275,24 @@ InflationFilter::updateCosts(
   for (int j = min_j; j < max_j; ++j) {
     for (int i = min_i; i < max_i; ++i) {
       const unsigned int index = master_grid.getIndex(i, j);
-
-      // Reset visited flag only for cells inside the relevant region
-      seen_[index] = false;
-
       const unsigned char cost = master_array[index];
+
       if (cost == LETHAL_OBSTACLE ||
-          (inflate_around_unknown_ && cost == NO_INFORMATION))
+        (inflate_around_unknown_ && cost == NO_INFORMATION))
       {
         obs_bin.emplace_back(i, j, i, j);
       }
     }
   }
 
-  // No obstacles → nothing to inflate
+  // No seeds in this region → nothing to inflate
   if (obs_bin.empty()) {
     return;
   }
 
   // --------------------------------------------------------------------------
-  // 2) BFS over inflation distance bins
+  // 2) BFS over the distance bins. New cells are appended to the bin
+  //    corresponding to their distance from the nearest obstacle.
   // --------------------------------------------------------------------------
   for (auto & dist_bin : inflation_cells_) {
     dist_bin.reserve(200);
@@ -313,26 +305,26 @@ InflationFilter::updateCosts(
       const unsigned int sy = cell.src_y_;
       const unsigned int index = master_grid.getIndex(mx, my);
 
-      // Skip if already processed in this call
-      if (seen_[index]) {
+      // Skip if this cell has already been processed in the current call
+      if (seen_stamp[index] == current_stamp) {
         continue;
       }
-      seen_[index] = true;
+      seen_stamp[index] = current_stamp;
 
-      // Compute inflation cost based on distance from obstacle
+      // Compute inflation cost based on distance to the nearest obstacle
       const unsigned char cost = costLookup(mx, my, sx, sy);
       const unsigned char old_cost = master_array[index];
 
-      // Apply inflation only in the original bounding box
+      // Apply inflation only inside the original (non-expanded) bounding box
       if (static_cast<int>(mx) >= base_min_i &&
-          static_cast<int>(my) >= base_min_j &&
-          static_cast<int>(mx) < base_max_i &&
-          static_cast<int>(my) < base_max_j)
+        static_cast<int>(my) >= base_min_j &&
+        static_cast<int>(mx) < base_max_i &&
+        static_cast<int>(my) < base_max_j)
       {
         if (old_cost == NO_INFORMATION &&
-            (inflate_unknown_ ?
-             (cost > FREE_SPACE) :
-             (cost >= INSCRIBED_INFLATED_OBSTACLE)))
+          (inflate_unknown_ ?
+          (cost > FREE_SPACE) :
+          (cost >= INSCRIBED_INFLATED_OBSTACLE)))
         {
           master_array[index] = cost;
         } else {
@@ -340,7 +332,7 @@ InflationFilter::updateCosts(
         }
       }
 
-      // Push 4-connected neighbors into their corresponding bins
+      // Enqueue 4-connected neighbors (clipped to full map bounds)
       if (mx > 0u) {
         enqueue(index - 1u, mx - 1u, my, sx, sy);
       }
@@ -354,6 +346,8 @@ InflationFilter::updateCosts(
         enqueue(index + size_x, mx, my + 1u, sx, sy);
       }
     }
+
+    // No need to shrink dist_bin here; capacity is reused on the next call.
   }
 }
 
@@ -463,10 +457,10 @@ InflationFilter::needs_recompute_static_(const Costmap2D & static_map) const
   }
 
   if (static_map.getSizeInCellsX() != static_sig_.size_x ||
-      static_map.getSizeInCellsY() != static_sig_.size_y ||
-      static_map.getResolution()   != static_sig_.resolution ||
-      static_map.getOriginX()      != static_sig_.origin_x ||
-      static_map.getOriginY()      != static_sig_.origin_y)
+    static_map.getSizeInCellsY() != static_sig_.size_y ||
+    static_map.getResolution() != static_sig_.resolution ||
+    static_map.getOriginX() != static_sig_.origin_x ||
+    static_map.getOriginY() != static_sig_.origin_y)
   {
     return true;
   }
@@ -484,11 +478,11 @@ InflationFilter::recompute_static_inflation_(const Costmap2D & static_map)
   const int h = static_inflated_.getSizeInCellsY();
   updateCosts(static_inflated_, 0, 0, w, h);
 
-  static_sig_.size_x    = static_map.getSizeInCellsX();
-  static_sig_.size_y    = static_map.getSizeInCellsY();
+  static_sig_.size_x = static_map.getSizeInCellsX();
+  static_sig_.size_y = static_map.getSizeInCellsY();
   static_sig_.resolution = static_map.getResolution();
-  static_sig_.origin_x   = static_map.getOriginX();
-  static_sig_.origin_y   = static_map.getOriginY();
+  static_sig_.origin_x = static_map.getOriginX();
+  static_sig_.origin_y = static_map.getOriginY();
 
   has_static_inflated_ = true;
 }
