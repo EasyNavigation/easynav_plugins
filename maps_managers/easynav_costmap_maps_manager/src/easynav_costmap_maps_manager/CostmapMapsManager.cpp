@@ -187,17 +187,26 @@ CostmapMapsManager::update(NavState & nav_state)
     nav_state.set("map.static", static_map_);
   }
 
-  Costmap2D dynamic_map = static_map_;
-  nav_state.set("map.dynamic.filtered", dynamic_map);
-
-  for (const auto & filter : costmap_filters_) {
-    filter->update(nav_state);
+  if (!dynamic_map_) {
+    dynamic_map_ = std::make_shared<Costmap2D>(static_map_);
+  } else {
+    *dynamic_map_ = static_map_;
   }
 
-  const auto & final_dynamic_map = nav_state.get<Costmap2D>("map.dynamic.filtered");
-  nav_state.set("map.dynamic", final_dynamic_map);
+  nav_state.set("map.dynamic.filtered", dynamic_map_);
 
-  final_dynamic_map.toOccupancyGridMsg(dynamic_grid_msg_);
+  for (const auto & filter : costmap_filters_) {
+    auto t0 = get_node()->now();
+    filter->update(nav_state);
+    auto t1 = get_node()->now();
+
+    std::cerr << "[" << filter->get_plugin_name() << "] " <<
+      std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
+  }
+
+  nav_state.set("map.dynamic", dynamic_map_);
+
+  dynamic_map_->toOccupancyGridMsg(dynamic_grid_msg_);
   dynamic_grid_msg_.header.frame_id = get_tf_prefix() + "map";
   dynamic_grid_msg_.header.stamp = get_node()->now();
   dynamic_occ_pub_->publish(dynamic_grid_msg_);

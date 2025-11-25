@@ -97,6 +97,11 @@ private:
   Costmap2D static_map_;
 
   /**
+   * @brief Internal static map.
+   */
+  std::shared_ptr<Costmap2D> dynamic_map_;
+
+  /**
    * @brief Publisher for the static occupancy grid.
    */
   rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr static_occ_pub_;

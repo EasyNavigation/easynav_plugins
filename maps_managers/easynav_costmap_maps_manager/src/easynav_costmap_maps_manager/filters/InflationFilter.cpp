@@ -99,19 +99,84 @@ InflationFilter::on_initialize()
 void
 InflationFilter::update(NavState & nav_state)
 {
-  Costmap2D dynamic_map = nav_state.get<Costmap2D>("map.dynamic.filtered");
+  auto t0 = get_node()->now();
 
+  auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
+  Costmap2D & dynamic_map = *dynamic_map_ptr;
+
+  const auto & static_map = nav_state.get<Costmap2D>("map.static");
+
+  if (needs_recompute_static_(static_map)) {
+    std::cerr << "Recomputado!!!" << std::endl;
+    recompute_static_inflation_(static_map);
+  }
+
+  auto t1 = get_node()->now();
   if (!matchedSize_) {
     cell_inflation_radius_ = cellDistance(dynamic_map, inflation_radius_);
     matchSize(dynamic_map);
     matchedSize_ = true;
   }
 
-  updateCosts(dynamic_map, 0, 0, dynamic_map.getSizeInCellsX(), dynamic_map.getSizeInCellsY());
+  int min_i = 0;
+  int min_j = 0;
+  int size_x = dynamic_map.getSizeInCellsX();
+  int size_y = dynamic_map.getSizeInCellsY();
+  int max_i = size_x;
+  int max_j = size_y;
 
-  nav_state.set("map.dynamic.filtered", dynamic_map);
+  auto t2 = get_node()->now();
+
+  if (nav_state.has("map.dynamic.obstacle_bounds")) {
+    const auto & bb = nav_state.get<ObstacleBounds>("map.dynamic.obstacle_bounds");
+
+    unsigned int cmin_i, cmin_j, cmax_i, cmax_j;
+    if (dynamic_map.worldToMap(bb.min_x, bb.min_y, cmin_i, cmin_j) &&
+        dynamic_map.worldToMap(bb.max_x, bb.max_y, cmax_i, cmax_j))
+    {
+      min_i = static_cast<int>(cmin_i);
+      min_j = static_cast<int>(cmin_j);
+      max_i = static_cast<int>(cmax_i) + 1;
+      max_j = static_cast<int>(cmax_j) + 1;
+
+      // Expand by the inflation radius in cells, so that all cells whose
+      // cost may be affected by the new obstacles are included.
+      const int r = static_cast<int>(cell_inflation_radius_);
+      min_i = std::max(0, min_i - r);
+      min_j = std::max(0, min_j - r);
+      max_i = std::min(max_i + r, size_x);
+      max_j = std::min(max_j + r, size_y);
+    }
+  }
+
+  auto t3 = get_node()->now();
+
+  std::cerr << "[" << min_i << " - " << max_i << "] ["  << min_j << " - " << max_j << "]" << std::endl;
+
+  updateCosts(dynamic_map, min_i, min_j, max_i, max_j);
+
+    auto t4 = get_node()->now();
+
+
+  for (int i = 0; i < dynamic_map.getSizeInCellsX(); i++) {
+    for (int j = 0; j < dynamic_map.getSizeInCellsY(); j++) {
+      int index = static_cast<int>(dynamic_map.getIndex(i, j));
+      unsigned char cost = std::max(
+        dynamic_map.getCost(i, j), static_inflated_.getCost(i, j));
+      dynamic_map.setCost(i, j, cost);
+    }
+  }
+
+  auto t5 = get_node()->now();
+
+  std::cerr << "t1" << std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
+  std::cerr << "t2" << std::fixed << std::setprecision(10) << (t2 - t1).seconds() << std::endl;
+  std::cerr << "t3" << std::fixed << std::setprecision(10) << (t3 - t2).seconds() << std::endl;
+  std::cerr << "t4" << std::fixed << std::setprecision(10) << (t4 - t3).seconds() << std::endl;
+  std::cerr << "t5" << std::fixed << std::setprecision(10) << (t5 - t4).seconds() << std::endl;
+
+  nav_state.set("map.dynamic.filtered", dynamic_map_ptr);
 }
-
 
 void
 InflationFilter::matchSize(easynav::Costmap2D & costmap)
@@ -282,15 +347,6 @@ InflationFilter::updateCosts(
   }
 }
 
-/**
- * @brief  Given an index of a cell in the costmap, place it into a list pending for obstacle inflation
- * @param  grid The costmap
- * @param  index The index of the cell
- * @param  mx The x coordinate of the cell (can be computed from the index, but saves time to store it)
- * @param  my The y coordinate of the cell (can be computed from the index, but saves time to store it)
- * @param  src_x The x index of the obstacle point inflation started at
- * @param  src_y The y index of the obstacle point inflation started at
- */
 void
 InflationFilter::enqueue(
   unsigned int index, unsigned int mx, unsigned int my,
@@ -387,6 +443,44 @@ InflationFilter::generateIntegerDistances()
 
   distance_matrix_ = distance_matrix;
   return level;
+}
+
+bool
+InflationFilter::needs_recompute_static_(const Costmap2D & static_map) const
+{
+  if (!has_static_inflated_) {
+    return true;
+  }
+
+  if (static_map.getSizeInCellsX() != static_sig_.size_x ||
+      static_map.getSizeInCellsY() != static_sig_.size_y ||
+      static_map.getResolution()   != static_sig_.resolution ||
+      static_map.getOriginX()      != static_sig_.origin_x ||
+      static_map.getOriginY()      != static_sig_.origin_y)
+  {
+    return true;
+  }
+
+  return false;
+}
+
+void
+InflationFilter::recompute_static_inflation_(const Costmap2D & static_map)
+{
+  static_inflated_ = static_map;
+
+  matchSize(static_inflated_);
+  const int w = static_inflated_.getSizeInCellsX();
+  const int h = static_inflated_.getSizeInCellsY();
+  updateCosts(static_inflated_, 0, 0, w, h);
+
+  static_sig_.size_x    = static_map.getSizeInCellsX();
+  static_sig_.size_y    = static_map.getSizeInCellsY();
+  static_sig_.resolution = static_map.getResolution();
+  static_sig_.origin_x   = static_map.getOriginX();
+  static_sig_.origin_y   = static_map.getOriginY();
+
+  has_static_inflated_ = true;
 }
 
 }  // namespace easynav

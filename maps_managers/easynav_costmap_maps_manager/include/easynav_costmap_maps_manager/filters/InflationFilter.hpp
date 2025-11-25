@@ -197,7 +197,13 @@ protected:
   }
 
   /**
-   * @brief Enqueue new cells in cache distance update search
+   * @brief  Given an index of a cell in the costmap, place it into a list pending for obstacle inflation
+   * @param  grid The costmap
+   * @param  index The index of the cell
+   * @param  mx The x coordinate of the cell (can be computed from the index, but saves time to store it)
+   * @param  my The y coordinate of the cell (can be computed from the index, but saves time to store it)
+   * @param  src_x The x index of the obstacle point inflation started at
+   * @param  src_y The y index of the obstacle point inflation started at
    */
   inline void enqueue(
     unsigned int index, unsigned int mx, unsigned int my,
@@ -224,6 +230,21 @@ protected:
   bool need_reinflation_;
 
   bool matchedSize_ {false};
+  
+  Costmap2D static_inflated_;
+  bool has_static_inflated_ {false};
+  
+  struct StaticGeomSignature
+  {
+    unsigned int size_x {0};
+    unsigned int size_y {0};
+    double resolution {0.0};
+    double origin_x {0.0};
+    double origin_y {0.0};
+  } static_sig_;
+
+  bool needs_recompute_static_(const Costmap2D & static_map) const;
+  void recompute_static_inflation_(const Costmap2D & static_map);
 };
 
 }  // namespace easynav
