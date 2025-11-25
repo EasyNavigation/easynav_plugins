@@ -217,24 +217,17 @@ InflationFilter::updateCosts(
   const unsigned int size_x = master_grid.getSizeInCellsX();
   const unsigned int size_y = master_grid.getSizeInCellsY();
   const std::size_t cell_count = static_cast<std::size_t>(size_x) * size_y;
-
-  // --------------------------------------------------------------------------
-  // Visited flags: stamp-based approach to avoid clearing a full-sized array.
-  // Each call increases current_stamp, and a cell is considered "seen" if
-  // seen_stamp[index] == current_stamp.
-  // --------------------------------------------------------------------------
-  static std::vector<uint32_t> seen_stamp;
-  static uint32_t current_stamp = 1u;
-
-  if (seen_stamp.size() != cell_count) {
-    seen_stamp.assign(cell_count, 0u);
-  }
-
-  // Increment stamp; on overflow, reset the whole buffer once.
-  ++current_stamp;
-  if (current_stamp == 0u) {
-    std::fill(seen_stamp.begin(), seen_stamp.end(), 0u);
-    current_stamp = 1u;
+  // Reuse boolean seen_ vector for this call to avoid full O(N) clearing
+  if (seen_.size() != cell_count) {
+    seen_.assign(cell_count, false);
+  } else {
+    // Clear only inside the current bounded region to reduce cost
+    for (int j = min_j; j < max_j; ++j) {
+      unsigned int row = static_cast<unsigned int>(j) * size_x;
+      for (int i = min_i; i < max_i; ++i) {
+        seen_[row + static_cast<unsigned int>(i)] = false;
+      }
+    }
   }
 
   // Reuse all inflation distance bins instead of reallocating them
@@ -304,12 +297,11 @@ InflationFilter::updateCosts(
       const unsigned int sx = cell.src_x_;
       const unsigned int sy = cell.src_y_;
       const unsigned int index = master_grid.getIndex(mx, my);
-
-      // Skip if this cell has already been processed in the current call
-      if (seen_stamp[index] == current_stamp) {
+      // Process each cell only once in this call
+      if (seen_[index]) {
         continue;
       }
-      seen_stamp[index] = current_stamp;
+      seen_[index] = true;
 
       // Compute inflation cost based on distance to the nearest obstacle
       const unsigned char cost = costLookup(mx, my, sx, sy);
@@ -372,6 +364,7 @@ InflationFilter::enqueue(
     // push the cell data onto the inflation list and mark
     const auto dist = distance_matrix_[mx - src_x + r][my - src_y + r];
     inflation_cells_[dist].emplace_back(mx, my, src_x, src_y);
+    // Do not mark seen_ here; we mark upon processing to allow enqueuing neighbors
   }
 }
 
