@@ -17,6 +17,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
+find_package(PCL REQUIRED COMPONENTS common io)
 find_package(NLopt QUIET)
 if(NOT NLopt_FOUND)
   find_path(NLOPT_INCLUDE_DIR nlopt.hpp)
@@ -33,6 +34,7 @@ endif()
 
 add_library(${PROJECT_NAME} SHARED
   src/easynav_mpc_controller/MPCController.cpp
+  src/easynav_mpc_controller/MPCOptimizer.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -48,6 +50,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   nlopt
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
+  ${PCL_LIBRARIES}
 )
 
 install(

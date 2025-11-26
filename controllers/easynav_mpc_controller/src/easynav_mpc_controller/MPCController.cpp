@@ -22,74 +22,6 @@
 
 #include "easynav_mpc_controller/MPCController.hpp"
 
-Eigen::Vector3d
-kinematic_model(const Eigen::Vector3d & x, const Eigen::Vector3d & q, double v, double w, double dt)
-{
-  Eigen::Vector3d x_k1;
-  x_k1[0] = x[0] + v * cos(q[2]) * dt;
-  x_k1[1] = x[1] + v * sin(q[2]) * dt;
-  x_k1[2] = q[2] + w * dt;
-  return x_k1;
-}
-
-double
-cost_function(const std::vector<double> & u, std::vector<double> & grad, void *data)
-{
-  MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
-
-  Eigen::Vector3d position = params->x0;
-  Eigen::Vector3d orientation = params->theta0;
-  Eigen::Vector3d state;
-  int N = params->N;
-  double dt = params->dt;
-  double qtheta = params->qtheta;
-  double cost = 0.0;
-
-  Eigen::Matrix2d R = params->R;
-  Eigen::Matrix2d Q = params->Q;
-  Eigen::Matrix2d Rd = params->Rd;
-
-  for (int i = 0; i < N; ++i) {
-    double v = u[2 * i];
-    double w = u[2 * i + 1];
-    double dv, dw;
-    if(i < (N - 1)) {
-      dv = u[2 * (i + 1)] - u[2 * i];
-      dw = u[2 * (i + 1) + 1] - u[2 * i + 1];
-    } else {
-      dv = 0.0;
-      dw = 0.0;
-    }
-
-    state = kinematic_model(position, orientation, v, w, dt);
-
-    Eigen::Vector2d pos = state.head<2>();
-    Eigen::Vector2d error = params->goal - pos;
-    double error_theta = (atan2((error[1]), (error[0]))) - state[2];
-    Eigen::Vector2d uk(v, w);
-    Eigen::Vector2d duk(dv, dw);
-
-    // Tracking cost
-    cost += Q(0, 0) * error[0] * error[0] + Q(1,
-      1) * error[1] * error[1] + qtheta * error_theta * error_theta;
-    // Effort Cost
-    cost += R(0, 0) * v * v + R(1, 1) * w * w;
-    // Smooth Cost
-    cost += Rd(0, 0) * dv * dv + Rd(1, 1) * dw * dw;
-  }
-
-  return cost;
-
-}
-
-static double nlopt_cost_callback(
-  const std::vector<double> & x,
-  std::vector<double> & grad,
-  void *data)
-{
-  return cost_function(x, grad, data);
-}
-
 namespace easynav
 {
 
@@ -114,6 +46,8 @@ MPCController::on_initialize()
   node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
+
+  optimizer_ = std::make_unique<MPCOptimizer>();
 
   mpc_path_pub_ =
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mpc/path", 10);
@@ -145,7 +79,7 @@ MPCController::publish_mpc_path(
     double v = best_vel[i];
     double w = best_vel[i + 1];
     geometry_msgs::msg::Point p;
-    state = kinematic_model(position, orientation, v, w, dt_);
+    state = optimizer_->kinematic_model(position, orientation, v, w, dt_);
     p.x = state[0];
     p.y = state[1];
     p.z = position[2] + 0.5;
@@ -159,15 +93,14 @@ MPCController::publish_mpc_path(
 void
 MPCController::update_rt(NavState & nav_state)
 {
-  if (!nav_state.has("path") || !nav_state.has("robot_pose")) {
+  if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("points")) {
     if(verbose_) {
-      std::cout << "No Path or No robot pose" << std::endl;
+      std::cout << "No Path, No Points or No Robot Pose" << std::endl;
     }
     return;
   }
 
   const auto path = nav_state.get<nav_msgs::msg::Path>("path");
-
   if (path.poses.empty()) {
     // If the path is empty, stop the robot
     cmd_vel_.header.frame_id = path.header.frame_id;
@@ -179,10 +112,25 @@ MPCController::update_rt(NavState & nav_state)
   }
 
   int num_elements = path.poses.size();
+  size_t local_horizon;
+  if (num_elements > horizon_steps_) {
+    local_horizon = horizon_steps_;
+  } else {
+    local_horizon = num_elements - 1;
+  }
+  const auto & last_pose = path.poses[local_horizon].pose.position;
+
+  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & filtered = PointPerceptionsOpsView(perceptions)
+    .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})
+    .fuse("map")
+    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .collapse({NAN, NAN, 0.1})
+    .downsample(0.1)
+    .as_points();
 
   const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   double roll_, pitch_, yaw_;
-
   tf2::Quaternion q(
     pose.orientation.x,
     pose.orientation.y,
@@ -192,30 +140,25 @@ MPCController::update_rt(NavState & nav_state)
   m.getRPY(roll_, pitch_, yaw_);
 
   // MPC Code
-
-  MPCParameters params;
-  params.x0 = {pose.position.x, pose.position.y, pose.position.z};
-  params.theta0 = {roll_, pitch_, yaw_};
-  size_t local_horizon;
-  if (num_elements > horizon_steps_) {
-    local_horizon = horizon_steps_;
-  } else {
-    local_horizon = num_elements - 1;
-  }
-  const auto & last_pose = path.poses[local_horizon].pose.position;
-  params.goal = Eigen::Vector2d(static_cast<double>(last_pose.x),
-                                static_cast<double>(last_pose.y));
-  params.N = horizon_steps_;
-  params.dt = dt_;
-  params.R = R_;
-  params.Q = Q_;
-  params.Rd = Rd_;
-  params.qtheta = qtheta_;
   double minf;
   std::vector<double> u(2 * horizon_steps_, 0.0);
 
+  auto params = MPCParameters(
+    Eigen::Vector2d(static_cast<double>(last_pose.x), static_cast<double>(last_pose.y)),
+    {pose.position.x, pose.position.y, pose.position.z},
+    {roll_, pitch_, yaw_},
+    Q_,
+    R_,
+    Rd_,
+    qtheta_,
+    static_cast<int>(horizon_steps_),
+    dt_,
+    filtered);
+
+  NLoptCallbackData cbdata{ optimizer_.get(), &params };
+
   nlopt::opt opt(nlopt::LN_COBYLA, static_cast<int>(u.size()));
-  opt.set_min_objective(nlopt_cost_callback, &params);
+  opt.set_min_objective(easynav::MPCOptimizer::nlopt_cost_callback, &cbdata);
 
   std::vector<double> lb(2 * horizon_steps_);
   std::vector<double> ub(2 * horizon_steps_);

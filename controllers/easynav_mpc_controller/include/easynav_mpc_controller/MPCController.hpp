@@ -4,6 +4,7 @@
 // licensed under the GNU General Public License v3.0.
 // See <http://www.gnu.org/licenses/> for details.
 
+// #pragma once
 #ifndef EASYNAV_MPC_CONTROLLER__MPCCONTROLLER_HPP_
 #define EASYNAV_MPC_CONTROLLER__MPCCONTROLLER_HPP_
 
@@ -13,7 +14,7 @@
 #include <cmath>
 
 #include <tf2/LinearMath/Quaternion.hpp>
-#include <tf2/LinearMath/Matrix3x3.hpp>
+
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
@@ -24,19 +25,9 @@
 
 #include "easynav_core/ControllerMethodBase.hpp"
 #include "easynav_common/types/NavState.hpp"
+#include "easynav_common/types/PointPerception.hpp"
 
-struct MPCParameters
-{
-  Eigen::Vector2d goal;
-  Eigen::Vector3d x0;
-  Eigen::Vector3d theta0;
-  Eigen::Matrix2d Q;
-  Eigen::Matrix2d R;
-  Eigen::Matrix2d Rd;
-  double qtheta;
-  int N;
-  double dt;
-};
+#include "easynav_mpc_controller/MPCOptimizer.hpp"
 
 namespace easynav
 {
@@ -71,6 +62,8 @@ protected:
   double max_lin_vel_{1.5};   ///< Maximum linear velocity for MPC.
   double max_ang_vel_{1.5};   ///< Maximum angular velocity for MPC.
   bool verbose_{false};       ///< Value to debug on terminal
+
+  std::unique_ptr<MPCOptimizer> optimizer_;  ///< MPPI optimizer
 
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr mpc_path_pub_;    ///< Publisher for MPC path markers.
 
