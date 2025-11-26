@@ -127,6 +127,8 @@ Collaboration diagram for CostmapFilter:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a76d57eb6cb00b6b3446afe2067211990" id="r_a76d57eb6cb00b6b3446afe2067211990"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76d57eb6cb00b6b3446afe2067211990">CostmapFilter</a> ()</td></tr>
 <tr class="separator:a76d57eb6cb00b6b3446afe2067211990"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ca6e8531c0fc1535502893305881a3e" id="r_a8ca6e8531c0fc1535502893305881a3e"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ca6e8531c0fc1535502893305881a3e">get_plugin_name</a> () const</td></tr>
+<tr class="separator:a8ca6e8531c0fc1535502893305881a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa296c75461a72b1feb9888eed47df769" id="r_aa296c75461a72b1feb9888eed47df769"><td class="memItemLeft" align="right" valign="top">std::expected&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa296c75461a72b1feb9888eed47df769">initialize</a> (const std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt; parent_node, const std::string &amp;plugin_name, const std::string &amp;tf_prefix=&quot;&quot;)</td></tr>
 <tr class="separator:aa296c75461a72b1feb9888eed47df769"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe2e8943a7f433c59ce39d4138becc01" id="r_afe2e8943a7f433c59ce39d4138becc01"><td class="memItemLeft" align="right" valign="top">virtual std::expected&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe2e8943a7f433c59ce39d4138becc01">on_initialize</a> ()=0</td></tr>
@@ -138,8 +140,6 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:abfb20156702d89bea674892ec784e9a2" id="r_abfb20156702d89bea674892ec784e9a2"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfb20156702d89bea674892ec784e9a2">get_node</a> () const</td></tr>
 <tr class="separator:abfb20156702d89bea674892ec784e9a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ca6e8531c0fc1535502893305881a3e" id="r_a8ca6e8531c0fc1535502893305881a3e"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ca6e8531c0fc1535502893305881a3e">get_plugin_name</a> () const</td></tr>
-<tr class="separator:a8ca6e8531c0fc1535502893305881a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53b5926a7db7d454e5a860493959fcae" id="r_a53b5926a7db7d454e5a860493959fcae"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53b5926a7db7d454e5a860493959fcae">get_tf_prefix</a> () const</td></tr>
 <tr class="separator:a53b5926a7db7d454e5a860493959fcae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -201,9 +201,6 @@ Protected Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">const std::string &amp; get_plugin_name </td>
@@ -212,11 +209,6 @@ Protected Attributes</h2></td></tr>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
