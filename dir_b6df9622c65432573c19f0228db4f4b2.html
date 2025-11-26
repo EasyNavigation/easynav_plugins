@@ -116,7 +116,7 @@ Directories</h2></td></tr>
 <p>"" "![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)" "" "![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)" "" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
 <h1><a class="anchor" id="autotoc_md49"></a>
 Description</h1>
-<p>Easy Navigation: VFF Controller package.</p>
+<p>Vector Field Histogram (VFF) style local obstacle avoidance controller. Generates <code>cmd_vel</code> commands from proximity/cost data and a target path reference using a histogram-based steering selection.</p>
 <h1><a class="anchor" id="autotoc_md50"></a>
 Authors and Maintainers</h1>
 <ul>
@@ -142,11 +142,42 @@ Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <code>easynav_vff_controller/VffController</code> <br  />
  <b>Type:</b> <code><a class="el" href="classeasynav_1_1VffController.html" title="A default &quot;Vff&quot; implementation for the Control Method.">easynav::VffController</a></code> <br  />
- <b>Base:</b> <code>easynav::ControllerMethodBase</code> <br  />
- <b>Library:</b> <code>vff_controller</code> <br  />
- <b>Description:</b> A VFF implementation for the Controller Method.</li>
+ <b>Base Class:</b> <code>easynav::ControllerMethodBase</code> <br  />
+ <b>Library:</b> <code>easynav_vff_controller</code> <br  />
+ <b>Description:</b> Histogram-based obstacle avoidance controller producing velocity commands.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md53"></a>
+Parameters</h1>
+<p>No ROS parameters are currently declared in code. (Add declarations in the plugin to enable runtime tuning.)</p>
+<h1><a class="anchor" id="autotoc_md54"></a>
+Interfaces</h1>
+<h2><a class="anchor" id="autotoc_md55"></a>
+NavState Keys</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Key   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Access   </th><th class="markdownTableHeadNone">Notes    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>robot_pose</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs::msg::Odometry</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Current pose for steering decisions.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>path</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs::msg::Path</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Planned path reference.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>cmd_vel</code>   </td><td class="markdownTableBodyNone"><code>geometry_msgs::msg::TwistStamped</code>   </td><td class="markdownTableBodyNone"><b>Write</b>   </td><td class="markdownTableBodyNone">Output velocity command.   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md56"></a>
+Publications</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Topic   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadNone">Purpose   </th><th class="markdownTableHeadNone">QoS    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>/vff/markers</code>   </td><td class="markdownTableBodyNone"><code>visualization_msgs/msg/MarkerArray</code>   </td><td class="markdownTableBodyNone">Histogram / debug visualization (name inferred from code marker publisher variable).   </td><td class="markdownTableBodyNone">depth=10   </td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md57"></a>
+Subscriptions / Services</h2>
+<p>None directly; relies on NavState for data sharing.</p>
+<h1><a class="anchor" id="autotoc_md58"></a>
+TF Frames</h1>
+<p>Relies on frames stamped in <code>robot_pose</code>; does not query TF directly.</p>
+<h1><a class="anchor" id="autotoc_md59"></a>
 License</h1>
 <p>GPL-3.0-only </p>
 </div><!-- contents -->

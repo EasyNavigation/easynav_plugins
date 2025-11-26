@@ -119,17 +119,17 @@ Directories</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>"" "![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)" "" "![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)" "" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
-<h1><a class="anchor" id="autotoc_md189"></a>
+<h1><a class="anchor" id="autotoc_md195"></a>
 Description</h1>
 <p>A planner plugin implementing a standard <b>A*</b> path planner over a <code><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></code> representation. It reads the dynamic costmap, goal list, and robot pose from NavState and publishes a computed path as a <code>nav_msgs/Path</code> message.</p>
-<h1><a class="anchor" id="autotoc_md190"></a>
+<h1><a class="anchor" id="autotoc_md196"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab <br  />
 </li>
 <li><b>Maintainers:</b> Francisco Martín Rico <a href="#" onclick="location.href='mai'+'lto:'+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'; return false;">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md191"></a>
+<h1><a class="anchor" id="autotoc_md197"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -143,7 +143,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">rolling   </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md192"></a>
+<h1><a class="anchor" id="autotoc_md198"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <code>easynav_costmap_planner/CostmapPlanner</code></li>
@@ -153,7 +153,7 @@ Plugin (pluginlib)</h1>
 <li><b>Description:</b> A default Costmap2D-based A* path planner implementation.</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md194"></a>
+<h1><a class="anchor" id="autotoc_md200"></a>
 Parameters</h1>
 <p>All parameters are declared under the plugin namespace, i.e., <code>/&lt;node_fqn&gt;/easynav_costmap_planner/CostmapPlanner/...</code>.</p>
 <table class="markdownTable">
@@ -171,9 +171,9 @@ Parameters</h1>
 <td class="markdownTableBodyNone"><code>&lt;plugin&gt;.continuous_replan</code>   </td><td class="markdownTableBodyNone"><code>bool</code>   </td><td class="markdownTableBodyRight"><code>true</code>   </td><td class="markdownTableBodyNone">If <code>true</code>, re-plans continuously as the map/goal changes; if <code>false</code>, plans once per request.   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md196"></a>
+<h1><a class="anchor" id="autotoc_md202"></a>
 Interfaces (Topics and Services)</h1>
-<h2><a class="anchor" id="autotoc_md197"></a>
+<h2><a class="anchor" id="autotoc_md203"></a>
 Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -183,7 +183,7 @@ Publications</h2>
 </table>
 <p>This plugin does not create subscriptions or services directly; it reads inputs via NavState.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md199"></a>
+<h1><a class="anchor" id="autotoc_md205"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -198,7 +198,7 @@ NavState Keys</h1>
 <td class="markdownTableBodyNone"><code>path</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs::msg::Path</code>   </td><td class="markdownTableBodyNone"><b>Write</b>   </td><td class="markdownTableBodyNone">Output path to follow.   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md201"></a>
+<h1><a class="anchor" id="autotoc_md207"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -207,7 +207,7 @@ TF Frames</h1>
 <td class="markdownTableBodyNone">Reads   </td><td class="markdownTableBodyNone"><code>map -&gt; base_footprint</code>   </td><td class="markdownTableBodyNone">Requires consistent frames between the costmap and the published path.   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md203"></a>
+<h1><a class="anchor" id="autotoc_md209"></a>
 License</h1>
 <p>GPL-3.0-only </p>
 </div><!-- contents -->
