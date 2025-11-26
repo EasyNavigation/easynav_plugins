@@ -25,6 +25,7 @@
 #include <cmath>
 
 #include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include "easynav_common/types/PointPerception.hpp"
 
@@ -301,7 +302,7 @@ SerestController::closest_obstacle_distance(
   // 2) Analizar los sensores de distancia
   if (!nav_state.has("points")) {return std::numeric_limits<double>::infinity();}
 
-  const auto perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get<PointPerceptions>("points");
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(0.3)
     .fuse(get_tf_prefix() + "base_link")

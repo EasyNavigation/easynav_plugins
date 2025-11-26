@@ -50,10 +50,10 @@ All parameters are declared under the plugin namespace, i.e.
 
 | Name | Type | Default | Description |
 |---|---|---:|---|
-| `<plugin>.layer` | `string` | `"inflated_obstacles"` | Name of the NavMap layer containing 8-bit costs (`FREE_SPACE=0`, `INSCRIBED_INFLATED_OBSTACLE=253`, `LETHAL_OBSTACLE=254`). |
 | `<plugin>.cost_factor` | `double` | `2.0` | Multiplicative weight for geometric distance; values > 1 increase the relative importance of distance. |
-| `<plugin>.inflation_penalty` | `double` | `5.0` | Additional penalty proportional to the normalized cell cost; higher values keep the path farther from inflated areas. |
 | `<plugin>.continuous_replan` | `bool` | `true` | If true, recomputes the path whenever `NavState` updates; if false, plans once per goal. |
+
+**Note:** The planner internally uses hardcoded values for `layer_name` (prefers `"inflated_obstacles"`, fallback to `"obstacles"`), `inflation_penalty` (value used in cost calculation), `cost_axial`, and `cost_diagonal`. These are not runtime-configurable parameters.
 
 ## Interfaces (Topics and Services)
 

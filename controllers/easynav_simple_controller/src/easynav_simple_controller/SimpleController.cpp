@@ -23,6 +23,7 @@
 #include <expected>
 
 #include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include "easynav_simple_controller/SimpleController.hpp"
 
@@ -100,7 +101,7 @@ SimpleController::update_rt(NavState & nav_state)
   if (!nav_state.has("path")) {return;}
   if (!nav_state.has("robot_pose")) {return;}
 
-  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+  const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
 
   if (path.poses.empty()) {
     twist_stamped_.header.frame_id = path.header.frame_id;
@@ -115,7 +116,7 @@ SimpleController::update_rt(NavState & nav_state)
   }
 
   // If we're very close to the final path pose, stop the robot.
-  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const auto & goal_pose = path.poses.back().pose;
   double dist_to_goal = get_distance(pose, goal_pose);
   double angle_to_goal = get_diff_angle(pose.orientation, goal_pose.orientation);

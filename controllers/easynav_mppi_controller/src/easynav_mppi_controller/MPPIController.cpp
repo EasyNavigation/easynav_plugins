@@ -144,7 +144,7 @@ MPPIController::update_rt(NavState & nav_state)
     return;
   }
 
-  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+  const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
 
   if (path.poses.empty()) {
     // If the path is empty, stop the robot and clear markers
@@ -164,8 +164,8 @@ MPPIController::update_rt(NavState & nav_state)
     return;
   }
 
-  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
-  const auto perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})

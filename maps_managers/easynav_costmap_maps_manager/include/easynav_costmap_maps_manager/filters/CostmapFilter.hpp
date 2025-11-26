@@ -31,6 +31,12 @@
 namespace easynav
 {
 
+struct ObstacleBounds
+{
+  double min_x, min_y, max_x, max_y;
+};
+
+
 class CostmapFilter
 {
 public:
@@ -45,10 +51,11 @@ public:
   virtual std::expected<void, std::string> on_initialize() = 0;
   virtual void update(NavState & nav_state) = 0;
 
+  const std::string & get_plugin_name() const;
+
 protected:
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> get_node() const;
 
-  const std::string & get_plugin_name() const;
 
   const std::string & get_tf_prefix() const;
 
