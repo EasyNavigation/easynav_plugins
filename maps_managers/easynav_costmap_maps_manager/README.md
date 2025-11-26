@@ -45,17 +45,38 @@ At the core of this stack lies the Costmap2D data structure. `Costmap2D` extends
 
 ---
 
-### Filter Parameters
-Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` with at least the key `plugin`, plus any specific parameters.
+### Filter Plugins
+Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` with at least the key `plugin`, plus any filter-specific parameters.
 
-#### InflationFilter
-| Name | Type | Default | Description |
+#### **ObstacleFilter**
+- **Plugin Name:** `easynav_costmap_maps_manager/ObstacleFilter`
+- **Type:** `easynav::ObstacleFilter`
+- **Description:**  
+  Detects occupied cells from input point clouds (`points` key in `NavState`) and marks them as `LETHAL_OBSTACLE` in the dynamic costmap.  
+  The filter fuses incoming 3D points into the map frame, downsamples them to the costmap resolution, filters out ground-level points (z < 0.1 m), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (`ObstacleBounds`) of updated obstacles to enable efficient incremental inflation.
+
+| Parameter | Type | Default | Description |
 |---|---|---:|---|
-| `<plugin>.inflation.inflation_radius` | `double` | `0.3` | Radius (m) used to inflate obstacles in the costmap. |
-| `<plugin>.inflation.cost_scaling_factor` | `double` | `3.0` | Exponential decay factor controlling cost reduction with distance. |
+| _(None)_ | — | — | This filter does not declare additional ROS parameters beyond `plugin`. Downsampling resolution and frame fusion use the costmap's own resolution and `map` frame. |
+| **Input Key:** | | | Reads point clouds from `NavState` key `"points"`. |
+| **Output Key:** | | | Updates `NavState` key `"map.dynamic.obstacle_bounds"` with obstacle bounding box. |
+| **Updates:** | | | Marks cells in the dynamic costmap (`map.dynamic.filtered`) as `LETHAL_OBSTACLE` (254). |
 
-#### ObstacleFilter
-This filter does not declare any ROS parameters apart from `plugin`.
+#### **InflationFilter**
+- **Plugin Name:** `easynav_costmap_maps_manager/InflationFilter`
+- **Type:** `easynav::InflationFilter`
+- **Description:**  
+  Expands obstacle information in the costmap by assigning graded costs around `LETHAL_OBSTACLE` cells based on distance. Uses a breadth-first wavefront propagation algorithm (distance bins) to efficiently inflate obstacles up to `inflation_radius`.  
+  The filter reads both the static map and the dynamic filtered map, applies inflation to each, and merges results. If `ObstacleBounds` is available in `NavState`, inflation is restricted to the updated region for performance.
+
+| Parameter | Type | Default | Description |
+|---|---|---:|---|
+| `<plugin>.inflation_radius` | `double` | `0.3` | Maximum inflation distance (m) from obstacles. Cells farther than this receive no inflation cost. |
+| `<plugin>.inscribed_radius` | `double` | `0.25` | Radius of the inscribed zone (m). Cells within this distance of an obstacle are marked with high constant cost (`INSCRIBED_INFLATED_OBSTACLE`, value 253) before exponential decay begins. |
+| `<plugin>.cost_scaling_factor` | `double` | `3.0` | Exponential decay rate controlling how quickly cost decreases with distance beyond the inscribed radius. Higher values produce steeper cost gradients. |
+| **Input Keys:** | | | Reads `"map.static"` and `"map.dynamic.filtered"` (`Costmap2D`), and optionally `"map.dynamic.obstacle_bounds"` (`ObstacleBounds`). |
+| **Output Key:** | | | Writes inflated result back to `"map.dynamic.filtered"`. |
+| **Cost Model:** | | | Uses exponential decay: `cost = exp(-cost_scaling_factor * (distance - inscribed_radius)) * 253` for distances beyond inscribed radius. |
 
 **Example Configuration**
 
@@ -100,6 +121,7 @@ maps_manager_node:
 | `map.static` | `Costmap2D` | **Write** | Static map loaded from YAML. |
 | `map.dynamic` | `Costmap2D` | **Write** | Dynamic map after applying filters. |
 | `map.dynamic.filtered` | `Costmap2D` | **Read** | Previously filtered map used as input if available. |
+| `map.dynamic.obstacle_bounds` | `ObstacleBounds` | **Read** | Bounding box of updated obstacles (used to limit inflation region). |
 
 ---
 
