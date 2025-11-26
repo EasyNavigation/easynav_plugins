@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>easynav_fusion_localizer</name>
+  <version>0.0.2</version>
+  <description>Easy Navigation: Fusion Localizer package.</description>
+  <maintainer email="miguelangel.demgiuel@urjc.es">Miguel Ángel de Miguel</maintainer>
+  
+  <license>GPL-3.0-only</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>easynav_core</depend>
+  <depend>easynav_common</depend>
+  <depend>easynav_localizer</depend>
+  <depend>pluginlib</depend>
+  <depend>geographiclib</depend>
+  <depend>geographic_msgs</depend>
+  <depend>robot_localization</depend>
+  <depend>std_srvs</depend>
+  <depend>angles</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>robot_localization</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
