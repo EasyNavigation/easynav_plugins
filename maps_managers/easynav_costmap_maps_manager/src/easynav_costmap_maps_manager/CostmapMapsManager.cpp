@@ -196,12 +196,7 @@ CostmapMapsManager::update(NavState & nav_state)
   nav_state.set("map.dynamic.filtered", dynamic_map_);
 
   for (const auto & filter : costmap_filters_) {
-    auto t0 = get_node()->now();
     filter->update(nav_state);
-    auto t1 = get_node()->now();
-
-    std::cerr << "[" << filter->get_plugin_name() << "] " <<
-      std::fixed << std::setprecision(10) << (t1 - t0).seconds() << std::endl;
   }
 
   nav_state.set("map.dynamic", dynamic_map_);
