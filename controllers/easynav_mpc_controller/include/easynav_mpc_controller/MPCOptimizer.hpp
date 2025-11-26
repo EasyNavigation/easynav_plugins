@@ -23,26 +23,32 @@ public:
   MPCParameters(Eigen::Vector2d goal,
     Eigen::Vector3d x0,
     Eigen::Vector3d theta0,
-    Eigen::Matrix2d Q,
-    Eigen::Matrix2d R,
-    Eigen::Matrix2d Rd,
-    double qtheta,
+    const pcl::PointCloud<pcl::PointXYZ> & points,
     int N,
-    double dt,
-    const pcl::PointCloud<pcl::PointXYZ> & points);
+    double dt);
 
   ~MPCParameters();
 
   Eigen::Vector2d goal;
   Eigen::Vector3d x0;
   Eigen::Vector3d theta0;
-  Eigen::Matrix2d Q;
-  Eigen::Matrix2d R;
-  Eigen::Matrix2d Rd;
-  double qtheta;
-  int N;
-  double dt;
   const pcl::PointCloud<pcl::PointXYZ> & points;
+
+  int get_steps();
+  double get_timestep();
+  double get_angular_tracking_cost();
+  Eigen::Matrix2d get_effort_cost();
+  Eigen::Matrix2d get_tracking_cost();
+  Eigen::Matrix2d get_smooth_cost();
+
+private:
+  int N_ {5};
+  double dt_ {0.1};
+  Eigen::Matrix2d Q_ {{4.0, 0.0}, {0.0, 4.0}};    ///< Tracking Cost
+  Eigen::Matrix2d R_ {{0.1, 0.0}, {0.0, 0.1}};    ///< Effort Cost
+  Eigen::Matrix2d Rd_ {{0.1, 0.0}, {0.0, 0.1}};   ///< Smooth Cost
+  double qtheta_ {3.0};
+
 };
 
 class MPCOptimizer

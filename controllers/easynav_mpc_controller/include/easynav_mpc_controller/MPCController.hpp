@@ -68,10 +68,6 @@ protected:
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr mpc_path_pub_;    ///< Publisher for MPC path markers.
 
 private:
-  Eigen::Matrix2d Q_ {{4.0, 0.0}, {0.0, 4.0}};    ///< Tracking Cost
-  Eigen::Matrix2d R_ {{0.1, 0.0}, {0.0, 0.1}};    ///< Effort Cost
-  Eigen::Matrix2d Rd_ {{0.1, 0.0}, {0.0, 0.1}};   ///< Smooth Cost
-  double qtheta_ {3.0};
   geometry_msgs::msg::TwistStamped cmd_vel_;  ///< Current velocity command.
 
 };

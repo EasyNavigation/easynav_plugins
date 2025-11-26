@@ -6,17 +6,42 @@ namespace easynav
 MPCParameters::MPCParameters(Eigen::Vector2d goal,
   Eigen::Vector3d x0,
   Eigen::Vector3d theta0,
-  Eigen::Matrix2d Q,
-  Eigen::Matrix2d R,
-  Eigen::Matrix2d Rd,
-  double qtheta,
+  const pcl::PointCloud<pcl::PointXYZ> & points,
   int N,
-  double dt,
-  const pcl::PointCloud<pcl::PointXYZ> & points)
-  :x0(x0), theta0(theta0), Q(Q), R(R), Rd(Rd), qtheta(qtheta), N(N),
-    dt(dt), points(points) {}
+  double dt)
+  :goal(goal), x0(x0), theta0(theta0), points(points), N_(N), dt_(dt) {}
 
 MPCParameters::~MPCParameters() = default;
+
+int MPCParameters::get_steps()
+{
+  return N_;
+}
+
+double MPCParameters::get_timestep()
+{
+  return dt_;
+}
+
+double MPCParameters::get_angular_tracking_cost()
+{
+  return qtheta_;
+}
+
+Eigen::Matrix2d MPCParameters::get_effort_cost()
+{
+  return R_;
+}
+
+Eigen::Matrix2d MPCParameters::get_tracking_cost()
+{
+  return Q_;
+}
+
+Eigen::Matrix2d MPCParameters::get_smooth_cost()
+{
+  return Rd_;
+}
 
 MPCOptimizer::MPCOptimizer() {}
 
@@ -40,14 +65,14 @@ MPCOptimizer::cost_function(const std::vector<double> & u, std::vector<double> &
   Eigen::Vector3d position = params->x0;
   Eigen::Vector3d orientation = params->theta0;
   Eigen::Vector3d state;
-  int N = params->N;
-  double dt = params->dt;
-  double qtheta = params->qtheta;
+  int N = params->get_steps();
+  double dt = params->get_timestep();
+  double qtheta = params->get_angular_tracking_cost();
   double cost = 0.0;
 
-  Eigen::Matrix2d R = params->R;
-  Eigen::Matrix2d Q = params->Q;
-  Eigen::Matrix2d Rd = params->Rd;
+  Eigen::Matrix2d R = params->get_effort_cost();
+  Eigen::Matrix2d Q = params->get_tracking_cost();
+  Eigen::Matrix2d Rd = params->get_smooth_cost();
 
   for (int i = 0; i < N; ++i) {
     double v = u[2 * i];

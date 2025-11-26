@@ -147,13 +147,9 @@ MPCController::update_rt(NavState & nav_state)
     Eigen::Vector2d(static_cast<double>(last_pose.x), static_cast<double>(last_pose.y)),
     {pose.position.x, pose.position.y, pose.position.z},
     {roll_, pitch_, yaw_},
-    Q_,
-    R_,
-    Rd_,
-    qtheta_,
+    filtered,
     static_cast<int>(horizon_steps_),
-    dt_,
-    filtered);
+    dt_);
 
   NLoptCallbackData cbdata{ optimizer_.get(), &params };
 
