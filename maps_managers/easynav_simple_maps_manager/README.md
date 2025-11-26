@@ -27,7 +27,7 @@ At the heart of this stack is the SimpleMap data structure. It represents the en
 - **Description:** Simple (no-op) Maps Manager that demonstrates the Maps Manager API. It forwards/republishes a basic occupancy map flow and exposes standard topics and a save-map service.
 
 ## Parameters
-### Plugin Parameters (namespace: `/<node_fqn>/easynav_simple_maps_manager/OctomapMapsManager/...`)
+### Plugin Parameters (namespace: `/<node_fqn>/easynav_simple_maps_manager/SimpleMapsManager/...`)
 | Name | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.package` | `string` | `""` | Package name used to resolve relative map paths via `ament_index`. |
@@ -55,6 +55,8 @@ At the heart of this stack is the SimpleMap data structure. It represents the en
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `points` | `PointPerceptions` | **Read** | Optional perception points bundle (not strictly required for this no-op manager). |
+| `map.static` | `SimpleMap` | **Write** | Static map loaded from file / parameter configuration. |
+| `map.dynamic` | `SimpleMap` | **Write** | Dynamic map after applying incoming updates. |
 
 
 ## TF Frames

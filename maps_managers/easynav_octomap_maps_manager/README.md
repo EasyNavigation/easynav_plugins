@@ -26,14 +26,8 @@ Maps Manager that maintains an [OctoMap](https://octomap.github.io/) (probabilis
 
 ## Parameters
 
-### Plugin Parameters (namespace: `/<node_fqn>/easynav_octomap_maps_manager/OctomapMapsManager/...`)
-| Name | Type | Default | Description |
-|---|---|---:|---|
-| `<plugin>.package` | `string` | `""` | Package name used to resolve relative map paths via `ament_index`. |
-| `<plugin>.occmap_path_file` | `string` | `""` | Relative path (inside the package) to a ROS YAML occupancy grid to import as OctoMap. |
-| `<plugin>.octomap_path_file` | `string` | `""` | Relative path (inside the package) to a PCD/PLY/OT file used to build/load the OctoMap. |
-| `<plugin>.filters` | `string[]` | `[]` | List of filter identifiers to be instantiated (see “Filter Parameters”). |
-| `<plugin>.<filter>.plugin` | `string` | `""` | Type of filter plugin (e.g., `easynav_octomap_maps_manager/InflationFilter`). |
+### Plugin Parameters
+The current code (OctomapMapsManager.cpp) has the high-level parameter declarations for package and map paths commented out. Active runtime parameters are therefore limited to filter plugin namespaces populated by entries in `filters` (if/when enabled). Until the declarations are restored, only filter-local parameters are honored.
 
 ### Filter Parameters
 Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` with at least the key `plugin`, plus any specific parameters.
@@ -75,8 +69,8 @@ maps_manager_node:
 ### Subscriptions and Publications
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
-| Publisher | `<node_fqn>/<plugin>/map` | `octomap_msgs/msg/Octomap` | Publishes the current OctoMap. | `depth=1` |
-| Subscription | `<node_fqn>/<plugin>/incoming_pc2_map` | `sensor_msgs/msg/PointCloud2` | Input point cloud used to build/update the OctoMap. | `depth=100` |
+| Publisher | `<node_fqn>/<plugin>/map` | `octomap_msgs/msg/Octomap` | Publishes the current OctoMap. | depth=1 |
+| Subscription | `<node_fqn>/<plugin>/incoming_pc2_map` | `sensor_msgs/msg/PointCloud2` | Input point cloud used to build/update the OctoMap. | depth=100 |
 
 ### Services
 | Direction | Service | Type | Purpose |
@@ -88,7 +82,7 @@ maps_manager_node:
 ## NavState Keys
 | Key | Type | Access | Notes |
 |---|---|---|---|
-| `map` | `::octomap::Octomap` | **Read** | If present in NavState, used as input/seed map. This plugin does not write a NavState key. |
+| `map` | `::octomap::Octomap` | **Read** | If present in NavState, used as an input/seed map. (Plugin currently does not write back to NavState.) |
 
 ---
 
