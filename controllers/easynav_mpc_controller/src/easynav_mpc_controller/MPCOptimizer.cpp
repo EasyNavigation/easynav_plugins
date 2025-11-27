@@ -69,6 +69,7 @@ MPCOptimizer::cost_function(const std::vector<double> & u, std::vector<double> &
   double dt = params->get_timestep();
   double qtheta = params->get_angular_tracking_cost();
   double cost = 0.0;
+  double penalty = 0.25;
 
   Eigen::Matrix2d R = params->get_effort_cost();
   Eigen::Matrix2d Q = params->get_tracking_cost();
@@ -93,6 +94,30 @@ MPCOptimizer::cost_function(const std::vector<double> & u, std::vector<double> &
     double error_theta = (atan2((error[1]), (error[0]))) - state[2];
     Eigen::Vector2d uk(v, w);
     Eigen::Vector2d duk(dv, dw);
+
+    for (const auto & point : params->points) {
+    // double min_obs_dist = std::numeric_limits<double>::max();
+    // for (const auto &[x, y] : trajectory) {
+    //   double dx = point.x - x;
+    //   double dy = point.y - y;
+    //   double dist = std::hypot(dx, dy);
+    //   if (dist < min_obs_dist) {min_obs_dist = dist;}
+    // }
+    // min_obs_overall = std::min(min_obs_overall, min_obs_dist);
+
+    // // Safety margin (robot radius + margin)
+    // if (min_obs_dist < safety_radius_) {
+    //   // Heavy penalty for collision risk
+    //   cost += 5000.0 * std::pow(safety_radius_ - min_obs_dist, 2) * (1.0 + v);
+    // } else {
+    //   // Small penalty: encourage keeping clearance
+    //   cost += 1.0 / (min_obs_dist * min_obs_dist);
+      double dist = std::hypot(point.x - pos[0] , point.y -pos[1]);
+      if (dist < 1.0){
+        cost+=penalty * std::pow(1.0 - dist, 2) * std::pow(v, 2);
+        //cost+=penalty;
+      }
+    }
 
     // Tracking cost
     cost += Q(0, 0) * error[0] * error[0] + Q(1,
