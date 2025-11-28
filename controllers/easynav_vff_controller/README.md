@@ -2,7 +2,6 @@
 
 [![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#) [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
 
-
 ## Description
 
 Vector Field Histogram (VFF) style local obstacle avoidance controller. Generates `cmd_vel` commands from proximity/cost data and a target path reference using a histogram-based steering selection.

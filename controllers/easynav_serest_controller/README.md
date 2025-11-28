@@ -2,7 +2,6 @@
 
 [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#)
 
-
 ## Description
 
 A SeReST (Smooth Error-Responsive Speed and Turning) controller for path tracking.
@@ -77,7 +76,6 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.v_progress_min` | `double` | `0.05` | Minimum forward speed to ensure progress (m/s). |
 | `<plugin>.v_ref` | `double` | `0.6` | Nominal reference speed (m/s). |
 
-
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
@@ -110,7 +108,6 @@ This package does not create service servers or clients.
 | `serest.debug.goal.gamma_slow` | `double/int` | **Write** | Debug metric |
 | `serest.debug.goal.in_final_align` | `double/int` | **Write** | Debug metric |
 | `serest.debug.goal.arrived` | `double/int` | **Write** | Debug metric |
-
 
 ## TF Frames
 
