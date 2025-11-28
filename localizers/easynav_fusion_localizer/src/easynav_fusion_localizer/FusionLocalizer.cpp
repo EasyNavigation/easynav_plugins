@@ -18,32 +18,32 @@ namespace easynav
 
 std::expected<void, std::string> FusionLocalizer::on_initialize()
 {
-  
+
   try {
-    
+
     auto node = get_node();
-    
+
     auto localizer_node = std::dynamic_pointer_cast<LocalizerNode>(node);
 
     last_gps_stamp_.resize(10, 0.0);
-    
-    const std::string& plugin_name = this->get_plugin_name();
-    const std::string& tf_prefix = this->get_tf_prefix();
+
+    const std::string & plugin_name = this->get_plugin_name();
+    const std::string & tf_prefix = this->get_tf_prefix();
     RCLCPP_INFO(localizer_node->get_logger(), "Using tf_prefix: '%s'", tf_prefix.c_str());
     RCLCPP_INFO(localizer_node->get_logger(), "Using parameter namespace: '%s'",
     plugin_name.c_str());
-    
+
     ukf_wrapper_ = std::make_unique<robot_localization::UkfWrapper>(
       localizer_node, tf_prefix, plugin_name + ".local_filter"
     );
     ukf_wrapper_->initialize();
-    localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0)); 
+    localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
     localizer_node->get_parameter(plugin_name + ".latitude_origin", latitude_origin_);
-  
-    localizer_node->declare_parameter(plugin_name + ".longitude_origin", double(0.0)); 
+
+    localizer_node->declare_parameter(plugin_name + ".longitude_origin", double(0.0));
     localizer_node->get_parameter(plugin_name + ".longitude_origin", longitude_origin_);
-  
-    localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0)); 
+
+    localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0));
     localizer_node->get_parameter(plugin_name + ".altitude_origin", altitude_origin_);
   } catch (const std::exception & e) {
     RCLCPP_FATAL(
@@ -57,7 +57,8 @@ std::expected<void, std::string> FusionLocalizer::on_initialize()
   int zone;
   bool northp;
 
-  GeographicLib::UTMUPS::Forward(latitude_origin_, longitude_origin_, zone, northp, UTM_origin_x_, UTM_origin_y_);
+  GeographicLib::UTMUPS::Forward(latitude_origin_, longitude_origin_, zone, northp, UTM_origin_x_,
+      UTM_origin_y_);
   UTM_zone_ = std::to_string(zone) + (northp ? "N" : "S");
   UTM_origin_z_ = altitude_origin_;
 
@@ -79,12 +80,13 @@ void FusionLocalizer::update_rt(NavState & nav_state)
     for (int i = 0; i < n_gps_sensors_; ++i) {
       double gps_time = gps_data[i]->data.header.stamp.sec +
         gps_data[i]->data.header.stamp.nanosec * 1e-9;
-      if (gps_time > last_gps_stamp_[i]) { 
+      if (gps_time > last_gps_stamp_[i]) {
       // if(true) {
         last_gps_stamp_[i] = gps_time;
         std::cout << "FusionLocalizer: Processing GNSS sensor data " << i << std::endl;
         auto pose = navsatfix_to_pose(gps_data[i]->data);
-        std::cout << "GPS UTM POSE (X, Y): " << pose.pose.pose.position.x << ", " << pose.pose.pose.position.y << std::endl;
+        std::cout << "GPS UTM POSE (X, Y): " << pose.pose.pose.position.x << ", " <<
+          pose.pose.pose.position.y << std::endl;
         // nav_state.set("UTM_gnss_pose", pose);
         // Call the wrapper callback
         ukf_wrapper_->poseCallback(
@@ -98,7 +100,7 @@ void FusionLocalizer::update_rt(NavState & nav_state)
       }
     }
   }
-  
+
   std::cout << "Updating..." << std::endl;
   ukf_wrapper_->periodicUpdate();
   std::cout << "Updated!!" << std::endl;
@@ -112,7 +114,7 @@ void FusionLocalizer::update_rt(NavState & nav_state)
 // 3. Hook de actualización no-RT (baja frecuencia)
 void FusionLocalizer::update([[maybe_unused]] NavState & nav_state)
 {
-  
+
 }
 
 geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose(
@@ -130,7 +132,7 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
   double utm_x, utm_y;
   int zone;
   bool northp;
-  
+
   GeographicLib::UTMUPS::Forward(
     navsat_msg.latitude,
     navsat_msg.longitude,
@@ -138,7 +140,7 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
     northp,
     utm_x,
     utm_y);
-    
+
   pose_msg.pose.pose.position.x = utm_x - UTM_origin_x_;
   pose_msg.pose.pose.position.y = utm_y - UTM_origin_y_;
   pose_msg.pose.pose.position.z = navsat_msg.altitude - UTM_origin_z_;
@@ -150,13 +152,13 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
 
   pose_msg.pose.covariance.fill(0.0);
 
-  pose_msg.pose.covariance[0]  = navsat_msg.position_covariance[0]; // xx
-  pose_msg.pose.covariance[1]  = navsat_msg.position_covariance[1]; // xy
-  pose_msg.pose.covariance[2]  = navsat_msg.position_covariance[2]; // xz
+  pose_msg.pose.covariance[0] = navsat_msg.position_covariance[0];  // xx
+  pose_msg.pose.covariance[1] = navsat_msg.position_covariance[1];  // xy
+  pose_msg.pose.covariance[2] = navsat_msg.position_covariance[2];  // xz
 
-  pose_msg.pose.covariance[6]  = navsat_msg.position_covariance[3]; // yx
-  pose_msg.pose.covariance[7]  = navsat_msg.position_covariance[4]; // yy
-  pose_msg.pose.covariance[8]  = navsat_msg.position_covariance[5]; // yz
+  pose_msg.pose.covariance[6] = navsat_msg.position_covariance[3];  // yx
+  pose_msg.pose.covariance[7] = navsat_msg.position_covariance[4];  // yy
+  pose_msg.pose.covariance[8] = navsat_msg.position_covariance[5];  // yz
 
   pose_msg.pose.covariance[12] = navsat_msg.position_covariance[6]; // zx
   pose_msg.pose.covariance[13] = navsat_msg.position_covariance[7]; // zy

@@ -50,7 +50,6 @@ protected:
   void update(NavState & nav_state) override;
 
 private:
-  
   std::unique_ptr<robot_localization::UkfWrapper> ukf_wrapper_;
 
   int n_imu_sensors_{0};
@@ -59,7 +58,7 @@ private:
   std::string base_link_frame_id_;
   std::string odom_frame_id_;
   std::string world_frame_id_;
-  
+
   geometry_msgs::msg::PoseWithCovarianceStamped
   navsatfix_to_pose(const sensor_msgs::msg::NavSatFix & navsat_msg);
 

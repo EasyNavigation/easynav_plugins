@@ -57,7 +57,7 @@
 #include "robot_localization/measurement.hpp"
 #include "robot_localization/srv/toggle_filter_processing.hpp"
 #include "robot_localization/srv/set_pose.hpp"
-#include "robot_localization/ukf.hpp" 
+#include "robot_localization/ukf.hpp"
 #include "sensor_msgs/msg/imu.hpp"
 #include "std_srvs/srv/empty.hpp"
 #include "tf2/LinearMath/Transform.hpp"
@@ -104,9 +104,10 @@ public:
   //! The UkfWrapper constructor makes sure that anyone using
   //! this template is doing so with the correct object type
   //!
-  explicit UkfWrapper(std::shared_ptr<easynav::LocalizerNode> parent_node,
-  const std::string & tf_prefix,
-  const std::string & plugin_name);
+  explicit UkfWrapper(
+    std::shared_ptr<easynav::LocalizerNode> parent_node,
+    const std::string & tf_prefix,
+    const std::string & plugin_name);
 
   //! @brief Destructor
   //!
@@ -342,22 +343,22 @@ public:
   //!
   bool validateFilterOutput(nav_msgs::msg::Odometry * message);
 
-  std::vector<CallbackData> getGpsCallbackDataArr() const 
+  std::vector<CallbackData> getGpsCallbackDataArr() const
   {
     return gps_callbackData_arr_;
   }
 
-  std::string getBaseLinkFrameId() const 
+  std::string getBaseLinkFrameId() const
   {
     return base_link_frame_id_;
   }
 
-  std::string getWorldFrameId() const 
+  std::string getWorldFrameId() const
   {
     return world_frame_id_;
   }
 
-  std::string getOdomFrameId() const 
+  std::string getOdomFrameId() const
   {
     return odom_frame_id_;
   }
