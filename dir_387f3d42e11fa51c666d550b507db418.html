@@ -121,11 +121,11 @@ Directories</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>"" "![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)" "" "![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)" "" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
 <h1><a class="anchor" id="autotoc_md122"></a>
 Description</h1>
 <p>Maps Manager that maintains 2D costmaps (static and dynamic), supports filter plugins (such as inflation and obstacle filters), and exposes maps through ROS topics and NavState integration.</p>
-<p>At the core of this stack lies the <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a> data structure. <code><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></code> extends the binary occupancy grid into a graded cost representation with values in the range [0–255]:</p><ul>
+<p>At the core of this stack lies the <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a> data structure. <code><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></code> extends the binary occupancy grid into a graded cost representation with values in the range [0–255]:</p>
+<ul>
 <li>0: Free space, no cost to traverse.</li>
 <li>1–252: Gradual cost values, representing increasing difficulty or proximity to obstacles.</li>
 <li>253: “Near obstacle” (inscribed obstacle) cost, traversal strongly discouraged.</li>
@@ -243,7 +243,8 @@ Filter Plugins</h2>
 </table>
 <p><b>Cost Model:</b> <br  />
  Uses exponential decay: <code>cost = exp(-cost_scaling_factor * (distance - inscribed_radius)) * 253</code> for distances beyond inscribed radius.</p>
-<p><b>Example Configuration</b></p>
+<h2><a class="anchor" id="autotoc_md133"></a>
+Example Configuration</h2>
 <div class="fragment"><div class="line">maps_manager_node:</div>
 <div class="line">  ros__parameters:</div>
 <div class="line">    map_types: [costmap]</div>
@@ -259,9 +260,9 @@ Filter Plugins</h2>
 <div class="line">      obstacles:</div>
 <div class="line">        plugin: easynav_costmap_maps_manager/ObstacleFilter</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md134"></a>
+<h1><a class="anchor" id="autotoc_md135"></a>
 Interfaces (Topics and Services)</h1>
-<h2><a class="anchor" id="autotoc_md135"></a>
+<h2><a class="anchor" id="autotoc_md136"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -273,7 +274,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publisher   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/dynamic_map</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs/msg/OccupancyGrid</code>   </td><td class="markdownTableBodyNone">Publishes the dynamic (live) costmap.   </td><td class="markdownTableBodyNone"><code>depth=100</code>   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md136"></a>
+<h2><a class="anchor" id="autotoc_md137"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -282,7 +283,7 @@ Services</h2>
 <td class="markdownTableBodyNone">Service Server   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</code>   </td><td class="markdownTableBodyNone"><code>std_srvs/srv/Trigger</code>   </td><td class="markdownTableBodyNone">Saves the current costmap(s) to disk.   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md138"></a>
+<h1><a class="anchor" id="autotoc_md139"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -297,7 +298,7 @@ NavState Keys</h1>
 <td class="markdownTableBodyNone"><code>map.dynamic.obstacle_bounds</code>   </td><td class="markdownTableBodyNone"><code>ObstacleBounds</code>   </td><td class="markdownTableBodyNone"><b>Read</b>   </td><td class="markdownTableBodyNone">Bounding box of updated obstacles (used to limit inflation region).   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md140"></a>
+<h1><a class="anchor" id="autotoc_md141"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -306,7 +307,7 @@ TF Frames</h1>
 <td class="markdownTableBodyNone">Publishes   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">This manager does not broadcast TF; costmaps use their internal <code>frame_id</code>.   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md142"></a>
+<h1><a class="anchor" id="autotoc_md143"></a>
 License</h1>
 <p>GPL-3.0-only </p>
 </div><!-- contents -->

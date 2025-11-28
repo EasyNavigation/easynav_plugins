@@ -116,19 +116,18 @@ Directories</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>"" "![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)" "" "![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)" "" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
-<h1><a class="anchor" id="autotoc_md144"></a>
+<h1><a class="anchor" id="autotoc_md145"></a>
 Description</h1>
 <p>Maps Manager that maintains a <a href="https://github.com/EasyNavigation/NavMap">NavMap</a> (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds.</p>
 <p>This package also includes map filters implemented as plugins (<code>ObstacleFilter</code> and <code>InflationFilter</code>) that operate on NavMap layers to detect obstacles and inflate their costs, enabling cost-aware path planning.</p>
-<h1><a class="anchor" id="autotoc_md145"></a>
+<h1><a class="anchor" id="autotoc_md146"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab <br  />
 </li>
 <li><b>Maintainer:</b> Francisco Martín Rico <a href="#" onclick="location.href='mai'+'lto:'+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'; return false;">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md146"></a>
+<h1><a class="anchor" id="autotoc_md147"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -142,7 +141,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">rolling   </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md147"></a>
+<h1><a class="anchor" id="autotoc_md148"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <code>easynav_navmap_maps_manager/NavMapMapsManager</code></li>
@@ -152,7 +151,7 @@ Plugin (pluginlib)</h1>
 <li><b>Description:</b> <br  />
  Maps Manager that maintains a NavMap (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds, and applying dynamic filters to generate obstacle and inflated layers.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md148"></a>
+<h1><a class="anchor" id="autotoc_md149"></a>
 Parameters</h1>
 <p>All parameters are declared under the plugin namespace, i.e. <br  />
  <code>/&lt;node_fqn&gt;/easynav_navmap_maps_manager/NavMapMapsManager/...</code></p>
@@ -172,9 +171,9 @@ Parameters</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>&lt;plugin&gt;.filters</code>   </td><td class="markdownTableBodyNone"><code>list&lt;string&gt;</code>   </td><td class="markdownTableBodyRight"><code>[]</code>   </td><td class="markdownTableBodyNone">Ordered list of filter plugin names to be applied after map loading (e.g. <code>["obstacles", "inflation"]</code>).   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md149"></a>
+<h2><a class="anchor" id="autotoc_md150"></a>
 Filter Plugins</h2>
-<h3><a class="anchor" id="autotoc_md150"></a>
+<h3><a class="anchor" id="autotoc_md151"></a>
 <b>ObstacleFilter</b></h3>
 <ul>
 <li><b>Plugin Name:</b> <code>easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter</code></li>
@@ -199,7 +198,7 @@ Filter Plugins</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Output Layer:</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Updates or creates NavMap layer <code>"obstacles"</code>.   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md151"></a>
+<h3><a class="anchor" id="autotoc_md152"></a>
 <b>InflationFilter</b></h3>
 <ul>
 <li><b>Plugin Name:</b> <code>easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</code></li>
@@ -222,9 +221,9 @@ Filter Plugins</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Output Layer:</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Writes to <code>"inflated_obstacles"</code>.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md152"></a>
+<h1><a class="anchor" id="autotoc_md153"></a>
 Interfaces (Topics and Services)</h1>
-<h2><a class="anchor" id="autotoc_md153"></a>
+<h2><a class="anchor" id="autotoc_md154"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -238,7 +237,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Subscription   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_pc2_map</code>   </td><td class="markdownTableBodyNone"><code>sensor_msgs/msg/PointCloud2</code>   </td><td class="markdownTableBodyNone">Input point cloud to build/update NavMap.   </td><td class="markdownTableBodyNone">depth=100   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md154"></a>
+<h2><a class="anchor" id="autotoc_md155"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -246,7 +245,7 @@ Services</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Service Server   </td><td class="markdownTableBodyNone"><code>&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</code>   </td><td class="markdownTableBodyNone"><code>std_srvs/srv/Trigger</code>   </td><td class="markdownTableBodyNone">Saves the current NavMap and layers to disk.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md155"></a>
+<h1><a class="anchor" id="autotoc_md156"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -256,7 +255,7 @@ NavState Keys</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>map.navmap</code>   </td><td class="markdownTableBodyNone"><code>::navmap::NavMap</code>   </td><td class="markdownTableBodyNone"><b>Write</b>   </td><td class="markdownTableBodyNone">Stores the maintained NavMap, including generated layers <code>"obstacles"</code> and <code>"inflated_obstacles"</code>.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md156"></a>
+<h1><a class="anchor" id="autotoc_md157"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -264,7 +263,7 @@ TF Frames</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publishes   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">No TF broadcasting in this manager; outputs are stamped in their configured frame.   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md157"></a>
+<h1><a class="anchor" id="autotoc_md158"></a>
 Example Configuration</h1>
 <div class="fragment"><div class="line">maps_manager_node:</div>
 <div class="line">  ros__parameters:</div>
@@ -283,7 +282,7 @@ Example Configuration</h1>
 <div class="line">        plugin: easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</div>
 <div class="line">        inflation_radius: 1.0</div>
 <div class="line">        cost_scaling_factor: 2.0</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md158"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md159"></a>
 License</h1>
 <p>GPL-3.0-only </p>
 </div><!-- contents -->
