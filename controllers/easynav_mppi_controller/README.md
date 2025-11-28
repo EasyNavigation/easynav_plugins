@@ -7,10 +7,12 @@
 A Model Predictive Path Integral (MPPI) controller implementation for Easy Navigation.
 
 ## Authors and Maintainers
+
 - **Authors:** Intelligent Robotics Lab
 - **Maintainers:** Jose Miguel Guerrero Hernandez <josemiguel.guerrero@urjc.es>
 
 ## Supported ROS 2 Distributions
+
 | Distribution | Status |
 |---|---|
 | humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
@@ -19,6 +21,7 @@ A Model Predictive Path Integral (MPPI) controller implementation for Easy Navig
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
 ## Plugin (pluginlib)
+
 - **Plugin Name:** `easynav_mppi_controller/MPPIController`
 - **Type:** `easynav::MPPIController`
 - **Base Class:** `easynav::ControllerMethodBase`
@@ -26,6 +29,7 @@ A Model Predictive Path Integral (MPPI) controller implementation for Easy Navig
 - **Description:** A Model Predictive Path Integral (MPPI) controller implementation for Easy Navigation.
 
 ## Parameters
+
 All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easynav_mppi_controller/MPPIController/...`.
 
 > This plugin derives from [`easynav::ControllerMethodBase`](https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase).  \
@@ -48,6 +52,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
+
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
 | Publisher | `/mppi/candidates` | `visualization_msgs/msg/MarkerArray` | MPPI candidate trajectories as markers. | QoS depth=10 |
@@ -55,10 +60,12 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 
 
 ### Services
+
 This package does not create service servers or clients.
 
 
 ## NavState Keys
+
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `path` | `nav_msgs::msg::Path` | **Read** | Target path to track. |
@@ -68,7 +75,9 @@ This package does not create service servers or clients.
 
 
 ## TF Frames
+
 This controller does not explicitly publish or require TF frames in code.
 
 ## License
+
 GPL-3.0-only

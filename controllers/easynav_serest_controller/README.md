@@ -4,21 +4,25 @@
 
 
 ## Description
+
 A SeReST (Smooth Error-Responsive Speed and Turning) controller for path tracking.
 
 ## Authors and Maintainers
+
 - **Authors:** Intelligent Robotics Lab
 - **Maintainers:** Francisco Martín Rico <fmrico@gmail.com>
 
 ## Supported ROS 2 Distributions
+
 | Distribution | Status |
 |---|---:|
 | humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
 | jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
-| rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) | 
+| rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
 ## Plugin (pluginlib)
+
 - **Plugin Name:** `easynav_serest_controller/SerestController`
 - **Type:** `easynav::SerestController`
 - **Base Class:** `easynav::ControllerMethodBase`
@@ -26,6 +30,7 @@ A SeReST (Smooth Error-Responsive Speed and Turning) controller for path trackin
 - **Description:** A SeReST (Smooth Error-Responsive Speed and Turning) controller for path tracking.
 
 ## Parameters
+
 All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easynav_serest_controller/SerestController/...`.
 
 > This plugin derives from [`easynav::ControllerMethodBase`](https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase).  \
@@ -76,13 +81,15 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
+
 This controller communicates through `NavState` (no direct ROS topics in this plugin).
 
-
 ### Services
+
 This package does not create service servers or clients.
 
 ## NavState Keys
+
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `path` | `nav_msgs::msg::Path` | **Read** | Reference path. |
@@ -106,7 +113,9 @@ This package does not create service servers or clients.
 
 
 ## TF Frames
+
 This controller reads pose from `nav_msgs/Odometry` (NavState key `robot_pose`). TF is not directly used in this plugin.
 
 ## License
+
 GPL-3.0-only
