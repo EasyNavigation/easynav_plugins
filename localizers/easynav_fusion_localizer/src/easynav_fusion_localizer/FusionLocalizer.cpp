@@ -83,10 +83,7 @@ void FusionLocalizer::update_rt(NavState & nav_state)
       if (gps_time > last_gps_stamp_[i]) {
       // if(true) {
         last_gps_stamp_[i] = gps_time;
-        std::cout << "FusionLocalizer: Processing GNSS sensor data " << i << std::endl;
         auto pose = navsatfix_to_pose(gps_data[i]->data);
-        std::cout << "GPS UTM POSE (X, Y): " << pose.pose.pose.position.x << ", " <<
-          pose.pose.pose.position.y << std::endl;
         // nav_state.set("UTM_gnss_pose", pose);
         // Call the wrapper callback
         ukf_wrapper_->poseCallback(
@@ -96,14 +93,11 @@ void FusionLocalizer::update_rt(NavState & nav_state)
           ukf_wrapper_->getOdomFrameId(),  // pose_source_frame
           false                           // imu_data
         );
-        std::cout << "FusionLocalizer: Processed!!" << std::endl;
       }
     }
   }
-
-  std::cout << "Updating..." << std::endl;
+  
   ukf_wrapper_->periodicUpdate();
-  std::cout << "Updated!!" << std::endl;
 
   nav_msgs::msg::Odometry current_odom;
   if (ukf_wrapper_->getFilteredOdometryMessage(&current_odom)) {

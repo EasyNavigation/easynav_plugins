@@ -820,6 +820,11 @@ void UkfWrapper::loadParams()
   // Get the plugin name, if any
   const std::string param_prefix = plugin_name_.empty() ? "" : plugin_name_ + ".";
 
+  // Get callback_group
+  auto rt_cbg = parent_node_->get_real_time_cbg();
+  rclcpp::SubscriptionOptions options;
+  options.callback_group = rt_cbg;
+
   double alpha = parent_node_->declare_parameter(param_prefix + "alpha", 0.001);
   double kappa = parent_node_->declare_parameter(param_prefix + "kappa", 0.0);
   double beta = parent_node_->declare_parameter(param_prefix + "beta", 2.0);
@@ -1169,7 +1174,7 @@ void UkfWrapper::loadParams()
   set_pose_sub_ =
     parent_node_->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "set_pose", rclcpp::QoS(1),
-    std::bind(&UkfWrapper::setPoseCallback, this, std::placeholders::_1));
+    std::bind(&UkfWrapper::setPoseCallback, this, std::placeholders::_1), options);
 
   // Create a service for manually setting/resetting pose
   set_pose_service_ =
@@ -1305,7 +1310,7 @@ void UkfWrapper::loadParams()
         topic_subs_.push_back(
           parent_node_->create_subscription<nav_msgs::msg::Odometry>(
             odom_topic, custom_qos,
-            odom_callback));
+            odom_callback, options));
       } else {
         std::stringstream stream;
         stream << odom_topic << " is listed as an input topic, but all update "
@@ -1443,7 +1448,7 @@ void UkfWrapper::loadParams()
         topic_subs_.push_back(
           parent_node_->create_subscription<
             geometry_msgs::msg::PoseWithCovarianceStamped>(
-            pose_topic, custom_qos, pose_callback));
+            pose_topic, custom_qos, pose_callback, options));
 
         if (differential) {
           twist_var_counts[StateMemberVx] += pose_update_vec[StateMemberX];
@@ -1526,9 +1531,9 @@ void UkfWrapper::loadParams()
         std::numeric_limits<double>::max());
 
       // Set optional custom queue size
-      int queue_size = parent_node_->declare_parameter(param_prefix +
-        gps_topic_name +
-        std::string("_queue_size"), 10);
+      // int queue_size = parent_node_->declare_parameter(param_prefix +
+      //   gps_topic_name +
+      //   std::string("_queue_size"), 10);
 
       // Pull in the sensor's config, zero out values that are invalid for the
       // gps type
@@ -1660,7 +1665,7 @@ void UkfWrapper::loadParams()
         topic_subs_.push_back(
           parent_node_->create_subscription<
             geometry_msgs::msg::TwistWithCovarianceStamped>(
-            twist_topic, custom_qos, twist_callback));
+            twist_topic, custom_qos, twist_callback, options));
 
         twist_var_counts[StateMemberVx] += twist_update_vec[StateMemberVx];
         twist_var_counts[StateMemberVy] += twist_update_vec[StateMemberVy];
@@ -1869,7 +1874,7 @@ void UkfWrapper::loadParams()
         auto custom_qos = rclcpp::SensorDataQoS(rclcpp::KeepLast(queue_size));
         topic_subs_.push_back(
           parent_node_->create_subscription<sensor_msgs::msg::Imu>(
-            imu_topic, custom_qos, imu_callback));
+            imu_topic, custom_qos, imu_callback, options));
       } else {
         RCLCPP_ERROR_STREAM(
           parent_node_->get_logger(),
@@ -1950,11 +1955,11 @@ void UkfWrapper::loadParams()
     if(stamped_control_) {
       stamped_control_sub_ = parent_node_->create_subscription<geometry_msgs::msg::TwistStamped>(
         "cmd_vel", rclcpp::QoS(1),
-        std::bind(&UkfWrapper::controlStampedCallback, this, std::placeholders::_1));
+        std::bind(&UkfWrapper::controlStampedCallback, this, std::placeholders::_1), options);
     } else {
       control_sub_ = parent_node_->create_subscription<geometry_msgs::msg::Twist>(
         "cmd_vel", rclcpp::QoS(1),
-        std::bind(&UkfWrapper::controlCallback, this, std::placeholders::_1));
+        std::bind(&UkfWrapper::controlCallback, this, std::placeholders::_1), options);
     }
   }
 
