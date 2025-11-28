@@ -25,47 +25,48 @@
 namespace easynav
 {
 
-MPCParameters::MPCParameters(Eigen::Vector2d goal,
+MPCParameters::MPCParameters(
+  Eigen::Vector2d goal,
   Eigen::Vector3d x0,
   Eigen::Vector3d theta0,
   const pcl::PointCloud<pcl::PointXYZ> & points,
   int N,
   double dt)
-  :goal(goal), x0(x0), theta0(theta0), points(points), N_(N), dt_(dt) {}
+:goal(goal), x0(x0), theta0(theta0), points(points), N_(N), dt_(dt) {}
 
 MPCParameters::~MPCParameters() = default;
 
-int 
+int
 MPCParameters::get_steps()
 {
   return N_;
 }
 
-double 
+double
 MPCParameters::get_timestep()
 {
   return dt_;
 }
 
-double 
+double
 MPCParameters::get_angular_tracking_cost()
 {
   return qtheta_;
 }
 
-Eigen::Matrix2d 
+Eigen::Matrix2d
 MPCParameters::get_effort_cost()
 {
   return R_;
 }
 
-Eigen::Matrix2d 
+Eigen::Matrix2d
 MPCParameters::get_tracking_cost()
 {
   return Q_;
 }
 
-Eigen::Matrix2d 
+Eigen::Matrix2d
 MPCParameters::get_smooth_cost()
 {
   return Rd_;
@@ -76,7 +77,9 @@ MPCOptimizer::MPCOptimizer() {}
 MPCOptimizer::~MPCOptimizer() = default;
 
 Eigen::Vector3d
-MPCOptimizer::kinematic_model(const Eigen::Vector3d & x, const Eigen::Vector3d & q, double v, double w, double dt)
+MPCOptimizer::kinematic_model(
+  const Eigen::Vector3d & x, const Eigen::Vector3d & q, double v,
+  double w, double dt)
 {
   Eigen::Vector3d x_k1;
   x_k1[0] = x[0] + v * cos(q[2]) * dt;
@@ -86,7 +89,9 @@ MPCOptimizer::kinematic_model(const Eigen::Vector3d & x, const Eigen::Vector3d &
 }
 
 double
-MPCOptimizer::cost_function(const std::vector<double> & u, [[maybe_unused]] std::vector<double> & grad, void *data)
+MPCOptimizer::cost_function(
+  const std::vector<double> & u,
+  [[maybe_unused]] std::vector<double> & grad, void *data)
 {
   MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
 
@@ -135,13 +140,13 @@ MPCOptimizer::cost_function(const std::vector<double> & u, [[maybe_unused]] std:
 
 }
 
-double 
+double
 MPCOptimizer::nlopt_cost_callback(
   const std::vector<double> & x,
   std::vector<double> & grad,
   void *data)
 {
-  auto *cbdata = static_cast<NLoptCallbackData*>(data);
+  auto *cbdata = static_cast<NLoptCallbackData *>(data);
   return cbdata->optimizer->cost_function(x, grad, cbdata->params);
 }
 

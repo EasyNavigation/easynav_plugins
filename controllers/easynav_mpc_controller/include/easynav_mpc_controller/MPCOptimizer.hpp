@@ -20,7 +20,8 @@ namespace easynav
 class MPCParameters
 {
 public:
-  MPCParameters(Eigen::Vector2d goal,
+  MPCParameters(
+    Eigen::Vector2d goal,
     Eigen::Vector3d x0,
     Eigen::Vector3d theta0,
     const pcl::PointCloud<pcl::PointXYZ> & points,
@@ -43,7 +44,7 @@ public:
   /// \return double value of time in seconds
   double get_timestep();
 
-  /// \brief Get angular cost used in angle optimization 
+  /// \brief Get angular cost used in angle optimization
   /// \return double value of angular cost
   double get_angular_tracking_cost();
 
@@ -81,16 +82,17 @@ public:
   /// \brief Kinematic model for a particle used by optmizer to stimate final position
   /// \param x Eigen::Vector3d Initial position for robot (x,y,z)
   /// \param q Eigen::Vector3d Initial angel for robot (roll, pitch , yaw)
-  /// \param v double lineal velocity 
+  /// \param v double lineal velocity
   /// \param w double angular velocity
-  /// \param dt double differential time used for integration 
+  /// \param dt double differential time used for integration
   /// \return Eigen::Vector3d Final state for robot (x,y,yaw)
-  Eigen::Vector3d kinematic_model(const Eigen::Vector3d & x, 
-    const Eigen::Vector3d & q, double v, double w, double dt);  
+  Eigen::Vector3d kinematic_model(
+    const Eigen::Vector3d & x,
+    const Eigen::Vector3d & q, double v, double w, double dt);
 
   /// \brief Wrap for real cost function
   /// \param u std::vector<double> Velocity vector to be optimized
-  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this implementation. 
+  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this implementation.
   /// \param data MPCParameter pointer with parameters used by optimizer
   /// \return double cost value used by nlOpt in internal callback
   double cost_function(const std::vector<double> & u, [[maybe_unused]]
@@ -98,19 +100,21 @@ public:
 
   /// \brief Real cost function with static propierties
   /// \param u std::vector<double> Velocity vector to be optimized
-  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this implementation. 
+  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this implementation.
   /// \param data MPCParameter pointer with parameters used by optimizer
   /// \return double cost value used by nlOpt in internal callback
-  static double nlopt_cost_callback(const std::vector<double> & x, 
+  static double nlopt_cost_callback(
+    const std::vector<double> & x,
     std::vector<double> & grad, void *data);
 
 };
 
 /// \brief Struct used as element in callback.
-struct NLoptCallbackData {
-    MPCOptimizer *optimizer;                      ///< Pointer to optimizer.
-    MPCParameters *params;                        ///< Pointer to parameter for optimizer.
-  };
+struct NLoptCallbackData
+{
+  MPCOptimizer *optimizer;                        ///< Pointer to optimizer.
+  MPCParameters *params;                          ///< Pointer to parameter for optimizer.
+};
 
 }  // namespace easynav
 

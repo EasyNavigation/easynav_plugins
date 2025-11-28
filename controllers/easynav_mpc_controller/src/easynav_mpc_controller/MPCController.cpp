@@ -55,13 +55,15 @@ MPCController::on_initialize()
     node->create_publisher<nav_msgs::msg::Path>("/mpc/path", 10);
 
   detection_pub_ =
-    node->create_publisher<sensor_msgs::msg::PointCloud2>("/mpc/detection",10);
+    node->create_publisher<sensor_msgs::msg::PointCloud2>("/mpc/detection", 10);
 
   return {};
 }
 
 void
-MPCController::publish_mpc_path(void *data, const std::vector<double> & best_vel, nav_msgs::msg::Path path)
+MPCController::publish_mpc_path(
+  void *data, const std::vector<double> & best_vel,
+  nav_msgs::msg::Path path)
 {
   MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
   nav_msgs::msg::Path mpc_path_;
@@ -92,20 +94,20 @@ MPCController::collision_checker(void *data, std::vector<double> & u)
   double x_m = 0.0, y_m = 0.0, dist = 0.0, angle = 0.0;
   size_t real_points = 0;
   for (const auto & point : params->points) {
-    if(!std::isnan(point.x) || !std::isnan(point.y)){
+    if(!std::isnan(point.x) || !std::isnan(point.y)) {
       x_m += (point.x - params->x0[0]);
       y_m += (point.y - params->x0[1]);
       real_points++;
     }
   }
-  x_m/=real_points;
-  y_m/=real_points;
+  x_m /= real_points;
+  y_m /= real_points;
   dist = std::hypot(x_m, y_m);
   angle = std::atan2(y_m, x_m) - params->theta0[2];
-  if(real_points!=0 && dist < safety_radius_){
+  if(real_points != 0 && dist < safety_radius_) {
     std::cerr << "Detection at: " << dist << " Theta: " << angle << std::endl;
-    u[0] -= dist/real_points * dt_;
-    u[1] -= angle/real_points * dt_; 
+    u[0] -= dist / real_points * dt_;
+    u[1] -= angle / real_points * dt_;
   }
 }
 
@@ -176,7 +178,7 @@ MPCController::update_rt(NavState & nav_state)
     static_cast<int>(horizon_steps_),
     dt_);
 
-  NLoptCallbackData cbdata{ optimizer_.get(), &params };
+  NLoptCallbackData cbdata{optimizer_.get(), &params};
 
   nlopt::opt opt(nlopt::LN_COBYLA, static_cast<int>(u.size()));
   opt.set_min_objective(easynav::MPCOptimizer::nlopt_cost_callback, &cbdata);
