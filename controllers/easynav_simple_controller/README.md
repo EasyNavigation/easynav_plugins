@@ -28,6 +28,9 @@ Simple path-following controller that uses PID controllers and a look-ahead refe
 ## Parameters
 All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easynav_simple_controller/SimpleController/...`.
 
+> This plugin derives from [`easynav::ControllerMethodBase`](https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase).  \
+> See that section for shared collision-checking parameters and debug markers common to all controllers.
+
 | Name | Type | Default | Description |
 |---|---|---:|---|
 | `max_linear_speed` | `double` | `1.0` | Maximum linear speed (m/s).

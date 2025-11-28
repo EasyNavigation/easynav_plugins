@@ -28,6 +28,9 @@ A SeReST (Smooth Error-Responsive Speed and Turning) controller for path trackin
 ## Parameters
 All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easynav_serest_controller/SerestController/...`.
 
+> This plugin derives from [`easynav::ControllerMethodBase`](https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase).  \
+> See that section for shared collision-checking parameters and debug markers common to all controllers.
+
 | Name | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.a_acc` | `double` | `0.8` | Comfortable forward acceleration (m/s²). |

@@ -28,6 +28,9 @@ Vector Field Histogram (VFF) style local obstacle avoidance controller. Generate
 ## Parameters
 No ROS parameters are currently declared in code. (Add declarations in the plugin to enable runtime tuning.)
 
+> This plugin derives from [`easynav::ControllerMethodBase`](https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase).  \
+> See that section for shared collision-checking parameters and debug markers common to all controllers.
+
 ## Interfaces
 
 ### NavState Keys

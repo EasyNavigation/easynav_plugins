@@ -28,6 +28,9 @@ A Model Predictive Path Integral (MPPI) controller implementation for Easy Navig
 ## Parameters
 All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easynav_mppi_controller/MPPIController/...`.
 
+> This plugin derives from [`easynav::ControllerMethodBase`](https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase).  \
+> See that section for shared collision-checking parameters and debug markers common to all controllers.
+
 | Name | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.num_samples` | `int` | `100` | Number of trajectory rollouts per iteration. |
