@@ -27,16 +27,21 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 
 | Name | Type | Default | Description |
 |---|---|---:|---|
-| `<plugin>.horizon_steps` | `int` | `10` | Number of time steps in the prediction horizon. |
+| `<plugin>.horizon_steps` | `int` | `5` | Number of time steps in the prediction horizon. |
 | `<plugin>.dt` | `double` | `0.1` | Integration time step (seconds). |
-| `<plugin>.max_linear_velocity` | `double` | `1.0` | Maximum linear velocity (m/s). |
-| `<plugin>.max_angular_velocity` | `double` | `1.0` | Maximum angular velocity (rad/s). |
+| `<plugin>.safety_radius` | `double` | `0.35` | Safety radius to check possible collisions. |
+| `<plugin>.max_linear_velocity` | `double` | `1.5` | Maximum linear velocity (m/s). |
+| `<plugin>.max_angular_velocity` | `double` | `1.5` | Maximum angular velocity (rad/s). |
+| `<plugin>.verbose` | `bool` | `false` | Show data on terminal about Optimization. |
 
 
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
-This package does not create topic subscriptions or publications.
+| Direction | Topic | Type | Purpose | QoS |
+|---|---|---|---|---|
+| Publisher | `/mpc/path` | `nav_msgs/msg/path` | MPC trajectories generate by Predictive Component. | QoS depth=10 |
+| Publisher | `/mpc/detection` | `sensor_msgs::msg::PointCloud2` | Detections used by collision checker. | QoS depth=10 |
 
 
 ### Services
@@ -49,6 +54,7 @@ This package does not create service servers or clients.
 | `path` | `nav_msgs::msg::Path` | **Read** | Target path to track. |
 | `robot_pose` | `nav_msgs::msg::Odometry` | **Read** | Current robot pose/state. |
 | `cmd_vel` | `geometry_msgs::msg::TwistStamped` | **Read** | Last commanded velocity (if provided in state). |
+| `points` | `PointPerceptions` | **Read** | Perception point cloud(s) used for costs. |
 
 
 ## TF Frames

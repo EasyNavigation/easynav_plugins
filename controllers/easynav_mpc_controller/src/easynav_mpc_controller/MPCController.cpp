@@ -37,12 +37,14 @@ MPCController::on_initialize()
 
   node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->declare_parameter<double>(plugin_name + ".dt", dt_);
+  node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
   node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
   node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
 
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
+  node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
   node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
@@ -50,44 +52,61 @@ MPCController::on_initialize()
   optimizer_ = std::make_unique<MPCOptimizer>();
 
   mpc_path_pub_ =
-    node->create_publisher<visualization_msgs::msg::MarkerArray>("/mpc/path", 10);
+    node->create_publisher<nav_msgs::msg::Path>("/mpc/path", 10);
+
+  detection_pub_ =
+    node->create_publisher<sensor_msgs::msg::PointCloud2>("/mpc/detection",10);
 
   return {};
 }
 
 void
-MPCController::publish_mpc_path(
-  const Eigen::Vector3d & position,
-  const Eigen::Vector3d & orientation, const std::vector<double> & best_vel)
+MPCController::publish_mpc_path(void *data, const std::vector<double> & best_vel, nav_msgs::msg::Path path)
 {
-  visualization_msgs::msg::MarkerArray path;
-  visualization_msgs::msg::Marker points;
-  points.header.frame_id = "map";
-  points.header.stamp = rclcpp::Clock().now();
-  points.ns = "mpc_path";
-  points.id = 0;
-  points.type = visualization_msgs::msg::Marker::LINE_STRIP;
-  points.action = visualization_msgs::msg::Marker::ADD;
-  points.scale.x = 0.05;
-  points.color.r = 1.0;
-  points.color.g = 0.0;
-  points.color.b = 0.0;
-  points.color.a = 0.8;
+  MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
+  nav_msgs::msg::Path mpc_path_;
 
-  Eigen::Vector3d state;
-  for (size_t i = 0; i + 1 < best_vel.size(); i += 2) {
-    double v = best_vel[i];
-    double w = best_vel[i + 1];
-    geometry_msgs::msg::Point p;
-    state = optimizer_->kinematic_model(position, orientation, v, w, dt_);
-    p.x = state[0];
-    p.y = state[1];
-    p.z = position[2] + 0.5;
-    points.points.push_back(p);
+  if (best_vel.size() > 0) {
+    mpc_path_.header.stamp = get_node()->now();
+    mpc_path_.header.frame_id = path.header.frame_id;
+    for (size_t i = 0; i + 1 < best_vel.size(); i += 2) {
+      geometry_msgs::msg::PoseStamped pose_stamped;
+      double v = best_vel[i];
+      double w = best_vel[i + 1];
+      pose_stamped.header.frame_id = path.header.frame_id;
+      pose_stamped.header.stamp = path.header.stamp;
+      auto state = optimizer_->kinematic_model(params->x0, params->theta0, v, w, dt_);
+      pose_stamped.pose.position.x = state[0];
+      pose_stamped.pose.position.y = state[1];
+      mpc_path_.poses.push_back(pose_stamped);
+    }
+    mpc_path_pub_->publish(mpc_path_);
+
   }
+}
 
-  path.markers.push_back(points);
-  mpc_path_pub_->publish(path);
+void
+MPCController::collision_checker(void *data, std::vector<double> & u)
+{
+  MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
+  double x_m = 0.0, y_m = 0.0, dist = 0.0, angle = 0.0;
+  size_t real_points = 0;
+  for (const auto & point : params->points) {
+    if(!std::isnan(point.x) || !std::isnan(point.y)){
+      x_m += (point.x - params->x0[0]);
+      y_m += (point.y - params->x0[1]);
+      real_points++;
+    }
+  }
+  x_m/=real_points;
+  y_m/=real_points;
+  dist = std::hypot(x_m, y_m);
+  angle = std::atan2(y_m, x_m) - params->theta0[2];
+  if(real_points!=0 && dist < safety_radius_){
+    std::cerr << "Detection at: " << dist << " Theta: " << angle << std::endl;
+    u[0] -= dist/real_points * dt_;
+    u[1] -= angle/real_points * dt_; 
+  }
 }
 
 void
@@ -122,12 +141,18 @@ MPCController::update_rt(NavState & nav_state)
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
   const auto & filtered = PointPerceptionsOpsView(perceptions)
-    .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})
+    .filter({-2.0, -0.35, -1.0}, {0.0, 0.35, 1.0})
     .fuse("map")
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(0.1)
     .as_points();
+
+  sensor_msgs::msg::PointCloud2 cloud_out;
+  pcl::toROSMsg(filtered, cloud_out);
+  cloud_out.header.frame_id = path.header.frame_id;
+  cloud_out.header.stamp = get_node()->now();
+  detection_pub_->publish(cloud_out);
 
   const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   double roll_, pitch_, yaw_;
@@ -185,6 +210,8 @@ MPCController::update_rt(NavState & nav_state)
     std::cerr << "Optimization Error: " << e.what() << std::endl;
   }
 
+  collision_checker(&params, u);
+
   // Publish the computed velocity command
   cmd_vel_.header.frame_id = path.header.frame_id;
   cmd_vel_.header.stamp = get_node()->now();
@@ -194,7 +221,7 @@ MPCController::update_rt(NavState & nav_state)
   nav_state.set("cmd_vel", cmd_vel_);
 
   // Publish the path
-  publish_mpc_path(params.x0, params.theta0, u);
+  publish_mpc_path(&params, u, path);
 }
 
 }  // namespace easynav

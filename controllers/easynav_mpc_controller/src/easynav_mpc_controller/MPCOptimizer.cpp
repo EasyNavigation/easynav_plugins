@@ -1,3 +1,25 @@
+// Copyright 2025 Intelligent Robotics Lab
+//
+// This file is part of the project Easy Navigation (EasyNav in short)
+// licensed under the GNU General Public License v3.0.
+// See <http://www.gnu.org/licenses/> for details.
+//
+// Easy Navigation program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+/// \file
+/// \brief Implementation of MPCParameters and MPCOptimizer classes.
+
 #include "easynav_mpc_controller/MPCOptimizer.hpp"
 
 namespace easynav
@@ -13,32 +35,38 @@ MPCParameters::MPCParameters(Eigen::Vector2d goal,
 
 MPCParameters::~MPCParameters() = default;
 
-int MPCParameters::get_steps()
+int 
+MPCParameters::get_steps()
 {
   return N_;
 }
 
-double MPCParameters::get_timestep()
+double 
+MPCParameters::get_timestep()
 {
   return dt_;
 }
 
-double MPCParameters::get_angular_tracking_cost()
+double 
+MPCParameters::get_angular_tracking_cost()
 {
   return qtheta_;
 }
 
-Eigen::Matrix2d MPCParameters::get_effort_cost()
+Eigen::Matrix2d 
+MPCParameters::get_effort_cost()
 {
   return R_;
 }
 
-Eigen::Matrix2d MPCParameters::get_tracking_cost()
+Eigen::Matrix2d 
+MPCParameters::get_tracking_cost()
 {
   return Q_;
 }
 
-Eigen::Matrix2d MPCParameters::get_smooth_cost()
+Eigen::Matrix2d 
+MPCParameters::get_smooth_cost()
 {
   return Rd_;
 }
@@ -58,7 +86,7 @@ MPCOptimizer::kinematic_model(const Eigen::Vector3d & x, const Eigen::Vector3d &
 }
 
 double
-MPCOptimizer::cost_function(const std::vector<double> & u, std::vector<double> & grad, void *data)
+MPCOptimizer::cost_function(const std::vector<double> & u, [[maybe_unused]] std::vector<double> & grad, void *data)
 {
   MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
 
@@ -69,7 +97,6 @@ MPCOptimizer::cost_function(const std::vector<double> & u, std::vector<double> &
   double dt = params->get_timestep();
   double qtheta = params->get_angular_tracking_cost();
   double cost = 0.0;
-  double penalty = 0.25;
 
   Eigen::Matrix2d R = params->get_effort_cost();
   Eigen::Matrix2d Q = params->get_tracking_cost();
@@ -95,30 +122,6 @@ MPCOptimizer::cost_function(const std::vector<double> & u, std::vector<double> &
     Eigen::Vector2d uk(v, w);
     Eigen::Vector2d duk(dv, dw);
 
-    for (const auto & point : params->points) {
-    // double min_obs_dist = std::numeric_limits<double>::max();
-    // for (const auto &[x, y] : trajectory) {
-    //   double dx = point.x - x;
-    //   double dy = point.y - y;
-    //   double dist = std::hypot(dx, dy);
-    //   if (dist < min_obs_dist) {min_obs_dist = dist;}
-    // }
-    // min_obs_overall = std::min(min_obs_overall, min_obs_dist);
-
-    // // Safety margin (robot radius + margin)
-    // if (min_obs_dist < safety_radius_) {
-    //   // Heavy penalty for collision risk
-    //   cost += 5000.0 * std::pow(safety_radius_ - min_obs_dist, 2) * (1.0 + v);
-    // } else {
-    //   // Small penalty: encourage keeping clearance
-    //   cost += 1.0 / (min_obs_dist * min_obs_dist);
-      double dist = std::hypot(point.x - pos[0] , point.y -pos[1]);
-      if (dist < 1.0){
-        cost+=penalty * std::pow(1.0 - dist, 2) * std::pow(v, 2);
-        //cost+=penalty;
-      }
-    }
-
     // Tracking cost
     cost += Q(0, 0) * error[0] * error[0] + Q(1,
       1) * error[1] * error[1] + qtheta * error_theta * error_theta;
@@ -132,7 +135,8 @@ MPCOptimizer::cost_function(const std::vector<double> & u, std::vector<double> &
 
 }
 
-double MPCOptimizer::nlopt_cost_callback(
+double 
+MPCOptimizer::nlopt_cost_callback(
   const std::vector<double> & x,
   std::vector<double> & grad,
   void *data)
