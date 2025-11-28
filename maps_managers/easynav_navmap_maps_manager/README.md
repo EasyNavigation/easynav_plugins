@@ -1,17 +1,17 @@
 # easynav_navmap_maps_manager
 
-[![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#) [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
-
 ## Description
 Maps Manager that maintains a [NavMap](https://github.com/EasyNavigation/NavMap) (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds.
 
 This package also includes map filters implemented as plugins (`ObstacleFilter` and `InflationFilter`) that operate on NavMap layers to detect obstacles and inflate their costs, enabling cost-aware path planning.
 
 ## Authors and Maintainers
+
 - **Authors:** Intelligent Robotics Lab  
 - **Maintainer:** Francisco Martín Rico <fmrico@gmail.com>
 
 ## Supported ROS 2 Distributions
+
 | Distribution | Status |
 |---|---|
 | humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
@@ -20,6 +20,7 @@ This package also includes map filters implemented as plugins (`ObstacleFilter` 
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
 ## Plugin (pluginlib)
+
 - **Plugin Name:** `easynav_navmap_maps_manager/NavMapMapsManager`
 - **Type:** `easynav::navmap::NavMapMapsManager`
 - **Base Class:** `easynav::MapsManagerBase`
@@ -28,6 +29,7 @@ This package also includes map filters implemented as plugins (`ObstacleFilter` 
   Maps Manager that maintains a NavMap (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds, and applying dynamic filters to generate obstacle and inflated layers.
 
 ## Parameters
+
 All parameters are declared under the plugin namespace, i.e.  
 `/<node_fqn>/easynav_navmap_maps_manager/NavMapMapsManager/...`
 
@@ -43,6 +45,7 @@ All parameters are declared under the plugin namespace, i.e.
 ### Filter Plugins
 
 #### **ObstacleFilter**
+
 - **Plugin Name:** `easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter`
 - **Type:** `easynav::navmap::ObstacleFilter`
 - **Description:**  
@@ -59,6 +62,7 @@ All parameters are declared under the plugin namespace, i.e.
 | **Output Layer:** | | | Updates or creates NavMap layer `"obstacles"`. |
 
 #### **InflationFilter**
+
 - **Plugin Name:** `easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter`
 - **Type:** `easynav::navmap::InflationFilter`
 - **Description:**  
@@ -76,6 +80,7 @@ All parameters are declared under the plugin namespace, i.e.
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
+
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
 | Publisher | `<node_fqn>/<plugin>/map` | `navmap_ros_interfaces/msg/NavMap` | Publishes the full NavMap. | depth=1 |
@@ -84,22 +89,26 @@ All parameters are declared under the plugin namespace, i.e.
 | Subscription | `<node_fqn>/<plugin>/incoming_pc2_map` | `sensor_msgs/msg/PointCloud2` | Input point cloud to build/update NavMap. | depth=100 |
 
 ### Services
+
 | Direction | Service | Type | Purpose |
 |---|---|---|---|
 | Service Server | `<node_fqn>/<plugin>/savemap` | `std_srvs/srv/Trigger` | Saves the current NavMap and layers to disk. |
 
 ## NavState Keys
+
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `map.navmap` | `::navmap::NavMap` | **Read** | Reads the NavMap if already present in NavState. |
 | `map.navmap` | `::navmap::NavMap` | **Write** | Stores the maintained NavMap, including generated layers `"obstacles"` and `"inflated_obstacles"`. |
 
 ## TF Frames
+
 | Role | Transform | Notes |
 |---|---|---|
 | Publishes | — | No TF broadcasting in this manager; outputs are stamped in their configured frame. |
 
 ## Example Configuration
+
 ```yaml
 maps_manager_node:
   ros__parameters:
@@ -121,4 +130,5 @@ maps_manager_node:
 ```
 
 ## License
+
 GPL-3.0-only
