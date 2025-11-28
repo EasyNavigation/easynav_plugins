@@ -9,6 +9,7 @@
 📋 Roadmap Project: [RoadMap](https://github.com/EasyNavigation/EasyNavigation/blob/rolling/ROADMAP.md)
 
 ## Description
+
 **EasyNav Plugins** provides the official collection of plugins for the [Easy Navigation (EasyNav)](https://github.com/EasyNavigation) framework.  
 These plugins extend the navigation core with planners, controllers, map managers, and localizers compatible with ROS 2.
 
@@ -19,6 +20,7 @@ Each plugin resides in its own ROS 2 package and is registered via `pluginlib`, 
 ## Repository Structure
 
 ### 🧭 Planners
+
 Path planning plugins implementing A*, costmap, or NavMap–based methods.
 
 | Package | Description | Link |
@@ -30,6 +32,7 @@ Path planning plugins implementing A*, costmap, or NavMap–based methods.
 ---
 
 ### ⚙️ Controllers
+
 Motion controllers for trajectory tracking and reactive behaviors.
 
 | Package | Description | Link |
@@ -42,6 +45,7 @@ Motion controllers for trajectory tracking and reactive behaviors.
 ---
 
 ### 🗺️ Maps Managers
+
 Map management plugins that provide, update, and store different environment representations.
 
 | Package | Description | Link |
@@ -55,6 +59,7 @@ Map management plugins that provide, update, and store different environment rep
 ---
 
 ### 📍 Localizers
+
 Localization plugins based on different map types and sensors.
 
 | Package | Description | Link |
@@ -67,5 +72,5 @@ Localization plugins based on different map types and sensors.
 ---
 
 ## License
-All packages in this repository are released under **GPL-3.0-only** unless stated otherwise in the individual package.
 
+All packages in this repository are released under **GPL-3.0-only** unless stated otherwise in the individual package.
