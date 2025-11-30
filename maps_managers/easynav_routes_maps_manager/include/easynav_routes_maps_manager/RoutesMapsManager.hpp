@@ -25,6 +25,8 @@
 
 #include "geometry_msgs/msg/pose.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
+#include "visualization_msgs/msg/interactive_marker.hpp"
+#include "visualization_msgs/msg/interactive_marker_feedback.hpp"
 
 #include "std_srvs/srv/trigger.hpp"
 
@@ -35,6 +37,9 @@ namespace easynav
 
 struct RouteSegment
 {
+  /// @brief Unique identifier for this segment.
+  std::string id;
+
   geometry_msgs::msg::Pose start;
   geometry_msgs::msg::Pose end;
 };
@@ -91,6 +96,13 @@ private:
 
   /// @brief Publish the current routes as visualization markers.
   void publish_routes_markers();
+
+  /// @brief Publish or update interactive markers for editing endpoints.
+  void publish_interactive_markers();
+
+  /// @brief Handle feedback from interactive markers and update routes_.
+  void handle_interactive_feedback(
+    const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr & feedback);
   /**
    * @brief Full path to the map file.
    */
@@ -101,8 +113,15 @@ private:
   /// @brief Publisher for visualizing routes as markers.
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr routes_pub_;
 
-  /// @brief Service for reloading the routes YAML file.
-  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr reload_routes_srv_;
+  /// @brief Publisher for interactive markers.
+  rclcpp::Publisher<visualization_msgs::msg::InteractiveMarker>::SharedPtr imarker_pub_;
+
+  /// @brief Subscription for interactive marker feedback.
+  rclcpp::Subscription<visualization_msgs::msg::InteractiveMarkerFeedback>::SharedPtr
+    imarker_feedback_sub_;
+
+  /// @brief Service for saving current routes back to disk.
+  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr save_routes_srv_;
 };
 
 }  // namespace easynav

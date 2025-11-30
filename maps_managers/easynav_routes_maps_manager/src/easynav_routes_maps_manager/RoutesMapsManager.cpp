@@ -1,6 +1,7 @@
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
 
 #include <expected>
+#include <fstream>
 
 #include <yaml-cpp/yaml.h>
 
@@ -62,15 +63,86 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes",
     rclcpp::SystemDefaultsQoS());
 
-  reload_routes_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/reload_routes",
+  imarker_pub_ = node->create_publisher<visualization_msgs::msg::InteractiveMarker>(
+    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes_imarkers",
+    rclcpp::SystemDefaultsQoS());
+
+  imarker_feedback_sub_ = node->create_subscription<
+    visualization_msgs::msg::InteractiveMarkerFeedback>(
+    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes_imarkers/feedback",
+    rclcpp::SystemDefaultsQoS(),
+    [this](const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr feedback) {
+      handle_interactive_feedback(feedback);
+    });
+
+  save_routes_srv_ = node->create_service<std_srvs::srv::Trigger>(
+    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/save_routes",
     [this](const std_srvs::srv::Trigger::Request::SharedPtr,
     std_srvs::srv::Trigger::Response::SharedPtr response) {
       try {
-        load_routes_from_yaml();
-        publish_routes_markers();
+        // Persist current routes_ back to YAML file using the
+        // structure:
+        // routes: [route1, route2]
+        // route1: { start: ..., end: ... }
+        YAML::Emitter out;
+        out << YAML::BeginMap;
+
+        // Collect route names from ids (or generate generic ones).
+        std::vector<std::string> names;
+        names.reserve(routes_.size());
+        for (std::size_t i = 0; i < routes_.size(); ++i) {
+          const auto & seg = routes_[i];
+          if (!seg.id.empty()) {
+            names.push_back(seg.id);
+          } else {
+            names.push_back("route" + std::to_string(i));
+          }
+        }
+
+        out << YAML::Key << "routes" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+        for (const auto & n : names) {
+          out << n;
+        }
+        out << YAML::EndSeq;
+
+        // Now define each route as a separate key in the map.
+        for (std::size_t i = 0; i < routes_.size(); ++i) {
+          const auto & seg = routes_[i];
+          const auto & name = names[i];
+
+          out << YAML::Key << name << YAML::Value << YAML::BeginMap;
+
+          out << YAML::Key << "start" << YAML::Value << YAML::BeginMap;
+          out << YAML::Key << "x" << YAML::Value << seg.start.position.x;
+          out << YAML::Key << "y" << YAML::Value << seg.start.position.y;
+          out << YAML::Key << "z" << YAML::Value << seg.start.position.z;
+          out << YAML::Key << "qx" << YAML::Value << seg.start.orientation.x;
+          out << YAML::Key << "qy" << YAML::Value << seg.start.orientation.y;
+          out << YAML::Key << "qz" << YAML::Value << seg.start.orientation.z;
+          out << YAML::Key << "qw" << YAML::Value << seg.start.orientation.w;
+          out << YAML::EndMap;
+
+          out << YAML::Key << "end" << YAML::Value << YAML::BeginMap;
+          out << YAML::Key << "x" << YAML::Value << seg.end.position.x;
+          out << YAML::Key << "y" << YAML::Value << seg.end.position.y;
+          out << YAML::Key << "z" << YAML::Value << seg.end.position.z;
+          out << YAML::Key << "qx" << YAML::Value << seg.end.orientation.x;
+          out << YAML::Key << "qy" << YAML::Value << seg.end.orientation.y;
+          out << YAML::Key << "qz" << YAML::Value << seg.end.orientation.z;
+          out << YAML::Key << "qw" << YAML::Value << seg.end.orientation.w;
+          out << YAML::EndMap;
+
+          out << YAML::EndMap;
+        }
+
+        out << YAML::EndMap;
+
+        std::ofstream file(map_path_);
+        file << out.c_str();
+        file.close();
+
         response->success = true;
-        response->message = "Routes reloaded";
+        response->message = "Routes saved";
       } catch (const std::exception & e) {
         response->success = false;
         response->message = e.what();
@@ -80,6 +152,7 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
   try {
     load_routes_from_yaml();
     publish_routes_markers();
+    publish_interactive_markers();
   } catch (const std::exception & e) {
     return std::unexpected(std::string{"Failed to load routes: "} + e.what());
   }
@@ -107,12 +180,22 @@ void RoutesMapsManager::load_routes_from_yaml()
     throw std::runtime_error{"YAML file must contain a 'routes' sequence"};
   }
 
-  for (const auto & route_node : root["routes"]) {
+  // routes: [route1, route2, ...]
+  const auto & names_node = root["routes"];
+  for (std::size_t i = 0; i < names_node.size(); ++i) {
+    const auto name = names_node[i].as<std::string>();
+
+    if (!root[name]) {
+      continue;
+    }
+
+    const auto & route_node = root[name];
     if (!route_node["start"] || !route_node["end"]) {
       continue;
     }
 
     RouteSegment segment;
+    segment.id = name;
 
     const auto & start = route_node["start"];
     const auto & end = route_node["end"];
@@ -176,6 +259,56 @@ void RoutesMapsManager::publish_routes_markers()
   }
 
   routes_pub_->publish(array);
+}
+
+void RoutesMapsManager::publish_interactive_markers()
+{
+  if (!imarker_pub_) {
+    return;
+  }
+
+  int id = 0;
+  for (const auto & seg : routes_) {
+    // Start marker
+    visualization_msgs::msg::InteractiveMarker start_marker;
+    start_marker.header.frame_id = "map";
+    start_marker.name = seg.id + "_start";
+    start_marker.description = "Route " + seg.id + " start";
+    start_marker.pose = seg.start;
+
+    visualization_msgs::msg::InteractiveMarker end_marker;
+    end_marker.header.frame_id = "map";
+    end_marker.name = seg.id + "_end";
+    end_marker.description = "Route " + seg.id + " end";
+    end_marker.pose = seg.end;
+
+    imarker_pub_->publish(start_marker);
+    imarker_pub_->publish(end_marker);
+
+    (void)id;
+  }
+}
+
+void RoutesMapsManager::handle_interactive_feedback(
+  const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr & feedback)
+{
+  if (!feedback) {
+    return;
+  }
+
+  const auto & name = feedback->marker_name;
+
+  for (auto & seg : routes_) {
+    if (name == seg.id + "_start") {
+      seg.start = feedback->pose;
+      publish_routes_markers();
+      return;
+    } else if (name == seg.id + "_end") {
+      seg.end = feedback->pose;
+      publish_routes_markers();
+      return;
+    }
+  }
 }
 
 }  // namespace easynav

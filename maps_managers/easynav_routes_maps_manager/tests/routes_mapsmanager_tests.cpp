@@ -37,39 +37,13 @@ TEST_F(RoutesMapsManagerTestNode, LoadRoutesFromYamlAndPublish)
   close(fd);
 
   std::ofstream out(filename);
-  out << "routes:\n";
-  out << "  - start:\n";
-  out << "      x: 0.0\n";
-  out << "      y: 0.0\n";
-  out << "      z: 0.0\n";
-  out << "      qx: 0.0\n";
-  out << "      qy: 0.0\n";
-  out << "      qz: 0.0\n";
-  out << "      qw: 1.0\n";
-  out << "    end:\n";
-  out << "      x: 1.0\n";
-  out << "      y: 0.0\n";
-  out << "      z: 0.0\n";
-  out << "      qx: 0.0\n";
-  out << "      qy: 0.0\n";
-  out << "      qz: 0.0\n";
-  out << "      qw: 1.0\n";
-  out << "  - start:\n";
-  out << "      x: 1.0\n";
-  out << "      y: 1.0\n";
-  out << "      z: 0.0\n";
-  out << "      qx: 0.0\n";
-  out << "      qy: 0.0\n";
-  out << "      qz: 0.0\n";
-  out << "      qw: 1.0\n";
-  out << "    end:\n";
-  out << "      x: 2.0\n";
-  out << "      y: 1.0\n";
-  out << "      z: 0.0\n";
-  out << "      qx: 0.0\n";
-  out << "      qy: 0.0\n";
-  out << "      qz: 0.0\n";
-  out << "      qw: 1.0\n";
+  out << "routes: [route1, route2]\n";
+  out << "route1:\n";
+  out << "  start: {x: 0.0, y: 0.0, z: 0.0, qx: 0.0, qy: 0.0, qz: 0.0, qw: 1.0}\n";
+  out << "  end:   {x: 1.0, y: 0.0, z: 0.0, qx: 0.0, qy: 0.0, qz: 0.0, qw: 1.0}\n";
+  out << "route2:\n";
+  out << "  start: {x: 1.0, y: 1.0, z: 0.0, qx: 0.0, qy: 0.0, qz: 0.0, qw: 1.0}\n";
+  out << "  end:   {x: 2.0, y: 1.0, z: 0.0, qx: 0.0, qy: 0.0, qz: 0.0, qw: 1.0}\n";
   out.close();
 
   // Declare parameters before setting them to avoid exceptions.
