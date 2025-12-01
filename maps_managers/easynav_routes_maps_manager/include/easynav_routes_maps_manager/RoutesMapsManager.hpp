@@ -44,6 +44,9 @@ struct RouteSegment
 
   geometry_msgs::msg::Pose start;
   geometry_msgs::msg::Pose end;
+
+  /// @brief Whether this segment is currently in edit mode.
+  bool edit_mode{false};
 };
 
 using RoutesMap = std::vector<RouteSegment>;
@@ -111,6 +114,9 @@ private:
   std::string map_path_;
   /// @brief In-memory collection of route segments.
   RoutesMap routes_;
+
+  /// @brief Monotonic counter for generating unique route IDs.
+  int next_route_id_{0};
 
   /// @brief Publisher for visualizing routes as markers.
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr routes_pub_;

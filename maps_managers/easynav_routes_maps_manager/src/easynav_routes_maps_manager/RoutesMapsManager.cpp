@@ -211,6 +211,22 @@ void RoutesMapsManager::load_routes_from_yaml()
 
     routes_.push_back(segment);
   }
+
+  // Initialize next_route_id_ so that newly created routes get
+  // unique IDs that don't clash with existing ones.
+  next_route_id_ = 0;
+  for (const auto & seg : routes_) {
+    if (seg.id.rfind("route", 0) == 0 && seg.id.size() > 5) {
+      try {
+        const int n = std::stoi(seg.id.substr(5));
+        if (n >= next_route_id_) {
+          next_route_id_ = n + 1;
+        }
+      } catch (...) {
+        // Non-numeric suffixes are ignored.
+      }
+    }
+  }
 }
 
 void RoutesMapsManager::publish_routes_markers()
@@ -271,9 +287,9 @@ void RoutesMapsManager::publish_routes_markers()
     start_arrow.type = visualization_msgs::msg::Marker::ARROW;
     start_arrow.action = visualization_msgs::msg::Marker::ADD;
     start_arrow.pose = seg.start;
-    start_arrow.scale.x = 1.0;   // shaft length
-    start_arrow.scale.y = 0.1;   // shaft diameter
-    start_arrow.scale.z = 0.2;   // head diameter
+    start_arrow.scale.x = 0.25;   // shaft length
+    start_arrow.scale.y = 0.05;   // shaft diameter
+    start_arrow.scale.z = 0.1;   // head diameter
     start_arrow.color.r = 1.0f;
     start_arrow.color.g = 1.0f;
     start_arrow.color.b = 0.0f;
@@ -288,9 +304,9 @@ void RoutesMapsManager::publish_routes_markers()
     end_arrow.type = visualization_msgs::msg::Marker::ARROW;
     end_arrow.action = visualization_msgs::msg::Marker::ADD;
     end_arrow.pose = seg.end;
-    end_arrow.scale.x = 1.0;
-    end_arrow.scale.y = 0.1;
-    end_arrow.scale.z = 0.2;
+    end_arrow.scale.x = 0.25;
+    end_arrow.scale.y = 0.05;
+    end_arrow.scale.z = 0.1;
     end_arrow.color.r = 1.0f;
     end_arrow.color.g = 1.0f;
     end_arrow.color.b = 0.0f;
@@ -309,6 +325,69 @@ void RoutesMapsManager::publish_interactive_markers()
   imarker_server_->clear();
 
   for (const auto & seg : routes_) {
+    // Per-segment toggle cube (red in normal mode, green in edit mode).
+    visualization_msgs::msg::InteractiveMarker mode_marker;
+    mode_marker.header.frame_id = "map";
+    mode_marker.name = seg.id + "_mode";
+    mode_marker.scale = 1.0;
+
+    // Mid-point between start and end (no vertical offset)
+    mode_marker.pose.position.x = 0.5 * (seg.start.position.x + seg.end.position.x);
+    mode_marker.pose.position.y = 0.5 * (seg.start.position.y + seg.end.position.y);
+    mode_marker.pose.position.z = 0.5 * (seg.start.position.z + seg.end.position.z);
+
+    visualization_msgs::msg::InteractiveMarkerControl mode_ctrl;
+    mode_ctrl.name = "toggle_edit";
+    mode_ctrl.interaction_mode =
+      visualization_msgs::msg::InteractiveMarkerControl::BUTTON;
+    mode_ctrl.always_visible = true;
+
+    visualization_msgs::msg::Marker cube;
+    cube.type = visualization_msgs::msg::Marker::CUBE;
+    cube.scale.x = 0.15;  // even smaller cube
+    cube.scale.y = 0.15;
+    cube.scale.z = 0.15;
+    if (!seg.edit_mode) {
+      // Red in normal mode
+      cube.color.r = 1.0f;
+      cube.color.g = 0.0f;
+      cube.color.b = 0.0f;
+    } else {
+      // Green in edit mode
+      cube.color.r = 0.0f;
+      cube.color.g = 1.0f;
+      cube.color.b = 0.0f;
+    }
+    cube.color.a = 0.9f;
+
+    // Text label for the toggle control
+    visualization_msgs::msg::Marker toggle_text;
+    toggle_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
+    toggle_text.text = "toggle edit";
+    toggle_text.scale.z = 0.1;  // font height
+    toggle_text.color.r = 1.0f;
+    toggle_text.color.g = 1.0f;
+    toggle_text.color.b = 1.0f;
+    toggle_text.color.a = 1.0f;
+    toggle_text.pose.position.z = 0.3;  // slightly above the cube
+
+    mode_ctrl.markers.push_back(cube);
+    mode_ctrl.markers.push_back(toggle_text);
+
+    mode_marker.controls.push_back(mode_ctrl);
+
+    imarker_server_->insert(
+      mode_marker,
+      std::bind(
+        &RoutesMapsManager::handle_interactive_feedback,
+        this,
+        std::placeholders::_1));
+
+    if (!seg.edit_mode) {
+      // In normal mode we only show the cube and skip endpoint controls.
+      continue;
+    }
+
     visualization_msgs::msg::InteractiveMarker start_marker;
     start_marker.header.frame_id = "map";
     start_marker.name = seg.id + "_start";
@@ -367,14 +446,28 @@ void RoutesMapsManager::publish_interactive_markers()
 
       visualization_msgs::msg::Marker add_marker;
       add_marker.type = visualization_msgs::msg::Marker::SPHERE;
-      add_marker.scale.x = 0.4;
-      add_marker.scale.y = 0.4;
-      add_marker.scale.z = 0.4;
+      // Visual sphere for the add control
+      add_marker.scale.x = 0.2;
+      add_marker.scale.y = 0.2;
+      add_marker.scale.z = 0.2;
       add_marker.color.r = 1.0f;
       add_marker.color.g = 0.5f;
       add_marker.color.b = 0.0f;
       add_marker.color.a = 0.9f;
+
+      // Text label for the add control
+      visualization_msgs::msg::Marker add_text;
+      add_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
+      add_text.text = "add";
+      add_text.scale.z = 0.1;  // font height (half)
+      add_text.color.r = 1.0f;
+      add_text.color.g = 1.0f;
+      add_text.color.b = 1.0f;
+      add_text.color.a = 1.0f;
+      add_text.pose.position.z = 0.4;  // slightly above the sphere
+
       add_ctrl.markers.push_back(add_marker);
+      add_ctrl.markers.push_back(add_text);
 
       marker.controls.push_back(add_ctrl);
 
@@ -390,14 +483,27 @@ void RoutesMapsManager::publish_interactive_markers()
       // Place the red sphere 1 m above the endpoint so that it
       // does not overlap with the orange "add" sphere.
       remove_marker.pose.position.z = 1.0;
-      remove_marker.scale.x = 0.3;
-      remove_marker.scale.y = 0.3;
-      remove_marker.scale.z = 0.3;
+      remove_marker.scale.x = 0.15;
+      remove_marker.scale.y = 0.15;
+      remove_marker.scale.z = 0.15;
       remove_marker.color.r = 1.0f;
       remove_marker.color.g = 0.0f;
       remove_marker.color.b = 0.0f;
       remove_marker.color.a = 0.9f;
+
+      // Text label for the remove control
+      visualization_msgs::msg::Marker remove_text;
+      remove_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
+      remove_text.text = "remove";
+      remove_text.scale.z = 0.1;  // font height (half)
+      remove_text.color.r = 1.0f;
+      remove_text.color.g = 1.0f;
+      remove_text.color.b = 1.0f;
+      remove_text.color.a = 1.0f;
+      remove_text.pose.position.z = 1.3;  // slightly above the red sphere
+
       remove_ctrl.markers.push_back(remove_marker);
+      remove_ctrl.markers.push_back(remove_text);
 
       marker.controls.push_back(remove_ctrl);
     };
@@ -431,6 +537,28 @@ void RoutesMapsManager::handle_interactive_feedback(
 
   const auto & name = feedback->marker_name;
 
+  // Toggle per-segment edit mode when clicking the central cube.
+  if (feedback->control_name == "toggle_edit" &&
+      (feedback->event_type ==
+        visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
+       feedback->event_type ==
+        visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
+  {
+    // name is <id>_mode
+    const auto underscore_pos = name.rfind("_");
+    if (underscore_pos != std::string::npos) {
+      const auto base_id = name.substr(0, underscore_pos);
+      for (auto & seg : routes_) {
+        if (seg.id == base_id) {
+          seg.edit_mode = !seg.edit_mode;
+          break;
+        }
+      }
+      publish_interactive_markers();
+    }
+    return;
+  }
+
   // Creation of a new segment from this endpoint
   if (feedback->control_name == "add_segment" &&
       (feedback->event_type ==
@@ -455,8 +583,8 @@ void RoutesMapsManager::handle_interactive_feedback(
     const double length = 2.0;  // meters
 
     RouteSegment new_seg;
-    // New segment id based on size
-    new_seg.id = "route" + std::to_string(routes_.size());
+    // New unique segment id based on a monotonic counter
+    new_seg.id = "route" + std::to_string(next_route_id_++);
 
     new_seg.start = feedback->pose;
     new_seg.end = feedback->pose;
@@ -498,10 +626,12 @@ void RoutesMapsManager::handle_interactive_feedback(
     if (name == seg.id + "_start") {
       seg.start = feedback->pose;
       publish_routes_markers();
+      publish_interactive_markers();
       return;
     } else if (name == seg.id + "_end") {
       seg.end = feedback->pose;
       publish_routes_markers();
+      publish_interactive_markers();
       return;
     }
   }
