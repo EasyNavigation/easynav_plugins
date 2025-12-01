@@ -20,6 +20,7 @@ find_package(yaets REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(interactive_markers REQUIRED)
 
 
 add_library(${PROJECT_NAME} SHARED
@@ -37,6 +38,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   ament_index_cpp::ament_index_cpp
   yaets::yaets
   yaml-cpp
+  interactive_markers::interactive_markers
   ${geometry_msgs_TARGETS}
   ${visualization_msgs_TARGETS}
   ${nav_msgs_TARGETS}
@@ -82,6 +84,7 @@ ament_export_dependencies(
   std_srvs
   geometry_msgs
   visualization_msgs
+  interactive_markers
   yaets
   yaml-cpp
 )

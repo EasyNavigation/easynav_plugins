@@ -28,6 +28,8 @@
 #include "visualization_msgs/msg/interactive_marker.hpp"
 #include "visualization_msgs/msg/interactive_marker_feedback.hpp"
 
+#include "interactive_markers/interactive_marker_server.hpp"
+
 #include "std_srvs/srv/trigger.hpp"
 
 #include "easynav_core/MapsManagerBase.hpp"
@@ -113,12 +115,8 @@ private:
   /// @brief Publisher for visualizing routes as markers.
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr routes_pub_;
 
-  /// @brief Publisher for interactive markers.
-  rclcpp::Publisher<visualization_msgs::msg::InteractiveMarker>::SharedPtr imarker_pub_;
-
-  /// @brief Subscription for interactive marker feedback.
-  rclcpp::Subscription<visualization_msgs::msg::InteractiveMarkerFeedback>::SharedPtr
-    imarker_feedback_sub_;
+  /// @brief Interactive marker server for editing endpoints.
+  std::shared_ptr<interactive_markers::InteractiveMarkerServer> imarker_server_;
 
   /// @brief Service for saving current routes back to disk.
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr save_routes_srv_;

@@ -61,19 +61,10 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
 
   routes_pub_ = node->create_publisher<visualization_msgs::msg::MarkerArray>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes",
-    rclcpp::SystemDefaultsQoS());
+    rclcpp::QoS(10).transient_local().reliable());
 
-  imarker_pub_ = node->create_publisher<visualization_msgs::msg::InteractiveMarker>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes_imarkers",
-    rclcpp::SystemDefaultsQoS());
-
-  imarker_feedback_sub_ = node->create_subscription<
-    visualization_msgs::msg::InteractiveMarkerFeedback>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes_imarkers/feedback",
-    rclcpp::SystemDefaultsQoS(),
-    [this](const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr feedback) {
-      handle_interactive_feedback(feedback);
-    });
+  imarker_server_ = std::make_shared<interactive_markers::InteractiveMarkerServer>(
+    plugin_name + std::string("_imarkers"), node, false);
 
   save_routes_srv_ = node->create_service<std_srvs::srv::Trigger>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/save_routes",
@@ -230,11 +221,26 @@ void RoutesMapsManager::publish_routes_markers()
 
   visualization_msgs::msg::MarkerArray array;
 
+   // First, delete all previous markers in our namespaces so that
+   // removed segments do not leave orphaned markers behind.
+  {
+    visualization_msgs::msg::Marker m;
+    m.header.frame_id = "map";
+    m.action = visualization_msgs::msg::Marker::DELETEALL;
+
+    m.ns = "routes_line";
+    array.markers.push_back(m);
+
+    m.ns = "routes_arrow";
+    array.markers.push_back(m);
+  }
+
   int id = 0;
   for (const auto & seg : routes_) {
+    // Line between start and end
     visualization_msgs::msg::Marker line;
     line.header.frame_id = "map";
-    line.ns = "routes";
+    line.ns = "routes_line";
     line.id = id++;
     line.type = visualization_msgs::msg::Marker::LINE_LIST;
     line.action = visualization_msgs::msg::Marker::ADD;
@@ -256,6 +262,40 @@ void RoutesMapsManager::publish_routes_markers()
     line.points[1].z = seg.end.position.z;
 
     array.markers.push_back(line);
+
+    // Arrow for start orientation (same style as end)
+    visualization_msgs::msg::Marker start_arrow;
+    start_arrow.header.frame_id = "map";
+    start_arrow.ns = "routes_arrow";
+    start_arrow.id = id++;
+    start_arrow.type = visualization_msgs::msg::Marker::ARROW;
+    start_arrow.action = visualization_msgs::msg::Marker::ADD;
+    start_arrow.pose = seg.start;
+    start_arrow.scale.x = 1.0;   // shaft length
+    start_arrow.scale.y = 0.1;   // shaft diameter
+    start_arrow.scale.z = 0.2;   // head diameter
+    start_arrow.color.r = 1.0f;
+    start_arrow.color.g = 1.0f;
+    start_arrow.color.b = 0.0f;
+    start_arrow.color.a = 0.9f;
+    array.markers.push_back(start_arrow);
+
+    // Arrow for end orientation (same style)
+    visualization_msgs::msg::Marker end_arrow;
+    end_arrow.header.frame_id = "map";
+    end_arrow.ns = "routes_arrow";
+    end_arrow.id = id++;
+    end_arrow.type = visualization_msgs::msg::Marker::ARROW;
+    end_arrow.action = visualization_msgs::msg::Marker::ADD;
+    end_arrow.pose = seg.end;
+    end_arrow.scale.x = 1.0;
+    end_arrow.scale.y = 0.1;
+    end_arrow.scale.z = 0.2;
+    end_arrow.color.r = 1.0f;
+    end_arrow.color.g = 1.0f;
+    end_arrow.color.b = 0.0f;
+    end_arrow.color.a = 0.9f;
+    array.markers.push_back(end_arrow);
   }
 
   routes_pub_->publish(array);
@@ -263,30 +303,123 @@ void RoutesMapsManager::publish_routes_markers()
 
 void RoutesMapsManager::publish_interactive_markers()
 {
-  if (!imarker_pub_) {
+  if (!imarker_server_) {
     return;
   }
+  imarker_server_->clear();
 
-  int id = 0;
   for (const auto & seg : routes_) {
-    // Start marker
     visualization_msgs::msg::InteractiveMarker start_marker;
     start_marker.header.frame_id = "map";
     start_marker.name = seg.id + "_start";
     start_marker.description = "Route " + seg.id + " start";
     start_marker.pose = seg.start;
+    start_marker.scale = 1.0;
 
     visualization_msgs::msg::InteractiveMarker end_marker;
     end_marker.header.frame_id = "map";
     end_marker.name = seg.id + "_end";
     end_marker.description = "Route " + seg.id + " end";
     end_marker.pose = seg.end;
+    end_marker.scale = 1.0;
 
-    imarker_pub_->publish(start_marker);
-    imarker_pub_->publish(end_marker);
+    auto add_controls = [](visualization_msgs::msg::InteractiveMarker & marker) {
+      visualization_msgs::msg::InteractiveMarkerControl control;
 
-    (void)id;
+      // Move along X
+      control.orientation.w = 1.0;
+      control.orientation.x = 1.0;
+      control.orientation.y = 0.0;
+      control.orientation.z = 0.0;
+      control.name = "move_x";
+      control.interaction_mode =
+        visualization_msgs::msg::InteractiveMarkerControl::MOVE_AXIS;
+      marker.controls.push_back(control);
+
+      // Move along Y
+      control.orientation.x = 0.0;
+      control.orientation.y = 1.0;
+      control.name = "move_y";
+      marker.controls.push_back(control);
+
+      // Move along Z
+      control.orientation.y = 0.0;
+      control.orientation.z = 1.0;
+      control.name = "move_z";
+      marker.controls.push_back(control);
+
+      // Rotate around Z (yaw), orientation as in interactive_markers examples
+      control.interaction_mode =
+        visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS;
+      control.orientation.w = 1.0;
+      control.orientation.x = 0.0;
+      control.orientation.y = 1.0;
+      control.orientation.z = 0.0;
+      control.name = "rotate_z";
+      marker.controls.push_back(control);
+
+      // Button control to add a new segment starting from this endpoint
+      visualization_msgs::msg::InteractiveMarkerControl add_ctrl;
+      add_ctrl.name = "add_segment";
+      add_ctrl.interaction_mode =
+        visualization_msgs::msg::InteractiveMarkerControl::BUTTON;
+      add_ctrl.always_visible = true;
+
+      visualization_msgs::msg::Marker add_marker;
+      add_marker.type = visualization_msgs::msg::Marker::SPHERE;
+      add_marker.scale.x = 0.4;
+      add_marker.scale.y = 0.4;
+      add_marker.scale.z = 0.4;
+      add_marker.color.r = 1.0f;
+      add_marker.color.g = 0.5f;
+      add_marker.color.b = 0.0f;
+      add_marker.color.a = 0.9f;
+      add_ctrl.markers.push_back(add_marker);
+
+      marker.controls.push_back(add_ctrl);
+
+      // Button control to remove the segment this endpoint belongs to
+      visualization_msgs::msg::InteractiveMarkerControl remove_ctrl;
+      remove_ctrl.name = "remove_segment";
+      remove_ctrl.interaction_mode =
+        visualization_msgs::msg::InteractiveMarkerControl::BUTTON;
+      remove_ctrl.always_visible = true;
+
+      visualization_msgs::msg::Marker remove_marker;
+      remove_marker.type = visualization_msgs::msg::Marker::SPHERE;
+      // Place the red sphere 1 m above the endpoint so that it
+      // does not overlap with the orange "add" sphere.
+      remove_marker.pose.position.z = 1.0;
+      remove_marker.scale.x = 0.3;
+      remove_marker.scale.y = 0.3;
+      remove_marker.scale.z = 0.3;
+      remove_marker.color.r = 1.0f;
+      remove_marker.color.g = 0.0f;
+      remove_marker.color.b = 0.0f;
+      remove_marker.color.a = 0.9f;
+      remove_ctrl.markers.push_back(remove_marker);
+
+      marker.controls.push_back(remove_ctrl);
+    };
+
+    add_controls(start_marker);
+    add_controls(end_marker);
+
+    imarker_server_->insert(
+      start_marker,
+      std::bind(
+        &RoutesMapsManager::handle_interactive_feedback,
+        this,
+        std::placeholders::_1));
+    imarker_server_->insert(
+      end_marker,
+      std::bind(
+        &RoutesMapsManager::handle_interactive_feedback,
+        this,
+        std::placeholders::_1));
   }
+
+  imarker_server_->applyChanges();
 }
 
 void RoutesMapsManager::handle_interactive_feedback(
@@ -297,6 +430,69 @@ void RoutesMapsManager::handle_interactive_feedback(
   }
 
   const auto & name = feedback->marker_name;
+
+  // Creation of a new segment from this endpoint
+  if (feedback->control_name == "add_segment" &&
+      (feedback->event_type ==
+        visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
+       feedback->event_type ==
+        visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
+  {
+    // Compute forward direction from marker orientation (assume x-forward).
+    const auto & p = feedback->pose.position;
+    const auto & q = feedback->pose.orientation;
+
+    const double qx = q.x;
+    const double qy = q.y;
+    const double qz = q.z;
+    const double qw = q.w;
+
+    // Forward vector in world coordinates: q * (1,0,0) * q^{-1}
+    const double fx = 2.0 * (qx * qx + qw * qw) - 1.0;
+    const double fy = 2.0 * (qx * qy + qw * qz);
+    const double fz = 2.0 * (qx * qz - qw * qy);
+
+    const double length = 2.0;  // meters
+
+    RouteSegment new_seg;
+    // New segment id based on size
+    new_seg.id = "route" + std::to_string(routes_.size());
+
+    new_seg.start = feedback->pose;
+    new_seg.end = feedback->pose;
+    new_seg.end.position.x = p.x + fx * length;
+    new_seg.end.position.y = p.y + fy * length;
+    new_seg.end.position.z = p.z + fz * length;
+
+    routes_.push_back(new_seg);
+
+    publish_routes_markers();
+    publish_interactive_markers();
+    return;
+  }
+
+  // Removal of the segment this endpoint belongs to
+  if (feedback->control_name == "remove_segment" &&
+      (feedback->event_type ==
+        visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
+       feedback->event_type ==
+        visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
+  {
+    // marker_name is either <id>_start or <id>_end
+    const auto underscore_pos = name.rfind("_");
+    if (underscore_pos != std::string::npos) {
+      const auto base_id = name.substr(0, underscore_pos);
+      for (auto it = routes_.begin(); it != routes_.end(); ++it) {
+        if (it->id == base_id) {
+          routes_.erase(it);
+          break;
+        }
+      }
+      publish_routes_markers();
+      publish_interactive_markers();
+    }
+    return;
+  }
 
   for (auto & seg : routes_) {
     if (name == seg.id + "_start") {
@@ -312,3 +508,6 @@ void RoutesMapsManager::handle_interactive_feedback(
 }
 
 }  // namespace easynav
+
+#include <pluginlib/class_list_macros.hpp>
+PLUGINLIB_EXPORT_CLASS(easynav::RoutesMapsManager, easynav::MapsManagerBase)
