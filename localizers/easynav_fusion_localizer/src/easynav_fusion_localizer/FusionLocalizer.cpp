@@ -96,7 +96,7 @@ void FusionLocalizer::update_rt(NavState & nav_state)
       }
     }
   }
-  
+
   ukf_wrapper_->periodicUpdate();
 
   nav_msgs::msg::Odometry current_odom;
