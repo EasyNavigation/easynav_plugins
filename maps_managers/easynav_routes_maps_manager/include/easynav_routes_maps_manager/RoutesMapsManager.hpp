@@ -32,7 +32,14 @@
 
 #include "std_srvs/srv/trigger.hpp"
 
+#include <memory>
+#include <vector>
+
+#include "pluginlib/class_loader.hpp"
+
 #include "easynav_core/MapsManagerBase.hpp"
+
+#include "easynav_routes_maps_manager/RoutesFilter.hpp"
 
 namespace easynav
 {
@@ -117,6 +124,12 @@ private:
 
   /// @brief Monotonic counter for generating unique route IDs.
   int next_route_id_{0};
+
+  /// @brief Plugin loader for route filters.
+  std::unique_ptr<pluginlib::ClassLoader<RoutesFilter>> routes_filters_loader_;
+
+  /// @brief Loaded route filters.
+  std::vector<std::shared_ptr<RoutesFilter>> routes_filters_;
 
   /// @brief Publisher for visualizing routes as markers.
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr routes_pub_;
