@@ -1,11 +1,11 @@
 # easynav_costmap_maps_manager
 
-[![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#) [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
-
 ## Description
+
 Maps Manager that maintains 2D costmaps (static and dynamic), supports filter plugins (such as inflation and obstacle filters), and exposes maps through ROS topics and NavState integration.
 
 At the core of this stack lies the Costmap2D data structure. `Costmap2D` extends the binary occupancy grid into a graded cost representation with values in the range [0–255]:
+
 - 0: Free space, no cost to traverse.
 - 1–252: Gradual cost values, representing increasing difficulty or proximity to obstacles.
 - 253: “Near obstacle” (inscribed obstacle) cost, traversal strongly discouraged.
@@ -13,10 +13,12 @@ At the core of this stack lies the Costmap2D data structure. `Costmap2D` extends
 - 255: Unknown space.
 
 ## Authors and Maintainers
+
 - **Authors:** Intelligent Robotics Lab  
 - **Maintainers:** Francisco Martín Rico <fmrico@gmail.com>
 
 ## Supported ROS 2 Distributions
+
 | Distribution | Status |
 |---|---|
 | humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
@@ -25,6 +27,7 @@ At the core of this stack lies the Costmap2D data structure. `Costmap2D` extends
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
 ## Plugin (pluginlib)
+
 - **Plugin Name:** `easynav_costmap_maps_manager/CostmapMapsManager`
 - **Type:** `easynav::CostmapMapsManager`
 - **Base Class:** `easynav::MapsManagerBase`
@@ -36,6 +39,7 @@ At the core of this stack lies the Costmap2D data structure. `Costmap2D` extends
 ## Parameters
 
 ### Plugin Parameters (namespace: `/<node_fqn>/easynav_costmap_maps_manager/CostmapMapsManager/...`)
+
 | Name | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.package` | `string` | `""` | Package name used to resolve relative map paths via `ament_index`. |
@@ -46,9 +50,11 @@ At the core of this stack lies the Costmap2D data structure. `Costmap2D` extends
 ---
 
 ### Filter Plugins
+
 Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` with at least the key `plugin`, plus any filter-specific parameters.
 
 #### **ObstacleFilter**
+
 - **Plugin Name:** `easynav_costmap_maps_manager/ObstacleFilter`
 - **Type:** `easynav::ObstacleFilter`
 - **Description:**  
@@ -70,6 +76,7 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 | `map.dynamic.obstacle_bounds` | `ObstacleBounds` | **Write** | Bounding box of updated obstacles for incremental inflation. |
 
 #### **InflationFilter**
+
 - **Plugin Name:** `easynav_costmap_maps_manager/InflationFilter`
 - **Type:** `easynav::InflationFilter`
 - **Description:**  
@@ -95,7 +102,7 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 **Cost Model:**  
 Uses exponential decay: `cost = exp(-cost_scaling_factor * (distance - inscribed_radius)) * 253` for distances beyond inscribed radius.
 
-**Example Configuration**
+### Example Configuration
 
 ```yaml
 maps_manager_node:
@@ -119,6 +126,7 @@ maps_manager_node:
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
+
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
 | Subscription | `<node_fqn>/<plugin>/incoming_map` | `nav_msgs/msg/OccupancyGrid` | Input occupancy map used to update the dynamic map. | `depth=1, transient_local, reliable` |
@@ -126,6 +134,7 @@ maps_manager_node:
 | Publisher | `<node_fqn>/<plugin>/dynamic_map` | `nav_msgs/msg/OccupancyGrid` | Publishes the dynamic (live) costmap. | `depth=100` |
 
 ### Services
+
 | Direction | Service | Type | Purpose |
 |---|---|---|---|
 | Service Server | `<node_fqn>/<plugin>/savemap` | `std_srvs/srv/Trigger` | Saves the current costmap(s) to disk. |
@@ -133,6 +142,7 @@ maps_manager_node:
 ---
 
 ## NavState Keys
+
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `map.static` | `Costmap2D` | **Write** | Static map loaded from YAML. |
@@ -143,6 +153,7 @@ maps_manager_node:
 ---
 
 ## TF Frames
+
 | Role | Transform | Notes |
 |---|---|---|
 | Publishes | — | This manager does not broadcast TF; costmaps use their internal `frame_id`. |
@@ -150,4 +161,5 @@ maps_manager_node:
 ---
 
 ## License
+
 GPL-3.0-only

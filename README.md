@@ -9,6 +9,7 @@
 📋 Roadmap Project: [RoadMap](https://github.com/EasyNavigation/EasyNavigation/blob/rolling/ROADMAP.md)
 
 ## Description
+
 **EasyNav Plugins** provides the official collection of plugins for the [Easy Navigation (EasyNav)](https://github.com/EasyNavigation) framework.  
 These plugins extend the navigation core with planners, controllers, map managers, and localizers compatible with ROS 2.
 
@@ -19,6 +20,7 @@ Each plugin resides in its own ROS 2 package and is registered via `pluginlib`, 
 ## Repository Structure
 
 ### 🧭 Planners
+
 Path planning plugins implementing A*, costmap, or NavMap–based methods.
 
 | Package | Description | Link |
@@ -30,6 +32,7 @@ Path planning plugins implementing A*, costmap, or NavMap–based methods.
 ---
 
 ### ⚙️ Controllers
+
 Motion controllers for trajectory tracking and reactive behaviors.
 
 | Package | Description | Link |
@@ -38,10 +41,12 @@ Motion controllers for trajectory tracking and reactive behaviors.
 | `easynav_mppi_controller` | Model Predictive Path Integral (MPPI) controller. | [README](./controllers/easynav_mppi_controller/README.md) |
 | `easynav_simple_controller` | Simple proportional controller for testing. | [README](./controllers/easynav_simple_controller/README.md) |
 | `easynav_serest_controller` | SeReST (Safe Reactive Steering) controller. | [README](./controllers/easynav_serest_controller/README.md) |
+| `easynav_mpc_controller` | Model Predictive Controller (MPC). | [README](./controllers/easynav_mpc_controller/README.md) |
 
 ---
 
 ### 🗺️ Maps Managers
+
 Map management plugins that provide, update, and store different environment representations.
 
 | Package | Description | Link |
@@ -55,6 +60,7 @@ Map management plugins that provide, update, and store different environment rep
 ---
 
 ### 📍 Localizers
+
 Localization plugins based on different map types and sensors.
 
 | Package | Description | Link |
@@ -67,5 +73,5 @@ Localization plugins based on different map types and sensors.
 ---
 
 ## License
-All packages in this repository are released under **GPL-3.0-only** unless stated otherwise in the individual package.
 
+All packages in this repository are released under **GPL-3.0-only** unless stated otherwise in the individual package.
