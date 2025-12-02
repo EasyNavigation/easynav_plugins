@@ -32,18 +32,47 @@ namespace easynav
 
 class NavState;
 
+/// @brief Base interface for all routes filters.
+///
+/// A RoutesFilter consumes the current navigation state (including the
+/// active RoutesMap written by RoutesMapsManager) and is allowed to
+/// modify other entries in the NavState (for example, a costmap) in
+/// order to enforce corridor-following behaviour, masking, etc.
 class RoutesFilter
 {
 public:
+  /// @brief Shared pointer alias for convenience.
   using Ptr = std::shared_ptr<RoutesFilter>;
 
+  /// @brief Virtual destructor.
   virtual ~RoutesFilter() = default;
 
+  /// @brief Configure the filter instance.
+  ///
+  /// This method is called once after construction by the
+  /// RoutesMapsManager. Implementations should declare/read any
+  /// required parameters, create publishers or other resources, and
+  /// store references to the lifecycle node.
+  ///
+  /// @param node Shared pointer to the owning lifecycle node.
+  /// @param plugin_ns Namespace under which this filter is configured
+  ///   (used as prefix for ROS parameters and topics).
+  /// @param tf_prefix TF frame prefix used by the navigation stack.
+  /// @return std::expected<void, std::string> Empty on success or
+  ///   an error message describing the failure.
   virtual std::expected<void, std::string> initialize(
     const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
     const std::string & plugin_ns,
     const std::string & tf_prefix) = 0;
 
+  /// @brief Update hook called every navigation cycle.
+  ///
+  /// Implementations may read the current "routes" entry from the
+  /// NavState as well as other map representations and modify them in
+  /// place. The filter must not assume ownership of data stored in the
+  /// NavState.
+  ///
+  /// @param nav_state Blackboard-like navigation state container.
   virtual void update(NavState & nav_state) = 0;
 };
 

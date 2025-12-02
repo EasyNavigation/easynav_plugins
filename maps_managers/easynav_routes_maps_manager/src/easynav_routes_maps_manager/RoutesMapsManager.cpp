@@ -15,16 +15,16 @@ namespace easynav
 RoutesMapsManager::RoutesMapsManager()
 {
   NavState::register_printer<RoutesMap>(
-      [](const RoutesMap & routes) {
-        std::ostringstream out;
-        out << "RoutesMap with " << routes.size() << " segments";
-        for (std::size_t i = 0; i < routes.size(); ++i) {
-          const auto & s = routes[i];
-          out << "\n  [" << i << "] from (" << s.start.position.x << ", "
+    [](const RoutesMap & routes) {
+      std::ostringstream out;
+      out << "RoutesMap with " << routes.size() << " segments";
+      for (std::size_t i = 0; i < routes.size(); ++i) {
+        const auto & s = routes[i];
+        out   << "\n  [" << i << "] from (" << s.start.position.x << ", "
               << s.start.position.y << ") to (" << s.end.position.x << ", "
               << s.end.position.y << ")";
-        }
-        return out.str();
+      }
+      return out.str();
       });
 
   routes_filters_loader_ = std::make_unique<pluginlib::ClassLoader<RoutesFilter>>(
@@ -57,7 +57,13 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
   node->get_parameter(plugin_name + ".filters", routes_filters_names);
 
   map_path_.clear();
-  if (!map_path_file.empty() && map_path_file[0] == '/') {
+  if (package_name.empty() && map_path_file.empty()) {
+    // Accepted: we will use a default in-memory route in load_routes_from_yaml().
+    RCLCPP_INFO(
+      node->get_logger(),
+      "[%s] No package or map_path_file specified, using default in-memory route",
+      plugin_name.c_str());
+  } else if (!map_path_file.empty() && map_path_file[0] == '/') {
     // Absolute path: ignore package_name.
     map_path_ = map_path_file;
   } else if (!package_name.empty() && !map_path_file.empty()) {
@@ -219,13 +225,81 @@ void RoutesMapsManager::load_routes_from_yaml()
   routes_.clear();
 
   if (map_path_.empty()) {
-    throw std::runtime_error{"Parameter 'routes_map_path' is empty"};
+    // No map path configured: initialize a default single route segment.
+    RouteSegment segment;
+    segment.id = "route0";
+    segment.start.position.x = 0.0;
+    segment.start.position.y = 0.0;
+    segment.start.position.z = 0.0;
+    segment.start.orientation.x = 0.0;
+    segment.start.orientation.y = 0.0;
+    segment.start.orientation.z = 0.0;
+    segment.start.orientation.w = 1.0;
+
+    segment.end.position.x = 1.0;
+    segment.end.position.y = 0.0;
+    segment.end.position.z = 0.0;
+    segment.end.orientation.x = 0.0;
+    segment.end.orientation.y = 0.0;
+    segment.end.orientation.z = 0.0;
+    segment.end.orientation.w = 1.0;
+
+    routes_.push_back(segment);
+    next_route_id_ = 1;
+    return;
   }
 
-  YAML::Node root = YAML::LoadFile(map_path_);
+  YAML::Node root;
+  try {
+    root = YAML::LoadFile(map_path_);
+  } catch (const std::exception &) {
+    // File missing or invalid: fall back to a default single route.
+    RouteSegment segment;
+    segment.id = "route0";
+    segment.start.position.x = 0.0;
+    segment.start.position.y = 0.0;
+    segment.start.position.z = 0.0;
+    segment.start.orientation.x = 0.0;
+    segment.start.orientation.y = 0.0;
+    segment.start.orientation.z = 0.0;
+    segment.start.orientation.w = 1.0;
+
+    segment.end.position.x = 1.0;
+    segment.end.position.y = 0.0;
+    segment.end.position.z = 0.0;
+    segment.end.orientation.x = 0.0;
+    segment.end.orientation.y = 0.0;
+    segment.end.orientation.z = 0.0;
+    segment.end.orientation.w = 1.0;
+
+    routes_.push_back(segment);
+    next_route_id_ = 1;
+    return;
+  }
 
   if (!root["routes"]) {
-    throw std::runtime_error{"YAML file must contain a 'routes' sequence"};
+    // No explicit routes list: use a default single route.
+    RouteSegment segment;
+    segment.id = "route0";
+    segment.start.position.x = 0.0;
+    segment.start.position.y = 0.0;
+    segment.start.position.z = 0.0;
+    segment.start.orientation.x = 0.0;
+    segment.start.orientation.y = 0.0;
+    segment.start.orientation.z = 0.0;
+    segment.start.orientation.w = 1.0;
+
+    segment.end.position.x = 1.0;
+    segment.end.position.y = 0.0;
+    segment.end.position.z = 0.0;
+    segment.end.orientation.x = 0.0;
+    segment.end.orientation.y = 0.0;
+    segment.end.orientation.z = 0.0;
+    segment.end.orientation.w = 1.0;
+
+    routes_.push_back(segment);
+    next_route_id_ = 1;
+    return;
   }
 
   // routes: [route1, route2, ...]
@@ -460,110 +534,110 @@ void RoutesMapsManager::publish_interactive_markers()
     end_marker.scale = 1.0;
 
     auto add_controls = [](visualization_msgs::msg::InteractiveMarker & marker) {
-      visualization_msgs::msg::InteractiveMarkerControl control;
+        visualization_msgs::msg::InteractiveMarkerControl control;
 
       // Move along X
-      control.orientation.w = 1.0;
-      control.orientation.x = 1.0;
-      control.orientation.y = 0.0;
-      control.orientation.z = 0.0;
-      control.name = "move_x";
-      control.interaction_mode =
-        visualization_msgs::msg::InteractiveMarkerControl::MOVE_AXIS;
-      marker.controls.push_back(control);
+        control.orientation.w = 1.0;
+        control.orientation.x = 1.0;
+        control.orientation.y = 0.0;
+        control.orientation.z = 0.0;
+        control.name = "move_x";
+        control.interaction_mode =
+          visualization_msgs::msg::InteractiveMarkerControl::MOVE_AXIS;
+        marker.controls.push_back(control);
 
       // Move along Y
-      control.orientation.x = 0.0;
-      control.orientation.y = 1.0;
-      control.name = "move_y";
-      marker.controls.push_back(control);
+        control.orientation.x = 0.0;
+        control.orientation.y = 1.0;
+        control.name = "move_y";
+        marker.controls.push_back(control);
 
       // Move along Z
-      control.orientation.y = 0.0;
-      control.orientation.z = 1.0;
-      control.name = "move_z";
-      marker.controls.push_back(control);
+        control.orientation.y = 0.0;
+        control.orientation.z = 1.0;
+        control.name = "move_z";
+        marker.controls.push_back(control);
 
       // Rotate around Z (yaw), orientation as in interactive_markers examples
-      control.interaction_mode =
-        visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS;
-      control.orientation.w = 1.0;
-      control.orientation.x = 0.0;
-      control.orientation.y = 1.0;
-      control.orientation.z = 0.0;
-      control.name = "rotate_z";
-      marker.controls.push_back(control);
+        control.interaction_mode =
+          visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS;
+        control.orientation.w = 1.0;
+        control.orientation.x = 0.0;
+        control.orientation.y = 1.0;
+        control.orientation.z = 0.0;
+        control.name = "rotate_z";
+        marker.controls.push_back(control);
 
       // Button control to add a new segment starting from this endpoint
-      visualization_msgs::msg::InteractiveMarkerControl add_ctrl;
-      add_ctrl.name = "add_segment";
-      add_ctrl.interaction_mode =
-        visualization_msgs::msg::InteractiveMarkerControl::BUTTON;
-      add_ctrl.always_visible = true;
+        visualization_msgs::msg::InteractiveMarkerControl add_ctrl;
+        add_ctrl.name = "add_segment";
+        add_ctrl.interaction_mode =
+          visualization_msgs::msg::InteractiveMarkerControl::BUTTON;
+        add_ctrl.always_visible = true;
 
-      visualization_msgs::msg::Marker add_marker;
-      add_marker.type = visualization_msgs::msg::Marker::SPHERE;
+        visualization_msgs::msg::Marker add_marker;
+        add_marker.type = visualization_msgs::msg::Marker::SPHERE;
       // Visual sphere for the add control
-      add_marker.scale.x = 0.2;
-      add_marker.scale.y = 0.2;
-      add_marker.scale.z = 0.2;
-      add_marker.color.r = 1.0f;
-      add_marker.color.g = 0.5f;
-      add_marker.color.b = 0.0f;
-      add_marker.color.a = 0.9f;
+        add_marker.scale.x = 0.2;
+        add_marker.scale.y = 0.2;
+        add_marker.scale.z = 0.2;
+        add_marker.color.r = 1.0f;
+        add_marker.color.g = 0.5f;
+        add_marker.color.b = 0.0f;
+        add_marker.color.a = 0.9f;
 
       // Text label for the add control
-      visualization_msgs::msg::Marker add_text;
-      add_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
-      add_text.text = "add";
-      add_text.scale.z = 0.1;  // font height (half)
-      add_text.color.r = 1.0f;
-      add_text.color.g = 1.0f;
-      add_text.color.b = 1.0f;
-      add_text.color.a = 1.0f;
-      add_text.pose.position.z = 0.4;  // slightly above the sphere
+        visualization_msgs::msg::Marker add_text;
+        add_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
+        add_text.text = "add";
+        add_text.scale.z = 0.1; // font height (half)
+        add_text.color.r = 1.0f;
+        add_text.color.g = 1.0f;
+        add_text.color.b = 1.0f;
+        add_text.color.a = 1.0f;
+        add_text.pose.position.z = 0.4; // slightly above the sphere
 
-      add_ctrl.markers.push_back(add_marker);
-      add_ctrl.markers.push_back(add_text);
+        add_ctrl.markers.push_back(add_marker);
+        add_ctrl.markers.push_back(add_text);
 
-      marker.controls.push_back(add_ctrl);
+        marker.controls.push_back(add_ctrl);
 
       // Button control to remove the segment this endpoint belongs to
-      visualization_msgs::msg::InteractiveMarkerControl remove_ctrl;
-      remove_ctrl.name = "remove_segment";
-      remove_ctrl.interaction_mode =
-        visualization_msgs::msg::InteractiveMarkerControl::BUTTON;
-      remove_ctrl.always_visible = true;
+        visualization_msgs::msg::InteractiveMarkerControl remove_ctrl;
+        remove_ctrl.name = "remove_segment";
+        remove_ctrl.interaction_mode =
+          visualization_msgs::msg::InteractiveMarkerControl::BUTTON;
+        remove_ctrl.always_visible = true;
 
-      visualization_msgs::msg::Marker remove_marker;
-      remove_marker.type = visualization_msgs::msg::Marker::SPHERE;
+        visualization_msgs::msg::Marker remove_marker;
+        remove_marker.type = visualization_msgs::msg::Marker::SPHERE;
       // Place the red sphere 1 m above the endpoint so that it
       // does not overlap with the orange "add" sphere.
-      remove_marker.pose.position.z = 1.0;
-      remove_marker.scale.x = 0.15;
-      remove_marker.scale.y = 0.15;
-      remove_marker.scale.z = 0.15;
-      remove_marker.color.r = 1.0f;
-      remove_marker.color.g = 0.0f;
-      remove_marker.color.b = 0.0f;
-      remove_marker.color.a = 0.9f;
+        remove_marker.pose.position.z = 1.0;
+        remove_marker.scale.x = 0.15;
+        remove_marker.scale.y = 0.15;
+        remove_marker.scale.z = 0.15;
+        remove_marker.color.r = 1.0f;
+        remove_marker.color.g = 0.0f;
+        remove_marker.color.b = 0.0f;
+        remove_marker.color.a = 0.9f;
 
       // Text label for the remove control
-      visualization_msgs::msg::Marker remove_text;
-      remove_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
-      remove_text.text = "remove";
-      remove_text.scale.z = 0.1;  // font height (half)
-      remove_text.color.r = 1.0f;
-      remove_text.color.g = 1.0f;
-      remove_text.color.b = 1.0f;
-      remove_text.color.a = 1.0f;
-      remove_text.pose.position.z = 1.3;  // slightly above the red sphere
+        visualization_msgs::msg::Marker remove_text;
+        remove_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
+        remove_text.text = "remove";
+        remove_text.scale.z = 0.1; // font height (half)
+        remove_text.color.r = 1.0f;
+        remove_text.color.g = 1.0f;
+        remove_text.color.b = 1.0f;
+        remove_text.color.a = 1.0f;
+        remove_text.pose.position.z = 1.3; // slightly above the red sphere
 
-      remove_ctrl.markers.push_back(remove_marker);
-      remove_ctrl.markers.push_back(remove_text);
+        remove_ctrl.markers.push_back(remove_marker);
+        remove_ctrl.markers.push_back(remove_text);
 
-      marker.controls.push_back(remove_ctrl);
-    };
+        marker.controls.push_back(remove_ctrl);
+      };
 
     add_controls(start_marker);
     add_controls(end_marker);
@@ -596,10 +670,10 @@ void RoutesMapsManager::handle_interactive_feedback(
 
   // Toggle per-segment edit mode when clicking the central cube.
   if (feedback->control_name == "toggle_edit" &&
-      (feedback->event_type ==
-        visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
-       feedback->event_type ==
-        visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
+    (feedback->event_type ==
+    visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
+    feedback->event_type ==
+    visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
   {
     // name is <id>_mode
     const auto underscore_pos = name.rfind("_");
@@ -618,10 +692,10 @@ void RoutesMapsManager::handle_interactive_feedback(
 
   // Creation of a new segment from this endpoint
   if (feedback->control_name == "add_segment" &&
-      (feedback->event_type ==
-        visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
-       feedback->event_type ==
-        visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
+    (feedback->event_type ==
+    visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
+    feedback->event_type ==
+    visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
   {
     // Compute forward direction from marker orientation (assume x-forward).
     const auto & p = feedback->pose.position;
@@ -658,10 +732,10 @@ void RoutesMapsManager::handle_interactive_feedback(
 
   // Removal of the segment this endpoint belongs to
   if (feedback->control_name == "remove_segment" &&
-      (feedback->event_type ==
-        visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
-       feedback->event_type ==
-        visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
+    (feedback->event_type ==
+    visualization_msgs::msg::InteractiveMarkerFeedback::BUTTON_CLICK ||
+    feedback->event_type ==
+    visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_UP))
   {
     // marker_name is either <id>_start or <id>_end
     const auto underscore_pos = name.rfind("_");

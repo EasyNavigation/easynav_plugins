@@ -18,7 +18,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /// \file
-/// \brief Declaration of the RoutesMapsManager method.
+/// \brief Declaration of the RoutesMapsManager class and related types.
 
 #ifndef EASYNAV_PLANNER__ROUTESMAPMANAGER_HPP_
 #define EASYNAV_PLANNER__ROUTESMAPMANAGER_HPP_
@@ -44,18 +44,27 @@
 namespace easynav
 {
 
+/// @brief Simple directed segment between two poses.
+///
+/// Each RouteSegment represents a straight-line connection between two
+/// poses in the navigation frame. The segment can be individually
+/// edited and identified via its @ref id field.
 struct RouteSegment
 {
   /// @brief Unique identifier for this segment.
   std::string id;
 
+  /// @brief Start pose of the segment.
   geometry_msgs::msg::Pose start;
+
+  /// @brief End pose of the segment.
   geometry_msgs::msg::Pose end;
 
   /// @brief Whether this segment is currently in edit mode.
   bool edit_mode{false};
 };
 
+/// @brief Container type representing a full set of navigation routes.
 using RoutesMap = std::vector<RouteSegment>;
 
 /**
@@ -103,7 +112,11 @@ public:
   const RoutesMap & get_routes() const {return routes_;}
 
 private:
-  /// @brief Load routes from the YAML file into routes_.
+  /// @brief Load routes from the configured YAML file into @ref routes_.
+  ///
+  /// When the configured YAML file is missing, invalid, or the
+  /// "routes" key is not present, a default map with a single segment
+  /// from (0, 0, 0) to (1, 0, 0) is created instead.
   void load_routes_from_yaml();
 
   /// @brief Publish the current routes as visualization markers.
@@ -112,13 +125,12 @@ private:
   /// @brief Publish or update interactive markers for editing endpoints.
   void publish_interactive_markers();
 
-  /// @brief Handle feedback from interactive markers and update routes_.
+  /// @brief Handle feedback from interactive markers and update @ref routes_.
   void handle_interactive_feedback(
     const visualization_msgs::msg::InteractiveMarkerFeedback::ConstSharedPtr & feedback);
-  /**
-   * @brief Full path to the map file.
-   */
+  /// @brief Full path to the YAML file used to load/save routes.
   std::string map_path_;
+
   /// @brief In-memory collection of route segments.
   RoutesMap routes_;
 
