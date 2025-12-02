@@ -141,6 +141,38 @@ void CostmapPlanner::update(NavState & nav_state)
 
   current_goal_ = goal;
 
+  // Lightweight skip: if inputs unchanged, avoid recomputation for a short window
+  static int last_sx = -1;
+  static int last_sy = -1;
+  static geometry_msgs::msg::Pose last_goal_pose;
+  static rclcpp::Time last_plan_time;
+
+  unsigned int sx_chk, sy_chk;
+  if (map.worldToMap(robot_pose.pose.pose.position.x, robot_pose.pose.pose.position.y, sx_chk,
+      sy_chk))
+  {
+    const bool same_start_cell = (static_cast<int>(sx_chk) == last_sx) &&
+      (static_cast<int>(sy_chk) == last_sy);
+    const bool same_goal_pose = (
+      std::fabs(goal.position.x - last_goal_pose.position.x) < 1e-6 &&
+      std::fabs(goal.position.y - last_goal_pose.position.y) < 1e-6 &&
+      goal.orientation.x == last_goal_pose.orientation.x &&
+      goal.orientation.y == last_goal_pose.orientation.y &&
+      goal.orientation.z == last_goal_pose.orientation.z &&
+      goal.orientation.w == last_goal_pose.orientation.w);
+
+    // Initialize last_plan_time on first use to current node time
+    if (last_plan_time.nanoseconds() == 0) {
+      last_plan_time = get_node()->now();
+    }
+    const double since_last = (get_node()->now() - last_plan_time).seconds();
+    if (continuous_replan_ && same_start_cell && same_goal_pose && since_last < 0.05) {
+      // Skip re-planning when nothing relevant changed recently
+      nav_state.set("path", current_path_);
+      return;
+    }
+  }
+
   auto poses = a_star_path(map, robot_pose.pose.pose, goal);
   if (!poses.empty()) {
     current_path_.header.stamp = get_node()->now();
@@ -152,9 +184,22 @@ void CostmapPlanner::update(NavState & nav_state)
       pose_stamped.pose = pose;
       current_path_.poses.push_back(pose_stamped);
     }
-    if (path_pub_->get_subscription_count() > 0) {
-      path_pub_->publish(current_path_);
+    // Publish only when the content changed (size as a cheap proxy)
+    static size_t last_published_size = 0;
+    if (current_path_.poses.size() != last_published_size) {
+      if (path_pub_->get_subscription_count() > 0) {
+        path_pub_->publish(current_path_);
+      }
+      last_published_size = current_path_.poses.size();
     }
+    // Update last inputs snapshot
+    unsigned int sx, sy;
+    if (map.worldToMap(robot_pose.pose.pose.position.x, robot_pose.pose.pose.position.y, sx, sy)) {
+      last_sx = static_cast<int>(sx);
+      last_sy = static_cast<int>(sy);
+    }
+    last_goal_pose = goal;
+    last_plan_time = get_node()->now();
   }
   nav_state.set("path", current_path_);
 }
@@ -169,11 +214,19 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
   if (!map.worldToMap(goal.position.x, goal.position.y, gx, gy)) {return {};}
 
   int width = map.getSizeInCellsX();
+  // Precompute constants used inside the neighbor loop
+  const double lethal_norm = 1.0 / static_cast<double>(LETHAL_OBSTACLE);
+  const double axial_cost = cost_axial_;
+  const double diagonal_cost = cost_diagonal_;
   auto idx = [&](int x, int y) {return y * width + x;};
 
   std::priority_queue<GridNode, std::vector<GridNode>, std::greater<>> open;
-  std::unordered_map<int, std::pair<int, int>> came_from;
-  std::unordered_map<int, double> cost_so_far;
+
+  const int height = map.getSizeInCellsY();
+  const int total_cells = width * height;
+  std::vector<int> parent_x(total_cells, -1);
+  std::vector<int> parent_y(total_cells, -1);
+  std::vector<double> cost_so_far(total_cells, std::numeric_limits<double>::infinity());
 
   open.push(GridNode{static_cast<int>(sx), static_cast<int>(sy), 0.0, heuristic(sx, sy, gx, gy)});
   cost_so_far[idx(sx, sy)] = 0.0;
@@ -193,23 +246,24 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
       if (cell_cost >= INSCRIBED_INFLATED_OBSTACLE) {continue;}
 
       // Calculate traversal cost for free and lightly inflated cells
-      double traversal_cost = 1.0 + cost_factor_ * static_cast<double>(cell_cost) / LETHAL_OBSTACLE;
+      double traversal_cost = 1.0 + cost_factor_ * static_cast<double>(cell_cost) * lethal_norm;
 
-      double step_cost = (dx == 0 || dy == 0) ? cost_axial_ : cost_diagonal_;
+      double step_cost = (dx == 0 || dy == 0) ? axial_cost : diagonal_cost;
       double new_cost = cost_so_far[idx(current.x, current.y)] + traversal_cost * step_cost;
       int nid = idx(nx, ny);
 
-      if (!cost_so_far.contains(nid) || new_cost < cost_so_far[nid]) {
+      if (new_cost < cost_so_far[nid]) {
         cost_so_far[nid] = new_cost;
         open.push(GridNode{nx, ny, new_cost, new_cost + heuristic(nx, ny, gx, gy)});
-        came_from[nid] = {current.x, current.y};
+        parent_x[nid] = current.x;
+        parent_y[nid] = current.y;
       }
     }
   }
 
   std::vector<geometry_msgs::msg::Pose> path;
   int cx = static_cast<int>(gx), cy = static_cast<int>(gy);
-  while (came_from.contains(idx(cx, cy))) {
+  while (parent_x[idx(cx, cy)] != -1) {
     double wx, wy;
     map.mapToWorld(cx, cy, wx, wy);
     geometry_msgs::msg::Pose pose;
@@ -217,7 +271,10 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
     pose.position.y = wy;
     pose.orientation = goal.orientation;
     path.push_back(pose);
-    std::tie(cx, cy) = came_from[idx(cx, cy)];
+    int px = parent_x[idx(cx, cy)];
+    int py = parent_y[idx(cx, cy)];
+    cx = px;
+    cy = py;
   }
   std::reverse(path.begin(), path.end());
 
