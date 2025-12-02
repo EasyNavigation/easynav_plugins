@@ -13,6 +13,7 @@
   <depend>rclcpp_lifecycle</depend> -->
   <depend>easynav_common</depend>
   <depend>easynav_core</depend>
+  <depend>easynav_costmap_common</depend>
   <depend>tf2_ros</depend>
   <depend>pluginlib</depend>
   <depend>nav_msgs</depend>
