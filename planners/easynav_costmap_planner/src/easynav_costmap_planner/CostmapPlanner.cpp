@@ -148,8 +148,11 @@ void CostmapPlanner::update(NavState & nav_state)
   static rclcpp::Time last_plan_time;
 
   unsigned int sx_chk, sy_chk;
-  if (map.worldToMap(robot_pose.pose.pose.position.x, robot_pose.pose.pose.position.y, sx_chk, sy_chk)) {
-    const bool same_start_cell = (static_cast<int>(sx_chk) == last_sx) && (static_cast<int>(sy_chk) == last_sy);
+  if (map.worldToMap(robot_pose.pose.pose.position.x, robot_pose.pose.pose.position.y, sx_chk,
+      sy_chk))
+  {
+    const bool same_start_cell = (static_cast<int>(sx_chk) == last_sx) &&
+      (static_cast<int>(sy_chk) == last_sy);
     const bool same_goal_pose = (
       std::fabs(goal.position.x - last_goal_pose.position.x) < 1e-6 &&
       std::fabs(goal.position.y - last_goal_pose.position.y) < 1e-6 &&
