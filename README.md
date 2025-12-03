@@ -69,6 +69,7 @@ Localization plugins based on different map types and sensors.
 | `easynav_simple_localizer` | Basic localizer for SimpleMap–based setups. | [README](./localizers/easynav_simple_localizer/README.md) |
 | `easynav_navmap_localizer` | AMCL-like localizer operating on NavMap meshes. | [README](./localizers/easynav_navmap_localizer/README.md) |
 | `easynav_costmap_localizer` | AMCL-like localizer using Costmap2D. | [README](./localizers/easynav_costmap_localizer/README.md) |
+| `easynav_fusion_localizer` | Multi-sensor fusion localizer (e.g., GPS + odometry + map). | [README](./localizers/easynav_fusion_localizer/README.md) |
 
 ---
 
