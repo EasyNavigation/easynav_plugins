@@ -68,6 +68,48 @@ static double compute_path_length(const nav_msgs::msg::Path & path)
   return total_length;
 }
 
+// Simple path smoother: moving average over a sliding window in XY.
+// Keeps endpoints unchanged to preserve exact start and goal.
+static void smooth_path(std::vector<geometry_msgs::msg::Pose> & poses, int window_size = 5)
+{
+  if (poses.size() < 3 || window_size <= 1) {
+    return;
+  }
+
+  // Ensure window_size is odd and at least 3
+  if (window_size < 3) {
+    window_size = 3;
+  }
+  if (window_size % 2 == 0) {
+    window_size += 1;
+  }
+
+  const int half = window_size / 2;
+  const size_t n = poses.size();
+  std::vector<geometry_msgs::msg::Pose> original = poses;
+
+  // Leave first and last pose untouched
+  for (size_t i = 1; i + 1 < n; ++i) {
+    double sum_x = 0.0;
+    double sum_y = 0.0;
+    int count = 0;
+
+    const int begin = static_cast<int>(std::max<size_t>(0, i > static_cast<size_t>(half) ? i - half : 0));
+    const int end = static_cast<int>(std::min<size_t>(n - 1, i + half));
+
+    for (int j = begin; j <= end; ++j) {
+      sum_x += original[j].position.x;
+      sum_y += original[j].position.y;
+      ++count;
+    }
+
+    if (count > 0) {
+      poses[i].position.x = sum_x / static_cast<double>(count);
+      poses[i].position.y = sum_y / static_cast<double>(count);
+    }
+  }
+}
+
 CostmapPlanner::CostmapPlanner()
 {
   NavState::register_printer<nav_msgs::msg::Path>(
@@ -175,6 +217,9 @@ void CostmapPlanner::update(NavState & nav_state)
 
   auto poses = a_star_path(map, robot_pose.pose.pose, goal);
   if (!poses.empty()) {
+    // Apply a light smoothing to the raw grid path
+    smooth_path(poses);
+
     current_path_.poses.clear();
     current_path_.header.stamp = get_node()->now();
     current_path_.header.frame_id = goals.header.frame_id;

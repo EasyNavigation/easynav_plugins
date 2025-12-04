@@ -21,6 +21,7 @@
 /// \brief Implementation of the MPCController class.
 
 #include "easynav_mpc_controller/MPCController.hpp"
+#include "easynav_system/GoalManager.hpp"
 
 namespace easynav
 {
@@ -114,6 +115,18 @@ MPCController::collision_checker(void *data, std::vector<double> & u)
 void
 MPCController::update_rt(NavState & nav_state)
 {
+  // If navigation is IDLE, force zero velocity
+  if (nav_state.has("navigation_state")) {
+    const auto nav_state_val = nav_state.get<easynav::GoalManager::State>("navigation_state");
+    if (nav_state_val == easynav::GoalManager::State::IDLE) {
+      cmd_vel_.header.stamp = get_node()->now();
+      cmd_vel_.twist.linear.x = 0.0;
+      cmd_vel_.twist.angular.z = 0.0;
+      nav_state.set("cmd_vel", cmd_vel_);
+      return;
+    }
+  }
+
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("points")) {
     if(verbose_) {
       std::cout << "No Path, No Points or No Robot Pose" << std::endl;
