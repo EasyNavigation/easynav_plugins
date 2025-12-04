@@ -390,9 +390,9 @@ void AMCLLocalizer::correct(NavState & nav_state)
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .downsample(map_static.resolution())
     .fuse(get_tf_prefix() + "base_footprint")
-    ->filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
-    ->downsample(map_static.resolution())
+    .downsample(map_static.resolution())
     .as_points();
 
   if (filtered.empty()) {
