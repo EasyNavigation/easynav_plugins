@@ -103,7 +103,6 @@ std::expected<void, std::string> CostmapPlanner::on_initialize()
 
 void CostmapPlanner::update(NavState & nav_state)
 {
-  current_path_.poses.clear();
   if (!nav_state.has("goals") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
     return;
   }
@@ -166,7 +165,8 @@ void CostmapPlanner::update(NavState & nav_state)
       last_plan_time = get_node()->now();
     }
     const double since_last = (get_node()->now() - last_plan_time).seconds();
-    if (continuous_replan_ && same_start_cell && same_goal_pose && since_last < 0.05) {
+    // Only allow skipping when continuous_replan_ is disabled (event-based planning)
+    if (!continuous_replan_ && same_start_cell && same_goal_pose && since_last < 0.05) {
       // Skip re-planning when nothing relevant changed recently
       nav_state.set("path", current_path_);
       return;
@@ -175,6 +175,7 @@ void CostmapPlanner::update(NavState & nav_state)
 
   auto poses = a_star_path(map, robot_pose.pose.pose, goal);
   if (!poses.empty()) {
+    current_path_.poses.clear();
     current_path_.header.stamp = get_node()->now();
     current_path_.header.frame_id = goals.header.frame_id;
     for (const auto & pose : poses) {
@@ -184,13 +185,9 @@ void CostmapPlanner::update(NavState & nav_state)
       pose_stamped.pose = pose;
       current_path_.poses.push_back(pose_stamped);
     }
-    // Publish only when the content changed (size as a cheap proxy)
-    static size_t last_published_size = 0;
-    if (current_path_.poses.size() != last_published_size) {
-      if (path_pub_->get_subscription_count() > 0) {
-        path_pub_->publish(current_path_);
-      }
-      last_published_size = current_path_.poses.size();
+    // Always publish a newly computed path
+    if (path_pub_->get_subscription_count() > 0) {
+      path_pub_->publish(current_path_);
     }
     // Update last inputs snapshot
     unsigned int sx, sy;
