@@ -134,7 +134,7 @@ MPCController::update_rt(NavState & nav_state)
     return;
   }
 
-  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+  nav_msgs::msg::Path path = nav_state.get<nav_msgs::msg::Path>("path");
   if (path.poses.empty()) {
     // If the path is empty, stop the robot
     cmd_vel_.header.frame_id = path.header.frame_id;
@@ -144,6 +144,46 @@ MPCController::update_rt(NavState & nav_state)
     nav_state.set("cmd_vel", cmd_vel_);
     return;
   }
+
+  // Build a local path that:
+  // 1) keeps only the segment that brings the robot closer to the goal, and
+  // 2) prepends a short straight segment from the robot pose to that segment.
+  const auto & robot_pose_msg = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_p = robot_pose_msg.pose.pose.position;
+
+  // Goal is the last point of the planner path
+  const auto & goal_p = path.poses.back().pose.position;
+
+  nav_msgs::msg::Path local_path;
+  local_path.header = path.header;
+  local_path.poses.clear();
+
+  // 1) Find the first index that actually brings us closer to the goal than our current pose
+  const double d_robot_goal = std::hypot(goal_p.x - robot_p.x, goal_p.y - robot_p.y);
+  std::size_t start_idx = 0;
+  for (std::size_t i = 0; i < path.poses.size(); ++i) {
+    const auto & pi = path.poses[i].pose.position;
+    const double d_pi_goal = std::hypot(goal_p.x - pi.x, goal_p.y - pi.y);
+    if (d_pi_goal <= d_robot_goal) {
+      start_idx = i;
+      break;
+    }
+  }
+
+  // 2) Prepend a point at the robot position to ensure continuity from the current pose
+  geometry_msgs::msg::PoseStamped robot_ps;
+  robot_ps.header = path.header;
+  robot_ps.pose.position = robot_p;
+  robot_ps.pose.orientation = path.poses[start_idx].pose.orientation;
+  local_path.poses.push_back(robot_ps);
+
+  // 3) Copy the remaining points from start_idx to the goal
+  for (std::size_t i = start_idx; i < path.poses.size(); ++i) {
+    local_path.poses.push_back(path.poses[i]);
+  }
+
+  // Use the local path from now on
+  path = local_path;
 
   int num_elements = path.poses.size();
   size_t local_horizon;
