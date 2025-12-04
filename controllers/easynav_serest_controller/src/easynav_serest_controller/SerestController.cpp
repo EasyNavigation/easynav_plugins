@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <limits>
 #include <cmath>
+#include <numbers>
 
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
@@ -45,7 +46,7 @@ SerestController::on_initialize()
   auto node = get_node();
   const auto & ns = get_plugin_name();
 
-  // Máximos y límites básicos
+  // Maximums and basic limits
   node->declare_parameter<bool>(ns + ".allow_reverse", allow_reverse_);
   node->declare_parameter<double>(ns + ".v_progress_min", v_progress_min_);
   node->declare_parameter<double>(ns + ".k_s_share_max", k_s_share_max_);
@@ -55,7 +56,7 @@ SerestController::on_initialize()
   node->declare_parameter<double>(ns + ".max_linear_acc", max_linear_acc_);
   node->declare_parameter<double>(ns + ".max_angular_acc", max_angular_acc_);
 
-  // Seguimiento
+  // Tracking
   node->declare_parameter<double>(ns + ".k_s", k_s_);
   node->declare_parameter<double>(ns + ".k_theta", k_theta_);
   node->declare_parameter<double>(ns + ".k_y", k_y_);
@@ -63,7 +64,7 @@ SerestController::on_initialize()
   node->declare_parameter<double>(ns + ".v_ref", v_ref_);
   node->declare_parameter<double>(ns + ".eps", eps_);
 
-  // Seguridad
+  // Safety
   node->declare_parameter<double>(ns + ".a_acc", a_acc_);
   node->declare_parameter<double>(ns + ".a_brake", a_brake_);
   node->declare_parameter<double>(ns + ".a_lat_max", a_lat_max_);
@@ -72,7 +73,7 @@ SerestController::on_initialize()
   node->declare_parameter<double>(ns + ".d_hard", d_hard_);
   node->declare_parameter<double>(ns + ".t_emerg", t_emerg_);
 
-  // Blend en vértices
+  // Blend at vertices
   node->declare_parameter<double>(ns + ".blend_base", blend_base_);
   node->declare_parameter<double>(ns + ".blend_k_per_v", blend_k_per_v_);
   node->declare_parameter<double>(ns + ".kappa_max", kappa_max_);
@@ -218,29 +219,29 @@ SerestController::ref_heading_and_curvature(
     };
   auto atan2dir = [](const Vec2 & t){return std::atan2(t.y, t.x);};
 
-  // Índices de segmentos relevante: i-1, i, i + 1
+  // Relevant segment indices: i-1, i, i + 1
   const size_t i = prj.seg_idx;
   const Vec2 Ti = seg_dir(i);
   double psi_i = atan2dir(Ti);
 
-  // Mezcla local con previsualización
+  // Local blend with look-ahead
   double b = std::max(0.1, blend_base_ + blend_k_per_v_ * std::fabs(v_prev));
 
-  // Determina si estamos cerca del comienzo o fin de un segmento
+  // Determine if we are near the beginning or end of a segment
   double s_i = pd.s_acc[i];
   double s_ip1 = pd.s_acc[i + 1];
   double s = prj.s_star;
 
-  // Por defecto: rumbo constante del segmento, kappa = 0
+  // Default: constant segment heading, kappa = 0
   rk.psi_ref = psi_i;
   rk.kappa_hat = 0.0;
 
-  // Blend cerca del inicio del segmento i (con i-1)
+  // Blend near the beginning of segment i (with i-1)
   if (i > 0 && (s - s_i) < b) {
     Vec2 Tim1 = seg_dir(i - 1);
     double psi_im1 = atan2dir(Tim1);
-    double w = 1.0 / (1.0 + std::exp(-( (s - s_i) / b ))); // sigmoide en [s_i, s_i+b]
-    // Interpolación circular de rumbos
+    double w = 1.0 / (1.0 + std::exp(-( (s - s_i) / b ))); // sigmoid in [s_i, s_i+b]
+    // Circular interpolation of headings
     double sx = (1.0 - w) * std::cos(psi_im1) + w * std::cos(psi_i);
     double sy = (1.0 - w) * std::sin(psi_im1) + w * std::sin(psi_i);
     rk.psi_ref = std::atan2(sy, sx);
@@ -251,12 +252,12 @@ SerestController::ref_heading_and_curvature(
     rk.kappa_hat = std::clamp(dpsi * sigma_prime, -kappa_max_, kappa_max_);
   }
 
-  // Blend cerca del final del segmento i (hacia i + 1)
+  // Blend near the end of segment i (towards i + 1)
   if (i + 1 < pd.pts.size() - 1 && (s_ip1 - s) < b) {
     Vec2 Tip1 = seg_dir(i + 1);
     double psi_ip1 = atan2dir(Tip1);
-    double w = 1.0 / (1.0 + std::exp(-( (s_ip1 - s) / b ))); // simétrico
-    // Mezcla entre i y i + 1
+    double w = 1.0 / (1.0 + std::exp(-( (s_ip1 - s) / b ))); // symmetric
+    // Blend between i and i + 1
     double sx = (1.0 - w) * std::cos(psi_i) + w * std::cos(psi_ip1);
     double sy = (1.0 - w) * std::sin(psi_i) + w * std::sin(psi_ip1);
     rk.psi_ref = std::atan2(sy, sx);
@@ -264,7 +265,7 @@ SerestController::ref_heading_and_curvature(
     double dpsi = std::atan2(std::sin(psi_ip1 - psi_i), std::cos(psi_ip1 - psi_i));
     double sigma_prime = (w * (1 - w)) / b;
     double kappa2 = std::clamp(dpsi * sigma_prime, -kappa_max_, kappa_max_);
-    // Si hay dos blends solapados, combinamos suavemente (promedio)
+    // If there are two overlapping blends, combine smoothly (average)
     rk.kappa_hat = 0.5 * (rk.kappa_hat + kappa2);
   }
 
@@ -277,12 +278,12 @@ SerestController::frenet_errors(
   const Projection & prj, double psi_ref,
   double & e_y, double & e_theta) const
 {
-  // Vector normal a la derecha de la tangente
+  // Normal vector to the right of the tangent
   Vec2 T = v2(std::cos(psi_ref), std::sin(psi_ref));
-  Vec2 N = v2(-T.y, T.x); // 90º a la izquierda (convención)
+  Vec2 N = v2(-T.y, T.x); // 90º to the left (convention)
   Vec2 err = robot_xy - prj.closest;
 
-  e_y = dot(err, N); // distancia lateral con signo
+  e_y = dot(err, N); // signed lateral distance
   e_theta = std::atan2(std::sin(robot_yaw - psi_ref), std::cos(robot_yaw - psi_ref));
 }
 
@@ -290,16 +291,16 @@ double
 SerestController::closest_obstacle_distance(
   const NavState & nav_state) const
 {
-  // 1) Preferir medición directa si existe
+  // 1) Prefer direct measurement if it exists
   if (nav_state.has("closest_obstacle_distance")) {
     try {
       return nav_state.get<double>("closest_obstacle_distance");
     } catch (...) {
-      // continúa a estimación
+      // fall through to estimation
     }
   }
 
-  // 2) Analizar los sensores de distancia
+  // 2) Analyze distance sensors
   if (!nav_state.has("points")) {return std::numeric_limits<double>::infinity();}
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
@@ -324,7 +325,7 @@ SerestController::closest_obstacle_distance(
 double
 SerestController::v_safe_from_distance(double d, double slope_sin) const
 {
-  // a_eff reduce la capacidad de frenado en pendiente; en 2D slope_sin = 0
+  // a_eff reduces braking capability on slopes; in 2D slope_sin = 0
   const double a_eff = std::max(0.1, a_brake_ - 9.81 * slope_sin);
   if (d <= d0_margin_) {return 0.0;}
 
@@ -337,7 +338,7 @@ SerestController::v_safe_from_distance(double d, double slope_sin) const
 double
 SerestController::v_curvature_limit(double kappa_hat) const
 {
-  // Tres límites típicos: v_max, ω_max/|κ| y sqrt(a_lat_max/|κ|)
+  // Three typical limits: v_max, ω_max/|κ| and sqrt(a_lat_max/|κ|)
   double v1 = max_linear_speed_;
   double v2 = std::numeric_limits<double>::infinity();
   double v3 = std::numeric_limits<double>::infinity();
@@ -401,10 +402,6 @@ SerestController::compute_goal_zone(
   double & stop_r, double & slow_r, double & gamma_slow,
   Vec2 & goal_xy, double & yaw_goal) const
 {
-  const double PI = 3.14159265358979323846;
-  const double goal_yaw_tol = goal_yaw_tol_deg_ * PI / 180.0;  // (no se devuelve, pero útil si quieres)
-  (void)goal_yaw_tol;
-
   const auto & pgoal = path.poses.back().pose.position;
   yaw_goal = tf2::getYaw(path.poses.back().pose.orientation);
   goal_xy = Vec2{pgoal.x, pgoal.y};
@@ -412,6 +409,9 @@ SerestController::compute_goal_zone(
   dist_xy_goal = std::hypot(robot_xy.x - goal_xy.x, robot_xy.y - goal_xy.y);
   e_theta_goal = std::atan2(std::sin(robot_yaw - yaw_goal), std::cos(robot_yaw - yaw_goal));
 
+  // Use externally provided goal position tolerance when available (via update_rt),
+  // which stores it in goal_pos_tol_. Here we only shape the radial zone using
+  // the current value of goal_pos_tol_ as stop radius.
   stop_r = std::max(0.0, goal_pos_tol_);
   slow_r = std::max(slow_radius_, stop_r + 0.05);
 
@@ -430,7 +430,7 @@ SerestController::safety_limits(
   d_closest = closest_obstacle_distance(nav_state);
   v_safe = v_safe_from_distance(d_closest, /*slope_sin=*/0.0);
 
-  // Límite por curvatura (versión “soft” del archivo original)
+  // Curvature-based limit ("soft" version of the original file)
   const double ak = std::fabs(rk.kappa_hat);
   double v_curv_soft = std::numeric_limits<double>::infinity();
   if (ak > 1e-6) {
@@ -465,7 +465,7 @@ SerestController::apply_corner_guard(
   alpha_corner = std::clamp(1.0 / (1.0 + penal), corner_min_alpha_, 1.0);
   omega_boost = 1.0 + corner_boost_omega_ * std::min(1.0, e_y_out / std::max(1e-3, ell_));
 
-  // Empuje al “ápice” si vas por fuera y hay curvatura
+  // Push towards the "apex" if you are outside and there is curvature
   if (std::fabs(rk.kappa_hat) > 1e-6 && e_y_out > 0.0) {
     const double e_y_des = -sgn_k * std::max(0.0, apex_ey_des_);
     const double e_y_err = e_y - e_y_des;
@@ -480,17 +480,16 @@ SerestController::should_turn_in_place(
   bool allow_reverse, double e_theta, double e_theta_goal,
   double dist_to_end, [[maybe_unused]] double turn_in_place_thr) const
 {
-  // Mantenemos compatibilidad con la firma, pero ignoramos turn_in_place_thr
-  // y usamos dos umbrales internos sin exponer parámetros.
-  const double PI = 3.14159265358979323846;
-  const double thr_enter = 60.0 * PI / 180.0; // entra a girar si |e_theta| > 60°
-  // const double thr_exit = 35.0 * PI / 180.0; // sale de girar si |e_theta| < 35°
+  // Keep compatibility with the signature, but ignore turn_in_place_thr
+  // and use two internal thresholds without exposing parameters.
+  const double thr_enter = 60.0 * std::numbers::pi / 180.0; // enter TiP if |e_theta| > 60°
+  // const double thr_exit = 35.0 * PI / 180.0; // exit TiP if |e_theta| < 35°
 
-  // No permitimos “atajo” marcha atrás en esta decisión: si no permites reverse,
-  // el criterio es más estricto.
+  // Do not allow reverse "shortcut" in this decision: if reverse is not allowed,
+  // the criterion is stricter.
   bool tip = (!allow_reverse) && (std::fabs(e_theta) > thr_enter);
 
-  // Cerca del final, si el yaw al objetivo es grande, también pedimos TiP
+  // Near the end, if the yaw error to the goal is large, also request TiP
   if (dist_to_end < 0.50) {
     if (!allow_reverse && std::fabs(e_theta_goal) > thr_enter) {
       tip = true;
@@ -506,8 +505,7 @@ SerestController::maybe_final_align_and_publish(
   double dist_xy_goal, double stop_r, double e_theta_goal,
   double gamma_slow, double dt)
 {
-  const double PI = 3.14159265358979323846;
-  const double goal_yaw_tol = goal_yaw_tol_deg_ * PI / 180.0;
+  const double goal_yaw_tol = goal_yaw_tol_deg_ * std::numbers::pi / 180.0;
 
   if (dist_xy_goal > stop_r) {
     return false;
@@ -620,6 +618,16 @@ SerestController::update_rt(NavState & nav_state)
   nav_msgs::msg::Odometry odom;
   if (!fetch_required_inputs(nav_state, path, odom)) {return;}
 
+  // 1.5) Goal tolerances: prefer shared GoalManager values, fallback to local params
+  double goal_pos_tol = goal_pos_tol_;
+  double goal_yaw_tol = goal_yaw_tol_deg_ * (std::numbers::pi / 180.0);
+  if (nav_state.has("goal_tolerance.position")) {
+    goal_pos_tol = nav_state.get<double>("goal_tolerance.position");
+  }
+  if (nav_state.has("goal_tolerance.yaw")) {
+    goal_yaw_tol = nav_state.get<double>("goal_tolerance.yaw");
+  }
+
   // 2) Robot state (position + yaw)
   Vec2 robot_xy; double yaw = 0.0;
   robot_state_from_odom(odom, robot_xy, yaw);
@@ -714,8 +722,7 @@ SerestController::update_rt(NavState & nav_state)
   double v_prog_ref = v_prog_ref_free * gamma_slow;
 
   // Maintain a small cruising speed when roughly aligned and outside the stop zone (no reverse)
-  const double PI = 3.14159265358979323846;
-  const double align_thr = 30.0 * PI / 180.0;
+  const double align_thr = 30.0 * std::numbers::pi / 180.0;
   if (!allow_reverse_ && (dist_xy_goal > stop_r) && std::fabs(e_theta) < align_thr) {
     v_prog_ref = std::max(v_prog_ref, std::min(slow_min_speed_, v_prog_ref_free));
   }
@@ -766,7 +773,7 @@ SerestController::update_rt(NavState & nav_state)
 
   // Optional classic TiP safeguard using the same angular threshold
   {
-    const double turn_in_place_thr = (60.0 * PI / 180.0);
+    const double turn_in_place_thr = (60.0 * std::numbers::pi / 180.0);
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 

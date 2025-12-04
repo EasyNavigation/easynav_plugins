@@ -68,6 +68,49 @@ static double compute_path_length(const nav_msgs::msg::Path & path)
   return total_length;
 }
 
+// Simple path smoother: moving average over a sliding window in XY.
+// Keeps endpoints unchanged to preserve exact start and goal.
+static void smooth_path(std::vector<geometry_msgs::msg::Pose> & poses, int window_size = 5)
+{
+  if (poses.size() < 3 || window_size <= 1) {
+    return;
+  }
+
+  // Ensure window_size is odd and at least 3
+  if (window_size < 3) {
+    window_size = 3;
+  }
+  if (window_size % 2 == 0) {
+    window_size += 1;
+  }
+
+  const int half = window_size / 2;
+  const size_t n = poses.size();
+  std::vector<geometry_msgs::msg::Pose> original = poses;
+
+  // Leave first and last pose untouched
+  for (size_t i = 1; i + 1 < n; ++i) {
+    double sum_x = 0.0;
+    double sum_y = 0.0;
+    int count = 0;
+
+    const int begin = static_cast<int>(std::max<size_t>(0,
+        i > static_cast<size_t>(half) ? i - half : 0));
+    const int end = static_cast<int>(std::min<size_t>(n - 1, i + half));
+
+    for (int j = begin; j <= end; ++j) {
+      sum_x += original[j].position.x;
+      sum_y += original[j].position.y;
+      ++count;
+    }
+
+    if (count > 0) {
+      poses[i].position.x = sum_x / static_cast<double>(count);
+      poses[i].position.y = sum_y / static_cast<double>(count);
+    }
+  }
+}
+
 CostmapPlanner::CostmapPlanner()
 {
   NavState::register_printer<nav_msgs::msg::Path>(
@@ -103,7 +146,6 @@ std::expected<void, std::string> CostmapPlanner::on_initialize()
 
 void CostmapPlanner::update(NavState & nav_state)
 {
-  current_path_.poses.clear();
   if (!nav_state.has("goals") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
     return;
   }
@@ -166,7 +208,8 @@ void CostmapPlanner::update(NavState & nav_state)
       last_plan_time = get_node()->now();
     }
     const double since_last = (get_node()->now() - last_plan_time).seconds();
-    if (continuous_replan_ && same_start_cell && same_goal_pose && since_last < 0.05) {
+    // Only allow skipping when continuous_replan_ is disabled (event-based planning)
+    if (!continuous_replan_ && same_start_cell && same_goal_pose && since_last < 0.05) {
       // Skip re-planning when nothing relevant changed recently
       nav_state.set("path", current_path_);
       return;
@@ -175,6 +218,10 @@ void CostmapPlanner::update(NavState & nav_state)
 
   auto poses = a_star_path(map, robot_pose.pose.pose, goal);
   if (!poses.empty()) {
+    // Apply a light smoothing to the raw grid path
+    smooth_path(poses);
+
+    current_path_.poses.clear();
     current_path_.header.stamp = get_node()->now();
     current_path_.header.frame_id = goals.header.frame_id;
     for (const auto & pose : poses) {
@@ -184,13 +231,9 @@ void CostmapPlanner::update(NavState & nav_state)
       pose_stamped.pose = pose;
       current_path_.poses.push_back(pose_stamped);
     }
-    // Publish only when the content changed (size as a cheap proxy)
-    static size_t last_published_size = 0;
-    if (current_path_.poses.size() != last_published_size) {
-      if (path_pub_->get_subscription_count() > 0) {
-        path_pub_->publish(current_path_);
-      }
-      last_published_size = current_path_.poses.size();
+    // Always publish a newly computed path
+    if (path_pub_->get_subscription_count() > 0) {
+      path_pub_->publish(current_path_);
     }
     // Update last inputs snapshot
     unsigned int sx, sy;

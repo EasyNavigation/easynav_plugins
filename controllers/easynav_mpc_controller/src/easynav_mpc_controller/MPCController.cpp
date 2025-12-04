@@ -21,6 +21,7 @@
 /// \brief Implementation of the MPCController class.
 
 #include "easynav_mpc_controller/MPCController.hpp"
+#include "easynav_system/GoalManager.hpp"
 
 namespace easynav
 {
@@ -42,12 +43,18 @@ MPCController::on_initialize()
   node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
   node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
 
+  node->declare_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
+  node->declare_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
   node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
+
+  node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
+  node->get_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
 
   optimizer_ = std::make_unique<MPCOptimizer>();
 
@@ -114,6 +121,18 @@ MPCController::collision_checker(void *data, std::vector<double> & u)
 void
 MPCController::update_rt(NavState & nav_state)
 {
+  // If navigation is IDLE, force zero velocity
+  if (nav_state.has("navigation_state")) {
+    const auto nav_state_val = nav_state.get<easynav::GoalManager::State>("navigation_state");
+    if (nav_state_val == easynav::GoalManager::State::IDLE) {
+      cmd_vel_.header.stamp = get_node()->now();
+      cmd_vel_.twist.linear.x = 0.0;
+      cmd_vel_.twist.angular.z = 0.0;
+      nav_state.set("cmd_vel", cmd_vel_);
+      return;
+    }
+  }
+
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("points")) {
     if(verbose_) {
       std::cout << "No Path, No Points or No Robot Pose" << std::endl;
@@ -121,7 +140,7 @@ MPCController::update_rt(NavState & nav_state)
     return;
   }
 
-  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+  nav_msgs::msg::Path path = nav_state.get<nav_msgs::msg::Path>("path");
   if (path.poses.empty()) {
     // If the path is empty, stop the robot
     cmd_vel_.header.frame_id = path.header.frame_id;
@@ -131,6 +150,46 @@ MPCController::update_rt(NavState & nav_state)
     nav_state.set("cmd_vel", cmd_vel_);
     return;
   }
+
+  // Build a local path that:
+  // 1) keeps only the segment that brings the robot closer to the goal, and
+  // 2) prepends a short straight segment from the robot pose to that segment.
+  const auto & robot_pose_msg = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_p = robot_pose_msg.pose.pose.position;
+
+  // Goal is the last point of the planner path
+  const auto & goal_p = path.poses.back().pose.position;
+
+  nav_msgs::msg::Path local_path;
+  local_path.header = path.header;
+  local_path.poses.clear();
+
+  // 1) Find the first index that actually brings us closer to the goal than our current pose
+  const double d_robot_goal = std::hypot(goal_p.x - robot_p.x, goal_p.y - robot_p.y);
+  std::size_t start_idx = 0;
+  for (std::size_t i = 0; i < path.poses.size(); ++i) {
+    const auto & pi = path.poses[i].pose.position;
+    const double d_pi_goal = std::hypot(goal_p.x - pi.x, goal_p.y - pi.y);
+    if (d_pi_goal <= d_robot_goal) {
+      start_idx = i;
+      break;
+    }
+  }
+
+  // 2) Prepend a point at the robot position to ensure continuity from the current pose
+  geometry_msgs::msg::PoseStamped robot_ps;
+  robot_ps.header = path.header;
+  robot_ps.pose.position = robot_p;
+  robot_ps.pose.orientation = path.poses[start_idx].pose.orientation;
+  local_path.poses.push_back(robot_ps);
+
+  // 3) Copy the remaining points from start_idx to the goal
+  for (std::size_t i = start_idx; i < path.poses.size(); ++i) {
+    local_path.poses.push_back(path.poses[i]);
+  }
+
+  // Use the local path from now on
+  path = local_path;
 
   int num_elements = path.poses.size();
   size_t local_horizon;
@@ -213,6 +272,62 @@ MPCController::update_rt(NavState & nav_state)
   }
 
   collision_checker(&params, u);
+
+  // Final alignment phase with hysteresis on distance:
+  // - Enter when dist_to_goal <= 0.5 * pos_tol
+  // - Stay in this phase (even if dist grows slightly) until dist_to_goal > pos_tol
+  {
+    const auto & goal_pose = path.poses.back().pose;
+
+    double pos_tol = fallback_goal_pos_tol_;
+    double yaw_tol = fallback_goal_yaw_tol_;
+
+    if (nav_state.has("goal_tolerance.position")) {
+      pos_tol = nav_state.get<double>("goal_tolerance.position");
+    }
+    if (nav_state.has("goal_tolerance.yaw")) {
+      yaw_tol = nav_state.get<double>("goal_tolerance.yaw");
+    }
+
+    const double dx_g = goal_pose.position.x - pose.position.x;
+    const double dy_g = goal_pose.position.y - pose.position.y;
+    const double dist_to_goal = std::hypot(dx_g, dy_g);
+
+    const double yaw_goal = std::atan2(
+      2.0 * (goal_pose.orientation.w * goal_pose.orientation.z +
+      goal_pose.orientation.x * goal_pose.orientation.y),
+      1.0 - 2.0 * (goal_pose.orientation.y * goal_pose.orientation.y +
+      goal_pose.orientation.z * goal_pose.orientation.z));
+    double e_theta_goal = std::atan2(std::sin(yaw_ - yaw_goal), std::cos(yaw_ - yaw_goal));
+
+    const double enter_dist = 0.5 * pos_tol;
+
+    // Hysteresis based on distance to goal: start aligning when we are
+    // well inside the goal radius (enter_dist) and keep aligning until
+    // we move clearly outside (dist_to_goal > pos_tol).
+    const bool inside_hysteresis_band = (dist_to_goal <= pos_tol);
+    const bool should_enter_alignment = (dist_to_goal <= enter_dist);
+
+    if ((inside_hysteresis_band && std::fabs(e_theta_goal) > yaw_tol) ||
+      should_enter_alignment)
+    {
+      // Stay in place and rotate towards the goal orientation using a simple P controller
+      const double k_align = 1.0;
+      double vlin = 0.0;
+      double vrot = -k_align * e_theta_goal;
+
+      vrot = std::clamp(vrot, -max_ang_vel_, max_ang_vel_);
+
+      cmd_vel_.header.frame_id = path.header.frame_id;
+      cmd_vel_.header.stamp = get_node()->now();
+      cmd_vel_.twist.linear.x = vlin;
+      cmd_vel_.twist.angular.z = vrot;
+
+      nav_state.set("cmd_vel", cmd_vel_);
+      publish_mpc_path(&params, u, path);
+      return;
+    }
+  }
 
   // Publish the computed velocity command
   cmd_vel_.header.frame_id = path.header.frame_id;

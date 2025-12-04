@@ -24,6 +24,7 @@
 
 #include "easynav_mppi_controller/MPPIController.hpp"
 #include "easynav_common/types/PointPerception.hpp"
+#include "easynav_system/GoalManager.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
 
@@ -140,6 +141,27 @@ void MPPIController::publish_mppi_markers(
 void
 MPPIController::update_rt(NavState & nav_state)
 {
+  // If navigation is IDLE, force zero velocity
+  if (nav_state.has("navigation_state")) {
+    const auto nav_state_val = nav_state.get<easynav::GoalManager::State>("navigation_state");
+    if (nav_state_val == easynav::GoalManager::State::IDLE) {
+      twist_stamped_.header.stamp = get_node()->now();
+      twist_stamped_.twist.linear.x = 0.0;
+      twist_stamped_.twist.angular.z = 0.0;
+      nav_state.set("cmd_vel", twist_stamped_);
+
+      // Also clear visualization markers when idle
+      visualization_msgs::msg::MarkerArray clear_markers;
+      visualization_msgs::msg::Marker delete_all;
+      delete_all.action = visualization_msgs::msg::Marker::DELETEALL;
+      clear_markers.markers.push_back(delete_all);
+
+      mppi_candidates_pub_->publish(clear_markers);
+      mppi_optimal_pub_->publish(clear_markers);
+      return;
+    }
+  }
+
   if (!nav_state.has("path") || !nav_state.has("robot_pose")) {
     return;
   }
