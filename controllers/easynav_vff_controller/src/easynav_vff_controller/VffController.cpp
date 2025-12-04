@@ -264,7 +264,7 @@ void VffController::update_rt(NavState & nav_state)
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
       .fuse(get_tf_prefix() + "base_link")
-      ->filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
+      .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
           obstacle_detection_z_max_}).as_points();
 
