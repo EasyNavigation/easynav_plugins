@@ -94,7 +94,8 @@ static void smooth_path(std::vector<geometry_msgs::msg::Pose> & poses, int windo
     double sum_y = 0.0;
     int count = 0;
 
-    const int begin = static_cast<int>(std::max<size_t>(0, i > static_cast<size_t>(half) ? i - half : 0));
+    const int begin = static_cast<int>(std::max<size_t>(0,
+        i > static_cast<size_t>(half) ? i - half : 0));
     const int end = static_cast<int>(std::min<size_t>(n - 1, i + half));
 
     for (int j = begin; j <= end; ++j) {
