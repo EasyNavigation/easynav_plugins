@@ -73,6 +73,10 @@ protected:
   double max_ang_vel_{1.5};     ///< Maximum angular velocity for MPC.
   bool verbose_{false};         ///< Value to debug on terminal
 
+  // Fallback goal tolerances if GoalManager does not publish them
+  double fallback_goal_pos_tol_{0.05};   ///< Default positional tolerance (meters).
+  double fallback_goal_yaw_tol_{0.05};   ///< Default angular tolerance (radians).
+
   std::unique_ptr<MPCOptimizer> optimizer_;  ///< MPC optimizer
 
   rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr mpc_path_pub_;            ///< Publisher for MPC path.

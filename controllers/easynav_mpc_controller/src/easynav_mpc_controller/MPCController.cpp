@@ -43,12 +43,18 @@ MPCController::on_initialize()
   node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
   node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
 
+  node->declare_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
+  node->declare_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
   node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
   node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
+
+  node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
+  node->get_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
 
   optimizer_ = std::make_unique<MPCOptimizer>();
 
@@ -266,6 +272,62 @@ MPCController::update_rt(NavState & nav_state)
   }
 
   collision_checker(&params, u);
+
+  // Final alignment phase with hysteresis on distance:
+  // - Enter when dist_to_goal <= 0.5 * pos_tol
+  // - Stay in this phase (even if dist grows slightly) until dist_to_goal > pos_tol
+  {
+    const auto & goal_pose = path.poses.back().pose;
+
+    double pos_tol = fallback_goal_pos_tol_;
+    double yaw_tol = fallback_goal_yaw_tol_;
+
+    if (nav_state.has("goal_tolerance.position")) {
+      pos_tol = nav_state.get<double>("goal_tolerance.position");
+    }
+    if (nav_state.has("goal_tolerance.yaw")) {
+      yaw_tol = nav_state.get<double>("goal_tolerance.yaw");
+    }
+
+    const double dx_g = goal_pose.position.x - pose.position.x;
+    const double dy_g = goal_pose.position.y - pose.position.y;
+    const double dist_to_goal = std::hypot(dx_g, dy_g);
+
+    const double yaw_goal = std::atan2(
+      2.0 * (goal_pose.orientation.w * goal_pose.orientation.z +
+      goal_pose.orientation.x * goal_pose.orientation.y),
+      1.0 - 2.0 * (goal_pose.orientation.y * goal_pose.orientation.y +
+      goal_pose.orientation.z * goal_pose.orientation.z));
+    double e_theta_goal = std::atan2(std::sin(yaw_ - yaw_goal), std::cos(yaw_ - yaw_goal));
+
+    const double enter_dist = 0.5 * pos_tol;
+
+    // Hysteresis based on distance to goal: start aligning when we are
+    // well inside the goal radius (enter_dist) and keep aligning until
+    // we move clearly outside (dist_to_goal > pos_tol).
+    const bool inside_hysteresis_band = (dist_to_goal <= pos_tol);
+    const bool should_enter_alignment = (dist_to_goal <= enter_dist);
+
+    if ((inside_hysteresis_band && std::fabs(e_theta_goal) > yaw_tol) ||
+      should_enter_alignment)
+    {
+      // Stay in place and rotate towards the goal orientation using a simple P controller
+      const double k_align = 1.0;
+      double vlin = 0.0;
+      double vrot = -k_align * e_theta_goal;
+
+      vrot = std::clamp(vrot, -max_ang_vel_, max_ang_vel_);
+
+      cmd_vel_.header.frame_id = path.header.frame_id;
+      cmd_vel_.header.stamp = get_node()->now();
+      cmd_vel_.twist.linear.x = vlin;
+      cmd_vel_.twist.angular.z = vrot;
+
+      nav_state.set("cmd_vel", cmd_vel_);
+      publish_mpc_path(&params, u, path);
+      return;
+    }
+  }
 
   // Publish the computed velocity command
   cmd_vel_.header.frame_id = path.header.frame_id;

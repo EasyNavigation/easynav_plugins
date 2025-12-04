@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <limits>
 #include <cmath>
+#include <numbers>
 
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
@@ -401,10 +402,6 @@ SerestController::compute_goal_zone(
   double & stop_r, double & slow_r, double & gamma_slow,
   Vec2 & goal_xy, double & yaw_goal) const
 {
-  const double PI = 3.14159265358979323846;
-  const double goal_yaw_tol = goal_yaw_tol_deg_ * PI / 180.0;  // (no se devuelve, pero útil si quieres)
-  (void)goal_yaw_tol;
-
   const auto & pgoal = path.poses.back().pose.position;
   yaw_goal = tf2::getYaw(path.poses.back().pose.orientation);
   goal_xy = Vec2{pgoal.x, pgoal.y};
@@ -412,6 +409,9 @@ SerestController::compute_goal_zone(
   dist_xy_goal = std::hypot(robot_xy.x - goal_xy.x, robot_xy.y - goal_xy.y);
   e_theta_goal = std::atan2(std::sin(robot_yaw - yaw_goal), std::cos(robot_yaw - yaw_goal));
 
+  // Use externally provided goal position tolerance when available (via update_rt),
+  // which stores it in goal_pos_tol_. Here we only shape the radial zone using
+  // the current value of goal_pos_tol_ as stop radius.
   stop_r = std::max(0.0, goal_pos_tol_);
   slow_r = std::max(slow_radius_, stop_r + 0.05);
 
@@ -482,8 +482,7 @@ SerestController::should_turn_in_place(
 {
   // Mantenemos compatibilidad con la firma, pero ignoramos turn_in_place_thr
   // y usamos dos umbrales internos sin exponer parámetros.
-  const double PI = 3.14159265358979323846;
-  const double thr_enter = 60.0 * PI / 180.0; // entra a girar si |e_theta| > 60°
+  const double thr_enter = 60.0 * std::numbers::pi / 180.0; // entra a girar si |e_theta| > 60°
   // const double thr_exit = 35.0 * PI / 180.0; // sale de girar si |e_theta| < 35°
 
   // No permitimos “atajo” marcha atrás en esta decisión: si no permites reverse,
@@ -506,8 +505,7 @@ SerestController::maybe_final_align_and_publish(
   double dist_xy_goal, double stop_r, double e_theta_goal,
   double gamma_slow, double dt)
 {
-  const double PI = 3.14159265358979323846;
-  const double goal_yaw_tol = goal_yaw_tol_deg_ * PI / 180.0;
+  const double goal_yaw_tol = goal_yaw_tol_deg_ * std::numbers::pi / 180.0;
 
   if (dist_xy_goal > stop_r) {
     return false;
@@ -620,6 +618,16 @@ SerestController::update_rt(NavState & nav_state)
   nav_msgs::msg::Odometry odom;
   if (!fetch_required_inputs(nav_state, path, odom)) {return;}
 
+  // 1.5) Goal tolerances: prefer shared GoalManager values, fallback to local params
+  double goal_pos_tol = goal_pos_tol_;
+  double goal_yaw_tol = goal_yaw_tol_deg_ * (std::numbers::pi / 180.0);
+  if (nav_state.has("goal_tolerance.position")) {
+    goal_pos_tol = nav_state.get<double>("goal_tolerance.position");
+  }
+  if (nav_state.has("goal_tolerance.yaw")) {
+    goal_yaw_tol = nav_state.get<double>("goal_tolerance.yaw");
+  }
+
   // 2) Robot state (position + yaw)
   Vec2 robot_xy; double yaw = 0.0;
   robot_state_from_odom(odom, robot_xy, yaw);
@@ -714,8 +722,7 @@ SerestController::update_rt(NavState & nav_state)
   double v_prog_ref = v_prog_ref_free * gamma_slow;
 
   // Maintain a small cruising speed when roughly aligned and outside the stop zone (no reverse)
-  const double PI = 3.14159265358979323846;
-  const double align_thr = 30.0 * PI / 180.0;
+  const double align_thr = 30.0 * std::numbers::pi / 180.0;
   if (!allow_reverse_ && (dist_xy_goal > stop_r) && std::fabs(e_theta) < align_thr) {
     v_prog_ref = std::max(v_prog_ref, std::min(slow_min_speed_, v_prog_ref_free));
   }
@@ -766,7 +773,7 @@ SerestController::update_rt(NavState & nav_state)
 
   // Optional classic TiP safeguard using the same angular threshold
   {
-    const double turn_in_place_thr = (60.0 * PI / 180.0);
+    const double turn_in_place_thr = (60.0 * std::numbers::pi / 180.0);
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 
