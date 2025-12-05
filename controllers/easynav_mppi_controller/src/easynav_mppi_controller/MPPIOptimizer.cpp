@@ -1,5 +1,6 @@
 #include "easynav_mppi_controller/MPPIOptimizer.hpp"
 #include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include <cmath>
 #include <limits>
