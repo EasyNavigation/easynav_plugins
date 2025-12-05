@@ -205,7 +205,7 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
       std::shared_ptr<RoutesFilter> instance =
         routes_filters_loader_->createSharedInstance(plugin);
 
-      auto result = instance->initialize(node, plugin_name + "." + filter_name, get_tf_prefix());
+      auto result = instance->initialize(node, plugin_name + "." + filter_name, get_tf_info());
       if (!result) {
         RCLCPP_ERROR(node->get_logger(),
           "Unable to initialize RoutesFilter %s [%s]. Error: %s",

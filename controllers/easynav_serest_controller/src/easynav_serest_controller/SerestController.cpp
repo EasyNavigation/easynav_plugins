@@ -306,7 +306,7 @@ SerestController::closest_obstacle_distance(
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(0.3)
-    .fuse(get_tf_prefix() + "base_link")
+    .fuse(get_tf_info().robot_frame)
     .filter({-dist_search_radius_, -dist_search_radius_, NAN},
       {dist_search_radius_, dist_search_radius_, 2.0})
     .collapse({NAN, NAN, 0.1})
@@ -368,7 +368,7 @@ SerestController::fetch_required_inputs(
   nav_msgs::msg::Odometry & odom)
 {
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
-    publish_stop(nav_state, "base_link");
+    publish_stop(nav_state, get_tf_info().robot_frame);
     return false;
   }
 

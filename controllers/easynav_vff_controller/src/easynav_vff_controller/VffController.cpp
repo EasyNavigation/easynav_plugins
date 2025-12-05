@@ -64,7 +64,7 @@ std::expected<void, std::string> VffController::on_initialize()
 
   // Initialize the odometry message
   cmd_vel_.header.stamp = node->now();
-  cmd_vel_.header.frame_id = get_tf_prefix() + "base_link";
+  cmd_vel_.header.frame_id = get_tf_info().robot_frame;
   cmd_vel_.twist.linear.x = 0.0;
   cmd_vel_.twist.linear.y = 0.0;
   cmd_vel_.twist.linear.z = 0.0;
@@ -215,7 +215,7 @@ void VffController::update_rt(NavState & nav_state)
   const auto & all_goals = nav_state.get<nav_msgs::msg::Goals>("goals");
 
   if (all_goals.goals.empty()) {
-    cmd_vel_.header.frame_id = get_tf_prefix() + "map";
+    cmd_vel_.header.frame_id = get_tf_info().map_frame;
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = 0.0;
     cmd_vel_.twist.angular.z = 0.0;
@@ -259,17 +259,18 @@ void VffController::update_rt(NavState & nav_state)
 
     const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
+    const auto & tf_info = get_tf_info();
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
-      .fuse(get_tf_prefix() + "base_link")
+      .fuse(tf_info.robot_frame)
       .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
           obstacle_detection_z_max_})
       .as_points();
 
     // Get VFF vectors
-    const VFFVectors & vff = get_vff(angle_error, fused, get_tf_prefix() + "base_link");
+    const VFFVectors & vff = get_vff(angle_error, fused, tf_info.robot_frame);
 
     // Use result vector to calculate output speed
     const auto & v = vff.result;

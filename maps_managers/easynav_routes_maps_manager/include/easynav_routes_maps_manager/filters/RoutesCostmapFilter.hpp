@@ -53,14 +53,13 @@ public:
   ///   RoutesMapsManager.
   /// @param plugin_ns Namespace used to resolve this filter's
   ///   parameters and topics.
-  /// @param tf_prefix TF frame prefix; used to set the frame id of
-  ///   the published debug grid.
+  /// @param tf_info TF frame information used by the navigation stack.
   /// @return std::expected<void, std::string> Empty on success or an
   ///   error message on failure.
   std::expected<void, std::string> initialize(
     const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
     const std::string & plugin_ns,
-    const std::string & tf_prefix) override;
+    const TFInfo & tf_info) override;
 
   /// @brief Apply the routes-based filtering to the costmap.
   ///
@@ -80,8 +79,8 @@ private:
   /// @brief Plugin namespace used for parameters and topics.
   std::string plugin_ns_;
 
-  /// @brief TF prefix used for published frame ids.
-  std::string tf_prefix_;
+  /// @brief TF info used in the navigation stack.
+  TFInfo tf_info_;
 
   /// @brief Minimum cost enforced outside the route corridor.
   int min_cost_{50};

@@ -88,7 +88,8 @@ TEST_F(RoutesMapsManagerTest, LoadsRoutesFromValidYaml)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
-  auto init_result = manager->initialize(node, "routes");
+  easynav::TFInfo tf_info;
+  auto init_result = manager->initialize(node, "routes", tf_info);
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   const auto & routes = manager->get_routes();
@@ -114,7 +115,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenMapPathEmpty)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
-  auto init_result = manager->initialize(node, "routes");
+  easynav::TFInfo tf_info;
+  auto init_result = manager->initialize(node, "routes", tf_info);
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   const auto & routes = manager->get_routes();
@@ -139,7 +141,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenYamlMissing)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
-  auto init_result = manager->initialize(node, "routes");
+  easynav::TFInfo tf_info;
+  auto init_result = manager->initialize(node, "routes", tf_info);
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   const auto & routes = manager->get_routes();
@@ -165,7 +168,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenNoRoutesKey)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
-  auto init_result = manager->initialize(node, "routes");
+  easynav::TFInfo tf_info;
+  auto init_result = manager->initialize(node, "routes", tf_info);
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   const auto & routes = manager->get_routes();
@@ -196,7 +200,8 @@ TEST_F(RoutesMapsManagerTest, UpdateWritesRoutesIntoNavState)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
-  auto init_result = manager->initialize(node, "routes");
+  easynav::TFInfo tf_info;
+  auto init_result = manager->initialize(node, "routes", tf_info);
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   easynav::NavState nav_state;

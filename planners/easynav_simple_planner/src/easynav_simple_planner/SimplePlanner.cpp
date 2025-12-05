@@ -135,7 +135,7 @@ SimplePlanner::update(NavState & nav_state)
 
   auto downsampled_map = map_typed.downsample(0.2);
 
-  if (goals.header.frame_id != "map") {
+  if (goals.header.frame_id != get_tf_info().map_frame) {
     RCLCPP_WARN(get_node()->get_logger(),
       "SimplePlanner::update goals frame is not map (%s)", goals.header.frame_id.c_str());
     return;

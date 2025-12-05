@@ -66,7 +66,7 @@ ObstacleFilter::update(::easynav::NavState & nav_state)
 
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(get_map_resolution())
-    .fuse(get_tf_prefix() + "map")
+    .fuse(get_tf_info().map_frame)
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .as_points();
 

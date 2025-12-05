@@ -201,9 +201,10 @@ MPCController::update_rt(NavState & nav_state)
   const auto & last_pose = path.poses[local_horizon].pose.position;
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & tf_info = get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-2.0, -0.35, -1.0}, {0.0, 0.35, 1.0})
-    .fuse("map")
+    .fuse(tf_info.map_frame)
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(0.1)

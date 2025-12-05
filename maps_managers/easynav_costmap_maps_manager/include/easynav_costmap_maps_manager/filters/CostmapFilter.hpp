@@ -25,6 +25,7 @@
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
+#include "easynav_common/types/TFInfo.hpp"
 
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
@@ -46,7 +47,7 @@ public:
   initialize(
     const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
     const std::string & plugin_name,
-    const std::string & tf_prefix = "");
+    const TFInfo & tf_info);
 
   virtual std::expected<void, std::string> on_initialize() = 0;
   virtual void update(NavState & nav_state) = 0;
@@ -57,12 +58,12 @@ protected:
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> get_node() const;
 
 
-  const std::string & get_tf_prefix() const;
+  const TFInfo & get_tf_info() const;
 
 protected:
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_ {nullptr};
   std::string plugin_name_;
-  std::string tf_prefix_;
+  TFInfo tf_info_;
 };
 }  // namespace easynav
 

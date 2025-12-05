@@ -34,8 +34,9 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
 
   // Initialize the odometry message
   odom_.header.stamp = get_node()->now();
-  odom_.header.frame_id = get_tf_prefix() + "map";
-  odom_.child_frame_id = get_tf_prefix() + "base_link";
+  const auto & tf_info = get_tf_info();
+  odom_.header.frame_id = tf_info.map_frame;
+  odom_.child_frame_id = tf_info.robot_frame;
 
   // Create subscriber to GPS data
   gps_subscriber_ = node->create_subscription<sensor_msgs::msg::NavSatFix>(
@@ -57,8 +58,8 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
   // Create static transform
   geometry_msgs::msg::TransformStamped transform;
   transform.header.stamp = node->now();
-  transform.header.frame_id = get_tf_prefix() + "map";
-  transform.child_frame_id = get_tf_prefix() + "odom";
+  transform.header.frame_id = tf_info.map_frame;
+  transform.child_frame_id = tf_info.odom_frame;
   transform.transform.translation.x = 0.0;
   transform.transform.translation.y = 0.0;
   transform.transform.translation.z = 0.0;
@@ -114,8 +115,9 @@ void GpsLocalizer::update(NavState & nav_state)
 
   // Get XY cartesian coordinates respect to the origin
   odom_.header.stamp = gps_msg_.header.stamp;
-  odom_.header.frame_id = get_tf_prefix() + "map";
-  odom_.child_frame_id = get_tf_prefix() + "base_link";
+  const auto & tf_info = get_tf_info();
+  odom_.header.frame_id = tf_info.map_frame;
+  odom_.child_frame_id = tf_info.robot_frame;
   odom_.pose.pose.position.x = utm_x - origin_utm_.x;
   odom_.pose.pose.position.y = utm_y - origin_utm_.y;
 

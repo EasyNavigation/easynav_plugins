@@ -55,7 +55,8 @@ TEST_F(RoutesCostmapFilterTest, DoesNothingWhenNavStateMissingKeys)
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("routes_costmap_filter_missing");
 
   RoutesCostmapFilter filter;
-  auto init_result = filter.initialize(node, "routes.routes_costmap", "");
+  easynav::TFInfo tf_info;
+  auto init_result = filter.initialize(node, "routes.routes_costmap", tf_info);
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   NavState nav_state;
@@ -68,7 +69,8 @@ TEST_F(RoutesCostmapFilterTest, RaisesCostOutsideRoutes)
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("routes_costmap_filter_basic");
 
   RoutesCostmapFilter filter;
-  auto init_result = filter.initialize(node, "routes.routes_costmap", "");
+  easynav::TFInfo tf_info;
+  auto init_result = filter.initialize(node, "routes.routes_costmap", tf_info);
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   // Simple costmap 10x1, resolution 1.0, origin at (0,0)
@@ -116,7 +118,8 @@ TEST_F(RoutesCostmapFilterTest, IgnoresRoutePointsOutsideMap)
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("routes_costmap_filter_outside");
 
   RoutesCostmapFilter filter;
-  auto init_result = filter.initialize(node, "routes.routes_costmap", "");
+  easynav::TFInfo tf_info;
+  auto init_result = filter.initialize(node, "routes.routes_costmap", tf_info);
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   // Costmap 5x1 from x=0..5

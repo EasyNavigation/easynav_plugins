@@ -93,7 +93,7 @@ NavMapMapsManager::on_initialize()
       instance = navmap_filters_loader_->createSharedInstance(plugin);
 
       auto result = instance->initialize(node, plugin_name + "." + navmap_filter,
-        get_tf_prefix());
+        get_tf_info());
 
       if (!result) {
         RCLCPP_ERROR(node->get_logger(),
