@@ -55,10 +55,6 @@ private:
   int n_imu_sensors_{0};
   int n_gps_sensors_{0};
 
-  std::string base_link_frame_id_;
-  std::string odom_frame_id_;
-  std::string world_frame_id_;
-
   geometry_msgs::msg::PoseWithCovarianceStamped
   navsatfix_to_pose(const sensor_msgs::msg::NavSatFix & navsat_msg);
 

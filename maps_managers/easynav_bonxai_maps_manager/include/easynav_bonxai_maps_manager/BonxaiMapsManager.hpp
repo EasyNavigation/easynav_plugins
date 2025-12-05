@@ -118,7 +118,6 @@ private:
 
   double resolution_ {0.3};
   double height_with_occ_ {1.0};
-  std::string frame_id_ {"map"};
 };
 
 }  // namespace easynav_bonxai

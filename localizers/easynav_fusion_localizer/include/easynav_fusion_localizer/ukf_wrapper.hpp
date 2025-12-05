@@ -50,6 +50,7 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
+#include "easynav_common/types/TFInfo.hpp"
 #include "geometry_msgs/msg/twist_with_covariance_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -207,6 +208,12 @@ public:
     return filter_;
   }
 
+  //! @brief Returns TF configuration (map, odom, robot frames)
+  const easynav::TFInfo & getTFInfo() const
+  {
+    return tf_info_;
+  }
+
   //! @brief Retrieves the EKF's output for broadcasting
   //! @param[out] message - The standard ROS odometry message to be filled
   //! @return true if the filter is initialized, false otherwise
@@ -346,21 +353,6 @@ public:
   std::vector<CallbackData> getGpsCallbackDataArr() const
   {
     return gps_callbackData_arr_;
-  }
-
-  std::string getBaseLinkFrameId() const
-  {
-    return base_link_frame_id_;
-  }
-
-  std::string getWorldFrameId() const
-  {
-    return world_frame_id_;
-  }
-
-  std::string getOdomFrameId() const
-  {
-    return odom_frame_id_;
   }
 
 protected:
@@ -634,6 +626,9 @@ protected:
   //! node will calculate and broadcast.
   //!
   std::string world_frame_id_;
+
+  //! @brief TF configuration aggregated for Easynav
+  easynav::TFInfo tf_info_;
 
   //! @brief Used for outputting debug messages
   //!
