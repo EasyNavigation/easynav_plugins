@@ -488,7 +488,8 @@ AMCLLocalizer::update_odom_from_tf()
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-      "odom", "base_footprint", tf2::TimePointZero, tf2::durationFromSec(0.0));
+      get_tf_info().odom_frame, get_tf_info().robot_frame, tf2::TimePointZero,
+        tf2::durationFromSec(0.0));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "AMCLLocalizer::update: TF failed: %s", ex.what());
     return;

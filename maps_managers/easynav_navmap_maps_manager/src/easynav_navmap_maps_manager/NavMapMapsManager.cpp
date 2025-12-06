@@ -140,7 +140,7 @@ NavMapMapsManager::on_initialize()
     navmap_ = navmap_ros::from_occupancy_grid(occ_msg);
 
     navmap_msg_ = navmap_ros::to_msg(navmap_);
-    navmap_msg_.header.frame_id = "map";
+    navmap_msg_.header.frame_id = get_tf_info().map_frame;
     navmap_msg_.header.stamp = node->now();
     navmap_pub_->publish(navmap_msg_);
   }
@@ -155,7 +155,7 @@ NavMapMapsManager::on_initialize()
 
     if (navmap_ros::io::load_from_file(map_path_, navmap_)) {
       navmap_msg_ = navmap_ros::to_msg(navmap_);
-      navmap_msg_.header.frame_id = "map";
+      navmap_msg_.header.frame_id = get_tf_info().map_frame;
       navmap_msg_.header.stamp = node->now();
       navmap_pub_->publish(navmap_msg_);
     } else {
@@ -172,7 +172,7 @@ NavMapMapsManager::on_initialize()
       navmap_ = navmap_ros::from_occupancy_grid(*msg);
 
       navmap_msg_ = navmap_ros::to_msg(navmap_);
-      navmap_msg_.header.frame_id = "map";
+      navmap_msg_.header.frame_id = get_tf_info().map_frame;
       navmap_msg_.header.stamp = this->get_node()->now();
       navmap_pub_->publish(navmap_msg_);
     });
@@ -186,7 +186,7 @@ NavMapMapsManager::on_initialize()
       navmap_ = navmap_ros::from_pointcloud2(*msg, navmap_msg_, params);
 
 
-      navmap_msg_.header.frame_id = "map";
+      navmap_msg_.header.frame_id = get_tf_info().map_frame;
       navmap_msg_.header.stamp = this->get_node()->now();
       navmap_pub_->publish(navmap_msg_);
     });

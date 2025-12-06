@@ -60,7 +60,7 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
   const auto & points = PointPerceptionsOpsView(perceptions)
     .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
     .downsample(0.3)
-    .fuse("map")
+    .fuse(get_tf_info().map_frame)
     .as_points();
 
   const float voxel_xy = 0.30f;

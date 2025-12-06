@@ -392,7 +392,7 @@ void RoutesMapsManager::publish_routes_markers()
    // removed segments do not leave orphaned markers behind.
   {
     visualization_msgs::msg::Marker m;
-    m.header.frame_id = "map";
+    m.header.frame_id = get_tf_info().map_frame;
     m.action = visualization_msgs::msg::Marker::DELETEALL;
 
     m.ns = "routes_line";
@@ -406,7 +406,7 @@ void RoutesMapsManager::publish_routes_markers()
   for (const auto & seg : routes_) {
     // Line between start and end
     visualization_msgs::msg::Marker line;
-    line.header.frame_id = "map";
+    line.header.frame_id = get_tf_info().map_frame;
     line.ns = "routes_line";
     line.id = id++;
     line.type = visualization_msgs::msg::Marker::LINE_LIST;
@@ -432,7 +432,7 @@ void RoutesMapsManager::publish_routes_markers()
 
     // Arrow for start orientation (same style as end)
     visualization_msgs::msg::Marker start_arrow;
-    start_arrow.header.frame_id = "map";
+    start_arrow.header.frame_id = get_tf_info().map_frame;
     start_arrow.ns = "routes_arrow";
     start_arrow.id = id++;
     start_arrow.type = visualization_msgs::msg::Marker::ARROW;
@@ -449,7 +449,7 @@ void RoutesMapsManager::publish_routes_markers()
 
     // Arrow for end orientation (same style)
     visualization_msgs::msg::Marker end_arrow;
-    end_arrow.header.frame_id = "map";
+    end_arrow.header.frame_id = get_tf_info().map_frame;
     end_arrow.ns = "routes_arrow";
     end_arrow.id = id++;
     end_arrow.type = visualization_msgs::msg::Marker::ARROW;
@@ -478,7 +478,7 @@ void RoutesMapsManager::publish_interactive_markers()
   for (const auto & seg : routes_) {
     // Per-segment toggle cube (red in normal mode, green in edit mode).
     visualization_msgs::msg::InteractiveMarker mode_marker;
-    mode_marker.header.frame_id = "map";
+    mode_marker.header.frame_id = get_tf_info().map_frame;
     mode_marker.name = seg.id + "_mode";
     mode_marker.scale = 1.0;
 
@@ -540,14 +540,14 @@ void RoutesMapsManager::publish_interactive_markers()
     }
 
     visualization_msgs::msg::InteractiveMarker start_marker;
-    start_marker.header.frame_id = "map";
+    start_marker.header.frame_id = get_tf_info().map_frame;
     start_marker.name = seg.id + "_start";
     start_marker.description = "Route " + seg.id + " start";
     start_marker.pose = seg.start;
     start_marker.scale = 1.0;
 
     visualization_msgs::msg::InteractiveMarker end_marker;
-    end_marker.header.frame_id = "map";
+    end_marker.header.frame_id = get_tf_info().map_frame;
     end_marker.name = seg.id + "_end";
     end_marker.description = "Route " + seg.id + " end";
     end_marker.pose = seg.end;

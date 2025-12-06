@@ -179,7 +179,8 @@ OctomapMapsManager::on_initialize()
       geometry_msgs::msg::TransformStamped tf_msg;
       try {
         tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-          "map", msg->header.frame_id, msg->header.stamp, rclcpp::Duration::from_seconds(0.05));
+          get_tf_info().map_frame, msg->header.frame_id, msg->header.stamp,
+            rclcpp::Duration::from_seconds(0.05));
       } catch (const tf2::TransformException & ex) {
         RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
         return;
@@ -223,7 +224,7 @@ OctomapMapsManager::on_initialize()
       octomap_->updateInnerOccupancy();
 
 
-      octomap_msg_.header.frame_id = "map";
+      octomap_msg_.header.frame_id = get_tf_info().map_frame;
       octomap_msg_.header.stamp = this->get_node()->now();
       octomap_msg_.id = "OcTree";
       octomap_msg_.binary = true;

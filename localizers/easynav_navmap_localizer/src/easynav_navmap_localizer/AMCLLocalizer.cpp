@@ -484,7 +484,8 @@ void AMCLLocalizer::update_odom_from_tf()
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-      "odom", "base_footprint", tf2::TimePointZero, tf2::durationFromSec(0.0));
+     get_tf_info().odom_frame, get_tf_info().robot_frame, tf2::TimePointZero,
+          tf2::durationFromSec(0.0));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "TF failed: %s", ex.what());
     return;
@@ -620,12 +621,14 @@ static inline std::string get_frame_id_from(const PointPerception & pp)
 }
 
 
-static inline tf2::Transform lookup_bf_to_sensor(const std::string & sensor_frame)
+static inline tf2::Transform lookup_bf_to_sensor(
+  const std::string & robot_frame,
+  const std::string & sensor_frame)
 {
   if (sensor_frame.empty()) {return tf2::Transform::getIdentity();}
   geometry_msgs::msg::TransformStamped tf_msg =
     RTTFBuffer::getInstance()->lookupTransform(
-      "base_footprint", sensor_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
+      robot_frame, sensor_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
   tf2::Transform T; tf2::fromMsg(tf_msg.transform, T);
   return T;
 }
@@ -744,7 +747,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
   for (const auto & b : bundles) {
     if (!T_bf_sensor_cache.count(b.frame_id)) {
       try {
-        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(b.frame_id);
+        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(get_tf_info().robot_frame, b.frame_id);
 
         // const tf2::Transform & t = T_bf_sensor_cache[b.frame_id];
 
