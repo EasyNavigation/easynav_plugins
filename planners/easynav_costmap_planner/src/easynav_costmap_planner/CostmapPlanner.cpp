@@ -26,6 +26,7 @@
 #include <tuple>
 
 #include "easynav_costmap_planner/CostmapPlanner.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/odometry.hpp"
@@ -156,8 +157,9 @@ void CostmapPlanner::update(NavState & nav_state)
   const auto & map = nav_state.get<Costmap2D>("map.dynamic");
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  if (goals.header.frame_id != get_tf_info().map_frame) {
+  if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",
         goals.header.frame_id.c_str());
     return;

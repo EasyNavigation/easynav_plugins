@@ -50,7 +50,7 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
-#include "easynav_common/types/TFInfo.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 #include "geometry_msgs/msg/twist_with_covariance_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -206,12 +206,6 @@ public:
   robot_localization::Ukf & getFilter()
   {
     return filter_;
-  }
-
-  //! @brief Returns TF configuration (map, odom, robot frames)
-  const easynav::TFInfo & getTFInfo() const
-  {
-    return tf_info_;
   }
 
   //! @brief Retrieves the EKF's output for broadcasting
@@ -626,9 +620,6 @@ protected:
   //! node will calculate and broadcast.
   //!
   std::string world_frame_id_;
-
-  //! @brief TF configuration aggregated for Easynav
-  easynav::TFInfo tf_info_;
 
   //! @brief Used for outputting debug messages
   //!

@@ -22,6 +22,7 @@
 #include <cmath>
 
 #include "easynav_simple_planner/SimplePlanner.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/odometry.hpp"
@@ -132,10 +133,11 @@ SimplePlanner::update(NavState & nav_state)
 
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   auto downsampled_map = map_typed.downsample(0.2);
 
-  if (goals.header.frame_id != get_tf_info().map_frame) {
+  if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(get_node()->get_logger(),
       "SimplePlanner::update goals frame is not map (%s)", goals.header.frame_id.c_str());
     return;

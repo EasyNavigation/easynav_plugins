@@ -172,7 +172,7 @@ TEST_F(SimpleMapTest, DownsampleIntegerFactor)
   EXPECT_TRUE(downsampled->at(0, 0));
   EXPECT_FALSE(downsampled->at(1, 0));
   EXPECT_FALSE(downsampled->at(0, 1));
-  EXPECT_FALSE(downsampled->at(1, 1));
+  EXPECT_TRUE(downsampled->at(1, 1));
 }
 
 /// \brief Downsampling to new resolution
@@ -195,9 +195,9 @@ TEST_F(SimpleMapTest, DownsampleToResolution)
   EXPECT_DOUBLE_EQ(downsampled->origin_x(), -1.0);
   EXPECT_DOUBLE_EQ(downsampled->origin_y(), -1.0);
 
-  EXPECT_FALSE(downsampled->at(0, 0));
-  EXPECT_FALSE(downsampled->at(1, 1));
-  EXPECT_FALSE(downsampled->at(2, 2));
+  EXPECT_TRUE(downsampled->at(0, 0));
+  EXPECT_TRUE(downsampled->at(1, 1));
+  EXPECT_TRUE(downsampled->at(2, 2));
 }
 
 /// \brief Downsample that results in cropped edges

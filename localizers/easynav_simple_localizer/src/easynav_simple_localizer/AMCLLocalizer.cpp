@@ -386,7 +386,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
 
   const auto & map_static = nav_state.get<SimpleMap>("map.static");
 
-  const auto & tf_info = get_tf_info();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .downsample(map_static.resolution())
     .fuse(tf_info.robot_frame)
@@ -527,7 +527,7 @@ AMCLLocalizer::publishTF(const tf2::Transform & map2bf)
 {
   geometry_msgs::msg::TransformStamped tf_msg;
   tf_msg.header.stamp = get_node()->now();
-  const auto & tf_info = get_tf_info();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   tf_msg.header.frame_id = tf_info.map_frame;
   tf_msg.child_frame_id = tf_info.odom_frame;
   tf_msg.transform = tf2::toMsg(map2bf);
@@ -539,9 +539,11 @@ AMCLLocalizer::publishTF(const tf2::Transform & map2bf)
 void
 AMCLLocalizer::publishParticles()
 {
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   geometry_msgs::msg::PoseArray array_msg;
   array_msg.header.stamp = get_node()->now();
-  array_msg.header.frame_id = get_tf_info().map_frame;
+  array_msg.header.frame_id = tf_info.map_frame;
 
   array_msg.poses.reserve(particles_.size());
   for (const auto & p : particles_) {
@@ -600,9 +602,11 @@ AMCLLocalizer::publishEstimatedPose(const tf2::Transform & est_pose)
   tf2::Matrix3x3 cov = computeCovariance(particles_, 0, N_top, mean);
   double yaw_variance = computeYawVariance(particles_, 0, N_top);
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   geometry_msgs::msg::PoseWithCovarianceStamped msg;
   msg.header.stamp = get_node()->now();
-  msg.header.frame_id = get_tf_info().map_frame;
+  msg.header.frame_id = tf_info.map_frame;
 
   msg.pose.pose.position.x = mean.x();
   msg.pose.pose.position.y = mean.y();
@@ -625,7 +629,7 @@ AMCLLocalizer::get_pose()
   nav_msgs::msg::Odometry odom_msg;
 
   odom_msg.header.stamp = get_node()->now();
-  const auto & tf_info = get_tf_info();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_msg.header.frame_id = tf_info.map_frame;
   odom_msg.child_frame_id = tf_info.robot_frame;
 

@@ -34,7 +34,7 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
 
   // Initialize the odometry message
   odom_.header.stamp = get_node()->now();
-  const auto & tf_info = get_tf_info();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_.header.frame_id = tf_info.map_frame;
   odom_.child_frame_id = tf_info.robot_frame;
 
@@ -115,7 +115,7 @@ void GpsLocalizer::update(NavState & nav_state)
 
   // Get XY cartesian coordinates respect to the origin
   odom_.header.stamp = gps_msg_.header.stamp;
-  const auto & tf_info = get_tf_info();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_.header.frame_id = tf_info.map_frame;
   odom_.child_frame_id = tf_info.robot_frame;
   odom_.pose.pose.position.x = utm_x - origin_utm_.x;
