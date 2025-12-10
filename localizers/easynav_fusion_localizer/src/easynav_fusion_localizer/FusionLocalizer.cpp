@@ -86,7 +86,7 @@ void FusionLocalizer::update_rt(NavState & nav_state)
         ukf_wrapper_->poseCallback(
           std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(pose),
           ukf_wrapper_->getGpsCallbackDataArr()[i], // callback_data
-          tf_info.world_frame, // target_frame
+          tf_info.map_frame, // target_frame
           tf_info.odom_frame,  // pose_source_frame
           false                           // imu_data
         );
@@ -117,7 +117,7 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
   // Usamos el mismo timestamp que el mensaje original
   // y el world_frame_id que el filtro UKF espera (p.ej., "map" u "odom")
   pose_msg.header = navsat_msg.header;
-  pose_msg.header.frame_id = get_tf_info().world_frame;
+  pose_msg.header.frame_id = get_tf_info().map_frame;
 
   // 2. Convertir coordenadas (Lat, Lon) a UTM (x, y)
   double utm_x, utm_y;
