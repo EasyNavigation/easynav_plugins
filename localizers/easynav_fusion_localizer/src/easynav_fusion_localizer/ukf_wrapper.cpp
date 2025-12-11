@@ -894,7 +894,8 @@ void UkfWrapper::loadParams()
   map_frame_id_ = tf_info.map_frame;
   odom_frame_id_ = tf_info.odom_frame;
   base_link_frame_id_ = tf_info.robot_frame;
-  world_frame_id_ = tf_info.world_frame;
+  // World frame comes from Easynav TFInfo configuration
+  world_frame_id_ = tf_info.map_frame;
 
   base_link_output_frame_id_ = base_link_frame_id_;
 
@@ -915,7 +916,7 @@ void UkfWrapper::loadParams()
    * transform to compute *and broadcast* map->odom.
    *
    * The state estimation nodes in robot_localization therefore have two
-   * "modes." If your world_frame parameter value matches the odom_frame
+   * "modes." If your world_frame parameter value matches the map_frame
    * parameter value, then robot_localization will assume someone else is
    * broadcasting a transform from odom_frame->base_link_frame, and it will
    * compute the map_frame->odom_frame transform. Otherwise, it will simply
@@ -923,6 +924,8 @@ void UkfWrapper::loadParams()
    *
    * The default is the latter behavior (broadcast of odom->base_link).
    */
+
+
 
   if (map_frame_id_ == odom_frame_id_ ||
     odom_frame_id_ == base_link_frame_id_ ||
