@@ -120,7 +120,7 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
   // y el world_frame_id que el filtro UKF espera (p.ej., "map" u "odom")
   pose_msg.header = navsat_msg.header;
 
-  pose_msg.header.frame_id = get_tf_info().map_frame;
+  pose_msg.header.frame_id = tf_info.map_frame;
 
   // 2. Convertir coordenadas (Lat, Lon) a UTM (x, y)
   double utm_x, utm_y;
