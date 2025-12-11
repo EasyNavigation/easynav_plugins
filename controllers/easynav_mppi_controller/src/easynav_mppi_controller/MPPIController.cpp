@@ -24,6 +24,8 @@
 
 #include "easynav_mppi_controller/MPPIController.hpp"
 #include "easynav_common/types/PointPerception.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
+
 #include "easynav_system/GoalManager.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
@@ -78,7 +80,7 @@ void MPPIController::publish_mppi_markers(
   const std::vector<std::vector<std::pair<double, double>>> & all_trajs,
   const std::vector<std::pair<double, double>> & best_traj)
 {
-  const auto & tf_info = get_tf_info();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   visualization_msgs::msg::MarkerArray candidates;
   visualization_msgs::msg::MarkerArray optimal;
   int id = 0;
@@ -189,7 +191,7 @@ MPPIController::update_rt(NavState & nav_state)
 
   const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
-  const auto & tf_info = get_tf_info();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})
     .fuse(tf_info.map_frame)

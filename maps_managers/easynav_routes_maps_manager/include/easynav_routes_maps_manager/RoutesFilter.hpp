@@ -26,7 +26,6 @@
 #include <vector>
 
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
-#include "easynav_common/types/TFInfo.hpp"
 
 namespace easynav
 {
@@ -63,8 +62,7 @@ public:
   ///   an error message describing the failure.
   virtual std::expected<void, std::string> initialize(
     const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
-    const std::string & plugin_ns,
-    const TFInfo & tf_info) = 0;
+    const std::string & plugin_ns) = 0;
 
   /// @brief Update hook called every navigation cycle.
   ///

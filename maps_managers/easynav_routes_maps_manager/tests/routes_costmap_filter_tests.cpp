@@ -20,6 +20,7 @@
 #include <gtest/gtest.h>
 
 #include "easynav_common/types/NavState.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 
@@ -56,7 +57,9 @@ TEST_F(RoutesCostmapFilterTest, DoesNothingWhenNavStateMissingKeys)
 
   RoutesCostmapFilter filter;
   easynav::TFInfo tf_info;
-  auto init_result = filter.initialize(node, "routes.routes_costmap", tf_info);
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
+  auto init_result = filter.initialize(node, "routes.routes_costmap");
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   NavState nav_state;
@@ -70,7 +73,9 @@ TEST_F(RoutesCostmapFilterTest, RaisesCostOutsideRoutes)
 
   RoutesCostmapFilter filter;
   easynav::TFInfo tf_info;
-  auto init_result = filter.initialize(node, "routes.routes_costmap", tf_info);
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
+  auto init_result = filter.initialize(node, "routes.routes_costmap");
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   // Simple costmap 10x1, resolution 1.0, origin at (0,0)
@@ -119,7 +124,9 @@ TEST_F(RoutesCostmapFilterTest, IgnoresRoutePointsOutsideMap)
 
   RoutesCostmapFilter filter;
   easynav::TFInfo tf_info;
-  auto init_result = filter.initialize(node, "routes.routes_costmap", tf_info);
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
+  auto init_result = filter.initialize(node, "routes.routes_costmap");
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
   // Costmap 5x1 from x=0..5

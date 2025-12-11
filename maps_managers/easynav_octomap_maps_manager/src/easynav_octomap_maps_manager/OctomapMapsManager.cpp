@@ -171,15 +171,17 @@ OctomapMapsManager::on_initialize()
 //      octomap_pub_->publish(octomap_msg_);
 //    });
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
-    [this](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
+    [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
       geometry_msgs::msg::TransformStamped tf_msg;
       try {
         tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-          get_tf_info().map_frame, msg->header.frame_id, msg->header.stamp,
+          tf_info.map_frame, msg->header.frame_id, msg->header.stamp,
             rclcpp::Duration::from_seconds(0.05));
       } catch (const tf2::TransformException & ex) {
         RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
@@ -223,8 +225,7 @@ OctomapMapsManager::on_initialize()
       octomap_->insertPointCloud(cloud, origin, 1000.0, true, false);
       octomap_->updateInnerOccupancy();
 
-
-      octomap_msg_.header.frame_id = get_tf_info().map_frame;
+      octomap_msg_.header.frame_id = tf_info.map_frame;
       octomap_msg_.header.stamp = this->get_node()->now();
       octomap_msg_.id = "OcTree";
       octomap_msg_.binary = true;

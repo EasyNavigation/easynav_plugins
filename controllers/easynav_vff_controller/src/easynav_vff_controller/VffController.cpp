@@ -62,9 +62,11 @@ std::expected<void, std::string> VffController::on_initialize()
   node->get_parameter<double>(plugin_name + ".max_speed", max_speed_);
   node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   // Initialize the odometry message
   cmd_vel_.header.stamp = node->now();
-  cmd_vel_.header.frame_id = get_tf_info().robot_frame;
+  cmd_vel_.header.frame_id = tf_info.robot_frame;
   cmd_vel_.twist.linear.x = 0.0;
   cmd_vel_.twist.linear.y = 0.0;
   cmd_vel_.twist.linear.z = 0.0;
@@ -213,9 +215,10 @@ void VffController::update_rt(NavState & nav_state)
   if (!nav_state.has("robot_pose")) {return;}
 
   const auto & all_goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (all_goals.goals.empty()) {
-    cmd_vel_.header.frame_id = get_tf_info().map_frame;
+    cmd_vel_.header.frame_id = tf_info.map_frame;
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = 0.0;
     cmd_vel_.twist.angular.z = 0.0;
@@ -259,7 +262,7 @@ void VffController::update_rt(NavState & nav_state)
 
     const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
-    const auto & tf_info = get_tf_info();
+    const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})

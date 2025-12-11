@@ -23,6 +23,8 @@
 #include "easynav_mpc_controller/MPCController.hpp"
 #include "easynav_system/GoalManager.hpp"
 
+#include "easynav_common/RTTFBuffer.hpp"
+
 namespace easynav
 {
 
@@ -201,7 +203,8 @@ MPCController::update_rt(NavState & nav_state)
   const auto & last_pose = path.poses[local_horizon].pose.position;
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
-  const auto & tf_info = get_tf_info();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-2.0, -0.35, -1.0}, {0.0, 0.35, 1.0})
     .fuse(tf_info.map_frame)

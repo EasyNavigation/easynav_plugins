@@ -108,7 +108,9 @@ TEST_F(AMCLLocalizerTest, IncomingOccupancyGridUpdatesMaps)
   tf_info.map_frame = "world_map";
   tf_info.odom_frame = "world_odom";
   tf_info.robot_frame = "world_base";
-  manager->initialize(node, "test2", tf_info);
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
+  manager->initialize(node, "test2");
 
   rclcpp::executors::SingleThreadedExecutor executor;
   executor.add_node(node->get_node_base_interface());
