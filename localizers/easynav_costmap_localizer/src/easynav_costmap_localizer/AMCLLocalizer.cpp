@@ -322,6 +322,7 @@ AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
   if (compute_odom_from_tf_) {return;}
 
   tf2::fromMsg(msg->pose.pose, odom_);
+  last_input_time_ = msg->header.stamp;
 
   if (!initialized_odom_) {
     last_odom_ = odom_;
@@ -502,8 +503,11 @@ AMCLLocalizer::update_odom_from_tf()
 
   last_odom_ = odom_;
   odom_ = tf_odom;
+  last_input_time_ = tf_msg.header.stamp;
 
   initialized_odom_ = true;
+
+
 }
 
 void
@@ -720,7 +724,7 @@ void
 AMCLLocalizer::publishTF(const tf2::Transform & map2bf)
 {
   geometry_msgs::msg::TransformStamped tf_msg;
-  tf_msg.header.stamp = get_node()->now();
+  tf_msg.header.stamp = last_input_time_;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   tf_msg.header.frame_id = tf_info.map_frame;
   tf_msg.child_frame_id = tf_info.odom_frame;
@@ -736,7 +740,7 @@ AMCLLocalizer::publishParticles()
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   geometry_msgs::msg::PoseArray array_msg;
-  array_msg.header.stamp = get_node()->now();
+  array_msg.header.stamp = last_input_time_;
   array_msg.header.frame_id = tf_info.map_frame;
   array_msg.poses.reserve(particles_.size());
   for (const auto & p : particles_) {
@@ -797,7 +801,7 @@ AMCLLocalizer::publishEstimatedPose(const tf2::Transform & est_pose)
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   geometry_msgs::msg::PoseWithCovarianceStamped msg;
-  msg.header.stamp = get_node()->now();
+  msg.header.stamp = last_input_time_;
   msg.header.frame_id = tf_info.map_frame;
 
   msg.pose.pose.position.x = mean.x();
@@ -820,7 +824,7 @@ AMCLLocalizer::get_pose()
 {
   nav_msgs::msg::Odometry odom_msg;
 
-  odom_msg.header.stamp = get_node()->now();
+  odom_msg.header.stamp = last_input_time_;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_msg.header.frame_id = tf_info.map_frame;
   odom_msg.child_frame_id = tf_info.robot_frame;

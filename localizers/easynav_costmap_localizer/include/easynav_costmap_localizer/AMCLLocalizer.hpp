@@ -222,6 +222,9 @@ protected:
   /// Time interval (in seconds) after which the particles should be reseeded.
   double reseed_time_;
 
+  /// Timestamp of the last input message (odometry or initial pose).
+  rclcpp::Time last_input_time_;
+
   /// Timestamp of the last reseed event.
   rclcpp::Time last_reseed_;
 };
