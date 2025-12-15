@@ -926,7 +926,6 @@ void UkfWrapper::loadParams()
    */
 
 
-
   if (map_frame_id_ == odom_frame_id_ ||
     odom_frame_id_ == base_link_frame_id_ ||
     map_frame_id_ == base_link_frame_id_ ||
