@@ -22,6 +22,7 @@
 #include <fstream>
 
 #include "easynav_common/types/NavState.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
 
@@ -88,6 +89,9 @@ TEST_F(RoutesMapsManagerTest, LoadsRoutesFromValidYaml)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
+  easynav::TFInfo tf_info;
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
   auto init_result = manager->initialize(node, "routes");
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
@@ -114,6 +118,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenMapPathEmpty)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
+  easynav::TFInfo tf_info;
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
   auto init_result = manager->initialize(node, "routes");
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
@@ -139,6 +145,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenYamlMissing)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
+  easynav::TFInfo tf_info;
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
   auto init_result = manager->initialize(node, "routes");
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
@@ -165,6 +173,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenNoRoutesKey)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
+  easynav::TFInfo tf_info;
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
   auto init_result = manager->initialize(node, "routes");
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 
@@ -196,6 +206,9 @@ TEST_F(RoutesMapsManagerTest, UpdateWritesRoutesIntoNavState)
   });
 
   auto manager = std::make_shared<RoutesMapsManager>();
+  easynav::TFInfo tf_info;
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
   auto init_result = manager->initialize(node, "routes");
   ASSERT_TRUE(init_result.has_value()) << init_result.error();
 

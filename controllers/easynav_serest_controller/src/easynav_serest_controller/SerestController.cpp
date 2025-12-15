@@ -29,6 +29,7 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include "easynav_common/types/PointPerception.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_serest_controller/SerestController.hpp"
 #include "pluginlib/class_list_macros.hpp"
@@ -304,9 +305,11 @@ SerestController::closest_obstacle_distance(
   if (!nav_state.has("points")) {return std::numeric_limits<double>::infinity();}
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(0.3)
-    .fuse(get_tf_prefix() + "base_link")
+    .fuse(tf_info.robot_frame)
     .filter({-dist_search_radius_, -dist_search_radius_, NAN},
       {dist_search_radius_, dist_search_radius_, 2.0})
     .collapse({NAN, NAN, 0.1})
@@ -367,8 +370,10 @@ SerestController::fetch_required_inputs(
   nav_msgs::msg::Path & path,
   nav_msgs::msg::Odometry & odom)
 {
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
-    publish_stop(nav_state, "base_link");
+    publish_stop(nav_state, tf_info.robot_frame);
     return false;
   }
 

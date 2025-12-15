@@ -64,13 +64,11 @@ BonxaiMapsManager::on_initialize()
   node->declare_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
   node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->declare_parameter(plugin_name + ".resolution", resolution_);
-  node->declare_parameter(plugin_name + ".frame_id", frame_id_);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
   node->get_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->get_parameter(plugin_name + ".resolution", resolution_);
-  node->get_parameter(plugin_name + ".frame_id", frame_id_);
 
   bonxai_pub_ = node->create_publisher<sensor_msgs::msg::PointCloud2>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
@@ -177,11 +175,13 @@ BonxaiMapsManager::update(::easynav::NavState & nav_state)
 void
 BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
 {
+  const auto & tf_info = ::easynav::RTTFBuffer::getInstance()->get_tf_info();
 
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = ::easynav::RTTFBuffer::getInstance()->lookupTransform(
-          frame_id_, pc2.header.frame_id, pc2.header.stamp, rclcpp::Duration::from_seconds(0.05));
+          tf_info.map_frame, pc2.header.frame_id, pc2.header.stamp,
+          rclcpp::Duration::from_seconds(0.05));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
     return;
@@ -285,7 +285,9 @@ BonxaiMapsManager::update_from_occ(const nav_msgs::msg::OccupancyGrid & occ)
 void
 BonxaiMapsManager::publish_map()
 {
-  bonxai_msg_.header.frame_id = frame_id_;
+  const auto & tf_info = ::easynav::RTTFBuffer::getInstance()->get_tf_info();
+
+  bonxai_msg_.header.frame_id = tf_info.map_frame;
   bonxai_msg_.header.stamp = this->get_node()->now();
   bonxai_pub_->publish(bonxai_msg_);
 

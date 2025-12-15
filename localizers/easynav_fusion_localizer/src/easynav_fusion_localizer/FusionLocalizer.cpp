@@ -28,13 +28,14 @@ std::expected<void, std::string> FusionLocalizer::on_initialize()
     last_gps_stamp_.resize(10, 0.0);
 
     const std::string & plugin_name = this->get_plugin_name();
-    const std::string & tf_prefix = this->get_tf_prefix();
-    RCLCPP_INFO(localizer_node->get_logger(), "Using tf_prefix: '%s'", tf_prefix.c_str());
+    const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+    RCLCPP_INFO(localizer_node->get_logger(), "Using tf_prefix: '%s'", tf_info.tf_prefix.c_str());
     RCLCPP_INFO(localizer_node->get_logger(), "Using parameter namespace: '%s'",
     plugin_name.c_str());
 
     ukf_wrapper_ = std::make_unique<robot_localization::UkfWrapper>(
-      localizer_node, tf_prefix, plugin_name + ".local_filter"
+      localizer_node, tf_info.tf_prefix, plugin_name + ".local_filter"
     );
     ukf_wrapper_->initialize();
     localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
@@ -64,10 +65,6 @@ std::expected<void, std::string> FusionLocalizer::on_initialize()
 
   n_gps_sensors_ = static_cast<int>(ukf_wrapper_->getGpsCallbackDataArr().size());
 
-  base_link_frame_id_ = ukf_wrapper_->getBaseLinkFrameId();
-  world_frame_id_ = ukf_wrapper_->getWorldFrameId();
-  odom_frame_id_ = ukf_wrapper_->getOdomFrameId();
-
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
   return {};
 }
@@ -86,11 +83,12 @@ void FusionLocalizer::update_rt(NavState & nav_state)
         auto pose = navsatfix_to_pose(gps_data[i]->data);
         // nav_state.set("UTM_gnss_pose", pose);
         // Call the wrapper callback
+        const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
         ukf_wrapper_->poseCallback(
           std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(pose),
           ukf_wrapper_->getGpsCallbackDataArr()[i], // callback_data
-          ukf_wrapper_->getWorldFrameId(), // target_frame
-          ukf_wrapper_->getOdomFrameId(),  // pose_source_frame
+          tf_info.map_frame, // target_frame
+          tf_info.odom_frame,  // pose_source_frame
           false                           // imu_data
         );
       }
@@ -115,12 +113,14 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
   const sensor_msgs::msg::NavSatFix & navsat_msg)
 {
   geometry_msgs::msg::PoseWithCovarianceStamped pose_msg;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   // 1. Establecer el Header
   // Usamos el mismo timestamp que el mensaje original
   // y el world_frame_id que el filtro UKF espera (p.ej., "map" u "odom")
   pose_msg.header = navsat_msg.header;
-  pose_msg.header.frame_id = world_frame_id_;
+
+  pose_msg.header.frame_id = tf_info.map_frame;
 
   // 2. Convertir coordenadas (Lat, Lon) a UTM (x, y)
   double utm_x, utm_y;

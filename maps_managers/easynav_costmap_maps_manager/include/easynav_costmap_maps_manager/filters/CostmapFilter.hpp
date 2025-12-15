@@ -45,8 +45,7 @@ public:
   std::expected<void, std::string>
   initialize(
     const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
-    const std::string & plugin_name,
-    const std::string & tf_prefix = "");
+    const std::string & plugin_name);
 
   virtual std::expected<void, std::string> on_initialize() = 0;
   virtual void update(NavState & nav_state) = 0;
@@ -56,13 +55,9 @@ public:
 protected:
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> get_node() const;
 
-
-  const std::string & get_tf_prefix() const;
-
 protected:
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_ {nullptr};
   std::string plugin_name_;
-  std::string tf_prefix_;
 };
 }  // namespace easynav
 

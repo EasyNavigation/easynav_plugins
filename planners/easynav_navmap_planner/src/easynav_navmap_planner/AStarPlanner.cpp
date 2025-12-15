@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <cstdint>
 
+#include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_navmap_planner/AStarPlanner.hpp"
 
 #include "nav_msgs/msg/goals.hpp"
@@ -95,8 +96,9 @@ void AStarPlanner::update(NavState & nav_state)
 
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  if (goals.header.frame_id != get_tf_prefix() + "map") {
+  if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(
       get_node()->get_logger(), "Goals frame is not 'map': %s",
       goals.header.frame_id.c_str());

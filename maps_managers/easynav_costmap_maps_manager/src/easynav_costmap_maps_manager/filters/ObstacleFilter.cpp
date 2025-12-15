@@ -56,10 +56,11 @@ ObstacleFilter::update(NavState & nav_state)
 
   auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
   Costmap2D & dynamic_map = *dynamic_map_ptr;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(dynamic_map.getResolution())
-    .fuse(get_tf_prefix() + "map")
+    .fuse(tf_info.map_frame)
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .as_points();
 

@@ -30,6 +30,8 @@
 
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
 
+#include "easynav_common/RTTFBuffer.hpp"
+
 namespace easynav
 {
 
@@ -38,13 +40,10 @@ RoutesCostmapFilter::RoutesCostmapFilter() = default;
 std::expected<void, std::string>
 RoutesCostmapFilter::initialize(
   const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
-  const std::string & plugin_ns,
-  const std::string & tf_prefix)
+  const std::string & plugin_ns)
 {
   node_ = node;
   plugin_ns_ = plugin_ns;
-  tf_prefix_ = tf_prefix;
-
   // Parameter for minimum cost to apply outside routes
   if (!node->has_parameter(plugin_ns_ + ".min_cost")) {
     node->declare_parameter(plugin_ns_ + ".min_cost", min_cost_);
@@ -182,7 +181,7 @@ RoutesCostmapFilter::update(NavState & nav_state)
   }
 
   costmap.toOccupancyGridMsg(routes_grid_msg_);
-  routes_grid_msg_.header.frame_id = tf_prefix_ + "map";
+  routes_grid_msg_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
   if (auto node_locked = node_.lock()) {
     routes_grid_msg_.header.stamp = node_locked->now();
   }

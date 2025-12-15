@@ -230,6 +230,9 @@ protected:
   /// Timestamp of the last reseed event.
   rclcpp::Time last_reseed_;
 
+  /// Timestamp of the last input message (odometry or initial pose).
+  rclcpp::Time last_input_time_;
+
   /**
    * @brief Internal static map.
    */

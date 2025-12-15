@@ -57,13 +57,12 @@ public:
   /// @param node Shared pointer to the owning lifecycle node.
   /// @param plugin_ns Namespace under which this filter is configured
   ///   (used as prefix for ROS parameters and topics).
-  /// @param tf_prefix TF frame prefix used by the navigation stack.
+  /// @param tf_info TF frame information used by the navigation stack.
   /// @return std::expected<void, std::string> Empty on success or
   ///   an error message describing the failure.
   virtual std::expected<void, std::string> initialize(
     const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
-    const std::string & plugin_ns,
-    const std::string & tf_prefix) = 0;
+    const std::string & plugin_ns) = 0;
 
   /// @brief Update hook called every navigation cycle.
   ///

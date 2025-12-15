@@ -23,6 +23,7 @@
 #include "easynav_navmap_maps_manager/NavMapMapsManager.hpp"
 
 #include "easynav_common/YTSession.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "navmap_core/NavMap.hpp"
 #include "navmap_ros/conversions.hpp"
@@ -92,8 +93,7 @@ NavMapMapsManager::on_initialize()
       std::shared_ptr<NavMapFilter> instance;
       instance = navmap_filters_loader_->createSharedInstance(plugin);
 
-      auto result = instance->initialize(node, plugin_name + "." + navmap_filter,
-        get_tf_prefix());
+      auto result = instance->initialize(node, plugin_name + "." + navmap_filter);
 
       if (!result) {
         RCLCPP_ERROR(node->get_logger(),
@@ -122,6 +122,9 @@ NavMapMapsManager::on_initialize()
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map_updates",
     rclcpp::QoS(100));
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+
   if (!package_name.empty() && !occmap_path_file.empty()) {
     try {
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
@@ -140,7 +143,7 @@ NavMapMapsManager::on_initialize()
     navmap_ = navmap_ros::from_occupancy_grid(occ_msg);
 
     navmap_msg_ = navmap_ros::to_msg(navmap_);
-    navmap_msg_.header.frame_id = "map";
+    navmap_msg_.header.frame_id = tf_info.map_frame;
     navmap_msg_.header.stamp = node->now();
     navmap_pub_->publish(navmap_msg_);
   }
@@ -155,7 +158,7 @@ NavMapMapsManager::on_initialize()
 
     if (navmap_ros::io::load_from_file(map_path_, navmap_)) {
       navmap_msg_ = navmap_ros::to_msg(navmap_);
-      navmap_msg_.header.frame_id = "map";
+      navmap_msg_.header.frame_id = tf_info.map_frame;
       navmap_msg_.header.stamp = node->now();
       navmap_pub_->publish(navmap_msg_);
     } else {
@@ -166,13 +169,13 @@ NavMapMapsManager::on_initialize()
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
-    [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
+    [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
       resolution_ = msg->info.resolution;
       navmap_ = navmap_ros::from_occupancy_grid(*msg);
 
       navmap_msg_ = navmap_ros::to_msg(navmap_);
-      navmap_msg_.header.frame_id = "map";
+      navmap_msg_.header.frame_id = tf_info.map_frame;
       navmap_msg_.header.stamp = this->get_node()->now();
       navmap_pub_->publish(navmap_msg_);
     });
@@ -180,13 +183,13 @@ NavMapMapsManager::on_initialize()
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
-    [this](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
+    [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
       navmap_ros::BuildParams params;
       navmap_ = navmap_ros::from_pointcloud2(*msg, navmap_msg_, params);
 
 
-      navmap_msg_.header.frame_id = "map";
+      navmap_msg_.header.frame_id = tf_info.map_frame;
       navmap_msg_.header.stamp = this->get_node()->now();
       navmap_pub_->publish(navmap_msg_);
     });
