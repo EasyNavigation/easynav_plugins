@@ -116,19 +116,19 @@ Collaboration diagram for CostmapPlanner:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1CostmapPlanner__coll__graph.png" border="0" usemap="#aCostmapPlanner_coll__map" alt="Collaboration graph"/></div>
 <map name="aCostmapPlanner_coll__map" id="aCostmapPlanner_coll__map">
-<area shape="rect" title="A planner implementing the A* algorithm on a Costmap2D grid." alt="" coords="340,139,457,165"/>
+<area shape="rect" title="A planner implementing the A* algorithm on a Costmap2D grid." alt="" coords="340,124,457,150"/>
 <area shape="rect" href="classPlannerMethodBase.html" title=" " alt="" coords="5,5,144,31"/>
-<area shape="poly" title=" " alt="" coords="96,40,137,78,162,97,189,113,226,127,266,136,340,146,339,151,265,142,225,132,187,117,159,102,133,83,93,44"/>
+<area shape="poly" title=" " alt="" coords="101,39,142,70,192,98,229,110,267,119,340,130,339,135,266,125,227,115,189,102,139,75,98,44"/>
 <area shape="rect" title=" " alt="" coords="168,5,227,31"/>
-<area shape="poly" title=" " alt="" coords="197,46,199,82,205,99,215,113,234,124,265,133,340,144,339,149,264,138,232,129,211,117,200,101,194,83,191,47"/>
+<area shape="poly" title=" " alt="" coords="198,46,202,74,208,87,216,98,236,109,266,118,340,129,339,134,265,123,233,114,212,102,203,90,197,75,193,47"/>
 <area shape="rect" title=" " alt="" coords="304,5,349,31"/>
-<area shape="poly" title=" " alt="" coords="323,46,320,80,323,98,330,114,342,127,357,136,355,141,338,131,325,116,318,99,315,80,317,45"/>
+<area shape="poly" title=" " alt="" coords="323,46,322,73,330,99,342,112,357,121,355,126,338,116,325,101,317,74,317,46"/>
 <area shape="rect" title=" " alt="" coords="448,5,496,31"/>
-<area shape="poly" title=" " alt="" coords="470,47,461,82,445,117,420,140,416,136,440,113,456,80,465,46"/>
+<area shape="poly" title=" " alt="" coords="469,47,459,74,445,102,419,126,416,122,440,98,454,72,464,45"/>
 <area shape="rect" title=" " alt="" coords="560,5,611,31"/>
-<area shape="poly" title=" " alt="" coords="586,47,577,83,568,101,555,117,533,132,509,143,458,153,457,148,507,138,531,128,551,113,563,99,572,81,581,46"/>
+<area shape="poly" title=" " alt="" coords="583,47,572,76,552,102,531,116,507,126,458,137,457,132,505,121,528,112,549,98,567,73,578,45"/>
 <area shape="rect" title=" " alt="" coords="658,5,737,31"/>
-<area shape="poly" title=" " alt="" coords="699,46,691,83,683,102,670,117,654,126,632,134,578,144,458,153,457,147,577,139,631,129,652,121,666,113,678,99,686,81,694,45"/>
+<area shape="poly" title=" " alt="" coords="696,47,686,76,665,102,629,118,575,128,458,137,457,132,574,123,627,113,662,98,681,74,691,46"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -155,12 +155,6 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a35e94cf5823e535adf42e15573b348d8" id="r_a35e94cf5823e535adf42e15573b348d8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35e94cf5823e535adf42e15573b348d8">continuous_replan_</a> {true}</td></tr>
 <tr class="memdesc:a35e94cf5823e535adf42e15573b348d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wheter replan path at freq time.  <br /></td></tr>
 <tr class="separator:a35e94cf5823e535adf42e15573b348d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a0cc9d7035b71dd3eae451181ee896f" id="r_a3a0cc9d7035b71dd3eae451181ee896f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a0cc9d7035b71dd3eae451181ee896f">cost_axial_</a></td></tr>
-<tr class="memdesc:a3a0cc9d7035b71dd3eae451181ee896f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cost multiplier for axial (horizontal/vertical) moves.  <br /></td></tr>
-<tr class="separator:a3a0cc9d7035b71dd3eae451181ee896f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae88bf99367ef2892c348393a3ee8f84" id="r_aae88bf99367ef2892c348393a3ee8f84"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae88bf99367ef2892c348393a3ee8f84">cost_diagonal_</a></td></tr>
-<tr class="memdesc:aae88bf99367ef2892c348393a3ee8f84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cost multiplier for diagonal moves.  <br /></td></tr>
-<tr class="separator:aae88bf99367ef2892c348393a3ee8f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89eb78013dffcbf2780471861a37b90a" id="r_a89eb78013dffcbf2780471861a37b90a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89eb78013dffcbf2780471861a37b90a">cost_factor_</a></td></tr>
 <tr class="memdesc:a89eb78013dffcbf2780471861a37b90a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scaling factor applied to cell cost values.  <br /></td></tr>
 <tr class="separator:a89eb78013dffcbf2780471861a37b90a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,6 +164,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a8dc6b25f90bfb16f7f1d95b51800aa00" id="r_a8dc6b25f90bfb16f7f1d95b51800aa00"><td class="memItemLeft" align="right" valign="top">nav_msgs::msg::Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8dc6b25f90bfb16f7f1d95b51800aa00">current_path_</a></td></tr>
 <tr class="memdesc:a8dc6b25f90bfb16f7f1d95b51800aa00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most recently computed path.  <br /></td></tr>
 <tr class="separator:a8dc6b25f90bfb16f7f1d95b51800aa00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d32de66d943443ddb2dcb34fb16b718" id="r_a4d32de66d943443ddb2dcb34fb16b718"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d32de66d943443ddb2dcb34fb16b718">heuristic_scale_</a> {1.0}</td></tr>
+<tr class="memdesc:a4d32de66d943443ddb2dcb34fb16b718"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scaling factor applied to the heuristic term in A*.  <br /></td></tr>
+<tr class="separator:a4d32de66d943443ddb2dcb34fb16b718"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa42e78400a5504304ee9b56e2160d5c" id="r_afa42e78400a5504304ee9b56e2160d5c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa42e78400a5504304ee9b56e2160d5c">inflation_penalty_</a></td></tr>
 <tr class="memdesc:afa42e78400a5504304ee9b56e2160d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extra cost penalty for paths near inflated obstacles.  <br /></td></tr>
 <tr class="separator:afa42e78400a5504304ee9b56e2160d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -349,54 +346,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3a0cc9d7035b71dd3eae451181ee896f" name="a3a0cc9d7035b71dd3eae451181ee896f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a0cc9d7035b71dd3eae451181ee896f">&#9670;&#160;</a></span>cost_axial_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double cost_axial_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Cost multiplier for axial (horizontal/vertical) moves. </p>
-
-</div>
-</div>
-<a id="aae88bf99367ef2892c348393a3ee8f84" name="aae88bf99367ef2892c348393a3ee8f84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae88bf99367ef2892c348393a3ee8f84">&#9670;&#160;</a></span>cost_diagonal_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double cost_diagonal_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Cost multiplier for diagonal moves. </p>
-
-</div>
-</div>
 <a id="a89eb78013dffcbf2780471861a37b90a" name="a89eb78013dffcbf2780471861a37b90a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89eb78013dffcbf2780471861a37b90a">&#9670;&#160;</a></span>cost_factor_</h2>
 
@@ -466,6 +415,30 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Most recently computed path. </p>
+
+</div>
+</div>
+<a id="a4d32de66d943443ddb2dcb34fb16b718" name="a4d32de66d943443ddb2dcb34fb16b718"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d32de66d943443ddb2dcb34fb16b718">&#9670;&#160;</a></span>heuristic_scale_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double heuristic_scale_ {1.0}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Scaling factor applied to the heuristic term in A*. </p>
 
 </div>
 </div>

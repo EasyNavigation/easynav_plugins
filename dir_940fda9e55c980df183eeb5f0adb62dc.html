@@ -160,20 +160,65 @@ Parameters</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Name   </th><th class="markdownTableHeadNone">Type   </th><th class="markdownTableHeadRight">Default   </th><th class="markdownTableHeadNone">Description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.cost_factor</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>2.0</code>   </td><td class="markdownTableBodyNone">Scaling factor applied to costmap cell values to compute traversal costs.    </td></tr>
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.cost_factor</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>2.0</code>   </td><td class="markdownTableBodyNone">Scaling factor applied to costmap cell values to compute traversal costs. Higher values make high-cost cells much less attractive.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>&lt;plugin&gt;.inflation_penalty</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>5.0</code>   </td><td class="markdownTableBodyNone">Extra penalty added to inflated/near-obstacle cells to push paths away from obstacles.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.cost_axial</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>1.0</code>   </td><td class="markdownTableBodyNone">Base movement cost for axial (N/E/S/W) steps.    </td></tr>
+<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.heuristic_scale</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>1.0</code>   </td><td class="markdownTableBodyNone">Scaling factor applied to the A* heuristic term. Controls the trade-off between following the cheapest route vs. going more directly.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>&lt;plugin&gt;.cost_diagonal</code>   </td><td class="markdownTableBodyNone"><code>double</code>   </td><td class="markdownTableBodyRight"><code>1.41</code>   </td><td class="markdownTableBodyNone">Base movement cost for diagonal steps (approx. √2).    </td></tr>
-<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>&lt;plugin&gt;.continuous_replan</code>   </td><td class="markdownTableBodyNone"><code>bool</code>   </td><td class="markdownTableBodyRight"><code>true</code>   </td><td class="markdownTableBodyNone">If <code>true</code>, re-plans continuously as the map/goal changes; if <code>false</code>, plans once per request.   </td></tr>
 </table>
+<h2><a class="anchor" id="autotoc_md202"></a>
+Effect of <code>cost_factor</code></h2>
+<p>The planner uses a per-step traversal cost:</p>
+<p>$$ g_{\text{new}} = g_{\text{current}} + \text{step_cost} \cdot \left(1 + \text{cost_factor} \cdot \frac{\text{cell_cost}}{\text{LETHAL_OBSTACLE}}\right) $$</p>
+<ul>
+<li><b>Low <code>cost_factor</code> (e.g. 1–2):</b><ul>
+<li>Cell cost has a modest influence; the planner is closer to a pure geometric shortest-path search.</li>
+<li>Paths may cross moderately expensive regions if that keeps distance short.</li>
+</ul>
+</li>
+<li><b>High <code>cost_factor</code> (e.g. 5–10+):</b><ul>
+<li>High-cost cells become very unattractive, so the planner strongly prefers low-cost corridors (e.g. routes or low-inflation areas), even if they are longer.</li>
+<li>Useful when combined with modules that encode preferences as higher costs (such as route managers).</li>
+</ul>
+</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md203"></a>
+Effect of <code>heuristic_scale</code></h2>
+<p>The A* priority is:</p>
+<p>$$ f = g + h, \quad h = \text{heuristic_scale} \cdot d_{\text{cells}}(\text{current}, \text{goal}) $$</p>
+<p>where $d_{\text{cells}}$ is the Euclidean distance in cell indices (not metric distance, but proportional).</p>
+<ul>
+<li><b>Decrease <code>heuristic_scale</code> (&lt; 1.0):</b><ul>
+<li>The heuristic term becomes weaker, and A* behaves more like Dijkstra.</li>
+<li>The search explores more alternatives and is guided more strictly by the true accumulated cost $g$.</li>
+<li>This usually makes the planner follow high-cost penalties (e.g. for leaving a route) more faithfully, at the expense of more computation.</li>
+</ul>
+</li>
+<li><b>Increase <code>heuristic_scale</code> (&gt; 1.0):</b><ul>
+<li>The heuristic term dominates more, so the planner prefers geometrically direct paths.</li>
+<li>It may still avoid extremely high-cost regions if <code>cost_factor</code> is large, but will be more willing to “cut corners” through slightly more expensive zones.</li>
+</ul>
+</li>
+</ul>
+<p><b>Typical tuning strategy:</b></p>
+<ul>
+<li>First, adjust <code>cost_factor</code> so that the costmap properly encodes your preferences:<ul>
+<li>Increase it until paths clearly avoid high-cost areas that should be disfavored.</li>
+</ul>
+</li>
+<li>Then, fine-tune <code>heuristic_scale</code>:<ul>
+<li>Start from <code>1.0</code>.</li>
+<li>If the planner still takes shortcuts that ignore cost differences, consider reducing it slightly (e.g. <code>0.7–0.9</code>).</li>
+<li>If planning becomes too slow or explores too widely, you can increase it modestly (e.g. <code>1.2–1.5</code>).</li>
+</ul>
+</li>
+</ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md203"></a>
+<h1><a class="anchor" id="autotoc_md205"></a>
 Interfaces (Topics and Services)</h1>
-<h2><a class="anchor" id="autotoc_md204"></a>
+<h2><a class="anchor" id="autotoc_md206"></a>
 Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -183,7 +228,7 @@ Publications</h2>
 </table>
 <p>This plugin does not create subscriptions or services directly; it reads inputs via NavState.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md206"></a>
+<h1><a class="anchor" id="autotoc_md208"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -198,7 +243,7 @@ NavState Keys</h1>
 <td class="markdownTableBodyNone"><code>path</code>   </td><td class="markdownTableBodyNone"><code>nav_msgs::msg::Path</code>   </td><td class="markdownTableBodyNone"><b>Write</b>   </td><td class="markdownTableBodyNone">Output path to follow.   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md208"></a>
+<h1><a class="anchor" id="autotoc_md210"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -207,7 +252,7 @@ TF Frames</h1>
 <td class="markdownTableBodyNone">Reads   </td><td class="markdownTableBodyNone"><code>map -&gt; base_footprint</code>   </td><td class="markdownTableBodyNone">Requires consistent frames between the costmap and the published path.   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md210"></a>
+<h1><a class="anchor" id="autotoc_md212"></a>
 License</h1>
 <p>GPL-3.0-only </p>
 </div><!-- contents -->

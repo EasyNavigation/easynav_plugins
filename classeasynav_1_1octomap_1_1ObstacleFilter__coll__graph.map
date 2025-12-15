@@ -1,11 +1,11 @@
 <map id="ObstacleFilter" name="ObstacleFilter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="180,199,283,225"/>
-<area shape="rect" id="Node000002" href="$classeasynav_1_1octomap_1_1OctomapFilter.html" title=" " alt="" coords="180,124,283,150"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,165,234,199,229,199,229,165"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="180,184,283,210"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1octomap_1_1OctomapFilter.html" title=" " alt="" coords="180,109,283,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="234,150,234,184,229,184,229,150"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,5,181,46"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,57,128,79,147,98,168,111,190,121,188,126,165,116,144,102,124,82,108,60"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,56,147,83,193,106,191,111,144,87,115,60"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="205,13,258,38"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="234,54,234,124,229,124,229,54"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="234,54,234,108,229,108,229,54"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="322,13,368,38"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="342,55,333,79,318,102,299,116,279,126,277,121,297,111,314,98,328,77,337,53"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="339,54,330,71,318,87,298,101,277,111,275,106,296,96,314,83,326,68,334,52"/>
 </map>
