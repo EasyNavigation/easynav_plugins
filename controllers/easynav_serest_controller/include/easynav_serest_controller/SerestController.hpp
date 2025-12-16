@@ -20,7 +20,6 @@
 #ifndef EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_
 #define EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_
 
-#include <expected>
 #include <vector>
 #include <string>
 
@@ -63,9 +62,9 @@ public:
 
   /**
    * @brief Initialize parameters and internal state.
-   * @return std::expected<void, std::string> Empty on success; error message otherwise.
+   * @throws std::runtime_error on initialization error.
    */
-  std::expected<void, std::string> on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Real-time control update (called ~20–30 Hz).

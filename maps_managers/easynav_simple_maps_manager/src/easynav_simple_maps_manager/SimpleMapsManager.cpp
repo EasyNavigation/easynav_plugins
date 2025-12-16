@@ -20,8 +20,6 @@
 /// \file
 /// \brief Implementation of the SimpleMapsManager class.
 
-#include <expected>
-
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 
@@ -51,7 +49,7 @@ SimpleMapsManager::~SimpleMapsManager()
 }
 
 
-std::expected<void, std::string>
+void
 SimpleMapsManager::on_initialize()
 {
   auto node = get_node();
@@ -71,11 +69,11 @@ SimpleMapsManager::on_initialize()
       pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + "/" + map_path_file;
     } catch(ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     if (!static_map_.load_from_file(map_path_)) {
-      return std::unexpected("File [" + map_path_ + "] not found");
+      throw std::runtime_error("File [" + map_path_ + "] not found");
     }
   }
 
@@ -123,8 +121,6 @@ SimpleMapsManager::on_initialize()
   static_grid_msg_.header.stamp = node->now();
 
   static_occ_pub_->publish(static_grid_msg_);
-
-  return {};
 }
 
 void

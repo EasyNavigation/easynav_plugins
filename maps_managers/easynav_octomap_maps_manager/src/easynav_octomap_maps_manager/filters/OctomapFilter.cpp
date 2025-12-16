@@ -18,7 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "octomap/octomap.h"
@@ -35,14 +34,14 @@ OctomapFilter::OctomapFilter()
 
 }
 
-std::expected<void, std::string>
+void
 OctomapFilter::initialize(
   const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
   const std::string & plugin_name)
 {
   parent_node_ = parent_node;
   plugin_name_ = plugin_name;
-  return on_initialize();
+  on_initialize();
 }
 
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>

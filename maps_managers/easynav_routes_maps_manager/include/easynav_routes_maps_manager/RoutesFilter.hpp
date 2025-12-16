@@ -20,7 +20,6 @@
 #ifndef EASYNAV_ROUTES_MAPS_MANAGER_ROUTES_FILTER_HPP_
 #define EASYNAV_ROUTES_MAPS_MANAGER_ROUTES_FILTER_HPP_
 
-#include <expected>
 #include <memory>
 #include <string>
 #include <vector>
@@ -58,9 +57,8 @@ public:
   /// @param plugin_ns Namespace under which this filter is configured
   ///   (used as prefix for ROS parameters and topics).
   /// @param tf_info TF frame information used by the navigation stack.
-  /// @return std::expected<void, std::string> Empty on success or
-  ///   an error message describing the failure.
-  virtual std::expected<void, std::string> initialize(
+  /// @throws std::runtime_error if initialization fails.
+  virtual void initialize(
     const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
     const std::string & plugin_ns) = 0;
 

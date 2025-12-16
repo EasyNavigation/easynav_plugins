@@ -21,7 +21,6 @@
 #ifndef EASYNAV_PLANNER__FILTERS__OBSTACLEFILTER_HPP_
 #define EASYNAV_PLANNER__FILTERS__OBSTACLEFILTER_HPP_
 
-#include <expected>
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
@@ -36,7 +35,7 @@ class ObstacleFilter : public CostmapFilter
 public:
   ObstacleFilter();
 
-  virtual std::expected<void, std::string> on_initialize();
+  virtual void on_initialize();
   virtual void update(NavState & nav_state);
 };
 

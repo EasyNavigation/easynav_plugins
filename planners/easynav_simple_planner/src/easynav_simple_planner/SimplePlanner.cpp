@@ -86,7 +86,7 @@ SimplePlanner::SimplePlanner()
     });
 }
 
-std::expected<void, std::string>
+void
 SimplePlanner::on_initialize()
 {
   auto node = get_node();
@@ -99,8 +99,6 @@ SimplePlanner::on_initialize()
 
   path_pub_ = get_node()->create_publisher<nav_msgs::msg::Path>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
-
-  return {};
 }
 
 void
@@ -247,7 +245,7 @@ SimplePlanner::a_star_path(
       double new_cost = cost_so_far[idx(current.x, current.y)] + hypot(dx, dy);
       int nid = idx(nx, ny);
 
-      if (!cost_so_far.contains(nid) || new_cost < cost_so_far[nid]) {
+      if (cost_so_far.find(nid) == cost_so_far.end() || new_cost < cost_so_far[nid]) {
         cost_so_far[nid] = new_cost;
         double priority = new_cost + heuristic(nx, ny, gx, gy);
         open.push({nx, ny, new_cost, priority});
@@ -258,7 +256,7 @@ SimplePlanner::a_star_path(
 
   std::vector<geometry_msgs::msg::Pose> path;
   int cx = gx, cy = gy;
-  while (came_from.contains(idx(cx, cy))) {
+  while (came_from.find(idx(cx, cy) ) != came_from.end()) {
     geometry_msgs::msg::Pose pose;
 
     auto [px, py] = map.cell_to_metric(cx, cy);

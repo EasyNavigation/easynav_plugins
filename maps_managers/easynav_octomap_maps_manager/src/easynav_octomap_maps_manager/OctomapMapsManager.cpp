@@ -17,7 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#include <expected>
 #include <string>
 
 #include "easynav_octomap_maps_manager/OctomapMapsManager.hpp"
@@ -60,7 +59,7 @@ OctomapMapsManager::OctomapMapsManager()
 
 OctomapMapsManager::~OctomapMapsManager() {}
 
-std::expected<void, std::string>
+void
 OctomapMapsManager::on_initialize()
 {
   auto node = get_node();
@@ -96,7 +95,7 @@ OctomapMapsManager::on_initialize()
   //      if (!result) {
   //        RCLCPP_ERROR(node->get_logger(),
   //          "Unable to initialize [%s]. Error: %s", plugin.c_str(), result.error().c_str());
-  //        return std::unexpected("Unable to initialize " +
+  //        throw std::runtime_error("Unable to initialize " +
   //          plugin + " . Error: " + result.error());
   //      }
   //
@@ -107,7 +106,7 @@ OctomapMapsManager::on_initialize()
   //    } catch (pluginlib::PluginlibException & ex) {
   //      RCLCPP_ERROR(node->get_logger(),
   //        "Unable to load plugin easynav::octomap::OctomapFilter. Error: %s", ex.what());
-  //      return std::unexpected("Unable to load plugin easynav::octomap::OctomapFilter " +
+  //      throw std::runtime_error("Unable to load plugin easynav::octomap::OctomapFilter " +
   //        octomap_filter + " . Error: " + ex.what());
   //    }
   //  }
@@ -121,13 +120,13 @@ OctomapMapsManager::on_initialize()
 //       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
 //       map_path_ = pkgpath + std::string("/") + occmap_path_file;
 //     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-//       return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+//       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
 //     }
 //
 //     nav_msgs::msg::OccupancyGrid occ_msg;
 //     if (auto ret = loadMapFromYaml(map_path_, occ_msg) != LOAD_MAP_SUCCESS) {
 //       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
-//       return std::unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
+//       throw std::runtime_error("YAML file [" + map_path_ + "] not found or invalid: ");
 //     }
 //
 //     resolution_ = occ_msg.info.resolution;
@@ -144,7 +143,7 @@ OctomapMapsManager::on_initialize()
 //       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
 //       map_path_ = pkgpath + std::string("/") + occmap_path_file;
 //     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-//       return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+//       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
 //     }
 //
 //     if (octomap_ros::io::load_from_file(map_path_, octomap_)) {
@@ -248,8 +247,6 @@ OctomapMapsManager::on_initialize()
 
       // ToDo
     });
-
-  return {};
 }
 
 void

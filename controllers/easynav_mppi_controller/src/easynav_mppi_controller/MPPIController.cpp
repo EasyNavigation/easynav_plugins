@@ -20,8 +20,6 @@
 /// \file
 /// \brief Implementation of the MPPIController class.
 
-#include <expected>
-
 #include "easynav_mppi_controller/MPPIController.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
@@ -37,7 +35,7 @@ MPPIController::MPPIController() {}
 
 MPPIController::~MPPIController() = default;
 
-std::expected<void, std::string>
+void
 MPPIController::on_initialize()
 {
   auto node = get_node();
@@ -72,8 +70,6 @@ MPPIController::on_initialize()
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/candidates", 10);
   mppi_optimal_pub_ =
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/optimal_path", 10);
-
-  return {};
 }
 
 void MPPIController::publish_mppi_markers(

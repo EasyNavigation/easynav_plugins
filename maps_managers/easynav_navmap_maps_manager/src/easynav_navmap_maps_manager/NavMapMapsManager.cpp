@@ -17,7 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#include <expected>
+#include <stdexcept>
 #include <string>
 
 #include "easynav_navmap_maps_manager/NavMapMapsManager.hpp"
@@ -63,7 +63,7 @@ NavMapMapsManager::NavMapMapsManager()
 
 NavMapMapsManager::~NavMapMapsManager() {}
 
-std::expected<void, std::string>
+void
 NavMapMapsManager::on_initialize()
 {
   auto node = get_node();
@@ -93,13 +93,12 @@ NavMapMapsManager::on_initialize()
       std::shared_ptr<NavMapFilter> instance;
       instance = navmap_filters_loader_->createSharedInstance(plugin);
 
-      auto result = instance->initialize(node, plugin_name + "." + navmap_filter);
-
-      if (!result) {
+      try {
+        instance->initialize(node, plugin_name + "." + navmap_filter);
+      } catch (const std::runtime_error & ex) {
         RCLCPP_ERROR(node->get_logger(),
-          "Unable to initialize [%s]. Error: %s", plugin.c_str(), result.error().c_str());
-        return std::unexpected("Unable to initialize " +
-          plugin + " . Error: " + result.error());
+          "Unable to initialize [%s]. Error: %s", plugin.c_str(), ex.what());
+        throw;
       }
 
       navmap_filters_.push_back(instance);
@@ -109,7 +108,7 @@ NavMapMapsManager::on_initialize()
     } catch (pluginlib::PluginlibException & ex) {
       RCLCPP_ERROR(node->get_logger(),
         "Unable to load plugin easynav::navmap::NavMapFilter. Error: %s", ex.what());
-      return std::unexpected("Unable to load plugin easynav::navmap::NavMapFilter " +
+      throw std::runtime_error("Unable to load plugin easynav::navmap::NavMapFilter " +
         navmap_filter + " . Error: " + ex.what());
     }
   }
@@ -130,13 +129,13 @@ NavMapMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + occmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     nav_msgs::msg::OccupancyGrid occ_msg;
     if (auto ret = loadMapFromYaml(map_path_, occ_msg) != LOAD_MAP_SUCCESS) {
       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
-      return std::unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
+      throw std::runtime_error("YAML file [" + map_path_ + "] not found or invalid: ");
     }
 
     resolution_ = occ_msg.info.resolution;
@@ -153,7 +152,7 @@ NavMapMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + navmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     if (navmap_ros::io::load_from_file(map_path_, navmap_)) {
@@ -206,8 +205,6 @@ NavMapMapsManager::on_initialize()
       navmap_ros::io::save_to_file(navmap_, "/tmp/map.navmap");
       // ToDo
     });
-
-  return {};
 }
 
 void

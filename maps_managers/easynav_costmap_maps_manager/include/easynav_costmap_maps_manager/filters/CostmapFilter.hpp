@@ -21,7 +21,6 @@
 #ifndef EASYNAV_PLANNER__FILTERS__COSTMAPFILTER_HPP_
 #define EASYNAV_PLANNER__FILTERS__COSTMAPFILTER_HPP_
 
-#include <expected>
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
@@ -42,12 +41,12 @@ class CostmapFilter
 public:
   CostmapFilter();
 
-  std::expected<void, std::string>
+  void
   initialize(
     const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
     const std::string & plugin_name);
 
-  virtual std::expected<void, std::string> on_initialize() = 0;
+  virtual void on_initialize() = 0;
   virtual void update(NavState & nav_state) = 0;
 
   const std::string & get_plugin_name() const;

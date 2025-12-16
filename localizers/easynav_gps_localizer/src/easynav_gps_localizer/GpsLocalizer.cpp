@@ -20,7 +20,6 @@
 /// \file
 /// \brief Implementation of the GpsLocalizer class.
 
-#include <expected>
 #include "easynav_gps_localizer/GpsLocalizer.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
@@ -28,7 +27,7 @@
 namespace easynav
 {
 
-std::expected<void, std::string> GpsLocalizer::on_initialize()
+void GpsLocalizer::on_initialize()
 {
   auto node = get_node();
 
@@ -73,8 +72,6 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
 
   time_1_ = get_node()->now().seconds();
   alpha_ = 0.99;
-
-  return {};
 }
 
 void GpsLocalizer::gps_callback(const sensor_msgs::msg::NavSatFix::SharedPtr msg)

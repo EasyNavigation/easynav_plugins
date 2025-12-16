@@ -18,7 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_costmap_maps_manager/filters/CostmapFilter.hpp"
@@ -31,7 +30,7 @@ CostmapFilter::CostmapFilter()
 
 }
 
-std::expected<void, std::string>
+void
 CostmapFilter::initialize(
   const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
   const std::string & plugin_name)
@@ -39,7 +38,7 @@ CostmapFilter::initialize(
   parent_node_ = parent_node;
   plugin_name_ = plugin_name;
 
-  return on_initialize();
+  on_initialize();
 }
 
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>

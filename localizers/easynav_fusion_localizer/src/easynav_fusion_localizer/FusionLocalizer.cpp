@@ -1,5 +1,3 @@
-#include <expected>
-
 #include "easynav_fusion_localizer/FusionLocalizer.hpp"
 
 #include "easynav_localizer/LocalizerNode.hpp"
@@ -16,7 +14,7 @@
 namespace easynav
 {
 
-std::expected<void, std::string> FusionLocalizer::on_initialize()
+void FusionLocalizer::on_initialize()
 {
 
   try {
@@ -50,8 +48,8 @@ std::expected<void, std::string> FusionLocalizer::on_initialize()
     RCLCPP_FATAL(
       get_node()->get_logger(), "Critical failure initializing UkfWrapper: %s",
       e.what());
-    // Return an error to easynav
-    return std::unexpected(std::string("Failed to initialize UkfWrapper: ") + e.what());
+    // Raise error
+    throw std::runtime_error(std::string("Failed to initialize UkfWrapper: ") + e.what());
   }
 
 
@@ -66,7 +64,6 @@ std::expected<void, std::string> FusionLocalizer::on_initialize()
   n_gps_sensors_ = static_cast<int>(ukf_wrapper_->getGpsCallbackDataArr().size());
 
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
-  return {};
 }
 
 // 2. Hook de actualización RT (Tu "Timer" de alta frecuencia)

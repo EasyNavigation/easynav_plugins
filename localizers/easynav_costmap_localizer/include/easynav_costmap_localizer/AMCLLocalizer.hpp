@@ -67,9 +67,9 @@ public:
    *
    * Sets up publishers, subscribers, and prepares the particle filter.
    *
-   * @return std::expected<void, std::string> Success or error message.
+   * @throws std::runtime_error on initialization error.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Real-time update of the localization state.

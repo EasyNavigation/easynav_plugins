@@ -21,9 +21,7 @@
 #ifndef EASYNAV_OCTOMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 #define EASYNAV_OCTOMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 
-#include <expected>
 #include <string>
-
 
 #include "pluginlib/class_loader.hpp"
 
@@ -42,7 +40,7 @@ class InflationFilter : public OctomapFilter
 public:
   InflationFilter();
 
-  virtual std::expected<void, std::string> on_initialize();
+  virtual void on_initialize();
   virtual void update(::easynav::NavState & nav_state);
 
   bool inflate_layer_u8(

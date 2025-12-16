@@ -51,9 +51,9 @@ public:
    * Configures publishers, retrieves parameters, and prepares the planner
    * for path generation using the available map data.
    *
-   * @return std::expected<void, std::string> Success or an error message.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the planner by computing a new path.

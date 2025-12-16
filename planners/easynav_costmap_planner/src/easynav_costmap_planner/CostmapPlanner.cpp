@@ -123,7 +123,7 @@ CostmapPlanner::CostmapPlanner()
     });
 }
 
-std::expected<void, std::string> CostmapPlanner::on_initialize()
+void CostmapPlanner::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -139,7 +139,6 @@ std::expected<void, std::string> CostmapPlanner::on_initialize()
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
-  return {};
 }
 
 void CostmapPlanner::update(NavState & nav_state)

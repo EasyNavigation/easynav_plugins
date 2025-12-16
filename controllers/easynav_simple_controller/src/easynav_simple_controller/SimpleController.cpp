@@ -20,8 +20,6 @@
 /// \file
 /// \brief Implementation of the SimpleController class.
 
-#include <expected>
-
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
@@ -39,7 +37,7 @@ SimpleController::SimpleController()
 
 SimpleController::~SimpleController() = default;
 
-std::expected<void, std::string>
+void
 SimpleController::on_initialize()
 {
   auto node = get_node();
@@ -87,8 +85,6 @@ SimpleController::on_initialize()
   last_vlin_ = 0.0;
   last_vrot_ = 0.0;
   last_update_ts_ = node->now();
-
-  return {};
 }
 
 

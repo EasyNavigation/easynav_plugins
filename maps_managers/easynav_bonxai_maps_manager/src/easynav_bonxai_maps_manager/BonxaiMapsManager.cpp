@@ -17,7 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#include <expected>
 #include <string>
 
 #include "easynav_bonxai_maps_manager/BonxaiMapsManager.hpp"
@@ -53,7 +52,7 @@ BonxaiMapsManager::BonxaiMapsManager()
 
 BonxaiMapsManager::~BonxaiMapsManager() {}
 
-std::expected<void, std::string>
+void
 BonxaiMapsManager::on_initialize()
 {
   auto node = get_node();
@@ -81,7 +80,7 @@ BonxaiMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + bonxai_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     std::vector<Eigen::Vector3d> bonxai_result;
@@ -114,13 +113,13 @@ BonxaiMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + occmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     nav_msgs::msg::OccupancyGrid occ_msg;
     if (auto ret = loadMapFromYaml(map_path_, occ_msg) != LOAD_MAP_SUCCESS) {
       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
-      return std::unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
+      throw std::runtime_error("YAML file [" + map_path_ + "] not found or invalid: ");
     }
 
     update_from_occ(occ_msg);
@@ -159,8 +158,6 @@ BonxaiMapsManager::on_initialize()
       Bonxai::WritePointsFromPCD(map_path_, bonxai_result);  // This can overwrite yaml occ maps
       // ToDo
     });
-
-  return {};
 }
 
 void
