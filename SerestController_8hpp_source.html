@@ -113,254 +113,253 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#ifndef EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#define EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;expected&gt;</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;rclcpp/time.hpp&quot;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;nav_msgs/msg/odometry.hpp&quot;</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &quot;nav_msgs/msg/path.hpp&quot;</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &quot;geometry_msgs/msg/twist_stamped.hpp&quot;</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &quot;easynav_core/ControllerMethodBase.hpp&quot;</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &quot;easynav_common/types/NavState.hpp&quot;</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>{</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span></div>
-<div class="foldopen" id="foldopen00056" data-start="{" data-end="};">
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="classeasynav_1_1SerestController.html">   56</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1SerestController.html#a9c0e602094884b47abb95c257590f290">SerestController</a> : <span class="keyword">public</span> ControllerMethodBase</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>{</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classeasynav_1_1SerestController.html#a9c0e602094884b47abb95c257590f290">   60</a></span>  <a class="code hl_function" href="classeasynav_1_1SerestController.html#a9c0e602094884b47abb95c257590f290">SerestController</a>();</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classeasynav_1_1SerestController.html#a9ce92be03951ffeb7464f90ba1e6e491">   62</a></span>  <a class="code hl_function" href="classeasynav_1_1SerestController.html#a9ce92be03951ffeb7464f90ba1e6e491">~SerestController</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  std::expected&lt;void, std::string&gt; <a class="code hl_function" href="classeasynav_1_1SerestController.html#aa09f4316ce265b452c96e6d74101cd76">on_initialize</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1SerestController.html#a6ed380ba537bbe9a85710810db50a95c">update_rt</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span></div>
-<div class="foldopen" id="foldopen00091" data-start="{" data-end="};">
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html">   91</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  {</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">   93</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>; </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">   94</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>; </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#a065c5a2320a9ba7ab7678814180a5fec">   97</a></span>    <span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="structeasynav_1_1SerestController_1_1Vec2.html#a065c5a2320a9ba7ab7678814180a5fec">operator+</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; b)<span class="keyword"> const </span>{<span class="keywordflow">return</span> {<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> + b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>, <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> + b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>};}</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#a86009e900b8e7b53ccb1bf4a2146fe4f">   99</a></span>    <span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="structeasynav_1_1SerestController_1_1Vec2.html#a86009e900b8e7b53ccb1bf4a2146fe4f">operator-</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; b)<span class="keyword"> const </span>{<span class="keywordflow">return</span> {<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> - b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>, <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> - b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>};}</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#a3f67a1714282b87fbfab422e9270d2aa">  101</a></span>    <span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="structeasynav_1_1SerestController_1_1Vec2.html#a3f67a1714282b87fbfab422e9270d2aa">operator*</a>(<span class="keywordtype">double</span> s)<span class="keyword"> const </span>{<span class="keywordflow">return</span> {<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> * s, <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> * s};}</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#aa0a1373782ca4fb64c3ace041425aef5">  104</a></span>    <span class="keyword">friend</span> <span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> <a class="code hl_friend" href="structeasynav_1_1SerestController_1_1Vec2.html#aa0a1373782ca4fb64c3ace041425aef5">operator*</a>(<span class="keywordtype">double</span> s, <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; a) {<span class="keywordflow">return</span> {a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> * s, a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> * s};}</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  };</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;rclcpp/time.hpp&quot;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;nav_msgs/msg/odometry.hpp&quot;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;nav_msgs/msg/path.hpp&quot;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &quot;geometry_msgs/msg/twist_stamped.hpp&quot;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &quot;easynav_core/ControllerMethodBase.hpp&quot;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &quot;easynav_common/types/NavState.hpp&quot;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>{</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span></div>
+<div class="foldopen" id="foldopen00055" data-start="{" data-end="};">
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classeasynav_1_1SerestController.html">   55</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1SerestController.html#a9c0e602094884b47abb95c257590f290">SerestController</a> : <span class="keyword">public</span> ControllerMethodBase</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>{</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classeasynav_1_1SerestController.html#a9c0e602094884b47abb95c257590f290">   59</a></span>  <a class="code hl_function" href="classeasynav_1_1SerestController.html#a9c0e602094884b47abb95c257590f290">SerestController</a>();</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classeasynav_1_1SerestController.html#a9ce92be03951ffeb7464f90ba1e6e491">   61</a></span>  <a class="code hl_function" href="classeasynav_1_1SerestController.html#a9ce92be03951ffeb7464f90ba1e6e491">~SerestController</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1SerestController.html#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1SerestController.html#a6ed380ba537bbe9a85710810db50a95c">update_rt</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span></div>
+<div class="foldopen" id="foldopen00090" data-start="{" data-end="};">
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html">   90</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  {</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">   92</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>; </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">   93</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>; </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#a065c5a2320a9ba7ab7678814180a5fec">   96</a></span>    <span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="structeasynav_1_1SerestController_1_1Vec2.html#a065c5a2320a9ba7ab7678814180a5fec">operator+</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; b)<span class="keyword"> const </span>{<span class="keywordflow">return</span> {<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> + b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>, <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> + b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>};}</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#a86009e900b8e7b53ccb1bf4a2146fe4f">   98</a></span>    <span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="structeasynav_1_1SerestController_1_1Vec2.html#a86009e900b8e7b53ccb1bf4a2146fe4f">operator-</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; b)<span class="keyword"> const </span>{<span class="keywordflow">return</span> {<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> - b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>, <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> - b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>};}</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#a3f67a1714282b87fbfab422e9270d2aa">  100</a></span>    <span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> <a class="code hl_function" href="structeasynav_1_1SerestController_1_1Vec2.html#a3f67a1714282b87fbfab422e9270d2aa">operator*</a>(<span class="keywordtype">double</span> s)<span class="keyword"> const </span>{<span class="keywordflow">return</span> {<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> * s, <a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> * s};}</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="structeasynav_1_1SerestController_1_1Vec2.html#aa0a1373782ca4fb64c3ace041425aef5">  103</a></span>    <span class="keyword">friend</span> <span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> <a class="code hl_friend" href="structeasynav_1_1SerestController_1_1Vec2.html#aa0a1373782ca4fb64c3ace041425aef5">operator*</a>(<span class="keywordtype">double</span> s, <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; a) {<span class="keywordflow">return</span> {a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> * s, a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> * s};}</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  };</div>
 </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  <span class="keyword">struct </span>PathData</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  {</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    std::vector&lt;Vec2&gt; pts;      </div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    std::vector&lt;double&gt; s_acc;  </div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  };</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  <span class="keyword">struct </span>Projection</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  {</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordtype">size_t</span> seg_idx{0};   </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordtype">double</span> s_star{0.0};  </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    Vec2   closest{0.0, 0.0}; </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    <span class="keywordtype">double</span> t{0.0};       </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  };</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  <span class="keyword">struct </span>RefKinematics</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordtype">double</span> psi_ref{0.0};     </div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keywordtype">double</span> kappa_hat{0.0};   </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  };</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  PathData build_path_data(<span class="keyword">const</span> nav_msgs::msg::Path &amp; path) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span></div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>  Projection project_on_path(<span class="keyword">const</span> PathData &amp; pd, <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; p) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  RefKinematics ref_heading_and_curvature(</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    <span class="keyword">const</span> PathData &amp; pd, <span class="keyword">const</span> Projection &amp; prj, <span class="keywordtype">double</span> v_prev) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span></div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>  <span class="keywordtype">void</span> frenet_errors(</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; robot_xy, <span class="keywordtype">double</span> robot_yaw,</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keyword">const</span> Projection &amp; prj, <span class="keywordtype">double</span> psi_ref,</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    <span class="keywordtype">double</span> &amp; e_y, <span class="keywordtype">double</span> &amp; e_theta) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span></div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>  <span class="keywordtype">double</span> closest_obstacle_distance(</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <span class="keyword">const</span> NavState &amp; nav_state) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span></div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  <span class="keywordtype">double</span> v_safe_from_distance(<span class="keywordtype">double</span> d, <span class="keywordtype">double</span> slope_sin = 0.0) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span></div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>  <span class="keywordtype">double</span> v_curvature_limit(<span class="keywordtype">double</span> kappa_hat) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>  <span class="comment">// Gestiona dt y actualiza last_update_ts_. Devuelve dt robusto.</span></div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>  <span class="keywordtype">double</span> compute_dt_and_update_clock();</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>  <span class="comment">// Comprueba entradas mínimas. Publica stop si faltan y devuelve false.</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>  <span class="comment">// Si todo ok, rellena &#39;path&#39; y &#39;odom&#39; y devuelve true.</span></div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>  <span class="keywordtype">bool</span> fetch_required_inputs(</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    NavState &amp; nav_state,</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    nav_msgs::msg::Path &amp; path,</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    nav_msgs::msg::Odometry &amp; odom);</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>  <span class="comment">// Extrae estado del robot (xy, yaw) desde la odometría.</span></div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>  <span class="keywordtype">void</span> robot_state_from_odom(</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="keyword">const</span> nav_msgs::msg::Odometry &amp; odom,</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; robot_xy, <span class="keywordtype">double</span> &amp; yaw) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>  <span class="comment">// Calcula información de goal y zonas slow/stop.</span></div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>  <span class="keywordtype">void</span> compute_goal_zone(</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    <span class="keyword">const</span> nav_msgs::msg::Path &amp; path,</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; robot_xy, <span class="keywordtype">double</span> robot_yaw,</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    <span class="keywordtype">double</span> &amp; dist_xy_goal, <span class="keywordtype">double</span> &amp; e_theta_goal,</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    <span class="keywordtype">double</span> &amp; stop_r, <span class="keywordtype">double</span> &amp; slow_r, <span class="keywordtype">double</span> &amp; gamma_slow,</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; goal_xy, <span class="keywordtype">double</span> &amp; yaw_goal) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>  <span class="comment">// Calcula límites de seguridad globales (distancia obstáculo, v_safe, v_curv).</span></div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>  <span class="keywordtype">void</span> safety_limits(</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keyword">const</span> NavState &amp; nav_state,</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    <span class="keyword">const</span> RefKinematics &amp; rk,</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <span class="keywordtype">double</span> &amp; d_closest, <span class="keywordtype">double</span> &amp; v_safe, <span class="keywordtype">double</span> &amp; v_curv) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>  <span class="comment">// Aplica corner‑guard: ajusta v_prog_ref y obtiene omega_boost + término ápice.</span></div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>  <span class="keywordtype">void</span> apply_corner_guard(</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <span class="keyword">const</span> RefKinematics &amp; rk, <span class="keywordtype">double</span> e_y, <span class="keywordtype">double</span> e_theta,</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <span class="keywordtype">double</span> &amp; v_prog_ref, <span class="keywordtype">double</span> &amp; omega_boost, <span class="keywordtype">double</span> &amp; ey_apex_term) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>  <span class="comment">// Determina si debe hacerse giro en el sitio en esta iteración.</span></div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>  <span class="keywordtype">bool</span> should_turn_in_place(</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keywordtype">bool</span> allow_reverse, <span class="keywordtype">double</span> e_theta, <span class="keywordtype">double</span> e_theta_goal,</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="keywordtype">double</span> dist_to_end, <span class="keywordtype">double</span> turn_in_place_thr) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  <span class="comment">// Fase de alineación final: publica y devuelve true si se ha gestionado aquí.</span></div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>  <span class="keywordtype">bool</span> maybe_final_align_and_publish(</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    NavState &amp; nav_state, <span class="keyword">const</span> nav_msgs::msg::Path &amp; path,</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <span class="keywordtype">double</span> dist_xy_goal, <span class="keywordtype">double</span> stop_r, <span class="keywordtype">double</span> e_theta_goal,</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    <span class="keywordtype">double</span> gamma_slow, <span class="keywordtype">double</span> dt);</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span> </div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>  <span class="comment">// Aplica rate‑limit y saturaciones finales sobre (vlin, vrot) y actualiza last_*.</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>  <span class="keywordtype">void</span> rate_limit_and_saturate(<span class="keywordtype">double</span> dt, <span class="keywordtype">double</span> &amp; vlin, <span class="keywordtype">double</span> &amp; vrot);</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>  <span class="comment">// Publica cmd_vel y variables de depuración comunes del final de update_rt.</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>  <span class="keywordtype">void</span> publish_cmd_and_debug(</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    NavState &amp; nav_state, <span class="keyword">const</span> nav_msgs::msg::Path &amp; path,</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>    <span class="keywordtype">double</span> vlin, <span class="keywordtype">double</span> vrot,</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keywordtype">double</span> e_y, <span class="keywordtype">double</span> e_theta, <span class="keywordtype">double</span> kappa_hat,</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    <span class="keywordtype">double</span> d_closest, <span class="keywordtype">double</span> v_safe, <span class="keywordtype">double</span> v_curv, <span class="keywordtype">double</span> alpha,</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="keywordtype">bool</span> allow_reverse, <span class="keywordtype">double</span> dist_to_end,</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    <span class="keywordtype">double</span> dist_xy_goal, <span class="keywordtype">double</span> gamma_slow,</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <span class="keywordtype">int</span> in_final_align, <span class="keywordtype">int</span> arrived);</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>  <span class="comment">// Publica parada inmediata con frame y stamp actuales.</span></div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  <span class="keywordtype">void</span> publish_stop(NavState &amp; nav_state, <span class="keyword">const</span> std::string &amp; frame_id);</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span> </div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>  <span class="comment">// --- Parameters ---</span></div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span></div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>  <span class="keywordtype">bool</span>   allow_reverse_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>  <span class="keywordtype">double</span> v_progress_min_{0.05};</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>  <span class="keywordtype">double</span> k_s_share_max_{0.5};</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span></div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>  <span class="keywordtype">double</span> max_linear_speed_{0.6};</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>  <span class="keywordtype">double</span> max_angular_speed_{1.5};</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>  <span class="keywordtype">double</span> max_linear_acc_{0.8};</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>  <span class="keywordtype">double</span> max_angular_acc_{2.0};</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span></div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>  <span class="keywordtype">double</span> k_s_{0.8}, k_theta_{2.0}, k_y_{1.2}, ell_{0.3};</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>  <span class="keywordtype">double</span> v_ref_{0.6};</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>  <span class="keywordtype">double</span> eps_{1e-3};</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span></div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>  <span class="keywordtype">double</span> a_acc_{0.8};</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>  <span class="keywordtype">double</span> a_brake_{1.2};</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>  <span class="keywordtype">double</span> a_lat_max_{1.5};</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>  <span class="keywordtype">double</span> d0_margin_{0.30};</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>  <span class="keywordtype">double</span> tau_latency_{0.10};</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>  <span class="keywordtype">double</span> d_hard_{0.20};</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>  <span class="keywordtype">double</span> t_emerg_{0.25};</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span></div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>  <span class="keywordtype">double</span> blend_base_{0.6};</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>  <span class="keywordtype">double</span> blend_k_per_v_{0.6};</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>  <span class="keywordtype">double</span> kappa_max_{2.5};</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span></div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>  <span class="keywordtype">double</span> dist_search_radius_{2.0};</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span></div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>  <span class="keywordtype">double</span> goal_pos_tol_{0.05};</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>  <span class="keywordtype">double</span> goal_yaw_tol_deg_{5.0};</div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>  <span class="keywordtype">double</span> slow_radius_{0.60};</div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>  <span class="keywordtype">double</span> slow_min_speed_{0.03};</div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span></div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>  <span class="keywordtype">double</span> final_align_k_{2.0};</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>  <span class="keywordtype">double</span> final_align_wmax_{0.6};</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span></div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>  <span class="keywordtype">bool</span>  corner_guard_enable_{<span class="keyword">true</span>};</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>  <span class="keywordtype">double</span> corner_gain_ey_{1.5};</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>  <span class="keywordtype">double</span> corner_gain_eth_{0.7};</div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>  <span class="keywordtype">double</span> corner_gain_kappa_{0.4};</div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>  <span class="keywordtype">double</span> corner_min_alpha_{0.35};</div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>  <span class="keywordtype">double</span> corner_boost_omega_{0.8};</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>  <span class="keywordtype">double</span> apex_ey_des_{0.05};</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>  <span class="keywordtype">double</span> a_lat_soft_{1.1};</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span> </div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>  <span class="comment">// --- Internal state ---</span></div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span> </div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>  <span class="keywordtype">bool</span> startup_anchor_active_{<span class="keyword">true</span>};</div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>  geometry_msgs::msg::Pose goal_pose_last_{};</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>  <span class="comment">// Activa/desactiva giro en el sitio con histéresis</span></div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>  <span class="keywordtype">bool</span> tip_active_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span></div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>  <span class="keywordtype">double</span> last_vlin_{0.0};</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>  <span class="keywordtype">double</span> last_vrot_{0.0};</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>  rclcpp::Time last_update_ts_;</div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>  geometry_msgs::msg::TwistStamped twist_stamped_;</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>};</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  <span class="keyword">struct </span>PathData</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  {</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    std::vector&lt;Vec2&gt; pts;      </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    std::vector&lt;double&gt; s_acc;  </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  };</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  <span class="keyword">struct </span>Projection</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  {</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    <span class="keywordtype">size_t</span> seg_idx{0};   </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordtype">double</span> s_star{0.0};  </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    Vec2   closest{0.0, 0.0}; </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keywordtype">double</span> t{0.0};       </div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  };</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  <span class="keyword">struct </span>RefKinematics</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>  {</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keywordtype">double</span> psi_ref{0.0};     </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordtype">double</span> kappa_hat{0.0};   </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  };</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>  PathData build_path_data(<span class="keyword">const</span> nav_msgs::msg::Path &amp; path) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  Projection project_on_path(<span class="keyword">const</span> PathData &amp; pd, <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; p) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  RefKinematics ref_heading_and_curvature(</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="keyword">const</span> PathData &amp; pd, <span class="keyword">const</span> Projection &amp; prj, <span class="keywordtype">double</span> v_prev) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>  <span class="keywordtype">void</span> frenet_errors(</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; robot_xy, <span class="keywordtype">double</span> robot_yaw,</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <span class="keyword">const</span> Projection &amp; prj, <span class="keywordtype">double</span> psi_ref,</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keywordtype">double</span> &amp; e_y, <span class="keywordtype">double</span> &amp; e_theta) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>  <span class="keywordtype">double</span> closest_obstacle_distance(</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="keyword">const</span> NavState &amp; nav_state) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  <span class="keywordtype">double</span> v_safe_from_distance(<span class="keywordtype">double</span> d, <span class="keywordtype">double</span> slope_sin = 0.0) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>  <span class="keywordtype">double</span> v_curvature_limit(<span class="keywordtype">double</span> kappa_hat) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>  <span class="comment">// Gestiona dt y actualiza last_update_ts_. Devuelve dt robusto.</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>  <span class="keywordtype">double</span> compute_dt_and_update_clock();</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>  <span class="comment">// Comprueba entradas mínimas. Publica stop si faltan y devuelve false.</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>  <span class="comment">// Si todo ok, rellena &#39;path&#39; y &#39;odom&#39; y devuelve true.</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>  <span class="keywordtype">bool</span> fetch_required_inputs(</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    NavState &amp; nav_state,</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    nav_msgs::msg::Path &amp; path,</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    nav_msgs::msg::Odometry &amp; odom);</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>  <span class="comment">// Extrae estado del robot (xy, yaw) desde la odometría.</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>  <span class="keywordtype">void</span> robot_state_from_odom(</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    <span class="keyword">const</span> nav_msgs::msg::Odometry &amp; odom,</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; robot_xy, <span class="keywordtype">double</span> &amp; yaw) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span> </div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>  <span class="comment">// Calcula información de goal y zonas slow/stop.</span></div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>  <span class="keywordtype">void</span> compute_goal_zone(</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    <span class="keyword">const</span> nav_msgs::msg::Path &amp; path,</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; robot_xy, <span class="keywordtype">double</span> robot_yaw,</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="keywordtype">double</span> &amp; dist_xy_goal, <span class="keywordtype">double</span> &amp; e_theta_goal,</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    <span class="keywordtype">double</span> &amp; stop_r, <span class="keywordtype">double</span> &amp; slow_r, <span class="keywordtype">double</span> &amp; gamma_slow,</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">Vec2</a> &amp; goal_xy, <span class="keywordtype">double</span> &amp; yaw_goal) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>  <span class="comment">// Calcula límites de seguridad globales (distancia obstáculo, v_safe, v_curv).</span></div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>  <span class="keywordtype">void</span> safety_limits(</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <span class="keyword">const</span> NavState &amp; nav_state,</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keyword">const</span> RefKinematics &amp; rk,</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    <span class="keywordtype">double</span> &amp; d_closest, <span class="keywordtype">double</span> &amp; v_safe, <span class="keywordtype">double</span> &amp; v_curv) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>  <span class="comment">// Aplica corner‑guard: ajusta v_prog_ref y obtiene omega_boost + término ápice.</span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>  <span class="keywordtype">void</span> apply_corner_guard(</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <span class="keyword">const</span> RefKinematics &amp; rk, <span class="keywordtype">double</span> e_y, <span class="keywordtype">double</span> e_theta,</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <span class="keywordtype">double</span> &amp; v_prog_ref, <span class="keywordtype">double</span> &amp; omega_boost, <span class="keywordtype">double</span> &amp; ey_apex_term) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>  <span class="comment">// Determina si debe hacerse giro en el sitio en esta iteración.</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>  <span class="keywordtype">bool</span> should_turn_in_place(</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    <span class="keywordtype">bool</span> allow_reverse, <span class="keywordtype">double</span> e_theta, <span class="keywordtype">double</span> e_theta_goal,</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keywordtype">double</span> dist_to_end, <span class="keywordtype">double</span> turn_in_place_thr) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>  <span class="comment">// Fase de alineación final: publica y devuelve true si se ha gestionado aquí.</span></div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  <span class="keywordtype">bool</span> maybe_final_align_and_publish(</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    NavState &amp; nav_state, <span class="keyword">const</span> nav_msgs::msg::Path &amp; path,</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <span class="keywordtype">double</span> dist_xy_goal, <span class="keywordtype">double</span> stop_r, <span class="keywordtype">double</span> e_theta_goal,</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <span class="keywordtype">double</span> gamma_slow, <span class="keywordtype">double</span> dt);</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  <span class="comment">// Aplica rate‑limit y saturaciones finales sobre (vlin, vrot) y actualiza last_*.</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>  <span class="keywordtype">void</span> rate_limit_and_saturate(<span class="keywordtype">double</span> dt, <span class="keywordtype">double</span> &amp; vlin, <span class="keywordtype">double</span> &amp; vrot);</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>  <span class="comment">// Publica cmd_vel y variables de depuración comunes del final de update_rt.</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>  <span class="keywordtype">void</span> publish_cmd_and_debug(</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    NavState &amp; nav_state, <span class="keyword">const</span> nav_msgs::msg::Path &amp; path,</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    <span class="keywordtype">double</span> vlin, <span class="keywordtype">double</span> vrot,</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>    <span class="keywordtype">double</span> e_y, <span class="keywordtype">double</span> e_theta, <span class="keywordtype">double</span> kappa_hat,</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keywordtype">double</span> d_closest, <span class="keywordtype">double</span> v_safe, <span class="keywordtype">double</span> v_curv, <span class="keywordtype">double</span> alpha,</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    <span class="keywordtype">bool</span> allow_reverse, <span class="keywordtype">double</span> dist_to_end,</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="keywordtype">double</span> dist_xy_goal, <span class="keywordtype">double</span> gamma_slow,</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    <span class="keywordtype">int</span> in_final_align, <span class="keywordtype">int</span> arrived);</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>  <span class="comment">// Publica parada inmediata con frame y stamp actuales.</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>  <span class="keywordtype">void</span> publish_stop(NavState &amp; nav_state, <span class="keyword">const</span> std::string &amp; frame_id);</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span> </div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>  <span class="comment">// --- Parameters ---</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span></div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>  <span class="keywordtype">bool</span>   allow_reverse_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  <span class="keywordtype">double</span> v_progress_min_{0.05};</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>  <span class="keywordtype">double</span> k_s_share_max_{0.5};</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span></div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>  <span class="keywordtype">double</span> max_linear_speed_{0.6};</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>  <span class="keywordtype">double</span> max_angular_speed_{1.5};</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>  <span class="keywordtype">double</span> max_linear_acc_{0.8};</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>  <span class="keywordtype">double</span> max_angular_acc_{2.0};</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>  <span class="keywordtype">double</span> k_s_{0.8}, k_theta_{2.0}, k_y_{1.2}, ell_{0.3};</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>  <span class="keywordtype">double</span> v_ref_{0.6};</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>  <span class="keywordtype">double</span> eps_{1e-3};</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span></div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>  <span class="keywordtype">double</span> a_acc_{0.8};</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>  <span class="keywordtype">double</span> a_brake_{1.2};</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>  <span class="keywordtype">double</span> a_lat_max_{1.5};</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>  <span class="keywordtype">double</span> d0_margin_{0.30};</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>  <span class="keywordtype">double</span> tau_latency_{0.10};</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>  <span class="keywordtype">double</span> d_hard_{0.20};</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>  <span class="keywordtype">double</span> t_emerg_{0.25};</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>  <span class="keywordtype">double</span> blend_base_{0.6};</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>  <span class="keywordtype">double</span> blend_k_per_v_{0.6};</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>  <span class="keywordtype">double</span> kappa_max_{2.5};</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span></div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>  <span class="keywordtype">double</span> dist_search_radius_{2.0};</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span></div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>  <span class="keywordtype">double</span> goal_pos_tol_{0.05};</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>  <span class="keywordtype">double</span> goal_yaw_tol_deg_{5.0};</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>  <span class="keywordtype">double</span> slow_radius_{0.60};</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>  <span class="keywordtype">double</span> slow_min_speed_{0.03};</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span></div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>  <span class="keywordtype">double</span> final_align_k_{2.0};</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>  <span class="keywordtype">double</span> final_align_wmax_{0.6};</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span></div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>  <span class="keywordtype">bool</span>  corner_guard_enable_{<span class="keyword">true</span>};</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>  <span class="keywordtype">double</span> corner_gain_ey_{1.5};</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>  <span class="keywordtype">double</span> corner_gain_eth_{0.7};</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>  <span class="keywordtype">double</span> corner_gain_kappa_{0.4};</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>  <span class="keywordtype">double</span> corner_min_alpha_{0.35};</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>  <span class="keywordtype">double</span> corner_boost_omega_{0.8};</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>  <span class="keywordtype">double</span> apex_ey_des_{0.05};</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>  <span class="keywordtype">double</span> a_lat_soft_{1.1};</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>  <span class="comment">// --- Internal state ---</span></div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span> </div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>  <span class="keywordtype">bool</span> startup_anchor_active_{<span class="keyword">true</span>};</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>  geometry_msgs::msg::Pose goal_pose_last_{};</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>  <span class="comment">// Activa/desactiva giro en el sitio con histéresis</span></div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>  <span class="keywordtype">bool</span> tip_active_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>  <span class="keywordtype">double</span> last_vlin_{0.0};</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>  <span class="keywordtype">double</span> last_vrot_{0.0};</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>  rclcpp::Time last_update_ts_;</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>  geometry_msgs::msg::TwistStamped twist_stamped_;</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>};</div>
 </div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span></div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a0ffc863bec70f7d80d9402116a3a6f49">  368</a></span><span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> <a class="code hl_function" href="namespaceeasynav.html#a0ffc863bec70f7d80d9402116a3a6f49">v2</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y) {<span class="keywordflow">return</span> {x, y};}</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span></div>
-<div class="foldopen" id="foldopen00376" data-start="{" data-end="}">
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c">  376</a></span><span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c">dot</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; a, <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; b)</div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>{</div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>  <span class="keywordflow">return</span> a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> * b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> + a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> * b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>;</div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>}</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span></div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a0ffc863bec70f7d80d9402116a3a6f49">  367</a></span><span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> <a class="code hl_function" href="namespaceeasynav.html#a0ffc863bec70f7d80d9402116a3a6f49">v2</a>(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y) {<span class="keywordflow">return</span> {x, y};}</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span></div>
+<div class="foldopen" id="foldopen00375" data-start="{" data-end="}">
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c">  375</a></span><span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c">dot</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; a, <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; b)</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>{</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>  <span class="keywordflow">return</span> a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> * b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> + a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> * b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>;</div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>}</div>
 </div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span></div>
-<div class="foldopen" id="foldopen00387" data-start="{" data-end="}">
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a17c24043890991aea729baaebb2c9752">  387</a></span><span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceeasynav.html#a17c24043890991aea729baaebb2c9752">crossz</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; a, <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; b)</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>{</div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>  <span class="keywordflow">return</span> a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> * b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> - a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> * b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>;</div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>}</div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span></div>
+<div class="foldopen" id="foldopen00386" data-start="{" data-end="}">
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a17c24043890991aea729baaebb2c9752">  386</a></span><span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceeasynav.html#a17c24043890991aea729baaebb2c9752">crossz</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; a, <span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; b)</div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>{</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>  <span class="keywordflow">return</span> a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> * b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> - a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> * b.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>;</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>}</div>
 </div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span></div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915">  397</a></span><span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915">norm</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; a) {<span class="keywordflow">return</span> std::hypot(a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>, a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>);}</div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span></div>
-<div class="foldopen" id="foldopen00404" data-start="{" data-end="}">
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a8073b4d2bf21d487cd8619896aed9959">  404</a></span><span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> <a class="code hl_function" href="namespaceeasynav.html#a8073b4d2bf21d487cd8619896aed9959">normalize</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; a)</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>{</div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>  <span class="keywordtype">double</span> n = <a class="code hl_function" href="namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915">norm</a>(a);</div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>  <span class="keywordflow">return</span> n &gt; 1e-9 ? <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a>{a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> / n, a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> / n} : <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a>{1.0, 0.0};</div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>}</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span></div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915">  396</a></span><span class="keyword">inline</span> <span class="keywordtype">double</span> <a class="code hl_function" href="namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915">norm</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; a) {<span class="keywordflow">return</span> std::hypot(a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a>, a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a>);}</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span></div>
+<div class="foldopen" id="foldopen00403" data-start="{" data-end="}">
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a8073b4d2bf21d487cd8619896aed9959">  403</a></span><span class="keyword">inline</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> <a class="code hl_function" href="namespaceeasynav.html#a8073b4d2bf21d487cd8619896aed9959">normalize</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a> &amp; a)</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>{</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>  <span class="keywordtype">double</span> n = <a class="code hl_function" href="namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915">norm</a>(a);</div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>  <span class="keywordflow">return</span> n &gt; 1e-9 ? <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a>{a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">x</a> / n, a.<a class="code hl_variable" href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">y</a> / n} : <a class="code hl_struct" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a>{1.0, 0.0};</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>}</div>
 </div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span> </div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>}  <span class="comment">// namespace easynav</span></div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span> </div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_</span></div>
-<div class="ttc" id="aclasseasynav_1_1SerestController_html_a6ed380ba537bbe9a85710810db50a95c"><div class="ttname"><a href="classeasynav_1_1SerestController.html#a6ed380ba537bbe9a85710810db50a95c">easynav::SerestController::update_rt</a></div><div class="ttdeci">void update_rt(NavState &amp;nav_state) override</div><div class="ttdoc">Real-time control update (called ~20–30 Hz).</div><div class="ttdef"><b>Definition</b> SerestController.cpp:616</div></div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span> </div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>}  <span class="comment">// namespace easynav</span></div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span> </div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_</span></div>
+<div class="ttc" id="aclasseasynav_1_1SerestController_html_a6ed380ba537bbe9a85710810db50a95c"><div class="ttname"><a href="classeasynav_1_1SerestController.html#a6ed380ba537bbe9a85710810db50a95c">easynav::SerestController::update_rt</a></div><div class="ttdeci">void update_rt(NavState &amp;nav_state) override</div><div class="ttdoc">Real-time control update (called ~20–30 Hz).</div><div class="ttdef"><b>Definition</b> SerestController.cpp:613</div></div>
 <div class="ttc" id="aclasseasynav_1_1SerestController_html_a9c0e602094884b47abb95c257590f290"><div class="ttname"><a href="classeasynav_1_1SerestController.html#a9c0e602094884b47abb95c257590f290">easynav::SerestController::SerestController</a></div><div class="ttdeci">SerestController()</div><div class="ttdoc">Default constructor.</div></div>
 <div class="ttc" id="aclasseasynav_1_1SerestController_html_a9ce92be03951ffeb7464f90ba1e6e491"><div class="ttname"><a href="classeasynav_1_1SerestController.html#a9ce92be03951ffeb7464f90ba1e6e491">easynav::SerestController::~SerestController</a></div><div class="ttdeci">~SerestController() override</div><div class="ttdoc">Destructor.</div></div>
-<div class="ttc" id="aclasseasynav_1_1SerestController_html_aa09f4316ce265b452c96e6d74101cd76"><div class="ttname"><a href="classeasynav_1_1SerestController.html#aa09f4316ce265b452c96e6d74101cd76">easynav::SerestController::on_initialize</a></div><div class="ttdeci">std::expected&lt; void, std::string &gt; on_initialize() override</div><div class="ttdoc">Initialize parameters and internal state.</div><div class="ttdef"><b>Definition</b> SerestController.cpp:45</div></div>
+<div class="ttc" id="aclasseasynav_1_1SerestController_html_ac9d1795b6cf8a4da7bf9b33f783db911"><div class="ttname"><a href="classeasynav_1_1SerestController.html#ac9d1795b6cf8a4da7bf9b33f783db911">easynav::SerestController::on_initialize</a></div><div class="ttdeci">void on_initialize() override</div><div class="ttdoc">Initialize parameters and internal state.</div><div class="ttdef"><b>Definition</b> SerestController.cpp:44</div></div>
 <div class="ttc" id="anamespaceeasynav_html"><div class="ttname"><a href="namespaceeasynav.html">easynav</a></div><div class="ttdoc">Provides a mapping for often used cost values.</div><div class="ttdef"><b>Definition</b> cost_values.hpp:41</div></div>
-<div class="ttc" id="anamespaceeasynav_html_a0ffc863bec70f7d80d9402116a3a6f49"><div class="ttname"><a href="namespaceeasynav.html#a0ffc863bec70f7d80d9402116a3a6f49">easynav::v2</a></div><div class="ttdeci">SerestController::Vec2 v2(double x, double y)</div><div class="ttdoc">Construct a 2D vector.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:368</div></div>
-<div class="ttc" id="anamespaceeasynav_html_a17c24043890991aea729baaebb2c9752"><div class="ttname"><a href="namespaceeasynav.html#a17c24043890991aea729baaebb2c9752">easynav::crossz</a></div><div class="ttdeci">double crossz(const SerestController::Vec2 &amp;a, const SerestController::Vec2 &amp;b)</div><div class="ttdoc">2D cross product Z component (a.x*b.y - a.y*b.x).</div><div class="ttdef"><b>Definition</b> SerestController.hpp:387</div></div>
-<div class="ttc" id="anamespaceeasynav_html_a63a1a53961555a7d2a4e28b39685ee6c"><div class="ttname"><a href="namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c">easynav::dot</a></div><div class="ttdeci">double dot(const SerestController::Vec2 &amp;a, const SerestController::Vec2 &amp;b)</div><div class="ttdoc">Dot product between two 2D vectors.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:376</div></div>
-<div class="ttc" id="anamespaceeasynav_html_a8073b4d2bf21d487cd8619896aed9959"><div class="ttname"><a href="namespaceeasynav.html#a8073b4d2bf21d487cd8619896aed9959">easynav::normalize</a></div><div class="ttdeci">SerestController::Vec2 normalize(const SerestController::Vec2 &amp;a)</div><div class="ttdoc">Normalize a 2D vector, with a safe fallback for very small norms.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:404</div></div>
-<div class="ttc" id="anamespaceeasynav_html_abf04c966ff4505d2e278c4c388ca4915"><div class="ttname"><a href="namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915">easynav::norm</a></div><div class="ttdeci">double norm(const SerestController::Vec2 &amp;a)</div><div class="ttdoc">Euclidean norm (length) of a 2D vector.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:397</div></div>
-<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html">easynav::SerestController::Vec2</a></div><div class="ttdoc">Simple 2D vector utility type.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:92</div></div>
-<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_a065c5a2320a9ba7ab7678814180a5fec"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#a065c5a2320a9ba7ab7678814180a5fec">easynav::SerestController::Vec2::operator+</a></div><div class="ttdeci">Vec2 operator+(const Vec2 &amp;b) const</div><div class="ttdoc">Vector addition.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:97</div></div>
-<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_a3f67a1714282b87fbfab422e9270d2aa"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#a3f67a1714282b87fbfab422e9270d2aa">easynav::SerestController::Vec2::operator*</a></div><div class="ttdeci">Vec2 operator*(double s) const</div><div class="ttdoc">Scalar multiplication (vector * scalar).</div><div class="ttdef"><b>Definition</b> SerestController.hpp:101</div></div>
-<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_a86009e900b8e7b53ccb1bf4a2146fe4f"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#a86009e900b8e7b53ccb1bf4a2146fe4f">easynav::SerestController::Vec2::operator-</a></div><div class="ttdeci">Vec2 operator-(const Vec2 &amp;b) const</div><div class="ttdoc">Vector subtraction.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:99</div></div>
-<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_aa0a1373782ca4fb64c3ace041425aef5"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#aa0a1373782ca4fb64c3ace041425aef5">easynav::SerestController::Vec2::operator*</a></div><div class="ttdeci">friend Vec2 operator*(double s, const Vec2 &amp;a)</div><div class="ttdoc">Scalar multiplication (scalar * vector).</div><div class="ttdef"><b>Definition</b> SerestController.hpp:104</div></div>
-<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_ab927965981178aa1fba979a37168db2a"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">easynav::SerestController::Vec2::y</a></div><div class="ttdeci">double y</div><div class="ttdoc">Y component.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:94</div></div>
-<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_af88b946fb90d5f08b5fb740c70e98c10"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">easynav::SerestController::Vec2::x</a></div><div class="ttdeci">double x</div><div class="ttdoc">X component.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:93</div></div>
+<div class="ttc" id="anamespaceeasynav_html_a0ffc863bec70f7d80d9402116a3a6f49"><div class="ttname"><a href="namespaceeasynav.html#a0ffc863bec70f7d80d9402116a3a6f49">easynav::v2</a></div><div class="ttdeci">SerestController::Vec2 v2(double x, double y)</div><div class="ttdoc">Construct a 2D vector.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:367</div></div>
+<div class="ttc" id="anamespaceeasynav_html_a17c24043890991aea729baaebb2c9752"><div class="ttname"><a href="namespaceeasynav.html#a17c24043890991aea729baaebb2c9752">easynav::crossz</a></div><div class="ttdeci">double crossz(const SerestController::Vec2 &amp;a, const SerestController::Vec2 &amp;b)</div><div class="ttdoc">2D cross product Z component (a.x*b.y - a.y*b.x).</div><div class="ttdef"><b>Definition</b> SerestController.hpp:386</div></div>
+<div class="ttc" id="anamespaceeasynav_html_a63a1a53961555a7d2a4e28b39685ee6c"><div class="ttname"><a href="namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c">easynav::dot</a></div><div class="ttdeci">double dot(const SerestController::Vec2 &amp;a, const SerestController::Vec2 &amp;b)</div><div class="ttdoc">Dot product between two 2D vectors.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:375</div></div>
+<div class="ttc" id="anamespaceeasynav_html_a8073b4d2bf21d487cd8619896aed9959"><div class="ttname"><a href="namespaceeasynav.html#a8073b4d2bf21d487cd8619896aed9959">easynav::normalize</a></div><div class="ttdeci">SerestController::Vec2 normalize(const SerestController::Vec2 &amp;a)</div><div class="ttdoc">Normalize a 2D vector, with a safe fallback for very small norms.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:403</div></div>
+<div class="ttc" id="anamespaceeasynav_html_abf04c966ff4505d2e278c4c388ca4915"><div class="ttname"><a href="namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915">easynav::norm</a></div><div class="ttdeci">double norm(const SerestController::Vec2 &amp;a)</div><div class="ttdoc">Euclidean norm (length) of a 2D vector.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:396</div></div>
+<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html">easynav::SerestController::Vec2</a></div><div class="ttdoc">Simple 2D vector utility type.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:91</div></div>
+<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_a065c5a2320a9ba7ab7678814180a5fec"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#a065c5a2320a9ba7ab7678814180a5fec">easynav::SerestController::Vec2::operator+</a></div><div class="ttdeci">Vec2 operator+(const Vec2 &amp;b) const</div><div class="ttdoc">Vector addition.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:96</div></div>
+<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_a3f67a1714282b87fbfab422e9270d2aa"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#a3f67a1714282b87fbfab422e9270d2aa">easynav::SerestController::Vec2::operator*</a></div><div class="ttdeci">Vec2 operator*(double s) const</div><div class="ttdoc">Scalar multiplication (vector * scalar).</div><div class="ttdef"><b>Definition</b> SerestController.hpp:100</div></div>
+<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_a86009e900b8e7b53ccb1bf4a2146fe4f"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#a86009e900b8e7b53ccb1bf4a2146fe4f">easynav::SerestController::Vec2::operator-</a></div><div class="ttdeci">Vec2 operator-(const Vec2 &amp;b) const</div><div class="ttdoc">Vector subtraction.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:98</div></div>
+<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_aa0a1373782ca4fb64c3ace041425aef5"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#aa0a1373782ca4fb64c3ace041425aef5">easynav::SerestController::Vec2::operator*</a></div><div class="ttdeci">friend Vec2 operator*(double s, const Vec2 &amp;a)</div><div class="ttdoc">Scalar multiplication (scalar * vector).</div><div class="ttdef"><b>Definition</b> SerestController.hpp:103</div></div>
+<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_ab927965981178aa1fba979a37168db2a"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#ab927965981178aa1fba979a37168db2a">easynav::SerestController::Vec2::y</a></div><div class="ttdeci">double y</div><div class="ttdoc">Y component.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:93</div></div>
+<div class="ttc" id="astructeasynav_1_1SerestController_1_1Vec2_html_af88b946fb90d5f08b5fb740c70e98c10"><div class="ttname"><a href="structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10">easynav::SerestController::Vec2::x</a></div><div class="ttdeci">double x</div><div class="ttdoc">X component.</div><div class="ttdef"><b>Definition</b> SerestController.hpp:92</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

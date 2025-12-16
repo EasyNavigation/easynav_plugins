@@ -1,15 +1,12 @@
 <map id="maps_managers/easynav_navmap_maps_manager/src/easynav_navmap_maps_manager/filters/NavMapFilter.cpp" name="maps_managers/easynav_navmap_maps_manager/src/easynav_navmap_maps_manager/filters/NavMapFilter.cpp">
 <area shape="rect" id="Node000001" title=" " alt="" coords="5,5,225,76"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="12,220,85,246"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,77,60,206,55,204,100,75"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="110,220,163,246"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,76,136,205,131,205,116,77"/>
-<area shape="rect" id="Node000004" href="$NavMapFilter_8hpp.html" title=" " alt="" coords="152,124,371,165"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="167,74,222,113,219,117,164,79"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="214,168,93,216,91,211,212,163"/>
-<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="235,167,168,213,165,209,232,163"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="188,213,349,253"/>
-<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="266,165,268,197,263,197,261,165"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="373,213,534,253"/>
-<area shape="poly" id="edge7_Node000004_Node000006" title=" " alt="" coords="306,163,398,204,395,208,304,168"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="22,220,75,246"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,78,69,125,58,167,53,206,48,205,53,166,65,123,89,75"/>
+<area shape="rect" id="Node000003" href="$NavMapFilter_8hpp.html" title=" " alt="" coords="79,124,298,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="142,75,167,110,163,113,138,78"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="158,167,82,214,79,210,155,163"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="104,213,265,253"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="190,165,189,197,183,197,185,165"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="289,213,450,253"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="231,163,316,203,314,208,228,168"/>
 </map>

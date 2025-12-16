@@ -125,9 +125,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad72a29008719b8d181200952457ed05e" id="r_ad72a29008719b8d181200952457ed05e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad72a29008719b8d181200952457ed05e">GpsLocalizer</a> ()=default</td></tr>
 <tr class="memdesc:ad72a29008719b8d181200952457ed05e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <br /></td></tr>
 <tr class="separator:ad72a29008719b8d181200952457ed05e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa09f4316ce265b452c96e6d74101cd76" id="r_aa09f4316ce265b452c96e6d74101cd76"><td class="memItemLeft" align="right" valign="top">virtual std::expected&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa09f4316ce265b452c96e6d74101cd76">on_initialize</a> () override</td></tr>
-<tr class="memdesc:aa09f4316ce265b452c96e6d74101cd76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the localization method.  <br /></td></tr>
-<tr class="separator:aa09f4316ce265b452c96e6d74101cd76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d1795b6cf8a4da7bf9b33f783db911" id="r_ac9d1795b6cf8a4da7bf9b33f783db911"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a> () override</td></tr>
+<tr class="memdesc:ac9d1795b6cf8a4da7bf9b33f783db911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the localization method.  <br /></td></tr>
+<tr class="separator:ac9d1795b6cf8a4da7bf9b33f783db911"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24ddfd2eba3d3d6a90d492e8d25ff0da" id="r_a24ddfd2eba3d3d6a90d492e8d25ff0da"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24ddfd2eba3d3d6a90d492e8d25ff0da">update</a> (NavState &amp;nav_state) override</td></tr>
 <tr class="memdesc:a24ddfd2eba3d3d6a90d492e8d25ff0da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the localization estimate based on the current navigation state.  <br /></td></tr>
 <tr class="separator:a24ddfd2eba3d3d6a90d492e8d25ff0da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,8 +197,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa09f4316ce265b452c96e6d74101cd76" name="aa09f4316ce265b452c96e6d74101cd76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa09f4316ce265b452c96e6d74101cd76">&#9670;&#160;</a></span>on_initialize()</h2>
+<a id="ac9d1795b6cf8a4da7bf9b33f783db911" name="ac9d1795b6cf8a4da7bf9b33f783db911"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9d1795b6cf8a4da7bf9b33f783db911">&#9670;&#160;</a></span>on_initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,7 +207,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::expected&lt; void, std::string &gt; on_initialize </td>
+          <td class="memname">void on_initialize </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -222,7 +222,12 @@ Public Member Functions</h2></td></tr>
 
 <p>Initialize the localization method. </p>
 <p>This override may be used to set up internal resources. By default, it simply succeeds.</p>
-<dl class="section return"><dt>Returns</dt><dd>std::expected&lt;void, std::string&gt; Returns success or an error message. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if initialization fails. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

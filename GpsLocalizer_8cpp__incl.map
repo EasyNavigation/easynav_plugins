@@ -1,24 +1,21 @@
 <map id="localizers/easynav_gps_localizer/src/easynav_gps_localizer/GpsLocalizer.cpp" name="localizers/easynav_gps_localizer/src/easynav_gps_localizer/GpsLocalizer.cpp">
-<area shape="rect" id="Node000001" title="Implementation of the GpsLocalizer class." alt="" coords="496,5,703,61"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,205,79,231"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="509,64,316,124,91,200,86,202,84,197,89,195,314,119,508,59"/>
-<area shape="rect" id="Node000003" href="$GpsLocalizer_8hpp.html" title="Declaration of the GpsLocalizer class, a default plugin implementation for localization." alt="" coords="418,109,570,150"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="571,64,529,101,525,97,567,60"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="594,116,815,142"/>
-<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="632,60,682,104,678,108,628,64"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="840,109,967,150"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="688,59,826,101,824,107,686,64"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="418,141,266,163,177,179,91,200,84,202,83,197,89,195,176,174,265,157,417,136"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="102,205,294,231"/>
-<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="427,153,255,203,253,198,426,148"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="317,198,471,238"/>
-<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="473,152,430,189,426,185,470,148"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="495,198,696,238"/>
-<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="519,148,563,185,559,189,515,152"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="720,198,879,238"/>
-<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="564,148,716,191,715,196,563,153"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="903,205,1080,231"/>
-<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="571,145,582,147,737,172,892,195,915,199,914,204,891,200,736,177,582,152,570,150"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="1104,205,1294,231"/>
-<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="571,145,582,147,725,165,837,173,949,179,1093,195,1122,199,1121,205,1092,200,949,185,837,178,725,170,582,152,570,150"/>
+<area shape="rect" id="Node000001" title="Implementation of the GpsLocalizer class." alt="" coords="707,5,914,61"/>
+<area shape="rect" id="Node000002" href="$GpsLocalizer_8hpp.html" title="Declaration of the GpsLocalizer class, a default plugin implementation for localization." alt="" coords="524,109,675,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="750,64,659,105,657,100,748,59"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="700,116,921,142"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="813,62,813,101,808,101,808,62"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="945,109,1073,150"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="869,59,955,100,952,104,867,64"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,205,197,231"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="524,146,208,200,184,205,183,199,207,195,523,141"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="220,198,374,238"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="531,153,381,196,379,191,530,148"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="398,198,598,238"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="578,152,535,189,531,185,575,148"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="623,198,782,238"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="625,148,669,185,666,189,621,152"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="806,205,983,231"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="668,148,839,198,838,203,666,153"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1007,205,1198,231"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="676,145,688,147,842,172,996,195,1021,199,1020,205,995,200,841,177,687,152,675,150"/>
 </map>

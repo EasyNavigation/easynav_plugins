@@ -114,35 +114,34 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#ifndef EASYNAV_PLANNER__FILTERS__OBSTACLEFILTER_HPP_</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#define EASYNAV_PLANNER__FILTERS__OBSTACLEFILTER_HPP_</span></div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;expected&gt;</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;easynav_common/types/NavState.hpp&quot;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &quot;<a class="code" href="CostmapFilter_8hpp.html">easynav_costmap_maps_manager/filters/CostmapFilter.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>{</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="foldopen" id="foldopen00034" data-start="{" data-end="};">
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classeasynav_1_1ObstacleFilter.html">   34</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0">ObstacleFilter</a> : <span class="keyword">public</span> <a class="code hl_function" href="classeasynav_1_1CostmapFilter.html#a76d57eb6cb00b6b3446afe2067211990">CostmapFilter</a></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>{</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <a class="code hl_function" href="classeasynav_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0">ObstacleFilter</a>();</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  <span class="keyword">virtual</span> std::expected&lt;void, std::string&gt; <a class="code hl_function" href="classeasynav_1_1ObstacleFilter.html#abbbf8f0f2aa91650eb99d49111c7e9b1">on_initialize</a>();</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1ObstacleFilter.html#a2ca06ddb77a58406986fb74980981fc5">update</a>(NavState &amp; nav_state);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>};</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;easynav_common/types/NavState.hpp&quot;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;<a class="code" href="CostmapFilter_8hpp.html">easynav_costmap_maps_manager/filters/CostmapFilter.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>{</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="foldopen" id="foldopen00033" data-start="{" data-end="};">
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classeasynav_1_1ObstacleFilter.html">   33</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0">ObstacleFilter</a> : <span class="keyword">public</span> <a class="code hl_function" href="classeasynav_1_1CostmapFilter.html#a76d57eb6cb00b6b3446afe2067211990">CostmapFilter</a></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>{</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  <a class="code hl_function" href="classeasynav_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0">ObstacleFilter</a>();</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1ObstacleFilter.html#a66853af5fc8c3381f41186c4a16a14ea">on_initialize</a>();</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1ObstacleFilter.html#a2ca06ddb77a58406986fb74980981fc5">update</a>(NavState &amp; nav_state);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>};</div>
 </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>}  <span class="comment">// namespace easynav</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_PLANNER__FILTERS__OBSTACLEFILTER_HPP_</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>}  <span class="comment">// namespace easynav</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_PLANNER__FILTERS__OBSTACLEFILTER_HPP_</span></div>
 <div class="ttc" id="aCostmapFilter_8hpp_html"><div class="ttname"><a href="CostmapFilter_8hpp.html">CostmapFilter.hpp</a></div></div>
-<div class="ttc" id="aclasseasynav_1_1CostmapFilter_html_a76d57eb6cb00b6b3446afe2067211990"><div class="ttname"><a href="classeasynav_1_1CostmapFilter.html#a76d57eb6cb00b6b3446afe2067211990">easynav::CostmapFilter::CostmapFilter</a></div><div class="ttdeci">CostmapFilter()</div><div class="ttdef"><b>Definition</b> CostmapFilter.cpp:29</div></div>
-<div class="ttc" id="aclasseasynav_1_1ObstacleFilter_html_a2ca06ddb77a58406986fb74980981fc5"><div class="ttname"><a href="classeasynav_1_1ObstacleFilter.html#a2ca06ddb77a58406986fb74980981fc5">easynav::ObstacleFilter::update</a></div><div class="ttdeci">virtual void update(NavState &amp;nav_state)</div><div class="ttdef"><b>Definition</b> ObstacleFilter.cpp:49</div></div>
-<div class="ttc" id="aclasseasynav_1_1ObstacleFilter_html_a93c8fbce74f889285cb13fa80d49eae0"><div class="ttname"><a href="classeasynav_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0">easynav::ObstacleFilter::ObstacleFilter</a></div><div class="ttdeci">ObstacleFilter()</div><div class="ttdef"><b>Definition</b> ObstacleFilter.cpp:37</div></div>
-<div class="ttc" id="aclasseasynav_1_1ObstacleFilter_html_abbbf8f0f2aa91650eb99d49111c7e9b1"><div class="ttname"><a href="classeasynav_1_1ObstacleFilter.html#abbbf8f0f2aa91650eb99d49111c7e9b1">easynav::ObstacleFilter::on_initialize</a></div><div class="ttdeci">virtual std::expected&lt; void, std::string &gt; on_initialize()</div><div class="ttdef"><b>Definition</b> ObstacleFilter.cpp:43</div></div>
+<div class="ttc" id="aclasseasynav_1_1CostmapFilter_html_a76d57eb6cb00b6b3446afe2067211990"><div class="ttname"><a href="classeasynav_1_1CostmapFilter.html#a76d57eb6cb00b6b3446afe2067211990">easynav::CostmapFilter::CostmapFilter</a></div><div class="ttdeci">CostmapFilter()</div><div class="ttdef"><b>Definition</b> CostmapFilter.cpp:28</div></div>
+<div class="ttc" id="aclasseasynav_1_1ObstacleFilter_html_a2ca06ddb77a58406986fb74980981fc5"><div class="ttname"><a href="classeasynav_1_1ObstacleFilter.html#a2ca06ddb77a58406986fb74980981fc5">easynav::ObstacleFilter::update</a></div><div class="ttdeci">virtual void update(NavState &amp;nav_state)</div><div class="ttdef"><b>Definition</b> ObstacleFilter.cpp:46</div></div>
+<div class="ttc" id="aclasseasynav_1_1ObstacleFilter_html_a66853af5fc8c3381f41186c4a16a14ea"><div class="ttname"><a href="classeasynav_1_1ObstacleFilter.html#a66853af5fc8c3381f41186c4a16a14ea">easynav::ObstacleFilter::on_initialize</a></div><div class="ttdeci">virtual void on_initialize()</div><div class="ttdef"><b>Definition</b> ObstacleFilter.cpp:42</div></div>
+<div class="ttc" id="aclasseasynav_1_1ObstacleFilter_html_a93c8fbce74f889285cb13fa80d49eae0"><div class="ttname"><a href="classeasynav_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0">easynav::ObstacleFilter::ObstacleFilter</a></div><div class="ttdeci">ObstacleFilter()</div><div class="ttdef"><b>Definition</b> ObstacleFilter.cpp:36</div></div>
 <div class="ttc" id="anamespaceeasynav_html"><div class="ttname"><a href="namespaceeasynav.html">easynav</a></div><div class="ttdoc">Provides a mapping for often used cost values.</div><div class="ttdef"><b>Definition</b> cost_values.hpp:41</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

@@ -128,9 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3da2795defa79fafca9536fa41c98ee0" id="r_a3da2795defa79fafca9536fa41c98ee0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3da2795defa79fafca9536fa41c98ee0">CostmapMapsManager</a> ()</td></tr>
 <tr class="memdesc:a3da2795defa79fafca9536fa41c98ee0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <br /></td></tr>
 <tr class="separator:a3da2795defa79fafca9536fa41c98ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa09f4316ce265b452c96e6d74101cd76" id="r_aa09f4316ce265b452c96e6d74101cd76"><td class="memItemLeft" align="right" valign="top">virtual std::expected&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa09f4316ce265b452c96e6d74101cd76">on_initialize</a> () override</td></tr>
-<tr class="memdesc:aa09f4316ce265b452c96e6d74101cd76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the maps manager.  <br /></td></tr>
-<tr class="separator:aa09f4316ce265b452c96e6d74101cd76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d1795b6cf8a4da7bf9b33f783db911" id="r_ac9d1795b6cf8a4da7bf9b33f783db911"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a> () override</td></tr>
+<tr class="memdesc:ac9d1795b6cf8a4da7bf9b33f783db911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the maps manager.  <br /></td></tr>
+<tr class="separator:ac9d1795b6cf8a4da7bf9b33f783db911"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66b4eb11a2f75d5fa63fa2af65ee3f3e" id="r_a66b4eb11a2f75d5fa63fa2af65ee3f3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66b4eb11a2f75d5fa63fa2af65ee3f3e">set_static_map</a> (const <a class="el" href="classeasynav_1_1Costmap2D.html">Costmap2D</a> &amp;new_map)</td></tr>
 <tr class="memdesc:a66b4eb11a2f75d5fa63fa2af65ee3f3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces the current static map.  <br /></td></tr>
 <tr class="separator:a66b4eb11a2f75d5fa63fa2af65ee3f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,8 +190,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa09f4316ce265b452c96e6d74101cd76" name="aa09f4316ce265b452c96e6d74101cd76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa09f4316ce265b452c96e6d74101cd76">&#9670;&#160;</a></span>on_initialize()</h2>
+<a id="ac9d1795b6cf8a4da7bf9b33f783db911" name="ac9d1795b6cf8a4da7bf9b33f783db911"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9d1795b6cf8a4da7bf9b33f783db911">&#9670;&#160;</a></span>on_initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -200,7 +200,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::expected&lt; void, std::string &gt; on_initialize </td>
+          <td class="memname">void on_initialize </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -215,7 +215,12 @@ Protected Attributes</h2></td></tr>
 
 <p>Initializes the maps manager. </p>
 <p>Creates necessary publishers/subscribers and initializes the map instances.</p>
-<dl class="section return"><dt>Returns</dt><dd>std::expected&lt;void, std::string&gt; Success or error string. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if initialization fails. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

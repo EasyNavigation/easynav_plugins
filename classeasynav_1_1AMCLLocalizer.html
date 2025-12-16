@@ -168,12 +168,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aca0e63564e9178ee829d71b954f99780" id="r_aca0e63564e9178ee829d71b954f99780"><td class="memItemLeft" align="right" valign="top">tf2::Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca0e63564e9178ee829d71b954f99780">getEstimatedPose</a> () const</td></tr>
 <tr class="memdesc:aca0e63564e9178ee829d71b954f99780"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current estimated pose as a transform.  <br /></td></tr>
 <tr class="separator:aca0e63564e9178ee829d71b954f99780"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa09f4316ce265b452c96e6d74101cd76" id="r_aa09f4316ce265b452c96e6d74101cd76"><td class="memItemLeft" align="right" valign="top">virtual std::expected&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa09f4316ce265b452c96e6d74101cd76">on_initialize</a> () override</td></tr>
-<tr class="memdesc:aa09f4316ce265b452c96e6d74101cd76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the localization method.  <br /></td></tr>
-<tr class="separator:aa09f4316ce265b452c96e6d74101cd76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4952a5ca913c6432a4276e06927f0b2d" id="r_a4952a5ca913c6432a4276e06927f0b2d"><td class="memItemLeft" align="right" valign="top">virtual std::expected&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4952a5ca913c6432a4276e06927f0b2d">on_initialize</a> () override</td></tr>
-<tr class="memdesc:a4952a5ca913c6432a4276e06927f0b2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the localization method.  <br /></td></tr>
-<tr class="separator:a4952a5ca913c6432a4276e06927f0b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d1795b6cf8a4da7bf9b33f783db911" id="r_ac9d1795b6cf8a4da7bf9b33f783db911"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a> () override</td></tr>
+<tr class="memdesc:ac9d1795b6cf8a4da7bf9b33f783db911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the localization method.  <br /></td></tr>
+<tr class="separator:ac9d1795b6cf8a4da7bf9b33f783db911"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12f82805b9f74e913e08766724d1400b" id="r_a12f82805b9f74e913e08766724d1400b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12f82805b9f74e913e08766724d1400b">on_initialize</a> () override</td></tr>
+<tr class="memdesc:a12f82805b9f74e913e08766724d1400b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the localization method.  <br /></td></tr>
+<tr class="separator:a12f82805b9f74e913e08766724d1400b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24ddfd2eba3d3d6a90d492e8d25ff0da" id="r_a24ddfd2eba3d3d6a90d492e8d25ff0da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24ddfd2eba3d3d6a90d492e8d25ff0da">update</a> (NavState &amp;nav_state) override</td></tr>
 <tr class="memdesc:a24ddfd2eba3d3d6a90d492e8d25ff0da"><td class="mdescLeft">&#160;</td><td class="mdescRight">General update of the localization state.  <br /></td></tr>
 <tr class="separator:a24ddfd2eba3d3d6a90d492e8d25ff0da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -695,8 +695,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa09f4316ce265b452c96e6d74101cd76" name="aa09f4316ce265b452c96e6d74101cd76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa09f4316ce265b452c96e6d74101cd76">&#9670;&#160;</a></span>on_initialize() <span class="overload">[1/2]</span></h2>
+<a id="ac9d1795b6cf8a4da7bf9b33f783db911" name="ac9d1795b6cf8a4da7bf9b33f783db911"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9d1795b6cf8a4da7bf9b33f783db911">&#9670;&#160;</a></span>on_initialize() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -705,7 +705,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::expected&lt; void, std::string &gt; on_initialize </td>
+          <td class="memname">void on_initialize </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -720,12 +720,17 @@ Protected Attributes</h2></td></tr>
 
 <p>Initializes the localization method. </p>
 <p>Sets up publishers, subscribers, and prepares the particle filter.</p>
-<dl class="section return"><dt>Returns</dt><dd>std::expected&lt;void, std::string&gt; Success or error message. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>on initialization error. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a4952a5ca913c6432a4276e06927f0b2d" name="a4952a5ca913c6432a4276e06927f0b2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4952a5ca913c6432a4276e06927f0b2d">&#9670;&#160;</a></span>on_initialize() <span class="overload">[2/2]</span></h2>
+<a id="a12f82805b9f74e913e08766724d1400b" name="a12f82805b9f74e913e08766724d1400b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12f82805b9f74e913e08766724d1400b">&#9670;&#160;</a></span>on_initialize() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -734,7 +739,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::expected&lt; void, std::string &gt; on_initialize </td>
+          <td class="memname">virtual void on_initialize </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -749,7 +754,12 @@ Protected Attributes</h2></td></tr>
 
 <p>Initializes the localization method. </p>
 <p>Sets up publishers, subscribers, and prepares the particle filter.</p>
-<dl class="section return"><dt>Returns</dt><dd>std::expected&lt;void, std::string&gt; Success or error message. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if initialization fails. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

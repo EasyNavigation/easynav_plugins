@@ -1,13 +1,11 @@
 <map id="maps_managers/easynav_octomap_maps_manager/include/easynav_octomap_maps_manager/filters/OctomapFilter.hpp" name="maps_managers/easynav_octomap_maps_manager/include/easynav_octomap_maps_manager/filters/OctomapFilter.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="118,5,380,76"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,79,157"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,79,82,127,79,122,177,74"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="103,132,157,157"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,78,157,124,154,119,207,74"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="181,132,316,157"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="251,76,251,116,246,116,246,76"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="340,124,501,165"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="309,74,376,114,373,118,306,79"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="525,124,687,165"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="372,74,523,117,522,122,370,79"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="105,5,367,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,59,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,79,71,127,69,122,165,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="83,132,218,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,78,173,121,168,118,205,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="242,124,403,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="267,74,298,110,294,114,263,78"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="427,124,589,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="330,74,442,116,440,121,328,79"/>
 </map>

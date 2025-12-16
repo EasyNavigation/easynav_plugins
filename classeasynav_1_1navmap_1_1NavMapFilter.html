@@ -133,14 +133,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5e5326fd311de885268a740c3b40abbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ca6e8531c0fc1535502893305881a3e" id="r_a8ca6e8531c0fc1535502893305881a3e"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ca6e8531c0fc1535502893305881a3e">get_plugin_name</a> () const</td></tr>
 <tr class="separator:a8ca6e8531c0fc1535502893305881a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0af5d7ce8b198cea513fffa2bbf53ad" id="r_ab0af5d7ce8b198cea513fffa2bbf53ad"><td class="memItemLeft" align="right" valign="top">std::expected&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0af5d7ce8b198cea513fffa2bbf53ad">initialize</a> (const std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt; parent_node, const std::string &amp;plugin_name)</td></tr>
-<tr class="separator:ab0af5d7ce8b198cea513fffa2bbf53ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b077b5711726202f8d6faaba7563592" id="r_a0b077b5711726202f8d6faaba7563592"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b077b5711726202f8d6faaba7563592">initialize</a> (const std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt; parent_node, const std::string &amp;plugin_name)</td></tr>
+<tr class="separator:a0b077b5711726202f8d6faaba7563592"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bda7d2c017879dcdf236cf3d3700d02" id="r_a1bda7d2c017879dcdf236cf3d3700d02"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bda7d2c017879dcdf236cf3d3700d02">is_adding_layer</a> ()</td></tr>
 <tr class="separator:a1bda7d2c017879dcdf236cf3d3700d02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a225602ee95bfbf08d63951860087b115" id="r_a225602ee95bfbf08d63951860087b115"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a225602ee95bfbf08d63951860087b115">NavMapFilter</a> ()</td></tr>
 <tr class="separator:a225602ee95bfbf08d63951860087b115"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe2e8943a7f433c59ce39d4138becc01" id="r_afe2e8943a7f433c59ce39d4138becc01"><td class="memItemLeft" align="right" valign="top">virtual std::expected&lt; void, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe2e8943a7f433c59ce39d4138becc01">on_initialize</a> ()=0</td></tr>
-<tr class="separator:afe2e8943a7f433c59ce39d4138becc01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51bd672a8cb43f202c482832176709ba" id="r_a51bd672a8cb43f202c482832176709ba"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51bd672a8cb43f202c482832176709ba">on_initialize</a> ()=0</td></tr>
+<tr class="separator:a51bd672a8cb43f202c482832176709ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a809ce980ee5a7d86857225136a1999" id="r_a6a809ce980ee5a7d86857225136a1999"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a809ce980ee5a7d86857225136a1999">set_map_resolution</a> (float resolution)</td></tr>
 <tr class="separator:a6a809ce980ee5a7d86857225136a1999"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a758f95121a219752d45c8d7ab6f7af4d" id="r_a758f95121a219752d45c8d7ab6f7af4d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a758f95121a219752d45c8d7ab6f7af4d">update</a> (::easynav::NavState &amp;nav_state)=0</td></tr>
@@ -265,14 +265,14 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab0af5d7ce8b198cea513fffa2bbf53ad" name="ab0af5d7ce8b198cea513fffa2bbf53ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0af5d7ce8b198cea513fffa2bbf53ad">&#9670;&#160;</a></span>initialize()</h2>
+<a id="a0b077b5711726202f8d6faaba7563592" name="a0b077b5711726202f8d6faaba7563592"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b077b5711726202f8d6faaba7563592">&#9670;&#160;</a></span>initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::expected&lt; void, std::string &gt; initialize </td>
+          <td class="memname">void initialize </td>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt;</td>          <td class="paramname"><span class="paramname"><em>parent_node</em></span>, </td>
         </tr>
@@ -313,8 +313,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afe2e8943a7f433c59ce39d4138becc01" name="afe2e8943a7f433c59ce39d4138becc01"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe2e8943a7f433c59ce39d4138becc01">&#9670;&#160;</a></span>on_initialize()</h2>
+<a id="a51bd672a8cb43f202c482832176709ba" name="a51bd672a8cb43f202c482832176709ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51bd672a8cb43f202c482832176709ba">&#9670;&#160;</a></span>on_initialize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -323,7 +323,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::expected&lt; void, std::string &gt; on_initialize </td>
+          <td class="memname">virtual void on_initialize </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -336,7 +336,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classeasynav_1_1navmap_1_1InflationFilter.html#aa09f4316ce265b452c96e6d74101cd76">InflationFilter</a>, and <a class="el" href="classeasynav_1_1navmap_1_1ObstacleFilter.html#aa09f4316ce265b452c96e6d74101cd76">ObstacleFilter</a>.</p>
+<p>Implemented in <a class="el" href="classeasynav_1_1navmap_1_1InflationFilter.html#ac9d1795b6cf8a4da7bf9b33f783db911">InflationFilter</a>, and <a class="el" href="classeasynav_1_1navmap_1_1ObstacleFilter.html#ac9d1795b6cf8a4da7bf9b33f783db911">ObstacleFilter</a>.</p>
 
 </div>
 </div>
