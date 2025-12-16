@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <limits>
 #include <cmath>
-#include <numbers>
 
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
@@ -41,7 +40,7 @@ namespace easynav
 SerestController::SerestController() = default;
 SerestController::~SerestController() = default;
 
-std::expected<void, std::string>
+void
 SerestController::on_initialize()
 {
   auto node = get_node();
@@ -149,8 +148,6 @@ SerestController::on_initialize()
   last_vlin_ = 0.0;
   last_vrot_ = 0.0;
   last_update_ts_ = node->now();
-
-  return {};
 }
 
 SerestController::PathData
@@ -487,7 +484,7 @@ SerestController::should_turn_in_place(
 {
   // Keep compatibility with the signature, but ignore turn_in_place_thr
   // and use two internal thresholds without exposing parameters.
-  const double thr_enter = 60.0 * std::numbers::pi / 180.0; // enter TiP if |e_theta| > 60°
+  const double thr_enter = 60.0 * M_PI / 180.0; // enter TiP if |e_theta| > 60°
   // const double thr_exit = 35.0 * PI / 180.0; // exit TiP if |e_theta| < 35°
 
   // Do not allow reverse "shortcut" in this decision: if reverse is not allowed,
@@ -510,7 +507,7 @@ SerestController::maybe_final_align_and_publish(
   double dist_xy_goal, double stop_r, double e_theta_goal,
   double gamma_slow, double dt)
 {
-  const double goal_yaw_tol = goal_yaw_tol_deg_ * std::numbers::pi / 180.0;
+  const double goal_yaw_tol = goal_yaw_tol_deg_ * M_PI / 180.0;
 
   if (dist_xy_goal > stop_r) {
     return false;
@@ -625,7 +622,7 @@ SerestController::update_rt(NavState & nav_state)
 
   // 1.5) Goal tolerances: prefer shared GoalManager values, fallback to local params
   double goal_pos_tol = goal_pos_tol_;
-  double goal_yaw_tol = goal_yaw_tol_deg_ * (std::numbers::pi / 180.0);
+  double goal_yaw_tol = goal_yaw_tol_deg_ * (M_PI / 180.0);
   if (nav_state.has("goal_tolerance.position")) {
     goal_pos_tol = nav_state.get<double>("goal_tolerance.position");
   }
@@ -727,7 +724,7 @@ SerestController::update_rt(NavState & nav_state)
   double v_prog_ref = v_prog_ref_free * gamma_slow;
 
   // Maintain a small cruising speed when roughly aligned and outside the stop zone (no reverse)
-  const double align_thr = 30.0 * std::numbers::pi / 180.0;
+  const double align_thr = 30.0 * M_PI / 180.0;
   if (!allow_reverse_ && (dist_xy_goal > stop_r) && std::fabs(e_theta) < align_thr) {
     v_prog_ref = std::max(v_prog_ref, std::min(slow_min_speed_, v_prog_ref_free));
   }
@@ -778,7 +775,7 @@ SerestController::update_rt(NavState & nav_state)
 
   // Optional classic TiP safeguard using the same angular threshold
   {
-    const double turn_in_place_thr = (60.0 * std::numbers::pi / 180.0);
+    const double turn_in_place_thr = (60.0 * M_PI / 180.0);
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 

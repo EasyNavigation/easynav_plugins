@@ -42,7 +42,6 @@
 #ifndef EASYNAV_PLANNER__FILTERS__IINFLATIONFILTER_HPP_
 #define EASYNAV_PLANNER__FILTERS__IINFLATIONFILTER_HPP_
 
-#include <expected>
 #include <string>
 #include <vector>
 
@@ -79,7 +78,7 @@ class InflationFilter : public CostmapFilter
 public:
   InflationFilter();
 
-  virtual std::expected<void, std::string> on_initialize();
+  virtual void on_initialize();
   virtual void update(NavState & nav_state);
 
   /**

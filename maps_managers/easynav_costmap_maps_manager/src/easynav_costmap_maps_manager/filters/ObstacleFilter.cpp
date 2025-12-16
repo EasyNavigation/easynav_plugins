@@ -18,7 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_costmap_common/costmap_2d.hpp"
@@ -39,11 +38,9 @@ ObstacleFilter::ObstacleFilter()
 
 }
 
-std::expected<void, std::string>
+void
 ObstacleFilter::on_initialize()
-{
-  return {};
-}
+{}
 
 void
 ObstacleFilter::update(NavState & nav_state)

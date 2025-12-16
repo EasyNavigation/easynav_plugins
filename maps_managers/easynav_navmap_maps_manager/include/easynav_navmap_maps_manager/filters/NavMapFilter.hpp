@@ -21,7 +21,6 @@
 #ifndef EASYNAV_PLANNER__FILTERS__NAVMAPFILTER_HPP_
 #define EASYNAV_PLANNER__FILTERS__NAVMAPFILTER_HPP_
 
-#include <expected>
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
@@ -37,12 +36,12 @@ class NavMapFilter
 public:
   NavMapFilter();
 
-  std::expected<void, std::string>
+  void
   initialize(
     const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
     const std::string & plugin_name);
 
-  virtual std::expected<void, std::string> on_initialize() = 0;
+  virtual void on_initialize() = 0;
   virtual void update(::easynav::NavState & nav_state) = 0;
 
   virtual bool is_adding_layer() {return false;}

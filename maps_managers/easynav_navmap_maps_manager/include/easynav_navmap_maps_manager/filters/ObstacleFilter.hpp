@@ -21,7 +21,6 @@
 #ifndef EASYNAV_NAVMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
 #define EASYNAV_NAVMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
 
-#include <expected>
 #include <string>
 
 #include "navmap_core/NavMap.hpp"
@@ -39,7 +38,7 @@ class ObstacleFilter : public NavMapFilter
 public:
   ObstacleFilter();
 
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
   virtual void update(::easynav::NavState & nav_state) override;
 
   virtual bool is_adding_layer() override {return true;}

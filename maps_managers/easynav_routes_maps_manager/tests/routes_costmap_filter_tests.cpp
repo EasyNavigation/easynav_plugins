@@ -59,8 +59,7 @@ TEST_F(RoutesCostmapFilterTest, DoesNothingWhenNavStateMissingKeys)
   easynav::TFInfo tf_info;
   easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
 
-  auto init_result = filter.initialize(node, "routes.routes_costmap");
-  ASSERT_TRUE(init_result.has_value()) << init_result.error();
+  ASSERT_NO_THROW(filter.initialize(node, "routes.routes_costmap"));
 
   NavState nav_state;
   // No 'routes' and no 'map.dynamic.filtered' keys -> update should not crash
@@ -75,8 +74,7 @@ TEST_F(RoutesCostmapFilterTest, RaisesCostOutsideRoutes)
   easynav::TFInfo tf_info;
   easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
 
-  auto init_result = filter.initialize(node, "routes.routes_costmap");
-  ASSERT_TRUE(init_result.has_value()) << init_result.error();
+  ASSERT_NO_THROW(filter.initialize(node, "routes.routes_costmap"));
 
   // Simple costmap 10x1, resolution 1.0, origin at (0,0)
   Costmap2D map(10, 1, 1.0, 0.0, 0.0);
@@ -126,8 +124,7 @@ TEST_F(RoutesCostmapFilterTest, IgnoresRoutePointsOutsideMap)
   easynav::TFInfo tf_info;
   easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
 
-  auto init_result = filter.initialize(node, "routes.routes_costmap");
-  ASSERT_TRUE(init_result.has_value()) << init_result.error();
+  ASSERT_NO_THROW(filter.initialize(node, "routes.routes_costmap"));
 
   // Costmap 5x1 from x=0..5
   Costmap2D map(5, 1, 1.0, 0.0, 0.0);

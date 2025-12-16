@@ -21,7 +21,6 @@
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
-#include <expected>
 #include <fstream>
 
 #include <yaml-cpp/yaml.h>
@@ -54,7 +53,7 @@ RoutesMapsManager::RoutesMapsManager()
 
 RoutesMapsManager::~RoutesMapsManager() = default;
 
-std::expected<void, std::string> RoutesMapsManager::on_initialize()
+void RoutesMapsManager::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -91,7 +90,7 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
     const auto pkgpath = ament_index_cpp::get_package_share_directory(package_name);
     map_path_ = pkgpath + "/" + map_path_file;
   } else {
-    return std::unexpected(
+    throw std::runtime_error(
       "Parameters '" + plugin_name + ".package' and '" + plugin_name +
       ".map_path_file' are not correctly set");
   }
@@ -182,7 +181,7 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
     publish_routes_markers();
     publish_interactive_markers();
   } catch (const std::exception & e) {
-    return std::unexpected(std::string{"Failed to load routes: "} + e.what());
+    throw std::runtime_error(std::string{"Failed to load routes: "} + e.what());
   }
 
   // Instantiate and initialize configured route filters
@@ -206,13 +205,14 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
       std::shared_ptr<RoutesFilter> instance =
         routes_filters_loader_->createSharedInstance(plugin);
 
-      auto result = instance->initialize(node, plugin_name + "." + filter_name);
-      if (!result) {
+      try {
+        instance->initialize(node, plugin_name + "." + filter_name);
+      } catch (const std::exception & e) {
         RCLCPP_ERROR(node->get_logger(),
           "Unable to initialize RoutesFilter %s [%s]. Error: %s",
-          filter_name.c_str(), plugin.c_str(), result.error().c_str());
-        return std::unexpected("Unable to initialize RoutesFilter " + plugin +
-          " . Error: " + result.error());
+          filter_name.c_str(), plugin.c_str(), e.what());
+        throw std::runtime_error("Unable to initialize RoutesFilter " + plugin +
+          " . Error: " + e.what());
       }
 
       routes_filters_.push_back(instance);
@@ -222,12 +222,10 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
     } catch (pluginlib::PluginlibException & ex) {
       RCLCPP_ERROR(node->get_logger(),
         "Unable to load plugin easynav::RoutesFilter. Error: %s", ex.what());
-      return std::unexpected("Unable to load plugin easynav::RoutesFilter " +
+      throw std::runtime_error("Unable to load plugin easynav::RoutesFilter " +
         filter_name + " . Error: " + ex.what());
     }
   }
-
-  return {};
 }
 
 void RoutesMapsManager::update(NavState & nav_state)

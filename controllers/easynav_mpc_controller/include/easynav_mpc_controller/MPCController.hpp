@@ -45,8 +45,8 @@ public:
   ~MPCController() override;
 
   /// \brief Initializes parameters and MPC controller.
-  /// \return std::expected<void, std::string> success or error message.
-  std::expected<void, std::string> on_initialize() override;
+  /// \throws std::runtime_error if initialization fails.
+  void on_initialize() override;
 
   /// \brief Updates the controller using the given NavState.
   /// \param nav_state Current navigation state, including odometry and planned path.

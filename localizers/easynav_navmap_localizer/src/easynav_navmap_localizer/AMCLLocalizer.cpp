@@ -20,7 +20,6 @@
 /// \file
 /// \brief AMCLLocalizer implementation (Bonxai + probabilistic inflation + ray casting).
 
-#include <expected>
 #include <random>
 #include <unordered_map>
 #include <unordered_set>
@@ -366,7 +365,7 @@ AMCLLocalizer::AMCLLocalizer()
 
 AMCLLocalizer::~AMCLLocalizer() = default;
 
-std::expected<void, std::string> AMCLLocalizer::on_initialize()
+void AMCLLocalizer::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -469,7 +468,6 @@ std::expected<void, std::string> AMCLLocalizer::on_initialize()
 
   last_reseed_ = get_node()->now();
   get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
-  return {};
 }
 
 void AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)

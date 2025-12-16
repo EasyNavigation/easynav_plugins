@@ -20,7 +20,6 @@
 #ifndef EASYNAV_ROUTES_MAPS_MANAGER_FILTERS_ROUTES_COSTMAP_FILTER_HPP_
 #define EASYNAV_ROUTES_MAPS_MANAGER_FILTERS_ROUTES_COSTMAP_FILTER_HPP_
 
-#include <expected>
 #include <string>
 
 #include "easynav_routes_maps_manager/RoutesFilter.hpp"
@@ -54,9 +53,8 @@ public:
   /// @param plugin_ns Namespace used to resolve this filter's
   ///   parameters and topics.
   /// @param tf_info TF frame information used by the navigation stack.
-  /// @return std::expected<void, std::string> Empty on success or an
-  ///   error message on failure.
-  std::expected<void, std::string> initialize(
+  /// @throws std::runtime_error if initialization fails.
+  void initialize(
     const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
     const std::string & plugin_ns) override;
 

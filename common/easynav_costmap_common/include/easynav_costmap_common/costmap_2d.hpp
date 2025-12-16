@@ -41,6 +41,7 @@
 #include <cstring>
 #include <algorithm>
 #include <cmath>
+#include <climits>
 #include <vector>
 #include <mutex>
 #include "geometry_msgs/msg/point.hpp"

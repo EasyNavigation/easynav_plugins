@@ -32,7 +32,7 @@ MPCController::MPCController() {}
 
 MPCController::~MPCController() = default;
 
-std::expected<void, std::string>
+void
 MPCController::on_initialize()
 {
   auto node = get_node();
@@ -65,8 +65,6 @@ MPCController::on_initialize()
 
   detection_pub_ =
     node->create_publisher<sensor_msgs::msg::PointCloud2>("/mpc/detection", 10);
-
-  return {};
 }
 
 void

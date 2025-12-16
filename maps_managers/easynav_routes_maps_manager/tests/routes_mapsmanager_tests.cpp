@@ -92,8 +92,7 @@ TEST_F(RoutesMapsManagerTest, LoadsRoutesFromValidYaml)
   easynav::TFInfo tf_info;
   easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
 
-  auto init_result = manager->initialize(node, "routes");
-  ASSERT_TRUE(init_result.has_value()) << init_result.error();
+  ASSERT_NO_THROW(manager->initialize(node, "routes"));
 
   const auto & routes = manager->get_routes();
   ASSERT_EQ(routes.size(), 2u);
@@ -120,8 +119,7 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenMapPathEmpty)
   auto manager = std::make_shared<RoutesMapsManager>();
   easynav::TFInfo tf_info;
   easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
-  auto init_result = manager->initialize(node, "routes");
-  ASSERT_TRUE(init_result.has_value()) << init_result.error();
+  ASSERT_NO_THROW(manager->initialize(node, "routes"));
 
   const auto & routes = manager->get_routes();
   ASSERT_EQ(routes.size(), 1u);
@@ -147,8 +145,7 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenYamlMissing)
   auto manager = std::make_shared<RoutesMapsManager>();
   easynav::TFInfo tf_info;
   easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
-  auto init_result = manager->initialize(node, "routes");
-  ASSERT_TRUE(init_result.has_value()) << init_result.error();
+  ASSERT_NO_THROW(manager->initialize(node, "routes"));
 
   const auto & routes = manager->get_routes();
   ASSERT_EQ(routes.size(), 1u);
@@ -175,8 +172,7 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenNoRoutesKey)
   auto manager = std::make_shared<RoutesMapsManager>();
   easynav::TFInfo tf_info;
   easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
-  auto init_result = manager->initialize(node, "routes");
-  ASSERT_TRUE(init_result.has_value()) << init_result.error();
+  ASSERT_NO_THROW(manager->initialize(node, "routes"));
 
   const auto & routes = manager->get_routes();
   ASSERT_EQ(routes.size(), 1u);
@@ -209,8 +205,7 @@ TEST_F(RoutesMapsManagerTest, UpdateWritesRoutesIntoNavState)
   easynav::TFInfo tf_info;
   easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
 
-  auto init_result = manager->initialize(node, "routes");
-  ASSERT_TRUE(init_result.has_value()) << init_result.error();
+  ASSERT_NO_THROW(manager->initialize(node, "routes"));
 
   easynav::NavState nav_state;
   manager->update(nav_state);

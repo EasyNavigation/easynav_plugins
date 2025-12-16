@@ -18,7 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
@@ -40,11 +39,9 @@ ObstacleFilter::ObstacleFilter()
 
 }
 
-std::expected<void, std::string>
+void
 ObstacleFilter::on_initialize()
-{
-  return {};
-}
+{}
 
 void
 ObstacleFilter::update(::easynav::NavState & nav_state)

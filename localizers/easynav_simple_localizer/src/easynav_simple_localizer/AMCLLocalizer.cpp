@@ -20,7 +20,6 @@
 /// \file
 /// \brief Implementation of the AMCLLocalizer class.
 
-#include <expected>
 #include <random>
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
@@ -185,7 +184,7 @@ AMCLLocalizer::~AMCLLocalizer()
 {
 }
 
-std::expected<void, std::string>
+void
 AMCLLocalizer::on_initialize()
 {
   auto node = get_node();
@@ -263,8 +262,6 @@ AMCLLocalizer::on_initialize()
   last_reseed_ = get_node()->now();
 
   get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
-
-  return {};
 }
 
 void printTransform(const tf2::Transform & tf)

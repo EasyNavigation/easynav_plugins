@@ -20,8 +20,6 @@
 /// \file
 /// \brief Implementation of the VffController class.
 
-#include <expected>
-
 #include "easynav_vff_controller/VffController.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_common/types/PointPerception.hpp"
@@ -35,7 +33,7 @@
 namespace easynav
 {
 
-std::expected<void, std::string> VffController::on_initialize()
+void VffController::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -77,8 +75,6 @@ std::expected<void, std::string> VffController::on_initialize()
   // Publisher for visualization markers
   marker_array_pub_ = node->create_publisher<visualization_msgs::msg::MarkerArray>(
     "vff/markers_vff", 10);
-
-  return {};
 }
 
 visualization_msgs::msg::MarkerArray

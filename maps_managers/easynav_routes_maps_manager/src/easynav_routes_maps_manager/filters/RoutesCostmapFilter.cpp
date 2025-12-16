@@ -37,7 +37,7 @@ namespace easynav
 
 RoutesCostmapFilter::RoutesCostmapFilter() = default;
 
-std::expected<void, std::string>
+void
 RoutesCostmapFilter::initialize(
   const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
   const std::string & plugin_ns)
@@ -68,8 +68,6 @@ RoutesCostmapFilter::initialize(
   routes_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes_map",
     rclcpp::QoS(1).reliable());
-
-  return {};
 }
 
 void

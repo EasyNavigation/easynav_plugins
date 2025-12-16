@@ -17,7 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#include <expected>
+#include <stdexcept>
 #include <string>
 
 #include "easynav_costmap_maps_manager/CostmapMapsManager.hpp"
@@ -52,7 +52,7 @@ CostmapMapsManager::CostmapMapsManager()
 
 CostmapMapsManager::~CostmapMapsManager() {}
 
-std::expected<void, std::string>
+void
 CostmapMapsManager::on_initialize()
 {
   auto node = get_node();
@@ -81,13 +81,13 @@ CostmapMapsManager::on_initialize()
       std::shared_ptr<CostmapFilter> instance;
       instance = costmap_filters_loader_->createSharedInstance(plugin);
 
-      auto result = instance->initialize(node, plugin_name + "." + costmap_filter);
-
-      if (!result) {
+      try {
+        instance->initialize(node, plugin_name + "." + costmap_filter);
+      } catch (std::runtime_error & ex) {
         RCLCPP_ERROR(node->get_logger(),
-          "Unable to initialize [%s]. Error: %s", plugin.c_str(), result.error().c_str());
-        return std::unexpected("Unable to initialize " +
-          plugin + " . Error: " + result.error());
+          "Unable to initialize [%s]. Error: %s", plugin.c_str(), ex.what());
+        throw std::runtime_error("Unable to initialize " +
+          plugin + " . Error: " + ex.what());
       }
 
       costmap_filters_.push_back(instance);
@@ -97,7 +97,7 @@ CostmapMapsManager::on_initialize()
     } catch (pluginlib::PluginlibException & ex) {
       RCLCPP_ERROR(node->get_logger(),
         "Unable to load plugin easynav::CostmapFilter. Error: %s", ex.what());
-      return std::unexpected("Unable to load plugin easynav::CostmapFilter " +
+      throw std::runtime_error("Unable to load plugin easynav::CostmapFilter " +
         costmap_filter + " . Error: " + ex.what());
     }
   }
@@ -117,12 +117,12 @@ CostmapMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + map_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     if (auto ret = loadMapFromYaml(map_path_, static_grid_msg_) != LOAD_MAP_SUCCESS) {
       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
-      return std::unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
+      throw std::runtime_error("YAML file [" + map_path_ + "] not found or invalid: ");
     }
 
     static_map_ = Costmap2D(static_grid_msg_);
@@ -169,8 +169,6 @@ CostmapMapsManager::on_initialize()
         response->message = "Map successfully saved to: " + map_path_;
       }
     });
-
-  return {};
 }
 
 void
