@@ -283,7 +283,7 @@ MPCController::update_rt(NavState & nav_state)
     std::cerr << "Optimization Error: " << e.what() << std::endl;
   }
 
-  if (collision_checker_active_) {
+  if (ControllerMethodBase::collision_checker_active_) {
     collision_checker(&params, u);
   }
 
