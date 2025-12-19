@@ -387,7 +387,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .downsample(map_static.resolution())
-    .fuse(tf_info.robot_frame)
+    .fuse(tf_info.robot_footprint_frame)
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(map_static.resolution())
@@ -629,7 +629,7 @@ AMCLLocalizer::get_pose()
   odom_msg.header.stamp = last_input_time_;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_msg.header.frame_id = tf_info.map_frame;
-  odom_msg.child_frame_id = tf_info.robot_frame;
+  odom_msg.child_frame_id = tf_info.robot_footprint_frame;
 
   tf2::Transform est_pose = getEstimatedPose();
 

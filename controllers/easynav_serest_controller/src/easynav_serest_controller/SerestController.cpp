@@ -306,7 +306,7 @@ SerestController::closest_obstacle_distance(
 
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(0.3)
-    .fuse(tf_info.robot_frame)
+    .fuse(tf_info.robot_footprint_frame)
     .filter({-dist_search_radius_, -dist_search_radius_, NAN},
       {dist_search_radius_, dist_search_radius_, 2.0})
     .collapse({NAN, NAN, 0.1})
@@ -370,7 +370,7 @@ SerestController::fetch_required_inputs(
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
-    publish_stop(nav_state, tf_info.robot_frame);
+    publish_stop(nav_state, tf_info.robot_footprint_frame);
     return false;
   }
 

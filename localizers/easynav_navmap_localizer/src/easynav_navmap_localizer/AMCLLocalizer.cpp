@@ -485,7 +485,7 @@ void AMCLLocalizer::update_odom_from_tf()
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-     tf_info.odom_frame, tf_info.robot_frame, tf2::TimePointZero,
+     tf_info.odom_frame, tf_info.robot_footprint_frame, tf2::TimePointZero,
           tf2::durationFromSec(0.0));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "TF failed: %s", ex.what());
@@ -747,7 +747,8 @@ void AMCLLocalizer::correct(NavState & nav_state)
     if (!T_bf_sensor_cache.count(b.frame_id)) {
       const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
       try {
-        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(tf_info.robot_frame, b.frame_id);
+        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(tf_info.robot_footprint_frame,
+              b.frame_id);
 
         // const tf2::Transform & t = T_bf_sensor_cache[b.frame_id];
 
@@ -1092,7 +1093,7 @@ AMCLLocalizer::get_pose()
   odom_msg.header.stamp = last_input_time_;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_msg.header.frame_id = tf_info.map_frame;
-  odom_msg.child_frame_id = tf_info.robot_frame;
+  odom_msg.child_frame_id = tf_info.robot_footprint_frame;
 
   pose_ = getEstimatedPose();
   tf2::Transform est_pose = pose_;
