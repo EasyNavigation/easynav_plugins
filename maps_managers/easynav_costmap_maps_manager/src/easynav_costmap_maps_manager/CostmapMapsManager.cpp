@@ -195,6 +195,10 @@ CostmapMapsManager::update(NavState & nav_state)
 
   nav_state.set("map.dynamic.filtered", dynamic_map_);
 
+  if (!nav_state.has("map_time")) {
+    nav_state.set("map_time", get_node()->now());
+  }
+
   for (const auto & filter : costmap_filters_) {
     filter->update(nav_state);
   }
@@ -203,9 +207,11 @@ CostmapMapsManager::update(NavState & nav_state)
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
+  rclcpp::Time map_stamp = nav_state.get<rclcpp::Time>("map_time");
+
   dynamic_map_->toOccupancyGridMsg(dynamic_grid_msg_);
   dynamic_grid_msg_.header.frame_id = tf_info.map_frame;
-  dynamic_grid_msg_.header.stamp = get_node()->now();
+  dynamic_grid_msg_.header.stamp = map_stamp;
   dynamic_occ_pub_->publish(dynamic_grid_msg_);
 }
 

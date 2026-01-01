@@ -583,18 +583,21 @@ AMCLLocalizer::correct(NavState & nav_state)
   const auto & map_static = nav_state.get<Costmap2D>("map.static");
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
-  const auto & filtered = PointPerceptionsOpsView(perceptions)
-    .downsample(map_static.getResolution())
-    .fuse(tf_info.robot_footprint_frame)
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-    .collapse({NAN, NAN, 0.1})
-    .downsample(map_static.getResolution())
-    .as_points();
+
+  auto view = PointPerceptionsOpsView(perceptions);
+  view.downsample(map_static.getResolution())
+  .fuse(tf_info.robot_footprint_frame)
+  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+  .collapse({NAN, NAN, 0.1})
+  .downsample(map_static.getResolution());
+  const auto & filtered = view.as_points();
 
   if (filtered.empty()) {
     RCLCPP_WARN(get_node()->get_logger(), "No points to correct");
     return;
   }
+
+  last_input_time_ = view.get_latest_stamp();
 
   for (auto & particle : particles_) {
     int hits = 0;
