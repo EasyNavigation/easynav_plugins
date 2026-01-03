@@ -177,7 +177,8 @@ AMCLLocalizer::AMCLLocalizer()
       double roll, pitch, yaw;
       tf2::Matrix3x3(q).getRPY(roll, pitch, yaw);
 
-      ret << "Odometry with pose: (x: " << x << ", y: " << y << ", yaw: " << yaw << ")";
+      ret << "{" << rclcpp::Time(odom.header.stamp).seconds() << " } Odometry with pose: (x: " <<
+        x << ", y: " << y << ", yaw: " << yaw << ")";
       return ret.str();
     });
 }

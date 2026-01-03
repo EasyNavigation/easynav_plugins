@@ -357,7 +357,8 @@ AMCLLocalizer::AMCLLocalizer()
       tf2::Quaternion q(odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
                         odom.pose.pose.orientation.z, odom.pose.pose.orientation.w);
       double r, p, y; tf2::Matrix3x3(q).getRPY(r, p, y);
-      ret << "Odometry with pose: (x: " << odom.pose.pose.position.x
+      ret << "{" << rclcpp::Time(odom.header.stamp).seconds() << "} Odometry with pose: (x: " <<
+        odom.pose.pose.position.x
           << ", y: " << odom.pose.pose.position.y << ", yaw: " << y << ")";
       return ret.str();
     });

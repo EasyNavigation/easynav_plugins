@@ -117,7 +117,8 @@ CostmapPlanner::CostmapPlanner()
   NavState::register_printer<nav_msgs::msg::Path>(
     [](const nav_msgs::msg::Path & path) {
       std::ostringstream ret;
-      ret << "Path with " << path.poses.size() << " poses and length "
+      ret << "{ " << rclcpp::Time(path.header.stamp).seconds() << " } Path with " <<
+        path.poses.size() << " poses and length "
           << compute_path_length(path) << " m.";
       return ret.str();
     });
