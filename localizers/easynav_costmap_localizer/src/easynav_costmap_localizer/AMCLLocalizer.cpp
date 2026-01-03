@@ -269,6 +269,7 @@ AMCLLocalizer::on_initialize()
     "initialpose", 10, std::bind(&AMCLLocalizer::init_pose_callback, this, std::placeholders::_1));
 
   last_reseed_ = get_node()->now();
+  last_input_time_ = get_node()->now();
 
   get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
 }
