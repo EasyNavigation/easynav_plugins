@@ -55,12 +55,13 @@ ObstacleFilter::update(NavState & nav_state)
   Costmap2D & dynamic_map = *dynamic_map_ptr;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
+  rclcpp::Time stamp;
+
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(dynamic_map.getResolution())
-  .fuse(tf_info.map_frame, false)
+  .fuse(tf_info.map_frame, stamp, false)
   .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN});
 
-  const auto stamp = view.get_latest_stamp();
   const auto & fused = view.as_points();
 
   nav_state.set("map_time", stamp);
