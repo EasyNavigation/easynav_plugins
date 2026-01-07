@@ -117,7 +117,8 @@ CostmapPlanner::CostmapPlanner()
   NavState::register_printer<nav_msgs::msg::Path>(
     [](const nav_msgs::msg::Path & path) {
       std::ostringstream ret;
-      ret << "Path with " << path.poses.size() << " poses and length "
+      ret << "{ " << rclcpp::Time(path.header.stamp).seconds() << " } Path with " <<
+        path.poses.size() << " poses and length "
           << compute_path_length(path) << " m.";
       return ret.str();
     });
@@ -157,6 +158,17 @@ void CostmapPlanner::update(NavState & nav_state)
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+  rclcpp::Time latest_stamp = nav_state.get<rclcpp::Time>("map_time");
+  if (rclcpp::Time(robot_pose.header.stamp, latest_stamp.get_clock_type()) > latest_stamp) {
+    latest_stamp = robot_pose.header.stamp;
+  }
+  if (rclcpp::Time(goals.goals.front().header.stamp,
+      latest_stamp.get_clock_type()) > latest_stamp)
+  {
+    latest_stamp = goals.goals.front().header.stamp;
+  }
+  current_path_.header.stamp = latest_stamp;
 
   if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",

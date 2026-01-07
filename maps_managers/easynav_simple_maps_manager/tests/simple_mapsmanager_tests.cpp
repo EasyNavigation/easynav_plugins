@@ -40,18 +40,6 @@ protected:
   void SetUp() override
   {
     rclcpp::init(0, nullptr);
-
-    easynav::NavState::register_printer<easynav::PointPerceptions>(
-      [](const easynav::PointPerceptions & perceptions) {
-        std::ostringstream ret;
-        ret << "PointPerception " << perceptions.size() << " with:\n";
-        for (const auto & perception : perceptions) {
-          ret << "\t[" << static_cast<const void *>(perception.get()) << "] --> "
-              << perception->data.size() << " points in frame [" << perception->frame_id
-              << "] with ts " << perception->stamp.seconds() << "\n";
-        }
-        return ret.str();
-      });
   }
 
   void TearDown() override
