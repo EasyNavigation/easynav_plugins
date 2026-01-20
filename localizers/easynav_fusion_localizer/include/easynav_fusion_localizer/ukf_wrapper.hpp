@@ -108,7 +108,8 @@ public:
   explicit UkfWrapper(
     std::shared_ptr<easynav::LocalizerNode> parent_node,
     const std::string & tf_prefix,
-    const std::string & plugin_name);
+    const std::string & plugin_name,
+    bool local_filter);
 
   //! @brief Destructor
   //!
@@ -870,6 +871,7 @@ protected:
   std::string plugin_name_;
   std::string tf_prefix_;
   std::vector<CallbackData> gps_callbackData_arr_;
+  bool local_filter_;
 
 };
 

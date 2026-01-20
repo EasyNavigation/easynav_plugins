@@ -86,7 +86,8 @@ using namespace std::chrono_literals;
 UkfWrapper::UkfWrapper(
   std::shared_ptr<easynav::LocalizerNode> parent_node,
   const std::string & tf_prefix,
-  const std::string & plugin_name)
+  const std::string & plugin_name,
+  bool local_filter)
 : print_diagnostics_(true),
   publish_acceleration_(false),
   publish_transform_(true),
@@ -114,7 +115,8 @@ UkfWrapper::UkfWrapper(
   last_set_pose_time_(0, 0, RCL_ROS_TIME),
   latest_control_time_(0, 0, RCL_ROS_TIME),
   tf_timeout_(0ns),
-  tf_time_offset_(0ns)
+  tf_time_offset_(0ns),
+  local_filter_(local_filter)
 {
   parent_node_ = parent_node;
   tf_prefix_ = tf_prefix;
@@ -895,7 +897,11 @@ void UkfWrapper::loadParams()
   odom_frame_id_ = tf_info.odom_frame;
   base_link_frame_id_ = tf_info.robot_footprint_frame;
   // World frame comes from Easynav TFInfo configuration
-  world_frame_id_ = tf_info.map_frame;
+  if(local_filter_) {
+    world_frame_id_ = tf_info.odom_frame;
+  } else {
+    world_frame_id_ = tf_info.map_frame;
+  }
 
   base_link_output_frame_id_ = base_link_frame_id_;
 
@@ -2262,15 +2268,21 @@ void UkfWrapper::initialize()
   // Position publisher
   rclcpp::PublisherOptions publisher_options;
   publisher_options.qos_overriding_options = rclcpp::QosOverridingOptions::with_default_policies();
+  std::string mode_prefix;
+  if (local_filter_) {
+    mode_prefix = "local_";
+  } else {
+    mode_prefix = "global_";
+  }
   position_pub_ =
     parent_node_->create_publisher<nav_msgs::msg::Odometry>(
-    "odometry/filtered", rclcpp::QoS(10), publisher_options);
+    mode_prefix + "odometry/filtered", rclcpp::QoS(10), publisher_options);
 
   // Optional acceleration publisher
   if (publish_acceleration_) {
     accel_pub_ =
       parent_node_->create_publisher<geometry_msgs::msg::AccelWithCovarianceStamped>(
-      "accel/filtered", rclcpp::QoS(10), publisher_options);
+      mode_prefix + "accel/filtered", rclcpp::QoS(10), publisher_options);
   }
 
   // Block commented as it is handled in the update_rt

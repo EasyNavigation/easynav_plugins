@@ -32,10 +32,14 @@ void FusionLocalizer::on_initialize()
     RCLCPP_INFO(localizer_node->get_logger(), "Using parameter namespace: '%s'",
     plugin_name.c_str());
 
-    ukf_wrapper_ = std::make_unique<robot_localization::UkfWrapper>(
-      localizer_node, tf_info.tf_prefix, plugin_name + ".local_filter"
+    ukf_global_ = std::make_unique<robot_localization::UkfWrapper>(
+      localizer_node, tf_info.tf_prefix, plugin_name + ".global_filter", false
     );
-    ukf_wrapper_->initialize();
+    ukf_local_ = std::make_unique<robot_localization::UkfWrapper>(
+      localizer_node, tf_info.tf_prefix, plugin_name + ".local_filter", true
+    );
+    ukf_global_->initialize();
+    ukf_local_->initialize();
     localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
     localizer_node->get_parameter(plugin_name + ".latitude_origin", latitude_origin_);
 
@@ -61,7 +65,7 @@ void FusionLocalizer::on_initialize()
   UTM_zone_ = std::to_string(zone) + (northp ? "N" : "S");
   UTM_origin_z_ = altitude_origin_;
 
-  n_gps_sensors_ = static_cast<int>(ukf_wrapper_->getGpsCallbackDataArr().size());
+  n_gps_sensors_ = static_cast<int>(ukf_global_->getGpsCallbackDataArr().size());
 
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
 }
@@ -81,9 +85,9 @@ void FusionLocalizer::update_rt(NavState & nav_state)
         // nav_state.set("UTM_gnss_pose", pose);
         // Call the wrapper callback
         const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
-        ukf_wrapper_->poseCallback(
+        ukf_global_->poseCallback(
           std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(pose),
-          ukf_wrapper_->getGpsCallbackDataArr()[i], // callback_data
+          ukf_global_->getGpsCallbackDataArr()[i], // callback_data
           tf_info.map_frame, // target_frame
           tf_info.odom_frame,  // pose_source_frame
           false                           // imu_data
@@ -92,11 +96,15 @@ void FusionLocalizer::update_rt(NavState & nav_state)
     }
   }
 
-  ukf_wrapper_->periodicUpdate();
+  ukf_global_->periodicUpdate();
+  ukf_local_->periodicUpdate();
 
-  nav_msgs::msg::Odometry current_odom;
-  if (ukf_wrapper_->getFilteredOdometryMessage(&current_odom)) {
-    nav_state.set("robot_pose", current_odom);
+  nav_msgs::msg::Odometry global_odom, local_odom;
+  if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
+    nav_state.set("robot_pose", global_odom);
+  }
+  if (ukf_local_->getFilteredOdometryMessage(&local_odom)) {
+    nav_state.set("robot_pose_local", local_odom);
   }
 }
 

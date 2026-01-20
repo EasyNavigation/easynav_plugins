@@ -51,7 +51,8 @@ protected:
   void update(NavState & nav_state) override;
 
 private:
-  std::unique_ptr<robot_localization::UkfWrapper> ukf_wrapper_;
+  std::unique_ptr<robot_localization::UkfWrapper> ukf_local_{nullptr};
+  std::unique_ptr<robot_localization::UkfWrapper> ukf_global_{nullptr};
 
   int n_imu_sensors_{0};
   int n_gps_sensors_{0};

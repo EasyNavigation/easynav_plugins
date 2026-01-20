@@ -25,6 +25,72 @@ localizer_node:
       latitude_origin: 40.2834931
       longitude_origin: -3.8207253999999997
       altitude_origin: 746.184
+      local_filter:
+        two_d_mode: true
+        publish_tf: true
+
+        # --- Reference Frames ---
+        map_frame: map
+        odom_frame: odom
+        base_link_frame: base_link
+        world_frame: odom
+
+        # # --- INPUT 1: GPS Odometry ---
+        # gps0: /gps/fix
+        # gps0_config:
+        #   [true,  true,  false,
+        #   false, false, false,
+        #   false, false, false,
+        #   false, false, false,
+        #   false, false, false]
+        # gps0_differential: false
+
+        #--- INPUT 2: Wheel Odometry ---
+        odom0: /robotnik_base_control/odom
+        odom0_config:
+          [true, true, true,
+          false, false, true,
+          true,  true, true,
+          false, false, true,
+          false, false, false]
+        odom0_differential: false
+
+        # --- INPUT 3: IMU ---
+        imu0: /imu/data
+        imu0_config:
+          [false, false, false,
+          true,  true,  true,
+          false, false, false,
+          true,  true,  true,
+          false, false, false]
+        imu0_differential: true
+        imu0_remove_gravitational_acceleration: true
+
+        # twist0: /gps/fix_velocity
+        # twist0_config:
+        #   [false, false, false,
+        #   false, false, false,
+        #   true,  false,  false,
+        #   false, false, false,
+        #   false, false, false]
+        # twist0_differential: false
+
+        # --- Process Variances ---
+        process_noise_covariance: [0.05, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.05, 0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.06, 0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.03, 0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.03, 0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.06, 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.025, 0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.025, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.04, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.01, 0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.01, 0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.02, 0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.015]
       global_filter:
         two_d_mode: true
         publish_tf: true
@@ -59,21 +125,21 @@ localizer_node:
         imu0: /imu/data
         imu0_config:
           [false, false, false,
-          true,  true,  false,
+          true,  true,  true,
           false, false, false,
           true,  true,  true,
           false, false, false]
-        imu0_differential: false
+        imu0_differential: true
         imu0_remove_gravitational_acceleration: true
 
-        twist0: /gps/fix_velocity
-        twist0_config:
-          [false, false, false,
-          false, false, false,
-          true,  false,  false,
-          false, false, false,
-          false, false, false]
-        twist0_differential: false
+        # twist0: /gps/fix_velocity
+        # twist0_config:
+        #   [false, false, false,
+        #   false, false, false,
+        #   true,  false,  false,
+        #   false, false, false,
+        #   false, false, false]
+        # twist0_differential: false
 
         # --- Process Variances ---
         process_noise_covariance: [0.05, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
@@ -91,6 +157,7 @@ localizer_node:
                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,
                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,
                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.015]
+
 
 
 maps_manager_node:
