@@ -75,7 +75,6 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include <tf2_ros/buffer.hpp>
 #include <tf2_ros/transform_broadcaster.hpp>
-#include <tf2_ros/transform_listener.hpp>
 
 #include "easynav_common/RTTFBuffer.hpp"
 
@@ -122,8 +121,8 @@ UkfWrapper::UkfWrapper(
   tf_prefix_ = tf_prefix;
   plugin_name_ = plugin_name;
 
-  tf_buffer_ = std::make_unique<tf2_ros::Buffer>(parent_node_->get_clock());
-  tf_listener_ = std::make_unique<tf2_ros::TransformListener>(*tf_buffer_);
+  // Use the shared RTTFBuffer singleton instead of creating a private tf2_ros::Buffer
+  tf_buffer_ = easynav::RTTFBuffer::getInstance();
 
   state_variable_names_.push_back("X");
   state_variable_names_.push_back("Y");
@@ -149,8 +148,6 @@ UkfWrapper::~UkfWrapper()
   set_pose_sub_.reset();
   control_sub_.reset();
   stamped_control_sub_.reset();
-  tf_listener_.reset();
-  tf_buffer_.reset();
   diagnostic_updater_.reset();
   world_transform_broadcaster_.reset();
   set_pose_service_.reset();
@@ -186,8 +183,7 @@ void UkfWrapper::reset()
 
   last_diff_time_ = parent_node_->now().seconds();
 
-  // clear tf buffer to avoid TF_OLD_DATA errors
-  tf_buffer_->clear();
+  // Note: tf_buffer_ is the shared RTTFBuffer singleton, do not clear it here
 
   // clear last message timestamp, so older messages will be accepted
   last_message_times_.clear();
@@ -372,7 +368,7 @@ void UkfWrapper::enqueueMeasurement(
   const std::vector<bool> & update_vector, const double mahalanobis_thresh,
   const rclcpp::Time & time)
 {
-  MeasurementPtr meas = MeasurementPtr(new Measurement());
+  MeasurementPtr meas = std::make_shared<Measurement>();
 
   meas->topic_name_ = topic_name;
   meas->measurement_ = measurement;
@@ -1178,30 +1174,39 @@ void UkfWrapper::loadParams()
       "\npermit_corrected_publication is " << permit_corrected_publication_ <<
       "\nprint_diagnostics is " << print_diagnostics_ << "\n");
 
+  // Determine mode prefix for service/topic names to avoid collisions
+  // between local and global filter instances
+  std::string mode_prefix;
+  if (local_filter_) {
+    mode_prefix = "local_";
+  } else {
+    mode_prefix = "global_";
+  }
+
   // Create a subscriber for manually setting/resetting pose
   set_pose_sub_ =
     parent_node_->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
-    "set_pose", rclcpp::QoS(1),
+    mode_prefix + "set_pose", rclcpp::QoS(1),
     std::bind(&UkfWrapper::setPoseCallback, this, std::placeholders::_1), options);
 
   // Create a service for manually setting/resetting pose
   set_pose_service_ =
     parent_node_->create_service<robot_localization::srv::SetPose>(
-    "set_pose", std::bind(
+    mode_prefix + "set_pose", std::bind(
       &UkfWrapper::setPoseSrvCallback, this,
       std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
   // Create a service for manually enabling the filter
   enable_filter_srv_ =
     parent_node_->create_service<std_srvs::srv::Empty>(
-    "~/enable", std::bind(
+    "~/" + mode_prefix + "enable", std::bind(
       &UkfWrapper::enableFilterSrvCallback, this,
       std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
   // Create a service for manually setting/resetting pose
   reset_srv_ =
     parent_node_->create_service<std_srvs::srv::Empty>(
-    "reset", std::bind(
+    mode_prefix + "reset", std::bind(
       &UkfWrapper::resetSrvCallback, this,
       std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
@@ -1209,7 +1214,7 @@ void UkfWrapper::loadParams()
   // publishing
   toggle_filter_processing_srv_ =
     parent_node_->create_service<robot_localization::srv::ToggleFilterProcessing>(
-    "~/toggle", std::bind(
+    "~/" + mode_prefix + "toggle", std::bind(
       &UkfWrapper::toggleFilterProcessingCallback, this,
       std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
@@ -2096,6 +2101,8 @@ void UkfWrapper::odometryCallback(
     pos_ptr->header = msg->header;
     pos_ptr->pose = msg->pose;  // Entire pose object, also copies covariance
 
+    
+
     if (pose_callback_data.pose_use_child_frame_) {
       poseCallback(pos_ptr, pose_callback_data, world_frame_id_, msg->child_frame_id, false);
     } else {
@@ -2876,7 +2883,7 @@ bool UkfWrapper::prepareAcceleration(
   // we have to handle the situation.
   tf2::Transform target_frame_trans;
   bool can_transform = ros_filter_utilities::lookupTransformSafe(
-    tf_buffer_.get(), target_frame, msg_frame, msg->header.stamp, tf_timeout_,
+    tf_buffer_, target_frame, msg_frame, msg->header.stamp, tf_timeout_,
     target_frame_trans);
 
   if (can_transform) {
@@ -3105,7 +3112,7 @@ bool UkfWrapper::preparePose(
   // 2. Get the target frame transformation
   tf2::Transform target_frame_trans;
   bool can_transform = ros_filter_utilities::lookupTransformSafe(
-    tf_buffer_.get(), final_target_frame, pose_tmp.frame_id_,
+    tf_buffer_, final_target_frame, pose_tmp.frame_id_,
     rclcpp::Time(tf2::timeToSec(pose_tmp.stamp_)), tf_timeout_,
     target_frame_trans);
 
@@ -3115,7 +3122,7 @@ bool UkfWrapper::preparePose(
   bool can_src_transform = false;
   if (source_frame != base_link_frame_id_) {
     can_src_transform = ros_filter_utilities::lookupTransformSafe(
-      tf_buffer_.get(), source_frame, base_link_frame_id_,
+      tf_buffer_, source_frame, base_link_frame_id_,
       rclcpp::Time(tf2::timeToSec(pose_tmp.stamp_)), tf_timeout_,
       source_frame_trans);
   }
@@ -3537,7 +3544,7 @@ bool UkfWrapper::prepareTwist(
   // 4. We need to transform this into the target frame (probably base_link)
   tf2::Transform target_frame_trans;
   bool can_transform = ros_filter_utilities::lookupTransformSafe(
-    tf_buffer_.get(), target_frame, msg_frame, msg->header.stamp, tf_timeout_,
+    tf_buffer_, target_frame, msg_frame, msg->header.stamp, tf_timeout_,
     target_frame_trans);
 
   if (can_transform) {

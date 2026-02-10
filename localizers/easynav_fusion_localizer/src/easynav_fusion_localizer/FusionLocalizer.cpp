@@ -6,6 +6,7 @@
 
 #include "easynav_common/types/IMUPerception.hpp"
 #include "easynav_common/types/GNSSPerception.hpp"
+#include "sensor_msgs/msg/nav_sat_status.hpp"
 
 #include <GeographicLib/UTMUPS.hpp>
 
@@ -22,8 +23,6 @@ void FusionLocalizer::on_initialize()
     auto node = get_node();
 
     auto localizer_node = std::dynamic_pointer_cast<LocalizerNode>(node);
-
-    last_gps_stamp_.resize(10, 0.0);
 
     const std::string & plugin_name = this->get_plugin_name();
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
@@ -48,6 +47,14 @@ void FusionLocalizer::on_initialize()
 
     localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0));
     localizer_node->get_parameter(plugin_name + ".altitude_origin", altitude_origin_);
+
+    localizer_node->declare_parameter(
+      plugin_name + ".navsatfix_topic", std::string("global/navsatfix"));
+    localizer_node->get_parameter(plugin_name + ".navsatfix_topic", navsatfix_topic_);
+    navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
+      navsatfix_topic_, rclcpp::QoS(10));
+    gps_debug_pub_ = localizer_node->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
+      "gps_pose", rclcpp::QoS(10));
   } catch (const std::exception & e) {
     RCLCPP_FATAL(
       get_node()->get_logger(), "Critical failure initializing UkfWrapper: %s",
@@ -57,40 +64,41 @@ void FusionLocalizer::on_initialize()
   }
 
 
-  int zone;
-  bool northp;
-
-  GeographicLib::UTMUPS::Forward(latitude_origin_, longitude_origin_, zone, northp, UTM_origin_x_,
-      UTM_origin_y_);
-  UTM_zone_ = std::to_string(zone) + (northp ? "N" : "S");
+  GeographicLib::UTMUPS::Forward(latitude_origin_, longitude_origin_, UTM_zone_number_,
+      UTM_zone_northp_, UTM_origin_x_, UTM_origin_y_);
+  UTM_zone_ = std::to_string(UTM_zone_number_) + (UTM_zone_northp_ ? "N" : "S");
   UTM_origin_z_ = altitude_origin_;
 
   n_gps_sensors_ = static_cast<int>(ukf_global_->getGpsCallbackDataArr().size());
+  last_gps_stamp_.resize(n_gps_sensors_, rclcpp::Time(0, 0, RCL_ROS_TIME));
 
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
 }
 
-// 2. Hook de actualización RT (Tu "Timer" de alta frecuencia)
 void FusionLocalizer::update_rt(NavState & nav_state)
 {
-  if(n_gps_sensors_ && nav_state.has("gnss")) {
+  EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_update_rt");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+  if (n_gps_sensors_ && nav_state.has("gnss")) {
     auto gps_data = nav_state.get<GNSSPerceptions>(std::string("gnss"));
+    const auto & gps_cb_arr = ukf_global_->getGpsCallbackDataArr();
     for (int i = 0; i < n_gps_sensors_; ++i) {
-      double gps_time = gps_data[i]->data.header.stamp.sec +
-        gps_data[i]->data.header.stamp.nanosec * 1e-9;
+      if (gps_data[i]->data.status.status < sensor_msgs::msg::NavSatStatus::STATUS_FIX) {
+        continue;
+      }
+      rclcpp::Time gps_time(gps_data[i]->data.header.stamp);
       if (gps_time > last_gps_stamp_[i]) {
-      // if(true) {
+        EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_process_gps");
         last_gps_stamp_[i] = gps_time;
         auto pose = navsatfix_to_pose(gps_data[i]->data);
-        // nav_state.set("UTM_gnss_pose", pose);
-        // Call the wrapper callback
-        const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+        gps_debug_pub_->publish(pose);
         ukf_global_->poseCallback(
           std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(pose),
-          ukf_global_->getGpsCallbackDataArr()[i], // callback_data
-          tf_info.map_frame, // target_frame
-          tf_info.odom_frame,  // pose_source_frame
-          false                           // imu_data
+          gps_cb_arr[i],
+          tf_info.map_frame,
+          gps_data[i]->data.header.frame_id,
+          false
         );
       }
     }
@@ -102,32 +110,49 @@ void FusionLocalizer::update_rt(NavState & nav_state)
   nav_msgs::msg::Odometry global_odom, local_odom;
   if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
     nav_state.set("robot_pose", global_odom);
+    navsat_pub_->publish(odom_to_navsatfix(global_odom));
   }
   if (ukf_local_->getFilteredOdometryMessage(&local_odom)) {
     nav_state.set("robot_pose_local", local_odom);
   }
 }
 
-// 3. Hook de actualización no-RT (baja frecuencia)
 void FusionLocalizer::update([[maybe_unused]] NavState & nav_state)
 {
 
 }
 
+/**
+ * @brief Converts a NavSatFix message to a PoseWithCovarianceStamped in UTM coordinates.
+ *
+ * This function transforms the latitude, longitude, and altitude from a sensor_msgs::msg::NavSatFix
+ * message into UTM coordinates and populates a geometry_msgs::msg::PoseWithCovarianceStamped message.
+ * The output pose is expressed relative to a predefined UTM origin. The orientation is set to identity
+ * (no rotation), as orientation cannot be inferred from GPS data alone.
+ *
+ * Covariance handling:
+ * - If the NavSatFix message provides a diagonal covariance (COVARIANCE_TYPE_DIAGONAL_KNOWN),
+ *   the corresponding variances are copied into the pose covariance matrix.
+ * - If not, a default variance of 1.0 is used for the position, and a warning is issued.
+ *
+ * @param navsat_msg The input NavSatFix message containing latitude, longitude, altitude, and covariance.
+ * @return geometry_msgs::msg::PoseWithCovarianceStamped The resulting pose in UTM coordinates with covariance.
+ *
+ * @note
+ * The function uses RCLCPP_WARN_THROTTLE to log a warning if the covariance type is unknown or invalid.
+ * This throttled warning will only be emitted at most once every 5 seconds, preventing log flooding,
+ * unlike RCLCPP_WARN which would log a warning every time the condition is met.
+ */
 geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose(
   const sensor_msgs::msg::NavSatFix & navsat_msg)
 {
   geometry_msgs::msg::PoseWithCovarianceStamped pose_msg;
-  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  // 1. Establecer el Header
-  // Usamos el mismo timestamp que el mensaje original
-  // y el world_frame_id que el filtro UKF espera (p.ej., "map" u "odom")
   pose_msg.header = navsat_msg.header;
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   pose_msg.header.frame_id = tf_info.map_frame;
 
-  // 2. Convertir coordenadas (Lat, Lon) a UTM (x, y)
   double utm_x, utm_y;
   int zone;
   bool northp;
@@ -138,7 +163,8 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
     zone,
     northp,
     utm_x,
-    utm_y);
+    utm_y,
+    UTM_zone_number_);
 
   pose_msg.pose.pose.position.x = utm_x - UTM_origin_x_;
   pose_msg.pose.pose.position.y = utm_y - UTM_origin_y_;
@@ -151,23 +177,63 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
 
   pose_msg.pose.covariance.fill(0.0);
 
-  pose_msg.pose.covariance[0] = navsat_msg.position_covariance[0];  // xx
-  pose_msg.pose.covariance[1] = navsat_msg.position_covariance[1];  // xy
-  pose_msg.pose.covariance[2] = navsat_msg.position_covariance[2];  // xz
+  if (navsat_msg.position_covariance_type == sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN)
+  {
+    pose_msg.pose.covariance[0] = navsat_msg.position_covariance[0];
+    pose_msg.pose.covariance[7] = navsat_msg.position_covariance[4];
+    pose_msg.pose.covariance[14] = navsat_msg.position_covariance[8];
 
-  pose_msg.pose.covariance[6] = navsat_msg.position_covariance[3];  // yx
-  pose_msg.pose.covariance[7] = navsat_msg.position_covariance[4];  // yy
-  pose_msg.pose.covariance[8] = navsat_msg.position_covariance[5];  // yz
+    pose_msg.pose.covariance[21] = kNoOrientationCovariance;
+    pose_msg.pose.covariance[28] = kNoOrientationCovariance;
+    pose_msg.pose.covariance[35] = kNoOrientationCovariance;
+  } else {
+      // Fallback variances if GPS doesn't provide them
+      double default_var = 1.0; // 1 meter variance standard
+      pose_msg.pose.covariance[0] = default_var;
+      pose_msg.pose.covariance[7] = default_var;
+      pose_msg.pose.covariance[14] = default_var;
 
-  pose_msg.pose.covariance[12] = navsat_msg.position_covariance[6]; // zx
-  pose_msg.pose.covariance[13] = navsat_msg.position_covariance[7]; // zy
-  pose_msg.pose.covariance[14] = navsat_msg.position_covariance[8]; // zz
-
-  pose_msg.pose.covariance[21] = 99999.0;
-  pose_msg.pose.covariance[28] = 99999.0;
-  pose_msg.pose.covariance[35] = 99999.0;
+      pose_msg.pose.covariance[21] = kNoOrientationCovariance;
+      pose_msg.pose.covariance[28] = kNoOrientationCovariance;
+      pose_msg.pose.covariance[35] = kNoOrientationCovariance;
+      
+      RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 5000, 
+        "NavSatFix covariance type unknown or invalid. Using default covariance.");
+  }
 
   return pose_msg;
+}
+
+sensor_msgs::msg::NavSatFix FusionLocalizer::odom_to_navsatfix(
+  const nav_msgs::msg::Odometry & odom_msg)
+{
+  sensor_msgs::msg::NavSatFix navsat_msg;
+
+  navsat_msg.header = odom_msg.header;
+  navsat_msg.header.frame_id = "gps_link";
+  navsat_msg.status.status = sensor_msgs::msg::NavSatStatus::STATUS_FIX;
+  navsat_msg.status.service = sensor_msgs::msg::NavSatStatus::SERVICE_GPS;
+
+  const double utm_x = odom_msg.pose.pose.position.x + UTM_origin_x_;
+  const double utm_y = odom_msg.pose.pose.position.y + UTM_origin_y_;
+
+  double latitude = 0.0;
+  double longitude = 0.0;
+  GeographicLib::UTMUPS::Reverse(
+    UTM_zone_number_, UTM_zone_northp_, utm_x, utm_y, latitude, longitude);
+
+  navsat_msg.latitude = latitude;
+  navsat_msg.longitude = longitude;
+  navsat_msg.altitude = odom_msg.pose.pose.position.z + UTM_origin_z_;
+
+  navsat_msg.position_covariance[0] = odom_msg.pose.covariance[0];
+  navsat_msg.position_covariance[4] = odom_msg.pose.covariance[7];
+  navsat_msg.position_covariance[8] = odom_msg.pose.covariance[14];
+
+  navsat_msg.position_covariance_type =
+    sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN;
+
+  return navsat_msg;
 }
 
 }  // namespace easynav
