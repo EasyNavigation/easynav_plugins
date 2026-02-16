@@ -119,7 +119,8 @@ MPCController::collision_checker(void *data, std::vector<double> & u)
         last_w_ = u[1];
       }
       RCLCPP_WARN(get_node()->get_logger(),
-        "[COLLISION] Collision detected at: [%f] m and Theta: [%f] degrees", dist, (angle * 180.00 / M_PI) );
+        "[COLLISION] Collision detected at: [%f] m and Theta: [%f] degrees", dist,
+        (angle * 180.00 / M_PI) );
       last_v_ = collision_factor_ * last_v_ * safety_radius_ / dist;
       last_w_ = collision_factor_ * last_w_ * safety_radius_ / dist;
       u[0] = -last_v_;
