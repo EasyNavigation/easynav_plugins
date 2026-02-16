@@ -51,12 +51,18 @@ public:
   /**
    * @brief Computes the control output for the given reference input.
    *
-   * Applies the PID formula and returns the control command within the specified output limits.
-   *
-   * @param new_reference The current reference input value (e.g., error signal).
-   * @return The computed control output.
+  * Applies the PID formula and returns the control command within the specified output limits.
+  *
+  * @param new_reference The current reference input value (e.g., error signal).
+  * @param dt Time elapsed since last call in seconds.
+  * @return The computed control output.
    */
-  double get_output(double new_reference);
+  double get_output(double new_reference, double dt);
+
+  /**
+  * @brief Reset internal integrator and derivative state.
+  */
+  void reset();
 
 private:
   double KP_;               ///< Proportional gain.
@@ -70,6 +76,7 @@ private:
 
   double prev_error_;       ///< Previous error value (for derivative term).
   double int_error_;        ///< Accumulated integral error.
+  double integral_limit_ {0.0}; ///< If >0, clamps the integral term to ±integral_limit_.
 };
 
 }  // namespace easynav

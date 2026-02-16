@@ -21,7 +21,6 @@
 #ifndef EASYNAV_OCTOMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
 #define EASYNAV_OCTOMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
 
-#include <expected>
 #include <string>
 
 #include "pluginlib/class_loader.hpp"
@@ -41,7 +40,7 @@ class ObstacleFilter : public OctomapFilter
 public:
   ObstacleFilter();
 
-  virtual std::expected<void, std::string> on_initialize();
+  virtual void on_initialize();
   virtual void update(::easynav::NavState & nav_state);
 
   bool is_adding_layer() override {return true;}

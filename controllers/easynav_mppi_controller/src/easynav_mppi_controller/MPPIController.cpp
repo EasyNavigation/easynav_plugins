@@ -20,13 +20,11 @@
 /// \file
 /// \brief Implementation of the MPPIController class.
 
-#include <expected>
-
-#include "tf2/utils.hpp"
-
 #include "easynav_mppi_controller/MPPIController.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
+
+#include "easynav_system/GoalManager.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
 
@@ -37,7 +35,7 @@ MPPIController::MPPIController() {}
 
 MPPIController::~MPPIController() = default;
 
-std::expected<void, std::string>
+void
 MPPIController::on_initialize()
 {
   auto node = get_node();
@@ -72,14 +70,13 @@ MPPIController::on_initialize()
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/candidates", 10);
   mppi_optimal_pub_ =
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/optimal_path", 10);
-
-  return {};
 }
 
 void MPPIController::publish_mppi_markers(
   const std::vector<std::vector<std::pair<double, double>>> & all_trajs,
   const std::vector<std::pair<double, double>> & best_traj)
 {
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   visualization_msgs::msg::MarkerArray candidates;
   visualization_msgs::msg::MarkerArray optimal;
   int id = 0;
@@ -87,7 +84,7 @@ void MPPIController::publish_mppi_markers(
   // Candidates in blue
   for (const auto & traj : all_trajs) {
     visualization_msgs::msg::Marker marker;
-    marker.header.frame_id = "map";
+    marker.header.frame_id = tf_info.map_frame;
     marker.header.stamp = rclcpp::Clock().now();
     marker.ns = "mppi_candidates";
     marker.id = id++;
@@ -112,7 +109,7 @@ void MPPIController::publish_mppi_markers(
 
   // Best trajectory in red
   visualization_msgs::msg::Marker best_marker;
-  best_marker.header.frame_id = "map";
+  best_marker.header.frame_id = tf_info.map_frame;
   best_marker.header.stamp = rclcpp::Clock().now();
   best_marker.ns = "mppi_optimal_path";
   best_marker.id = id++;
@@ -143,11 +140,32 @@ void MPPIController::publish_mppi_markers(
 void
 MPPIController::update_rt(NavState & nav_state)
 {
+  // If navigation is IDLE, force zero velocity
+  if (nav_state.has("navigation_state")) {
+    const auto nav_state_val = nav_state.get<easynav::GoalManager::State>("navigation_state");
+    if (nav_state_val == easynav::GoalManager::State::IDLE) {
+      twist_stamped_.header.stamp = get_node()->now();
+      twist_stamped_.twist.linear.x = 0.0;
+      twist_stamped_.twist.angular.z = 0.0;
+      nav_state.set("cmd_vel", twist_stamped_);
+
+      // Also clear visualization markers when idle
+      visualization_msgs::msg::MarkerArray clear_markers;
+      visualization_msgs::msg::Marker delete_all;
+      delete_all.action = visualization_msgs::msg::Marker::DELETEALL;
+      clear_markers.markers.push_back(delete_all);
+
+      mppi_candidates_pub_->publish(clear_markers);
+      mppi_optimal_pub_->publish(clear_markers);
+      return;
+    }
+  }
+
   if (!nav_state.has("path") || !nav_state.has("robot_pose")) {
     return;
   }
 
-  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+  const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
 
   if (path.poses.empty()) {
     // If the path is empty, stop the robot and clear markers
@@ -167,12 +185,12 @@ MPPIController::update_rt(NavState & nav_state)
     return;
   }
 
-  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
-  const auto perceptions = nav_state.get<PointPerceptions>("points");
-
+  const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})
-    .fuse("map")
+    .fuse(tf_info.map_frame)
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(0.1)

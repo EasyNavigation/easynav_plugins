@@ -1,21 +1,25 @@
 # easynav_mppi_controller
 
-[![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
-
 ## Description
+
 A Model Predictive Path Integral (MPPI) controller implementation for Easy Navigation.
 
 ## Authors and Maintainers
+
 - **Authors:** Intelligent Robotics Lab
 - **Maintainers:** Jose Miguel Guerrero Hernandez <josemiguel.guerrero@urjc.es>
 
 ## Supported ROS 2 Distributions
+
 | Distribution | Status |
 |---|---|
+| humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
+| jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
 ## Plugin (pluginlib)
+
 - **Plugin Name:** `easynav_mppi_controller/MPPIController`
 - **Type:** `easynav::MPPIController`
 - **Base Class:** `easynav::ControllerMethodBase`
@@ -23,7 +27,11 @@ A Model Predictive Path Integral (MPPI) controller implementation for Easy Navig
 - **Description:** A Model Predictive Path Integral (MPPI) controller implementation for Easy Navigation.
 
 ## Parameters
+
 All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easynav_mppi_controller/MPPIController/...`.
+
+> This plugin derives from [`easynav::ControllerMethodBase`](https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase).  \
+> See that section for shared collision-checking parameters and debug markers common to all controllers.
 
 | Name | Type | Default | Description |
 |---|---|---:|---|
@@ -38,21 +46,21 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.fov` | `double` | `M_PI/2.0` | Field of view used in trajectory sampling (radians). |
 | `<plugin>.safety_radius` | `double` | `0.6` | Safety radius around the robot (meters). |
 
-
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
+
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
 | Publisher | `/mppi/candidates` | `visualization_msgs/msg/MarkerArray` | MPPI candidate trajectories as markers. | QoS depth=10 |
 | Publisher | `/mppi/optimal_path` | `visualization_msgs/msg/MarkerArray` | Optimal MPPI trajectory as markers. | QoS depth=10 |
 
-
 ### Services
+
 This package does not create service servers or clients.
 
-
 ## NavState Keys
+
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `path` | `nav_msgs::msg::Path` | **Read** | Target path to track. |
@@ -60,9 +68,10 @@ This package does not create service servers or clients.
 | `points` | `PointPerceptions` | **Read** | Perception point cloud(s) used for costs. |
 | `cmd_vel` | `geometry_msgs::msg::TwistStamped` | **Read** | Last commanded velocity (if provided in state). |
 
-
 ## TF Frames
+
 This controller does not explicitly publish or require TF frames in code.
 
 ## License
+
 GPL-3.0-only
