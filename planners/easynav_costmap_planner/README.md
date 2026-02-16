@@ -31,11 +31,53 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 
 | Name | Type | Default | Description |
 |---|---|---:|---|
-| `<plugin>.cost_factor` | `double` | `2.0` | Scaling factor applied to costmap cell values to compute traversal costs. |
+| `<plugin>.cost_factor` | `double` | `2.0` | Scaling factor applied to costmap cell values to compute traversal costs. Higher values make high-cost cells much less attractive. |
 | `<plugin>.inflation_penalty` | `double` | `5.0` | Extra penalty added to inflated/near-obstacle cells to push paths away from obstacles. |
-| `<plugin>.cost_axial` | `double` | `1.0` | Base movement cost for axial (N/E/S/W) steps. |
-| `<plugin>.cost_diagonal` | `double` | `1.41` | Base movement cost for diagonal steps (approx. √2). |
+| `<plugin>.heuristic_scale` | `double` | `1.0` | Scaling factor applied to the A* heuristic term. Controls the trade-off between following the cheapest route vs. going more directly. |
 | `<plugin>.continuous_replan` | `bool` | `true` | If `true`, re-plans continuously as the map/goal changes; if `false`, plans once per request. |
+
+### Effect of `cost_factor`
+
+The planner uses a per-step traversal cost:
+
+$$
+g_{\text{new}} = g_{\text{current}} + \text{step\_cost} \cdot \left(1 + \text{cost\_factor} \cdot \frac{\text{cell\_cost}}{\text{LETHAL\_OBSTACLE}}\right)
+$$
+
+- **Low `cost_factor` (e.g. 1–2):**
+	- Cell cost has a modest influence; the planner is closer to a pure geometric shortest-path search.
+	- Paths may cross moderately expensive regions if that keeps distance short.
+- **High `cost_factor` (e.g. 5–10+):**
+	- High-cost cells become very unattractive, so the planner strongly prefers low-cost corridors (e.g. routes or low-inflation areas), even if they are longer.
+	- Useful when combined with modules that encode preferences as higher costs (such as route managers).
+
+### Effect of `heuristic_scale`
+
+The A* priority is:
+
+$$
+f = g + h, \quad h = \text{heuristic\_scale} \cdot d_{\text{cells}}(\text{current}, \text{goal})
+$$
+
+where $d_{\text{cells}}$ is the Euclidean distance in cell indices (not metric distance, but proportional).
+
+- **Decrease `heuristic_scale` (< 1.0):**
+	- The heuristic term becomes weaker, and A* behaves more like Dijkstra.
+	- The search explores more alternatives and is guided more strictly by the true accumulated cost $g$.
+	- This usually makes the planner follow high-cost penalties (e.g. for leaving a route) more faithfully, at the expense of more computation.
+
+- **Increase `heuristic_scale` (> 1.0):**
+	- The heuristic term dominates more, so the planner prefers geometrically direct paths.
+	- It may still avoid extremely high-cost regions if `cost_factor` is large, but will be more willing to “cut corners” through slightly more expensive zones.
+
+**Typical tuning strategy:**
+
+- First, adjust `cost_factor` so that the costmap properly encodes your preferences:
+	- Increase it until paths clearly avoid high-cost areas that should be disfavored.
+- Then, fine-tune `heuristic_scale`:
+	- Start from `1.0`.
+	- If the planner still takes shortcuts that ignore cost differences, consider reducing it slightly (e.g. `0.7–0.9`).
+	- If planning becomes too slow or explores too widely, you can increase it modestly (e.g. `1.2–1.5`).
 
 ---
 

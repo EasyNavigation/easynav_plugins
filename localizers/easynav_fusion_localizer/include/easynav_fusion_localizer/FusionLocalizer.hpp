@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <expected>
 
 #include "easynav_core/LocalizerMethodBase.hpp"
 #include "easynav_fusion_localizer/ukf_wrapper.hpp" // Tu wrapper refactorizado
@@ -28,10 +27,12 @@ protected:
   /**
    * @brief Hook de inicialización de MethodBase.
    *
-   * Crea e inicializa el UkfWrapper, que cargará parámetros
-   * y creará todos los suscriptores/publicadores de robot_localization.
+   * Loads and initializes the UkfWrapper, which will load parameters
+   * and create all robot_localization subscribers/publishers.
+   *
+   * @throws std::runtime_error if initialization fails.
    */
-  std::expected<void, std::string> on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Hook de actualización RT (alta frecuencia) de LocalizerMethodBase.
@@ -54,10 +55,6 @@ private:
 
   int n_imu_sensors_{0};
   int n_gps_sensors_{0};
-
-  std::string base_link_frame_id_;
-  std::string odom_frame_id_;
-  std::string world_frame_id_;
 
   geometry_msgs::msg::PoseWithCovarianceStamped
   navsatfix_to_pose(const sensor_msgs::msg::NavSatFix & navsat_msg);

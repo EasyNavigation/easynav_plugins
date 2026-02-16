@@ -23,12 +23,12 @@
 #include <algorithm>
 #include <limits>
 #include <cmath>
-#include <numbers>
 
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include "easynav_common/types/PointPerception.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_serest_controller/SerestController.hpp"
 #include "pluginlib/class_list_macros.hpp"
@@ -40,7 +40,7 @@ namespace easynav
 SerestController::SerestController() = default;
 SerestController::~SerestController() = default;
 
-std::expected<void, std::string>
+void
 SerestController::on_initialize()
 {
   auto node = get_node();
@@ -148,8 +148,6 @@ SerestController::on_initialize()
   last_vlin_ = 0.0;
   last_vrot_ = 0.0;
   last_update_ts_ = node->now();
-
-  return {};
 }
 
 SerestController::PathData
@@ -289,7 +287,7 @@ SerestController::frenet_errors(
 
 double
 SerestController::closest_obstacle_distance(
-  const NavState & nav_state) const
+  const NavState & nav_state)
 {
   // 1) Prefer direct measurement if it exists
   if (nav_state.has("closest_obstacle_distance")) {
@@ -304,14 +302,20 @@ SerestController::closest_obstacle_distance(
   if (!nav_state.has("points")) {return std::numeric_limits<double>::infinity();}
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
-  auto fused = PointPerceptionsOpsView(perceptions)
-    .downsample(0.3)
-    .fuse(get_tf_prefix() + "base_link")
-    .filter({-dist_search_radius_, -dist_search_radius_, NAN},
-      {dist_search_radius_, dist_search_radius_, 2.0})
-    .collapse({NAN, NAN, 0.1})
-    .downsample(0.3)
-    .as_points();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+  auto view = PointPerceptionsOpsView(perceptions);
+  view.downsample(0.3)
+  .fuse(tf_info.robot_footprint_frame)
+  .filter({-dist_search_radius_, -dist_search_radius_, NAN},
+    {dist_search_radius_, dist_search_radius_, 2.0})
+  .collapse({NAN, NAN, 0.1})
+  .downsample(0.3);
+  const auto & fused = view.as_points();
+
+  if (last_input_ts_ < view.get_latest_stamp()) {
+    last_input_ts_ = view.get_latest_stamp();
+  }
 
   double min_dist = std::numeric_limits<double>::infinity();
   for (const auto p : fused) {
@@ -367,13 +371,22 @@ SerestController::fetch_required_inputs(
   nav_msgs::msg::Path & path,
   nav_msgs::msg::Odometry & odom)
 {
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
-    publish_stop(nav_state, "base_link");
+    publish_stop(nav_state, tf_info.robot_footprint_frame);
     return false;
   }
 
   path = nav_state.get<nav_msgs::msg::Path>("path");
   odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+
+  if (rclcpp::Time(path.header.stamp, last_input_ts_.get_clock_type()) > last_input_ts_) {
+    last_input_ts_ = path.header.stamp;
+  }
+  if (rclcpp::Time(odom.header.stamp, last_input_ts_.get_clock_type()) > last_input_ts_) {
+    last_input_ts_ = odom.header.stamp;
+  }
 
   if (path.poses.empty()) {
     publish_stop(nav_state, path.header.frame_id);
@@ -425,7 +438,7 @@ void
 SerestController::safety_limits(
   const NavState & nav_state,
   const RefKinematics & rk,
-  double & d_closest, double & v_safe, double & v_curv) const
+  double & d_closest, double & v_safe, double & v_curv)
 {
   d_closest = closest_obstacle_distance(nav_state);
   v_safe = v_safe_from_distance(d_closest, /*slope_sin=*/0.0);
@@ -482,7 +495,7 @@ SerestController::should_turn_in_place(
 {
   // Keep compatibility with the signature, but ignore turn_in_place_thr
   // and use two internal thresholds without exposing parameters.
-  const double thr_enter = 60.0 * std::numbers::pi / 180.0; // enter TiP if |e_theta| > 60°
+  const double thr_enter = 60.0 * M_PI / 180.0; // enter TiP if |e_theta| > 60°
   // const double thr_exit = 35.0 * PI / 180.0; // exit TiP if |e_theta| < 35°
 
   // Do not allow reverse "shortcut" in this decision: if reverse is not allowed,
@@ -505,7 +518,7 @@ SerestController::maybe_final_align_and_publish(
   double dist_xy_goal, double stop_r, double e_theta_goal,
   double gamma_slow, double dt)
 {
-  const double goal_yaw_tol = goal_yaw_tol_deg_ * std::numbers::pi / 180.0;
+  const double goal_yaw_tol = goal_yaw_tol_deg_ * M_PI / 180.0;
 
   if (dist_xy_goal > stop_r) {
     return false;
@@ -533,7 +546,7 @@ SerestController::maybe_final_align_and_publish(
 
   // Publicación y actualización de estado
   twist_stamped_.header.frame_id = path.header.frame_id;
-  twist_stamped_.header.stamp = get_node()->now();
+  twist_stamped_.header.stamp = last_input_ts_;
   twist_stamped_.twist.linear.x = vlin;
   twist_stamped_.twist.angular.z = vrot;
 
@@ -576,7 +589,7 @@ SerestController::publish_cmd_and_debug(
   int in_final_align, int arrived)
 {
   twist_stamped_.header.frame_id = path.header.frame_id;
-  twist_stamped_.header.stamp = get_node()->now();
+  twist_stamped_.header.stamp = last_input_ts_;
   twist_stamped_.twist.linear.x = vlin;
   twist_stamped_.twist.angular.z = vrot;
   nav_state.set("cmd_vel", twist_stamped_);
@@ -599,7 +612,7 @@ SerestController::publish_cmd_and_debug(
 void
 SerestController::publish_stop(NavState & nav_state, const std::string & frame_id)
 {
-  auto now = get_node()->now();
+  auto now = last_input_ts_;
   twist_stamped_.header.frame_id = frame_id;
   twist_stamped_.header.stamp = now;
   twist_stamped_.twist.linear.x = 0.0;
@@ -620,7 +633,7 @@ SerestController::update_rt(NavState & nav_state)
 
   // 1.5) Goal tolerances: prefer shared GoalManager values, fallback to local params
   double goal_pos_tol = goal_pos_tol_;
-  double goal_yaw_tol = goal_yaw_tol_deg_ * (std::numbers::pi / 180.0);
+  double goal_yaw_tol = goal_yaw_tol_deg_ * (M_PI / 180.0);
   if (nav_state.has("goal_tolerance.position")) {
     goal_pos_tol = nav_state.get<double>("goal_tolerance.position");
   }
@@ -653,13 +666,12 @@ SerestController::update_rt(NavState & nav_state)
 
   // 6.5) Early turn-in-place with hysteresis (start-of-path aware)
   {
-    const double PI = 3.14159265358979323846;
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 
     // Internal angular thresholds (enter/exit)
-    const double thr_enter = 60.0 * PI / 180.0;
-    const double thr_exit = 35.0 * PI / 180.0;
+    const double thr_enter = 60.0 * M_PI / 180.0;
+    const double thr_exit = 35.0 * M_PI / 180.0;
     const double near_start_s = 0.30;  // treat the first 30 cm as the start region
 
     // Base request from the regular criterion (using the provided threshold)
@@ -722,7 +734,7 @@ SerestController::update_rt(NavState & nav_state)
   double v_prog_ref = v_prog_ref_free * gamma_slow;
 
   // Maintain a small cruising speed when roughly aligned and outside the stop zone (no reverse)
-  const double align_thr = 30.0 * std::numbers::pi / 180.0;
+  const double align_thr = 30.0 * M_PI / 180.0;
   if (!allow_reverse_ && (dist_xy_goal > stop_r) && std::fabs(e_theta) < align_thr) {
     v_prog_ref = std::max(v_prog_ref, std::min(slow_min_speed_, v_prog_ref_free));
   }
@@ -773,7 +785,7 @@ SerestController::update_rt(NavState & nav_state)
 
   // Optional classic TiP safeguard using the same angular threshold
   {
-    const double turn_in_place_thr = (60.0 * std::numbers::pi / 180.0);
+    const double turn_in_place_thr = (60.0 * M_PI / 180.0);
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 

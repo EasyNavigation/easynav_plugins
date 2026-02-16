@@ -20,7 +20,6 @@
 #ifndef EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_
 #define EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_
 
-#include <expected>
 #include <vector>
 #include <string>
 
@@ -63,9 +62,9 @@ public:
 
   /**
    * @brief Initialize parameters and internal state.
-   * @return std::expected<void, std::string> Empty on success; error message otherwise.
+   * @throws std::runtime_error on initialization error.
    */
-  std::expected<void, std::string> on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Real-time control update (called ~20–30 Hz).
@@ -183,7 +182,7 @@ private:
    * @return double Minimum obstacle distance (m). Infinity if none is found.
    */
   double closest_obstacle_distance(
-    const NavState & nav_state) const;
+    const NavState & nav_state);
 
   /**
    * @brief Compute a safe linear speed bound from obstacle distance and slope.
@@ -227,7 +226,7 @@ private:
   void safety_limits(
     const NavState & nav_state,
     const RefKinematics & rk,
-    double & d_closest, double & v_safe, double & v_curv) const;
+    double & d_closest, double & v_safe, double & v_curv);
 
   // Aplica corner‑guard: ajusta v_prog_ref y obtiene omega_boost + término ápice.
   void apply_corner_guard(
@@ -355,6 +354,8 @@ private:
   double last_vrot_{0.0};
   /// @brief Last update timestamp.
   rclcpp::Time last_update_ts_;
+  /// @brief Last input timestamp (max of path and odom).
+  rclcpp::Time last_input_ts_;
   /// @brief Output TwistStamped buffer.
   geometry_msgs::msg::TwistStamped twist_stamped_;
 };

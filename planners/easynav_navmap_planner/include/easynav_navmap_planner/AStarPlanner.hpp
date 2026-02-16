@@ -58,9 +58,9 @@ public:
    * Loads planner parameters, sets up ROS publishers,
    * and prepares the NavMap-based planning environment.
    *
-   * @return std::expected<void, std::string> A success indicator or error message.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Executes a planning cycle using the current navigation state.

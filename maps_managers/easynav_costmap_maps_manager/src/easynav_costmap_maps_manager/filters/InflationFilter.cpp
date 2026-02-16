@@ -39,7 +39,6 @@
  *********************************************************************/
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_costmap_common/costmap_2d.hpp"
@@ -71,7 +70,7 @@ InflationFilter::InflationFilter()
 {
 }
 
-std::expected<void, std::string>
+void
 InflationFilter::on_initialize()
 {
   auto node = get_node();
@@ -95,8 +94,6 @@ InflationFilter::on_initialize()
   cached_distances_.clear();
   cached_costs_.clear();
   need_reinflation_ = false;
-
-  return {};
 }
 
 void

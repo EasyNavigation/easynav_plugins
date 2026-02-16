@@ -18,7 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_costmap_common/costmap_2d.hpp"
@@ -39,11 +38,9 @@ ObstacleFilter::ObstacleFilter()
 
 }
 
-std::expected<void, std::string>
+void
 ObstacleFilter::on_initialize()
-{
-  return {};
-}
+{}
 
 void
 ObstacleFilter::update(NavState & nav_state)
@@ -56,12 +53,18 @@ ObstacleFilter::update(NavState & nav_state)
 
   auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
   Costmap2D & dynamic_map = *dynamic_map_ptr;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  auto fused = PointPerceptionsOpsView(perceptions)
-    .downsample(dynamic_map.getResolution())
-    .fuse(get_tf_prefix() + "map")
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-    .as_points();
+  rclcpp::Time stamp;
+
+  auto view = PointPerceptionsOpsView(perceptions);
+  view.downsample(dynamic_map.getResolution())
+  .fuse(tf_info.map_frame, stamp, false)
+  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN});
+
+  const auto & fused = view.as_points();
+
+  nav_state.set("map_time", stamp);
 
   double min_x = std::numeric_limits<double>::max();
   double min_y = std::numeric_limits<double>::max();

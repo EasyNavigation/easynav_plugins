@@ -54,9 +54,9 @@ public:
    * Loads planner parameters, sets up ROS publishers,
    * and prepares the costmap-based planning environment.
    *
-   * @return std::expected<void, std::string> A success indicator or error message.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Executes a planning cycle using the current navigation state.
@@ -70,8 +70,7 @@ public:
 protected:
   double cost_factor_;        ///< Scaling factor applied to cell cost values.
   double inflation_penalty_; ///< Extra cost penalty for paths near inflated obstacles.
-  double cost_axial_;        ///< Cost multiplier for axial (horizontal/vertical) moves.
-  double cost_diagonal_;     ///< Cost multiplier for diagonal moves.
+  double heuristic_scale_ {1.0}; ///< Scaling factor applied to the heuristic term in A*.
   bool continuous_replan_ {true};    ///< Wheter replan path at freq time
   nav_msgs::msg::Path current_path_;  ///< Most recently computed path.
   geometry_msgs::msg::Pose current_goal_;  ///< Current goal.

@@ -23,8 +23,6 @@
 #ifndef EASYNAV_CONTROLLER__VFFCONTROLLER_HPP_
 #define EASYNAV_CONTROLLER__VFFCONTROLLER_HPP_
 
-#include <expected>
-
 #include "pcl/point_cloud.h"
 
 #include "easynav_core/ControllerMethodBase.hpp"
@@ -83,11 +81,9 @@ public:
    * This method is called once during the configuration phase of the controller node,
    * and can be optionally overridden by derived classes to perform custom setup logic.
    *
-   * @return std::expected<void, std::string> Returns an expected object:
-   *         - `void` if initialization was successful,
-   *         - a `std::string` containing an error message if initialization failed.
+   * @throws std::runtime_error on initialization error.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the localization estimate based on the current navigation state.

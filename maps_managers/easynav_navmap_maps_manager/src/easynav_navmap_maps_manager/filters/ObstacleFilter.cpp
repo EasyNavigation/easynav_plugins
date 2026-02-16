@@ -18,12 +18,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 #include <cstdint>
 
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_common/types/PointPerception.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "navmap_core/NavMap.hpp"
 #include "navmap_ros/conversions.hpp"
@@ -41,11 +41,9 @@ ObstacleFilter::ObstacleFilter()
 
 }
 
-std::expected<void, std::string>
+void
 ObstacleFilter::on_initialize()
-{
-  return {};
-}
+{}
 
 void ObstacleFilter::update(::easynav::NavState & nav_state)
 {
@@ -54,13 +52,14 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   navmap_.layer_clear<uint8_t>(get_layer_name(), navmap_ros::FREE_SPACE);
 
   const auto & points = PointPerceptionsOpsView(perceptions)
     .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
     .downsample(0.3)
-    .fuse("map")
+    .fuse(tf_info.map_frame)
     .as_points();
 
   const float voxel_xy = 0.30f;

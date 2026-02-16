@@ -18,7 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
@@ -33,18 +32,15 @@ NavMapFilter::NavMapFilter()
 
 }
 
-std::expected<void, std::string>
+void
 NavMapFilter::initialize(
   const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
-  const std::string & plugin_name,
-  const std::string & tf_prefix
-)
+  const std::string & plugin_name)
 {
   parent_node_ = parent_node;
   plugin_name_ = plugin_name;
-  tf_prefix_ = tf_prefix;
 
-  return on_initialize();
+  on_initialize();
 }
 
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>
@@ -57,12 +53,6 @@ const std::string &
 NavMapFilter::get_plugin_name() const
 {
   return plugin_name_;
-}
-
-const std::string &
-NavMapFilter::get_tf_prefix() const
-{
-  return tf_prefix_;
 }
 
 }  // namespace navmap

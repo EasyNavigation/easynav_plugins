@@ -20,8 +20,6 @@
 /// \file
 /// \brief Implementation of the VffController class.
 
-#include <expected>
-
 #include "easynav_vff_controller/VffController.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_common/types/PointPerception.hpp"
@@ -35,7 +33,7 @@
 namespace easynav
 {
 
-std::expected<void, std::string> VffController::on_initialize()
+void VffController::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -62,9 +60,11 @@ std::expected<void, std::string> VffController::on_initialize()
   node->get_parameter<double>(plugin_name + ".max_speed", max_speed_);
   node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   // Initialize the odometry message
   cmd_vel_.header.stamp = node->now();
-  cmd_vel_.header.frame_id = get_tf_prefix() + "base_link";
+  cmd_vel_.header.frame_id = tf_info.robot_footprint_frame;
   cmd_vel_.twist.linear.x = 0.0;
   cmd_vel_.twist.linear.y = 0.0;
   cmd_vel_.twist.linear.z = 0.0;
@@ -75,8 +75,6 @@ std::expected<void, std::string> VffController::on_initialize()
   // Publisher for visualization markers
   marker_array_pub_ = node->create_publisher<visualization_msgs::msg::MarkerArray>(
     "vff/markers_vff", 10);
-
-  return {};
 }
 
 visualization_msgs::msg::MarkerArray
@@ -213,9 +211,10 @@ void VffController::update_rt(NavState & nav_state)
   if (!nav_state.has("robot_pose")) {return;}
 
   const auto & all_goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (all_goals.goals.empty()) {
-    cmd_vel_.header.frame_id = get_tf_prefix() + "map";
+    cmd_vel_.header.frame_id = tf_info.map_frame;
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = 0.0;
     cmd_vel_.twist.angular.z = 0.0;
@@ -259,17 +258,18 @@ void VffController::update_rt(NavState & nav_state)
 
     const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
+    const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
-      .fuse(get_tf_prefix() + "base_link")
+      .fuse(tf_info.robot_footprint_frame)
       .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
           obstacle_detection_z_max_})
       .as_points();
 
     // Get VFF vectors
-    const VFFVectors & vff = get_vff(angle_error, fused, get_tf_prefix() + "base_link");
+    const VFFVectors & vff = get_vff(angle_error, fused, tf_info.robot_footprint_frame);
 
     // Use result vector to calculate output speed
     const auto & v = vff.result;

@@ -50,6 +50,7 @@
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 #include "geometry_msgs/msg/twist_with_covariance_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -346,21 +347,6 @@ public:
   std::vector<CallbackData> getGpsCallbackDataArr() const
   {
     return gps_callbackData_arr_;
-  }
-
-  std::string getBaseLinkFrameId() const
-  {
-    return base_link_frame_id_;
-  }
-
-  std::string getWorldFrameId() const
-  {
-    return world_frame_id_;
-  }
-
-  std::string getOdomFrameId() const
-  {
-    return odom_frame_id_;
   }
 
 protected:

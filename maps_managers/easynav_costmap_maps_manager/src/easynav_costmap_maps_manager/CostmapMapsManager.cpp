@@ -17,7 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#include <expected>
+#include <stdexcept>
 #include <string>
 
 #include "easynav_costmap_maps_manager/CostmapMapsManager.hpp"
@@ -26,6 +26,7 @@
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_maps_manager/map_io.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
@@ -51,7 +52,7 @@ CostmapMapsManager::CostmapMapsManager()
 
 CostmapMapsManager::~CostmapMapsManager() {}
 
-std::expected<void, std::string>
+void
 CostmapMapsManager::on_initialize()
 {
   auto node = get_node();
@@ -80,14 +81,13 @@ CostmapMapsManager::on_initialize()
       std::shared_ptr<CostmapFilter> instance;
       instance = costmap_filters_loader_->createSharedInstance(plugin);
 
-      auto result = instance->initialize(node, plugin_name + "." + costmap_filter,
-        get_tf_prefix());
-
-      if (!result) {
+      try {
+        instance->initialize(node, plugin_name + "." + costmap_filter);
+      } catch (std::runtime_error & ex) {
         RCLCPP_ERROR(node->get_logger(),
-          "Unable to initialize [%s]. Error: %s", plugin.c_str(), result.error().c_str());
-        return std::unexpected("Unable to initialize " +
-          plugin + " . Error: " + result.error());
+          "Unable to initialize [%s]. Error: %s", plugin.c_str(), ex.what());
+        throw std::runtime_error("Unable to initialize " +
+          plugin + " . Error: " + ex.what());
       }
 
       costmap_filters_.push_back(instance);
@@ -97,7 +97,7 @@ CostmapMapsManager::on_initialize()
     } catch (pluginlib::PluginlibException & ex) {
       RCLCPP_ERROR(node->get_logger(),
         "Unable to load plugin easynav::CostmapFilter. Error: %s", ex.what());
-      return std::unexpected("Unable to load plugin easynav::CostmapFilter " +
+      throw std::runtime_error("Unable to load plugin easynav::CostmapFilter " +
         costmap_filter + " . Error: " + ex.what());
     }
   }
@@ -109,23 +109,25 @@ CostmapMapsManager::on_initialize()
   dynamic_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/dynamic_map", 100);
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   map_path_ = "/tmp/default.map.yaml";
   if (!package_name.empty() && !map_path_file.empty()) {
     try {
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + map_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     if (auto ret = loadMapFromYaml(map_path_, static_grid_msg_) != LOAD_MAP_SUCCESS) {
       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
-      return std::unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
+      throw std::runtime_error("YAML file [" + map_path_ + "] not found or invalid: ");
     }
 
     static_map_ = Costmap2D(static_grid_msg_);
 
-    static_grid_msg_.header.frame_id = get_tf_prefix() + "map";
+    static_grid_msg_.header.frame_id = tf_info.map_frame;
     static_grid_msg_.header.stamp = node->now();
     static_occ_pub_->publish(static_grid_msg_);
   }
@@ -133,12 +135,12 @@ CostmapMapsManager::on_initialize()
   incoming_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_map",
     rclcpp::QoS(1).transient_local().reliable(),
-    [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
+    [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
       static_grid_msg_ = *msg;
 
       static_map_ = Costmap2D(*msg);
 
-      static_grid_msg_.header.frame_id = get_tf_prefix() + "map";
+      static_grid_msg_.header.frame_id = tf_info.map_frame;
       static_grid_msg_.header.stamp = this->get_node()->now();
 
       static_occ_pub_->publish(static_grid_msg_);
@@ -146,7 +148,7 @@ CostmapMapsManager::on_initialize()
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
-    [this](
+    [&](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)
     {
@@ -167,8 +169,6 @@ CostmapMapsManager::on_initialize()
         response->message = "Map successfully saved to: " + map_path_;
       }
     });
-
-  return {};
 }
 
 void
@@ -195,15 +195,23 @@ CostmapMapsManager::update(NavState & nav_state)
 
   nav_state.set("map.dynamic.filtered", dynamic_map_);
 
+  if (!nav_state.has("map_time")) {
+    nav_state.set("map_time", get_node()->now());
+  }
+
   for (const auto & filter : costmap_filters_) {
     filter->update(nav_state);
   }
 
   nav_state.set("map.dynamic", dynamic_map_);
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+  rclcpp::Time map_stamp = nav_state.get<rclcpp::Time>("map_time");
+
   dynamic_map_->toOccupancyGridMsg(dynamic_grid_msg_);
-  dynamic_grid_msg_.header.frame_id = get_tf_prefix() + "map";
-  dynamic_grid_msg_.header.stamp = get_node()->now();
+  dynamic_grid_msg_.header.frame_id = tf_info.map_frame;
+  dynamic_grid_msg_.header.stamp = map_stamp;
   dynamic_occ_pub_->publish(dynamic_grid_msg_);
 }
 

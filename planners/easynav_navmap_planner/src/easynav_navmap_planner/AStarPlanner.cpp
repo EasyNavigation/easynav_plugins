@@ -23,10 +23,10 @@
 #include <queue>
 #include <cmath>
 #include <limits>
-#include <optional>
 #include <algorithm>
 #include <cstdint>
 
+#include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_navmap_planner/AStarPlanner.hpp"
 
 #include "nav_msgs/msg/goals.hpp"
@@ -56,13 +56,14 @@ AStarPlanner::AStarPlanner()
   NavState::register_printer<nav_msgs::msg::Path>(
     [](const nav_msgs::msg::Path & path) {
       std::ostringstream ret;
-      ret << "Path with " << path.poses.size() << " poses and length "
+      ret << "{ " << rclcpp::Time(path.header.stamp).seconds() << " } Path with " <<
+        path.poses.size() << " poses and length "
           << compute_path_length(path) << " m.";
       return ret.str();
     });
 }
 
-std::expected<void, std::string> AStarPlanner::on_initialize()
+void AStarPlanner::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -75,7 +76,6 @@ std::expected<void, std::string> AStarPlanner::on_initialize()
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
-  return {};
 }
 
 void AStarPlanner::update(NavState & nav_state)
@@ -95,8 +95,9 @@ void AStarPlanner::update(NavState & nav_state)
 
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  if (goals.header.frame_id != get_tf_prefix() + "map") {
+  if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(
       get_node()->get_logger(), "Goals frame is not 'map': %s",
       goals.header.frame_id.c_str());

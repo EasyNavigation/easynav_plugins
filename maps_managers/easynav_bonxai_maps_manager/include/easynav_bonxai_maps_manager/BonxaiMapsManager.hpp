@@ -61,9 +61,9 @@ public:
    *
    * Creates necessary publishers/subscribers and initializes the map instances.
    *
-   * @return std::expected<void, std::string> Success or error string.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -118,7 +118,6 @@ private:
 
   double resolution_ {0.3};
   double height_with_occ_ {1.0};
-  std::string frame_id_ {"map"};
 };
 
 }  // namespace easynav_bonxai

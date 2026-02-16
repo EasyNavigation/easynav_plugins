@@ -77,6 +77,8 @@
 #include <tf2_ros/transform_broadcaster.hpp>
 #include <tf2_ros/transform_listener.hpp>
 
+#include "easynav_common/RTTFBuffer.hpp"
+
 namespace robot_localization
 {
 using namespace std::chrono_literals;
@@ -885,17 +887,17 @@ void UkfWrapper::loadParams()
     }
   }
 
-  // These params specify the name of the robot's body frame (typically
-  // base_link) and odometry frame (typically odom)
-  map_frame_id_ = parent_node_->declare_parameter(param_prefix + "map_frame", std::string("map"));
-  odom_frame_id_ = parent_node_->declare_parameter(param_prefix + "odom_frame",
-      std::string("odom"));
-  base_link_frame_id_ = parent_node_->declare_parameter(param_prefix +
-    "base_link_frame",
-    std::string("base_link"));
-  base_link_output_frame_id_ = parent_node_->declare_parameter(param_prefix +
-    "base_link_frame_output",
-    base_link_frame_id_);
+  // Frame configuration comes from Easynav TFInfo; no frame params declared here
+
+  const auto & tf_info = easynav::RTTFBuffer::getInstance()->get_tf_info();
+
+  map_frame_id_ = tf_info.map_frame;
+  odom_frame_id_ = tf_info.odom_frame;
+  base_link_frame_id_ = tf_info.robot_footprint_frame;
+  // World frame comes from Easynav TFInfo configuration
+  world_frame_id_ = tf_info.map_frame;
+
+  base_link_output_frame_id_ = base_link_frame_id_;
 
   /*
    * These parameters are designed to enforce compliance with REP-105:
@@ -914,7 +916,7 @@ void UkfWrapper::loadParams()
    * transform to compute *and broadcast* map->odom.
    *
    * The state estimation nodes in robot_localization therefore have two
-   * "modes." If your world_frame parameter value matches the odom_frame
+   * "modes." If your world_frame parameter value matches the map_frame
    * parameter value, then robot_localization will assume someone else is
    * broadcasting a transform from odom_frame->base_link_frame, and it will
    * compute the map_frame->odom_frame transform. Otherwise, it will simply
@@ -922,7 +924,7 @@ void UkfWrapper::loadParams()
    *
    * The default is the latter behavior (broadcast of odom->base_link).
    */
-  world_frame_id_ = parent_node_->declare_parameter(param_prefix + "world_frame", odom_frame_id_);
+
 
   if (map_frame_id_ == odom_frame_id_ ||
     odom_frame_id_ == base_link_frame_id_ ||

@@ -67,9 +67,9 @@ public:
    *
    * Sets up publishers, subscribers, and prepares the particle filter.
    *
-   * @return std::expected<void, std::string> Success or error message.
+   * @throws std::runtime_error on initialization error.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Real-time update of the localization state.
@@ -221,6 +221,9 @@ protected:
 
   /// Time interval (in seconds) after which the particles should be reseeded.
   double reseed_time_;
+
+  /// Timestamp of the last input message (odometry or initial pose).
+  rclcpp::Time last_input_time_;
 
   /// Timestamp of the last reseed event.
   rclcpp::Time last_reseed_;

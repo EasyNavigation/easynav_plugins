@@ -20,7 +20,6 @@
 #ifndef EASYNAV_ROUTES_MAPS_MANAGER_FILTERS_ROUTES_COSTMAP_FILTER_HPP_
 #define EASYNAV_ROUTES_MAPS_MANAGER_FILTERS_ROUTES_COSTMAP_FILTER_HPP_
 
-#include <expected>
 #include <string>
 
 #include "easynav_routes_maps_manager/RoutesFilter.hpp"
@@ -53,14 +52,11 @@ public:
   ///   RoutesMapsManager.
   /// @param plugin_ns Namespace used to resolve this filter's
   ///   parameters and topics.
-  /// @param tf_prefix TF frame prefix; used to set the frame id of
-  ///   the published debug grid.
-  /// @return std::expected<void, std::string> Empty on success or an
-  ///   error message on failure.
-  std::expected<void, std::string> initialize(
+  /// @param tf_info TF frame information used by the navigation stack.
+  /// @throws std::runtime_error if initialization fails.
+  void initialize(
     const rclcpp_lifecycle::LifecycleNode::SharedPtr & node,
-    const std::string & plugin_ns,
-    const std::string & tf_prefix) override;
+    const std::string & plugin_ns) override;
 
   /// @brief Apply the routes-based filtering to the costmap.
   ///
@@ -79,9 +75,6 @@ private:
 
   /// @brief Plugin namespace used for parameters and topics.
   std::string plugin_ns_;
-
-  /// @brief TF prefix used for published frame ids.
-  std::string tf_prefix_;
 
   /// @brief Minimum cost enforced outside the route corridor.
   int min_cost_{50};

@@ -23,6 +23,8 @@
 #include "easynav_mpc_controller/MPCController.hpp"
 #include "easynav_system/GoalManager.hpp"
 
+#include "easynav_common/RTTFBuffer.hpp"
+
 namespace easynav
 {
 
@@ -30,7 +32,7 @@ MPCController::MPCController() {}
 
 MPCController::~MPCController() = default;
 
-std::expected<void, std::string>
+void
 MPCController::on_initialize()
 {
   auto node = get_node();
@@ -63,8 +65,6 @@ MPCController::on_initialize()
 
   detection_pub_ =
     node->create_publisher<sensor_msgs::msg::PointCloud2>("/mpc/detection", 10);
-
-  return {};
 }
 
 void
@@ -213,9 +213,11 @@ MPCController::update_rt(NavState & nav_state)
   const auto & last_pose = path.poses[local_horizon].pose.position;
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-2.0, -0.35, -1.0}, {0.0, 0.35, 1.0})
-    .fuse("map")
+    .fuse(tf_info.map_frame)
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(0.1)

@@ -17,7 +17,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-#include <expected>
 #include <string>
 
 #include "easynav_bonxai_maps_manager/BonxaiMapsManager.hpp"
@@ -53,7 +52,7 @@ BonxaiMapsManager::BonxaiMapsManager()
 
 BonxaiMapsManager::~BonxaiMapsManager() {}
 
-std::expected<void, std::string>
+void
 BonxaiMapsManager::on_initialize()
 {
   auto node = get_node();
@@ -64,13 +63,11 @@ BonxaiMapsManager::on_initialize()
   node->declare_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
   node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->declare_parameter(plugin_name + ".resolution", resolution_);
-  node->declare_parameter(plugin_name + ".frame_id", frame_id_);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
   node->get_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->get_parameter(plugin_name + ".resolution", resolution_);
-  node->get_parameter(plugin_name + ".frame_id", frame_id_);
 
   bonxai_pub_ = node->create_publisher<sensor_msgs::msg::PointCloud2>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
@@ -83,7 +80,7 @@ BonxaiMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + bonxai_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     std::vector<Eigen::Vector3d> bonxai_result;
@@ -116,13 +113,13 @@ BonxaiMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + occmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     nav_msgs::msg::OccupancyGrid occ_msg;
     if (auto ret = loadMapFromYaml(map_path_, occ_msg) != LOAD_MAP_SUCCESS) {
       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
-      return std::unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
+      throw std::runtime_error("YAML file [" + map_path_ + "] not found or invalid: ");
     }
 
     update_from_occ(occ_msg);
@@ -161,8 +158,6 @@ BonxaiMapsManager::on_initialize()
       Bonxai::WritePointsFromPCD(map_path_, bonxai_result);  // This can overwrite yaml occ maps
       // ToDo
     });
-
-  return {};
 }
 
 void
@@ -177,11 +172,13 @@ BonxaiMapsManager::update(::easynav::NavState & nav_state)
 void
 BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
 {
+  const auto & tf_info = ::easynav::RTTFBuffer::getInstance()->get_tf_info();
 
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = ::easynav::RTTFBuffer::getInstance()->lookupTransform(
-          frame_id_, pc2.header.frame_id, pc2.header.stamp, rclcpp::Duration::from_seconds(0.05));
+          tf_info.map_frame, pc2.header.frame_id, pc2.header.stamp,
+          rclcpp::Duration::from_seconds(0.05));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
     return;
@@ -285,7 +282,9 @@ BonxaiMapsManager::update_from_occ(const nav_msgs::msg::OccupancyGrid & occ)
 void
 BonxaiMapsManager::publish_map()
 {
-  bonxai_msg_.header.frame_id = frame_id_;
+  const auto & tf_info = ::easynav::RTTFBuffer::getInstance()->get_tf_info();
+
+  bonxai_msg_.header.frame_id = tf_info.map_frame;
   bonxai_msg_.header.stamp = this->get_node()->now();
   bonxai_pub_->publish(bonxai_msg_);
 

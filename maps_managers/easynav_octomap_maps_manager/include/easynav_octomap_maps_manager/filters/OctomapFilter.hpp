@@ -21,7 +21,6 @@
 #ifndef EASYNAV_PLANNER__FILTERS__OCTOMAPFILTER_HPP_
 #define EASYNAV_PLANNER__FILTERS__OCTOMAPFILTER_HPP_
 
-#include <expected>
 #include <string>
 
 #include "octomap/octomap.h"
@@ -38,13 +37,12 @@ class OctomapFilter
 public:
   OctomapFilter();
 
-  std::expected<void, std::string>
+  void
   initialize(
     const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
-    const std::string & plugin_name,
-    const std::string & tf_prefix = "");
+    const std::string & plugin_name);
 
-  virtual std::expected<void, std::string> on_initialize() = 0;
+  virtual void on_initialize() = 0;
   virtual void update(::easynav::NavState & nav_state) = 0;
 
   float get_map_resolution() {return map_resolution_;}
@@ -55,12 +53,9 @@ protected:
 
   const std::string & get_plugin_name() const;
 
-  const std::string & get_tf_prefix() const;
-
 protected:
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_ {nullptr};
   std::string plugin_name_;
-  std::string tf_prefix_;
 
   float map_resolution_ {0.1};
 };

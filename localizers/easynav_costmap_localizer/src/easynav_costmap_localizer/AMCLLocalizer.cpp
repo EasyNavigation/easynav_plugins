@@ -20,7 +20,6 @@
 /// \file
 /// \brief Implementation of the AMCLLocalizer class using Costmap2D.
 
-#include <expected>
 #include <random>
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
@@ -178,7 +177,8 @@ AMCLLocalizer::AMCLLocalizer()
       double roll, pitch, yaw;
       tf2::Matrix3x3(q).getRPY(roll, pitch, yaw);
 
-      ret << "Odometry with pose: (x: " << x << ", y: " << y << ", yaw: " << yaw << ")";
+      ret << "{" << rclcpp::Time(odom.header.stamp).seconds() << " } Odometry with pose: (x: " <<
+        x << ", y: " << y << ", yaw: " << yaw << ")";
       return ret.str();
     });
 }
@@ -187,7 +187,7 @@ AMCLLocalizer::~AMCLLocalizer()
 {
 }
 
-std::expected<void, std::string>
+void
 AMCLLocalizer::on_initialize()
 {
   auto node = get_node();
@@ -270,10 +270,9 @@ AMCLLocalizer::on_initialize()
     "initialpose", 10, std::bind(&AMCLLocalizer::init_pose_callback, this, std::placeholders::_1));
 
   last_reseed_ = get_node()->now();
+  last_input_time_ = get_node()->now();
 
   get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
-
-  return {};
 }
 
 void printTransform(const tf2::Transform & tf)
@@ -322,6 +321,7 @@ AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
   if (compute_odom_from_tf_) {return;}
 
   tf2::fromMsg(msg->pose.pose, odom_);
+  last_input_time_ = msg->header.stamp;
 
   if (!initialized_odom_) {
     last_odom_ = odom_;
@@ -338,9 +338,9 @@ AMCLLocalizer::init_pose_callback(
   }
 
   auto logger = get_node()->get_logger();
-
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   // Check expected frame
-  const std::string expected_frame = get_tf_prefix() + std::string("map");
+  const std::string expected_frame = tf_info.map_frame;
   if (!msg->header.frame_id.empty() && msg->header.frame_id != expected_frame) {
     RCLCPP_WARN(
       logger,
@@ -485,10 +485,13 @@ AMCLLocalizer::init_pose_callback(
 void
 AMCLLocalizer::update_odom_from_tf()
 {
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-      "odom", "base_footprint", tf2::TimePointZero, tf2::durationFromSec(0.0));
+      tf_info.odom_frame, tf_info.robot_footprint_frame, tf2::TimePointZero,
+        tf2::durationFromSec(0.0));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "AMCLLocalizer::update: TF failed: %s", ex.what());
     return;
@@ -499,8 +502,11 @@ AMCLLocalizer::update_odom_from_tf()
 
   last_odom_ = odom_;
   odom_ = tf_odom;
+  last_input_time_ = tf_msg.header.stamp;
 
   initialized_odom_ = true;
+
+
 }
 
 void
@@ -578,18 +584,22 @@ AMCLLocalizer::correct(NavState & nav_state)
 
   const auto & map_static = nav_state.get<Costmap2D>("map.static");
 
-  const auto & filtered = PointPerceptionsOpsView(perceptions)
-    .downsample(map_static.getResolution())
-    .fuse(get_tf_prefix() + "base_footprint")
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-    .collapse({NAN, NAN, 0.1})
-    .downsample(map_static.getResolution())
-    .as_points();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+  auto view = PointPerceptionsOpsView(perceptions);
+  view.downsample(map_static.getResolution())
+  .fuse(tf_info.robot_footprint_frame)
+  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+  .collapse({NAN, NAN, 0.1})
+  .downsample(map_static.getResolution());
+  const auto & filtered = view.as_points();
 
   if (filtered.empty()) {
     RCLCPP_WARN(get_node()->get_logger(), "No points to correct");
     return;
   }
+
+  last_input_time_ = view.get_latest_stamp();
 
   for (auto & particle : particles_) {
     int hits = 0;
@@ -716,9 +726,10 @@ void
 AMCLLocalizer::publishTF(const tf2::Transform & map2bf)
 {
   geometry_msgs::msg::TransformStamped tf_msg;
-  tf_msg.header.stamp = get_node()->now();
-  tf_msg.header.frame_id = get_tf_prefix() + "map";
-  tf_msg.child_frame_id = get_tf_prefix() + "odom";
+  tf_msg.header.stamp = last_input_time_;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  tf_msg.header.frame_id = tf_info.map_frame;
+  tf_msg.child_frame_id = tf_info.odom_frame;
   tf_msg.transform = tf2::toMsg(map2bf);
 
   RTTFBuffer::getInstance()->setTransform(tf_msg, "easynav", false);
@@ -728,10 +739,11 @@ AMCLLocalizer::publishTF(const tf2::Transform & map2bf)
 void
 AMCLLocalizer::publishParticles()
 {
-  geometry_msgs::msg::PoseArray array_msg;
-  array_msg.header.stamp = get_node()->now();
-  array_msg.header.frame_id = get_tf_prefix() + "map";
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
+  geometry_msgs::msg::PoseArray array_msg;
+  array_msg.header.stamp = last_input_time_;
+  array_msg.header.frame_id = tf_info.map_frame;
   array_msg.poses.reserve(particles_.size());
   for (const auto & p : particles_) {
     geometry_msgs::msg::Pose pose_msg;
@@ -789,9 +801,10 @@ AMCLLocalizer::publishEstimatedPose(const tf2::Transform & est_pose)
   tf2::Matrix3x3 cov = computeCovariance(particles_, 0, N_top, mean);
   double yaw_variance = computeYawVariance(particles_, 0, N_top);
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   geometry_msgs::msg::PoseWithCovarianceStamped msg;
-  msg.header.stamp = get_node()->now();
-  msg.header.frame_id = get_tf_prefix() + "map";
+  msg.header.stamp = last_input_time_;
+  msg.header.frame_id = tf_info.map_frame;
 
   msg.pose.pose.position.x = mean.x();
   msg.pose.pose.position.y = mean.y();
@@ -813,9 +826,10 @@ AMCLLocalizer::get_pose()
 {
   nav_msgs::msg::Odometry odom_msg;
 
-  odom_msg.header.stamp = get_node()->now();
-  odom_msg.header.frame_id = get_tf_prefix() + "map";
-  odom_msg.child_frame_id = get_tf_prefix() + "base_footprint";
+  odom_msg.header.stamp = last_input_time_;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  odom_msg.header.frame_id = tf_info.map_frame;
+  odom_msg.child_frame_id = tf_info.robot_footprint_frame;
 
   tf2::Transform est_pose = getEstimatedPose();
 

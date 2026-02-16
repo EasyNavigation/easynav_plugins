@@ -26,6 +26,7 @@
 #include <tuple>
 
 #include "easynav_costmap_planner/CostmapPlanner.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
 #include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/odometry.hpp"
@@ -116,32 +117,29 @@ CostmapPlanner::CostmapPlanner()
   NavState::register_printer<nav_msgs::msg::Path>(
     [](const nav_msgs::msg::Path & path) {
       std::ostringstream ret;
-      ret << "Path with " << path.poses.size() << " poses and length "
+      ret << "{ " << rclcpp::Time(path.header.stamp).seconds() << " } Path with " <<
+        path.poses.size() << " poses and length "
           << compute_path_length(path) << " m.";
       return ret.str();
     });
 }
 
-std::expected<void, std::string> CostmapPlanner::on_initialize()
+void CostmapPlanner::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
   node->declare_parameter<double>(plugin_name + ".cost_factor", 2.0);
   node->declare_parameter<double>(plugin_name + ".inflation_penalty", 5.0);
-  node->declare_parameter<double>(plugin_name + ".cost_axial", 1.0);
-  node->declare_parameter<double>(plugin_name + ".cost_diagonal", 1.41);
+  node->declare_parameter<double>(plugin_name + ".heuristic_scale", 1.0);
   node->declare_parameter<bool>(plugin_name + ".continuous_replan", true);
 
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
   node->get_parameter(plugin_name + ".inflation_penalty", inflation_penalty_);
-  node->get_parameter(plugin_name + ".cost_axial", cost_axial_);
-  node->get_parameter(plugin_name + ".cost_diagonal", cost_diagonal_);
-  node->get_parameter(plugin_name + ".cost_diagonal", cost_diagonal_);
+  node->get_parameter(plugin_name + ".heuristic_scale", heuristic_scale_);
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
-  return {};
 }
 
 void CostmapPlanner::update(NavState & nav_state)
@@ -159,8 +157,20 @@ void CostmapPlanner::update(NavState & nav_state)
   const auto & map = nav_state.get<Costmap2D>("map.dynamic");
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  if (goals.header.frame_id != get_tf_prefix() + "map") {
+  rclcpp::Time latest_stamp = nav_state.get<rclcpp::Time>("map_time");
+  if (rclcpp::Time(robot_pose.header.stamp, latest_stamp.get_clock_type()) > latest_stamp) {
+    latest_stamp = robot_pose.header.stamp;
+  }
+  if (rclcpp::Time(goals.goals.front().header.stamp,
+      latest_stamp.get_clock_type()) > latest_stamp)
+  {
+    latest_stamp = goals.goals.front().header.stamp;
+  }
+  current_path_.header.stamp = latest_stamp;
+
+  if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",
         goals.header.frame_id.c_str());
     return;
@@ -259,8 +269,8 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
   int width = map.getSizeInCellsX();
   // Precompute constants used inside the neighbor loop
   const double lethal_norm = 1.0 / static_cast<double>(LETHAL_OBSTACLE);
-  const double axial_cost = cost_axial_;
-  const double diagonal_cost = cost_diagonal_;
+  const double axial_cost = 1.0;
+  const double diagonal_cost = std::sqrt(2.0);
   auto idx = [&](int x, int y) {return y * width + x;};
 
   std::priority_queue<GridNode, std::vector<GridNode>, std::greater<>> open;
@@ -271,7 +281,9 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
   std::vector<int> parent_y(total_cells, -1);
   std::vector<double> cost_so_far(total_cells, std::numeric_limits<double>::infinity());
 
-  open.push(GridNode{static_cast<int>(sx), static_cast<int>(sy), 0.0, heuristic(sx, sy, gx, gy)});
+  const double initial_h = heuristic(static_cast<int>(sx), static_cast<int>(sy),
+      static_cast<int>(gx), static_cast<int>(gy)) * heuristic_scale_;
+  open.push(GridNode{static_cast<int>(sx), static_cast<int>(sy), 0.0, initial_h});
   cost_so_far[idx(sx, sy)] = 0.0;
 
   while (!open.empty()) {
@@ -297,7 +309,9 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
 
       if (new_cost < cost_so_far[nid]) {
         cost_so_far[nid] = new_cost;
-        open.push(GridNode{nx, ny, new_cost, new_cost + heuristic(nx, ny, gx, gy)});
+        const double h = heuristic(nx, ny, static_cast<int>(gx), static_cast<int>(gy)) *
+          heuristic_scale_;
+        open.push(GridNode{nx, ny, new_cost, new_cost + h});
         parent_x[nid] = current.x;
         parent_y[nid] = current.y;
       }

@@ -19,8 +19,8 @@
 
 
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
 
-#include <expected>
 #include <fstream>
 
 #include <yaml-cpp/yaml.h>
@@ -53,7 +53,7 @@ RoutesMapsManager::RoutesMapsManager()
 
 RoutesMapsManager::~RoutesMapsManager() = default;
 
-std::expected<void, std::string> RoutesMapsManager::on_initialize()
+void RoutesMapsManager::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -90,7 +90,7 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
     const auto pkgpath = ament_index_cpp::get_package_share_directory(package_name);
     map_path_ = pkgpath + "/" + map_path_file;
   } else {
-    return std::unexpected(
+    throw std::runtime_error(
       "Parameters '" + plugin_name + ".package' and '" + plugin_name +
       ".map_path_file' are not correctly set");
   }
@@ -181,7 +181,7 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
     publish_routes_markers();
     publish_interactive_markers();
   } catch (const std::exception & e) {
-    return std::unexpected(std::string{"Failed to load routes: "} + e.what());
+    throw std::runtime_error(std::string{"Failed to load routes: "} + e.what());
   }
 
   // Instantiate and initialize configured route filters
@@ -205,13 +205,14 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
       std::shared_ptr<RoutesFilter> instance =
         routes_filters_loader_->createSharedInstance(plugin);
 
-      auto result = instance->initialize(node, plugin_name + "." + filter_name, get_tf_prefix());
-      if (!result) {
+      try {
+        instance->initialize(node, plugin_name + "." + filter_name);
+      } catch (const std::exception & e) {
         RCLCPP_ERROR(node->get_logger(),
           "Unable to initialize RoutesFilter %s [%s]. Error: %s",
-          filter_name.c_str(), plugin.c_str(), result.error().c_str());
-        return std::unexpected("Unable to initialize RoutesFilter " + plugin +
-          " . Error: " + result.error());
+          filter_name.c_str(), plugin.c_str(), e.what());
+        throw std::runtime_error("Unable to initialize RoutesFilter " + plugin +
+          " . Error: " + e.what());
       }
 
       routes_filters_.push_back(instance);
@@ -221,12 +222,10 @@ std::expected<void, std::string> RoutesMapsManager::on_initialize()
     } catch (pluginlib::PluginlibException & ex) {
       RCLCPP_ERROR(node->get_logger(),
         "Unable to load plugin easynav::RoutesFilter. Error: %s", ex.what());
-      return std::unexpected("Unable to load plugin easynav::RoutesFilter " +
+      throw std::runtime_error("Unable to load plugin easynav::RoutesFilter " +
         filter_name + " . Error: " + ex.what());
     }
   }
-
-  return {};
 }
 
 void RoutesMapsManager::update(NavState & nav_state)
@@ -386,13 +385,15 @@ void RoutesMapsManager::publish_routes_markers()
     return;
   }
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   visualization_msgs::msg::MarkerArray array;
 
    // First, delete all previous markers in our namespaces so that
    // removed segments do not leave orphaned markers behind.
   {
     visualization_msgs::msg::Marker m;
-    m.header.frame_id = "map";
+    m.header.frame_id = tf_info.map_frame;
     m.action = visualization_msgs::msg::Marker::DELETEALL;
 
     m.ns = "routes_line";
@@ -406,7 +407,7 @@ void RoutesMapsManager::publish_routes_markers()
   for (const auto & seg : routes_) {
     // Line between start and end
     visualization_msgs::msg::Marker line;
-    line.header.frame_id = "map";
+    line.header.frame_id = tf_info.map_frame;
     line.ns = "routes_line";
     line.id = id++;
     line.type = visualization_msgs::msg::Marker::LINE_LIST;
@@ -432,7 +433,7 @@ void RoutesMapsManager::publish_routes_markers()
 
     // Arrow for start orientation (same style as end)
     visualization_msgs::msg::Marker start_arrow;
-    start_arrow.header.frame_id = "map";
+    start_arrow.header.frame_id = tf_info.map_frame;
     start_arrow.ns = "routes_arrow";
     start_arrow.id = id++;
     start_arrow.type = visualization_msgs::msg::Marker::ARROW;
@@ -449,7 +450,7 @@ void RoutesMapsManager::publish_routes_markers()
 
     // Arrow for end orientation (same style)
     visualization_msgs::msg::Marker end_arrow;
-    end_arrow.header.frame_id = "map";
+    end_arrow.header.frame_id = tf_info.map_frame;
     end_arrow.ns = "routes_arrow";
     end_arrow.id = id++;
     end_arrow.type = visualization_msgs::msg::Marker::ARROW;
@@ -475,10 +476,12 @@ void RoutesMapsManager::publish_interactive_markers()
   }
   imarker_server_->clear();
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   for (const auto & seg : routes_) {
     // Per-segment toggle cube (red in normal mode, green in edit mode).
     visualization_msgs::msg::InteractiveMarker mode_marker;
-    mode_marker.header.frame_id = "map";
+    mode_marker.header.frame_id = tf_info.map_frame;
     mode_marker.name = seg.id + "_mode";
     mode_marker.scale = 1.0;
 
@@ -540,14 +543,14 @@ void RoutesMapsManager::publish_interactive_markers()
     }
 
     visualization_msgs::msg::InteractiveMarker start_marker;
-    start_marker.header.frame_id = "map";
+    start_marker.header.frame_id = tf_info.map_frame;
     start_marker.name = seg.id + "_start";
     start_marker.description = "Route " + seg.id + " start";
     start_marker.pose = seg.start;
     start_marker.scale = 1.0;
 
     visualization_msgs::msg::InteractiveMarker end_marker;
-    end_marker.header.frame_id = "map";
+    end_marker.header.frame_id = tf_info.map_frame;
     end_marker.name = seg.id + "_end";
     end_marker.description = "Route " + seg.id + " end";
     end_marker.pose = seg.end;
