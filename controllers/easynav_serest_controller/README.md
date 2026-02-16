@@ -1,23 +1,35 @@
 # easynav_serest_controller
 
+<<<<<<< HEAD
 [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#)
 
 
+=======
+>>>>>>> juanscelyg/rolling
 ## Description
+
 A SeReST (Smooth Error-Responsive Speed and Turning) controller for path tracking.
 
 ## Authors and Maintainers
+
 - **Authors:** Intelligent Robotics Lab
 - **Maintainers:** Francisco Martín Rico <fmrico@gmail.com>
 
 ## Supported ROS 2 Distributions
+
 | Distribution | Status |
 |---|---:|
+<<<<<<< HEAD
+=======
+| humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
+| jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
+>>>>>>> juanscelyg/rolling
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) | 
 | jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
 
 ## Plugin (pluginlib)
+
 - **Plugin Name:** `easynav_serest_controller/SerestController`
 - **Type:** `easynav::SerestController`
 - **Base Class:** `easynav::ControllerMethodBase`
@@ -25,7 +37,11 @@ A SeReST (Smooth Error-Responsive Speed and Turning) controller for path trackin
 - **Description:** A SeReST (Smooth Error-Responsive Speed and Turning) controller for path tracking.
 
 ## Parameters
+
 All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easynav_serest_controller/SerestController/...`.
+
+> This plugin derives from [`easynav::ControllerMethodBase`](https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase).  \
+> See that section for shared collision-checking parameters and debug markers common to all controllers.
 
 | Name | Type | Default | Description |
 |---|---|---:|---|
@@ -68,17 +84,18 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.v_progress_min` | `double` | `0.05` | Minimum forward speed to ensure progress (m/s). |
 | `<plugin>.v_ref` | `double` | `0.6` | Nominal reference speed (m/s). |
 
-
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
+
 This controller communicates through `NavState` (no direct ROS topics in this plugin).
 
-
 ### Services
+
 This package does not create service servers or clients.
 
 ## NavState Keys
+
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `path` | `nav_msgs::msg::Path` | **Read** | Reference path. |
@@ -100,9 +117,10 @@ This package does not create service servers or clients.
 | `serest.debug.goal.in_final_align` | `double/int` | **Write** | Debug metric |
 | `serest.debug.goal.arrived` | `double/int` | **Write** | Debug metric |
 
-
 ## TF Frames
+
 This controller reads pose from `nav_msgs/Odometry` (NavState key `robot_pose`). TF is not directly used in this plugin.
 
 ## License
+
 GPL-3.0-only

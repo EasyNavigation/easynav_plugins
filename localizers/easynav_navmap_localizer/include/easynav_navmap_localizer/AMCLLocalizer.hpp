@@ -24,13 +24,9 @@
 #define EASYNAV_NAVMAP_LOCALIZER__AMCLLOCALIZER_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
 #include <random>
 #include <Eigen/Geometry>
+#include <bonxai/probabilistic_map.hpp>
 
 #include "geometry_msgs/msg/pose_array.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
@@ -79,9 +75,9 @@ public:
    *
    * Sets up publishers, subscribers, and prepares the particle filter.
    *
-   * @return std::expected<void, std::string> Success or error message.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Real-time update of the localization state.
@@ -188,7 +184,7 @@ protected:
   std::vector<Particle> particles_;
 
   /// Random number generator used for sampling noise.
-  std::default_random_engine rng_;
+  std::mt19937 rng_;
 
   /// Current estimated odometry-based pose.
   tf2::Transform pose_;
@@ -234,11 +230,13 @@ protected:
   /// Timestamp of the last reseed event.
   rclcpp::Time last_reseed_;
 
+  /// Timestamp of the last input message (odometry or initial pose).
+  rclcpp::Time last_input_time_;
+
   /**
    * @brief Internal static map.
    */
   std::shared_ptr<Bonxai::ProbabilisticMap> bonxai_map_;
-  ::navmap::NavMap navmap_;
   ::navmap::NavCelId last_cid_ {0};
 
   // PerceptionModel percepcion_model_;

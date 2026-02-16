@@ -20,9 +20,8 @@
 /// \file
 /// \brief Implementation of the SimpleController class.
 
-#include <expected>
-
 #include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include "easynav_simple_controller/SimpleController.hpp"
 
@@ -38,7 +37,7 @@ SimpleController::SimpleController()
 
 SimpleController::~SimpleController() = default;
 
-std::expected<void, std::string>
+void
 SimpleController::on_initialize()
 {
   auto node = get_node();
@@ -86,8 +85,6 @@ SimpleController::on_initialize()
   last_vlin_ = 0.0;
   last_vrot_ = 0.0;
   last_update_ts_ = node->now();
-
-  return {};
 }
 
 
@@ -100,7 +97,7 @@ SimpleController::update_rt(NavState & nav_state)
   if (!nav_state.has("path")) {return;}
   if (!nav_state.has("robot_pose")) {return;}
 
-  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+  const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
 
   if (path.poses.empty()) {
     twist_stamped_.header.frame_id = path.header.frame_id;
@@ -115,7 +112,11 @@ SimpleController::update_rt(NavState & nav_state)
   }
 
   // If we're very close to the final path pose, stop the robot.
+<<<<<<< HEAD
   const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+=======
+  const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+>>>>>>> juanscelyg/rolling
   const auto & goal_pose = path.poses.back().pose;
   double dist_to_goal = get_distance(pose, goal_pose);
   double angle_to_goal = get_diff_angle(pose.orientation, goal_pose.orientation);

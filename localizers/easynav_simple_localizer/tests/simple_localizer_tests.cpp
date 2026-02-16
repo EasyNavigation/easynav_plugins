@@ -104,6 +104,13 @@ TEST_F(AMCLLocalizerTest, IncomingOccupancyGridUpdatesMaps)
 {
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_node2");
   auto manager = std::make_shared<easynav::AMCLLocalizer>();
+  easynav::TFInfo tf_info;
+  tf_info.map_frame = "world_map";
+  tf_info.odom_frame = "world_odom";
+  tf_info.robot_frame = "world_base";
+  tf_info.robot_footprint_frame = "world_footprint_base";
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
   manager->initialize(node, "test2");
 
   rclcpp::executors::SingleThreadedExecutor executor;
@@ -114,7 +121,7 @@ TEST_F(AMCLLocalizerTest, IncomingOccupancyGridUpdatesMaps)
     "test_node2/test2/incoming_map", rclcpp::QoS(1).transient_local().reliable());
 
   nav_msgs::msg::OccupancyGrid grid;
-  grid.header.frame_id = "map";
+  grid.header.frame_id = tf_info.map_frame;
   grid.info.width = 10;
   grid.info.height = 10;
   grid.info.resolution = 0.2;

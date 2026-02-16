@@ -24,11 +24,6 @@
 #define EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "navmap_ros_interfaces/msg/nav_map.hpp"
@@ -36,16 +31,11 @@
 #include "std_srvs/srv/trigger.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
 
-#include "tf2_ros/buffer.hpp"
-#include "tf2_ros/transform_listener.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
 #include "navmap_core/NavMap.hpp"
 
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
 #include "pluginlib/class_loader.hpp"
-
-#include "yaets/tracing.hpp"
 
 namespace easynav
 {
@@ -78,9 +68,9 @@ public:
    *
    * Creates necessary publishers/subscribers and initializes the map instances.
    *
-   * @return std::expected<void, std::string> Success or error string.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.

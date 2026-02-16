@@ -21,31 +21,24 @@
 /// \brief Implementation of the AStarPlanner class using A* on ::navmap::NavMap (triangle graph).
 
 #include <queue>
-#include <unordered_map>
-#include <unordered_set>
 #include <cmath>
 #include <limits>
-#include <tuple>
-#include <optional>
 #include <algorithm>
+#include <cstdint>
 
+#include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_navmap_planner/AStarPlanner.hpp"
 
 #include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/path.hpp"
 #include "navmap_core/NavMap.hpp"
+#include "navmap_ros/conversions.hpp"
 
 namespace easynav
 {
 namespace navmap
 {
-
-static constexpr uint8_t NO_INFORMATION = 255;
-static constexpr uint8_t LETHAL_OBSTACLE = 254;
-static constexpr uint8_t INSCRIBED_INFLATED_OBSTACLE = 253;
-static constexpr uint8_t MAX_NON_OBSTACLE = 252;
-static constexpr uint8_t FREE_SPACE = 0;
 
 static double compute_path_length(const nav_msgs::msg::Path & path)
 {
@@ -63,28 +56,26 @@ AStarPlanner::AStarPlanner()
   NavState::register_printer<nav_msgs::msg::Path>(
     [](const nav_msgs::msg::Path & path) {
       std::ostringstream ret;
-      ret << "Path with " << path.poses.size() << " poses and length "
+      ret << "{ " << rclcpp::Time(path.header.stamp).seconds() << " } Path with " <<
+        path.poses.size() << " poses and length "
           << compute_path_length(path) << " m.";
       return ret.str();
     });
 }
 
-std::expected<void, std::string> AStarPlanner::on_initialize()
+void AStarPlanner::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
   node->declare_parameter<double>(plugin_name + ".cost_factor", 2.0);
-  node->declare_parameter<double>(plugin_name + ".inflation_penalty", 5.0);
   node->declare_parameter<bool>(plugin_name + ".continuous_replan", true);
 
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
-  node->get_parameter(plugin_name + ".inflation_penalty", inflation_penalty_);
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
-  return {};
 }
 
 void AStarPlanner::update(NavState & nav_state)
@@ -94,21 +85,32 @@ void AStarPlanner::update(NavState & nav_state)
     return;
   }
 
+<<<<<<< HEAD
 
   const auto goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty()) {
+=======
+  const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+  if (goals.goals.empty() || !nav_state.has("map.navmap")) {
+>>>>>>> juanscelyg/rolling
     nav_state.set("path", current_path_);
     return;
   }
 
+<<<<<<< HEAD
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
+=======
+  const auto & navmap = nav_state.get<::navmap::NavMap>("map.navmap");
+>>>>>>> juanscelyg/rolling
 
-  const auto robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  if (goals.header.frame_id != get_tf_prefix() + "map") {
-    RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",
-                goals.header.frame_id.c_str());
+  if (goals.header.frame_id != tf_info.map_frame) {
+    RCLCPP_WARN(
+      get_node()->get_logger(), "Goals frame is not 'map': %s",
+      goals.header.frame_id.c_str());
     return;
   }
 
@@ -121,7 +123,11 @@ void AStarPlanner::update(NavState & nav_state)
   }
 
   current_goal_ = goal;
+<<<<<<< HEAD
   auto poses = a_star_path(navmap_, robot_pose.pose.pose, goal);
+=======
+  auto poses = a_star_path(navmap, robot_pose.pose.pose, goal);
+>>>>>>> juanscelyg/rolling
   if (!poses.empty()) {
     current_path_.header.stamp = get_node()->now();
     current_path_.header.frame_id = goals.header.frame_id;
@@ -134,7 +140,11 @@ void AStarPlanner::update(NavState & nav_state)
       current_path_.poses.push_back(std::move(ps));
     }
 
+<<<<<<< HEAD
     current_path_ = path_smoother(current_path_, navmap_);
+=======
+    current_path_ = path_smoother(current_path_, navmap);
+>>>>>>> juanscelyg/rolling
 
     if (path_pub_->get_subscription_count() > 0) {
       path_pub_->publish(current_path_);
@@ -143,7 +153,10 @@ void AStarPlanner::update(NavState & nav_state)
   nav_state.set("path", current_path_);
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> juanscelyg/rolling
 nav_msgs::msg::Path
 AStarPlanner::path_smoother(
   const nav_msgs::msg::Path & in_path,
@@ -168,9 +181,16 @@ AStarPlanner::path_smoother(
   // Fill pts from input and locate cids
   for (size_t i = 0; i < N; ++i) {
     const auto & p = out.poses[i].pose.position;
+<<<<<<< HEAD
     pts[i] = Eigen::Vector3f(static_cast<float>(p.x),
                              static_cast<float>(p.y),
                              static_cast<float>(p.z));
+=======
+    pts[i] = Eigen::Vector3f(
+      static_cast<float>(p.x),
+      static_cast<float>(p.y),
+      static_cast<float>(p.z));
+>>>>>>> juanscelyg/rolling
   }
 
   // Use walking hints to speed up sequential location
@@ -206,7 +226,12 @@ AStarPlanner::path_smoother(
   }
 
   // Helper to fetch triangle vertices (A,B,C) for a cid
+<<<<<<< HEAD
   auto get_triangle_vertices = [&](::navmap::NavCelId cid) -> std::array<Eigen::Vector3f, 3> {
+=======
+  auto get_triangle_vertices =
+    [&](::navmap::NavCelId cid) -> std::array<Eigen::Vector3f, 3> {
+>>>>>>> juanscelyg/rolling
       const ::navmap::NavCel & tri = navmap.navcels[cid];
       const auto A = navmap.positions.at(tri.v[0]);
       const auto B = navmap.positions.at(tri.v[1]);
@@ -215,8 +240,13 @@ AStarPlanner::path_smoother(
     };
 
   // Helper: clamp a 3D point to the triangle of a given cid (closest point)
+<<<<<<< HEAD
   auto clamp_to_triangle = [&](const Eigen::Vector3f & p,
     ::navmap::NavCelId cid) -> Eigen::Vector3f {
+=======
+  auto clamp_to_triangle =
+    [&](const Eigen::Vector3f & p, ::navmap::NavCelId cid) -> Eigen::Vector3f {
+>>>>>>> juanscelyg/rolling
       const auto V = get_triangle_vertices(cid);
       return ::navmap::closest_point_on_triangle(p, V[0], V[1], V[2]);
     };
@@ -271,7 +301,11 @@ AStarPlanner::path_smoother(
       // Clamp to the *original* triangle of this point
       Eigen::Vector3f clamped = clamp_to_triangle(cand3, cids[i]);
 
+<<<<<<< HEAD
       next[i] = clamped; // already lies on triangle plane, z' consistent
+=======
+      next[i] = clamped;  // already lies on triangle plane, z' consistent
+>>>>>>> juanscelyg/rolling
     }
     curr.swap(next);
   }
@@ -287,34 +321,84 @@ AStarPlanner::path_smoother(
   return out;
 }
 
+<<<<<<< HEAD
+=======
+// Helper: detect if a layer exists (optional; if you already have API, adjust accordingly)
+static inline bool layer_exists(const ::navmap::NavMap & nm, const std::string & name)
+{
+  return static_cast<bool>(nm.layers.get(name));
+}
+
+void AStarPlanner::ensure_graph_cache(const ::navmap::NavMap & map)
+{
+  const std::size_t N = map.navcels.size();
+
+  // Cache centroids: only recompute when the number of NavCels changes.
+  if (centroids_.size() != N) {
+    centroids_.resize(N);
+    for (::navmap::NavCelId c = 0; c < static_cast<::navmap::NavCelId>(N); ++c) {
+      const auto cc = map.navcel_centroid(c);
+      centroids_[c] = Eigen::Vector3f{cc.x(), cc.y(), cc.z()};
+    }
+  }
+
+  // Ensure occupancy buffer has the right size (values are filled per-planning call).
+  if (occ_.size() != N) {
+    occ_.resize(N);
+  }
+
+  // Resize and reset A* buffers.
+  const double inf = std::numeric_limits<double>::infinity();
+
+  if (g_.size() != N) {
+    g_.assign(N, inf);
+  } else {
+    std::fill(g_.begin(), g_.end(), inf);
+  }
+
+  if (parent_.size() != N) {
+    parent_.assign(N, std::numeric_limits<::navmap::NavCelId>::max());
+  } else {
+    std::fill(
+      parent_.begin(), parent_.end(),
+      std::numeric_limits<::navmap::NavCelId>::max());
+  }
+}
+
+>>>>>>> juanscelyg/rolling
 std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   const ::navmap::NavMap & nm,
   const geometry_msgs::msg::Pose & start,
   const geometry_msgs::msg::Pose & goal)
 {
   using ::navmap::NavCelId;
+  using namespace navmap_ros;
 
   if (nm.navcels.empty()) {return {};}
 
-  // 1) Locate start & goal navcels (fallback to closest triangle)
-  size_t sidx_s = 0, sidx_g = 0;
+  // 1) Locate start and goal NavCels (fallback to closest triangle if necessary)
+  std::size_t sidx_s = 0, sidx_g = 0;
   NavCelId cid_start = 0, cid_goal = 0;
-  Eigen::Vector3f bary; Eigen::Vector3f hit;
+  Eigen::Vector3f bary;
+  Eigen::Vector3f hit;
 
   Eigen::Vector3f pS(start.position.x, start.position.y, start.position.z);
   Eigen::Vector3f pG(goal.position.x, goal.position.y, goal.position.z);
 
   bool okS = nm.locate_navcel(pS, sidx_s, cid_start, bary, &hit);
   if (!okS) {
-    Eigen::Vector3f q; float d2;
+    Eigen::Vector3f q;
+    float d2;
     if (!nm.closest_navcel(pS, sidx_s, cid_start, q, d2)) {return {};}
   }
   bool okG = nm.locate_navcel(pG, sidx_g, cid_goal, bary, &hit);
   if (!okG) {
-    Eigen::Vector3f q; float d2;
+    Eigen::Vector3f q;
+    float d2;
     if (!nm.closest_navcel(pG, sidx_g, cid_goal, q, d2)) {return {};}
   }
 
+<<<<<<< HEAD
   const size_t N = nm.navcels.size();
 
   // 3) Precompute centroids (2D) for consistent metric and heuristic
@@ -332,69 +416,161 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   auto step_cost = [&](NavCelId from, NavCelId to) -> double {
       const double dist = static_cast<double>((C[from] - C[to]).norm());
       return dist;
+=======
+  const std::size_t N = nm.navcels.size();
+
+  // 2) Choose cost layer: prefer "inflated_obstacles", fallback to "obstacles"
+  const std::string cost_layer =
+    layer_exists(nm, "inflated_obstacles") ? "inflated_obstacles" : "obstacles";
+
+  // Ensure cached buffers match the current NavMap.
+  ensure_graph_cache(nm);
+
+  // Precomputed centroids in `centroids_` are used for cost, heuristic, and edge lengths.
+  auto euclid = [&](NavCelId a, NavCelId b) -> double {
+      const auto d = centroids_[a] - centroids_[b];
+      return static_cast<double>(d.norm());
     };
 
-  // 4) A* on triangle graph
-  struct Node { NavCelId cid; double f; };
-  struct Cmp { bool operator()(const Node & a, const Node & b) const {return a.f > b.f;} };
+  // Cache per-NavCel uint8_t cost values (0..255) for the selected layer.
+  for (NavCelId c = 0; c < static_cast<NavCelId>(N); ++c) {
+    // If the cell has no stored value, assume FREE_SPACE (0).
+    occ_[c] = nm.layer_get<std::uint8_t>(cost_layer, c, FREE_SPACE);
+  }
+
+  // Traversability: block lethal and unknown.
+  auto traversable = [&](NavCelId c) -> bool {
+      const std::uint8_t v = occ_[c];
+      return (v != LETHAL_OBSTACLE) && (v != NO_INFORMATION);
+>>>>>>> juanscelyg/rolling
+    };
+
+  // Normalize a uint8_t cost into [0, 1]; FREE_SPACE=0 → 0.0; INSCRIBED=253 → ~1.0.
+  // Returns +inf for non-traversable (lethal/unknown).
+  auto normalized_cost = [&](NavCelId c) -> double {
+      const std::uint8_t v = occ_[c];
+      if (v == LETHAL_OBSTACLE || v == NO_INFORMATION) {
+        return std::numeric_limits<double>::infinity();
+      }
+      // Cap at INSCRIBED_INFLATED_OBSTACLE to avoid division by 0 at 254/255.
+      const double max_cost = static_cast<double>(INSCRIBED_INFLATED_OBSTACLE);  // 253
+      return static_cast<double>(v) / max_cost;  // FREE=0 → 0.0, INSCRIBED=253 → 1.0
+    };
+
+  // If start or goal lands on non-traversable, do not plan.
+  if (!traversable(cid_start) || !traversable(cid_goal)) {
+    return {};
+  }
+
+  // Weighted step cost:
+  //   base geometric cost (edge length) scaled by (cost_factor_ + inflation_penalty_ * norm_cost(target)).
+  // This preserves admissibility with heuristic h = Euclidean distance, since the minimal multiplier ≥ 1.
+  auto step_cost = [&](NavCelId from, NavCelId to) -> double {
+      const double base = euclid(from, to);
+      if (!std::isfinite(base) || base <= 0.0) {
+        return std::numeric_limits<double>::infinity();
+      }
+
+      const double ncost = normalized_cost(to);
+      if (!std::isfinite(ncost)) {
+        return std::numeric_limits<double>::infinity();
+      }
+
+      // Ensure the multiplier is at least 1.0 so h = euclid remains admissible.
+      // If your cost_factor_ is already ≥ 1, this holds. Otherwise we clamp.
+      const double cf = std::max(1.0, static_cast<double>(cost_factor_));
+      const double mult = cf + static_cast<double>(inflation_penalty_) * ncost;
+
+      return base * mult;
+    };
+
+  // 4) A* search on the triangle graph, using cost-aware edges.
+  struct Node
+  {
+    NavCelId cid;
+    double f;
+  };
+  struct Cmp
+  {
+    bool operator()(const Node & a, const Node & b) const {return a.f > b.f;}
+  };
 
   std::priority_queue<Node, std::vector<Node>, Cmp> open;
-  std::vector<double> g(N, std::numeric_limits<double>::infinity());
-  std::vector<uint8_t> in_open(N, 0);
-  std::vector<NavCelId> parent(N, std::numeric_limits<NavCelId>::max());
 
-  g[cid_start] = 0.0;
+  auto h = [&](NavCelId a, NavCelId b) -> double {
+      // Heuristic: pure Euclidean distance → admissible (never overestimates).
+      return euclid(a, b);
+    };
+
+  g_[cid_start] = 0.0;
   open.push(Node{cid_start, h(cid_start, cid_goal)});
-  in_open[cid_start] = 1;
 
   while (!open.empty()) {
-    const auto cur = open.top(); open.pop();
+    const auto cur = open.top();
+    open.pop();
     const NavCelId u = cur.cid;
 
     if (u == cid_goal) {break;}
 
-    // Optional: restrict to the goal surface (comment if you want cross-surface paths via explicit neighbors)
-    // const size_t surface_goal = sidx_g;
-    // if (surface_goal != sidx_s) {
-    //   // do nothing special; graph neighbors already encode connectivity
-    // }
+    const auto & tri = nm.navcels[u];
+    for (int e = 0; e < 3; ++e) {
+      NavCelId v = tri.neighbor[e];
+      if (v == std::numeric_limits<std::uint32_t>::max()) {
+        continue;
+      }
+      const std::size_t vidx = static_cast<std::size_t>(v);
+      if (vidx >= N) {
+        continue;
+      }
 
+<<<<<<< HEAD
     for (NavCelId v : nm.navcel_neighbors(u)) {
       const size_t vidx = static_cast<size_t>(v);
       if (vidx >= N) {continue;}
+=======
+      // Skip non-traversable neighbors (lethal or unknown).
+      if (!traversable(v)) {continue;}
+>>>>>>> juanscelyg/rolling
 
       const double sc = step_cost(u, v);
       if (!std::isfinite(sc)) {continue;}
 
-      const double tentative = g[u] + sc;
-      if (tentative < g[v]) {
-        g[v] = tentative;
-        parent[v] = u;
+      const double tentative = g_[u] + sc;
+      if (tentative < g_[v]) {
+        g_[v] = tentative;
+        parent_[v] = u;
         const double f = tentative + h(v, cid_goal);
         open.push(Node{v, f});
-        in_open[v] = 1;
       }
     }
   }
 
-  if (!std::isfinite(g[cid_goal])) {
+  if (!std::isfinite(g_[cid_goal])) {
     return {};
   }
 
-  // 5) Reconstruct path (centroidal polyline)
+  // 5) Path reconstruction (centroid-based polyline).
   std::vector<geometry_msgs::msg::Pose> path;
-  for (NavCelId c = cid_goal; c != std::numeric_limits<NavCelId>::max(); c = parent[c]) {
+  for (NavCelId c = cid_goal;
+    c != std::numeric_limits<NavCelId>::max();
+    c = parent_[c])
+  {
     geometry_msgs::msg::Pose p;
+<<<<<<< HEAD
     p.position.x = C[c].x();
     p.position.y = C[c].y();
     p.position.z = C[c].z();
+=======
+    p.position.x = centroids_[c].x();
+    p.position.y = centroids_[c].y();
+    p.position.z = centroids_[c].z();
+>>>>>>> juanscelyg/rolling
     p.orientation = goal.orientation;
     path.push_back(std::move(p));
     if (c == cid_start) {break;}
   }
   std::reverse(path.begin(), path.end());
 
-  // Ensure at least goal pose
   if (path.empty()) {path.push_back(goal);}
   return path;
 }

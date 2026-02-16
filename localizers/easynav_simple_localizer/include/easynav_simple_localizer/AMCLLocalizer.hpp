@@ -24,11 +24,6 @@
 #define EASYNAV_SIMPLE_LOCALIZER__AMCLLOCALIZER_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
 #include <random>
 #include <Eigen/Geometry>
 
@@ -72,9 +67,9 @@ public:
    *
    * Sets up publishers, subscribers, and prepares the particle filter.
    *
-   * @return std::expected<void, std::string> Success or error message.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Real-time update of the localization state.
@@ -209,6 +204,9 @@ protected:
 
   /// Timestamp of the last reseed event.
   rclcpp::Time last_reseed_;
+
+  /// Timestamp of the last input message (odometry or initial pose).
+  rclcpp::Time last_input_time_;
 };
 
 }  // namespace easynav

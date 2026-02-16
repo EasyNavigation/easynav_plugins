@@ -18,7 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
@@ -40,11 +39,9 @@ ObstacleFilter::ObstacleFilter()
 
 }
 
-std::expected<void, std::string>
+void
 ObstacleFilter::on_initialize()
-{
-  return {};
-}
+{}
 
 void
 ObstacleFilter::update(::easynav::NavState & nav_state)
@@ -58,6 +55,7 @@ ObstacleFilter::update(::easynav::NavState & nav_state)
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
   octomap_ = nav_state.get<::octomap::Octomap>("map");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (!octomap_.layer_copy<uint8_t>("occupancy", "obstacles")) {
     RCLCPP_ERROR(parent_node_->get_logger(), "Error copying layers at ObstacleFilter");
@@ -66,7 +64,11 @@ ObstacleFilter::update(::easynav::NavState & nav_state)
 
   auto fused = PointPerceptionsOpsView(perceptions)
     .downsample(get_map_resolution())
+<<<<<<< HEAD
     .fuse(get_tf_prefix() + "map")
+=======
+    .fuse(tf_info.map_frame)
+>>>>>>> juanscelyg/rolling
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .as_points();
 

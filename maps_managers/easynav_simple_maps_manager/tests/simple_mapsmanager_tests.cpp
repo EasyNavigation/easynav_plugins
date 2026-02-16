@@ -21,12 +21,12 @@
 
 #include "easynav_simple_common/SimpleMap.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "tf2_ros/transform_listener.hpp"
 
 #include "std_srvs/srv/trigger.hpp"
 
@@ -40,18 +40,6 @@ protected:
   void SetUp() override
   {
     rclcpp::init(0, nullptr);
-
-    easynav::NavState::register_printer<easynav::PointPerceptions>(
-      [](const easynav::PointPerceptions & perceptions) {
-        std::ostringstream ret;
-        ret << "PointPerception " << perceptions.size() << " with:\n";
-        for (const auto & perception : perceptions) {
-          ret << "\t[" << static_cast<const void *>(perception.get()) << "] --> "
-              << perception->data.size() << " points in frame [" << perception->frame_id
-              << "] with ts " << perception->stamp.seconds() << "\n";
-        }
-        return ret.str();
-      });
   }
 
   void TearDown() override
@@ -66,6 +54,13 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
 {
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_node");
   auto manager = std::make_shared<easynav::SimpleMapsManager>();
+  easynav::TFInfo tf_info;
+  tf_info.map_frame = "world_map";
+  tf_info.odom_frame = "world_odom";
+  tf_info.robot_frame = "world_base";
+  tf_info.robot_footprint_frame = "world_footprint_base";
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
   manager->initialize(node, "test");
 
   auto tf_buffer = easynav::RTTFBuffer::getInstance(node->get_clock());
@@ -124,6 +119,13 @@ TEST_F(SimpleMapsManagerTest, IncomingOccupancyGridUpdatesMaps)
 {
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_node2");
   auto manager = std::make_shared<easynav::SimpleMapsManager>();
+  easynav::TFInfo tf_info;
+  tf_info.map_frame = "world_map";
+  tf_info.odom_frame = "world_odom";
+  tf_info.robot_frame = "world_base";
+  tf_info.robot_footprint_frame = "world_footprint_base";
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
   manager->initialize(node, "test2");
 
   easynav::NavState navstate;
@@ -136,7 +138,7 @@ TEST_F(SimpleMapsManagerTest, IncomingOccupancyGridUpdatesMaps)
     "test_node2/test2/incoming_map", rclcpp::QoS(1).transient_local().reliable());
 
   nav_msgs::msg::OccupancyGrid grid;
-  grid.header.frame_id = "map";
+  grid.header.frame_id = tf_info.map_frame;
   grid.info.width = 10;
   grid.info.height = 10;
   grid.info.resolution = 0.2;
@@ -167,6 +169,13 @@ TEST_F(SimpleMapsManagerTest, SavemapServiceWorks)
 {
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_savemap_node");
   auto manager = std::make_shared<easynav::SimpleMapsManager>();
+  easynav::TFInfo tf_info;
+  tf_info.map_frame = "world_map";
+  tf_info.odom_frame = "world_odom";
+  tf_info.robot_frame = "world_base";
+  tf_info.robot_footprint_frame = "world_footprint_base";
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
   manager->initialize(node, "test_savemap");
 
   easynav::SimpleMap map_static;
