@@ -4,12 +4,9 @@
 [![rolling](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/rolling.yaml/badge.svg?branch=rolling)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/rolling.yaml)
 [![kilted](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/kilted.yaml/badge.svg?branch=kilted)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/kilted.yaml)
 [![jazzy](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/jazzy.yaml/badge.svg?branch=jazzy)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/jazzy.yaml)
-<<<<<<< HEAD
-=======
 [![humble](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/humble.yaml/badge.svg?branch=humble)](https://github.com/EasyNavigation/easynav_plugins/actions/workflows/humble.yaml)
 
 📋 Roadmap Project: [RoadMap](https://github.com/EasyNavigation/EasyNavigation/blob/rolling/ROADMAP.md)
->>>>>>> juanscelyg/rolling
 
 ## Description
 

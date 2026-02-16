@@ -1,11 +1,7 @@
 # easynav_mppi_controller
 
-<<<<<<< HEAD
 [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#)
 
-
-=======
->>>>>>> juanscelyg/rolling
 ## Description
 
 A Model Predictive Path Integral (MPPI) controller implementation for Easy Navigation.

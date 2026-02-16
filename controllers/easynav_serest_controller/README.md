@@ -1,11 +1,8 @@
 # easynav_serest_controller
 
-<<<<<<< HEAD
 [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#)
 
 
-=======
->>>>>>> juanscelyg/rolling
 ## Description
 
 A SeReST (Smooth Error-Responsive Speed and Turning) controller for path tracking.
@@ -19,11 +16,8 @@ A SeReST (Smooth Error-Responsive Speed and Turning) controller for path trackin
 
 | Distribution | Status |
 |---|---:|
-<<<<<<< HEAD
-=======
 | humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
 | jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
->>>>>>> juanscelyg/rolling
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) | 
 | jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
