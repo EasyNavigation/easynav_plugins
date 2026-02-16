@@ -600,17 +600,17 @@ AMCLLocalizer::correct(NavState & nav_state)
   }
 
   auto latest_time = [](const PointPerceptions & perceptions){
-    rclcpp::Time latest_stamp;
-    bool inited = false;
+      rclcpp::Time latest_stamp;
+      bool inited = false;
 
-    for (const auto & perception : perceptions) {
-      if (!inited || perception->stamp > latest_stamp) {
-        latest_stamp = perception->stamp;
-        inited = true;
+      for (const auto & perception : perceptions) {
+        if (!inited || perception->stamp > latest_stamp) {
+          latest_stamp = perception->stamp;
+          inited = true;
+        }
       }
-    }
-    return latest_stamp;
-  };
+      return latest_stamp;
+    };
 
   last_input_time_ = latest_time(perceptions);
 
