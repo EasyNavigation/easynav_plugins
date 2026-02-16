@@ -55,18 +55,11 @@ ObstacleFilter::update(NavState & nav_state)
   Costmap2D & dynamic_map = *dynamic_map_ptr;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-<<<<<<< HEAD
-  auto fused = PointPerceptionsOpsView(perceptions)
-    .downsample(dynamic_map.getResolution())
-    .fuse(get_tf_prefix() + "map")
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-    .as_points();
-=======
   rclcpp::Time stamp;
 
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(dynamic_map.getResolution())
-  .fuse(tf_info.map_frame, stamp, false)
+  .fuse(tf_info.robot_frame)
   .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN});
 
   const auto & fused = view.as_points();
@@ -77,7 +70,6 @@ ObstacleFilter::update(NavState & nav_state)
   double min_y = std::numeric_limits<double>::max();
   double max_x = std::numeric_limits<double>::lowest();
   double max_y = std::numeric_limits<double>::lowest();
->>>>>>> juanscelyg/rolling
 
   for (const auto & p : fused) {
     min_x = std::min(min_x, static_cast<double>(p.x));

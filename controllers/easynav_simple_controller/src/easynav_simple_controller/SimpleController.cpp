@@ -112,11 +112,7 @@ SimpleController::update_rt(NavState & nav_state)
   }
 
   // If we're very close to the final path pose, stop the robot.
-<<<<<<< HEAD
-  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
-=======
   const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
->>>>>>> juanscelyg/rolling
   const auto & goal_pose = path.poses.back().pose;
   double dist_to_goal = get_distance(pose, goal_pose);
   double angle_to_goal = get_diff_angle(pose.orientation, goal_pose.orientation);

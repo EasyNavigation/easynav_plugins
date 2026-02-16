@@ -85,23 +85,13 @@ void AStarPlanner::update(NavState & nav_state)
     return;
   }
 
-<<<<<<< HEAD
-
-  const auto goals = nav_state.get<nav_msgs::msg::Goals>("goals");
-  if (goals.goals.empty()) {
-=======
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty() || !nav_state.has("map.navmap")) {
->>>>>>> juanscelyg/rolling
     nav_state.set("path", current_path_);
     return;
   }
 
-<<<<<<< HEAD
-  navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
-=======
   const auto & navmap = nav_state.get<::navmap::NavMap>("map.navmap");
->>>>>>> juanscelyg/rolling
 
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
@@ -123,11 +113,7 @@ void AStarPlanner::update(NavState & nav_state)
   }
 
   current_goal_ = goal;
-<<<<<<< HEAD
-  auto poses = a_star_path(navmap_, robot_pose.pose.pose, goal);
-=======
   auto poses = a_star_path(navmap, robot_pose.pose.pose, goal);
->>>>>>> juanscelyg/rolling
   if (!poses.empty()) {
     current_path_.header.stamp = get_node()->now();
     current_path_.header.frame_id = goals.header.frame_id;
@@ -140,11 +126,7 @@ void AStarPlanner::update(NavState & nav_state)
       current_path_.poses.push_back(std::move(ps));
     }
 
-<<<<<<< HEAD
-    current_path_ = path_smoother(current_path_, navmap_);
-=======
     current_path_ = path_smoother(current_path_, navmap);
->>>>>>> juanscelyg/rolling
 
     if (path_pub_->get_subscription_count() > 0) {
       path_pub_->publish(current_path_);
@@ -153,10 +135,6 @@ void AStarPlanner::update(NavState & nav_state)
   nav_state.set("path", current_path_);
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> juanscelyg/rolling
 nav_msgs::msg::Path
 AStarPlanner::path_smoother(
   const nav_msgs::msg::Path & in_path,
@@ -181,16 +159,10 @@ AStarPlanner::path_smoother(
   // Fill pts from input and locate cids
   for (size_t i = 0; i < N; ++i) {
     const auto & p = out.poses[i].pose.position;
-<<<<<<< HEAD
-    pts[i] = Eigen::Vector3f(static_cast<float>(p.x),
-                             static_cast<float>(p.y),
-                             static_cast<float>(p.z));
-=======
     pts[i] = Eigen::Vector3f(
       static_cast<float>(p.x),
       static_cast<float>(p.y),
       static_cast<float>(p.z));
->>>>>>> juanscelyg/rolling
   }
 
   // Use walking hints to speed up sequential location
@@ -226,12 +198,8 @@ AStarPlanner::path_smoother(
   }
 
   // Helper to fetch triangle vertices (A,B,C) for a cid
-<<<<<<< HEAD
-  auto get_triangle_vertices = [&](::navmap::NavCelId cid) -> std::array<Eigen::Vector3f, 3> {
-=======
   auto get_triangle_vertices =
     [&](::navmap::NavCelId cid) -> std::array<Eigen::Vector3f, 3> {
->>>>>>> juanscelyg/rolling
       const ::navmap::NavCel & tri = navmap.navcels[cid];
       const auto A = navmap.positions.at(tri.v[0]);
       const auto B = navmap.positions.at(tri.v[1]);
@@ -240,13 +208,8 @@ AStarPlanner::path_smoother(
     };
 
   // Helper: clamp a 3D point to the triangle of a given cid (closest point)
-<<<<<<< HEAD
-  auto clamp_to_triangle = [&](const Eigen::Vector3f & p,
-    ::navmap::NavCelId cid) -> Eigen::Vector3f {
-=======
   auto clamp_to_triangle =
     [&](const Eigen::Vector3f & p, ::navmap::NavCelId cid) -> Eigen::Vector3f {
->>>>>>> juanscelyg/rolling
       const auto V = get_triangle_vertices(cid);
       return ::navmap::closest_point_on_triangle(p, V[0], V[1], V[2]);
     };
@@ -301,11 +264,7 @@ AStarPlanner::path_smoother(
       // Clamp to the *original* triangle of this point
       Eigen::Vector3f clamped = clamp_to_triangle(cand3, cids[i]);
 
-<<<<<<< HEAD
-      next[i] = clamped; // already lies on triangle plane, z' consistent
-=======
       next[i] = clamped;  // already lies on triangle plane, z' consistent
->>>>>>> juanscelyg/rolling
     }
     curr.swap(next);
   }
@@ -321,8 +280,6 @@ AStarPlanner::path_smoother(
   return out;
 }
 
-<<<<<<< HEAD
-=======
 // Helper: detect if a layer exists (optional; if you already have API, adjust accordingly)
 static inline bool layer_exists(const ::navmap::NavMap & nm, const std::string & name)
 {
@@ -365,7 +322,6 @@ void AStarPlanner::ensure_graph_cache(const ::navmap::NavMap & map)
   }
 }
 
->>>>>>> juanscelyg/rolling
 std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   const ::navmap::NavMap & nm,
   const geometry_msgs::msg::Pose & start,
@@ -398,25 +354,6 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
     if (!nm.closest_navcel(pG, sidx_g, cid_goal, q, d2)) {return {};}
   }
 
-<<<<<<< HEAD
-  const size_t N = nm.navcels.size();
-
-  // 3) Precompute centroids (2D) for consistent metric and heuristic
-  std::vector<Eigen::Vector3f> C(N);
-  for (NavCelId c = 0; c < N; ++c) {
-    const auto cc = nm.navcel_centroid(c);
-    C[c] = {cc.x(), cc.y(), cc.z()};
-  }
-
-  auto h = [&](NavCelId a, NavCelId b) -> double {
-      const auto d = C[a] - C[b];
-      return static_cast<double>(d.norm());
-    };
-
-  auto step_cost = [&](NavCelId from, NavCelId to) -> double {
-      const double dist = static_cast<double>((C[from] - C[to]).norm());
-      return dist;
-=======
   const std::size_t N = nm.navcels.size();
 
   // 2) Choose cost layer: prefer "inflated_obstacles", fallback to "obstacles"
@@ -442,7 +379,6 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   auto traversable = [&](NavCelId c) -> bool {
       const std::uint8_t v = occ_[c];
       return (v != LETHAL_OBSTACLE) && (v != NO_INFORMATION);
->>>>>>> juanscelyg/rolling
     };
 
   // Normalize a uint8_t cost into [0, 1]; FREE_SPACE=0 → 0.0; INSCRIBED=253 → ~1.0.
@@ -523,14 +459,8 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
         continue;
       }
 
-<<<<<<< HEAD
-    for (NavCelId v : nm.navcel_neighbors(u)) {
-      const size_t vidx = static_cast<size_t>(v);
-      if (vidx >= N) {continue;}
-=======
       // Skip non-traversable neighbors (lethal or unknown).
       if (!traversable(v)) {continue;}
->>>>>>> juanscelyg/rolling
 
       const double sc = step_cost(u, v);
       if (!std::isfinite(sc)) {continue;}
@@ -556,15 +486,9 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
     c = parent_[c])
   {
     geometry_msgs::msg::Pose p;
-<<<<<<< HEAD
-    p.position.x = C[c].x();
-    p.position.y = C[c].y();
-    p.position.z = C[c].z();
-=======
     p.position.x = centroids_[c].x();
     p.position.y = centroids_[c].y();
     p.position.z = centroids_[c].z();
->>>>>>> juanscelyg/rolling
     p.orientation = goal.orientation;
     path.push_back(std::move(p));
     if (c == cid_start) {break;}

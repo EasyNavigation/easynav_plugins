@@ -190,11 +190,7 @@ MPPIController::update_rt(NavState & nav_state)
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})
-<<<<<<< HEAD
-    .fuse("map")
-=======
     .fuse(tf_info.map_frame)
->>>>>>> juanscelyg/rolling
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(0.1)

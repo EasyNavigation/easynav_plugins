@@ -301,33 +301,34 @@ SerestController::closest_obstacle_distance(
   // 2) Analyze distance sensors
   if (!nav_state.has("points")) {return std::numeric_limits<double>::infinity();}
 
-<<<<<<< HEAD
-  const auto perceptions = nav_state.get<PointPerceptions>("points");
-  auto fused = PointPerceptionsOpsView(perceptions)
-    .downsample(0.3)
-    .fuse(get_tf_prefix() + "base_link")
-    .filter({-dist_search_radius_, -dist_search_radius_, NAN},
-      {dist_search_radius_, dist_search_radius_, 2.0})
-    .collapse({NAN, NAN, 0.1})
-    .downsample(0.3)
-    .as_points();
-=======
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(0.3)
-  .fuse(tf_info.robot_footprint_frame)
+  .fuse(tf_info.robot_frame)
   .filter({-dist_search_radius_, -dist_search_radius_, NAN},
     {dist_search_radius_, dist_search_radius_, 2.0})
   .collapse({NAN, NAN, 0.1})
   .downsample(0.3);
   const auto & fused = view.as_points();
 
-  if (last_input_ts_ < view.get_latest_stamp()) {
-    last_input_ts_ = view.get_latest_stamp();
+  auto latest_time = [](const PointPerceptions & perceptions){
+    rclcpp::Time latest_stamp;
+    bool inited = false;
+
+    for (const auto & perception : perceptions) {
+      if (!inited || perception->stamp > latest_stamp) {
+        latest_stamp = perception->stamp;
+        inited = true;
+      }
+    }
+    return latest_stamp;
+  };
+
+  if (last_input_ts_ < latest_time(perceptions)) {
+    last_input_ts_ = latest_time(perceptions);
   }
->>>>>>> juanscelyg/rolling
 
   double min_dist = std::numeric_limits<double>::infinity();
   for (const auto p : fused) {
@@ -386,7 +387,7 @@ SerestController::fetch_required_inputs(
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
-    publish_stop(nav_state, tf_info.robot_footprint_frame);
+    publish_stop(nav_state, tf_info.robot_frame);
     return false;
   }
 

@@ -893,7 +893,7 @@ void UkfWrapper::loadParams()
 
   map_frame_id_ = tf_info.map_frame;
   odom_frame_id_ = tf_info.odom_frame;
-  base_link_frame_id_ = tf_info.robot_footprint_frame;
+  base_link_frame_id_ = tf_info.robot_frame;
   // World frame comes from Easynav TFInfo configuration
   world_frame_id_ = tf_info.map_frame;
 

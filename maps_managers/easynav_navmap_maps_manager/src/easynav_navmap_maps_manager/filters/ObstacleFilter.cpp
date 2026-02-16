@@ -56,17 +56,10 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
 
   navmap_.layer_clear<uint8_t>(get_layer_name(), navmap_ros::FREE_SPACE);
 
-<<<<<<< HEAD
-  auto fused = PointPerceptionsOpsView(perceptions)
-    .downsample(get_map_resolution())
-    .fuse(get_tf_prefix() + "map")
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-=======
   const auto & points = PointPerceptionsOpsView(perceptions)
     .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
     .downsample(0.3)
     .fuse(tf_info.map_frame)
->>>>>>> juanscelyg/rolling
     .as_points();
 
   const float voxel_xy = 0.30f;

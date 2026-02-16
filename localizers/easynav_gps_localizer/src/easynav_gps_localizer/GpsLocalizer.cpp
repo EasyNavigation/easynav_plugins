@@ -35,7 +35,7 @@ void GpsLocalizer::on_initialize()
   odom_.header.stamp = get_node()->now();
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_.header.frame_id = tf_info.map_frame;
-  odom_.child_frame_id = tf_info.robot_footprint_frame;
+  odom_.child_frame_id = tf_info.robot_frame;
 
   // Create subscriber to GPS data
   gps_subscriber_ = node->create_subscription<sensor_msgs::msg::NavSatFix>(
@@ -114,7 +114,7 @@ void GpsLocalizer::update(NavState & nav_state)
   odom_.header.stamp = gps_msg_.header.stamp;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_.header.frame_id = tf_info.map_frame;
-  odom_.child_frame_id = tf_info.robot_footprint_frame;
+  odom_.child_frame_id = tf_info.robot_frame;
   odom_.pose.pose.position.x = utm_x - origin_utm_.x;
   odom_.pose.pose.position.y = utm_y - origin_utm_.y;
 
