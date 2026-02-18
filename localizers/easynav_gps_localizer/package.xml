@@ -6,7 +6,7 @@
   <description>Easy Navigation: GPS Localizer package.</description>
   <maintainer email="josemiguel.guerrero@urjc.es">Jose Miguel Guerrero Hernandez</maintainer>
   
-  <license>GPL-3.0-only</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
