@@ -25,4 +25,4 @@ Easy Navigation: VFF Controller package.
 
 
 ## License
-GPL-3.0-only
+Apache-2.0

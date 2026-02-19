@@ -66,4 +66,4 @@ This plugin does not create subscriptions or services directly; it reads inputs 
 ---
 
 ## License
-GPL-3.0-only
+Apache-2.0

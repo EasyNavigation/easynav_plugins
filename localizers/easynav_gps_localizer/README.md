@@ -52,4 +52,4 @@ This package does not create service servers or clients.
 
 
 ## License
-GPL-3.0-only
+Apache-2.0
