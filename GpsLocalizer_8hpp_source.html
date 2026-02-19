@@ -94,82 +94,78 @@ $(function(){ initResizable(false); });
 <a href="GpsLocalizer_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2025 Intelligent Robotics Lab</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">//</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// This file is part of the project Easy Navigation (EasyNav in short)</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">// licensed under the GNU General Public License v3.0.</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">// See &lt;http://www.gnu.org/licenses/&gt; for details.</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">//</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">// Easy Navigation program is free software: you can redistribute it and/or modify</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">// it under the terms of the GNU General Public License as published by</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">// the Free Software Foundation, either version 3 of the License, or</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">// (at your option) any later version.</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">//</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// This program is distributed in the hope that it will be useful,</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">// GNU General Public License for more details.</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">//</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">// You should have received a copy of the GNU General Public License</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">// along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#ifndef EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#define EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;nav_msgs/msg/odometry.hpp&quot;</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;sensor_msgs/msg/nav_sat_fix.hpp&quot;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;easynav_core/LocalizerMethodBase.hpp&quot;</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &quot;tf2_ros/static_transform_broadcaster.hpp&quot;</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &quot;sensor_msgs/msg/imu.hpp&quot;</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;GeographicLib/UTMUPS.hpp&gt;</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>{</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
-<div class="foldopen" id="foldopen00044" data-start="{" data-end="};">
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classeasynav_1_1GpsLocalizer.html">   44</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#ad72a29008719b8d181200952457ed05e">GpsLocalizer</a> : <span class="keyword">public</span> easynav::LocalizerMethodBase</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>{</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classeasynav_1_1GpsLocalizer.html#ad72a29008719b8d181200952457ed05e">   50</a></span>  <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#ad72a29008719b8d181200952457ed05e">GpsLocalizer</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classeasynav_1_1GpsLocalizer.html#a79cedcb4acbf9e92642ca2ec1d1f85c0">   55</a></span>  <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#a79cedcb4acbf9e92642ca2ec1d1f85c0">~GpsLocalizer</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#a6ed380ba537bbe9a85710810db50a95c">update_rt</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#a24ddfd2eba3d3d6a90d492e8d25ff0da">update</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  nav_msgs::msg::Odometry odom_;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  geometry_msgs::msg::Point origin_utm_;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  rclcpp::Publisher&lt;nav_msgs::msg::Odometry&gt;::SharedPtr odom_pub_;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  rclcpp::Subscription&lt;sensor_msgs::msg::NavSatFix&gt;::SharedPtr gps_subscriber_;</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  rclcpp::Subscription&lt;sensor_msgs::msg::Imu&gt;::SharedPtr imu_subscriber_;</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>  sensor_msgs::msg::NavSatFix gps_msg_;</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  sensor_msgs::msg::Imu imu_msg_;</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>  std::shared_ptr&lt;tf2_ros::StaticTransformBroadcaster&gt; static_broadcaster_;</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>  <span class="keywordtype">void</span> gps_callback(<span class="keyword">const</span> sensor_msgs::msg::NavSatFix::SharedPtr msg);</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>  <span class="keywordtype">void</span> imu_callback(<span class="keyword">const</span> sensor_msgs::msg::Imu::SharedPtr msg);</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>  <span class="keywordtype">double</span> alpha_, dt_, yaw_1_, time_1_;</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>};</div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">// you may not use this file except in compliance with the License.</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">// You may obtain a copy of the License at</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">//</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">//     http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">//</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">// Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// See the License for the specific language governing permissions and</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">// limitations under the License.</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#ifndef EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#define EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &quot;nav_msgs/msg/odometry.hpp&quot;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;sensor_msgs/msg/nav_sat_fix.hpp&quot;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;easynav_core/LocalizerMethodBase.hpp&quot;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;tf2_ros/static_transform_broadcaster.hpp&quot;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;sensor_msgs/msg/imu.hpp&quot;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &lt;GeographicLib/UTMUPS.hpp&gt;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>{</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span></div>
+<div class="foldopen" id="foldopen00040" data-start="{" data-end="};">
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="classeasynav_1_1GpsLocalizer.html">   40</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#ad72a29008719b8d181200952457ed05e">GpsLocalizer</a> : <span class="keyword">public</span> easynav::LocalizerMethodBase</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>{</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="classeasynav_1_1GpsLocalizer.html#ad72a29008719b8d181200952457ed05e">   46</a></span>  <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#ad72a29008719b8d181200952457ed05e">GpsLocalizer</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classeasynav_1_1GpsLocalizer.html#a79cedcb4acbf9e92642ca2ec1d1f85c0">   51</a></span>  <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#a79cedcb4acbf9e92642ca2ec1d1f85c0">~GpsLocalizer</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#a6ed380ba537bbe9a85710810db50a95c">update_rt</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1GpsLocalizer.html#a24ddfd2eba3d3d6a90d492e8d25ff0da">update</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  nav_msgs::msg::Odometry odom_;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  geometry_msgs::msg::Point origin_utm_;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  rclcpp::Publisher&lt;nav_msgs::msg::Odometry&gt;::SharedPtr odom_pub_;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  rclcpp::Subscription&lt;sensor_msgs::msg::NavSatFix&gt;::SharedPtr gps_subscriber_;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  rclcpp::Subscription&lt;sensor_msgs::msg::Imu&gt;::SharedPtr imu_subscriber_;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  sensor_msgs::msg::NavSatFix gps_msg_;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>  sensor_msgs::msg::Imu imu_msg_;</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  std::shared_ptr&lt;tf2_ros::StaticTransformBroadcaster&gt; static_broadcaster_;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span></div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>  <span class="keywordtype">void</span> gps_callback(<span class="keyword">const</span> sensor_msgs::msg::NavSatFix::SharedPtr msg);</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>  <span class="keywordtype">void</span> imu_callback(<span class="keyword">const</span> sensor_msgs::msg::Imu::SharedPtr msg);</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>  <span class="keywordtype">double</span> alpha_, dt_, yaw_1_, time_1_;</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>};</div>
 </div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>}  <span class="comment">// namespace easynav</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_</span></div>
-<div class="ttc" id="aclasseasynav_1_1GpsLocalizer_html_a24ddfd2eba3d3d6a90d492e8d25ff0da"><div class="ttname"><a href="classeasynav_1_1GpsLocalizer.html#a24ddfd2eba3d3d6a90d492e8d25ff0da">easynav::GpsLocalizer::update</a></div><div class="ttdeci">virtual void update(NavState &amp;nav_state) override</div><div class="ttdoc">Updates the localization estimate based on the current navigation state.</div><div class="ttdef"><b>Definition</b> GpsLocalizer.cpp:93</div></div>
-<div class="ttc" id="aclasseasynav_1_1GpsLocalizer_html_a6ed380ba537bbe9a85710810db50a95c"><div class="ttname"><a href="classeasynav_1_1GpsLocalizer.html#a6ed380ba537bbe9a85710810db50a95c">easynav::GpsLocalizer::update_rt</a></div><div class="ttdeci">virtual void update_rt(NavState &amp;nav_state) override</div><div class="ttdoc">Updates the localization estimate based on the current navigation state.</div><div class="ttdef"><b>Definition</b> GpsLocalizer.cpp:89</div></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>}  <span class="comment">// namespace easynav</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_</span></div>
+<div class="ttc" id="aclasseasynav_1_1GpsLocalizer_html_a24ddfd2eba3d3d6a90d492e8d25ff0da"><div class="ttname"><a href="classeasynav_1_1GpsLocalizer.html#a24ddfd2eba3d3d6a90d492e8d25ff0da">easynav::GpsLocalizer::update</a></div><div class="ttdeci">virtual void update(NavState &amp;nav_state) override</div><div class="ttdoc">Updates the localization estimate based on the current navigation state.</div><div class="ttdef"><b>Definition</b> GpsLocalizer.cpp:89</div></div>
+<div class="ttc" id="aclasseasynav_1_1GpsLocalizer_html_a6ed380ba537bbe9a85710810db50a95c"><div class="ttname"><a href="classeasynav_1_1GpsLocalizer.html#a6ed380ba537bbe9a85710810db50a95c">easynav::GpsLocalizer::update_rt</a></div><div class="ttdeci">virtual void update_rt(NavState &amp;nav_state) override</div><div class="ttdoc">Updates the localization estimate based on the current navigation state.</div><div class="ttdef"><b>Definition</b> GpsLocalizer.cpp:85</div></div>
 <div class="ttc" id="aclasseasynav_1_1GpsLocalizer_html_a79cedcb4acbf9e92642ca2ec1d1f85c0"><div class="ttname"><a href="classeasynav_1_1GpsLocalizer.html#a79cedcb4acbf9e92642ca2ec1d1f85c0">easynav::GpsLocalizer::~GpsLocalizer</a></div><div class="ttdeci">~GpsLocalizer()=default</div><div class="ttdoc">Default destructor.</div></div>
-<div class="ttc" id="aclasseasynav_1_1GpsLocalizer_html_ac9d1795b6cf8a4da7bf9b33f783db911"><div class="ttname"><a href="classeasynav_1_1GpsLocalizer.html#ac9d1795b6cf8a4da7bf9b33f783db911">easynav::GpsLocalizer::on_initialize</a></div><div class="ttdeci">virtual void on_initialize() override</div><div class="ttdoc">Initialize the localization method.</div><div class="ttdef"><b>Definition</b> GpsLocalizer.cpp:30</div></div>
+<div class="ttc" id="aclasseasynav_1_1GpsLocalizer_html_ac9d1795b6cf8a4da7bf9b33f783db911"><div class="ttname"><a href="classeasynav_1_1GpsLocalizer.html#ac9d1795b6cf8a4da7bf9b33f783db911">easynav::GpsLocalizer::on_initialize</a></div><div class="ttdeci">virtual void on_initialize() override</div><div class="ttdoc">Initialize the localization method.</div><div class="ttdef"><b>Definition</b> GpsLocalizer.cpp:26</div></div>
 <div class="ttc" id="aclasseasynav_1_1GpsLocalizer_html_ad72a29008719b8d181200952457ed05e"><div class="ttname"><a href="classeasynav_1_1GpsLocalizer.html#ad72a29008719b8d181200952457ed05e">easynav::GpsLocalizer::GpsLocalizer</a></div><div class="ttdeci">GpsLocalizer()=default</div><div class="ttdoc">Default constructor.</div></div>
 <div class="ttc" id="anamespaceeasynav_html"><div class="ttname"><a href="namespaceeasynav.html">easynav</a></div><div class="ttdoc">Provides a mapping for often used cost values.</div><div class="ttdef"><b>Definition</b> cost_values.hpp:41</div></div>
 </div><!-- fragment --></div><!-- contents -->
