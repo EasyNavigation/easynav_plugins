@@ -107,14 +107,27 @@ MPCController::collision_checker(void *data, std::vector<double> & u)
       real_points++;
     }
   }
-  x_m /= real_points;
-  y_m /= real_points;
-  dist = std::hypot(x_m, y_m);
-  angle = std::atan2(y_m, x_m) - params->theta0[2];
-  if(real_points != 0 && dist < safety_radius_) {
-    std::cerr << "Detection at: " << dist << " Theta: " << angle << std::endl;
-    u[0] -= dist / real_points * dt_;
-    u[1] -= angle / real_points * dt_;
+  if(real_points != 0) {
+    x_m /= real_points;
+    y_m /= real_points;
+    dist = std::hypot(x_m, y_m);
+    angle = std::atan2(y_m, x_m) - params->theta0[2];
+    if(dist < safety_radius_) {
+      if(!collision_state_) {
+        collision_state_ = true;
+        last_v_ = u[0];
+        last_w_ = u[1];
+      }
+      RCLCPP_WARN(get_node()->get_logger(),
+        "[COLLISION] Collision detected at: [%f] m and Theta: [%f] degrees", dist,
+        (angle * 180.00 / M_PI) );
+      last_v_ = collision_factor_ * last_v_ * safety_radius_ / dist;
+      last_w_ = collision_factor_ * last_w_ * safety_radius_ / dist;
+      u[0] = -last_v_;
+      u[1] = -last_w_;
+    } else {
+      collision_state_ = false;
+    }
   }
 }
 
@@ -273,7 +286,9 @@ MPCController::update_rt(NavState & nav_state)
     std::cerr << "Optimization Error: " << e.what() << std::endl;
   }
 
-  collision_checker(&params, u);
+  if (ControllerMethodBase::collision_checker_active_) {
+    collision_checker(&params, u);
+  }
 
   // Final alignment phase with hysteresis on distance:
   // - Enter when dist_to_goal <= 0.5 * pos_tol
