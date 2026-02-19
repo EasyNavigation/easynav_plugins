@@ -73,4 +73,4 @@ This controller reads pose from `nav_msgs/Odometry` (NavState key `robot_pose`).
 
 ## License
 
-GPL-3.0-only
+Apache-2.0
