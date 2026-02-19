@@ -77,4 +77,4 @@ This controller does not explicitly publish or require TF frames in code.
 
 ## License
 
-GPL-3.0-only
+Apache-2.0

@@ -67,4 +67,4 @@ This manager does not broadcast TF; messages are stamped directly with their fra
 
 ## License
 
-GPL-3.0-only
+Apache-2.0
