@@ -162,4 +162,4 @@ maps_manager_node:
 
 ## License
 
-GPL-3.0-only
+Apache-2.0

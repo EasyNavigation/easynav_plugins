@@ -76,4 +76,4 @@ This plugin does not create subscriptions or services directly; it retrieves all
 The planner assumes frame consistency between NavMap, robot pose, and goals. No TF lookups are performed internally.
 
 ## License
-GPL-3.0-only
+Apache-2.0
