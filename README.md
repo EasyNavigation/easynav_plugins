@@ -75,4 +75,4 @@ Localization plugins based on different map types and sensors.
 
 ## License
 
-All packages in this repository are released under **GPL-3.0-only** unless stated otherwise in the individual package.
+All packages in this repository are released under **Apache-2.0** unless stated otherwise in the individual package.
