@@ -24,11 +24,6 @@
 #define EASYNAV_COSTMAP_LOCALIZER__AMCLLOCALIZER_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
 #include <random>
 #include <Eigen/Geometry>
 
@@ -72,9 +67,9 @@ public:
    *
    * Sets up publishers, subscribers, and prepares the particle filter.
    *
-   * @return std::expected<void, std::string> Success or error message.
+   * @throws std::runtime_error on initialization error.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Real-time update of the localization state.
@@ -164,12 +159,23 @@ protected:
   /// Subscriber for odometry messages.
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
 
+  /// Subscriber for the initial pose.
+  rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr init_pose_sub_;
+
   /**
    * @brief Callback for receiving odometry updates.
    *
    * @param msg The incoming odometry message.
    */
   void odom_callback(nav_msgs::msg::Odometry::UniquePtr msg);
+
+  /**
+   * @brief Callback for receiving the initial pose.
+   *
+   * @param msg The incoming initial pose with covariance.
+   */
+  void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
+
 
   /**
    * @brief Update odom from TFs instead of a odom topic
@@ -181,7 +187,7 @@ protected:
   std::vector<Particle> particles_;
 
   /// Random number generator used for sampling noise.
-  std::default_random_engine rng_;
+  std::mt19937 rng_;
 
   /// Current estimated odometry-based pose.
   nav_msgs::msg::Odometry pose_;
@@ -215,6 +221,9 @@ protected:
 
   /// Time interval (in seconds) after which the particles should be reseeded.
   double reseed_time_;
+
+  /// Timestamp of the last input message (odometry or initial pose).
+  rclcpp::Time last_input_time_;
 
   /// Timestamp of the last reseed event.
   rclcpp::Time last_reseed_;

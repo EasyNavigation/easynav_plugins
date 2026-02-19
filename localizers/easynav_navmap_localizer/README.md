@@ -1,21 +1,25 @@
 # easynav_navmap_localizer
 
-[![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
-
 ## Description
+
 Easy Navigation: nAVmAP Localizer package.
 
 ## Authors and Maintainers
+
 - **Authors:** Intelligent Robotics Lab
 - **Maintainers:** Francisco Martín Rico <fmrico@gmail.com>
 
 ## Supported ROS 2 Distributions
+
 | Distribution | Status |
 |---|---|
+| humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
+| jazzy | ![kilted](https://img.shields.io/badge/jazzy-supported-brightgreen) |
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
 ## Plugin (pluginlib)
+
 - **Plugin Name:** `easynav_navmap_localizer/AMCLLocalizer`
 - **Type:** `easynav::navmap::AMCLLocalizer`
 - **Base Class:** `easynav::LocalizerMethodBase`
@@ -23,6 +27,7 @@ Easy Navigation: nAVmAP Localizer package.
 - **Description:** A default "navmap" implementation for the AMCL localizer.
 
 ## Parameters
+
 All parameters are declared under the plugin name namespace, i.e., `/<node_fqn>/easynav_navmap_localizer/AMCLLocalizer/...`.
 
 | Name | Type | Default | Description |
@@ -50,16 +55,19 @@ All parameters are declared under the plugin name namespace, i.e., `/<node_fqn>/
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
+
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
-| Subscription | `/odom` | `nav_msgs/msg/Odometry` | Used only when <plugin>.compute_odom_from_tf = false | SensorDataQoS (reliable) |
+| Subscription | `/odom` | `nav_msgs/msg/Odometry` | Used only when `<plugin>.compute_odom_from_tf = false` | SensorDataQoS (reliable) |
 | Publisher | `<node_fqn>/<plugin>/particles` | `geometry_msgs/msg/PoseArray` | Publishes the current particle set | depth=10 |
 | Publisher | `<node_fqn>/<plugin>/pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Publishes the estimated pose with covariance | depth=10 |
 
 ### Services
+
 This package does not create service servers or clients.
 
 ## NavState Keys
+
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `imu` | `IMUPerceptions` | **Read** | Used to get the latest IMU orientation when available. |
@@ -70,11 +78,13 @@ This package does not create service servers or clients.
 | `robot_pose` | `nav_msgs::msg::Odometry` | **Write** | Estimated robot pose stored at the end of update/predict. |
 
 ## TF Frames
+
 | Role | Transform | Notes |
 |---|---|---|
 | Publishes | `map -> odom` | Broadcasts the global transform that aligns the odometry frame with the map frame. |
-| Requires | `odom -> base_footprint` | Required only when <plugin>.compute_odom_from_tf = true (read from TF). |
+| Requires | `odom -> base_footprint` | Required only when `<plugin>.compute_odom_from_tf = true` (read from TF). |
 | Requires | `base_footprint -> <sensor_frame>` | Required to transform perception point clouds into the robot base frame during correction. |
 
 ## License
+
 GPL-3.0-only

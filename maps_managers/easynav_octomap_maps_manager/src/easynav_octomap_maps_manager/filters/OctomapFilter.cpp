@@ -18,11 +18,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "octomap/octomap.h"
-#include "easynav_common/types/NavState.hpp"
 
 #include "easynav_octomap_maps_manager/filters/OctomapFilter.hpp"
 
@@ -36,18 +34,14 @@ OctomapFilter::OctomapFilter()
 
 }
 
-std::expected<void, std::string>
+void
 OctomapFilter::initialize(
   const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
-  const std::string & plugin_name,
-  const std::string & tf_prefix
-)
+  const std::string & plugin_name)
 {
   parent_node_ = parent_node;
   plugin_name_ = plugin_name;
-  tf_prefix_ = tf_prefix;
-
-  return on_initialize();
+  on_initialize();
 }
 
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>
@@ -60,12 +54,6 @@ const std::string &
 OctomapFilter::get_plugin_name() const
 {
   return plugin_name_;
-}
-
-const std::string &
-OctomapFilter::get_tf_prefix() const
-{
-  return tf_prefix_;
 }
 
 }  // namespace octomap

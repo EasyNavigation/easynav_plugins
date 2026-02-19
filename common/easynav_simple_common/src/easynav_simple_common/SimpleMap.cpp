@@ -296,7 +296,8 @@ SimpleMap::downsample_factor(int factor) const
         }
       }
 
-      new_map->at(x, y) = (occupied_count > (factor * factor / 2));
+      // Mark cell as occupied if any source cell in the block is occupied
+      new_map->at(x, y) = (occupied_count > 0);
     }
   }
 

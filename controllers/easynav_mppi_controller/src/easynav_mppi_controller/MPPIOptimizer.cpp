@@ -1,13 +1,10 @@
 #include "easynav_mppi_controller/MPPIOptimizer.hpp"
 #include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include <cmath>
 #include <limits>
 #include <algorithm>
-#include <iostream>
-
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
 
 namespace easynav
 {

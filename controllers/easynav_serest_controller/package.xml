@@ -12,6 +12,8 @@
   <depend>easynav_common</depend>
   <depend>easynav_core</depend>
   <depend>pluginlib</depend>
+  <depend>tf2</depend>
+  <depend>tf2_geometry_msgs</depend>
   <depend>tf2_ros</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>

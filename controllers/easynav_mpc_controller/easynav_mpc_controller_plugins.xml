@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_mpc_controller">
+    <class name="easynav_mpc_controller/MPCController"  type="easynav::MPCController" base_class_type="easynav::ControllerMethodBase">
+      <description>
+      A MPC implementation for a Controller.
+      </description>
+    </class>
+  </library>
+</class_libraries>

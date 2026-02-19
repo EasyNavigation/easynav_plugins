@@ -23,28 +23,13 @@
 #ifndef EASYNAV_BONXAI_MAPS_MANAGER__BONXAI_MAPS_MANAGER_HPP_
 #define EASYNAV_BONXAI_MAPS_MANAGER__BONXAI_MAPS_MANAGER_HPP_
 
-#include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
-
-#include "bonxai/bonxai.hpp"
 #include "bonxai/probabilistic_map.hpp"
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
 
-#include "tf2_ros/buffer.hpp"
-#include "tf2_ros/transform_listener.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
-
-#include "pluginlib/class_loader.hpp"
-
-#include "yaets/tracing.hpp"
 
 namespace easynav_bonxai
 {
@@ -76,9 +61,9 @@ public:
    *
    * Creates necessary publishers/subscribers and initializes the map instances.
    *
-   * @return std::expected<void, std::string> Success or error string.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -133,7 +118,6 @@ private:
 
   double resolution_ {0.3};
   double height_with_occ_ {1.0};
-  std::string frame_id_ {"map"};
 };
 
 }  // namespace easynav_bonxai
