@@ -20,9 +20,8 @@
 /// \file
 /// \brief Implementation of the SimpleController class.
 
-#include <expected>
-
 #include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include "easynav_simple_controller/SimpleController.hpp"
 
@@ -38,7 +37,7 @@ SimpleController::SimpleController()
 
 SimpleController::~SimpleController() = default;
 
-std::expected<void, std::string>
+void
 SimpleController::on_initialize()
 {
   auto node = get_node();
@@ -51,6 +50,14 @@ SimpleController::on_initialize()
   node->declare_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->declare_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->declare_parameter<double>(plugin_name + ".k_rot", k_rot_);
+  node->declare_parameter<double>(plugin_name + ".final_goal_angle_tolerance",
+      final_goal_angle_tolerance_);
+  node->declare_parameter<double>(plugin_name + ".linear_kp", linear_kp_);
+  node->declare_parameter<double>(plugin_name + ".linear_ki", linear_ki_);
+  node->declare_parameter<double>(plugin_name + ".linear_kd", linear_kd_);
+  node->declare_parameter<double>(plugin_name + ".angular_kp", angular_kp_);
+  node->declare_parameter<double>(plugin_name + ".angular_ki", angular_ki_);
+  node->declare_parameter<double>(plugin_name + ".angular_kd", angular_kd_);
 
   node->get_parameter<double>(plugin_name + ".max_linear_speed", max_linear_speed_);
   node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
@@ -59,15 +66,25 @@ SimpleController::on_initialize()
   node->get_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->get_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->get_parameter<double>(plugin_name + ".k_rot", k_rot_);
+  node->get_parameter<double>(plugin_name + ".final_goal_angle_tolerance",
+      final_goal_angle_tolerance_);
+  node->get_parameter<double>(plugin_name + ".linear_kp", linear_kp_);
+  node->get_parameter<double>(plugin_name + ".linear_ki", linear_ki_);
+  node->get_parameter<double>(plugin_name + ".linear_kd", linear_kd_);
+  node->get_parameter<double>(plugin_name + ".angular_kp", angular_kp_);
+  node->get_parameter<double>(plugin_name + ".angular_ki", angular_ki_);
+  node->get_parameter<double>(plugin_name + ".angular_kd", angular_kd_);
 
   linear_pid_ = std::make_shared<PIDController>(0.01, look_ahead_dist_, 0.1, max_linear_speed_);
   angular_pid_ = std::make_shared<PIDController>(0.01, M_PI, 0.1, max_angular_speed_);
 
+  // apply configured gains
+  linear_pid_->set_pid(linear_kp_, linear_ki_, linear_kd_);
+  angular_pid_->set_pid(angular_kp_, angular_ki_, angular_kd_);
+
   last_vlin_ = 0.0;
   last_vrot_ = 0.0;
   last_update_ts_ = node->now();
-
-  return {};
 }
 
 
@@ -79,22 +96,46 @@ SimpleController::update_rt(NavState & nav_state)
 
   if (!nav_state.has("path")) {return;}
   if (!nav_state.has("robot_pose")) {return;}
-  if (!nav_state.has("path")) {return;}
 
-  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+  const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
 
   if (path.poses.empty()) {
     twist_stamped_.header.frame_id = path.header.frame_id;
     twist_stamped_.header.stamp = get_node()->now();
     twist_stamped_.twist.linear.x = 0.0;
     twist_stamped_.twist.angular.z = 0.0;
+    // reset PID state when there's no path
+    if (linear_pid_) {linear_pid_->reset();}
+    if (angular_pid_) {angular_pid_->reset();}
     nav_state.set("cmd_vel", twist_stamped_);
     return;
   }
 
-  auto ref_pose = get_ref_pose(path, look_ahead_dist_);
-  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  // If we're very close to the final path pose, stop the robot.
+  const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto & goal_pose = path.poses.back().pose;
+  double dist_to_goal = get_distance(pose, goal_pose);
+  double angle_to_goal = get_diff_angle(pose.orientation, goal_pose.orientation);
 
+  if (dist_to_goal <= tolerance_dist_ && std::abs(angle_to_goal) <= final_goal_angle_tolerance_) {
+    // we're at the final goal -> publish zero velocity and reset integrators/state
+    last_vlin_ = 0.0;
+    last_vrot_ = 0.0;
+    twist_stamped_.header.frame_id = path.header.frame_id;
+    twist_stamped_.header.stamp = get_node()->now();
+    twist_stamped_.twist.linear.x = 0.0;
+    twist_stamped_.twist.angular.z = 0.0;
+    // reset PID internal state to avoid windup / residual derivative
+    if (linear_pid_) {linear_pid_->reset();}
+    if (angular_pid_) {angular_pid_->reset();}
+    nav_state.set("cmd_vel", twist_stamped_);
+    RCLCPP_DEBUG(get_node()->get_logger(),
+        "%s: final goal reached (dist=%.3f, ang=%.3f), stopping.",
+        get_plugin_name().c_str(), dist_to_goal, angle_to_goal);
+    return;
+  }
+
+  auto ref_pose = get_ref_pose(path, look_ahead_dist_);
   double dist = get_distance(pose, ref_pose);
 
 
@@ -108,10 +149,10 @@ SimpleController::update_rt(NavState & nav_state)
 
   if (dist < tolerance_dist_) {
     double diff_angle = get_diff_angle(pose.orientation, ref_pose.orientation);
-    vrot = angular_pid_->get_output(diff_angle);
+    vrot = angular_pid_->get_output(diff_angle, dt);
   } else {
-    vrot = angular_pid_->get_output(angle);
-    vlin = std::max(0.0, linear_pid_->get_output(dist) - k_rot_ * abs(vrot));
+    vrot = angular_pid_->get_output(angle, dt);
+    vlin = std::max(0.0, linear_pid_->get_output(dist, dt) - k_rot_ * abs(vrot));
   }
 
 

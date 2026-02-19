@@ -23,16 +23,11 @@
 #ifndef EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_
 #define EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_
 
-#include <expected>
-
 #include "nav_msgs/msg/odometry.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
 #include "easynav_core/LocalizerMethodBase.hpp"
-#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_ros/static_transform_broadcaster.hpp"
 #include "sensor_msgs/msg/imu.hpp"
-#include "tf2/LinearMath/Quaternion.hpp"
-#include "tf2/LinearMath/Matrix3x3.hpp"
 #include <GeographicLib/UTMUPS.hpp>
 
 namespace easynav
@@ -64,9 +59,9 @@ public:
    *
    * This override may be used to set up internal resources. By default, it simply succeeds.
    *
-   * @return std::expected<void, std::string> Returns success or an error message.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the localization estimate based on the current navigation state.

@@ -18,11 +18,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
-
-#include "easynav_costmap_common/costmap_2d.hpp"
-#include "easynav_common/types/NavState.hpp"
 
 #include "easynav_costmap_maps_manager/filters/CostmapFilter.hpp"
 
@@ -34,18 +30,15 @@ CostmapFilter::CostmapFilter()
 
 }
 
-std::expected<void, std::string>
+void
 CostmapFilter::initialize(
   const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
-  const std::string & plugin_name,
-  const std::string & tf_prefix
-)
+  const std::string & plugin_name)
 {
   parent_node_ = parent_node;
   plugin_name_ = plugin_name;
-  tf_prefix_ = tf_prefix;
 
-  return on_initialize();
+  on_initialize();
 }
 
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>
@@ -60,10 +53,5 @@ CostmapFilter::get_plugin_name() const
   return plugin_name_;
 }
 
-const std::string &
-CostmapFilter::get_tf_prefix() const
-{
-  return tf_prefix_;
-}
 
 }  // namespace easynav

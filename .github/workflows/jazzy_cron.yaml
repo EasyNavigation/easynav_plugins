@@ -1,0 +1,43 @@
+name: jazzy
+
+on:
+  schedule:
+      - cron: '0 0 * * 6'     
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    container:
+      image: ubuntu:noble
+    steps:
+      - name: Repo checkout
+        uses: actions/checkout@v4
+        with:
+          ref: jazzy
+      - name: Setup ROS 2
+        uses: ros-tooling/setup-ros@0.7.15
+      - name: build and test
+        uses: ros-tooling/action-ros-ci@0.4.5
+        with:
+          package-name: easynav_bonxai_maps_manager easynav_costmap_common easynav_costmap_localizer easynav_costmap_maps_manager easynav_costmap_planner easynav_gps_localizer easynav_fusion_localizer easynav_mppi_controller easynav_navmap_localizer easynav_navmap_maps_manager easynav_navmap_planner easynav_serest_controller easynav_simple_common easynav_simple_controller easynav_simple_localizer easynav_simple_maps_manager easynav_simple_planner easynav_vff_controller easynav_mpc_controller
+          target-ros2-distro: jazzy
+          skip-tests: false
+          colcon-defaults: |
+            {
+              "build": {
+                "packages-up-to": true,
+                "mixin": ["coverage-gcc"]
+              },
+              "test": {
+                "parallel-workers" : 1
+              }
+            }
+          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml
+
+      - name: Codecov
+        uses: codecov/codecov-action@v5.4.0
+        with:
+          files: ros_ws/lcov/total_coverage.info
+          flags: unittests
+          name: codecov-umbrella
+          # yml: ./codecov.yml
+          fail_ci_if_error: false

@@ -20,7 +20,6 @@
 /// \file
 /// \brief AMCLLocalizer implementation (Bonxai + probabilistic inflation + ray casting).
 
-#include <expected>
 #include <random>
 #include <unordered_map>
 #include <unordered_set>
@@ -28,7 +27,6 @@
 #include <string>
 #include <cmath>
 #include <iostream>
-#include <iomanip>
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -40,7 +38,6 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 #include "easynav_common/types/IMUPerception.hpp"
 
@@ -352,6 +349,7 @@ struct CoordEq
 
 // ---------- AMCLLocalizer ----------
 AMCLLocalizer::AMCLLocalizer()
+: rng_(std::random_device{}())
 {
   NavState::register_printer<nav_msgs::msg::Odometry>(
     [](const nav_msgs::msg::Odometry & odom) {
@@ -359,7 +357,8 @@ AMCLLocalizer::AMCLLocalizer()
       tf2::Quaternion q(odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
                         odom.pose.pose.orientation.z, odom.pose.pose.orientation.w);
       double r, p, y; tf2::Matrix3x3(q).getRPY(r, p, y);
-      ret << "Odometry with pose: (x: " << odom.pose.pose.position.x
+      ret << "{" << rclcpp::Time(odom.header.stamp).seconds() << "} Odometry with pose: (x: " <<
+        odom.pose.pose.position.x
           << ", y: " << odom.pose.pose.position.y << ", yaw: " << y << ")";
       return ret.str();
     });
@@ -367,7 +366,7 @@ AMCLLocalizer::AMCLLocalizer()
 
 AMCLLocalizer::~AMCLLocalizer() = default;
 
-std::expected<void, std::string> AMCLLocalizer::on_initialize()
+void AMCLLocalizer::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -470,34 +469,38 @@ std::expected<void, std::string> AMCLLocalizer::on_initialize()
 
   last_reseed_ = get_node()->now();
   get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
-  return {};
 }
 
 void AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
 {
   if (compute_odom_from_tf_) {return;}
   tf2::fromMsg(msg->pose.pose, odom_);
+  last_input_time_ = msg->header.stamp;
   if (!initialized_odom_) {last_odom_ = odom_; initialized_odom_ = true;}
 }
 
 void AMCLLocalizer::update_odom_from_tf()
 {
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-      "odom", "base_footprint", tf2::TimePointZero, tf2::durationFromSec(0.0));
+     tf_info.odom_frame, tf_info.robot_frame, tf2::TimePointZero,
+          tf2::durationFromSec(0.0));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "TF failed: %s", ex.what());
     return;
   }
   tf2::fromMsg(tf_msg.transform, odom_);
+  last_input_time_ = tf_msg.header.stamp;
   initialized_odom_ = true;
 }
 
 std::optional<tf2::Quaternion> get_latest_imu_quat(const NavState & nav_state)
 {
   if (!nav_state.has("imu")) {return std::nullopt;}
-  const auto imus = nav_state.get<IMUPerceptions>("imu");
+  const auto & imus = nav_state.get<IMUPerceptions>("imu");
   if (imus.empty() || !imus.back()) {return std::nullopt;}
   const auto & imu_msg = imus.back()->data;
   tf2::Quaternion q(imu_msg.orientation.x, imu_msg.orientation.y,
@@ -530,7 +533,9 @@ void AMCLLocalizer::predict(NavState & nav_state)
 
   tf2::Transform delta = last_odom_.inverseTimes(odom_);
   const bool have_navmap = nav_state.has("map.navmap");
-  if (have_navmap) {navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");}
+
+  if (!have_navmap) {return;}
+  const auto & navmap = nav_state.get<::navmap::NavMap>("map.navmap");
 
   const auto imu_q_opt = get_latest_imu_quat(nav_state);
 
@@ -541,17 +546,16 @@ void AMCLLocalizer::predict(NavState & nav_state)
   double r, p, yaw; tf2::Matrix3x3(delta.getRotation()).getRPY(r, p, yaw);
   double rot_len = std::abs(yaw);
 
-  std::random_device rd; std::mt19937 gen(rd());
+  std::normal_distribution<double> n_dx(0.0, std::abs(dx) * noise_translation_);
+  std::normal_distribution<double> n_dy(0.0, std::abs(dy) * noise_translation_);
+  std::normal_distribution<double> n_dz(0.0, std::abs(dz) * noise_translation_);
+  std::normal_distribution<double> n_yaw(0.0,
+    rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_);
+
+  double noisy_y = yaw + n_yaw(rng_);
 
   for (auto & p : particles_) {
-    std::normal_distribution<double> n_dx(0.0, std::abs(dx) * noise_translation_);
-    std::normal_distribution<double> n_dy(0.0, std::abs(dy) * noise_translation_);
-    std::normal_distribution<double> n_dz(0.0, std::abs(dz) * noise_translation_);
-    std::normal_distribution<double> n_yaw(0.0,
-      rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_);
-
-    tf2::Vector3 noisy_t(dx + n_dx(gen), dy + n_dy(gen), dz + n_dz(gen));
-    double noisy_y = yaw + n_yaw(gen);
+    tf2::Vector3 noisy_t(dx + n_dx(rng_), dy + n_dy(rng_), dz + n_dz(rng_));
     tf2::Quaternion noisy_q; noisy_q.setRPY(0.0, 0.0, noisy_y);
     p.pose = p.pose * tf2::Transform(noisy_q, noisy_t);
 
@@ -566,9 +570,9 @@ void AMCLLocalizer::predict(NavState & nav_state)
       std::size_t sidx = 0; ::navmap::NavCelId cid = std::numeric_limits<uint32_t>::max();
       Eigen::Vector3f bary, hit_eig;
 
-      const bool ok = navmap_.locate_navcel(
+      const bool ok = navmap.locate_navcel(
         Eigen::Vector3f(static_cast<float>(Pw.x()), static_cast<float>(Pw.y()),
-            static_cast<float>(Pw.z() + 0.5f)),
+            static_cast<float>(Pw.z())),
         sidx, cid, bary, &hit_eig, opts);
 
       if (ok) {
@@ -577,7 +581,7 @@ void AMCLLocalizer::predict(NavState & nav_state)
         if (imu_q_opt.has_value()) {
           p.pose.setRotation(*imu_q_opt);
         } else {
-          const auto & cel = navmap_.navcels[cid];
+          const auto & cel = navmap.navcels[cid];
           tf2::Vector3 n_world = to_tf(cel.normal);
           double nlen = n_world.length();
           if (nlen > 1e-9) {
@@ -618,12 +622,14 @@ static inline std::string get_frame_id_from(const PointPerception & pp)
 }
 
 
-static inline tf2::Transform lookup_bf_to_sensor(const std::string & sensor_frame)
+static inline tf2::Transform lookup_bf_to_sensor(
+  const std::string & robot_frame,
+  const std::string & sensor_frame)
 {
   if (sensor_frame.empty()) {return tf2::Transform::getIdentity();}
   geometry_msgs::msg::TransformStamped tf_msg =
     RTTFBuffer::getInstance()->lookupTransform(
-      "base_footprint", sensor_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
+      robot_frame, sensor_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
   tf2::Transform T; tf2::fromMsg(tf_msg.transform, T);
   return T;
 }
@@ -687,12 +693,11 @@ static ScoreAgg score_particle_sensor_cloud(
 // ---------- correct() ----------
 void AMCLLocalizer::correct(NavState & nav_state)
 {
-  auto t0 = get_node()->now();
   if (!nav_state.has("points")) {
     RCLCPP_WARN(get_node()->get_logger(), "No points perceptions yet");
     return;
   }
-  const auto perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
   if (!nav_state.has("map.bonxai")) {
     RCLCPP_WARN(get_node()->get_logger(), "No Bonxai map yet");
@@ -701,7 +706,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
 
   // Build inflated map once and cache in NavState
   if (!nav_state.has("map.bonxai.inflated")) {
-    const auto original_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai");
+    const auto & original_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai");
     auto logger = get_node()->get_logger();
     auto clock = get_node()->get_clock();
     auto progress_cb = [logger, clock](float f) {
@@ -717,13 +722,11 @@ void AMCLLocalizer::correct(NavState & nav_state)
     nav_state.set("map.bonxai.inflated", inflated_map);
   }
 
-  const auto original_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai");
-  const auto inflated_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai.inflated");
+  const auto & original_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai");
+  const auto & inflated_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai.inflated");
 
   // Compute tail-skip coherent with inflation kernel
   const int TAIL_SKIP = compute_tail_skip(*original_map, inflation_stddev_, inflation_prob_min_);
-
-  auto t1 = get_node()->now();
 
   // Prepare per-sensor bundles (downsample/cap per sensor)
   std::vector<SensorBundle> bundles; bundles.reserve(perceptions.size());
@@ -743,8 +746,10 @@ void AMCLLocalizer::correct(NavState & nav_state)
   T_bf_sensor_cache.reserve(bundles.size());
   for (const auto & b : bundles) {
     if (!T_bf_sensor_cache.count(b.frame_id)) {
+      const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
       try {
-        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(b.frame_id);
+        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(tf_info.robot_frame,
+              b.frame_id);
 
         // const tf2::Transform & t = T_bf_sensor_cache[b.frame_id];
 
@@ -755,8 +760,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
       }
     }
   }
-
-  auto t2 = get_node()->now();
 
   // Score all particles against all sensors
   bool debug = false;
@@ -775,8 +778,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
     particle.hits += hits;
     particle.possible_hits += possible;
   }
-
-  auto t3 = get_node()->now();
 
   // Weights update with power tau
   for (auto & particle : particles_) {
@@ -798,18 +799,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
       p.weight /= total_w;
     }
   }
-
-  auto t4 = get_node()->now();
-
-  // Light profiling
-  std::cerr << "Prepare maps: " << std::fixed << std::setprecision(6) << (t1 - t0).seconds() <<
-    " s\n";
-  std::cerr << "Prep sensors: " << std::fixed << std::setprecision(6) << (t2 - t1).seconds() <<
-    " s\n";
-  std::cerr << "Scoring:      " << std::fixed << std::setprecision(6) << (t3 - t2).seconds() <<
-    " s\n";
-  std::cerr << "Weights:      " << std::fixed << std::setprecision(6) << (t4 - t3).seconds() <<
-    " s\n";
 }
 
 // ------------------- reseed -------------------
@@ -829,13 +818,6 @@ AMCLLocalizer::reseed()
 
   std::sort(particles_.begin(), particles_.end(),
     [](const Particle & a, const Particle & b) {return a.weight > b.weight;});
-
-  // std::cerr <<
-  //   "=================================================================================\n";
-  // for (std::size_t i = 0; i < particles_.size(); i++) {
-  //   std::cerr << "[" << i << "] " << particles_[i].hits << "/" << particles_[i].possible_hits
-  //             << "     " << static_cast<int>(particles_[i].last_cid) << std::endl;
-  // }
 
   tf2::Vector3 mean = computeMean(particles_, 0, N_top);
   tf2::Matrix3x3 cov = computeCovariance(particles_, 0, N_top, mean);
@@ -976,9 +958,10 @@ void AMCLLocalizer::publishTF(const tf2::Transform & map2bf)
     return;
   }
   geometry_msgs::msg::TransformStamped tf_msg;
-  tf_msg.header.stamp = get_node()->now();
-  tf_msg.header.frame_id = get_tf_prefix() + "map";
-  tf_msg.child_frame_id = get_tf_prefix() + "odom";
+  tf_msg.header.stamp = last_input_time_;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  tf_msg.header.frame_id = tf_info.map_frame;
+  tf_msg.child_frame_id = tf_info.odom_frame;
   tf_msg.transform = tf2::toMsg(map2bf);
   RTTFBuffer::getInstance()->setTransform(tf_msg, "easynav", false);
   tf_broadcaster_->sendTransform(tf_msg);
@@ -986,9 +969,11 @@ void AMCLLocalizer::publishTF(const tf2::Transform & map2bf)
 
 void AMCLLocalizer::publishParticles()
 {
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   geometry_msgs::msg::PoseArray array_msg;
-  array_msg.header.stamp = get_node()->now();
-  array_msg.header.frame_id = get_tf_prefix() + "map";
+  array_msg.header.stamp = last_input_time_;
+  array_msg.header.frame_id = tf_info.map_frame;
   array_msg.poses.reserve(particles_.size());
   for (const auto & p : particles_) {
     geometry_msgs::msg::Pose pose_msg;
@@ -1001,34 +986,91 @@ void AMCLLocalizer::publishParticles()
   particles_pub_->publish(array_msg);
 }
 
-tf2::Transform AMCLLocalizer::getEstimatedPose() const
+tf2::Transform
+AMCLLocalizer::getEstimatedPose() const
 {
   if (particles_.empty()) {return tf2::Transform::getIdentity();}
-  const std::size_t N = particles_.size(), N_top = N / 2;
-  std::vector<Particle> sorted = particles_;
-  std::sort(sorted.begin(), sorted.end(),
-    [](const Particle & a, const Particle & b){return a.weight > b.weight;});
-  tf2::Vector3 mean = computeMean(sorted, 0, N_top);
+
+  const std::size_t N = particles_.size();
+  std::size_t N_top = N / 2;
+  if (N_top == 0) {
+    N_top = 1;
+  }
+
+  std::vector<std::size_t> idx(N);
+  std::iota(idx.begin(), idx.end(), 0);
+
+  std::nth_element(
+    idx.begin(),
+    idx.begin() + N_top,
+    idx.end(),
+    [this](std::size_t a, std::size_t b) {
+      return particles_[a].weight > particles_[b].weight;
+    });
+
+  std::vector<Particle> top_particles;
+  top_particles.reserve(N_top);
+  for (std::size_t k = 0; k < N_top; ++k) {
+    top_particles.push_back(particles_[idx[k]]);
+  }
+
+  tf2::Vector3 mean = computeMean(top_particles, 0, top_particles.size());
   if (!std::isfinite(mean.x()) || !std::isfinite(mean.y()) || !std::isfinite(mean.z())) {
     mean = tf2::Vector3(0, 0, 0);
   }
-  double r, p, y; tf2::Matrix3x3(sorted[0].pose.getRotation()).getRPY(r, p, y);
-  tf2::Quaternion q; q.setRPY(0.0, 0.0, y);
-  tf2::Transform est; est.setOrigin(mean); est.setRotation(q); return est;
+
+  const Particle & best = top_particles[0];
+  double r, p, y;
+  tf2::Matrix3x3(best.pose.getRotation()).getRPY(r, p, y);
+  tf2::Quaternion q;
+  q.setRPY(0.0, 0.0, y);
+
+  tf2::Transform est;
+  est.setOrigin(mean);
+  est.setRotation(q);
+  return est;
 }
 
-void AMCLLocalizer::publishEstimatedPose(const tf2::Transform & est_pose)
+
+void
+AMCLLocalizer::publishEstimatedPose(const tf2::Transform & est_pose)
 {
   if (particles_.empty()) {return;}
-  const std::size_t N = particles_.size(), N_top = N / 2;
+
+  const std::size_t N = particles_.size();
+  std::size_t N_top = N / 2;
+  if (N_top == 0) {
+    N_top = 1;
+  }
+
+  std::vector<std::size_t> idx(N);
+  std::iota(idx.begin(), idx.end(), 0);
+
+  std::nth_element(
+    idx.begin(),
+    idx.begin() + N_top,
+    idx.end(),
+    [this](std::size_t a, std::size_t b) {
+      return particles_[a].weight > particles_[b].weight;
+    });
+
+  std::vector<Particle> top_particles;
+  top_particles.reserve(N_top);
+  for (std::size_t k = 0; k < N_top; ++k) {
+    top_particles.push_back(particles_[idx[k]]);
+  }
 
   tf2::Vector3 mean = est_pose.getOrigin();
-  tf2::Matrix3x3 cov = computeCovariance(particles_, 0, N_top, mean);
-  double yaw_var = computeYawVariance(particles_, 0, N_top);
+
+  tf2::Matrix3x3 cov = computeCovariance(top_particles, 0, top_particles.size(), mean);
+  double yaw_var = computeYawVariance(top_particles, 0, top_particles.size());
+
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   geometry_msgs::msg::PoseWithCovarianceStamped msg;
-  msg.header.stamp = get_node()->now();
-  msg.header.frame_id = get_tf_prefix() + "map";
+  msg.header.stamp = last_input_time_;
+  msg.header.frame_id = tf_info.map_frame;
+
   msg.pose.pose.position.x = mean.x();
   msg.pose.pose.position.y = mean.y();
   msg.pose.pose.position.z = mean.z();
@@ -1039,32 +1081,57 @@ void AMCLLocalizer::publishEstimatedPose(const tf2::Transform & est_pose)
       msg.pose.covariance[6 * r + c] = cov[r][c];
     }
   }
+
   msg.pose.covariance[6 * 5 + 5] = yaw_var;
+
   estimate_pub_->publish(msg);
 }
 
-nav_msgs::msg::Odometry AMCLLocalizer::get_pose()
+nav_msgs::msg::Odometry
+AMCLLocalizer::get_pose()
 {
   nav_msgs::msg::Odometry odom_msg;
-  odom_msg.header.stamp = get_node()->now();
-  odom_msg.header.frame_id = get_tf_prefix() + "map";
-  odom_msg.child_frame_id = get_tf_prefix() + "base_footprint";
+  odom_msg.header.stamp = last_input_time_;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  odom_msg.header.frame_id = tf_info.map_frame;
+  odom_msg.child_frame_id = tf_info.robot_frame;
 
   pose_ = getEstimatedPose();
   tf2::Transform est_pose = pose_;
+
   odom_msg.pose.pose.position.x = est_pose.getOrigin().x();
   odom_msg.pose.pose.position.y = est_pose.getOrigin().y();
   odom_msg.pose.pose.position.z = est_pose.getOrigin().z();
   odom_msg.pose.pose.orientation = tf2::toMsg(est_pose.getRotation());
 
   if (!particles_.empty()) {
-    const std::size_t N = particles_.size(), N_top = N / 2;
-    std::vector<Particle> sorted = particles_;
-    std::sort(sorted.begin(), sorted.end(),
-      [](const Particle & a, const Particle & b){return a.weight > b.weight;});
-    tf2::Vector3 mean = computeMean(sorted, 0, N_top);
-    tf2::Matrix3x3 cov = computeCovariance(sorted, 0, N_top, mean);
-    double yaw_var = computeYawVariance(sorted, 0, N_top);
+    const std::size_t N = particles_.size();
+    std::size_t N_top = N / 2;
+    if (N_top == 0) {
+      N_top = 1;
+    }
+
+    std::vector<std::size_t> idx(N);
+    std::iota(idx.begin(), idx.end(), 0);
+
+    std::nth_element(
+      idx.begin(),
+      idx.begin() + N_top,
+      idx.end(),
+      [this](std::size_t a, std::size_t b) {
+        return particles_[a].weight > particles_[b].weight;
+      });
+
+    std::vector<Particle> top_particles;
+    top_particles.reserve(N_top);
+    for (std::size_t k = 0; k < N_top; ++k) {
+      top_particles.push_back(particles_[idx[k]]);
+    }
+
+    tf2::Vector3 mean = computeMean(top_particles, 0, top_particles.size());
+    tf2::Matrix3x3 cov = computeCovariance(top_particles, 0, top_particles.size(), mean);
+    double yaw_var = computeYawVariance(top_particles, 0, top_particles.size());
+
     for (int r = 0; r < 3; ++r) {
       for (int c = 0; c < 3; ++c) {
         odom_msg.pose.covariance[6 * r + c] = cov[r][c];
@@ -1079,6 +1146,7 @@ nav_msgs::msg::Odometry AMCLLocalizer::get_pose()
   odom_msg.twist.twist.angular.x = 0.0;
   odom_msg.twist.twist.angular.y = 0.0;
   odom_msg.twist.twist.angular.z = 0.0;
+
   return odom_msg;
 }
 

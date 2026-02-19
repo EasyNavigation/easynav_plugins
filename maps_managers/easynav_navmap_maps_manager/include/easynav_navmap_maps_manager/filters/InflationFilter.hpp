@@ -21,11 +21,8 @@
 #ifndef EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 #define EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 
-#include <expected>
+#include <queue>
 #include <string>
-
-
-#include "pluginlib/class_loader.hpp"
 
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
@@ -42,8 +39,8 @@ class InflationFilter : public NavMapFilter
 public:
   InflationFilter();
 
-  virtual std::expected<void, std::string> on_initialize();
-  virtual void update(::easynav::NavState & nav_state);
+  virtual void on_initialize() override;
+  virtual void update(::easynav::NavState & nav_state) override;
 
   bool inflate_layer_u8(
     ::navmap::NavMap & nm,

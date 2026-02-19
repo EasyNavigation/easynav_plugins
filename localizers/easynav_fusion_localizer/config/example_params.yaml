@@ -1,0 +1,133 @@
+controller_node:
+  ros__parameters:
+    use_sim_time: true
+    controller_types: [dummy]
+    dummy:
+      rt_freq: 30.0
+      plugin: easynav_controller/DummyController
+      cycle_time_nort: 0.01
+      cycle_time_rt: 0.0001
+
+localizer_node:
+  ros__parameters:
+    use_sim_time: true
+    localizer_types: [Ukf]
+    dummy:
+      rt_freq: 30.0
+      plugin: easynav_localizer/DummyLocalizer
+      cycle_time_nort: 0.01
+      cycle_time_rt: 0.001
+    Ukf:
+      rt_freq: 50.0
+      freq: 5.0
+      reseed_freq: 0.1
+      plugin: easynav_fusion_localizer/FusionLocalizer
+      latitude_origin: 40.2834931
+      longitude_origin: -3.8207253999999997
+      altitude_origin: 746.184
+      local_filter:
+        two_d_mode: true
+        publish_tf: true
+
+        # --- Reference Frames ---
+        map_frame: map
+        odom_frame: odom
+        base_link_frame: base_link
+        world_frame: map
+
+        # --- INPUT 1: GPS Odometry ---
+        gps0: /gps/fix
+        gps0_config:
+          [true,  true,  false,
+          false, false, false,
+          false, false, false,
+          false, false, false,
+          false, false, false]
+        gps0_differential: false
+
+        #--- INPUT 2: Wheel Odometry ---
+        odom0: /robotnik_base_control/odom
+        odom0_config:
+          [false, false, false,
+          false, false, false,
+          true,  true, false,
+          false, false, true,
+          false, false, false]
+        odom0_differential: false
+
+        # --- INPUT 3: IMU ---
+        imu0: /imu/data
+        imu0_config:
+          [false, false, false,
+          true,  true,  false,
+          false, false, false,
+          true,  true,  true,
+          false, false, false]
+        imu0_differential: false
+        imu0_remove_gravitational_acceleration: true
+
+        twist0: /gps/fix_velocity
+        twist0_config:
+          [false, false, false,
+          false, false, false,
+          true,  false,  false,
+          false, false, false,
+          false, false, false]
+        twist0_differential: false
+
+        # --- Process Variances ---
+        process_noise_covariance: [0.05, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.05, 0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.06, 0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.03, 0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.03, 0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.06, 0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.025, 0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.025, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.04, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.01, 0.0,  0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.01, 0.0,  0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.02, 0.0,  0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,
+                                  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,   0.0,   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.015]
+
+
+maps_manager_node:
+  ros__parameters:
+    use_sim_time: true
+    map_types: [dummy]
+    dummy:
+      freq: 10.0
+      plugin: easynav_maps_manager/DummyMapsManager
+      cycle_time_nort: 0.1
+      cycle_time_rt: 0.0001
+
+planner_node:
+  ros__parameters:
+    use_sim_time: true
+    planner_types: [dummy]
+    dummy:
+      freq: 1.0
+      plugin: easynav_planner/DummyPlanner
+      cycle_time_nort: 0.2
+      cycle_time_rt: 0.0001
+
+sensors_node:
+  ros__parameters:
+    use_sim_time: true
+    forget_time: 0.5
+    sensors: [imu, gps]
+    perception_default_frame: odom
+    imu:
+      topic: /imu/data
+      type: sensor_msgs/msg/Imu
+    gps:
+      topic: /gps/fix
+      type: sensor_msgs/msg/NavSatFix
+
+system_node:
+  ros__parameters:
+    use_sim_time: true
+    position_tolerance: 0.1
+    angle_tolerance: 0.05

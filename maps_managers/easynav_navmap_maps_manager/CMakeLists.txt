@@ -5,10 +5,6 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake_modules)
 
 find_package(ament_cmake REQUIRED)
@@ -90,8 +86,8 @@ ament_export_targets(export_${PROJECT_NAME})
 # Register the plugin
 pluginlib_export_plugin_description_file(easynav_core easynav_navmap_maps_manager_plugins.xml)
 
-pluginlib_export_plugin_description_file(easynav_navmap_filter easynav_navmap_maps_manager_obstacle_filter.xml)
-pluginlib_export_plugin_description_file(easynav_navmap_filter easynav_navmap_maps_manager_inflation_filter.xml)
+pluginlib_export_plugin_description_file(easynav_navmap_maps_manager easynav_navmap_maps_manager_obstacle_filter.xml)
+pluginlib_export_plugin_description_file(easynav_navmap_maps_manager easynav_navmap_maps_manager_inflation_filter.xml)
 
 ament_export_dependencies(
   easynav_common

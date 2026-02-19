@@ -39,7 +39,6 @@
  *********************************************************************/
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
@@ -178,7 +177,7 @@ bool InflationFilter::inflate_layer_u8(
   return true;
 }
 
-std::expected<void, std::string>
+void
 InflationFilter::on_initialize()
 {
   auto node = get_node();
@@ -197,8 +196,6 @@ InflationFilter::on_initialize()
   RCLCPP_INFO(node->get_logger(),
     "InflationFilter with inflation_radius = %lf  cost_scaling_factor = %lf",
     inflation_radius_, cost_scaling_factor_);
-
-  return {};
 }
 
 void

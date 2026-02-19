@@ -38,14 +38,11 @@
 #ifndef EASYNAV_COSTMAP_COMMON__COSTMAP_2D_HPP_
 #define EASYNAV_COSTMAP_COMMON__COSTMAP_2D_HPP_
 
-#include <string.h>
-#include <stdio.h>
-#include <limits.h>
+#include <cstring>
 #include <algorithm>
 #include <cmath>
-#include <string>
+#include <climits>
 #include <vector>
-#include <queue>
 #include <mutex>
 #include "geometry_msgs/msg/point.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"

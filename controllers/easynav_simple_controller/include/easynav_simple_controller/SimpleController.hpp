@@ -8,10 +8,8 @@
 #define EASYNAV_SIMPLE_CONTROLLER__SIMPLECONTROLLER_HPP_
 
 #include <memory>
-#include <expected>
 #include <string>
 
-#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "geometry_msgs/msg/point.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "nav_msgs/msg/path.hpp"
@@ -33,8 +31,8 @@ public:
   ~SimpleController() override;
 
   /// \brief Initializes parameters and PID controllers.
-  /// \return std::expected<void, std::string> success or error message.
-  std::expected<void, std::string> on_initialize() override;
+  /// \throws std::runtime_error on initialization error.
+  void on_initialize() override;
 
   /// \brief Updates the controller using the given NavState.
   /// \param nav_state Current navigation state, including odometry and planned path.
@@ -50,7 +48,14 @@ protected:
   double max_angular_acc_{0.3};    ///< Maximum angular acceleration in rad/s².
   double look_ahead_dist_{1.0};    ///< Distance ahead of the robot to track in meters.
   double tolerance_dist_{0.05};    ///< Distance threshold to switch to orientation tracking.
-  double k_rot_{0.5};
+  double k_rot_{0.5};              ///< Gain to reduce linear speed based on angular velocity.
+  double final_goal_angle_tolerance_{0.1};  ///< Angular tolerance at the final goal in radians.
+  double linear_kp_{0.95};         ///< Proportional gain for linear PID.
+  double linear_ki_{0.03};         ///< Integral gain for linear PID.
+  double linear_kd_{0.08};         ///< Derivative gain for linear PID.
+  double angular_kp_{1.5};        ///< Proportional gain for angular PID.
+  double angular_ki_{0.03};        ///< Integral gain for angular PID.
+  double angular_kd_{0.08};        ///< Derivative gain for angular PID.
 
   double last_vlin_{0.0};          ///< Previous linear velocity for acceleration limiting.
   double last_vrot_{0.0};          ///< Previous angular velocity for acceleration limiting.

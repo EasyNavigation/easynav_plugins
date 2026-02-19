@@ -18,12 +18,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
-#include <expected>
 #include <string>
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/Perceptions.hpp"
 #include "easynav_common/types/PointPerception.hpp"
 
 #include "easynav_costmap_common/costmap_2d.hpp"
@@ -40,11 +38,9 @@ ObstacleFilter::ObstacleFilter()
 
 }
 
-std::expected<void, std::string>
+void
 ObstacleFilter::on_initialize()
-{
-  return {};
-}
+{}
 
 void
 ObstacleFilter::update(NavState & nav_state)
@@ -55,22 +51,42 @@ ObstacleFilter::update(NavState & nav_state)
 
   const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
-  Costmap2D dynamic_map = nav_state.get<Costmap2D>("map.dynamic.filtered");
+  auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
+  Costmap2D & dynamic_map = *dynamic_map_ptr;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  auto fused = PointPerceptionsOpsView(perceptions)
-    .downsample(dynamic_map.getResolution())
-    .fuse(get_tf_prefix() + "map")
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-    .as_points();
+  rclcpp::Time stamp;
+
+  auto view = PointPerceptionsOpsView(perceptions);
+  view.downsample(dynamic_map.getResolution())
+  .fuse(tf_info.map_frame)
+  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN});
+
+  const auto & fused = view.as_points();
+
+  nav_state.set("map_time", stamp);
+
+  double min_x = std::numeric_limits<double>::max();
+  double min_y = std::numeric_limits<double>::max();
+  double max_x = std::numeric_limits<double>::lowest();
+  double max_y = std::numeric_limits<double>::lowest();
 
   for (const auto & p : fused) {
+    min_x = std::min(min_x, static_cast<double>(p.x));
+    min_y = std::min(min_y, static_cast<double>(p.y));
+    max_x = std::max(max_x, static_cast<double>(p.x));
+    max_y = std::max(max_y, static_cast<double>(p.y));
+
     unsigned int cx, cy;
     if (dynamic_map.worldToMap(p.x, p.y, cx, cy)) {
       dynamic_map.setCost(cx, cy, LETHAL_OBSTACLE);
     }
   }
 
-  nav_state.set("map.dynamic.filtered", dynamic_map);
+  if (!fused.empty()) {
+    ObstacleBounds bb{min_x, min_y, max_x, max_y};
+    nav_state.set("map.dynamic.obstacle_bounds", bb);
+  }
 }
 
 }  // namespace easynav

@@ -23,23 +23,11 @@
 #ifndef EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
 #define EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
 
-#include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
-
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "std_srvs/srv/trigger.hpp"
 
-#include "tf2_ros/buffer.hpp"
-#include "tf2_ros/transform_listener.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
 #include "easynav_simple_common/SimpleMap.hpp"
-
-#include "yaets/tracing.hpp"
 
 namespace easynav
 {
@@ -70,9 +58,9 @@ public:
    *
    * Creates necessary publishers/subscribers and initializes the map instances.
    *
-   * @return std::expected<void, std::string> Success or error string.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
