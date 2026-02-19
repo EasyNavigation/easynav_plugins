@@ -56,4 +56,4 @@ This plugin does not create subscriptions or services directly; it reads inputs 
 This plugin does not perform TF lookups directly; frame consistency is assumed between NavMap, robot pose, and published path.
 
 ## License
-GPL-3.0-only
+Apache-2.0

@@ -59,4 +59,4 @@ At the heart of this stack is the SimpleMap data structure. It represents the en
 This manager does not broadcast TF; messages are stamped directly with their frame as provided.
 
 ## License
-GPL-3.0-only
+Apache-2.0

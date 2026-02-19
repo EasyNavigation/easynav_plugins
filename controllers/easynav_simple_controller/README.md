@@ -62,4 +62,4 @@ The controller itself does not create ROS publishers/subscribers or service serv
 This controller reads pose from `nav_msgs/Odometry` (NavState key `robot_pose`). TF is not directly used in this plugin.
 
 ## License
-GPL-3.0-only
+Apache-2.0

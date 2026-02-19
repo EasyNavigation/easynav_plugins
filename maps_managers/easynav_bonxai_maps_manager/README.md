@@ -63,4 +63,4 @@ Maps Manager that maintains a [Bonxai](https://github.com/facontidavide/Bonxai) 
 
 
 ## License
-GPL-3.0-only
+Apache-2.0

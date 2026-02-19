@@ -77,4 +77,4 @@ This package does not create service servers or clients.
 | Requires | `base_footprint -> <sensor_frame>` | Required to transform perception point clouds into the robot base frame during correction. |
 
 ## License
-GPL-3.0-only
+Apache-2.0

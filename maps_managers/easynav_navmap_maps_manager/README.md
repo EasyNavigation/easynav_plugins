@@ -63,4 +63,4 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 
 
 ## License
-GPL-3.0-only
+Apache-2.0
