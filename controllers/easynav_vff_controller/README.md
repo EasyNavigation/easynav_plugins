@@ -59,4 +59,4 @@ Relies on frames stamped in `robot_pose`; does not query TF directly.
 
 ## License
 
-GPL-3.0-only
+Apache-2.0
