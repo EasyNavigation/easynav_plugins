@@ -1,8 +1,17 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 // #pragma once
 #ifndef EASYNAV_MPC_CONTROLLER__MPCCONTROLLER_HPP_
@@ -66,12 +75,16 @@ public:
   void collision_checker(void *data, std::vector<double> & u);
 
 protected:
-  int horizon_steps_{5};        ///< Prediction horizon for MPC.
-  double dt_{0.1};              ///< Time step for MPC.
-  double safety_radius_{0.35};  ///< Safety radius to avoid obstacles
-  double max_lin_vel_{1.5};     ///< Maximum linear velocity for MPC.
-  double max_ang_vel_{1.5};     ///< Maximum angular velocity for MPC.
-  bool verbose_{false};         ///< Value to debug on terminal
+  int horizon_steps_{5};                ///< Prediction horizon for MPC.
+  double dt_{0.1};                      ///< Time step for MPC.
+  double safety_radius_{0.35};          ///< Safety radius to avoid obstacles
+  double max_lin_vel_{1.5};             ///< Maximum linear velocity for MPC.
+  double max_ang_vel_{1.5};             ///< Maximum angular velocity for MPC.
+  bool verbose_{false};                 ///< Value to debug on terminal
+  double last_v_{0.0};                  ///< Last value for linear velocity before than collision
+  double last_w_{0.0};                  ///< Last value for angular velocity before than collision
+  bool collision_state_{false};         ///< Collision state flag
+  double collision_factor_{0.618033};   ///< Collision avoidance for recalculate velocities
 
   // Fallback goal tolerances if GoalManager does not publish them
   double fallback_goal_pos_tol_{0.05};   ///< Default positional tolerance (meters).
