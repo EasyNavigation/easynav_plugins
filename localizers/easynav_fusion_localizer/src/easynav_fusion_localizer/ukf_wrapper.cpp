@@ -2101,7 +2101,6 @@ void UkfWrapper::odometryCallback(
     pos_ptr->header = msg->header;
     pos_ptr->pose = msg->pose;  // Entire pose object, also copies covariance
 
-    
 
     if (pose_callback_data.pose_use_child_frame_) {
       poseCallback(pos_ptr, pose_callback_data, world_frame_id_, msg->child_frame_id, false);

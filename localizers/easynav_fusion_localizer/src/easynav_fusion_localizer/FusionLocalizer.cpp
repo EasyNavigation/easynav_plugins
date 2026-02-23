@@ -53,7 +53,8 @@ void FusionLocalizer::on_initialize()
     localizer_node->get_parameter(plugin_name + ".navsatfix_topic", navsatfix_topic_);
     navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
       navsatfix_topic_, rclcpp::QoS(10));
-    gps_debug_pub_ = localizer_node->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
+    gps_debug_pub_ =
+      localizer_node->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
       "gps_pose", rclcpp::QoS(10));
   } catch (const std::exception & e) {
     RCLCPP_FATAL(
@@ -91,9 +92,12 @@ void FusionLocalizer::update_rt(NavState & nav_state)
       if (gps_time > last_gps_stamp_[i]) {
         EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_process_gps");
         last_gps_stamp_[i] = gps_time;
-        auto pose = std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(navsatfix_to_pose(gps_data[i]->data));
+        auto pose =
+          std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(navsatfix_to_pose(
+            gps_data[i]->data));
         if (!first_pose_received_) {
-          RCLCPP_INFO(get_node()->get_logger(), "First valid GPS fix received. Initializing filter state.");
+          RCLCPP_INFO(get_node()->get_logger(),
+              "First valid GPS fix received. Initializing filter state.");
           ukf_global_->setPoseCallback(pose);
           first_pose_received_ = true;
           continue;
@@ -182,10 +186,11 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
   pose_msg.pose.pose.orientation.w = 1.0;
 
   pose_msg.pose.covariance.fill(0.0);
-  
+
   double default_var = 1.0; // 1 meter variance standard
 
-  if (navsat_msg.position_covariance_type == sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN)
+  if (navsat_msg.position_covariance_type ==
+    sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN)
   {
     pose_msg.pose.covariance[0] = navsat_msg.position_covariance[0];
     pose_msg.pose.covariance[7] = navsat_msg.position_covariance[4];
@@ -196,15 +201,15 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
     pose_msg.pose.covariance[35] = default_var;
   } else {
       // Fallback variances if GPS doesn't provide them
-      pose_msg.pose.covariance[0] = default_var;
-      pose_msg.pose.covariance[7] = default_var;
-      pose_msg.pose.covariance[14] = default_var;
+    pose_msg.pose.covariance[0] = default_var;
+    pose_msg.pose.covariance[7] = default_var;
+    pose_msg.pose.covariance[14] = default_var;
 
-      pose_msg.pose.covariance[21] = default_var;
-      pose_msg.pose.covariance[28] = default_var;
-      pose_msg.pose.covariance[35] = default_var;
+    pose_msg.pose.covariance[21] = default_var;
+    pose_msg.pose.covariance[28] = default_var;
+    pose_msg.pose.covariance[35] = default_var;
 
-      RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 5000, 
+    RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 5000,
         "NavSatFix covariance type unknown or invalid. Using default covariance.");
   }
 
