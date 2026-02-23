@@ -91,10 +91,16 @@ void FusionLocalizer::update_rt(NavState & nav_state)
       if (gps_time > last_gps_stamp_[i]) {
         EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_process_gps");
         last_gps_stamp_[i] = gps_time;
-        auto pose = navsatfix_to_pose(gps_data[i]->data);
-        gps_debug_pub_->publish(pose);
+        auto pose = std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(navsatfix_to_pose(gps_data[i]->data));
+        if (!first_pose_received_) {
+          RCLCPP_INFO(get_node()->get_logger(), "First valid GPS fix received. Initializing filter state.");
+          ukf_global_->setPoseCallback(pose);
+          first_pose_received_ = true;
+          continue;
+        }
+        gps_debug_pub_->publish(*pose);
         ukf_global_->poseCallback(
-          std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(pose),
+          pose,
           gps_cb_arr[i],
           tf_info.map_frame,
           gps_data[i]->data.header.frame_id,
@@ -176,6 +182,8 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
   pose_msg.pose.pose.orientation.w = 1.0;
 
   pose_msg.pose.covariance.fill(0.0);
+  
+  double default_var = 1.0; // 1 meter variance standard
 
   if (navsat_msg.position_covariance_type == sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN)
   {
@@ -183,20 +191,19 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
     pose_msg.pose.covariance[7] = navsat_msg.position_covariance[4];
     pose_msg.pose.covariance[14] = navsat_msg.position_covariance[8];
 
-    pose_msg.pose.covariance[21] = kNoOrientationCovariance;
-    pose_msg.pose.covariance[28] = kNoOrientationCovariance;
-    pose_msg.pose.covariance[35] = kNoOrientationCovariance;
+    pose_msg.pose.covariance[21] = default_var;
+    pose_msg.pose.covariance[28] = default_var;
+    pose_msg.pose.covariance[35] = default_var;
   } else {
       // Fallback variances if GPS doesn't provide them
-      double default_var = 1.0; // 1 meter variance standard
       pose_msg.pose.covariance[0] = default_var;
       pose_msg.pose.covariance[7] = default_var;
       pose_msg.pose.covariance[14] = default_var;
 
-      pose_msg.pose.covariance[21] = kNoOrientationCovariance;
-      pose_msg.pose.covariance[28] = kNoOrientationCovariance;
-      pose_msg.pose.covariance[35] = kNoOrientationCovariance;
-      
+      pose_msg.pose.covariance[21] = default_var;
+      pose_msg.pose.covariance[28] = default_var;
+      pose_msg.pose.covariance[35] = default_var;
+
       RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 5000, 
         "NavSatFix covariance type unknown or invalid. Using default covariance.");
   }

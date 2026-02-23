@@ -82,6 +82,8 @@ private:
   rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr gps_debug_pub_{nullptr};
   std::string navsatfix_topic_;
 
+  bool first_pose_received_{false};
+
 };
 
 }  // namespace easynav
