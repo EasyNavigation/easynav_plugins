@@ -78,7 +78,6 @@ void FusionLocalizer::on_initialize()
 
 void FusionLocalizer::update_rt(NavState & nav_state)
 {
-  EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_update_rt");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (n_gps_sensors_ && nav_state.has("gnss")) {
@@ -98,6 +97,12 @@ void FusionLocalizer::update_rt(NavState & nav_state)
         if (!first_pose_received_) {
           RCLCPP_INFO(get_node()->get_logger(),
               "First valid GPS fix received. Initializing filter state.");
+          if(nav_state.has("imu")) {
+            auto imu_data = nav_state.get<IMUPerceptions>(std::string("imu"));
+            if (!imu_data.empty()) {
+              pose->pose.pose.orientation = imu_data[0]->data.orientation;
+            }
+          }
           ukf_global_->setPoseCallback(pose);
           first_pose_received_ = true;
           continue;
@@ -132,27 +137,6 @@ void FusionLocalizer::update([[maybe_unused]] NavState & nav_state)
 
 }
 
-/**
- * @brief Converts a NavSatFix message to a PoseWithCovarianceStamped in UTM coordinates.
- *
- * This function transforms the latitude, longitude, and altitude from a sensor_msgs::msg::NavSatFix
- * message into UTM coordinates and populates a geometry_msgs::msg::PoseWithCovarianceStamped message.
- * The output pose is expressed relative to a predefined UTM origin. The orientation is set to identity
- * (no rotation), as orientation cannot be inferred from GPS data alone.
- *
- * Covariance handling:
- * - If the NavSatFix message provides a diagonal covariance (COVARIANCE_TYPE_DIAGONAL_KNOWN),
- *   the corresponding variances are copied into the pose covariance matrix.
- * - If not, a default variance of 1.0 is used for the position, and a warning is issued.
- *
- * @param navsat_msg The input NavSatFix message containing latitude, longitude, altitude, and covariance.
- * @return geometry_msgs::msg::PoseWithCovarianceStamped The resulting pose in UTM coordinates with covariance.
- *
- * @note
- * The function uses RCLCPP_WARN_THROTTLE to log a warning if the covariance type is unknown or invalid.
- * This throttled warning will only be emitted at most once every 5 seconds, preventing log flooding,
- * unlike RCLCPP_WARN which would log a warning every time the condition is met.
- */
 geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose(
   const sensor_msgs::msg::NavSatFix & navsat_msg)
 {

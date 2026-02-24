@@ -89,7 +89,7 @@ localizer_node:
         transform_timeout: 0.1
         smooth_lagged_data: true
         # Defines the time window in seconds to keep past states in memory.
-        history_length: 5.0
+        # history_length: 5.0
         dynamic_process_noise_covariance: true
 
         # --- Reference Frames ---
