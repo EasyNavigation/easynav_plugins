@@ -1,12 +1,25 @@
 controller_node:
   ros__parameters:
     use_sim_time: true
-    controller_types: [dummy]
+    controller_types: [mppi]
     dummy:
       rt_freq: 30.0
       plugin: easynav_controller/DummyController
       cycle_time_nort: 0.01
       cycle_time_rt: 0.0001
+    mppi:
+      rt_freq: 30.0 
+      plugin: easynav_mppi_controller/MPPIController
+      num_samples: 200
+      horizon_steps: 5
+      dt: 0.15
+      lambda: 1.0      
+      fov: 1.57
+      max_linear_velocity: 1.5
+      max_angular_velocity: 1.0
+      max_linear_acceleration: 0.5
+      max_angular_acceleration: 0.5
+      safety_radius: 0.3
 
 localizer_node:
   ros__parameters:
@@ -165,7 +178,32 @@ localizer_node:
 maps_manager_node:
   ros__parameters:
     use_sim_time: true
-    map_types: [dummy]
+    map_types: [costmap]
+    routes:
+      freq: 10.0
+      plugin: easynav_routes_maps_manager/RoutesMapsManager
+      filters: [routes_costmap]
+      package: easynav_fusion_localizer
+      map_path_file: routes/simple_square.yaml
+      routes_costmap:
+        plugin: easynav_routes_maps_manager/RoutesCostmapFilter
+        min_cost: 50
+        route_width: 0.5
+      cycle_time_nort: 0.001
+      cycle_time_rt: 0.001
+    costmap:
+      freq: 10.0
+      plugin: easynav_costmap_maps_manager/CostmapMapsManager
+      package: easynav_fusion_localizer
+      map_path_file: maps/square.yaml
+      filters: [obstacles, inflation]
+      obstacles:
+        plugin: easynav_costmap_maps_manager/CostmapMapsManager/ObstaclesFilter
+      inflation:
+        plugin: easynav_costmap_maps_manager/CostmapMapsManager/InflationFilter
+        inflation_radius: 1.3
+        inscribed_radius: 0.25
+        cost_scaling_factor: 3.0
     dummy:
       freq: 10.0
       plugin: easynav_maps_manager/DummyMapsManager
@@ -175,18 +213,23 @@ maps_manager_node:
 planner_node:
   ros__parameters:
     use_sim_time: true
-    planner_types: [dummy]
+    planner_types: [simple]
     dummy:
       freq: 1.0
       plugin: easynav_planner/DummyPlanner
       cycle_time_nort: 0.2
       cycle_time_rt: 0.0001
+    simple:
+      freq: 10.0
+      plugin: easynav_costmap_planner/CostmapPlanner
+      cost_factor: 10.0
+      continuous_replan: true
 
 sensors_node:
   ros__parameters:
     use_sim_time: true
     forget_time: 0.5
-    sensors: [imu, gps]
+    sensors: [imu, gps, laser1]
     perception_default_frame: odom
     imu:
       topic: /imu/data
@@ -194,6 +237,11 @@ sensors_node:
     gps:
       topic: /gps/fix
       type: sensor_msgs/msg/NavSatFix
+    laser1:
+      topic: /front_laser/points
+      type: sensor_msgs/msg/PointCloud2
+      group: points
+    
 
 system_node:
   ros__parameters:
