@@ -4,6 +4,7 @@ Changelog for package easynav_mpc_controller
 
 Forthcoming
 -----------
+* 0.2.0
 * GPLv3 -> Apache 2.0
 * Collision checker scope was changed
 * Remove C++20/C++23 features and update to new MethodBase interface
@@ -17,7 +18,7 @@ Forthcoming
 * Visualization Marker was added
 * MPC controller is working
 * MPC was added
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, José Miguel Guerrero, Juan S. Cely, Juan S. Cely G., Miguel
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, José Miguel Guerrero, Juan S. Cely G., Miguel
 
 0.0.2 (2025-10-12)
 ------------------
