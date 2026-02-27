@@ -2,8 +2,8 @@
 Changelog for package easynav_mpc_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.1 (2026-02-27)
+------------------
 * GPLv3 -> Apache 2.0
 * Remove C++20/C++23 features and update to new MethodBase interface
 * TFInfo in RTTFBuffer
