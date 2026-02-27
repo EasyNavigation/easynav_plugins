@@ -2,8 +2,8 @@
 Changelog for package easynav_simple_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.1 (2026-02-27)
+------------------
 * 0.2.0
 * GPLv3 -> Apache 2.0
 * Documentation was corrected

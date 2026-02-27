@@ -2,8 +2,8 @@
 Changelog for package easynav_costmap_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.1 (2026-02-27)
+------------------
 * 0.2.0
 * GPLv3 -> Apache 2.0
 * Remove C++20/C++23 features and update to new MethodBase interface
