@@ -1,7 +1,7 @@
 <map id="SimpleMapsManager" name="SimpleMapsManager">
-<area shape="rect" id="Node000001" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="59,94,202,120"/>
+<area shape="rect" id="Node000001" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="59,102,202,128"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,5,139,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,42,125,92,120,95,86,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,43,125,100,121,103,85,45"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="163,5,216,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,45,141,95,137,92,171,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="176,45,140,103,136,100,172,43"/>
 </map>

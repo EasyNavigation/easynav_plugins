@@ -1,15 +1,15 @@
 <map id="CostmapPlanner" name="CostmapPlanner">
-<area shape="rect" id="Node000001" title="A planner implementing the A* algorithm on a Costmap2D grid." alt="" coords="340,124,457,150"/>
+<area shape="rect" id="Node000001" title="A planner implementing the A* algorithm on a Costmap2D grid." alt="" coords="350,143,468,168"/>
 <area shape="rect" id="Node000002" href="$classPlannerMethodBase.html" title=" " alt="" coords="5,5,144,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,39,142,70,192,98,229,110,267,119,340,130,339,135,266,125,227,115,189,102,139,75,98,44"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,41,136,81,162,100,189,116,229,131,271,142,350,151,350,156,271,147,228,136,187,121,159,105,133,85,92,45"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="168,5,227,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,46,202,74,208,87,216,98,236,109,266,118,340,129,339,134,265,123,233,114,212,102,203,90,197,75,193,47"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="304,5,349,31"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="323,46,322,73,330,99,342,112,357,121,355,126,338,116,325,101,317,74,317,46"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="448,5,496,31"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="469,47,459,74,445,102,419,126,416,122,440,98,454,72,464,45"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="560,5,611,31"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="583,47,572,76,552,102,531,116,507,126,458,137,457,132,505,121,528,112,549,98,567,73,578,45"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="658,5,737,31"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="696,47,686,76,665,102,629,118,575,128,458,137,457,132,574,123,627,113,662,98,681,74,691,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="196,46,198,83,204,101,215,117,236,129,270,138,350,148,350,154,269,143,234,134,211,121,199,104,193,84,191,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="312,5,357,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="330,47,328,82,331,101,338,117,350,130,366,140,364,144,347,134,334,120,326,102,323,83,325,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="461,5,509,31"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="484,47,476,83,458,120,433,144,429,140,454,117,471,81,479,46"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="577,5,628,31"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="604,47,596,85,587,104,574,121,556,131,530,139,469,150,468,145,529,134,554,126,570,117,582,101,591,83,599,46"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="680,5,760,31"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="722,47,715,85,706,105,692,121,676,130,653,138,595,149,469,157,468,151,594,144,652,133,674,126,689,117,701,102,710,84,717,46"/>
 </map>

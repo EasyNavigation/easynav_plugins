@@ -1,25 +1,25 @@
 <map id="AStarPlanner" name="AStarPlanner">
-<area shape="rect" id="Node000001" title="A planner implementing the A* algorithm on a ::navmap::NavMap grid." alt="" coords="357,284,455,309"/>
-<area shape="rect" id="Node000002" href="$classPlannerMethodBase.html" title=" " alt="" coords="30,9,169,35"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,4,221,3,261,7,300,18,334,39,349,57,362,84,382,155,397,229,405,283,400,284,392,230,377,157,357,86,344,60,331,43,298,23,260,12,221,8,183,10"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="70,86,129,112"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,98,250,106,300,115,334,129,352,146,367,165,388,209,400,251,406,283,400,284,395,252,383,210,362,168,348,149,331,133,299,120,250,111,144,103"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="73,136,126,161"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="142,143,184,143,234,148,286,161,334,184,359,206,379,233,402,282,398,285,375,236,355,210,331,188,284,166,233,154,184,149,142,148"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="77,185,122,211"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="138,196,229,205,282,217,334,235,368,258,394,282,391,285,365,262,331,240,281,222,228,211,137,201"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="75,234,124,260"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="139,248,228,257,333,274,361,280,359,286,332,279,227,263,139,253"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="74,284,125,309"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="141,294,356,294,356,299,141,299"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="60,333,139,359"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="154,339,238,329,332,314,360,307,362,313,333,319,239,335,155,344"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="16,382,183,408"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="198,387,265,375,332,353,365,332,391,308,394,312,368,336,334,358,266,380,199,392"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="28,432,171,457"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="185,444,260,433,297,422,331,404,355,383,374,357,397,309,402,311,379,359,359,386,334,408,299,426,261,439,186,449"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="41,481,158,507"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="173,499,213,499,254,494,295,482,331,461,348,445,363,426,383,383,395,341,401,309,406,310,400,342,388,385,367,429,352,449,334,466,297,487,255,499,213,504,174,505"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="5,530,194,556"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="208,554,241,552,273,547,304,536,331,519,353,496,370,469,383,440,391,409,400,352,402,310,408,310,406,352,397,410,388,442,375,472,357,500,334,523,306,541,274,552,241,558,208,560"/>
+<area shape="rect" id="Node000001" title="A planner implementing the A* algorithm on a navmap::NavMap grid." alt="" coords="362,327,460,353"/>
+<area shape="rect" id="Node000002" href="$classPlannerMethodBase.html" title=" " alt="" coords="30,10,169,36"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,5,218,3,261,6,303,17,339,40,356,61,369,94,391,178,404,265,411,327,406,327,399,266,385,179,364,96,351,64,336,44,301,22,260,11,218,8,178,10"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="70,114,129,140"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,124,253,131,304,140,339,154,359,173,374,195,396,244,407,291,411,327,406,327,402,292,391,246,370,198,355,176,336,158,303,145,252,136,145,130"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="73,167,126,193"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="142,178,250,185,303,194,339,207,367,234,388,267,401,300,409,326,404,328,396,302,383,270,363,238,336,212,302,199,250,191,141,184"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="77,221,122,246"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="138,229,180,230,232,235,287,246,339,266,359,279,377,295,403,325,399,329,373,298,356,283,336,271,285,251,231,240,180,235,138,235"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="75,274,124,300"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="140,287,231,296,338,314,375,324,373,329,337,319,230,301,139,292"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="74,327,125,353"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="141,338,361,338,361,343,141,343"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="60,381,139,406"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="154,389,241,382,337,366,380,351,382,356,338,371,241,388,155,395"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="16,434,183,460"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="198,446,268,436,303,427,336,413,356,400,374,384,399,352,403,355,378,387,360,404,339,418,305,432,269,441,198,451"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="28,487,171,513"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="186,507,224,507,263,502,301,491,336,473,364,446,384,413,397,379,404,353,409,354,402,381,389,415,368,449,339,477,303,496,264,507,224,512,186,513"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="41,541,158,566"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="173,565,214,568,257,566,299,556,336,536,356,517,372,494,393,442,403,391,407,353,412,354,409,392,398,443,377,496,360,520,339,540,300,561,257,571,214,573,173,571"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="5,594,194,620"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="163,621,206,627,251,627,296,618,317,609,336,597,350,580,362,553,383,482,397,408,405,353,411,354,403,408,388,483,367,555,354,583,339,601,320,614,298,623,252,632,205,632,163,626"/>
 </map>

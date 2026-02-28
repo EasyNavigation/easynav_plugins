@@ -1,5 +1,5 @@
 <map id="ProbabilisticMap::Options" name="ProbabilisticMap::Options">
-<area shape="rect" id="Node000001" title="These default values are the same as OctoMap." alt="" coords="5,169,174,195"/>
+<area shape="rect" id="Node000001" title="These default values are the same as OctoMap." alt="" coords="5,204,174,229"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="59,5,120,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,47,92,169,87,169,87,47"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,46,92,203,87,203,87,46"/>
 </map>

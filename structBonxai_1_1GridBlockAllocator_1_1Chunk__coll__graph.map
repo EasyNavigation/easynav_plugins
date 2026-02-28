@@ -1,7 +1,7 @@
 <map id="GridBlockAllocator&lt; DataT &gt;::Chunk" name="GridBlockAllocator&lt; DataT &gt;::Chunk">
-<area shape="rect" id="Node000001" title=" " alt="" coords="18,94,147,135"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="18,102,147,143"/>
 <area shape="rect" id="Node000002" href="$classBonxai_1_1Mask.html" title=" " alt="" coords="5,5,59,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="48,43,74,92,70,95,43,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="47,44,75,101,71,103,42,46"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="82,5,187,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="123,46,96,95,91,92,118,43"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,46,108,79,95,103,91,100,103,77,120,44"/>
 </map>

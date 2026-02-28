@@ -1,5 +1,5 @@
 <map id="planners/easynav_navmap_planner/include/easynav_navmap_planner/AStarPlanner.hpp" name="planners/easynav_navmap_planner/include/easynav_navmap_planner/AStarPlanner.hpp">
-<area shape="rect" id="Node000001" title="Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap." alt="" coords="246,5,475,61"/>
+<area shape="rect" id="Node000001" title="Declaration of the AStarPlanner class implementing A* path planning using navmap::NavMap." alt="" coords="246,5,475,61"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,116,63,142"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="247,62,162,84,75,112,72,112,70,107,73,106,160,79,245,56"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="86,116,147,142"/>

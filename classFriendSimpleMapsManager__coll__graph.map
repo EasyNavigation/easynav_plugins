@@ -1,9 +1,9 @@
 <map id="FriendSimpleMapsManager" name="FriendSimpleMapsManager">
-<area shape="rect" id="Node000001" title=" " alt="" coords="41,169,220,195"/>
-<area shape="rect" id="Node000002" href="$classeasynav_1_1SimpleMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="59,94,202,120"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,135,133,169,128,169,128,135"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="41,177,220,203"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1SimpleMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="59,102,202,128"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,143,133,177,128,177,128,143"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,5,139,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="91,42,125,92,120,95,86,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,43,125,100,121,103,85,45"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="163,5,216,31"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="175,45,141,95,137,92,171,42"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="176,45,140,103,136,100,172,43"/>
 </map>

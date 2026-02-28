@@ -1,5 +1,5 @@
 <map id="planners/easynav_navmap_planner/src/easynav_navmap_planner/AStarPlanner.cpp" name="planners/easynav_navmap_planner/src/easynav_navmap_planner/AStarPlanner.cpp">
-<area shape="rect" id="Node000001" title="Implementation of the AStarPlanner class using A* on ::navmap::NavMap (triangle graph)." alt="" coords="586,5,784,61"/>
+<area shape="rect" id="Node000001" title="Implementation of the AStarPlanner class using A* on navmap::NavMap (triangle graph)." alt="" coords="586,5,784,61"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="89,116,145,142"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="586,43,495,51,387,64,272,84,159,112,155,113,153,108,157,106,271,79,386,59,494,45,586,37"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="170,116,227,142"/>
@@ -12,7 +12,7 @@
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="587,62,526,84,466,111,452,122,442,132,431,143,415,152,366,170,324,179,285,183,248,183,171,183,128,188,78,200,74,201,72,196,76,195,127,183,171,178,248,178,285,177,323,174,365,165,413,147,428,138,438,128,448,118,463,107,524,79,585,57"/>
 <area shape="rect" id="Node000007" title=" " alt="" coords="773,116,994,142"/>
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="743,59,845,107,843,112,741,64"/>
-<area shape="rect" id="Node000008" href="$AStarPlanner_8hpp.html" title="Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap." alt="" coords="476,109,648,150"/>
+<area shape="rect" id="Node000008" href="$AStarPlanner_8hpp.html" title="Declaration of the AStarPlanner class implementing A* path planning using navmap::NavMap." alt="" coords="476,109,648,150"/>
 <area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="651,64,601,101,598,97,648,59"/>
 <area shape="rect" id="Node000011" title=" " alt="" coords="682,205,845,231"/>
 <area shape="poly" id="edge17_Node000001_Node000011" title=" " alt="" coords="692,61,703,103,719,148,746,191,742,194,714,151,697,105,687,62"/>

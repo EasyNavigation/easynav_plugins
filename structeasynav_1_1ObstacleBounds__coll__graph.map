@@ -1,5 +1,5 @@
 <map id="ObstacleBounds" name="ObstacleBounds">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,139,123,165"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,163,123,189"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="34,5,94,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,47,67,138,61,138,61,47"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,47,67,162,61,162,61,47"/>
 </map>

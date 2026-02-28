@@ -1,7 +1,7 @@
 <map id="InflationFilter::StaticGeomSignature" name="InflationFilter::StaticGeomSignature">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,124,176,165"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="35,5,74,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="55,47,56,73,62,99,75,122,70,125,57,101,51,73,50,47"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,143,176,183"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="34,5,72,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="51,47,50,81,57,118,72,141,67,144,52,120,45,82,46,47"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="98,5,158,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,47,99,125,94,123,117,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="123,47,98,143,93,142,118,45"/>
 </map>

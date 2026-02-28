@@ -1,40 +1,40 @@
 <map id="FriendAMCLLocalizer" name="FriendAMCLLocalizer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="536,798,683,824"/>
-<area shape="rect" id="Node000002" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="371,223,487,249"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="441,262,607,797,601,798,436,264"/>
-<area shape="rect" id="Node000003" href="$classControllerMethodBase.html" title=" " alt="" coords="19,65,169,90"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="184,62,224,61,267,65,309,75,348,94,380,123,403,158,418,194,427,222,422,224,413,196,398,161,376,126,345,98,307,80,266,70,224,67,184,67"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="23,114,165,155"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="181,127,263,134,307,143,348,158,371,171,391,188,420,221,416,225,387,192,368,176,346,162,305,148,263,139,180,133"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="64,402,124,428"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="137,393,206,368,246,361,279,361,310,358,345,343,371,322,392,296,419,248,424,251,397,299,375,326,348,348,311,364,279,367,247,367,207,373,139,398"/>
-<area shape="rect" id="Node000008" href="$classeasynav_1_1AMCLLocalizer.html" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="374,798,484,824"/>
-<area shape="poly" id="edge16_Node000008_Node000005" title=" " alt="" coords="122,436,161,467,208,494,228,500,247,502,281,499,314,500,331,507,348,519,376,552,397,589,412,629,422,670,431,745,431,797,426,797,425,745,417,671,407,631,392,591,372,555,345,523,328,511,313,506,281,505,246,507,227,505,206,498,158,471,119,440"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="69,601,119,626"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="135,609,260,599,316,591,345,582,362,558,378,520,401,421,416,319,424,249,429,249,422,320,407,422,383,521,367,560,348,587,317,596,260,604,135,614"/>
-<area shape="poly" id="edge19_Node000008_Node000006" title=" " alt="" coords="135,621,207,639,248,645,281,647,313,652,348,671,378,701,401,736,426,796,421,798,396,738,374,704,345,675,311,657,280,652,247,651,206,645,133,626"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="41,15,147,41"/>
-<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="162,18,207,17,255,23,304,36,348,59,368,77,384,98,407,144,421,189,428,222,423,223,416,190,402,146,379,100,364,80,345,64,302,41,255,28,206,23,162,23"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="473,824,528,826,580,821,581,827,528,831,473,829"/>
-<area shape="poly" id="edge20_Node000001_Node000008" title=" " alt="" coords="500,808,536,808,536,813,500,813"/>
-<area shape="poly" id="edge21_Node000001_Node000008" title=" " alt="" coords="473,792,528,790,581,795,580,800,528,795,473,798"/>
-<area shape="rect" id="Node000009" href="$classLocalizerMethodBase.html" title=" " alt="" coords="21,913,167,938"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="182,925,263,911,305,899,345,883,389,854,419,822,423,826,393,858,348,888,307,904,264,916,183,930"/>
-<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="166,907,254,890,301,876,346,859,375,841,401,822,405,826,378,846,348,864,302,881,255,895,167,912"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="10,962,178,1003"/>
-<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="192,979,271,964,310,951,345,932,373,907,394,877,420,823,425,825,399,879,377,910,348,936,312,956,272,970,193,984"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="54,1053,134,1078"/>
-<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="149,1074,196,1078,247,1077,299,1066,323,1056,345,1042,369,1019,387,991,401,960,411,928,422,867,425,824,430,824,427,868,416,929,406,962,392,993,373,1022,348,1046,326,1061,301,1071,248,1082,195,1084,149,1079"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="5,1102,183,1128"/>
-<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="163,1128,207,1133,256,1132,303,1122,325,1113,345,1100,360,1080,375,1049,398,968,414,884,423,823,429,824,420,885,403,969,380,1051,365,1083,348,1104,328,1117,305,1127,256,1138,207,1139,162,1134"/>
-<area shape="rect" id="Node000013" title=" " alt="" coords="58,525,130,550"/>
-<area shape="poly" id="edge13_Node000008_Node000013" title=" " alt="" coords="145,534,259,540,312,549,333,556,348,565,373,590,393,621,407,654,417,688,428,752,430,797,425,798,423,753,412,690,402,656,388,623,369,594,345,569,331,561,311,554,258,546,145,540"/>
-<area shape="rect" id="Node000014" title=" " alt="" coords="16,675,172,701"/>
-<area shape="poly" id="edge14_Node000008_Node000014" title=" " alt="" coords="187,690,280,699,319,707,348,716,373,734,394,755,422,796,418,799,390,759,369,738,345,721,318,712,279,704,187,695"/>
-<area shape="rect" id="Node000015" title=" " alt="" coords="55,725,133,750"/>
-<area shape="poly" id="edge15_Node000008_Node000015" title=" " alt="" coords="148,734,242,740,296,748,348,762,382,777,411,795,408,800,380,782,346,767,294,753,242,745,148,739"/>
-<area shape="rect" id="Node000016" title=" " alt="" coords="71,798,117,824"/>
-<area shape="poly" id="edge17_Node000008_Node000016" title=" " alt="" coords="132,808,374,808,374,813,132,813"/>
-<area shape="rect" id="Node000017" title=" " alt="" coords="54,859,134,885"/>
-<area shape="poly" id="edge18_Node000008_Node000017" title=" " alt="" coords="150,869,242,862,295,854,346,843,401,822,403,827,347,849,296,860,243,867,150,874"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="541,995,688,1020"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="376,277,492,303"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="445,318,612,994,607,995,439,319"/>
+<area shape="rect" id="Node000003" href="$classControllerMethodBase.html" title=" " alt="" coords="19,75,169,100"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="184,71,226,70,270,74,314,85,353,105,374,124,390,145,414,194,428,241,434,276,428,277,422,242,409,196,386,148,370,127,350,110,312,90,269,79,226,75,184,76"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="23,131,165,172"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="181,152,279,160,322,168,353,179,380,200,402,227,429,276,425,278,398,230,377,204,350,183,321,173,279,165,180,157"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="64,515,124,540"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="123,503,161,478,206,456,247,447,282,448,315,447,332,442,350,431,380,401,402,366,418,330,427,303,432,304,423,332,407,368,384,405,353,435,334,446,316,452,282,454,248,452,208,461,164,483,126,508"/>
+<area shape="rect" id="Node000008" href="$classeasynav_1_1AMCLLocalizer.html" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="379,995,489,1020"/>
+<area shape="poly" id="edge16_Node000008_Node000005" title=" " alt="" coords="117,550,156,591,181,610,208,627,228,634,247,636,283,633,318,633,335,639,354,652,372,679,387,719,411,820,427,923,434,994,429,995,421,924,406,821,382,720,367,682,350,656,333,644,317,638,284,638,247,641,227,639,206,631,178,615,153,595,113,554"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="69,756,119,782"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="135,764,263,752,320,744,350,734,371,701,389,651,402,590,413,522,425,391,429,304,435,304,430,392,418,523,408,591,394,653,376,704,353,738,321,749,263,758,135,769"/>
+<area shape="poly" id="edge19_Node000008_Node000006" title=" " alt="" coords="135,780,207,802,249,808,284,808,317,813,353,834,372,851,388,872,411,918,426,961,433,994,428,995,420,963,406,920,383,875,368,855,350,838,315,818,284,814,249,813,206,807,133,785"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="41,25,147,51"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="162,27,208,26,259,31,309,44,353,70,376,93,394,120,408,149,419,179,431,236,435,277,429,278,425,237,414,181,403,151,390,122,372,96,350,74,307,49,258,36,208,31,162,32"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="478,1021,533,1023,585,1018,586,1024,533,1028,478,1026"/>
+<area shape="poly" id="edge20_Node000001_Node000008" title=" " alt="" coords="505,1005,541,1005,541,1010,505,1010"/>
+<area shape="poly" id="edge21_Node000001_Node000008" title=" " alt="" coords="478,989,533,987,586,992,585,997,533,992,478,995"/>
+<area shape="rect" id="Node000009" href="$classLocalizerMethodBase.html" title=" " alt="" coords="21,1124,167,1150"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="182,1140,266,1127,310,1114,350,1096,375,1079,396,1059,425,1019,430,1023,400,1063,378,1084,353,1101,311,1119,267,1132,183,1145"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="182,1119,266,1103,310,1090,350,1072,386,1046,413,1019,417,1023,389,1051,353,1077,311,1095,267,1108,183,1124"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="10,1174,178,1215"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="193,1198,232,1195,274,1188,314,1175,350,1155,381,1124,404,1087,419,1049,427,1020,432,1022,424,1051,408,1089,385,1128,353,1159,316,1180,275,1193,233,1200,193,1203"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="54,1295,134,1320"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="149,1317,197,1323,250,1323,303,1312,328,1302,350,1287,365,1268,379,1239,402,1160,419,1079,428,1021,433,1021,424,1080,407,1162,384,1240,369,1271,353,1291,330,1306,305,1317,251,1328,196,1328,149,1323"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="5,1348,183,1374"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="154,1375,201,1383,253,1385,305,1377,328,1367,350,1353,368,1329,384,1291,407,1193,422,1091,429,1021,434,1021,427,1092,413,1194,389,1293,373,1332,353,1357,331,1371,306,1382,253,1391,200,1389,153,1381"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="58,665,130,691"/>
+<area shape="poly" id="edge13_Node000008_Node000013" title=" " alt="" coords="146,675,262,680,317,690,338,697,353,706,370,728,385,760,408,845,425,932,434,994,428,995,419,933,403,846,380,762,365,730,350,710,336,701,315,695,262,686,145,680"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="16,847,172,872"/>
+<area shape="poly" id="edge14_Node000008_Node000014" title=" " alt="" coords="187,860,283,868,324,876,353,887,382,911,404,940,430,993,425,996,399,943,378,914,350,891,323,881,282,873,187,865"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="55,900,133,926"/>
+<area shape="poly" id="edge15_Node000008_Node000015" title=" " alt="" coords="148,908,245,913,300,923,353,940,393,965,423,993,419,996,390,969,351,945,299,928,245,919,148,913"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="71,995,117,1020"/>
+<area shape="poly" id="edge17_Node000008_Node000016" title=" " alt="" coords="132,1005,378,1005,378,1010,132,1010"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="54,1069,134,1095"/>
+<area shape="poly" id="edge18_Node000008_Node000017" title=" " alt="" coords="150,1081,245,1076,299,1067,351,1054,385,1038,414,1019,417,1023,388,1042,353,1059,300,1073,246,1081,150,1086"/>
 </map>

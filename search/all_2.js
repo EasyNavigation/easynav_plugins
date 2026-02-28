@@ -12,8 +12,7 @@ var searchData=
   ['bonxai_3a_3adetails_9',['details',['../namespaceBonxai_1_1details.html',1,'Bonxai']]],
   ['bonxai_5fmap_5f_10',['bonxai_map_',['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#a259305db58b5f74104a940060871c814',1,'easynav::navmap::AMCLLocalizer']]],
   ['bonxai_5fuse_5fintrinsics_11',['BONXAI_USE_INTRINSICS',['../mask_8hpp.html#aadbab231c74f08c2f7c0619995f61edf',1,'mask.hpp']]],
-  ['bonxaimapsmanager_12',['BonxaiMapsManager',['../classeasynav__bonxai_1_1BonxaiMapsManager.html',1,'BonxaiMapsManager'],['../classeasynav__bonxai_1_1BonxaiMapsManager.html#a98b7d5ef6cefefaa3bc86c39ca1094be',1,'easynav_bonxai::BonxaiMapsManager::BonxaiMapsManager()']]],
-  ['bonxaimapsmanager_20tt_13',['Plugin Parameters (namespace: &lt;tt&gt;/\&lt;node_fqn\&gt;/easynav_bonxai_maps_manager/BonxaiMapsManager/...&lt;/tt&gt;)',['..//github/workspace/maps_managers/easynav_bonxai_maps_manager/README.md#autotoc_md114',1,'']]],
-  ['bonxaimapsmanager_2ecpp_14',['BonxaiMapsManager.cpp',['../BonxaiMapsManager_8cpp.html',1,'']]],
-  ['bonxaimapsmanager_2ehpp_15',['BonxaiMapsManager.hpp',['../BonxaiMapsManager_8hpp.html',1,'']]]
+  ['bonxaimapsmanager_12',['BonxaiMapsManager',['../classeasynav__bonxai_1_1BonxaiMapsManager.html',1,'BonxaiMapsManager'],['../classeasynav__bonxai_1_1BonxaiMapsManager.html#a98b7d5ef6cefefaa3bc86c39ca1094be',1,'easynav_bonxai::BonxaiMapsManager::BonxaiMapsManager()'],['../dir_15d4fba5d3442ae9632b472039ab173e.html#autotoc_md114',1,'Plugin Parameters (namespace: &lt;span class=&quot;tt&quot;&gt;/&amp;lt;node_fqn&amp;gt;/easynav_bonxai_maps_manager/BonxaiMapsManager/...&lt;/span&gt;)']]],
+  ['bonxaimapsmanager_2ecpp_13',['BonxaiMapsManager.cpp',['../BonxaiMapsManager_8cpp.html',1,'']]],
+  ['bonxaimapsmanager_2ehpp_14',['BonxaiMapsManager.hpp',['../BonxaiMapsManager_8hpp.html',1,'']]]
 ];

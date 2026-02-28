@@ -4,6 +4,6 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,41,88,81,86,76,162,36"/>
 <area shape="rect" id="Node000003" href="$classeasynav_1_1SimplePlanner.html" title="A planner implementing the A* algorithm on a SimpleMap grid." alt="" coords="147,79,253,105"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="203,46,203,79,197,79,197,46"/>
-<area shape="rect" id="Node000004" href="$classeasynav_1_1navmap_1_1AStarPlanner.html" title="A planner implementing the A* algorithm on a ::navmap::NavMap grid." alt="" coords="276,79,374,105"/>
+<area shape="rect" id="Node000004" href="$classeasynav_1_1navmap_1_1AStarPlanner.html" title="A planner implementing the A* algorithm on a navmap::NavMap grid." alt="" coords="276,79,374,105"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="236,37,305,76,303,81,233,41"/>
 </map>
