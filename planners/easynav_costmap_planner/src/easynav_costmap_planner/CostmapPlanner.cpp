@@ -157,12 +157,12 @@ void CostmapPlanner::update(NavState & nav_state)
 
   rclcpp::Time latest_stamp = nav_state.get<rclcpp::Time>("map_time");
   if (rclcpp::Time(robot_pose.header.stamp, latest_stamp.get_clock_type()) > latest_stamp) {
-    latest_stamp = robot_pose.header.stamp;
+    latest_stamp = rclcpp::Time(robot_pose.header.stamp, latest_stamp.get_clock_type());
   }
   if (rclcpp::Time(goals.goals.front().header.stamp,
       latest_stamp.get_clock_type()) > latest_stamp)
   {
-    latest_stamp = goals.goals.front().header.stamp;
+    latest_stamp = rclcpp::Time(goals.goals.front().header.stamp, latest_stamp.get_clock_type());
   }
   current_path_.header.stamp = latest_stamp;
 

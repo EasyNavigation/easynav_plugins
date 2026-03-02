@@ -130,7 +130,8 @@ SimplePlanner::update(NavState & nav_state)
   const auto & goal = goals.goals.front().pose;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  rclcpp::Time latest_stamp = robot_pose.header.stamp;
+  const auto clock_type = get_node()->get_clock()->get_clock_type();
+  rclcpp::Time latest_stamp(robot_pose.header.stamp, clock_type);
   if (rclcpp::Time(goals.goals.front().header.stamp,
       latest_stamp.get_clock_type()) > latest_stamp)
   {
