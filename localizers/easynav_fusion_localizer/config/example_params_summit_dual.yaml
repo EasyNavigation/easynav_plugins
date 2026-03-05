@@ -1,7 +1,7 @@
 controller_node:
   ros__parameters:
     use_sim_time: true
-    controller_types: [mppi]
+    controller_types: [serest]
     dummy:
       rt_freq: 30.0
       plugin: easynav_controller/DummyController
@@ -20,6 +20,30 @@ controller_node:
       max_linear_acceleration: 0.5
       max_angular_acceleration: 0.5
       safety_radius: 0.3
+    serest:
+      rt_freq: 30.0 
+      plugin: easynav_serest_controller/SerestController
+      allow_reverse: true
+      max_linear_speed: 0.8
+      max_angular_speed: 1.2
+      v_progress_min: 0.08        # 8 cm/s de crucero mínimo cuando alineado
+      k_s_share_max: 0.5          # succión lateral no cancela >50% del avance
+      k_theta: 2.5                # sube un poco
+      k_y: 1.5
+      goal_pos_tol: 0.1          # 7 cm
+      goal_yaw_tol_deg: 6.0       # 6 grados
+      slow_radius: 0.60
+      slow_min_speed: 0.03
+      final_align_k: 2.0
+      final_align_wmax: 0.6
+      corner_guard_enable: true
+      corner_gain_ey: 1.8
+      corner_gain_eth: 0.7
+      corner_gain_kappa: 0.4
+      corner_min_alpha: 0.35
+      corner_boost_omega: 1.0
+      a_lat_soft: 0.9
+      apex_ey_des: 0.05
 
 localizer_node:
   ros__parameters:
@@ -47,6 +71,8 @@ localizer_node:
         odom_frame: odom
         base_link_frame: base_link
         world_frame: odom
+
+        dynamic_process_noise_covariance: true
 
         #--- INPUT 2: Wheel Odometry ---
         odom0: /robotnik_base_control/odom
@@ -213,23 +239,27 @@ maps_manager_node:
 planner_node:
   ros__parameters:
     use_sim_time: true
-    planner_types: [simple]
+    planner_types: [costmap]
     dummy:
       freq: 1.0
       plugin: easynav_planner/DummyPlanner
       cycle_time_nort: 0.2
       cycle_time_rt: 0.0001
-    simple:
+    costmap:
       freq: 10.0
       plugin: easynav_costmap_planner/CostmapPlanner
       cost_factor: 10.0
       continuous_replan: true
+    simple:
+      freq: 0.5
+      plugin: easynav_simple_planner/SimplePlanner
+      robot_radius: 0.3
 
 sensors_node:
   ros__parameters:
     use_sim_time: true
     forget_time: 0.5
-    sensors: [imu, gps, laser1]
+    sensors: [imu, gps]
     perception_default_frame: odom
     imu:
       topic: /imu/data
@@ -246,5 +276,5 @@ sensors_node:
 system_node:
   ros__parameters:
     use_sim_time: true
-    position_tolerance: 0.1
-    angle_tolerance: 0.05
+    position_tolerance: 0.75
+    angle_tolerance: 0.25
