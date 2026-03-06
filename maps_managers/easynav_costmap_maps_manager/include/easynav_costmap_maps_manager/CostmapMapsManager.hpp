@@ -88,12 +88,16 @@ protected:
 
 private:
   /**
+   * @brief Internal flag to change navstate
+   */
+  bool update_map_static_ = false;
+  /**
    * @brief Internal static map.
    */
   Costmap2D static_map_;
 
   /**
-   * @brief Internal static map.
+   * @brief Internal dynamic map.
    */
   std::shared_ptr<Costmap2D> dynamic_map_;
 

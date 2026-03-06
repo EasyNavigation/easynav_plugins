@@ -140,6 +140,7 @@ CostmapMapsManager::on_initialize()
       static_grid_msg_.header.stamp = this->get_node()->now();
 
       static_occ_pub_->publish(static_grid_msg_);
+      update_map_static_ = true;
     });
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
@@ -179,8 +180,10 @@ CostmapMapsManager::update(NavState & nav_state)
 {
   EASYNAV_TRACE_EVENT;
 
-  if (!nav_state.has("map.static")) {
+  // Set static map at beggining or when a new static map arrives
+  if (update_map_static_ || !nav_state.has("map.static")) {
     nav_state.set("map.static", static_map_);
+    update_map_static_ = false;
   }
 
   if (!dynamic_map_) {
