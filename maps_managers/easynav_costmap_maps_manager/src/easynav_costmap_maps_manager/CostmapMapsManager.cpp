@@ -135,6 +135,7 @@ CostmapMapsManager::on_initialize()
       static_grid_msg_ = *msg;
 
       static_map_ = Costmap2D(*msg);
+      update_map_static_ = true;
 
       static_grid_msg_.header.frame_id = tf_info.map_frame;
       static_grid_msg_.header.stamp = this->get_node()->now();
@@ -178,9 +179,25 @@ void
 CostmapMapsManager::update(NavState & nav_state)
 {
   EASYNAV_TRACE_EVENT;
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  if (!nav_state.has("map.static")) {
+  // Update navstate static map with internal map
+  if (update_map_static_ || !nav_state.has("map.static")) {
     nav_state.set("map.static", static_map_);
+    update_map_static_ = false;
+  }
+
+  // Update internal map with navstate static map
+  if (nav_state.has("map.static.update") && nav_state.get<bool>("map.static.update")) {
+    static_map_ = nav_state.get<Costmap2D>("map.static");
+    nav_state.set("map.static.update", false);
+
+    // Publish to static map topic
+    static_map_.toOccupancyGridMsg(static_grid_msg_);
+
+    static_grid_msg_.header.frame_id = tf_info.map_frame;
+    static_grid_msg_.header.stamp = this->get_node()->now();
+    static_occ_pub_->publish(static_grid_msg_);
   }
 
   if (!dynamic_map_) {
@@ -200,8 +217,6 @@ CostmapMapsManager::update(NavState & nav_state)
   }
 
   nav_state.set("map.dynamic", dynamic_map_);
-
-  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   rclcpp::Time map_stamp = nav_state.get<rclcpp::Time>("map_time");
 

@@ -93,9 +93,14 @@ private:
   Costmap2D static_map_;
 
   /**
-   * @brief Internal static map.
+   * @brief Internal dynamic map.
    */
   std::shared_ptr<Costmap2D> dynamic_map_;
+
+  /**
+   * @brief Flag to update navstate
+   */
+  bool update_map_static_ = false;
 
   /**
    * @brief Publisher for the static occupancy grid.
