@@ -68,7 +68,8 @@ void FusionLocalizer::on_initialize()
       );
       ukf_global_->initialize();
     } else {
-      RCLCPP_WARN(localizer_node->get_logger(), "No global_filter parameters found. Global filter will NOT be created.");
+      RCLCPP_WARN(localizer_node->get_logger(),
+          "No global_filter parameters found. Global filter will NOT be created.");
     }
 
     if (has_local_filter_) {
@@ -77,7 +78,8 @@ void FusionLocalizer::on_initialize()
       );
       ukf_local_->initialize();
     } else {
-      RCLCPP_WARN(localizer_node->get_logger(), "No local_filter parameters found. Local filter will NOT be created.");
+      RCLCPP_WARN(localizer_node->get_logger(),
+          "No local_filter parameters found. Local filter will NOT be created.");
     }
 
     // GPS-related setup only needed when global filter is active
