@@ -58,6 +58,9 @@ private:
   std::unique_ptr<robot_localization::UkfWrapper> ukf_local_{nullptr};
   std::unique_ptr<robot_localization::UkfWrapper> ukf_global_{nullptr};
 
+  bool has_global_filter_{false};
+  bool has_local_filter_{false};
+
   int n_gps_sensors_{0};
 
   geometry_msgs::msg::PoseWithCovarianceStamped
@@ -79,7 +82,6 @@ private:
   std::vector<rclcpp::Time> last_gps_stamp_;
 
   rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr navsat_pub_{nullptr};
-  rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr gps_debug_pub_{nullptr};
   std::string navsatfix_topic_;
 
   bool first_pose_received_{false};

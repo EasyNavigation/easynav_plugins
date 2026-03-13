@@ -31,47 +31,89 @@ void FusionLocalizer::on_initialize()
     RCLCPP_INFO(localizer_node->get_logger(), "Using parameter namespace: '%s'",
     plugin_name.c_str());
 
-    ukf_global_ = std::make_unique<robot_localization::UkfWrapper>(
-      localizer_node, tf_info.tf_prefix, plugin_name + ".global_filter", false
-    );
-    ukf_local_ = std::make_unique<robot_localization::UkfWrapper>(
-      localizer_node, tf_info.tf_prefix, plugin_name + ".local_filter", true
-    );
-    ukf_global_->initialize();
-    ukf_local_->initialize();
-    localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
-    localizer_node->get_parameter(plugin_name + ".latitude_origin", latitude_origin_);
+    // Detect which filters have parameters configured by checking
+    // parameter overrides (loaded from YAML before declaration)
+    const std::string global_prefix = plugin_name + ".global_filter.";
+    const std::string local_prefix = plugin_name + ".local_filter.";
 
-    localizer_node->declare_parameter(plugin_name + ".longitude_origin", double(0.0));
-    localizer_node->get_parameter(plugin_name + ".longitude_origin", longitude_origin_);
+    const auto & overrides =
+      localizer_node->get_node_parameters_interface()->get_parameter_overrides();
 
-    localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0));
-    localizer_node->get_parameter(plugin_name + ".altitude_origin", altitude_origin_);
+    for (const auto & [key, _] : overrides) {
+      if (!has_global_filter_ && key.rfind(global_prefix, 0) == 0) {
+        has_global_filter_ = true;
+      }
+      if (!has_local_filter_ && key.rfind(local_prefix, 0) == 0) {
+        has_local_filter_ = true;
+      }
+      if (has_global_filter_ && has_local_filter_) {
+        break;
+      }
+    }
 
-    localizer_node->declare_parameter(
-      plugin_name + ".navsatfix_topic", std::string("global/navsatfix"));
-    localizer_node->get_parameter(plugin_name + ".navsatfix_topic", navsatfix_topic_);
-    navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
-      navsatfix_topic_, rclcpp::QoS(10));
-    gps_debug_pub_ =
-      localizer_node->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
-      "gps_pose", rclcpp::QoS(10));
+    if (!has_global_filter_ && !has_local_filter_) {
+      RCLCPP_FATAL(
+        localizer_node->get_logger(),
+        "No parameters found for either '%s' or '%s'. "
+        "At least one filter must be configured.",
+        global_prefix.c_str(), local_prefix.c_str());
+      throw std::runtime_error(
+        "FusionLocalizer: no global_filter or local_filter parameters detected. "
+        "At least one filter must be configured.");
+    }
+
+    if (has_global_filter_) {
+      ukf_global_ = std::make_unique<robot_localization::UkfWrapper>(
+        localizer_node, tf_info.tf_prefix, plugin_name + ".global_filter", false
+      );
+      ukf_global_->initialize();
+    } else {
+      RCLCPP_WARN(localizer_node->get_logger(), "No global_filter parameters found. Global filter will NOT be created.");
+    }
+
+    if (has_local_filter_) {
+      ukf_local_ = std::make_unique<robot_localization::UkfWrapper>(
+        localizer_node, tf_info.tf_prefix, plugin_name + ".local_filter", true
+      );
+      ukf_local_->initialize();
+    } else {
+      RCLCPP_WARN(localizer_node->get_logger(), "No local_filter parameters found. Local filter will NOT be created.");
+    }
+
+    // GPS-related setup only needed when global filter is active
+    if (has_global_filter_) {
+      localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
+      localizer_node->get_parameter(plugin_name + ".latitude_origin", latitude_origin_);
+
+      localizer_node->declare_parameter(plugin_name + ".longitude_origin", double(0.0));
+      localizer_node->get_parameter(plugin_name + ".longitude_origin", longitude_origin_);
+
+      localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0));
+      localizer_node->get_parameter(plugin_name + ".altitude_origin", altitude_origin_);
+
+      localizer_node->declare_parameter(
+        plugin_name + ".navsatfix_topic", std::string("gps/filtered"));
+      localizer_node->get_parameter(plugin_name + ".navsatfix_topic", navsatfix_topic_);
+      navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
+        navsatfix_topic_, rclcpp::QoS(10));
+    }
+
   } catch (const std::exception & e) {
     RCLCPP_FATAL(
       get_node()->get_logger(), "Critical failure initializing UkfWrapper: %s",
       e.what());
-    // Raise error
     throw std::runtime_error(std::string("Failed to initialize UkfWrapper: ") + e.what());
   }
 
+  if (has_global_filter_) {
+    GeographicLib::UTMUPS::Forward(latitude_origin_, longitude_origin_, UTM_zone_number_,
+        UTM_zone_northp_, UTM_origin_x_, UTM_origin_y_);
+    UTM_zone_ = std::to_string(UTM_zone_number_) + (UTM_zone_northp_ ? "N" : "S");
+    UTM_origin_z_ = altitude_origin_;
 
-  GeographicLib::UTMUPS::Forward(latitude_origin_, longitude_origin_, UTM_zone_number_,
-      UTM_zone_northp_, UTM_origin_x_, UTM_origin_y_);
-  UTM_zone_ = std::to_string(UTM_zone_number_) + (UTM_zone_northp_ ? "N" : "S");
-  UTM_origin_z_ = altitude_origin_;
-
-  n_gps_sensors_ = static_cast<int>(ukf_global_->getGpsCallbackDataArr().size());
-  last_gps_stamp_.resize(n_gps_sensors_, rclcpp::Time(0, 0, RCL_ROS_TIME));
+    n_gps_sensors_ = static_cast<int>(ukf_global_->getGpsCallbackDataArr().size());
+    last_gps_stamp_.resize(n_gps_sensors_, rclcpp::Time(0, 0, RCL_ROS_TIME));
+  }
 
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
 }
@@ -80,55 +122,61 @@ void FusionLocalizer::update_rt(NavState & nav_state)
 {
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  if (n_gps_sensors_ && nav_state.has("gnss")) {
-    auto gps_data = nav_state.get<GNSSPerceptions>(std::string("gnss"));
-    const auto & gps_cb_arr = ukf_global_->getGpsCallbackDataArr();
-    for (int i = 0; i < n_gps_sensors_; ++i) {
-      if (gps_data[i]->data.status.status < sensor_msgs::msg::NavSatStatus::STATUS_FIX) {
-        continue;
-      }
-      rclcpp::Time gps_time(gps_data[i]->data.header.stamp);
-      if (gps_time > last_gps_stamp_[i]) {
-        EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_process_gps");
-        last_gps_stamp_[i] = gps_time;
-        auto pose =
-          std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(navsatfix_to_pose(
-            gps_data[i]->data));
-        if (!first_pose_received_) {
-          RCLCPP_INFO(get_node()->get_logger(),
-              "First valid GPS fix received. Initializing filter state.");
-          if(nav_state.has("imu")) {
-            auto imu_data = nav_state.get<IMUPerceptions>(std::string("imu"));
-            if (!imu_data.empty()) {
-              pose->pose.pose.orientation = imu_data[0]->data.orientation;
-            }
-          }
-          ukf_global_->setPoseCallback(pose);
-          first_pose_received_ = true;
+  if (has_global_filter_) {
+    if (n_gps_sensors_ && nav_state.has("gnss")) {
+      auto gps_data = nav_state.get<GNSSPerceptions>(std::string("gnss"));
+      const auto & gps_cb_arr = ukf_global_->getGpsCallbackDataArr();
+      for (int i = 0; i < n_gps_sensors_; ++i) {
+        if (gps_data[i]->data.status.status < sensor_msgs::msg::NavSatStatus::STATUS_FIX) {
           continue;
         }
-        gps_debug_pub_->publish(*pose);
-        ukf_global_->poseCallback(
-          pose,
-          gps_cb_arr[i],
-          tf_info.map_frame,
-          gps_data[i]->data.header.frame_id,
-          false
-        );
+        rclcpp::Time gps_time(gps_data[i]->data.header.stamp);
+        if (gps_time > last_gps_stamp_[i]) {
+          EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_process_gps");
+          last_gps_stamp_[i] = gps_time;
+          auto pose =
+            std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(navsatfix_to_pose(
+              gps_data[i]->data));
+          if (!first_pose_received_) {
+            RCLCPP_INFO(get_node()->get_logger(),
+                "First valid GPS fix received. Initializing filter state.");
+            if(nav_state.has("imu")) {
+              auto imu_data = nav_state.get<IMUPerceptions>(std::string("imu"));
+              if (!imu_data.empty()) {
+                pose->pose.pose.orientation = imu_data[0]->data.orientation;
+              }
+            }
+            ukf_global_->setPoseCallback(pose);
+            first_pose_received_ = true;
+            continue;
+          }
+          ukf_global_->poseCallback(
+            pose,
+            gps_cb_arr[i],
+            tf_info.map_frame,
+            gps_data[i]->data.header.frame_id,
+            false
+          );
+        }
       }
+    }
+
+    ukf_global_->periodicUpdate();
+
+    nav_msgs::msg::Odometry global_odom;
+    if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
+      nav_state.set("robot_pose", global_odom);
+      navsat_pub_->publish(odom_to_navsatfix(global_odom));
     }
   }
 
-  ukf_global_->periodicUpdate();
-  ukf_local_->periodicUpdate();
+  if (has_local_filter_) {
+    ukf_local_->periodicUpdate();
 
-  nav_msgs::msg::Odometry global_odom, local_odom;
-  if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
-    nav_state.set("robot_pose", global_odom);
-    navsat_pub_->publish(odom_to_navsatfix(global_odom));
-  }
-  if (ukf_local_->getFilteredOdometryMessage(&local_odom)) {
-    nav_state.set("robot_pose_local", local_odom);
+    nav_msgs::msg::Odometry local_odom;
+    if (ukf_local_->getFilteredOdometryMessage(&local_odom)) {
+      nav_state.set("robot_pose_local", local_odom);
+    }
   }
 }
 
