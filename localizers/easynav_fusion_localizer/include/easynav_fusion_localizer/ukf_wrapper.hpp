@@ -64,7 +64,6 @@
 #include "tf2/LinearMath/Transform.hpp"
 #include <tf2_ros/buffer.hpp>
 #include <tf2_ros/transform_broadcaster.hpp>
-#include <tf2_ros/transform_listener.hpp>
 
 namespace robot_localization
 {
@@ -108,7 +107,8 @@ public:
   explicit UkfWrapper(
     std::shared_ptr<easynav::LocalizerNode> parent_node,
     const std::string & tf_prefix,
-    const std::string & plugin_name);
+    const std::string & plugin_name,
+    bool local_filter);
 
   //! @brief Destructor
   //!
@@ -344,7 +344,7 @@ public:
   //!
   bool validateFilterOutput(nav_msgs::msg::Odometry * message);
 
-  std::vector<CallbackData> getGpsCallbackDataArr() const
+  const std::vector<CallbackData> & getGpsCallbackDataArr() const
   {
     return gps_callbackData_arr_;
   }
@@ -820,13 +820,9 @@ protected:
   //!
   rclcpp::Service<std_srvs::srv::Empty>::SharedPtr reset_srv_;
 
-  //! @brief Transform buffer for managing coordinate transforms
+  //! @brief Transform buffer for managing coordinate transforms (shared RTTFBuffer singleton)
   //!
-  std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
-
-  //! @brief Transform listener for receiving transforms
-  //!
-  std::unique_ptr<tf2_ros::TransformListener> tf_listener_;
+  tf2_ros::Buffer * tf_buffer_{nullptr};
 
   //! @brief broadcaster of worldTransform tfs
   //!
@@ -870,6 +866,7 @@ protected:
   std::string plugin_name_;
   std::string tf_prefix_;
   std::vector<CallbackData> gps_callbackData_arr_;
+  bool local_filter_;
 
 };
 

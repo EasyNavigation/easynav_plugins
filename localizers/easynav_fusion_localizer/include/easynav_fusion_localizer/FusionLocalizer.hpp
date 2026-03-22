@@ -1,16 +1,20 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include "easynav_core/LocalizerMethodBase.hpp"
-#include "easynav_fusion_localizer/ukf_wrapper.hpp" // Tu wrapper refactorizado
+#include "easynav_fusion_localizer/ukf_wrapper.hpp"
 
 #include "sensor_msgs/msg/imu.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
+#include "nav_msgs/msg/odometry.hpp"
 
 namespace easynav
 {
+
+constexpr double kNoOrientationCovariance = 1e5;
 
 /**
  * @class FusionLocalizer
@@ -51,13 +55,19 @@ protected:
   void update(NavState & nav_state) override;
 
 private:
-  std::unique_ptr<robot_localization::UkfWrapper> ukf_wrapper_;
+  std::unique_ptr<robot_localization::UkfWrapper> ukf_local_{nullptr};
+  std::unique_ptr<robot_localization::UkfWrapper> ukf_global_{nullptr};
 
-  int n_imu_sensors_{0};
+  bool has_global_filter_{false};
+  bool has_local_filter_{false};
+
   int n_gps_sensors_{0};
 
   geometry_msgs::msg::PoseWithCovarianceStamped
   navsatfix_to_pose(const sensor_msgs::msg::NavSatFix & navsat_msg);
+
+  sensor_msgs::msg::NavSatFix
+  odom_to_navsatfix(const nav_msgs::msg::Odometry & odom_msg);
 
   double latitude_origin_{0.0};
   double longitude_origin_{0.0};
@@ -66,8 +76,15 @@ private:
   double UTM_origin_y_{0.0};
   double UTM_origin_z_{0.0};
   std::string UTM_zone_;
+  int UTM_zone_number_{0};
+  bool UTM_zone_northp_{true};
 
-  std::vector<double> last_gps_stamp_;
+  std::vector<rclcpp::Time> last_gps_stamp_;
+
+  rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr navsat_pub_{nullptr};
+  std::string navsatfix_topic_;
+
+  bool first_pose_received_{false};
 
 };
 

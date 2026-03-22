@@ -25,7 +25,7 @@ localizer_node:
       latitude_origin: 40.2834931
       longitude_origin: -3.8207253999999997
       altitude_origin: 746.184
-      local_filter:
+      global_filter:
         two_d_mode: true
         publish_tf: true
 
