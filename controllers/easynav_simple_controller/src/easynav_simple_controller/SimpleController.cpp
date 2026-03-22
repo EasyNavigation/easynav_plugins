@@ -111,7 +111,10 @@ SimpleController::update_rt(NavState & nav_state)
   const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const auto & goal_pose = path.poses.back().pose;
 
-  rclcpp::Time latest_stamp = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").header.stamp;
+  const auto clock_type = get_node()->get_clock()->get_clock_type();
+  rclcpp::Time latest_stamp(
+    nav_state.get<nav_msgs::msg::Odometry>("robot_pose").header.stamp,
+    clock_type);
   if (rclcpp::Time(path.poses.back().header.stamp,
       latest_stamp.get_clock_type()) > latest_stamp)
   {

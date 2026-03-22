@@ -309,8 +309,14 @@ SerestController::closest_obstacle_distance(
   .downsample(0.3);
   const auto & fused = view.as_points();
 
-  if (last_input_ts_ < view.get_latest_stamp()) {
-    last_input_ts_ = view.get_latest_stamp();
+  {
+    const auto view_latest = view.get_latest_stamp();
+    const rclcpp::Time view_latest_same_clock(
+      view_latest.nanoseconds(),
+      last_input_ts_.get_clock_type());
+    if (last_input_ts_ < view_latest_same_clock) {
+      last_input_ts_ = view_latest_same_clock;
+    }
   }
 
   double min_dist = std::numeric_limits<double>::infinity();
@@ -378,10 +384,10 @@ SerestController::fetch_required_inputs(
   odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
 
   if (rclcpp::Time(path.header.stamp, last_input_ts_.get_clock_type()) > last_input_ts_) {
-    last_input_ts_ = path.header.stamp;
+    last_input_ts_ = rclcpp::Time(path.header.stamp, last_input_ts_.get_clock_type());
   }
   if (rclcpp::Time(odom.header.stamp, last_input_ts_.get_clock_type()) > last_input_ts_) {
-    last_input_ts_ = odom.header.stamp;
+    last_input_ts_ = rclcpp::Time(odom.header.stamp, last_input_ts_.get_clock_type());
   }
 
   if (path.poses.empty()) {
