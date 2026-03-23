@@ -190,7 +190,6 @@ CostmapMapsManager::update(NavState & nav_state)
   // Update internal map with navstate static map
   if (nav_state.has("map.static.update") && nav_state.get<bool>("map.static.update")) {
     static_map_ = nav_state.get<Costmap2D>("map.static");
-    nav_state.set("map.static.update", false);
 
     // Publish to static map topic
     static_map_.toOccupancyGridMsg(static_grid_msg_);
