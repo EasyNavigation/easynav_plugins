@@ -18,7 +18,7 @@
 #include <cstdint>
 
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "navmap_core/NavMap.hpp"
@@ -44,9 +44,9 @@ ObstacleFilter::on_initialize()
 void ObstacleFilter::update(::easynav::NavState & nav_state)
 {
   if (!nav_state.has("map.navmap")) {return;}
-  if (!nav_state.has("points")) {return;}
+  if (!nav_state.has_group("points")) {return;}
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get_group<PointPerception>("points");
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 

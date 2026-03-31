@@ -42,8 +42,8 @@
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/Perceptions.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "octomap_core/Octomap.hpp"
 

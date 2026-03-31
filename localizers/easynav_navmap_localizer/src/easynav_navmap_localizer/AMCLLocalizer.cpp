@@ -34,8 +34,8 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/PointPerception.hpp"
-#include "easynav_common/types/IMUPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
+#include "easynav_sensors/types/IMUPerception.hpp"
 
 #include "navmap_core/NavMap.hpp"
 
@@ -689,11 +689,11 @@ static ScoreAgg score_particle_sensor_cloud(
 // ---------- correct() ----------
 void AMCLLocalizer::correct(NavState & nav_state)
 {
-  if (!nav_state.has("points")) {
+  if (!nav_state.has_group("points")) {
     RCLCPP_WARN(get_node()->get_logger(), "No points perceptions yet");
     return;
   }
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get_group<PointPerception>("points");
 
   if (!nav_state.has("map.bonxai")) {
     RCLCPP_WARN(get_node()->get_logger(), "No Bonxai map yet");

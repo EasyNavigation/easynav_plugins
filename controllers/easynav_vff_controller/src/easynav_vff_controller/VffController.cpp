@@ -18,7 +18,7 @@
 
 #include "easynav_vff_controller/VffController.hpp"
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/goals.hpp"
@@ -252,7 +252,7 @@ void VffController::update_rt(NavState & nav_state)
     // Calculate the angle error
     double angle_error = normalize_angle(bearing - yaw);
 
-    const auto & perceptions = nav_state.get<PointPerceptions>("points");
+    const auto & perceptions = nav_state.get_group<PointPerception>("points");
 
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
     auto fused =

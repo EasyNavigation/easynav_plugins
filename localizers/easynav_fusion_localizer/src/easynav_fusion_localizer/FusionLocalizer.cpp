@@ -4,8 +4,8 @@
 
 #include "easynav_common/RTTFBuffer.hpp"
 
-#include "easynav_common/types/IMUPerception.hpp"
-#include "easynav_common/types/GNSSPerception.hpp"
+#include "easynav_sensors/types/IMUPerception.hpp"
+#include "easynav_sensors/types/GNSSPerception.hpp"
 #include "sensor_msgs/msg/nav_sat_status.hpp"
 
 #include <GeographicLib/UTMUPS.hpp>

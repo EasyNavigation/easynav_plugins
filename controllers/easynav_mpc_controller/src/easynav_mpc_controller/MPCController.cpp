@@ -142,7 +142,7 @@ MPCController::update_rt(NavState & nav_state)
     }
   }
 
-  if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("points")) {
+  if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has_group("points")) {
     if(verbose_) {
       std::cout << "No Path, No Points or No Robot Pose" << std::endl;
     }
@@ -209,7 +209,7 @@ MPCController::update_rt(NavState & nav_state)
   }
   const auto & last_pose = path.poses[local_horizon].pose.position;
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get_group<PointPerception>("points");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   const auto & filtered = PointPerceptionsOpsView(perceptions)
