@@ -22,7 +22,7 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_simple_common/SimpleMap.hpp"
 
 #include "easynav_simple_localizer/AMCLLocalizer.hpp"
@@ -368,12 +368,11 @@ AMCLLocalizer::predict([[maybe_unused]] NavState & nav_state)
 
 void AMCLLocalizer::correct(NavState & nav_state)
 {
-  if (!nav_state.has("points")) {
-    RCLCPP_WARN(get_node()->get_logger(), "There is yet no points perceptions");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
-
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
   if (!nav_state.has("map.static")) {
     RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.static map");

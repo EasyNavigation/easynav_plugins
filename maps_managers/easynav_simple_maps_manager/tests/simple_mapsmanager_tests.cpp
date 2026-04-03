@@ -17,7 +17,7 @@
 
 #include "easynav_simple_common/SimpleMap.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
 
 #include "rclcpp/rclcpp.hpp"
@@ -68,7 +68,7 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
 
   easynav::NavState navstate;
   auto perception = std::make_shared<easynav::PointPerception>();
-  navstate.set("points", easynav::PointPerceptions());
+  navstate.set("laser", easynav::PointPerception());
 
   perception->data.points.resize(6);
   perception->data.points[0].x = 1.0;
@@ -94,9 +94,8 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
   perception->frame_id = "map";
   perception->valid = true;
 
-  easynav::PointPerceptions perceptions;
-  perceptions.push_back(perception);
-  navstate.set("points", perceptions);
+  navstate.set("laser", perception);
+  // navstate.set_group("points", {"laser"});
 
   manager->update(navstate);
 

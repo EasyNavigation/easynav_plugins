@@ -34,8 +34,8 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/PointPerception.hpp"
-#include "easynav_common/types/IMUPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
+#include "easynav_sensors/types/IMUPerception.hpp"
 
 #include "navmap_core/NavMap.hpp"
 
@@ -496,9 +496,8 @@ void AMCLLocalizer::update_odom_from_tf()
 std::optional<tf2::Quaternion> get_latest_imu_quat(const NavState & nav_state)
 {
   if (!nav_state.has("imu")) {return std::nullopt;}
-  const auto & imus = nav_state.get<IMUPerceptions>("imu");
-  if (imus.empty() || !imus.back()) {return std::nullopt;}
-  const auto & imu_msg = imus.back()->data;
+  const auto & imu = nav_state.get<IMUPerception>("imu");
+  const auto & imu_msg = imu.data;
   tf2::Quaternion q(imu_msg.orientation.x, imu_msg.orientation.y,
     imu_msg.orientation.z, imu_msg.orientation.w);
   if (q.length2() < 1e-12) {return std::nullopt;}
@@ -689,11 +688,11 @@ static ScoreAgg score_particle_sensor_cloud(
 // ---------- correct() ----------
 void AMCLLocalizer::correct(NavState & nav_state)
 {
-  if (!nav_state.has("points")) {
-    RCLCPP_WARN(get_node()->get_logger(), "No points perceptions yet");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
   if (!nav_state.has("map.bonxai")) {
     RCLCPP_WARN(get_node()->get_logger(), "No Bonxai map yet");

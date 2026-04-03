@@ -23,7 +23,7 @@
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_serest_controller/SerestController.hpp"
@@ -295,9 +295,9 @@ SerestController::closest_obstacle_distance(
   }
 
   // 2) Analyze distance sensors
-  if (!nav_state.has("points")) {return std::numeric_limits<double>::infinity();}
+  if (!nav_state.has_group("points")) {return std::numeric_limits<double>::infinity();}
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   auto view = PointPerceptionsOpsView(perceptions);

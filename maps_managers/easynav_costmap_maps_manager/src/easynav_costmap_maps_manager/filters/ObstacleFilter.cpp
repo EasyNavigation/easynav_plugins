@@ -18,7 +18,7 @@
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_common/cost_values.hpp"
@@ -41,11 +41,11 @@ ObstacleFilter::on_initialize()
 void
 ObstacleFilter::update(NavState & nav_state)
 {
-  if (!nav_state.has("points")) {
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
-
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
   auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
   Costmap2D & dynamic_map = *dynamic_map_ptr;

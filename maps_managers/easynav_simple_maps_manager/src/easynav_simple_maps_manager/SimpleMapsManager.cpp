@@ -17,7 +17,7 @@
 /// \brief Implementation of the SimpleMapsManager class.
 
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
@@ -138,13 +138,20 @@ SimpleMapsManager::update(NavState & nav_state)
 
   dynamic_map_.deep_copy(static_map_);
 
-  if (!nav_state.has("points")) {
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
+  }
+
+  if (perceptions.empty()) {
     nav_state.set("map.static", static_map_);
     nav_state.set("map.dynamic", dynamic_map_);
     return;
   }
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  std::cout << "perceptions size: " << perceptions.size() << std::endl;
+  std::cout << "perception[0] size: " << perceptions[0]->data.points.size() << std::endl;
+  std::cout << "perception[0] valid: " << perceptions[0]->valid << std::endl;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   rclcpp::Time stamp;
