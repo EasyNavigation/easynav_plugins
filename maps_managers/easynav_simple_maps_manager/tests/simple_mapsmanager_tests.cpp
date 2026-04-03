@@ -69,7 +69,6 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
   easynav::NavState navstate;
   auto perception = std::make_shared<easynav::PointPerception>();
   navstate.set("laser", easynav::PointPerception());
-  navstate.set_group("points", {"laser"});
 
   perception->data.points.resize(6);
   perception->data.points[0].x = 1.0;
