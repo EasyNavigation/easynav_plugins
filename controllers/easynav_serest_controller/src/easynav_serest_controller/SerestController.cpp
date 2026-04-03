@@ -297,7 +297,7 @@ SerestController::closest_obstacle_distance(
   // 2) Analyze distance sensors
   if (!nav_state.has_group("points")) {return std::numeric_limits<double>::infinity();}
 
-  const auto & perceptions = nav_state.get_group<PointPerception>("points");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   auto view = PointPerceptionsOpsView(perceptions);

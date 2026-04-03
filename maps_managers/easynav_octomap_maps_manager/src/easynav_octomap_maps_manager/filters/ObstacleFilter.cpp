@@ -45,11 +45,13 @@ ObstacleFilter::update(::easynav::NavState & nav_state)
   if (!nav_state.has("map")) {
     return;
   }
-  if (!nav_state.has_group("points")) {
+
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
 
-  const auto & perceptions = nav_state.get_group<PointPerception>("points");
   octomap_ = nav_state.get<::octomap::Octomap>("map");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 

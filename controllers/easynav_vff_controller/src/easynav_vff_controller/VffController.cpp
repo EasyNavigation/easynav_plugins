@@ -252,7 +252,7 @@ void VffController::update_rt(NavState & nav_state)
     // Calculate the angle error
     double angle_error = normalize_angle(bearing - yaw);
 
-    const auto & perceptions = nav_state.get_group<PointPerception>("points");
+    const auto & perceptions = nav_state.get_no_group<PointPerception>();
 
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
     auto fused =

@@ -138,14 +138,17 @@ SimpleMapsManager::update(NavState & nav_state)
 
   dynamic_map_.deep_copy(static_map_);
 
-  std::cout << "nav_state.has_group(points): " << nav_state.has_group("points") << std::endl;
-  if (!nav_state.has_group("points")) {
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
+  }
+
+  if (perceptions.empty()) {
     nav_state.set("map.static", static_map_);
     nav_state.set("map.dynamic", dynamic_map_);
     return;
   }
 
-  const auto & perceptions = nav_state.get_group<PointPerception>("points");
   std::cout << "perceptions size: " << perceptions.size() << std::endl;
   std::cout << "perception[0] size: " << perceptions[0]->data.points.size() << std::endl;
   std::cout << "perception[0] valid: " << perceptions[0]->valid << std::endl;

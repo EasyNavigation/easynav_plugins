@@ -142,11 +142,9 @@ void FusionLocalizer::update_rt(NavState & nav_state)
           if (!first_pose_received_) {
             RCLCPP_INFO(get_node()->get_logger(),
                 "First valid GPS fix received. Initializing filter state.");
-            if(nav_state.has("imu")) {
-              auto imu_data = nav_state.get<IMUPerceptions>(std::string("imu"));
-              if (!imu_data.empty()) {
-                pose->pose.pose.orientation = imu_data[0]->data.orientation;
-              }
+            if (nav_state.has("imu")) {
+              auto imu_data = nav_state.get<IMUPerception>(std::string("imu"));
+              pose->pose.pose.orientation = imu_data.data.orientation;
             }
             ukf_global_->setPoseCallback(pose);
             first_pose_received_ = true;

@@ -566,12 +566,11 @@ AMCLLocalizer::predict([[maybe_unused]] NavState & nav_state)
 void
 AMCLLocalizer::correct(NavState & nav_state)
 {
-  if (!nav_state.has_group("points")) {
-    RCLCPP_WARN(get_node()->get_logger(), "There is yet no points perceptions");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
-
-  const auto & perceptions = nav_state.get_group<PointPerception>("points");
 
   if (!nav_state.has("map.static")) {
     RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.static map");
