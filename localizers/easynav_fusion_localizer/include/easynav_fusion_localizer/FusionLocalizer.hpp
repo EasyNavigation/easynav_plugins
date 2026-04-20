@@ -28,6 +28,13 @@ public:
   virtual ~FusionLocalizer() = default;
 
 protected:
+  /// Subscriber for the initial pose.
+  rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr init_pose_sub_;
+
+  /// Callback for /initialpose.
+  void init_pose_callback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);
+
+protected:
   /**
    * @brief Hook de inicialización de MethodBase.
    *

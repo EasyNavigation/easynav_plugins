@@ -12,6 +12,9 @@
 
 #include "easynav_common/YTSession.hpp"
 
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
+#include "tf2/LinearMath/Quaternion.hpp"
+
 namespace easynav
 {
 
@@ -21,6 +24,11 @@ void FusionLocalizer::on_initialize()
   try {
 
     auto node = get_node();
+
+    // Subscribe to initial pose
+    init_pose_sub_ = node->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
+      "initialpose", 10,
+      std::bind(&FusionLocalizer::init_pose_callback, this, std::placeholders::_1));
 
     auto localizer_node = std::dynamic_pointer_cast<LocalizerNode>(node);
 
@@ -100,6 +108,39 @@ void FusionLocalizer::on_initialize()
         navsatfix_topic_, rclcpp::QoS(10));
     }
 
+    // Optional initial pose from parameters (kept consistent with AMCL parameter names)
+    localizer_node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
+    localizer_node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
+    localizer_node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
+
+    double init_x = 0.0;
+    double init_y = 0.0;
+    double init_yaw = 0.0;
+    localizer_node->get_parameter(plugin_name + ".initial_pose.x", init_x);
+    localizer_node->get_parameter(plugin_name + ".initial_pose.y", init_y);
+    localizer_node->get_parameter(plugin_name + ".initial_pose.yaw", init_yaw);
+
+    if (std::abs(init_x) > 1e-12 || std::abs(init_y) > 1e-12 || std::abs(init_yaw) > 1e-12) {
+      auto init_pose = std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>();
+      init_pose->header.stamp = localizer_node->now();
+      init_pose->header.frame_id = tf_info.map_frame;
+      init_pose->pose.pose.position.x = init_x;
+      init_pose->pose.pose.position.y = init_y;
+      init_pose->pose.pose.position.z = 0.0;
+      tf2::Quaternion q;
+      q.setRPY(0.0, 0.0, init_yaw);
+      init_pose->pose.pose.orientation = tf2::toMsg(q);
+      init_pose->pose.covariance.fill(0.0);
+
+      if (ukf_global_) {
+        ukf_global_->setPoseCallback(init_pose);
+        first_pose_received_ = true;
+      }
+      if (ukf_local_) {
+        ukf_local_->setPoseCallback(init_pose);
+      }
+    }
+
   } catch (const std::exception & e) {
     RCLCPP_FATAL(
       get_node()->get_logger(), "Critical failure initializing UkfWrapper: %s",
@@ -118,6 +159,19 @@ void FusionLocalizer::on_initialize()
   }
 
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
+}
+
+void FusionLocalizer::init_pose_callback(
+  const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
+{
+  // Forward initial pose to any active filters
+  if (ukf_global_) {
+    ukf_global_->setPoseCallback(msg);
+    first_pose_received_ = true;
+  }
+  if (ukf_local_) {
+    ukf_local_->setPoseCallback(msg);
+  }
 }
 
 void FusionLocalizer::update_rt(NavState & nav_state)
