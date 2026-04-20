@@ -1,26 +1,26 @@
 <map id="maps_managers/easynav_octomap_maps_manager/src/easynav_octomap_maps_manager/filters/ObstacleFilter.cpp" name="maps_managers/easynav_octomap_maps_manager/src/easynav_octomap_maps_manager/filters/ObstacleFilter.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="232,5,454,76"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="238,5,461,76"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="156,309,210,334"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,54,188,64,143,78,99,99,61,126,31,156,13,186,9,201,9,217,13,234,23,252,47,277,77,295,110,306,142,313,141,319,109,312,75,300,44,281,18,255,8,236,3,218,3,201,8,184,27,152,57,122,97,94,141,73,186,59,231,49"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="239,54,193,63,147,78,102,98,62,126,32,155,13,186,9,201,9,217,13,234,22,252,47,277,77,295,110,306,142,313,140,319,109,312,75,300,43,281,18,255,8,236,3,218,4,200,8,184,28,152,59,122,99,94,145,73,192,58,237,48"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="578,301,740,342"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="455,43,544,57,590,70,636,86,680,108,718,136,751,170,775,212,781,233,775,255,755,278,731,296,728,292,752,274,770,252,776,233,770,214,746,173,715,140,677,113,634,91,589,75,543,62,454,49"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="83,124,240,165"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="283,79,211,118,209,114,280,74"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="264,124,422,165"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="346,76,346,108,340,108,340,76"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="32,220,217,246"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="232,64,135,91,97,107,73,126,67,145,72,167,85,188,101,207,97,211,81,191,67,169,61,145,69,122,94,103,133,86,231,59"/>
-<area shape="rect" id="Node000007" href="$easynav__octomap__maps__manager_2include_2easynav__octomap__maps__manager_2filters_2ObstacleFilter_8hpp.html" title=" " alt="" coords="445,124,668,165"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="417,74,502,114,500,119,415,79"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="462,50,517,60,575,75,634,95,690,122,733,148,767,177,779,194,784,212,783,233,775,255,755,278,731,296,728,292,752,274,770,252,778,232,779,213,774,196,763,181,730,152,687,126,632,100,574,80,516,65,461,55"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="84,124,245,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="288,79,215,118,212,114,285,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="269,124,430,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="352,76,352,108,347,108,347,76"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="32,220,216,246"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="239,64,138,90,99,107,74,126,68,145,73,167,85,188,102,207,97,211,81,191,68,169,62,145,70,122,96,102,137,85,237,58"/>
+<area shape="rect" id="Node000007" href="$easynav__octomap__maps__manager_2include_2easynav__octomap__maps__manager_2filters_2ObstacleFilter_8hpp.html" title=" " alt="" coords="454,124,677,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="424,74,511,115,509,119,422,79"/>
 <area shape="rect" id="Node000012" title=" " alt="" coords="835,124,963,165"/>
-<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="455,57,626,86,817,121,821,122,820,127,816,127,625,91,454,62"/>
-<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="447,168,350,190,309,202,280,215,256,233,234,255,200,298,196,294,230,251,252,229,278,210,307,197,349,185,446,163"/>
-<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="559,165,565,207,571,230,581,252,597,272,617,290,613,294,593,276,577,255,566,232,560,208,554,166"/>
-<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="458,168,200,219,199,214,457,163"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="462,57,817,121,821,122,820,127,816,127,461,63"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="454,167,353,189,310,202,280,215,256,233,234,255,200,298,196,294,230,251,252,229,278,210,308,197,352,184,453,162"/>
+<area shape="poly" id="edge10_Node000007_Node000003" title=" " alt="" coords="567,165,568,207,573,230,581,252,596,272,615,290,611,294,592,276,577,255,568,232,563,208,561,165"/>
+<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="465,168,202,219,201,214,464,163"/>
 <area shape="rect" id="Node000008" title=" " alt="" coords="590,220,760,246"/>
-<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="585,163,648,209,645,213,582,167"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="592,163,650,209,647,213,589,167"/>
 <area shape="rect" id="Node000009" href="$OctomapFilter_8hpp.html" title=" " alt="" coords="291,213,515,253"/>
-<area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="523,168,452,207,449,203,520,163"/>
+<area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="530,168,454,207,452,203,527,163"/>
 <area shape="poly" id="edge12_Node000009_Node000002" title=" " alt="" coords="346,256,223,304,221,304,219,299,221,299,344,251"/>
 <area shape="poly" id="edge14_Node000009_Node000003" title=" " alt="" coords="462,251,587,293,586,299,460,256"/>
 <area shape="rect" id="Node000010" title=" " alt="" coords="234,309,369,334"/>
