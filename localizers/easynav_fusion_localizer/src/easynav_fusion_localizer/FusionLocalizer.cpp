@@ -108,39 +108,6 @@ void FusionLocalizer::on_initialize()
         navsatfix_topic_, rclcpp::QoS(10));
     }
 
-    // Optional initial pose from parameters (kept consistent with AMCL parameter names)
-    localizer_node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
-    localizer_node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
-    localizer_node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
-
-    double init_x = 0.0;
-    double init_y = 0.0;
-    double init_yaw = 0.0;
-    localizer_node->get_parameter(plugin_name + ".initial_pose.x", init_x);
-    localizer_node->get_parameter(plugin_name + ".initial_pose.y", init_y);
-    localizer_node->get_parameter(plugin_name + ".initial_pose.yaw", init_yaw);
-
-    if (std::abs(init_x) > 1e-12 || std::abs(init_y) > 1e-12 || std::abs(init_yaw) > 1e-12) {
-      auto init_pose = std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>();
-      init_pose->header.stamp = localizer_node->now();
-      init_pose->header.frame_id = tf_info.map_frame;
-      init_pose->pose.pose.position.x = init_x;
-      init_pose->pose.pose.position.y = init_y;
-      init_pose->pose.pose.position.z = 0.0;
-      tf2::Quaternion q;
-      q.setRPY(0.0, 0.0, init_yaw);
-      init_pose->pose.pose.orientation = tf2::toMsg(q);
-      init_pose->pose.covariance.fill(0.0);
-
-      if (ukf_global_) {
-        ukf_global_->setPoseCallback(init_pose);
-        first_pose_received_ = true;
-      }
-      if (ukf_local_) {
-        ukf_local_->setPoseCallback(init_pose);
-      }
-    }
-
   } catch (const std::exception & e) {
     RCLCPP_FATAL(
       get_node()->get_logger(), "Critical failure initializing UkfWrapper: %s",
@@ -164,12 +131,29 @@ void FusionLocalizer::on_initialize()
 void FusionLocalizer::init_pose_callback(
   const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
 {
-  // Forward initial pose to any active filters
-  if (ukf_global_) {
+  if (has_global_filter_) {
+    nav_msgs::msg::Odometry global_odom;
+    // Get current position to calculate the offset
+    if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
+      double current_x = global_odom.pose.pose.position.x;
+      double current_y = global_odom.pose.pose.position.y;
+      
+      // Shift the UTM origin so that the current GPS position will now map to msg's position
+      UTM_origin_x_ += (current_x - msg->pose.pose.position.x);
+      UTM_origin_y_ += (current_y - msg->pose.pose.position.y);
+      
+      RCLCPP_INFO(get_node()->get_logger(), 
+        "Initial pose reset UTM origin. Shifted X by %.2f, Y by %.2f to match pose (%.2f, %.2f)",
+        (current_x - msg->pose.pose.position.x), (current_y - msg->pose.pose.position.y),
+        msg->pose.pose.position.x, msg->pose.pose.position.y);
+    }
+    
+    // Forward initial pose to global filter to make the state jump immediately
     ukf_global_->setPoseCallback(msg);
     first_pose_received_ = true;
   }
-  if (ukf_local_) {
+  
+  if (has_local_filter_) {
     ukf_local_->setPoseCallback(msg);
   }
 }
@@ -179,8 +163,8 @@ void FusionLocalizer::update_rt(NavState & nav_state)
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (has_global_filter_) {
-    if (n_gps_sensors_ && nav_state.has("gnss")) {
-      auto gps_data = nav_state.get<GNSSPerceptions>(std::string("gnss"));
+    if (n_gps_sensors_ && nav_state.has_group("gnss")) {
+      auto gps_data = nav_state.get_group<easynav::GNSSPerception>(std::string("gnss"));
       const auto & gps_cb_arr = ukf_global_->getGpsCallbackDataArr();
       for (int i = 0; i < n_gps_sensors_; ++i) {
         if (gps_data[i]->data.status.status < sensor_msgs::msg::NavSatStatus::STATUS_FIX) {
