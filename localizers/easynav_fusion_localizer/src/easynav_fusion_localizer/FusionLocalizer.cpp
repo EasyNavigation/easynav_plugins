@@ -137,22 +137,22 @@ void FusionLocalizer::init_pose_callback(
     if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
       double current_x = global_odom.pose.pose.position.x;
       double current_y = global_odom.pose.pose.position.y;
-      
+
       // Shift the UTM origin so that the current GPS position will now map to msg's position
       UTM_origin_x_ += (current_x - msg->pose.pose.position.x);
       UTM_origin_y_ += (current_y - msg->pose.pose.position.y);
-      
-      RCLCPP_INFO(get_node()->get_logger(), 
+
+      RCLCPP_INFO(get_node()->get_logger(),
         "Initial pose reset UTM origin. Shifted X by %.2f, Y by %.2f to match pose (%.2f, %.2f)",
         (current_x - msg->pose.pose.position.x), (current_y - msg->pose.pose.position.y),
         msg->pose.pose.position.x, msg->pose.pose.position.y);
     }
-    
+
     // Forward initial pose to global filter to make the state jump immediately
     ukf_global_->setPoseCallback(msg);
     first_pose_received_ = true;
   }
-  
+
   if (has_local_filter_) {
     ukf_local_->setPoseCallback(msg);
   }
