@@ -171,6 +171,14 @@ void
 CostmapMapsManager::set_base_map(const Costmap2D & new_map)
 {
   map_base_ = new_map;
+
+  if (base_occ_pub_) {
+    const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+    map_base_.toOccupancyGridMsg(base_grid_msg_);
+    base_grid_msg_.header.frame_id = tf_info.map_frame;
+    base_grid_msg_.header.stamp = map_base_.getLastModifiedStamp();
+    base_occ_pub_->publish(base_grid_msg_);
+  }
 }
 
 
@@ -189,6 +197,14 @@ CostmapMapsManager::update(NavState & nav_state)
 
     if (external_ns > internal_ns) {
       map_base_ = external_base;
+
+      if (base_occ_pub_) {
+        const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+        map_base_.toOccupancyGridMsg(base_grid_msg_);
+        base_grid_msg_.header.frame_id = tf_info.map_frame;
+        base_grid_msg_.header.stamp = map_base_.getLastModifiedStamp();
+        base_occ_pub_->publish(base_grid_msg_);
+      }
     } else if (internal_ns > external_ns) {
       nav_state.set("map.base", map_base_);
     }
