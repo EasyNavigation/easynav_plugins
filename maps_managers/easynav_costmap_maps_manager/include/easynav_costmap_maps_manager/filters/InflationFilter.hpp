@@ -230,20 +230,20 @@ protected:
 
   bool matchedSize_ {false};
 
-  Costmap2D static_inflated_;
-  bool has_static_inflated_ {false};
+  Costmap2D base_inflated_;
+  bool has_base_inflated_ {false};
 
-  struct StaticGeomSignature
+  struct BaseGeomSignature
   {
     unsigned int size_x {0};
     unsigned int size_y {0};
     double resolution {0.0};
     double origin_x {0.0};
     double origin_y {0.0};
-  } static_sig_;
+  } base_sig_;
 
-  bool needs_recompute_static_(const Costmap2D & static_map) const;
-  void recompute_static_inflation_(const Costmap2D & static_map);
+  bool needs_recompute_base_(const Costmap2D & base_map) const;
+  void recompute_base_inflation_(const Costmap2D & base_map);
 };
 
 }  // namespace easynav

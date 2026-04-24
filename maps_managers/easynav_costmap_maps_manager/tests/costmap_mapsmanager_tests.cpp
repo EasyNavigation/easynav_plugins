@@ -43,8 +43,8 @@ protected:
 //  auto manager = std::make_shared<easynav::CostmapMapsManager>();
 //  manager->initialize(node, "test");
 //
-//  easynav::Costmap2D static_map(30, 30, 0.1, -1.5, -1.5);
-//  manager->set_static_map(static_map);
+//  easynav::Costmap2D base_map(30, 30, 0.1, -1.5, -1.5);
+//  manager->set_base_map(base_map);
 //
 //  easynav::NavState navstate;
 //  auto perception = std::make_shared<easynav::PointPerception>();
@@ -108,8 +108,8 @@ protected:
 //  easynav::NavState navstate;
 //  manager->update(navstate);
 //
-//  ASSERT_TRUE(navstate.has("map.static"));
-//  const auto & map = navstate.get<easynav::Costmap2D>("map.static");
+//  ASSERT_TRUE(navstate.has("map.base"));
+//  const auto & map = navstate.get<easynav::Costmap2D>("map.base");
 //
 //  EXPECT_EQ(map.getCost(5, 5), easynav::LETHAL_OBSTACLE);
 //  EXPECT_EQ(map.getCost(1, 1), easynav::FREE_SPACE);
@@ -129,17 +129,17 @@ protected:
 //  auto manager = std::make_shared<FriendCostmapMapsManager>();
 //  manager->initialize(node, "test_savemap");
 //
-//  // Create a 200x200 static costmap with resolution 0.05 and origin at (0, 0)
+//  // Create a 200x200 base costmap with resolution 0.05 and origin at (0, 0)
 //  const unsigned int width = 200;
 //  const unsigned int height = 200;
-//  easynav::Costmap2D map_static(width, height, 0.05, 0.0, 0.0);
+//  easynav::Costmap2D map_base(width, height, 0.05, 0.0, 0.0);
 //
 //  // Set a vertical line of lethal obstacles at x = 30
 //  for (unsigned int y = 0; y < height; ++y) {
-//    map_static.setCost(30, y, easynav::LETHAL_OBSTACLE);
+//    map_base.setCost(30, y, easynav::LETHAL_OBSTACLE);
 //  }
 //
-//  manager->set_static_map(map_static);
+//  manager->set_base_map(map_base);
 //
 //  const std::string yaml_path = "/tmp/savemap_test_map";
 //  const std::string service_name = "/test_savemap_node/test_savemap/savemap";
@@ -169,11 +169,11 @@ protected:
 //  easynav::Costmap2D loaded_map(loaded_grid);
 //
 //  // Check map dimensions match
-//  ASSERT_EQ(loaded_map.getSizeInCellsX(), map_static.getSizeInCellsX());
-//  ASSERT_EQ(loaded_map.getSizeInCellsY(), map_static.getSizeInCellsY());
+//  ASSERT_EQ(loaded_map.getSizeInCellsX(), map_base.getSizeInCellsX());
+//  ASSERT_EQ(loaded_map.getSizeInCellsY(), map_base.getSizeInCellsY());
 //
-//  for (unsigned int y = 0; y < map_static.getSizeInCellsY(); ++y) {
-//    for (unsigned int x = 0; x < map_static.getSizeInCellsX(); ++x) {
+//  for (unsigned int y = 0; y < map_base.getSizeInCellsY(); ++y) {
+//    for (unsigned int x = 0; x < map_base.getSizeInCellsX(); ++x) {
 //      if (x == 30) {
 //        EXPECT_EQ(loaded_map.getCost(x, y), easynav::LETHAL_OBSTACLE)
 //          << "Expected LETHAL_OBSTACLE at (" << x << "," << y << ")";
