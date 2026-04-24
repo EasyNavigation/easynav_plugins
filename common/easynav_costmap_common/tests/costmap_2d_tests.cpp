@@ -171,7 +171,7 @@ TEST_F(Costmap2DTest, TimestampFromCopyConstructor)
   EXPECT_EQ(out.header.stamp.nanosec, in.header.stamp.nanosec);
 }
 
-TEST_F(Costmap2DTest, TimestampNotUpdatedByChanges)
+TEST_F(Costmap2DTest, TimestampUpdatedBySetCost)
 {
   nav_msgs::msg::OccupancyGrid in;
   in.header.stamp.sec = 7;
@@ -185,13 +185,19 @@ TEST_F(Costmap2DTest, TimestampNotUpdatedByChanges)
 
   Costmap2D map(in);
   const int64_t expected_ns = 7LL * 1000000000LL + 8LL;
-  map.setCost(1, 1, 100);
-  map.resizeMap(4u, 4u, 1.0, 1.0, 1.0);
 
-  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns);
+  map.setCost(1, 1, 100);
+  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns + 1);
+
+  // Setting the same value should not change the stamp.
+  map.setCost(1, 1, 100);
+  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns + 1);
 
   nav_msgs::msg::OccupancyGrid out;
   map.toOccupancyGridMsg(out);
-  EXPECT_EQ(out.header.stamp.sec, in.header.stamp.sec);
-  EXPECT_EQ(out.header.stamp.nanosec, in.header.stamp.nanosec);
+
+  const int64_t out_ns =
+    static_cast<int64_t>(out.header.stamp.sec) * 1000000000LL +
+    static_cast<int64_t>(out.header.stamp.nanosec);
+  EXPECT_EQ(out_ns, expected_ns + 1);
 }

@@ -42,6 +42,7 @@
 #ifndef EASYNAV_PLANNER__FILTERS__IINFLATIONFILTER_HPP_
 #define EASYNAV_PLANNER__FILTERS__IINFLATIONFILTER_HPP_
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -240,6 +241,7 @@ protected:
     double resolution {0.0};
     double origin_x {0.0};
     double origin_y {0.0};
+    int64_t stamp_ns {0};
   } base_sig_;
 
   bool needs_recompute_base_(const Costmap2D & base_map) const;

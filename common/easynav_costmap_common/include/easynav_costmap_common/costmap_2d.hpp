@@ -136,9 +136,19 @@ public:
   /**
    * @brief Get timestamp of last costmap modification.
    *
-   * Currently only set by constructors and copy/assignment; other updates do not change it.
+   * Set by constructors and copy/assignment, and may be updated by some mutating operations.
+   * For high-frequency per-cell updates (e.g., many `setCost()` calls in a loop), prefer calling
+   * `touch()` once after the batch update.
    */
   rclcpp::Time getLastModifiedStamp() const;
+
+  /**
+   * @brief Mark the costmap as modified.
+   *
+   * This bumps the internal last-modified stamp by 1 nanosecond while preserving the clock type.
+   * It is intended to be called after bulk updates to avoid per-cell overhead.
+   */
+  void touch();
 
   /**
    * @brief Copies the (x0,y0)..(xn,yn) window from source costmap into a current costmap
@@ -591,7 +601,7 @@ protected:
   unsigned char default_value_;
 
   // Timestamp indicating when the costmap was last modified.
-  // Currently only set by constructors and copy/assignment; other updates do not change it.
+  // Set by constructors and copy/assignment, and bumped by some mutating operations.
   rclcpp::Time last_modified_;
 
   // *INDENT-OFF* Uncrustify doesn't handle indented public/private labels

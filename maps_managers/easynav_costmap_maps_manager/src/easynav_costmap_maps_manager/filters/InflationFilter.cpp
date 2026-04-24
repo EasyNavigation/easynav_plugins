@@ -449,11 +449,14 @@ InflationFilter::needs_recompute_base_(const Costmap2D & base_map) const
     return true;
   }
 
+  const int64_t stamp_ns = base_map.getLastModifiedStamp().nanoseconds();
+
   if (base_map.getSizeInCellsX() != base_sig_.size_x ||
     base_map.getSizeInCellsY() != base_sig_.size_y ||
     base_map.getResolution() != base_sig_.resolution ||
     base_map.getOriginX() != base_sig_.origin_x ||
-    base_map.getOriginY() != base_sig_.origin_y)
+    base_map.getOriginY() != base_sig_.origin_y ||
+    stamp_ns != base_sig_.stamp_ns)
   {
     return true;
   }
@@ -476,6 +479,7 @@ InflationFilter::recompute_base_inflation_(const Costmap2D & base_map)
   base_sig_.resolution = base_map.getResolution();
   base_sig_.origin_x = base_map.getOriginX();
   base_sig_.origin_y = base_map.getOriginY();
+  base_sig_.stamp_ns = base_map.getLastModifiedStamp().nanoseconds();
 
   has_base_inflated_ = true;
 }
