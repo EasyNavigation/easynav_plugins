@@ -15,11 +15,21 @@
 
 #include <gtest/gtest.h>
 
-#include "easynav_sensors/types/PointPerception.hpp"
+#include <chrono>
+#include <memory>
+#include <thread>
+
 #include "easynav_common/types/NavState.hpp"
+#include "easynav_common/RTTFBuffer.hpp"
+
+#include "easynav_costmap_common/costmap_2d.hpp"
+#include "easynav_costmap_common/cost_values.hpp"
+#include "easynav_costmap_maps_manager/CostmapMapsManager.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
+
+#include "nav_msgs/msg/occupancy_grid.hpp"
 
 /// \brief Fixture for CostmapMapsManager tests
 class CostmapMapsManagerTest : public ::testing::Test
@@ -35,6 +45,155 @@ protected:
     rclcpp::shutdown();
   }
 };
+
+static nav_msgs::msg::OccupancyGrid make_grid(
+  int width,
+  int height,
+  int occ_x,
+  int occ_y,
+  int64_t stamp_ns)
+{
+  nav_msgs::msg::OccupancyGrid grid;
+  grid.header.frame_id = "map";
+  grid.header.stamp.sec = static_cast<int32_t>(stamp_ns / 1000000000LL);
+  grid.header.stamp.nanosec = static_cast<uint32_t>(stamp_ns % 1000000000LL);
+
+  grid.info.width = static_cast<uint32_t>(width);
+  grid.info.height = static_cast<uint32_t>(height);
+  grid.info.resolution = 0.2f;
+  grid.info.origin.position.x = -1.0;
+  grid.info.origin.position.y = -1.0;
+  grid.data.assign(static_cast<size_t>(width * height), 0);
+
+  if (occ_x >= 0 && occ_y >= 0 && occ_x < width && occ_y < height) {
+    grid.data[static_cast<size_t>(occ_y * width + occ_x)] = 100;
+  }
+
+  return grid;
+}
+
+TEST_F(CostmapMapsManagerTest, SyncBaseMapPrefersNewerNavStateMap)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_node_sync_ns");
+
+  easynav::TFInfo tf_info;
+  tf_info.map_frame = "map";
+  tf_info.odom_frame = "odom";
+  tf_info.robot_frame = "base_link";
+  tf_info.robot_footprint_frame = "base_footprint";
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
+  auto manager = std::make_shared<easynav::CostmapMapsManager>();
+  manager->initialize(node, "test");
+
+  const int64_t older_ns = 10LL * 1000000000LL;
+  const int64_t newer_ns = 20LL * 1000000000LL;
+
+  easynav::Costmap2D internal_old(make_grid(10, 10, 1, 1, older_ns));
+  easynav::Costmap2D external_new(make_grid(10, 10, 2, 2, newer_ns));
+
+  manager->set_base_map(internal_old);
+
+  easynav::NavState navstate;
+  navstate.set("map.base", external_new);
+
+  manager->update(navstate);
+
+  ASSERT_TRUE(navstate.has("map.base"));
+  const auto & base_after = navstate.get<easynav::Costmap2D>("map.base");
+  EXPECT_EQ(base_after.getLastModifiedStamp().nanoseconds(), newer_ns);
+
+  ASSERT_TRUE(navstate.has("map.dynamic.filtered"));
+  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map.dynamic.filtered");
+  ASSERT_TRUE(dyn_ptr != nullptr);
+  EXPECT_EQ(dyn_ptr->getLastModifiedStamp().nanoseconds(), newer_ns);
+  EXPECT_EQ(dyn_ptr->getCost(2, 2), easynav::LETHAL_OBSTACLE);
+  EXPECT_EQ(dyn_ptr->getCost(1, 1), easynav::FREE_SPACE);
+}
+
+TEST_F(CostmapMapsManagerTest, SyncBaseMapPrefersNewerInternalMap)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_node_sync_internal");
+
+  easynav::TFInfo tf_info;
+  tf_info.map_frame = "map";
+  tf_info.odom_frame = "odom";
+  tf_info.robot_frame = "base_link";
+  tf_info.robot_footprint_frame = "base_footprint";
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
+  auto manager = std::make_shared<easynav::CostmapMapsManager>();
+  manager->initialize(node, "test");
+
+  const int64_t older_ns = 10LL * 1000000000LL;
+  const int64_t newer_ns = 20LL * 1000000000LL;
+
+  easynav::Costmap2D internal_new(make_grid(10, 10, 3, 3, newer_ns));
+  easynav::Costmap2D external_old(make_grid(10, 10, 4, 4, older_ns));
+
+  manager->set_base_map(internal_new);
+
+  easynav::NavState navstate;
+  navstate.set("map.base", external_old);
+
+  manager->update(navstate);
+
+  ASSERT_TRUE(navstate.has("map.base"));
+  const auto & base_after = navstate.get<easynav::Costmap2D>("map.base");
+  EXPECT_EQ(base_after.getLastModifiedStamp().nanoseconds(), newer_ns);
+
+  ASSERT_TRUE(navstate.has("map.dynamic.filtered"));
+  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map.dynamic.filtered");
+  ASSERT_TRUE(dyn_ptr != nullptr);
+  EXPECT_EQ(dyn_ptr->getLastModifiedStamp().nanoseconds(), newer_ns);
+  EXPECT_EQ(dyn_ptr->getCost(3, 3), easynav::LETHAL_OBSTACLE);
+  EXPECT_EQ(dyn_ptr->getCost(4, 4), easynav::FREE_SPACE);
+}
+
+TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_node_incoming");
+
+  easynav::TFInfo tf_info;
+  tf_info.map_frame = "map";
+  tf_info.odom_frame = "odom";
+  tf_info.robot_frame = "base_link";
+  tf_info.robot_footprint_frame = "base_footprint";
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
+  auto manager = std::make_shared<easynav::CostmapMapsManager>();
+  manager->initialize(node, "test");
+
+  rclcpp::executors::SingleThreadedExecutor executor;
+  executor.add_node(node->get_node_base_interface());
+
+  const std::string topic = node->get_fully_qualified_name() + std::string("/test/incoming_map");
+  auto pub = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
+    topic, rclcpp::QoS(1).transient_local().reliable());
+  pub->on_activate();
+
+  auto grid = make_grid(10, 10, 5, 5, 123LL * 1000000000LL);
+  pub->publish(grid);
+
+  executor.spin_some();
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  executor.spin_some();
+
+  easynav::NavState navstate;
+  manager->update(navstate);
+
+  ASSERT_TRUE(navstate.has("map.base"));
+  const auto & base_after = navstate.get<easynav::Costmap2D>("map.base");
+  EXPECT_EQ(base_after.getCost(5, 5), easynav::LETHAL_OBSTACLE);
+  EXPECT_GT(base_after.getLastModifiedStamp().nanoseconds(), 0);
+
+  ASSERT_TRUE(navstate.has("map.dynamic.filtered"));
+  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map.dynamic.filtered");
+  ASSERT_TRUE(dyn_ptr != nullptr);
+  EXPECT_EQ(dyn_ptr->getCost(5, 5), easynav::LETHAL_OBSTACLE);
+  EXPECT_EQ(dyn_ptr->getLastModifiedStamp().nanoseconds(),
+    base_after.getLastModifiedStamp().nanoseconds());
+}
 
 ///// \brief Dynamic map update test with point cloud
 //TEST_F(CostmapMapsManagerTest, BasicDynamicUpdate)

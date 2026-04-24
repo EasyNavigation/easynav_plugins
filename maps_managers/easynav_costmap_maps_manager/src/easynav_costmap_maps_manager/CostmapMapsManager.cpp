@@ -179,7 +179,20 @@ CostmapMapsManager::update(NavState & nav_state)
 {
   EASYNAV_TRACE_EVENT;
 
-  if (!nav_state.has("map.base")) {
+  // Sync internal base map with NavState, preferring the newest stamp.
+  // Note: Compare using nanoseconds to avoid rclcpp::Time clock-type mismatches.
+  if (nav_state.has("map.base")) {
+    const auto & external_base = nav_state.get<Costmap2D>("map.base");
+
+    const int64_t internal_ns = map_base_.getLastModifiedStamp().nanoseconds();
+    const int64_t external_ns = external_base.getLastModifiedStamp().nanoseconds();
+
+    if (external_ns > internal_ns) {
+      map_base_ = external_base;
+    } else if (internal_ns > external_ns) {
+      nav_state.set("map.base", map_base_);
+    }
+  } else {
     nav_state.set("map.base", map_base_);
   }
 
