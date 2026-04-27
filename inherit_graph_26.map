@@ -1,15 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,104,139,130"/>
-<area shape="rect" id="Node000001" href="$classeasynav_1_1CostmapMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="187,5,342,31"/>
-<area shape="poly" id="edge25_Node000000_Node000001" title=" " alt="" coords="100,93,140,66,186,40,213,29,215,34,188,45,143,70,103,97"/>
-<area shape="rect" id="Node000002" href="$classeasynav_1_1SimpleMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="193,55,336,80"/>
-<area shape="poly" id="edge26_Node000000_Node000002" title=" " alt="" coords="139,97,211,78,212,84,141,102"/>
-<area shape="rect" id="Node000004" href="$classeasynav_1_1navmap_1_1NavMapMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="189,104,341,130"/>
-<area shape="poly" id="edge28_Node000000_Node000004" title=" " alt="" coords="154,114,189,114,189,120,154,120"/>
-<area shape="rect" id="Node000005" href="$classeasynav_1_1octomap_1_1OctomapMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="187,153,343,179"/>
-<area shape="poly" id="edge29_Node000000_Node000005" title=" " alt="" coords="141,132,212,150,211,155,139,137"/>
-<area shape="rect" id="Node000006" href="$classeasynav__bonxai_1_1BonxaiMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="194,203,336,228"/>
-<area shape="poly" id="edge30_Node000000_Node000006" title=" " alt="" coords="103,137,143,164,188,189,215,200,213,205,186,194,140,168,100,141"/>
-<area shape="rect" id="Node000003" href="$classFriendSimpleMapsManager.html" title=" " alt="" coords="391,55,570,80"/>
-<area shape="poly" id="edge27_Node000002_Node000003" title=" " alt="" coords="352,65,390,65,390,70,352,70"/>
+<area shape="rect" id="Node000000" href="$classBonxai_1_1Mask.html" title=" " alt="" coords="5,5,59,31"/>
 </map>

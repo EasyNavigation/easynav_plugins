@@ -83,12 +83,15 @@ Directory dependency graph for easynav_gps_localizer:</div>
 <div class="dyncontent">
 <div class="center"><img src="dir_2db0121cf3f0f4867981babf895bb51a_dep.png" border="0" usemap="#adir__2db0121cf3f0f4867981babf895bb51a__dep" loading="lazy" alt="localizers/easynav_gps_localizer"/></div>
 <map name="adir__2db0121cf3f0f4867981babf895bb51a__dep" id="adir__2db0121cf3f0f4867981babf895bb51a__dep">
-<area shape="rect" href="dir_971c3e1296a0755c0377411a922cfc2c.html" title="include" alt="" coords="192,137,254,162"/>
+<area shape="rect" href="dir_971c3e1296a0755c0377411a922cfc2c.html" title="include" alt="" coords="234,137,296,162"/>
 <area shape="rect" href="dir_91f0824f8b0d598dafb306cd6e49ab86.html" title="src" alt="" coords="214,63,253,89"/>
-<area shape="poly" href="dir_000092_000071.html" alt="" coords="234,89,229,122,224,121,229,88"/>
-<area shape="rect" href="dir_000092_000071.html" title="1" alt="" coords="232,112,239,127"/>
-<area shape="rect" href="dir_2db0121cf3f0f4867981babf895bb51a.html" alt="" coords="27,52,264,173"/>
-<area shape="rect" href="dir_eaf1c103843d5a42241179bcdc1dcd04.html" title="localizers" alt="" coords="16,16,275,184"/>
+<area shape="poly" href="dir_000092_000071.html" alt="" coords="241,88,256,121,251,123,236,90"/>
+<area shape="rect" href="dir_000092_000071.html" title="1" alt="" coords="257,109,264,124"/>
+<area shape="rect" href="dir_e65228f279d107e35374f23ad9f00123.html" title="tests" alt="" coords="278,63,328,89"/>
+<area shape="poly" href="dir_000107_000071.html" alt="" coords="299,90,281,124,276,122,294,88"/>
+<area shape="rect" href="dir_000107_000071.html" title="1" alt="" coords="284,117,291,132"/>
+<area shape="rect" href="dir_2db0121cf3f0f4867981babf895bb51a.html" alt="" coords="27,52,339,173"/>
+<area shape="rect" href="dir_eaf1c103843d5a42241179bcdc1dcd04.html" title="localizers" alt="" coords="16,16,349,184"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -96,6 +99,7 @@ Directory dependency graph for easynav_gps_localizer:</div>
 Directories</h2></td></tr>
 <tr class="memitem:include" id="r_include"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_971c3e1296a0755c0377411a922cfc2c.html">include</a></td></tr>
 <tr class="memitem:src" id="r_src"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_91f0824f8b0d598dafb306cd6e49ab86.html">src</a></td></tr>
+<tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_e65228f279d107e35374f23ad9f00123.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md72"></a>
@@ -134,7 +138,17 @@ Plugin (pluginlib)</h1>
 </ul>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md77"></a>
 Parameters</h1>
-<p>This plugin does not declare configurable ROS parameters.</p>
+<p>All parameters are declared under the plugin namespace, i.e., <span class="tt">/&lt;node_fqn&gt;/easynav_gps_localizer/GpsLocalizer/...</span>.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Name  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadRight">Default  </th><th class="markdownTableHeadNone">Description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.initial_pose.x</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">Initial X position (m).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.initial_pose.y</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">Initial Y position (m).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.initial_pose.yaw</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">Initial yaw (rad).  </td></tr>
+</table>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md78"></a>
 Interfaces (Topics and Services)</h1>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md79"></a>
@@ -147,6 +161,8 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">imu/data</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs/msg/Imu</span>  </td><td class="markdownTableBodyNone">IMU orientation for yaw fusion.  </td><td class="markdownTableBodyNone">SensorDataQoS (reliable)  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">initialpose</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs/msg/PoseWithCovarianceStamped</span>  </td><td class="markdownTableBodyNone">Seed/reset the localizer pose from an external initial pose estimate.  </td><td class="markdownTableBodyNone">depth=10  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">robot/odom_gps</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/Odometry</span>  </td><td class="markdownTableBodyNone">Odometry fused from GPS + IMU (UTM-projected).  </td><td class="markdownTableBodyNone">SensorDataQoS  </td></tr>
 </table>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md80"></a>

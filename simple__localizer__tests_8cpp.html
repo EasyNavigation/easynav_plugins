@@ -76,84 +76,74 @@ $(function() {
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">simple_localizer_tests.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;gtest/gtest.h&gt;</code><br />
-<code>#include &quot;<a class="el" href="SimpleMap_8hpp_source.html">easynav_simple_common/SimpleMap.hpp</a>&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;chrono&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;thread&gt;</code><br />
 <code>#include &quot;<a class="el" href="easynav__simple__localizer_2include_2easynav__simple__localizer_2AMCLLocalizer_8hpp_source.html">easynav_simple_localizer/AMCLLocalizer.hpp</a>&quot;</code><br />
 <code>#include &quot;rclcpp/rclcpp.hpp&quot;</code><br />
+<code>#include &quot;rclcpp/executors/single_threaded_executor.hpp&quot;</code><br />
 <code>#include &quot;rclcpp_lifecycle/lifecycle_node.hpp&quot;</code><br />
-<code>#include &quot;std_srvs/srv/trigger.hpp&quot;</code><br />
-<code>#include &lt;memory&gt;</code><br />
-<code>#include &lt;fstream&gt;</code><br />
+<code>#include &quot;tf2_geometry_msgs/tf2_geometry_msgs.hpp&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for simple_localizer_tests.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="simple__localizer__tests_8cpp__incl.png" border="0" usemap="#alocalizers_2easynav__simple__localizer_2tests_2simple__localizer__tests_8cpp" loading="lazy" alt=""/></div>
 <map name="alocalizers_2easynav__simple__localizer_2tests_2simple__localizer__tests_8cpp" id="alocalizers_2easynav__simple__localizer_2tests_2simple__localizer__tests_8cpp">
-<area shape="rect" title=" " alt="" coords="837,5,1014,61"/>
-<area shape="rect" title=" " alt="" coords="107,116,200,142"/>
-<area shape="poly" title=" " alt="" coords="837,40,713,48,557,61,385,82,213,112,202,114,201,109,212,106,384,76,557,56,713,42,837,35"/>
-<area shape="rect" href="SimpleMap_8hpp.html" title="Declaration of the SimpleMap type." alt="" coords="224,109,395,150"/>
-<area shape="poly" title=" " alt="" coords="837,51,411,115,410,110,836,45"/>
-<area shape="rect" href="easynav__simple__localizer_2include_2easynav__simple__localizer_2AMCLLocalizer_8hpp.html" title="Declaration of the AMCLLocalizer method." alt="" coords="592,109,760,150"/>
-<area shape="poly" title=" " alt="" coords="854,64,744,106,742,101,853,59"/>
-<area shape="rect" title=" " alt="" coords="785,116,904,142"/>
-<area shape="poly" title=" " alt="" coords="904,63,866,107,862,103,900,60"/>
-<area shape="rect" title=" " alt="" coords="928,109,1089,150"/>
-<area shape="poly" title=" " alt="" coords="952,60,983,96,979,99,948,63"/>
-<area shape="rect" title=" " alt="" coords="1114,116,1271,142"/>
-<area shape="poly" title=" " alt="" coords="1004,59,1145,108,1143,113,1002,64"/>
-<area shape="rect" title=" " alt="" coords="1295,116,1362,142"/>
-<area shape="poly" title=" " alt="" coords="1015,46,1143,70,1284,106,1289,108,1287,113,1282,112,1142,75,1014,51"/>
-<area shape="rect" title=" " alt="" coords="1386,116,1452,142"/>
-<area shape="poly" title=" " alt="" coords="1015,41,1183,64,1280,83,1374,106,1380,108,1378,113,1373,112,1279,88,1183,69,1015,46"/>
-<area shape="rect" title=" " alt="" coords="281,205,338,231"/>
-<area shape="poly" title=" " alt="" coords="312,150,312,190,307,190,307,150"/>
-<area shape="rect" title=" " alt="" coords="5,205,57,231"/>
-<area shape="poly" title=" " alt="" coords="224,153,148,174,69,200,67,201,65,196,67,195,146,168,223,148"/>
-<area shape="rect" title=" " alt="" coords="80,198,256,238"/>
-<area shape="poly" title=" " alt="" coords="279,152,214,192,211,187,276,148"/>
-<area shape="poly" title=" " alt="" coords="592,145,477,167,352,200,348,202,346,196,350,195,476,162,591,140"/>
-<area shape="rect" title=" " alt="" coords="363,205,427,231"/>
-<area shape="poly" title=" " alt="" coords="599,153,441,200,437,202,435,197,439,195,598,148"/>
-<area shape="rect" title=" " alt="" coords="452,205,565,231"/>
-<area shape="poly" title=" " alt="" coords="639,153,546,200,544,195,637,148"/>
-<area shape="rect" title=" " alt="" coords="589,198,764,238"/>
-<area shape="poly" title=" " alt="" coords="679,150,679,182,674,182,674,150"/>
-<area shape="rect" title=" " alt="" coords="788,198,991,238"/>
-<area shape="poly" title=" " alt="" coords="726,148,828,189,826,194,724,153"/>
-<area shape="rect" title=" " alt="" coords="1015,205,1207,231"/>
-<area shape="poly" title=" " alt="" coords="761,145,1036,199,1035,204,760,150"/>
-<area shape="rect" title=" " alt="" coords="1231,205,1423,231"/>
-<area shape="poly" title=" " alt="" coords="761,145,773,147,898,163,996,172,1094,180,1219,195,1247,199,1246,205,1219,200,1093,185,995,177,897,169,772,152,761,150"/>
-<area shape="rect" title=" " alt="" coords="1447,205,1666,231"/>
-<area shape="poly" title=" " alt="" coords="761,145,773,147,958,166,1104,173,1249,179,1435,195,1471,200,1470,205,1435,200,1249,184,1103,179,958,172,772,152,761,151"/>
-<area shape="rect" title=" " alt="" coords="1690,198,1890,238"/>
-<area shape="poly" title=" " alt="" coords="761,145,773,147,908,161,1024,169,1222,173,1420,176,1537,182,1674,195,1674,200,1537,188,1420,181,1221,179,1024,175,908,167,772,152,761,151"/>
+<area shape="rect" title=" " alt="" coords="456,5,633,61"/>
+<area shape="rect" title=" " alt="" coords="55,116,149,142"/>
+<area shape="poly" title=" " alt="" coords="456,51,317,77,161,112,152,114,151,109,160,106,316,71,455,46"/>
+<area shape="rect" title=" " alt="" coords="173,116,247,142"/>
+<area shape="poly" title=" " alt="" coords="457,58,361,82,260,112,255,113,253,108,259,106,360,77,455,52"/>
+<area shape="rect" title=" " alt="" coords="272,116,332,142"/>
+<area shape="poly" title=" " alt="" coords="470,64,346,111,343,112,341,108,344,107,468,59"/>
+<area shape="rect" title=" " alt="" coords="356,116,424,142"/>
+<area shape="poly" title=" " alt="" coords="501,64,424,111,421,106,499,59"/>
+<area shape="rect" title=" " alt="" coords="448,116,505,142"/>
+<area shape="poly" title=" " alt="" coords="527,63,496,106,492,103,523,60"/>
+<area shape="rect" href="easynav__simple__localizer_2include_2easynav__simple__localizer_2AMCLLocalizer_8hpp.html" title="Declaration of the AMCLLocalizer method." alt="" coords="530,109,698,150"/>
+<area shape="poly" title=" " alt="" coords="567,60,593,95,589,98,563,63"/>
+<area shape="rect" title=" " alt="" coords="722,116,842,142"/>
+<area shape="poly" title=" " alt="" coords="614,59,739,108,737,113,612,64"/>
+<area shape="rect" title=" " alt="" coords="866,109,1024,150"/>
+<area shape="poly" title=" " alt="" coords="635,53,851,103,850,109,633,58"/>
+<area shape="rect" title=" " alt="" coords="1048,109,1209,150"/>
+<area shape="poly" title=" " alt="" coords="634,44,814,70,1033,106,1033,111,813,76,634,49"/>
+<area shape="rect" title=" " alt="" coords="1233,109,1387,150"/>
+<area shape="poly" title=" " alt="" coords="634,39,892,63,1053,82,1218,106,1217,111,1053,87,892,69,634,44"/>
+<area shape="rect" title=" " alt="" coords="5,205,63,231"/>
+<area shape="poly" title=" " alt="" coords="530,150,518,152,393,165,295,168,198,175,142,184,76,200,71,202,70,197,75,195,141,179,197,170,295,162,393,160,518,147,529,145"/>
+<area shape="rect" title=" " alt="" coords="87,205,152,231"/>
+<area shape="poly" title=" " alt="" coords="530,150,518,152,419,165,340,170,263,179,165,200,160,202,158,197,164,195,262,174,340,165,418,160,518,147,529,145"/>
+<area shape="rect" title=" " alt="" coords="176,205,289,231"/>
+<area shape="poly" title=" " alt="" coords="530,150,303,200,291,203,289,198,301,195,529,145"/>
+<area shape="rect" title=" " alt="" coords="314,198,488,238"/>
+<area shape="poly" title=" " alt="" coords="567,153,464,194,462,189,565,148"/>
+<area shape="rect" title=" " alt="" coords="512,198,716,238"/>
+<area shape="poly" title=" " alt="" coords="617,150,617,182,611,182,611,150"/>
+<area shape="rect" title=" " alt="" coords="740,205,931,231"/>
+<area shape="poly" title=" " alt="" coords="665,148,791,197,789,202,663,153"/>
+<area shape="rect" title=" " alt="" coords="955,205,1148,231"/>
+<area shape="poly" title=" " alt="" coords="699,145,711,147,976,199,975,204,709,152,698,150"/>
+<area shape="rect" title=" " alt="" coords="1171,205,1390,231"/>
+<area shape="poly" title=" " alt="" coords="699,145,710,147,836,164,935,173,1033,181,1160,195,1192,200,1192,205,1159,200,1033,186,934,178,836,169,710,152,698,150"/>
+<area shape="rect" title=" " alt="" coords="1414,198,1614,238"/>
+<area shape="poly" title=" " alt="" coords="699,145,710,147,902,166,1053,173,1204,178,1398,195,1398,200,1204,183,1052,178,901,172,710,152,698,151"/>
 </map>
 </div>
 </div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:AMCLLocalizerTest" id="r_AMCLLocalizerTest"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classAMCLLocalizerTest.html">AMCLLocalizerTest</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fixture for SimpleController tests (minimal).  <a href="classAMCLLocalizerTest.html#details">More...</a><br /></td></tr>
-<tr class="memitem:FriendAMCLLocalizer" id="r_FriendAMCLLocalizer"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classFriendAMCLLocalizer.html">FriendAMCLLocalizer</a></td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7a70ea5a26da16b15b12608c6faef686" id="r_a7a70ea5a26da16b15b12608c6faef686"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a7a70ea5a26da16b15b12608c6faef686">TEST_F</a> (<a class="el" href="classAMCLLocalizerTest.html">AMCLLocalizerTest</a>, BasicDynamicUpdate)</td></tr>
-<tr class="memdesc:a7a70ea5a26da16b15b12608c6faef686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dynamic map update tests.  <br /></td></tr>
-<tr class="memitem:ab0501738a4632848ed432134baef382c" id="r_ab0501738a4632848ed432134baef382c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab0501738a4632848ed432134baef382c">TEST_F</a> (<a class="el" href="classAMCLLocalizerTest.html">AMCLLocalizerTest</a>, IncomingOccupancyGridUpdatesMaps)</td></tr>
-<tr class="memdesc:ab0501738a4632848ed432134baef382c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map loading via subscription test.  <br /></td></tr>
-<tr class="memitem:af1b7ca98eae570b90d2d1c816f4386bd" id="r_af1b7ca98eae570b90d2d1c816f4386bd"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#af1b7ca98eae570b90d2d1c816f4386bd">TEST_F</a> (<a class="el" href="classAMCLLocalizerTest.html">AMCLLocalizerTest</a>, SavemapServiceWorks)</td></tr>
+<tr class="memitem:a3f4bacfb31ec41cc44b406ab8a9d2786" id="r_a3f4bacfb31ec41cc44b406ab8a9d2786"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a3f4bacfb31ec41cc44b406ab8a9d2786">TEST_F</a> (AMCLLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbackGroup)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="a7a70ea5a26da16b15b12608c6faef686" name="a7a70ea5a26da16b15b12608c6faef686"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a70ea5a26da16b15b12608c6faef686">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/3]</span></h2>
+<a id="a3f4bacfb31ec41cc44b406ab8a9d2786" name="a3f4bacfb31ec41cc44b406ab8a9d2786"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f4bacfb31ec41cc44b406ab8a9d2786">&#9670;&#160;</a></span>TEST_F()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -161,58 +151,12 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">TEST_F </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classAMCLLocalizerTest.html">AMCLLocalizerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+          <td class="paramtype">AMCLLocalizerInitialPoseTest</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">BasicDynamicUpdate</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Dynamic map update tests. </p>
-
-</div>
-</div>
-<a id="ab0501738a4632848ed432134baef382c" name="ab0501738a4632848ed432134baef382c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0501738a4632848ed432134baef382c">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">TEST_F </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classAMCLLocalizerTest.html">AMCLLocalizerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">IncomingOccupancyGridUpdatesMaps</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Map loading via subscription test. </p>
-
-</div>
-</div>
-<a id="af1b7ca98eae570b90d2d1c816f4386bd" name="af1b7ca98eae570b90d2d1c816f4386bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1b7ca98eae570b90d2d1c816f4386bd">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">TEST_F </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classAMCLLocalizerTest.html">AMCLLocalizerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SavemapServiceWorks</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+          <td class="paramtype">SubscribesToInitialPoseWithDefaultCallbackGroup</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">

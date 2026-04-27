@@ -1,8 +1,5 @@
 <map id="AMCLLocalizerTest" name="AMCLLocalizerTest">
 <area shape="rect" id="Node000001" title="Fixture for SimpleController tests (minimal)." alt="" coords="5,79,142,105"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="50,5,97,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="50,45,50,62,55,78,50,79,44,63,45,45"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="67,46,69,78,64,79,62,46"/>
-<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="85,46,83,79,78,78,80,46"/>
-<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="102,45,103,63,97,79,92,78,97,62,97,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,46,76,79,71,79,71,46"/>
 </map>

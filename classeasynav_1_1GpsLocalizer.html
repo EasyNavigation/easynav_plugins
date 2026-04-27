@@ -77,6 +77,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classeasynav_1_1GpsLocalizer-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">GpsLocalizer Class Reference</div></div>
 </div><!--header-->
@@ -101,9 +103,13 @@ Collaboration diagram for GpsLocalizer:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1GpsLocalizer__coll__graph.png" border="0" usemap="#aGpsLocalizer_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aGpsLocalizer_coll__map" id="aGpsLocalizer_coll__map">
-<area shape="rect" title="A default &quot;do&#45;nothing&quot; implementation of the LocalizerMethodBase." alt="" coords="30,79,127,105"/>
-<area shape="rect" title=" " alt="" coords="5,5,152,31"/>
-<area shape="poly" title=" " alt="" coords="81,46,81,79,76,79,76,46"/>
+<area shape="rect" title="A default &quot;do&#45;nothing&quot; implementation of the LocalizerMethodBase." alt="" coords="391,55,488,80"/>
+<area shape="rect" title=" " alt="" coords="41,5,188,31"/>
+<area shape="poly" title=" " alt="" coords="204,17,284,23,367,37,410,52,409,57,366,42,283,28,203,22"/>
+<area shape="rect" title=" " alt="" coords="75,55,154,80"/>
+<area shape="poly" title=" " alt="" coords="170,65,390,65,390,70,170,70"/>
+<area shape="rect" title=" " alt="" coords="5,105,224,161"/>
+<area shape="poly" title=" " alt="" coords="238,118,302,108,366,93,408,78,410,83,367,98,303,113,239,123"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -119,6 +125,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a6ed380ba537bbe9a85710810db50a95c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the localization estimate based on the current navigation state.  <br /></td></tr>
 <tr class="memitem:a79cedcb4acbf9e92642ca2ec1d1f85c0" id="r_a79cedcb4acbf9e92642ca2ec1d1f85c0"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a79cedcb4acbf9e92642ca2ec1d1f85c0">~GpsLocalizer</a> ()=default</td></tr>
 <tr class="memdesc:a79cedcb4acbf9e92642ca2ec1d1f85c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aa381d32b539a52c8f30eeee90c5dc80b" id="r_aa381d32b539a52c8f30eeee90c5dc80b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa381d32b539a52c8f30eeee90c5dc80b">init_pose_callback</a> (const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)</td></tr>
+<tr class="memdesc:aa381d32b539a52c8f30eeee90c5dc80b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback for /initialpose.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a73f46d41412aa74599db28b349e90221" id="r_a73f46d41412aa74599db28b349e90221"><td class="memItemLeft">rclcpp::Subscription&lt; geometry_msgs::msg::PoseWithCovarianceStamped &gt;::SharedPtr&#160;</td><td class="memItemRight"><a class="el" href="#a73f46d41412aa74599db28b349e90221">init_pose_sub_</a></td></tr>
+<tr class="memdesc:a73f46d41412aa74599db28b349e90221"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscriber for the initial pose.  <br /></td></tr>
+<tr class="memitem:a47e99774f485997fc4a8c5c1025de320" id="r_a47e99774f485997fc4a8c5c1025de320"><td class="memItemLeft">std::optional&lt; geometry_msgs::msg::PoseWithCovarianceStamped &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a47e99774f485997fc4a8c5c1025de320">pending_init_pose_</a></td></tr>
+<tr class="memdesc:a47e99774f485997fc4a8c5c1025de320"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initial pose received but not yet applied (e.g. waiting for a valid GPS fix).  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A default "do-nothing" implementation of the <a class="el" href="classLocalizerMethodBase.html">LocalizerMethodBase</a>. </p>
@@ -179,6 +197,33 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="aa381d32b539a52c8f30eeee90c5dc80b" name="aa381d32b539a52c8f30eeee90c5dc80b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa381d32b539a52c8f30eeee90c5dc80b">&#9670;&#160;</a></span>init_pose_callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void init_pose_callback </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr</td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Callback for /initialpose. </p>
+
+</div>
+</div>
 <a id="ac9d1795b6cf8a4da7bf9b33f783db911" name="ac9d1795b6cf8a4da7bf9b33f783db911"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac9d1795b6cf8a4da7bf9b33f783db911">&#9670;&#160;</a></span>on_initialize()</h2>
 
@@ -278,6 +323,55 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a73f46d41412aa74599db28b349e90221" name="a73f46d41412aa74599db28b349e90221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73f46d41412aa74599db28b349e90221">&#9670;&#160;</a></span>init_pose_sub_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">rclcpp::Subscription&lt;geometry_msgs::msg::PoseWithCovarianceStamped&gt;::SharedPtr init_pose_sub_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Subscriber for the initial pose. </p>
+
+</div>
+</div>
+<a id="a47e99774f485997fc4a8c5c1025de320" name="a47e99774f485997fc4a8c5c1025de320"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47e99774f485997fc4a8c5c1025de320">&#9670;&#160;</a></span>pending_init_pose_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;geometry_msgs::msg::PoseWithCovarianceStamped&gt; pending_init_pose_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initial pose received but not yet applied (e.g. waiting for a valid GPS fix). </p>
 
 </div>
 </div>

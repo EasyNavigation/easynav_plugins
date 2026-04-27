@@ -1,5 +1,7 @@
 <map id="localizers/easynav_gps_localizer/include/easynav_gps_localizer/GpsLocalizer.hpp" name="localizers/easynav_gps_localizer/include/easynav_gps_localizer/GpsLocalizer.hpp">
-<area shape="rect" id="Node000001" title="Declaration of the GpsLocalizer class, a default plugin implementation for localization." alt="" coords="31,5,187,76"/>
+<area shape="rect" id="Node000001" title="Declaration of the GpsLocalizer class, a default plugin implementation for localization." alt="" coords="135,5,291,76"/>
 <area shape="rect" id="Node000002" href="$GpsLocalizer_8cpp.html" title="Implementation of the GpsLocalizer class." alt="" coords="5,124,213,180"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,92,112,124,106,124,106,92"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,89,137,125,133,122,168,86"/>
+<area shape="rect" id="Node000003" href="$gps__localizer__tests_8cpp.html" title=" " alt="" coords="237,124,397,180"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="258,86,293,122,289,125,255,89"/>
 </map>

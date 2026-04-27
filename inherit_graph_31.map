@@ -1,7 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classeasynav_1_1navmap_1_1NavMapFilter.html" title=" " alt="" coords="5,31,105,56"/>
-<area shape="rect" id="Node000001" href="$classeasynav_1_1navmap_1_1InflationFilter.html" title=" " alt="" coords="156,5,252,31"/>
-<area shape="poly" id="edge31_Node000000_Node000001" title=" " alt="" coords="119,30,155,24,156,29,120,35"/>
-<area shape="rect" id="Node000002" href="$classeasynav_1_1navmap_1_1ObstacleFilter.html" title=" " alt="" coords="153,55,255,80"/>
-<area shape="poly" id="edge32_Node000000_Node000002" title=" " alt="" coords="120,51,152,57,152,62,119,57"/>
+<area shape="rect" id="Node000000" href="$structeasynav_1_1ObstacleBounds.html" title=" " alt="" coords="5,5,123,31"/>
 </map>

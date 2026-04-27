@@ -93,8 +93,8 @@ Directory dependency graph for easynav_navmap_localizer:</div>
 <area shape="poly" href="dir_000093_000083.html" alt="" coords="332,90,309,184,306,196,301,194,304,183,327,88"/>
 <area shape="rect" href="dir_000093_000083.html" title="2" alt="" coords="309,187,316,202"/>
 <area shape="rect" href="dir_b3e8952ff4f5e9567737ce244fed2263.html" title="tests" alt="" coords="238,63,288,89"/>
-<area shape="poly" href="dir_000107_000072.html" alt="" coords="266,89,266,121,261,121,260,89"/>
-<area shape="rect" href="dir_000107_000072.html" title="1" alt="" coords="268,110,275,125"/>
+<area shape="poly" href="dir_000108_000072.html" alt="" coords="266,89,266,121,261,121,260,89"/>
+<area shape="rect" href="dir_000108_000072.html" title="1" alt="" coords="268,110,275,125"/>
 <area shape="rect" href="dir_244f7d1e1d21c0deb2226ff0fb4701ca.html" alt="" coords="27,52,363,173"/>
 <area shape="rect" href="dir_eaf1c103843d5a42241179bcdc1dcd04.html" title="localizers" alt="" coords="16,16,373,184"/>
 </map>
@@ -196,8 +196,10 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">/odom</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/Odometry</span>  </td><td class="markdownTableBodyNone">Used only when <span class="tt">&lt;plugin&gt;.compute_odom_from_tf = false</span>  </td><td class="markdownTableBodyNone">SensorDataQoS (reliable)  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/particles</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs/msg/PoseArray</span>  </td><td class="markdownTableBodyNone">Publishes the current particle set  </td><td class="markdownTableBodyNone">depth=10  </td></tr>
+<td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">initialpose</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs/msg/PoseWithCovarianceStamped</span>  </td><td class="markdownTableBodyNone">Initialize particles pose to the received pose, using covariance  </td><td class="markdownTableBodyNone">depth=10  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/particles</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs/msg/PoseArray</span>  </td><td class="markdownTableBodyNone">Publishes the current particle set  </td><td class="markdownTableBodyNone">depth=10  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/pose</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs/msg/PoseWithCovarianceStamped</span>  </td><td class="markdownTableBodyNone">Publishes the estimated pose with covariance  </td><td class="markdownTableBodyNone">depth=10  </td></tr>
 </table>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md92"></a>

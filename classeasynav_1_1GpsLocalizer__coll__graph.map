@@ -1,5 +1,9 @@
 <map id="GpsLocalizer" name="GpsLocalizer">
-<area shape="rect" id="Node000001" title="A default &quot;do&#45;nothing&quot; implementation of the LocalizerMethodBase." alt="" coords="30,79,127,105"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,152,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,46,81,79,76,79,76,46"/>
+<area shape="rect" id="Node000001" title="A default &quot;do&#45;nothing&quot; implementation of the LocalizerMethodBase." alt="" coords="391,55,488,80"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,5,188,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,17,284,23,367,37,410,52,409,57,366,42,283,28,203,22"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="75,55,154,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,65,390,65,390,70,170,70"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,105,224,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="238,118,302,108,366,93,408,78,410,83,367,98,303,113,239,123"/>
 </map>
