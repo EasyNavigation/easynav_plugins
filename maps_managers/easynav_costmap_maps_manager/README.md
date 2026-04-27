@@ -2,7 +2,7 @@
 
 ## Description
 
-Maps Manager that maintains 2D costmaps (static and dynamic), supports filter plugins (such as inflation and obstacle filters), and exposes maps through ROS topics and NavState integration.
+Maps Manager that maintains 2D costmaps (base and dynamic), supports filter plugins (such as inflation and obstacle filters), and exposes maps through ROS topics and NavState integration.
 
 At the core of this stack lies the Costmap2D data structure. `Costmap2D` extends the binary occupancy grid into a graded cost representation with values in the range [0–255]:
 
@@ -81,7 +81,7 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 - **Type:** `easynav::InflationFilter`
 - **Description:**  
   Expands obstacle information in the costmap by assigning graded costs around `LETHAL_OBSTACLE` cells based on distance. Uses a breadth-first wavefront propagation algorithm (distance bins) to efficiently inflate obstacles up to `inflation_radius`.  
-  The filter reads both the static map and the dynamic filtered map, applies inflation to each, and merges results. If `ObstacleBounds` is available in `NavState`, inflation is restricted to the updated region for performance.
+  The filter reads both the base map and the dynamic filtered map, applies inflation to each, and merges results. If `ObstacleBounds` is available in `NavState`, inflation is restricted to the updated region for performance.
 
 **Parameters:**
 
@@ -95,7 +95,7 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 
 | Key | Type | Access | Description |
 |---|---|---|---|
-| `map.static` | `Costmap2D` | **Read** | Static costmap to inflate. |
+| `map.base` | `Costmap2D` | **Read** | Base costmap to inflate. |
 | `map.dynamic.filtered` | `Costmap2D` | **Read/Write** | Dynamic costmap input and output after inflation. |
 | `map.dynamic.obstacle_bounds` | `ObstacleBounds` | **Read** (optional) | Restricts inflation to updated region for performance. |
 
@@ -130,7 +130,7 @@ maps_manager_node:
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
 | Subscription | `<node_fqn>/<plugin>/incoming_map` | `nav_msgs/msg/OccupancyGrid` | Input occupancy map used to update the dynamic map. | `depth=1, transient_local, reliable` |
-| Publisher | `<node_fqn>/<plugin>/map` | `nav_msgs/msg/OccupancyGrid` | Publishes the static costmap. | `depth=1` |
+| Publisher | `<node_fqn>/<plugin>/map` | `nav_msgs/msg/OccupancyGrid` | Publishes the base costmap. | `depth=1` |
 | Publisher | `<node_fqn>/<plugin>/dynamic_map` | `nav_msgs/msg/OccupancyGrid` | Publishes the dynamic (live) costmap. | `depth=100` |
 
 ### Services
@@ -145,7 +145,7 @@ maps_manager_node:
 
 | Key | Type | Access | Notes |
 |---|---|---|---|
-| `map.static` | `Costmap2D` | **Write** | Static map loaded from YAML. |
+| `map.base` | `Costmap2D` | **Write** | Base map loaded from YAML. |
 | `map.dynamic` | `Costmap2D` | **Write** | Dynamic map after applying filters. |
 | `map.dynamic.filtered` | `Costmap2D` | **Read** | Previously filtered map used as input if available. |
 | `map.dynamic.obstacle_bounds` | `ObstacleBounds` | **Read** | Bounding box of updated obstacles (used to limit inflation region). |
