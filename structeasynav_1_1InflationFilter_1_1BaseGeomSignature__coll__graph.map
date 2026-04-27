@@ -1,0 +1,9 @@
+<map id="InflationFilter::BaseGeomSignature" name="InflationFilter::BaseGeomSignature">
+<area shape="rect" id="Node000001" title=" " alt="" coords="16,143,182,183"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,44,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="30,46,37,81,52,117,73,141,69,144,48,120,32,83,24,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="70,5,129,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="102,47,102,142,97,142,97,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="164,5,224,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="194,47,185,83,167,120,140,144,137,140,162,117,180,81,188,45"/>
+</map>

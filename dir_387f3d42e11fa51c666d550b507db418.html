@@ -83,16 +83,20 @@ Directory dependency graph for easynav_costmap_maps_manager:</div>
 <div class="dyncontent">
 <div class="center"><img src="dir_387f3d42e11fa51c666d550b507db418_dep.png" border="0" usemap="#adir__387f3d42e11fa51c666d550b507db418__dep" loading="lazy" alt="maps_managers/easynav_costmap_maps_manager"/></div>
 <map name="adir__387f3d42e11fa51c666d550b507db418__dep" id="adir__387f3d42e11fa51c666d550b507db418__dep">
-<area shape="rect" href="dir_a9cc6bece868a3498a174efb6d66b53a.html" title="include" alt="" coords="181,152,243,177"/>
-<area shape="rect" href="dir_bdd9a5d540de89e9fe90efdfc6973a4f.html" title="common" alt="" coords="210,225,281,251"/>
-<area shape="poly" href="dir_000075_000002.html" alt="" coords="220,176,236,210,231,212,215,179"/>
-<area shape="rect" href="dir_000075_000002.html" title="3" alt="" coords="236,197,243,212"/>
+<area shape="rect" href="dir_a9cc6bece868a3498a174efb6d66b53a.html" title="include" alt="" coords="190,152,252,177"/>
+<area shape="rect" href="dir_bdd9a5d540de89e9fe90efdfc6973a4f.html" title="common" alt="" coords="254,225,325,251"/>
+<area shape="poly" href="dir_000075_000002.html" alt="" coords="234,176,270,212,266,216,231,179"/>
+<area shape="rect" href="dir_000075_000002.html" title="3" alt="" coords="268,198,275,213"/>
 <area shape="rect" href="dir_31d11e2bcefd3fa032cf91b7990002d5.html" title="src" alt="" coords="227,70,266,96"/>
-<area shape="poly" href="dir_000096_000075.html" alt="" coords="244,98,226,138,221,136,239,96"/>
-<area shape="rect" href="dir_000096_000075.html" title="6" alt="" coords="229,130,236,145"/>
-<area shape="poly" href="dir_000096_000002.html" alt="" coords="252,96,258,141,257,199,255,211,250,210,252,198,252,142,246,97"/>
-<area shape="rect" href="dir_000096_000002.html" title="7" alt="" coords="258,202,265,217"/>
+<area shape="poly" href="dir_000096_000075.html" alt="" coords="245,97,232,137,227,136,240,96"/>
+<area shape="rect" href="dir_000096_000075.html" title="6" alt="" coords="235,129,242,144"/>
+<area shape="poly" href="dir_000096_000002.html" alt="" coords="253,96,284,209,279,211,247,97"/>
+<area shape="rect" href="dir_000096_000002.html" title="7" alt="" coords="286,198,293,213"/>
 <area shape="rect" href="dir_f3fb240574863be83e0bdebde262679b.html" title="tests" alt="" coords="291,70,341,96"/>
+<area shape="poly" href="dir_000109_000075.html" alt="" coords="303,99,249,143,246,139,300,95"/>
+<area shape="rect" href="dir_000109_000075.html" title="1" alt="" coords="252,139,259,154"/>
+<area shape="poly" href="dir_000109_000002.html" alt="" coords="319,97,319,142,311,199,306,213,301,211,305,198,314,142,314,97"/>
+<area shape="rect" href="dir_000109_000002.html" title="2" alt="" coords="309,205,316,220"/>
 <area shape="rect" href="dir_387f3d42e11fa51c666d550b507db418.html" alt="" coords="27,52,352,188"/>
 <area shape="rect" href="dir_0085665aa3dcf1c11f094757a0c11b94.html" title="maps_managers" alt="" coords="16,16,363,199"/>
 </map>
@@ -109,7 +113,7 @@ Directories</h2></td></tr>
 easynav_costmap_maps_manager</h1>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md122"></a>
 Description</h1>
-<p>Maps Manager that maintains 2D costmaps (static and dynamic), supports filter plugins (such as inflation and obstacle filters), and exposes maps through ROS topics and NavState integration.</p>
+<p>Maps Manager that maintains 2D costmaps (base and dynamic), supports filter plugins (such as inflation and obstacle filters), and exposes maps through ROS topics and NavState integration.</p>
 <p>At the core of this stack lies the <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a> data structure. <span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span> extends the binary occupancy grid into a graded cost representation with values in the range [0–255]:</p>
 <ul>
 <li>0: Free space, no cost to traverse.</li>
@@ -203,7 +207,7 @@ Filter Plugins</h2>
 <li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1InflationFilter.html">easynav::InflationFilter</a></span></li>
 <li><b>Description:</b> <br  />
  Expands obstacle information in the costmap by assigning graded costs around <span class="tt">LETHAL_OBSTACLE</span> cells based on distance. Uses a breadth-first wavefront propagation algorithm (distance bins) to efficiently inflate obstacles up to <span class="tt">inflation_radius</span>. <br  />
- The filter reads both the static map and the dynamic filtered map, applies inflation to each, and merges results. If <span class="tt">ObstacleBounds</span> is available in <span class="tt">NavState</span>, inflation is restricted to the updated region for performance.</li>
+ The filter reads both the base map and the dynamic filtered map, applies inflation to each, and merges results. If <span class="tt">ObstacleBounds</span> is available in <span class="tt">NavState</span>, inflation is restricted to the updated region for performance.</li>
 </ul>
 <p><b>Parameters:</b></p>
 <table class="markdownTable">
@@ -221,7 +225,7 @@ Filter Plugins</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Key  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Access  </th><th class="markdownTableHeadNone">Description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">map.static</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Static costmap to inflate.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">map.base</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Base costmap to inflate.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">map.dynamic.filtered</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read/Write</b>  </td><td class="markdownTableBodyNone">Dynamic costmap input and output after inflation.  </td></tr>
 <tr class="markdownTableRowOdd">
@@ -256,7 +260,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_map</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/OccupancyGrid</span>  </td><td class="markdownTableBodyNone">Input occupancy map used to update the dynamic map.  </td><td class="markdownTableBodyNone"><span class="tt">depth=1, transient_local, reliable</span>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/map</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/OccupancyGrid</span>  </td><td class="markdownTableBodyNone">Publishes the static costmap.  </td><td class="markdownTableBodyNone"><span class="tt">depth=1</span>  </td></tr>
+<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/map</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/OccupancyGrid</span>  </td><td class="markdownTableBodyNone">Publishes the base costmap.  </td><td class="markdownTableBodyNone"><span class="tt">depth=1</span>  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/dynamic_map</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/OccupancyGrid</span>  </td><td class="markdownTableBodyNone">Publishes the dynamic (live) costmap.  </td><td class="markdownTableBodyNone"><span class="tt">depth=100</span>  </td></tr>
 </table>
@@ -275,7 +279,7 @@ NavState Keys</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Key  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Access  </th><th class="markdownTableHeadNone">Notes  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">map.static</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Static map loaded from YAML.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">map.base</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Base map loaded from YAML.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">map.dynamic</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Dynamic map after applying filters.  </td></tr>
 <tr class="markdownTableRowOdd">

@@ -106,15 +106,17 @@ Collaboration diagram for Costmap2D:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1Costmap2D__coll__graph.png" border="0" usemap="#aCostmap2D_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aCostmap2D_coll__map" id="aCostmap2D_coll__map">
-<area shape="rect" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;." alt="" coords="113,143,203,168"/>
+<area shape="rect" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;." alt="" coords="165,143,255,168"/>
 <area shape="rect" title=" " alt="" coords="5,5,44,31"/>
-<area shape="poly" title=" " alt="" coords="23,46,25,83,30,101,40,117,55,130,73,140,114,150,112,155,72,145,52,135,35,120,25,103,20,84,18,46"/>
+<area shape="poly" title=" " alt="" coords="27,46,32,83,40,101,51,117,70,127,98,135,165,147,164,152,97,141,68,132,48,121,35,104,27,85,21,47"/>
 <area shape="rect" title=" " alt="" coords="72,5,132,31"/>
-<area shape="poly" title=" " alt="" coords="99,46,97,82,100,100,107,117,117,130,131,140,128,144,113,134,102,120,95,102,92,82,93,46"/>
+<area shape="poly" title=" " alt="" coords="107,45,116,82,124,101,136,117,151,130,169,140,167,144,148,134,132,120,120,103,111,84,102,47"/>
 <area shape="rect" title=" " alt="" coords="155,5,265,31"/>
-<area shape="poly" title=" " alt="" coords="207,47,197,82,183,120,169,144,164,141,178,118,192,81,201,46"/>
+<area shape="poly" title=" " alt="" coords="213,46,213,142,207,142,207,46"/>
 <area shape="rect" title=" " alt="" coords="289,5,390,31"/>
-<area shape="poly" title=" " alt="" coords="330,46,308,85,292,104,274,121,240,139,204,150,202,145,238,134,271,116,289,100,304,82,326,44"/>
+<area shape="poly" title=" " alt="" coords="331,47,312,84,282,121,264,134,244,144,242,140,261,130,279,117,307,81,327,44"/>
+<area shape="rect" title=" " alt="" coords="425,5,475,31"/>
+<area shape="poly" title=" " alt="" coords="452,47,444,85,436,104,422,121,393,135,350,145,255,155,255,149,349,139,391,130,419,117,431,102,439,84,447,46"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -155,6 +157,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa9396cc909aa1b587e0a9276b8b2e2fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the default background value of the costmap.  <br /></td></tr>
 <tr class="memitem:a93a7d8490f6d649334941b73a867d8cc" id="r_a93a7d8490f6d649334941b73a867d8cc"><td class="memItemLeft">unsigned int&#160;</td><td class="memItemRight"><a class="el" href="#a93a7d8490f6d649334941b73a867d8cc">getIndex</a> (unsigned int mx, unsigned int my) const</td></tr>
 <tr class="memdesc:a93a7d8490f6d649334941b73a867d8cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given two map coordinates... compute the associated index.  <br /></td></tr>
+<tr class="memitem:acf9e9de3bb2047008b767ed03399e359" id="r_acf9e9de3bb2047008b767ed03399e359"><td class="memItemLeft">rclcpp::Time&#160;</td><td class="memItemRight"><a class="el" href="#acf9e9de3bb2047008b767ed03399e359">getLastModifiedStamp</a> () const</td></tr>
+<tr class="memdesc:acf9e9de3bb2047008b767ed03399e359"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get timestamp of last costmap modification.  <br /></td></tr>
 <tr class="memitem:a77ed9c7256950cf58417e8aa30d73ad8" id="r_a77ed9c7256950cf58417e8aa30d73ad8"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a77ed9c7256950cf58417e8aa30d73ad8">getMapRegionOccupiedByPolygon</a> (const std::vector&lt; geometry_msgs::msg::Point &gt; &amp;polygon, std::vector&lt; <a class="el" href="structeasynav_1_1MapLocation.html">MapLocation</a> &gt; &amp;polygon_map_region)</td></tr>
 <tr class="memdesc:a77ed9c7256950cf58417e8aa30d73ad8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the map region occupied by polygon.  <br /></td></tr>
 <tr class="memitem:ae616d54e5819bc97cc29bfcec9a6c3ce" id="r_ae616d54e5819bc97cc29bfcec9a6c3ce"><td class="memItemLeft"><a class="el" href="#ac29a072d3feecd1a2aca27ddc703dbe3">mutex_t</a> *&#160;</td><td class="memItemRight"><a class="el" href="#ae616d54e5819bc97cc29bfcec9a6c3ce">getMutex</a> ()</td></tr>
@@ -202,6 +206,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac9038b6442e95aa3f92a08ebb584e485"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the given map region to desired value.  <br /></td></tr>
 <tr class="memitem:ab98f4ea53311e088e50b67eb734121c6" id="r_ab98f4ea53311e088e50b67eb734121c6"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab98f4ea53311e088e50b67eb734121c6">toOccupancyGridMsg</a> (nav_msgs::msg::OccupancyGrid &amp;msg) const</td></tr>
 <tr class="memdesc:ab98f4ea53311e088e50b67eb734121c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the current costmap into a nav_msgs::msg::OccupancyGrid message.  <br /></td></tr>
+<tr class="memitem:a1e97cc1d782004ee76abad529cfb0482" id="r_a1e97cc1d782004ee76abad529cfb0482"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1e97cc1d782004ee76abad529cfb0482">touch</a> ()</td></tr>
+<tr class="memdesc:a1e97cc1d782004ee76abad529cfb0482"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark the costmap as modified.  <br /></td></tr>
 <tr class="memitem:a77c9af44b5abc03309b56eea543b6e54" id="r_a77c9af44b5abc03309b56eea543b6e54"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a77c9af44b5abc03309b56eea543b6e54">updateOrigin</a> (double new_origin_x, double new_origin_y)</td></tr>
 <tr class="memdesc:a77c9af44b5abc03309b56eea543b6e54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move the origin of the costmap to a new location....  <br /></td></tr>
 <tr class="memitem:a7ac2097be7998dc81672e3542f5b87e9" id="r_a7ac2097be7998dc81672e3542f5b87e9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a7ac2097be7998dc81672e3542f5b87e9">worldToMap</a> (double wx, double wy, unsigned int &amp;mx, unsigned int &amp;my) const</td></tr>
@@ -234,6 +240,7 @@ Protected Member Functions</h2></td></tr>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a9b1a3d5d06a8675f34758dbaf7f9cf70" id="r_a9b1a3d5d06a8675f34758dbaf7f9cf70"><td class="memItemLeft">unsigned char *&#160;</td><td class="memItemRight"><a class="el" href="#a9b1a3d5d06a8675f34758dbaf7f9cf70">costmap_</a></td></tr>
 <tr class="memitem:af6215ccc21a390387fc406d520a9ea57" id="r_af6215ccc21a390387fc406d520a9ea57"><td class="memItemLeft">unsigned char&#160;</td><td class="memItemRight"><a class="el" href="#af6215ccc21a390387fc406d520a9ea57">default_value_</a></td></tr>
+<tr class="memitem:acf8da2f664b73200d1df2276d64048dd" id="r_acf8da2f664b73200d1df2276d64048dd"><td class="memItemLeft">rclcpp::Time&#160;</td><td class="memItemRight"><a class="el" href="#acf8da2f664b73200d1df2276d64048dd">last_modified_</a></td></tr>
 <tr class="memitem:af570b8473f988bc0e62afd4cefd93d4b" id="r_af570b8473f988bc0e62afd4cefd93d4b"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#af570b8473f988bc0e62afd4cefd93d4b">origin_x_</a></td></tr>
 <tr class="memitem:ad03b4d496631fbf4955adc7471b13820" id="r_ad03b4d496631fbf4955adc7471b13820"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ad03b4d496631fbf4955adc7471b13820">origin_y_</a></td></tr>
 <tr class="memitem:a5c33150be7fa35123dd02ba26fbfbc23" id="r_a5c33150be7fa35123dd02ba26fbfbc23"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a5c33150be7fa35123dd02ba26fbfbc23">resolution_</a></td></tr>
@@ -826,6 +833,26 @@ template&lt;typename data_type&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The associated index </dd></dl>
+
+</div>
+</div>
+<a id="acf9e9de3bb2047008b767ed03399e359" name="acf9e9de3bb2047008b767ed03399e359"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf9e9de3bb2047008b767ed03399e359">&#9670;&#160;</a></span>getLastModifiedStamp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">rclcpp::Time getLastModifiedStamp </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get timestamp of last costmap modification. </p>
+<p>Set by constructors and copy/assignment, and may be updated by some mutating operations. For high-frequency per-cell updates (e.g., many <span class="tt"><a class="el" href="#a6719a0c9ed4e04e8f67d6647a5379327" title="Set the cost of a cell in the costmap.">setCost()</a></span> calls in a loop), prefer calling <span class="tt"><a class="el" href="#a1e97cc1d782004ee76abad529cfb0482" title="Mark the costmap as modified.">touch()</a></span> once after the batch update. </p>
 
 </div>
 </div>
@@ -1637,7 +1664,28 @@ template&lt;class ActionType&gt; </div>
   </table>
   </dd>
 </dl>
-<p>The resulting OccupancyGrid message contains metadata such as resolution, size, and origin, and its data field is populated with cost values from the costmap. Cells with a value of NO_INFORMATION are mapped to -1; other values are cast to int8_t directly. </p>
+<p>The resulting OccupancyGrid message contains metadata such as resolution, size, and origin, and its data field is populated with cost values from the costmap. Cells with a value of NO_INFORMATION are mapped to -1; other values are cast to int8_t directly.</p>
+<p>The output message header stamp is set to the internal last-modified timestamp. </p>
+
+</div>
+</div>
+<a id="a1e97cc1d782004ee76abad529cfb0482" name="a1e97cc1d782004ee76abad529cfb0482"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e97cc1d782004ee76abad529cfb0482">&#9670;&#160;</a></span>touch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void touch </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mark the costmap as modified. </p>
+<p>This bumps the internal last-modified stamp by 1 nanosecond while preserving the clock type. It is intended to be called after bulk updates to avoid per-cell overhead. </p>
 
 </div>
 </div>
@@ -1908,6 +1956,28 @@ template&lt;class ActionType&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">unsigned char default_value_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf8da2f664b73200d1df2276d64048dd" name="acf8da2f664b73200d1df2276d64048dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf8da2f664b73200d1df2276d64048dd">&#9670;&#160;</a></span>last_modified_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">rclcpp::Time last_modified_</td>
         </tr>
       </table>
   </td>

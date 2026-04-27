@@ -84,33 +84,37 @@ $(function() {
 <div class="textblock"><code>#include &lt;gtest/gtest.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="costmap__2d_8hpp_source.html">easynav_costmap_common/costmap_2d.hpp</a>&quot;</code><br />
 <code>#include &quot;nav_msgs/msg/occupancy_grid.hpp&quot;</code><br />
+<code>#include &quot;rclcpp/time.hpp&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for costmap_2d_tests.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="costmap__2d__tests_8cpp__incl.png" border="0" usemap="#acommon_2easynav__costmap__common_2tests_2costmap__2d__tests_8cpp" loading="lazy" alt=""/></div>
 <map name="acommon_2easynav__costmap__common_2tests_2costmap__2d__tests_8cpp" id="acommon_2easynav__costmap__common_2tests_2costmap__2d__tests_8cpp">
-<area shape="rect" title=" " alt="" coords="292,5,472,61"/>
-<area shape="rect" title=" " alt="" coords="173,116,266,142"/>
-<area shape="poly" title=" " alt="" coords="336,64,255,111,252,106,334,59"/>
-<area shape="rect" href="costmap__2d_8hpp.html" title=" " alt="" coords="290,109,474,150"/>
-<area shape="poly" title=" " alt="" coords="385,62,385,94,380,94,380,62"/>
-<area shape="rect" title=" " alt="" coords="739,198,916,238"/>
-<area shape="poly" title=" " alt="" coords="449,59,767,189,765,194,447,64"/>
-<area shape="rect" title=" " alt="" coords="5,205,66,231"/>
-<area shape="poly" title=" " alt="" coords="290,151,171,177,79,200,75,202,73,196,77,195,170,172,289,146"/>
-<area shape="rect" title=" " alt="" coords="90,205,165,231"/>
-<area shape="poly" title=" " alt="" coords="319,153,176,200,172,202,171,197,175,195,317,148"/>
-<area shape="rect" title=" " alt="" coords="188,205,246,231"/>
-<area shape="poly" title=" " alt="" coords="346,153,255,200,252,195,343,148"/>
-<area shape="rect" title=" " alt="" coords="270,205,329,231"/>
-<area shape="poly" title=" " alt="" coords="365,152,323,196,319,192,361,148"/>
-<area shape="rect" title=" " alt="" coords="354,205,411,231"/>
-<area shape="poly" title=" " alt="" coords="385,150,385,190,380,190,380,150"/>
-<area shape="rect" title=" " alt="" coords="435,205,492,231"/>
-<area shape="poly" title=" " alt="" coords="403,148,444,192,440,196,399,152"/>
-<area shape="rect" title=" " alt="" coords="516,205,715,231"/>
-<area shape="poly" title=" " alt="" coords="436,148,570,197,568,202,434,153"/>
-<area shape="poly" title=" " alt="" coords="475,146,725,194,724,199,474,151"/>
+<area shape="rect" title=" " alt="" coords="593,5,773,61"/>
+<area shape="rect" title=" " alt="" coords="395,116,488,142"/>
+<area shape="poly" title=" " alt="" coords="614,64,488,113,486,108,612,59"/>
+<area shape="rect" href="costmap__2d_8hpp.html" title=" " alt="" coords="513,109,696,150"/>
+<area shape="poly" title=" " alt="" coords="662,63,633,99,629,95,658,60"/>
+<area shape="rect" title=" " alt="" coords="738,205,847,231"/>
+<area shape="poly" title=" " alt="" coords="702,60,780,190,775,193,697,63"/>
+<area shape="rect" title=" " alt="" coords="871,198,1047,238"/>
+<area shape="poly" title=" " alt="" coords="725,59,919,187,916,191,722,64"/>
+<area shape="rect" title=" " alt="" coords="228,205,288,231"/>
+<area shape="poly" title=" " alt="" coords="513,151,394,177,301,200,297,202,296,196,300,195,392,172,512,146"/>
+<area shape="rect" title=" " alt="" coords="313,205,387,231"/>
+<area shape="poly" title=" " alt="" coords="541,153,399,200,395,202,393,197,397,195,540,148"/>
+<area shape="rect" title=" " alt="" coords="410,205,468,231"/>
+<area shape="poly" title=" " alt="" coords="568,153,477,200,475,195,566,148"/>
+<area shape="rect" title=" " alt="" coords="492,205,552,231"/>
+<area shape="poly" title=" " alt="" coords="588,152,546,196,542,192,584,148"/>
+<area shape="rect" title=" " alt="" coords="576,205,633,231"/>
+<area shape="poly" title=" " alt="" coords="607,150,607,190,602,190,602,150"/>
+<area shape="rect" title=" " alt="" coords="658,205,714,231"/>
+<area shape="poly" title=" " alt="" coords="625,148,666,192,662,196,621,152"/>
+<area shape="poly" title=" " alt="" coords="648,148,754,196,751,201,646,153"/>
+<area shape="rect" title=" " alt="" coords="5,205,204,231"/>
+<area shape="poly" title=" " alt="" coords="513,150,501,152,216,200,190,205,189,199,215,195,500,147,512,145"/>
+<area shape="poly" title=" " alt="" coords="686,148,865,191,863,196,685,153"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -127,11 +131,14 @@ Functions</h2></td></tr>
 <tr class="memitem:addeb0de48b408e5762414e5189f401aa" id="r_addeb0de48b408e5762414e5189f401aa"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#addeb0de48b408e5762414e5189f401aa">TEST_F</a> (<a class="el" href="classCostmap2DTest.html">Costmap2DTest</a>, OccupancyGridConversion)</td></tr>
 <tr class="memitem:a4e3c8773f0f64a4b91dd7609b7678519" id="r_a4e3c8773f0f64a4b91dd7609b7678519"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4e3c8773f0f64a4b91dd7609b7678519">TEST_F</a> (<a class="el" href="classCostmap2DTest.html">Costmap2DTest</a>, OutOfBoundsDetection)</td></tr>
 <tr class="memitem:a8c09dec5b57171e4ee81fe608bac2c6f" id="r_a8c09dec5b57171e4ee81fe608bac2c6f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a8c09dec5b57171e4ee81fe608bac2c6f">TEST_F</a> (<a class="el" href="classCostmap2DTest.html">Costmap2DTest</a>, SetAndGetCost)</td></tr>
+<tr class="memitem:acd8f1c9c6909e7fd6e39aaf727cce773" id="r_acd8f1c9c6909e7fd6e39aaf727cce773"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#acd8f1c9c6909e7fd6e39aaf727cce773">TEST_F</a> (<a class="el" href="classCostmap2DTest.html">Costmap2DTest</a>, TimestampFromCopyConstructor)</td></tr>
+<tr class="memitem:a41664fd96708b277f158c5aeb08430fe" id="r_a41664fd96708b277f158c5aeb08430fe"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a41664fd96708b277f158c5aeb08430fe">TEST_F</a> (<a class="el" href="classCostmap2DTest.html">Costmap2DTest</a>, TimestampFromOccupancyGridConstructor)</td></tr>
+<tr class="memitem:a99ed73f67344f1a9db57488045d19097" id="r_a99ed73f67344f1a9db57488045d19097"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a99ed73f67344f1a9db57488045d19097">TEST_F</a> (<a class="el" href="classCostmap2DTest.html">Costmap2DTest</a>, TimestampUpdatedBySetCost)</td></tr>
 <tr class="memitem:a0c058ac5052a4feb224fcd8320c32ba3" id="r_a0c058ac5052a4feb224fcd8320c32ba3"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a0c058ac5052a4feb224fcd8320c32ba3">TEST_F</a> (<a class="el" href="classCostmap2DTest.html">Costmap2DTest</a>, WorldToMapAndMapToWorld)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a6ff88ef1ee91ec5d6ba1a70cbd0aeb0f" name="a6ff88ef1ee91ec5d6ba1a70cbd0aeb0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ff88ef1ee91ec5d6ba1a70cbd0aeb0f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ff88ef1ee91ec5d6ba1a70cbd0aeb0f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -152,7 +159,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ae444a853454ec4090bb1affe4cd0164e" name="ae444a853454ec4090bb1affe4cd0164e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae444a853454ec4090bb1affe4cd0164e">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae444a853454ec4090bb1affe4cd0164e">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -173,7 +180,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="addeb0de48b408e5762414e5189f401aa" name="addeb0de48b408e5762414e5189f401aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#addeb0de48b408e5762414e5189f401aa">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#addeb0de48b408e5762414e5189f401aa">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,7 +201,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a4e3c8773f0f64a4b91dd7609b7678519" name="a4e3c8773f0f64a4b91dd7609b7678519"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e3c8773f0f64a4b91dd7609b7678519">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e3c8773f0f64a4b91dd7609b7678519">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -215,7 +222,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a8c09dec5b57171e4ee81fe608bac2c6f" name="a8c09dec5b57171e4ee81fe608bac2c6f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c09dec5b57171e4ee81fe608bac2c6f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c09dec5b57171e4ee81fe608bac2c6f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -235,8 +242,71 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="acd8f1c9c6909e7fd6e39aaf727cce773" name="acd8f1c9c6909e7fd6e39aaf727cce773"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd8f1c9c6909e7fd6e39aaf727cce773">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCostmap2DTest.html">Costmap2DTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TimestampFromCopyConstructor</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a41664fd96708b277f158c5aeb08430fe" name="a41664fd96708b277f158c5aeb08430fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41664fd96708b277f158c5aeb08430fe">&#9670;&#160;</a></span>TEST_F() <span class="overload">[7/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCostmap2DTest.html">Costmap2DTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TimestampFromOccupancyGridConstructor</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a99ed73f67344f1a9db57488045d19097" name="a99ed73f67344f1a9db57488045d19097"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99ed73f67344f1a9db57488045d19097">&#9670;&#160;</a></span>TEST_F() <span class="overload">[8/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCostmap2DTest.html">Costmap2DTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TimestampUpdatedBySetCost</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0c058ac5052a4feb224fcd8320c32ba3" name="a0c058ac5052a4feb224fcd8320c32ba3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c058ac5052a4feb224fcd8320c32ba3">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c058ac5052a4feb224fcd8320c32ba3">&#9670;&#160;</a></span>TEST_F() <span class="overload">[9/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
