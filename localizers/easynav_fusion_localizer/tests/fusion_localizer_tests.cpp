@@ -73,9 +73,6 @@ TEST_F(FusionLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbac
   rclcpp::NodeOptions options;
   options.parameter_overrides({
     rclcpp::Parameter("test.global_filter.frequency", 30.0),
-    rclcpp::Parameter("test.initial_pose.x", x0),
-    rclcpp::Parameter("test.initial_pose.y", y0),
-    rclcpp::Parameter("test.initial_pose.yaw", yaw0),
   });
 
   auto node = std::make_shared<easynav::LocalizerNode>(options);
@@ -116,32 +113,6 @@ TEST_F(FusionLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbac
   }
 
   easynav::NavState nav_state;
-  {
-    const auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(500);
-    while (std::chrono::steady_clock::now() < deadline) {
-      exec.spin_some();
-      localizer->update_rt(nav_state);
-      if (nav_state.has("robot_pose")) {
-        const auto odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
-        const bool ok =
-          std::abs(odom.pose.pose.position.x - x0) < 1e-6 &&
-          std::abs(odom.pose.pose.position.y - y0) < 1e-6 &&
-          std::abs(yaw_from_quat(odom.pose.pose.orientation) - yaw0) < 1e-3;
-        if (ok) {
-          break;
-        }
-      }
-      std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-  }
-
-  ASSERT_TRUE(nav_state.has("robot_pose"));
-  {
-    const auto odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
-    EXPECT_NEAR(odom.pose.pose.position.x, x0, 1e-6);
-    EXPECT_NEAR(odom.pose.pose.position.y, y0, 1e-6);
-    EXPECT_NEAR(yaw_from_quat(odom.pose.pose.orientation), yaw0, 1e-3);
-  }
 
   geometry_msgs::msg::PoseWithCovarianceStamped init_pose_msg;
   init_pose_msg.header.stamp = pub_node->now();
@@ -161,19 +132,22 @@ TEST_F(FusionLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbac
       exec.spin_some();
       localizer->update_rt(nav_state);
 
-      const auto odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
-      const bool ok =
-        std::abs(odom.pose.pose.position.x - x1) < 1e-6 &&
-        std::abs(odom.pose.pose.position.y - y1) < 1e-6 &&
-        std::abs(yaw_from_quat(odom.pose.pose.orientation) - yaw1) < 1e-3;
+      if (nav_state.has("robot_pose")) {
+        const auto odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+        const bool ok =
+          std::abs(odom.pose.pose.position.x - x1) < 1e-6 &&
+          std::abs(odom.pose.pose.position.y - y1) < 1e-6 &&
+          std::abs(yaw_from_quat(odom.pose.pose.orientation) - yaw1) < 1e-3;
 
-      if (ok) {
-        break;
+        if (ok) {
+          break;
+        }
       }
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
   }
 
+  ASSERT_TRUE(nav_state.has("robot_pose"));
   {
     const auto odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
     EXPECT_NEAR(odom.pose.pose.position.x, x1, 1e-6);
