@@ -2538,10 +2538,29 @@ void UkfWrapper::setPoseCallback(
     update_vector, measurement, measurement_covariance);
 
   // For the state
+  const auto now = parent_node_->now();
+
+  // Deterministically set the internal state to the requested pose.
+  // This ensures a /set_pose (or /initialpose) immediately changes outputs.
   filter_.setState(measurement);
   filter_.setEstimateErrorCovariance(measurement_covariance);
+  filter_.setLastMeasurementTime(now);
 
-  filter_.setLastMeasurementTime(parent_node_->now());
+  // If the filter was not initialized yet, feed an equivalent measurement
+  // through the filter to flip its initialized flag.
+  if (!filter_.getInitializedStatus()) {
+    Measurement pose_measurement;
+    pose_measurement.topic_name_ = topic_name;
+    pose_measurement.measurement_ = measurement;
+    pose_measurement.covariance_ = measurement_covariance;
+    pose_measurement.update_vector_ = update_vector;
+    pose_measurement.time_ = now;
+    pose_measurement.mahalanobis_thresh_ = std::numeric_limits<double>::max();
+    pose_measurement.latest_control_ = latest_control_;
+    pose_measurement.latest_control_time_ = latest_control_time_;
+
+    filter_.processMeasurement(pose_measurement);
+  }
 
   RF_DEBUG("\n------ /UkfWrapper::setPoseCallback ------\n");
 }

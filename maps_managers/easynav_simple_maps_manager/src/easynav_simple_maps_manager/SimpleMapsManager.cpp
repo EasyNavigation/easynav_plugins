@@ -149,9 +149,6 @@ SimpleMapsManager::update(NavState & nav_state)
     return;
   }
 
-  std::cout << "perceptions size: " << perceptions.size() << std::endl;
-  std::cout << "perception[0] size: " << perceptions[0]->data.points.size() << std::endl;
-  std::cout << "perception[0] valid: " << perceptions[0]->valid << std::endl;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   rclcpp::Time stamp;

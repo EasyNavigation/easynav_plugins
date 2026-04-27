@@ -20,7 +20,7 @@
 #include <memory>
 #include <thread>
 
-#include "easynav_simple_localizer/AMCLLocalizer.hpp"
+#include "easynav_navmap_localizer/AMCLLocalizer.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp/executors/single_threaded_executor.hpp"
@@ -46,10 +46,10 @@ double yaw_from_tf(const tf2::Transform & tf)
   return yaw;
 }
 
-class FriendAMCLLocalizer : public easynav::AMCLLocalizer
+class FriendAMCLLocalizer : public easynav::navmap::AMCLLocalizer
 {
 public:
-  using easynav::AMCLLocalizer::init_pose_sub_;
+  using easynav::navmap::AMCLLocalizer::init_pose_sub_;
 };
 
 class AMCLLocalizerInitialPoseTest : public ::testing::Test
@@ -63,13 +63,13 @@ protected:
 
 TEST_F(AMCLLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbackGroup)
 {
-  const double x0 = 0.3;
-  const double y0 = 1.7;
-  const double yaw0 = -0.8;
+  const double x0 = -3.0;
+  const double y0 = 0.25;
+  const double yaw0 = 0.2;
 
-  const double x1 = 2.2;
-  const double y1 = -0.4;
-  const double yaw1 = 1.1;
+  const double x1 = 0.8;
+  const double y1 = 3.3;
+  const double yaw1 = 2.0;
 
   rclcpp::NodeOptions options;
   options.parameter_overrides({
@@ -81,10 +81,11 @@ TEST_F(AMCLLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbackG
     rclcpp::Parameter("test.initial_pose.std_dev_yaw", 0.0),
     rclcpp::Parameter("test.min_noise_xy", 0.0),
     rclcpp::Parameter("test.min_noise_yaw", 0.0),
+    rclcpp::Parameter("test.compute_odom_from_tf", true),
   });
 
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
-    "test_simple_localizer_node", options);
+    "test_navmap_localizer_node", options);
   auto localizer = std::make_shared<FriendAMCLLocalizer>();
 
   localizer->initialize(node, "test");

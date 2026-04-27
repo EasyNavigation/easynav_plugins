@@ -267,6 +267,7 @@ sensors_node:
     gps:
       topic: /gps/fix
       type: sensor_msgs/msg/NavSatFix
+      group: gnss
     laser1:
       topic: /front_laser/points
       type: sensor_msgs/msg/PointCloud2
