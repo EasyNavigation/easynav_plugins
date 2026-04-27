@@ -98,7 +98,7 @@ CostmapMapsManager::on_initialize()
     }
   }
 
-  static_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
+  base_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
@@ -116,30 +116,30 @@ CostmapMapsManager::on_initialize()
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
-    if (auto ret = loadMapFromYaml(map_path_, static_grid_msg_) != LOAD_MAP_SUCCESS) {
+    if (auto ret = loadMapFromYaml(map_path_, base_grid_msg_) != LOAD_MAP_SUCCESS) {
       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
       throw std::runtime_error("YAML file [" + map_path_ + "] not found or invalid: ");
     }
 
-    static_map_ = Costmap2D(static_grid_msg_);
+    base_grid_msg_.header.frame_id = tf_info.map_frame;
+    base_grid_msg_.header.stamp = node->now();
 
-    static_grid_msg_.header.frame_id = tf_info.map_frame;
-    static_grid_msg_.header.stamp = node->now();
-    static_occ_pub_->publish(static_grid_msg_);
+    map_base_ = Costmap2D(base_grid_msg_);
+    base_occ_pub_->publish(base_grid_msg_);
   }
 
   incoming_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
-      static_grid_msg_ = *msg;
+      base_grid_msg_ = *msg;
 
-      static_map_ = Costmap2D(*msg);
+      base_grid_msg_.header.frame_id = tf_info.map_frame;
+      base_grid_msg_.header.stamp = this->get_node()->now();
 
-      static_grid_msg_.header.frame_id = tf_info.map_frame;
-      static_grid_msg_.header.stamp = this->get_node()->now();
+      map_base_ = Costmap2D(base_grid_msg_);
 
-      static_occ_pub_->publish(static_grid_msg_);
+      base_occ_pub_->publish(base_grid_msg_);
     });
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
@@ -157,7 +157,7 @@ CostmapMapsManager::on_initialize()
       params.free_thresh = 0.25;
       params.occupied_thresh = 0.65;
 
-      if (!saveMapToFile(static_grid_msg_, params)) {
+      if (!saveMapToFile(base_grid_msg_, params)) {
         response->success = false;
         response->message = "Failed to save map to: " + map_path_;
       } else {
@@ -168,9 +168,17 @@ CostmapMapsManager::on_initialize()
 }
 
 void
-CostmapMapsManager::set_static_map(const Costmap2D & new_map)
+CostmapMapsManager::set_base_map(const Costmap2D & new_map)
 {
-  static_map_ = new_map;
+  map_base_ = new_map;
+
+  if (base_occ_pub_) {
+    const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+    map_base_.toOccupancyGridMsg(base_grid_msg_);
+    base_grid_msg_.header.frame_id = tf_info.map_frame;
+    base_grid_msg_.header.stamp = map_base_.getLastModifiedStamp();
+    base_occ_pub_->publish(base_grid_msg_);
+  }
 }
 
 
@@ -179,14 +187,35 @@ CostmapMapsManager::update(NavState & nav_state)
 {
   EASYNAV_TRACE_EVENT;
 
-  if (!nav_state.has("map.static")) {
-    nav_state.set("map.static", static_map_);
+  // Sync internal base map with NavState, preferring the newest stamp.
+  // Note: Compare using nanoseconds to avoid rclcpp::Time clock-type mismatches.
+  if (nav_state.has("map.base")) {
+    const auto & external_base = nav_state.get<Costmap2D>("map.base");
+
+    const int64_t internal_ns = map_base_.getLastModifiedStamp().nanoseconds();
+    const int64_t external_ns = external_base.getLastModifiedStamp().nanoseconds();
+
+    if (external_ns > internal_ns) {
+      map_base_ = external_base;
+
+      if (base_occ_pub_) {
+        const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+        map_base_.toOccupancyGridMsg(base_grid_msg_);
+        base_grid_msg_.header.frame_id = tf_info.map_frame;
+        base_grid_msg_.header.stamp = map_base_.getLastModifiedStamp();
+        base_occ_pub_->publish(base_grid_msg_);
+      }
+    } else if (internal_ns > external_ns) {
+      nav_state.set("map.base", map_base_);
+    }
+  } else {
+    nav_state.set("map.base", map_base_);
   }
 
   if (!dynamic_map_) {
-    dynamic_map_ = std::make_shared<Costmap2D>(static_map_);
+    dynamic_map_ = std::make_shared<Costmap2D>(map_base_);
   } else {
-    *dynamic_map_ = static_map_;
+    *dynamic_map_ = map_base_;
   }
 
   nav_state.set("map.dynamic.filtered", dynamic_map_);

@@ -78,7 +78,7 @@ public:
    *
    * @param new_map Shared pointer to a new map object. Must be of type SimpleMap.
    */
-  void set_static_map(const Costmap2D & new_map);
+  void set_base_map(const Costmap2D & new_map);
 
 protected:
   /**
@@ -88,9 +88,9 @@ protected:
 
 private:
   /**
-   * @brief Internal static map.
+   * @brief Internal base map.
    */
-  Costmap2D static_map_;
+  Costmap2D map_base_;
 
   /**
    * @brief Internal static map.
@@ -98,9 +98,9 @@ private:
   std::shared_ptr<Costmap2D> dynamic_map_;
 
   /**
-   * @brief Publisher for the static occupancy grid.
+   * @brief Publisher for the base occupancy grid.
    */
-  rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr static_occ_pub_;
+  rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr base_occ_pub_;
 
   /**
    * @brief Publisher for the dynamic occupancy grid.
@@ -118,9 +118,9 @@ private:
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr savemap_srv_;
 
   /**
-   * @brief Cached occupancy grid message for the static map.
+   * @brief Cached occupancy grid message for the base map.
    */
-  nav_msgs::msg::OccupancyGrid static_grid_msg_;
+  nav_msgs::msg::OccupancyGrid base_grid_msg_;
 
   /**
    * @brief Cached occupancy grid message for the dynamic map.

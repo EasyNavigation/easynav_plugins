@@ -16,6 +16,7 @@
 #include <gtest/gtest.h>
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
+#include "rclcpp/time.hpp"
 
 using easynav::Costmap2D;
 
@@ -120,4 +121,83 @@ TEST_F(Costmap2DTest, OccupancyGridConversion)
       expected_indices.end(), i) != expected_indices.end();
     EXPECT_EQ(grid.data[i], expected ? 100 : 0);
   }
+}
+
+TEST_F(Costmap2DTest, TimestampFromOccupancyGridConstructor)
+{
+  nav_msgs::msg::OccupancyGrid in;
+  in.header.stamp.sec = 123;
+  in.header.stamp.nanosec = 456u;
+
+  in.info.width = 2u;
+  in.info.height = 3u;
+  in.info.resolution = 0.5;
+  in.info.origin.position.x = 1.0;
+  in.info.origin.position.y = -2.0;
+  in.data.assign(in.info.width * in.info.height, 0);
+
+  Costmap2D map(in);
+  const int64_t expected_ns = 123LL * 1000000000LL + 456LL;
+  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns);
+
+  nav_msgs::msg::OccupancyGrid out;
+  map.toOccupancyGridMsg(out);
+
+  EXPECT_EQ(out.header.stamp.sec, in.header.stamp.sec);
+  EXPECT_EQ(out.header.stamp.nanosec, in.header.stamp.nanosec);
+}
+
+TEST_F(Costmap2DTest, TimestampFromCopyConstructor)
+{
+  nav_msgs::msg::OccupancyGrid in;
+  in.header.stamp.sec = 10;
+  in.header.stamp.nanosec = 20u;
+  in.info.width = 1u;
+  in.info.height = 1u;
+  in.info.resolution = 1.0;
+  in.info.origin.position.x = 0.0;
+  in.info.origin.position.y = 0.0;
+  in.data.assign(1u, 0);
+
+  Costmap2D original(in);
+  Costmap2D copy(original);
+
+  const int64_t expected_ns = 10LL * 1000000000LL + 20LL;
+  EXPECT_EQ(copy.getLastModifiedStamp().nanoseconds(), expected_ns);
+
+  nav_msgs::msg::OccupancyGrid out;
+  copy.toOccupancyGridMsg(out);
+  EXPECT_EQ(out.header.stamp.sec, in.header.stamp.sec);
+  EXPECT_EQ(out.header.stamp.nanosec, in.header.stamp.nanosec);
+}
+
+TEST_F(Costmap2DTest, TimestampUpdatedBySetCost)
+{
+  nav_msgs::msg::OccupancyGrid in;
+  in.header.stamp.sec = 7;
+  in.header.stamp.nanosec = 8u;
+  in.info.width = 3u;
+  in.info.height = 3u;
+  in.info.resolution = 1.0;
+  in.info.origin.position.x = 0.0;
+  in.info.origin.position.y = 0.0;
+  in.data.assign(in.info.width * in.info.height, 0);
+
+  Costmap2D map(in);
+  const int64_t expected_ns = 7LL * 1000000000LL + 8LL;
+
+  map.setCost(1, 1, 100);
+  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns + 1);
+
+  // Setting the same value should not change the stamp.
+  map.setCost(1, 1, 100);
+  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns + 1);
+
+  nav_msgs::msg::OccupancyGrid out;
+  map.toOccupancyGridMsg(out);
+
+  const int64_t out_ns =
+    static_cast<int64_t>(out.header.stamp.sec) * 1000000000LL +
+    static_cast<int64_t>(out.header.stamp.nanosec);
+  EXPECT_EQ(out_ns, expected_ns + 1);
 }

@@ -67,7 +67,7 @@ TEST_F(AMCLLocalizerTest, BasicDynamicUpdate)
 
   navstate.set("perceptions", easynav::Perceptions());
   navstate.get_mutable<easynav::Perceptions>("perceptions")->push_back(perception);
-  navstate.set("map.static", *static_map);
+  navstate.set("map.base", *static_map);
 
   manager->update(navstate);
 

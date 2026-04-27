@@ -102,10 +102,10 @@ InflationFilter::update(NavState & nav_state)
   auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
   Costmap2D & dynamic_map = *dynamic_map_ptr;
 
-  const auto & static_map = nav_state.get<Costmap2D>("map.static");
+  const auto & base_map = nav_state.get<Costmap2D>("map.base");
 
-  if (needs_recompute_static_(static_map)) {
-    recompute_static_inflation_(static_map);
+  if (needs_recompute_base_(base_map)) {
+    recompute_base_inflation_(base_map);
   }
 
   if (!matchedSize_) {
@@ -149,7 +149,7 @@ InflationFilter::update(NavState & nav_state)
     for (int j = 0; j < dynamic_map.getSizeInCellsY(); j++) {
       int index = static_cast<int>(dynamic_map.getIndex(i, j));
       unsigned char cost = std::max(
-        dynamic_map.getCost(i, j), static_inflated_.getCost(i, j));
+        dynamic_map.getCost(i, j), base_inflated_.getCost(i, j));
       dynamic_map.setCost(i, j, cost);
     }
   }
@@ -443,17 +443,20 @@ InflationFilter::generateIntegerDistances()
 }
 
 bool
-InflationFilter::needs_recompute_static_(const Costmap2D & static_map) const
+InflationFilter::needs_recompute_base_(const Costmap2D & base_map) const
 {
-  if (!has_static_inflated_) {
+  if (!has_base_inflated_) {
     return true;
   }
 
-  if (static_map.getSizeInCellsX() != static_sig_.size_x ||
-    static_map.getSizeInCellsY() != static_sig_.size_y ||
-    static_map.getResolution() != static_sig_.resolution ||
-    static_map.getOriginX() != static_sig_.origin_x ||
-    static_map.getOriginY() != static_sig_.origin_y)
+  const int64_t stamp_ns = base_map.getLastModifiedStamp().nanoseconds();
+
+  if (base_map.getSizeInCellsX() != base_sig_.size_x ||
+    base_map.getSizeInCellsY() != base_sig_.size_y ||
+    base_map.getResolution() != base_sig_.resolution ||
+    base_map.getOriginX() != base_sig_.origin_x ||
+    base_map.getOriginY() != base_sig_.origin_y ||
+    stamp_ns != base_sig_.stamp_ns)
   {
     return true;
   }
@@ -462,22 +465,23 @@ InflationFilter::needs_recompute_static_(const Costmap2D & static_map) const
 }
 
 void
-InflationFilter::recompute_static_inflation_(const Costmap2D & static_map)
+InflationFilter::recompute_base_inflation_(const Costmap2D & base_map)
 {
-  static_inflated_ = static_map;
+  base_inflated_ = base_map;
 
-  matchSize(static_inflated_);
-  const int w = static_inflated_.getSizeInCellsX();
-  const int h = static_inflated_.getSizeInCellsY();
-  updateCosts(static_inflated_, 0, 0, w, h);
+  matchSize(base_inflated_);
+  const int w = base_inflated_.getSizeInCellsX();
+  const int h = base_inflated_.getSizeInCellsY();
+  updateCosts(base_inflated_, 0, 0, w, h);
 
-  static_sig_.size_x = static_map.getSizeInCellsX();
-  static_sig_.size_y = static_map.getSizeInCellsY();
-  static_sig_.resolution = static_map.getResolution();
-  static_sig_.origin_x = static_map.getOriginX();
-  static_sig_.origin_y = static_map.getOriginY();
+  base_sig_.size_x = base_map.getSizeInCellsX();
+  base_sig_.size_y = base_map.getSizeInCellsY();
+  base_sig_.resolution = base_map.getResolution();
+  base_sig_.origin_x = base_map.getOriginX();
+  base_sig_.origin_y = base_map.getOriginY();
+  base_sig_.stamp_ns = base_map.getLastModifiedStamp().nanoseconds();
 
-  has_static_inflated_ = true;
+  has_base_inflated_ = true;
 }
 
 }  // namespace easynav
