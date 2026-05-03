@@ -58,7 +58,7 @@ TEST_F(RoutesCostmapFilterTest, DoesNothingWhenNavStateMissingKeys)
   ASSERT_NO_THROW(filter.initialize(node, "routes.routes_costmap"));
 
   NavState nav_state;
-  // No 'routes' and no 'map.dynamic.filtered' keys -> update should not crash
+  // No 'routes' and no 'map' keys -> update should not crash
   EXPECT_NO_THROW(filter.update(nav_state));
 }
 
@@ -93,11 +93,11 @@ TEST_F(RoutesCostmapFilterTest, RaisesCostOutsideRoutes)
 
   NavState nav_state;
   nav_state.set("routes", routes);
-  nav_state.set("map.dynamic.filtered", map);
+  nav_state.set("map", map);
 
   filter.update(nav_state);
 
-  auto map_after = nav_state.get<Costmap2D>("map.dynamic.filtered");
+  auto map_after = nav_state.get<Costmap2D>("map");
 
   // Cells clearly along the interior of the route should remain 0,
   // others should be >= 50 (default min_cost). The last endpoint
@@ -142,11 +142,11 @@ TEST_F(RoutesCostmapFilterTest, IgnoresRoutePointsOutsideMap)
 
   NavState nav_state;
   nav_state.set("routes", routes);
-  nav_state.set("map.dynamic.filtered", map);
+  nav_state.set("map", map);
 
   filter.update(nav_state);
 
-  auto map_after = nav_state.get<Costmap2D>("map.dynamic.filtered");
+  auto map_after = nav_state.get<Costmap2D>("map");
 
   // No cell should be considered "on route"; all should be raised to >= 50
   for (unsigned int x = 0; x < 5; ++x) {

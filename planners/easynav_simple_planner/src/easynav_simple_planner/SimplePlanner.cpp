@@ -113,16 +113,16 @@ SimplePlanner::update(NavState & nav_state)
     return;
   }
 
-  if (!nav_state.has("map.dynamic")) {
-    RCLCPP_WARN(get_node()->get_logger(), "SimplePlanner::update map.dynamic map not found");
+  if (!nav_state.has("map")) {
+    RCLCPP_WARN(get_node()->get_logger(), "SimplePlanner::update map map not found");
     return;
   }
 
   SimpleMap map_typed;
-  if (nav_state.has("map.dynamic")) {
-    map_typed = nav_state.get<SimpleMap>("map.dynamic");
+  if (nav_state.has("map")) {
+    map_typed = nav_state.get<SimpleMap>("map");
   } else {
-    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.dynamic map");
+    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map");
     return;
   }
 

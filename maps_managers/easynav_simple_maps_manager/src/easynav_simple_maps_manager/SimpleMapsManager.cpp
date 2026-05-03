@@ -144,8 +144,8 @@ SimpleMapsManager::update(NavState & nav_state)
   }
 
   if (perceptions.empty()) {
-    nav_state.set("map.static", static_map_);
-    nav_state.set("map.dynamic", dynamic_map_);
+    nav_state.set("map.base", static_map_);
+    nav_state.set("map", dynamic_map_);
     return;
   }
 
@@ -166,8 +166,8 @@ SimpleMapsManager::update(NavState & nav_state)
     }
   }
 
-  nav_state.set("map.static", static_map_);
-  nav_state.set("map.dynamic", dynamic_map_);
+  nav_state.set("map.base", static_map_);
+  nav_state.set("map", dynamic_map_);
 
   dynamic_map_.to_occupancy_grid(dynamic_grid_msg_);
   dynamic_grid_msg_.header.frame_id = tf_info.map_frame;

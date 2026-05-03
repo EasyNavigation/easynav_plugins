@@ -47,7 +47,7 @@ ObstacleFilter::update(NavState & nav_state)
     return;
   }
 
-  auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
+  auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map");
   Costmap2D & dynamic_map = *dynamic_map_ptr;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -81,7 +81,7 @@ ObstacleFilter::update(NavState & nav_state)
 
   if (!fused.empty()) {
     ObstacleBounds bb{min_x, min_y, max_x, max_y};
-    nav_state.set("map.dynamic.obstacle_bounds", bb);
+    nav_state.set("map.obstacle_bounds", bb);
   }
 }
 

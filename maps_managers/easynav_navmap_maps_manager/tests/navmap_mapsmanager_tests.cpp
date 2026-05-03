@@ -68,8 +68,8 @@ protected:
 //
 //  manager->update(::easynav::NavState);
 //
-//  ASSERT_TRUE(::easynav::NavState.has("map.dynamic"));
-//  const auto & map = ::easynav::NavState.get<easynav::NavMap2D>("map.dynamic");
+//  ASSERT_TRUE(::easynav::NavState.has("map"));
+//  const auto & map = ::easynav::NavState.get<easynav::NavMap2D>("map");
 //
 //  unsigned int cx, cy;
 //  ASSERT_TRUE(map.worldToMap(1.0, 1.0, cx, cy));
@@ -111,8 +111,8 @@ protected:
 //  ::easynav::NavState ::easynav::NavState;
 //  manager->update(::easynav::NavState);
 //
-//  ASSERT_TRUE(::easynav::NavState.has("map.static"));
-//  const auto & map = ::easynav::NavState.get<easynav::NavMap2D>("map.static");
+//  ASSERT_TRUE(::easynav::NavState.has("map.base"));
+//  const auto & map = ::easynav::NavState.get<easynav::NavMap2D>("map.base");
 //
 //  EXPECT_EQ(map.getCost(5, 5), easynav::LETHAL_OBSTACLE);
 //  EXPECT_EQ(map.getCost(1, 1), easynav::FREE_SPACE);

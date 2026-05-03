@@ -218,7 +218,7 @@ CostmapMapsManager::update(NavState & nav_state)
     *dynamic_map_ = map_base_;
   }
 
-  nav_state.set("map.dynamic.filtered", dynamic_map_);
+  nav_state.set("map", dynamic_map_);
 
   if (!nav_state.has("map_time")) {
     nav_state.set("map_time", get_node()->now());
@@ -228,7 +228,7 @@ CostmapMapsManager::update(NavState & nav_state)
     filter->update(nav_state);
   }
 
-  nav_state.set("map.dynamic", dynamic_map_);
+  nav_state.set("map", dynamic_map_);
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 

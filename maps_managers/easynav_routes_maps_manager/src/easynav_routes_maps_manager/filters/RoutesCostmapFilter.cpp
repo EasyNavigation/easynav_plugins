@@ -73,13 +73,13 @@ RoutesCostmapFilter::update(NavState & nav_state)
     return;
   }
 
-  if (!nav_state.has("map.dynamic.filtered")) {
+  if (!nav_state.has("map")) {
     return;
   }
 
   const auto & routes = nav_state.get<RoutesMap>("routes");
 
-  auto costmap_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
+  auto costmap_ptr = nav_state.get_ptr<Costmap2D>("map");
   if (!costmap_ptr) {
     return;
   }

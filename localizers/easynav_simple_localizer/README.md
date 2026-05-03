@@ -65,7 +65,7 @@ This package does not create service servers or clients.
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `points` | `PointPerceptions` | **Read** | Perception point clouds used in correction. |
-| `map.static` | `SimpleMap` | **Read** | Static map for likelihood evaluation. |
+| `map.base` | `SimpleMap` | **Read** | Static map for likelihood evaluation. |
 | `robot_pose` | `nav_msgs::msg::Odometry` | **Write** | Estimated robot pose. |
 
 ## TF Frames

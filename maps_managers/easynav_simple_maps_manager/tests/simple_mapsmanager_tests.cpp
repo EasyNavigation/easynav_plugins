@@ -99,8 +99,8 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
 
   manager->update(navstate);
 
-  ASSERT_TRUE(navstate.has("map.dynamic"));
-  auto map = navstate.get<easynav::SimpleMap>("map.dynamic");
+  ASSERT_TRUE(navstate.has("map"));
+  auto map = navstate.get<easynav::SimpleMap>("map");
 
   auto cell1 = map.metric_to_cell(1.0, 1.0);
   EXPECT_TRUE(map.at(cell1.first, cell1.second));
@@ -148,8 +148,8 @@ TEST_F(SimpleMapsManagerTest, IncomingOccupancyGridUpdatesMaps)
   manager->update(navstate);
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-  ASSERT_TRUE(navstate.has("map.static"));
-  const auto & map = navstate.get<easynav::SimpleMap>("map.static");
+  ASSERT_TRUE(navstate.has("map.base"));
+  const auto & map = navstate.get<easynav::SimpleMap>("map.base");
 
   EXPECT_EQ(map.at(5, 5), 1);
   EXPECT_EQ(map.at(1, 1), 0);
