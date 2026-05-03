@@ -140,7 +140,7 @@ void CostmapPlanner::on_initialize()
 
 void CostmapPlanner::update(NavState & nav_state)
 {
-  if (!nav_state.has("goals") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
+  if (!nav_state.has("goals") || !nav_state.has("robot_pose") || !nav_state.has("map")) {
     return;
   }
 
@@ -150,7 +150,7 @@ void CostmapPlanner::update(NavState & nav_state)
     return;
   }
 
-  const auto & map = nav_state.get<Costmap2D>("map.dynamic");
+  const auto & map = nav_state.get<Costmap2D>("map");
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
@@ -264,7 +264,6 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
 
   int width = map.getSizeInCellsX();
   // Precompute constants used inside the neighbor loop
-  const double lethal_norm = 1.0 / static_cast<double>(LETHAL_OBSTACLE);
   const double axial_cost = 1.0;
   const double diagonal_cost = std::sqrt(2.0);
   auto idx = [&](int x, int y) {return y * width + x;};
@@ -296,8 +295,8 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
       // Reject cells that would cause collision (>= INSCRIBED_INFLATED_OBSTACLE = 253)
       if (cell_cost >= INSCRIBED_INFLATED_OBSTACLE) {continue;}
 
-      // Calculate traversal cost for free and lightly inflated cells
-      double traversal_cost = 1.0 + cost_factor_ * static_cast<double>(cell_cost) * lethal_norm;
+      // Calculate traversal cost: cost_factor_ acts as a direct multiplier on cell cost
+      double traversal_cost = 1.0 + cost_factor_ * static_cast<double>(cell_cost);
 
       double step_cost = (dx == 0 || dy == 0) ? axial_cost : diagonal_cost;
       double new_cost = cost_so_far[idx(current.x, current.y)] + traversal_cost * step_cost;
