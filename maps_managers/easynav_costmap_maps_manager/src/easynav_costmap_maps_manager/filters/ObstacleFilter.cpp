@@ -48,6 +48,10 @@ ObstacleFilter::update(NavState & nav_state)
   }
 
   auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map");
+  if (!dynamic_map_ptr) {
+    RCLCPP_WARN(get_node()->get_logger(), "There is no map in NavState");
+    return;
+  }
   Costmap2D & dynamic_map = *dynamic_map_ptr;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
