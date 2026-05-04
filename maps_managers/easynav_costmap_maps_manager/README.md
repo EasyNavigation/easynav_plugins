@@ -146,8 +146,7 @@ maps_manager_node:
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `map.base` | `Costmap2D` | **Write** | Base map loaded from YAML. |
-| `map` | `Costmap2D` | **Write** | Dynamic map after applying filters. |
-| `map` | `Costmap2D` | **Read** | Previously filtered map used as input if available. |
+| `map` | `Costmap2D` | **Read/Write** | Dynamic map after applying filters; if an existing filtered `map` is available, the manager may use it as input. |
 | `map.obstacle_bounds` | `ObstacleBounds` | **Read** | Bounding box of updated obstacles (used to limit inflation region). |
 
 ---
