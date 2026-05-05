@@ -228,7 +228,7 @@ CostmapMapsManager::update(NavState & nav_state)
     filter->update(nav_state);
   }
 
-  dynamic_map_ = nav_state.get<std::shared_ptr<Costmap2D>>("map");
+  *dynamic_map_ = nav_state.get<Costmap2D>("map");
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
