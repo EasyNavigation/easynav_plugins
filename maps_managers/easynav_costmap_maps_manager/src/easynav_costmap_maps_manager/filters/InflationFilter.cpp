@@ -99,7 +99,7 @@ InflationFilter::on_initialize()
 void
 InflationFilter::update(NavState & nav_state)
 {
-  auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
+  auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map");
   Costmap2D & dynamic_map = *dynamic_map_ptr;
 
   const auto & base_map = nav_state.get<Costmap2D>("map.base");
@@ -121,8 +121,8 @@ InflationFilter::update(NavState & nav_state)
   int max_i = size_x;
   int max_j = size_y;
 
-  if (nav_state.has("map.dynamic.obstacle_bounds")) {
-    const auto & bb = nav_state.get<ObstacleBounds>("map.dynamic.obstacle_bounds");
+  if (nav_state.has("map.obstacle_bounds")) {
+    const auto & bb = nav_state.get<ObstacleBounds>("map.obstacle_bounds");
 
     unsigned int cmin_i, cmin_j, cmax_i, cmax_j;
     if (dynamic_map.worldToMap(bb.min_x, bb.min_y, cmin_i, cmin_j) &&
@@ -154,7 +154,7 @@ InflationFilter::update(NavState & nav_state)
     }
   }
 
-  nav_state.set("map.dynamic.filtered", dynamic_map_ptr);
+  nav_state.set("map", dynamic_map_ptr);
 }
 
 void

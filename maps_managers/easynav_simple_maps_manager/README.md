@@ -58,8 +58,8 @@ At the heart of this stack is the SimpleMap data structure. It represents the en
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `points` | `PointPerceptions` | **Read** | Optional perception points bundle (not strictly required for this no-op manager). |
-| `map.static` | `SimpleMap` | **Write** | Static map loaded from file / parameter configuration. |
-| `map.dynamic` | `SimpleMap` | **Write** | Dynamic map after applying incoming updates. |
+| `map.base` | `SimpleMap` | **Write** | Static map loaded from file / parameter configuration. |
+| `map` | `SimpleMap` | **Write** | Dynamic map after applying incoming updates. |
 
 ## TF Frames
 

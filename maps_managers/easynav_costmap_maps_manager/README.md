@@ -72,8 +72,8 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 | Key | Type | Access | Description |
 |---|---|---|---|
 | `points` | `sensor_msgs::msg::PointCloud2` | **Read** | Input point clouds to detect obstacles. |
-| `map.dynamic.filtered` | `Costmap2D` | **Write** | Marks cells as `LETHAL_OBSTACLE` (254). |
-| `map.dynamic.obstacle_bounds` | `ObstacleBounds` | **Write** | Bounding box of updated obstacles for incremental inflation. |
+| `map` | `Costmap2D` | **Write** | Marks cells as `LETHAL_OBSTACLE` (254). |
+| `map.obstacle_bounds` | `ObstacleBounds` | **Write** | Bounding box of updated obstacles for incremental inflation. |
 
 #### **InflationFilter**
 
@@ -96,8 +96,8 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 | Key | Type | Access | Description |
 |---|---|---|---|
 | `map.base` | `Costmap2D` | **Read** | Base costmap to inflate. |
-| `map.dynamic.filtered` | `Costmap2D` | **Read/Write** | Dynamic costmap input and output after inflation. |
-| `map.dynamic.obstacle_bounds` | `ObstacleBounds` | **Read** (optional) | Restricts inflation to updated region for performance. |
+| `map` | `Costmap2D` | **Read/Write** | Dynamic costmap input and output after inflation. |
+| `map.obstacle_bounds` | `ObstacleBounds` | **Read** (optional) | Restricts inflation to updated region for performance. |
 
 **Cost Model:**  
 Uses exponential decay: `cost = exp(-cost_scaling_factor * (distance - inscribed_radius)) * 253` for distances beyond inscribed radius.
@@ -146,9 +146,8 @@ maps_manager_node:
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `map.base` | `Costmap2D` | **Write** | Base map loaded from YAML. |
-| `map.dynamic` | `Costmap2D` | **Write** | Dynamic map after applying filters. |
-| `map.dynamic.filtered` | `Costmap2D` | **Read** | Previously filtered map used as input if available. |
-| `map.dynamic.obstacle_bounds` | `ObstacleBounds` | **Read** | Bounding box of updated obstacles (used to limit inflation region). |
+| `map` | `Costmap2D` | **Read/Write** | Dynamic map after applying filters; if an existing filtered `map` is available, the manager may use it as input. |
+| `map.obstacle_bounds` | `ObstacleBounds` | **Read** | Bounding box of updated obstacles (used to limit inflation region). |
 
 ---
 

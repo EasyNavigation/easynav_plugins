@@ -103,8 +103,8 @@ TEST_F(CostmapMapsManagerTest, SyncBaseMapPrefersNewerNavStateMap)
   const auto & base_after = navstate.get<easynav::Costmap2D>("map.base");
   EXPECT_EQ(base_after.getLastModifiedStamp().nanoseconds(), newer_ns);
 
-  ASSERT_TRUE(navstate.has("map.dynamic.filtered"));
-  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map.dynamic.filtered");
+  ASSERT_TRUE(navstate.has("map"));
+  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map");
   ASSERT_TRUE(dyn_ptr != nullptr);
   EXPECT_EQ(dyn_ptr->getLastModifiedStamp().nanoseconds(), newer_ns);
   EXPECT_EQ(dyn_ptr->getCost(2, 2), easynav::LETHAL_OBSTACLE);
@@ -142,8 +142,8 @@ TEST_F(CostmapMapsManagerTest, SyncBaseMapPrefersNewerInternalMap)
   const auto & base_after = navstate.get<easynav::Costmap2D>("map.base");
   EXPECT_EQ(base_after.getLastModifiedStamp().nanoseconds(), newer_ns);
 
-  ASSERT_TRUE(navstate.has("map.dynamic.filtered"));
-  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map.dynamic.filtered");
+  ASSERT_TRUE(navstate.has("map"));
+  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map");
   ASSERT_TRUE(dyn_ptr != nullptr);
   EXPECT_EQ(dyn_ptr->getLastModifiedStamp().nanoseconds(), newer_ns);
   EXPECT_EQ(dyn_ptr->getCost(3, 3), easynav::LETHAL_OBSTACLE);
@@ -187,8 +187,8 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
   EXPECT_EQ(base_after.getCost(5, 5), easynav::LETHAL_OBSTACLE);
   EXPECT_GT(base_after.getLastModifiedStamp().nanoseconds(), 0);
 
-  ASSERT_TRUE(navstate.has("map.dynamic.filtered"));
-  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map.dynamic.filtered");
+  ASSERT_TRUE(navstate.has("map"));
+  const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map");
   ASSERT_TRUE(dyn_ptr != nullptr);
   EXPECT_EQ(dyn_ptr->getCost(5, 5), easynav::LETHAL_OBSTACLE);
   EXPECT_EQ(dyn_ptr->getLastModifiedStamp().nanoseconds(),
@@ -224,8 +224,8 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
 //
 //  manager->update(navstate);
 //
-//  ASSERT_TRUE(navstate.has("map.dynamic"));
-//  const auto & map = navstate.get<easynav::Costmap2D>("map.dynamic");
+//  ASSERT_TRUE(navstate.has("map"));
+//  const auto & map = navstate.get<easynav::Costmap2D>("map");
 //
 //  unsigned int cx, cy;
 //  ASSERT_TRUE(map.worldToMap(1.0, 1.0, cx, cy));

@@ -527,12 +527,12 @@ void AMCLLocalizer::correct(NavState & nav_state)
     return;
   }
 
-  if (!nav_state.has("map.static")) {
-    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.static map");
+  if (!nav_state.has("map.base")) {
+    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.base map");
     return;
   }
 
-  const auto & map_static = nav_state.get<SimpleMap>("map.static");
+  const auto & map_static = nav_state.get<SimpleMap>("map.base");
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)

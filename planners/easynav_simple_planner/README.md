@@ -47,7 +47,7 @@ This plugin does not create subscriptions or services directly; it reads inputs 
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `goals` | `nav_msgs::msg::Goals` | **Read** | Planner targets. |
-| `map.dynamic` | `SimpleMap` | **Read** | Dynamic `SimpleMap` grid used for search. |
+| `map` | `SimpleMap` | **Read** | Dynamic `SimpleMap` grid used for search. |
 | `robot_pose` | `nav_msgs::msg::Odometry` | **Read** | Start pose for path planning. |
 | `path` | `nav_msgs::msg::Path` | **Write** | Output path to follow. |
 
