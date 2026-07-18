@@ -223,9 +223,9 @@ Filter Plugins</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">points</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs::msg::PointCloud2</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Input point clouds to detect obstacles.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">map.dynamic.filtered</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Marks cells as <span class="tt">LETHAL_OBSTACLE</span> (254).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">map</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Marks cells as <span class="tt">LETHAL_OBSTACLE</span> (254).  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">map.dynamic.obstacle_bounds</span>  </td><td class="markdownTableBodyNone"><span class="tt">ObstacleBounds</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Bounding box of updated obstacles for incremental inflation.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">map.obstacle_bounds</span>  </td><td class="markdownTableBodyNone"><span class="tt">ObstacleBounds</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Bounding box of updated obstacles for incremental inflation.  </td></tr>
 </table>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md132"></a>
 <b>InflationFilter</b></h3>
@@ -254,9 +254,9 @@ Filter Plugins</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">map.base</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Base costmap to inflate.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">map.dynamic.filtered</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read/Write</b>  </td><td class="markdownTableBodyNone">Dynamic costmap input and output after inflation.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">map</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read/Write</b>  </td><td class="markdownTableBodyNone">Dynamic costmap input and output after inflation.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">map.dynamic.obstacle_bounds</span>  </td><td class="markdownTableBodyNone"><span class="tt">ObstacleBounds</span>  </td><td class="markdownTableBodyNone"><b>Read</b> (optional)  </td><td class="markdownTableBodyNone">Restricts inflation to updated region for performance.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">map.obstacle_bounds</span>  </td><td class="markdownTableBodyNone"><span class="tt">ObstacleBounds</span>  </td><td class="markdownTableBodyNone"><b>Read</b> (optional)  </td><td class="markdownTableBodyNone">Restricts inflation to updated region for performance.  </td></tr>
 </table>
 <p><b>Cost Model:</b> <br  />
  Uses exponential decay: <span class="tt">cost = exp(-cost_scaling_factor * (distance - inscribed_radius)) * 253</span> for distances beyond inscribed radius.</p>
@@ -308,11 +308,9 @@ NavState Keys</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">map.base</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Base map loaded from YAML.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">map.dynamic</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Dynamic map after applying filters.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">map</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read/Write</b>  </td><td class="markdownTableBodyNone">Dynamic map after applying filters; if an existing filtered <span class="tt">map</span> is available, the manager may use it as input.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">map.dynamic.filtered</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Previously filtered map used as input if available.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">map.dynamic.obstacle_bounds</span>  </td><td class="markdownTableBodyNone"><span class="tt">ObstacleBounds</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Bounding box of updated obstacles (used to limit inflation region).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">map.obstacle_bounds</span>  </td><td class="markdownTableBodyNone"><span class="tt">ObstacleBounds</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Bounding box of updated obstacles (used to limit inflation region).  </td></tr>
 </table>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="autotoc_md141"></a>
