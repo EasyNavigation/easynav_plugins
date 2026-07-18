@@ -17,11 +17,12 @@
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
+#include <filesystem>
 #include <fstream>
 
 #include <yaml-cpp/yaml.h>
 
-#include "ament_index_cpp/get_package_share_directory.hpp"
+#include "ament_index_cpp/get_package_share_path.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -84,8 +85,8 @@ void RoutesMapsManager::on_initialize()
     // Absolute path: ignore package_name.
     map_path_ = map_path_file;
   } else if (!package_name.empty() && !map_path_file.empty()) {
-    const auto pkgpath = ament_index_cpp::get_package_share_directory(package_name);
-    map_path_ = pkgpath + "/" + map_path_file;
+    const auto pkgpath = ament_index_cpp::get_package_share_path(package_name);
+    map_path_ = (pkgpath / map_path_file).string();
   } else {
     throw std::runtime_error(
       "Parameters '" + plugin_name + ".package' and '" + plugin_name +

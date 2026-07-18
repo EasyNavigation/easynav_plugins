@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <filesystem>
 #include <stdexcept>
 #include <string>
 
@@ -26,7 +27,7 @@
 #include "navmap_ros/navmap_io.hpp"
 #include "easynav_navmap_maps_manager/map_io.hpp"
 
-#include "ament_index_cpp/get_package_share_directory.hpp"
+#include "ament_index_cpp/get_package_share_path.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
 
 namespace easynav
@@ -122,8 +123,8 @@ NavMapMapsManager::on_initialize()
 
   if (!package_name.empty() && !occmap_path_file.empty()) {
     try {
-      const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
-      map_path_ = pkgpath + std::string("/") + occmap_path_file;
+      const std::filesystem::path pkgpath = ament_index_cpp::get_package_share_path(package_name);
+      map_path_ = (pkgpath / occmap_path_file).string();
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
@@ -145,8 +146,8 @@ NavMapMapsManager::on_initialize()
 
   if (!package_name.empty() && !navmap_path_file.empty()) {
     try {
-      const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
-      map_path_ = pkgpath + std::string("/") + navmap_path_file;
+      const std::filesystem::path pkgpath = ament_index_cpp::get_package_share_path(package_name);
+      map_path_ = (pkgpath / navmap_path_file).string();
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
