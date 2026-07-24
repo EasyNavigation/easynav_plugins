@@ -258,11 +258,7 @@ void VffController::update_rt(NavState & nav_state)
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
-<<<<<<< HEAD
-      .fuse(tf_info.map_frame)
-=======
       .fuse(tf_info.robot_frame)
->>>>>>> kilted
       .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
           obstacle_detection_z_max_})

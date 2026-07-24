@@ -375,13 +375,8 @@ SerestController::fetch_required_inputs(
 {
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-<<<<<<< HEAD
-  if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
-    publish_stop(nav_state, tf_info.robot_frame);
-=======
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map")) {
     publish_stop(nav_state, tf_info.robot_footprint_frame);
->>>>>>> kilted
     return false;
   }
 

@@ -599,11 +599,7 @@ AMCLLocalizer::correct(NavState & nav_state)
 
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(map_static.getResolution())
-<<<<<<< HEAD
-  .fuse(tf_info.robot_frame)
-=======
   .fuse(tf_info.robot_footprint_frame, last_input_time_)
->>>>>>> kilted
   .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
   .collapse({NAN, NAN, 0.1})
   .downsample(map_static.getResolution());
@@ -614,24 +610,6 @@ AMCLLocalizer::correct(NavState & nav_state)
     return;
   }
 
-<<<<<<< HEAD
-  auto latest_time = [](const PointPerceptions & perceptions){
-      rclcpp::Time latest_stamp;
-      bool inited = false;
-
-      for (const auto & perception : perceptions) {
-        if (!inited || perception->stamp > latest_stamp) {
-          latest_stamp = perception->stamp;
-          inited = true;
-        }
-      }
-      return latest_stamp;
-    };
-
-  last_input_time_ = latest_time(perceptions);
-
-=======
->>>>>>> kilted
   for (auto & particle : particles_) {
     int hits = 0;
     int possible_hits = 0;

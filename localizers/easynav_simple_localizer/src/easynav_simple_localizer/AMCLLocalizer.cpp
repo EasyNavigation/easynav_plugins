@@ -554,11 +554,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .downsample(map_static.resolution())
-<<<<<<< HEAD
-    .fuse(tf_info.robot_frame)
-=======
     .fuse(tf_info.robot_footprint_frame, last_input_time_)
->>>>>>> kilted
     .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(map_static.resolution())
