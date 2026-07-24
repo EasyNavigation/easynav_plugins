@@ -21,6 +21,8 @@ find_package(tf2_geometry_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(PCL REQUIRED COMPONENTS common)
+find_package(Eigen3 REQUIRED NO_MODULE)
 
 
 add_library(${PROJECT_NAME} SHARED
@@ -29,6 +31,7 @@ add_library(${PROJECT_NAME} SHARED
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+  ${PCL_INCLUDE_DIRS}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
@@ -41,9 +44,11 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   tf2::tf2
   tf2_ros::tf2_ros
   pluginlib::pluginlib
+  Eigen3::Eigen
   ${tf2_geometry_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
+  ${PCL_LIBRARIES}
 )
 
 install(
@@ -91,5 +96,7 @@ ament_export_dependencies(
   geometry_msgs
   std_srvs
   nav_msgs
+  PCL
+  eigen
 )
 ament_package()

@@ -17,6 +17,7 @@
   <depend>easynav_core</depend>
   <depend>easynav_sensors</depend>
   <depend>pcl_ros</depend>
+  <depend>geometry_msgs</depend>
   <depend>visualization_msgs</depend>
 
   <test_depend>ament_lint_auto</test_depend>

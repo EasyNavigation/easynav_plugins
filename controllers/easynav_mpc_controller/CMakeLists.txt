@@ -13,9 +13,12 @@ find_package(easynav_sensors REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 find_package(PCL REQUIRED COMPONENTS common io)
+find_package(pcl_conversions REQUIRED)
 find_package(NLopt QUIET)
 if(NOT NLopt_FOUND)
   find_path(NLOPT_INCLUDE_DIR nlopt.hpp)
@@ -38,6 +41,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
   ${PCL_INCLUDE_DIRS}
+  ${pcl_conversions_INCLUDE_DIRS}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
@@ -45,11 +49,13 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_system::easynav_system
   easynav_sensors::easynav_sensors
   tf2_ros::tf2_ros
+  tf2::tf2
   pluginlib::pluginlib
   Eigen3::Eigen
   nlopt
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
+  ${sensor_msgs_TARGETS}
   ${PCL_LIBRARIES}
 )
 
@@ -89,8 +95,11 @@ ament_export_dependencies(
   easynav_sensors
   pluginlib
   tf2_ros
+  tf2
   geometry_msgs
   nav_msgs
+  sensor_msgs
+  pcl_conversions
   eigen
   nlopt
 )
