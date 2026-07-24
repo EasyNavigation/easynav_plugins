@@ -11,6 +11,7 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(easynav_core REQUIRED)
 find_package(easynav_common REQUIRED)
 find_package(easynav_localizer REQUIRED)
+find_package(easynav_sensors REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(geographic_msgs REQUIRED)
 find_package(robot_localization REQUIRED)
@@ -30,6 +31,7 @@ set(dependencies
   easynav_core
   easynav_common
   easynav_localizer
+  easynav_sensors
   pluginlib
   geographic_msgs
   robot_localization
@@ -49,6 +51,7 @@ target_link_libraries(fusion_localizer
   easynav_core::easynav_core
   easynav_common::easynav_common
   easynav_localizer::easynav_localizer
+  easynav_sensors::easynav_sensors
   pluginlib::pluginlib
   ${geographic_msgs_TARGETS}
   GeographicLib

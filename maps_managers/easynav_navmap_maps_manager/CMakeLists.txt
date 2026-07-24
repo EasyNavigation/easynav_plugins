@@ -18,6 +18,7 @@ find_package(ament_index_cpp REQUIRED)
 find_package(navmap_core REQUIRED)
 find_package(navmap_ros REQUIRED)
 find_package(navmap_ros_interfaces REQUIRED)
+find_package(easynav_sensors REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
@@ -46,6 +47,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   ament_index_cpp::ament_index_cpp
   navmap_core::navmap_core
   navmap_ros::navmap_ros
+  easynav_sensors::easynav_sensors
   ${sensor_msgs_TARGETS}
   ${tf2_geometry_msgs_TARGETS}
   ${navmap_ros_interfaces_TARGETS}
@@ -100,6 +102,7 @@ ament_export_dependencies(
   navmap_core
   navmap_ros
   navmap_ros_interfaces
+  easynav_sensors
   std_srvs
   yaets
   yaml_cpp_vendor

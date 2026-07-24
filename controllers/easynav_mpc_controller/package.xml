@@ -15,6 +15,7 @@
   <depend>easynav_common</depend>
   <depend>easynav_core</depend>
   <depend>easynav_system</depend>
+  <depend>easynav_sensors</depend>
   <depend>pluginlib</depend>
   <depend>tf2_ros</depend>
   <depend>geometry_msgs</depend>

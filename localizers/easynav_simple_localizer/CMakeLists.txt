@@ -10,6 +10,7 @@ find_package(easynav_common REQUIRED)
 find_package(easynav_simple_common REQUIRED)
 find_package(easynav_localizer REQUIRED)
 find_package(easynav_core REQUIRED)
+find_package(easynav_sensors REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
@@ -30,6 +31,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   easynav_simple_common::easynav_simple_common
   easynav_localizer::easynav_localizer
+  easynav_sensors::easynav_sensors
   tf2::tf2
   tf2_ros::tf2_ros
   pluginlib::pluginlib
@@ -73,6 +75,7 @@ ament_export_dependencies(
   easynav_simple_common
   easynav_localizer
   easynav_core
+  easynav_sensors
   tf2
   tf2_ros
   pluginlib
