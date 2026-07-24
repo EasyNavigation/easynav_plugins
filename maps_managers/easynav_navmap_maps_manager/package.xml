@@ -21,6 +21,7 @@
   <depend>navmap_core</depend>
   <depend>navmap_ros</depend>
   <depend>navmap_ros_interfaces</depend>
+  <depend>easynav_sensors</depend>
   <depend>std_srvs</depend>
   <depend>yaets</depend>
   <depend>yaml_cpp_vendor</depend>

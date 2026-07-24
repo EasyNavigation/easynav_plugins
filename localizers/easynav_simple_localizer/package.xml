@@ -13,6 +13,7 @@
   <depend>easynav_simple_common</depend>
   <depend>easynav_localizer</depend>
   <depend>easynav_core</depend>
+  <depend>easynav_sensors</depend>
   <depend>pluginlib</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>

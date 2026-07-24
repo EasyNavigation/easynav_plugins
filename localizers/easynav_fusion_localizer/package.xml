@@ -15,6 +15,7 @@
   <depend>easynav_core</depend>
   <depend>easynav_common</depend>
   <depend>easynav_localizer</depend>
+  <depend>easynav_sensors</depend>
   <depend>pluginlib</depend>
   <depend>geographiclib</depend>
   <depend>geographic_msgs</depend>

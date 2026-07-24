@@ -18,6 +18,7 @@
   <depend>nav_msgs</depend>
   <depend>ament_index_cpp</depend>
   <depend>easynav_costmap_common</depend>
+  <depend>easynav_sensors</depend>
   <depend>std_srvs</depend>
   <depend>yaets</depend>
   <depend>yaml_cpp_vendor</depend>
