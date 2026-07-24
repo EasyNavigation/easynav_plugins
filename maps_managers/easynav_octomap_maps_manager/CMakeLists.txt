@@ -27,6 +27,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
 find_package(yaets REQUIRED)
 find_package(GRAPHICSMAGICKCPP REQUIRED)
+find_package(Eigen3 REQUIRED NO_MODULE)
 
 add_library(${PROJECT_NAME} SHARED
   src/easynav_octomap_maps_manager/OctomapMapsManager.cpp
@@ -52,6 +53,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   tf2_ros::tf2_ros
   pluginlib::pluginlib
   ament_index_cpp::ament_index_cpp
+  Eigen3::Eigen
   ${sensor_msgs_TARGETS}
   ${tf2_geometry_msgs_TARGETS}
   ${octomap_msgs_TARGETS}
@@ -112,5 +114,6 @@ ament_export_dependencies(
   yaml_cpp_vendor
   pcl_conversions
   PCL
+  Eigen3
 )
 ament_package()

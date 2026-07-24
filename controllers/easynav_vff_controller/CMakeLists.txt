@@ -44,6 +44,7 @@ target_link_libraries(vff_controller
   easynav_common::easynav_common
   easynav_sensors::easynav_sensors
   pluginlib::pluginlib
+  tf2::tf2
   ${nav_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   ${visualization_msgs_TARGETS}
