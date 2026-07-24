@@ -20,12 +20,16 @@
 
 #include "easynav_common/RTTFBuffer.hpp"
 
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
+#include "tf2/LinearMath/Quaternion.hpp"
+
 namespace easynav
 {
 
 void GpsLocalizer::on_initialize()
 {
   auto node = get_node();
+  const auto & plugin_name = get_plugin_name();
 
   // Initialize the odometry message
   odom_.header.stamp = get_node()->now();
@@ -45,6 +49,38 @@ void GpsLocalizer::on_initialize()
   imu_subscriber_ = node->create_subscription<sensor_msgs::msg::Imu>(
     "imu/data", rclcpp::SensorDataQoS().reliable(),
     std::bind(&GpsLocalizer::imu_callback, this, std::placeholders::_1));
+
+  // Subscribe to initial pose
+  init_pose_sub_ = node->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
+    "initialpose", 10,
+    std::bind(&GpsLocalizer::init_pose_callback, this, std::placeholders::_1));
+
+  // Optional initial pose from parameters (kept consistent with AMCL parameter names)
+  node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
+  node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
+  node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
+
+  double init_x = 0.0;
+  double init_y = 0.0;
+  double init_yaw = 0.0;
+  node->get_parameter(plugin_name + ".initial_pose.x", init_x);
+  node->get_parameter(plugin_name + ".initial_pose.y", init_y);
+  node->get_parameter(plugin_name + ".initial_pose.yaw", init_yaw);
+
+  if (std::abs(init_x) > 1e-12 || std::abs(init_y) > 1e-12 || std::abs(init_yaw) > 1e-12) {
+    geometry_msgs::msg::PoseWithCovarianceStamped init_pose;
+    init_pose.header.stamp = node->now();
+    const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+    init_pose.header.frame_id = tf_info.map_frame;
+    init_pose.pose.pose.position.x = init_x;
+    init_pose.pose.pose.position.y = init_y;
+    init_pose.pose.pose.position.z = 0.0;
+    tf2::Quaternion q;
+    q.setRPY(0.0, 0.0, init_yaw);
+    init_pose.pose.pose.orientation = tf2::toMsg(q);
+    init_pose.pose.covariance.fill(0.0);
+    pending_init_pose_ = init_pose;
+  }
 
   // Create publisher
   odom_pub_ = node->create_publisher<nav_msgs::msg::Odometry>(
@@ -81,6 +117,12 @@ void GpsLocalizer::imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
   imu_msg_ = std::move(*msg);
 }
 
+void GpsLocalizer::init_pose_callback(
+  const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
+{
+  pending_init_pose_ = *msg;
+}
+
 
 void GpsLocalizer::update_rt([[maybe_unused]] NavState & nav_state)
 {
@@ -97,6 +139,14 @@ void GpsLocalizer::update(NavState & nav_state)
 
   GeographicLib::UTMUPS::Forward(lat, lon, zone, northp, utm_x, utm_y);
   std::string utm_zone = std::to_string(zone) + (northp ? "N" : "S");
+
+  // If an initial pose was provided, align the UTM origin so that the current
+  // GPS fix maps to that pose in the map frame.
+  if (pending_init_pose_.has_value() && gps_msg_ != sensor_msgs::msg::NavSatFix()) {
+    origin_utm_.x = utm_x - pending_init_pose_->pose.pose.position.x;
+    origin_utm_.y = utm_y - pending_init_pose_->pose.pose.position.y;
+    pending_init_pose_.reset();
+  }
 
   if (origin_utm_ == geometry_msgs::msg::Point() &&
     gps_msg_ != sensor_msgs::msg::NavSatFix())

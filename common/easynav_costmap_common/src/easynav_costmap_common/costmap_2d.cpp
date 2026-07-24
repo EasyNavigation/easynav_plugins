@@ -51,7 +51,7 @@ Costmap2D::Costmap2D(
   unsigned int cells_size_x, unsigned int cells_size_y, double resolution,
   double origin_x, double origin_y, unsigned char default_value)
 : resolution_(resolution), origin_x_(origin_x),
-  origin_y_(origin_y), costmap_(NULL), default_value_(default_value)
+  origin_y_(origin_y), costmap_(NULL), default_value_(default_value), last_modified_(0)
 {
   access_ = new mutex_t();
 
@@ -61,7 +61,7 @@ Costmap2D::Costmap2D(
 }
 
 Costmap2D::Costmap2D(const nav_msgs::msg::OccupancyGrid & map)
-: default_value_(FREE_SPACE)
+: default_value_(FREE_SPACE), last_modified_(map.header.stamp)
 {
   access_ = new mutex_t();
 
@@ -126,6 +126,9 @@ void Costmap2D::resetMaps()
 {
   std::unique_lock<mutex_t> lock(*access_);
   memset(costmap_, default_value_, size_x_ * size_y_ * sizeof(unsigned char));
+
+  const int64_t new_stamp_ns = last_modified_.nanoseconds() + 1;
+  last_modified_ = rclcpp::Time(new_stamp_ns, last_modified_.get_clock_type());
 }
 
 void Costmap2D::resetMap(unsigned int x0, unsigned int y0, unsigned int xn, unsigned int yn)
@@ -141,6 +144,9 @@ void Costmap2D::resetMapToValue(
   for (unsigned int y = y0 * size_x_ + x0; y < yn * size_x_ + x0; y += size_x_) {
     memset(costmap_ + y, value, len * sizeof(unsigned char));
   }
+
+  const int64_t new_stamp_ns = last_modified_.nanoseconds() + 1;
+  last_modified_ = rclcpp::Time(new_stamp_ns, last_modified_.get_clock_type());
 }
 
 bool Costmap2D::copyCostmapWindow(
@@ -179,6 +185,11 @@ bool Costmap2D::copyCostmapWindow(
     map.costmap_, lower_left_x, lower_left_y, map.size_x_, costmap_, 0, 0, size_x_,
     size_x_,
     size_y_);
+
+  {
+    std::unique_lock<mutex_t> lock(*access_);
+    last_modified_ = map.getLastModifiedStamp();
+  }
   return true;
 }
 
@@ -202,6 +213,14 @@ bool Costmap2D::copyWindow(
     source.costmap_, sx0, sy0, source.size_x_,
     costmap_, dx0, dy0, size_x_,
     sz_x, sz_y);
+
+  {
+    const auto source_stamp = source.getLastModifiedStamp();
+    std::unique_lock<mutex_t> lock(*access_);
+    const int64_t new_stamp_ns = std::max(last_modified_.nanoseconds(),
+        source_stamp.nanoseconds()) + 1;
+    last_modified_ = rclcpp::Time(new_stamp_ns, last_modified_.get_clock_type());
+  }
   return true;
 }
 
@@ -209,6 +228,10 @@ void
 Costmap2D::toOccupancyGridMsg(nav_msgs::msg::OccupancyGrid & msg) const
 {
   std::lock_guard<mutex_t> lock(*access_);
+
+  const int64_t stamp_ns = last_modified_.nanoseconds();
+  msg.header.stamp.sec = static_cast<int32_t>(stamp_ns / 1000000000LL);
+  msg.header.stamp.nanosec = static_cast<uint32_t>(stamp_ns % 1000000000LL);
 
   msg.info.width = size_x_;
   msg.info.height = size_y_;
@@ -231,6 +254,19 @@ Costmap2D::toOccupancyGridMsg(nav_msgs::msg::OccupancyGrid & msg) const
   }
 }
 
+rclcpp::Time Costmap2D::getLastModifiedStamp() const
+{
+  std::lock_guard<mutex_t> lock(*access_);
+  return last_modified_;
+}
+
+void Costmap2D::touch()
+{
+  std::lock_guard<mutex_t> lock(*access_);
+  const int64_t new_stamp_ns = last_modified_.nanoseconds() + 1;
+  last_modified_ = rclcpp::Time(new_stamp_ns, last_modified_.get_clock_type());
+}
+
 Costmap2D & Costmap2D::operator=(const Costmap2D & map)
 {
   // check for self assignment
@@ -247,6 +283,7 @@ Costmap2D & Costmap2D::operator=(const Costmap2D & map)
   origin_x_ = map.origin_x_;
   origin_y_ = map.origin_y_;
   default_value_ = map.default_value_;
+  last_modified_ = map.last_modified_;
 
   // initialize our various maps
   initMaps(size_x_, size_y_);
@@ -258,7 +295,7 @@ Costmap2D & Costmap2D::operator=(const Costmap2D & map)
 }
 
 Costmap2D::Costmap2D(const Costmap2D & map)
-: costmap_(NULL)
+: costmap_(NULL), last_modified_(0)
 {
   access_ = new mutex_t();
   *this = map;
@@ -266,7 +303,8 @@ Costmap2D::Costmap2D(const Costmap2D & map)
 
 // just initialize everything to NULL by default
 Costmap2D::Costmap2D()
-: size_x_(0), size_y_(0), resolution_(0.0), origin_x_(0.0), origin_y_(0.0), costmap_(NULL)
+: size_x_(0), size_y_(0), resolution_(0.0), origin_x_(0.0), origin_y_(0.0),
+  costmap_(NULL), last_modified_(0)
 {
   access_ = new mutex_t();
 }
@@ -305,7 +343,16 @@ unsigned char Costmap2D::getCost(unsigned int undex) const
 
 void Costmap2D::setCost(unsigned int mx, unsigned int my, unsigned char cost)
 {
-  costmap_[getIndex(mx, my)] = cost;
+  std::lock_guard<mutex_t> lock(*access_);
+  const unsigned int index = getIndex(mx, my);
+
+  if (costmap_[index] == cost) {
+    return;
+  }
+
+  costmap_[index] = cost;
+  const int64_t new_stamp_ns = last_modified_.nanoseconds() + 1;
+  last_modified_ = rclcpp::Time(new_stamp_ns, last_modified_.get_clock_type());
 }
 
 void Costmap2D::mapToWorld(unsigned int mx, unsigned int my, double & wx, double & wy) const

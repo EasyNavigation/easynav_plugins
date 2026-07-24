@@ -113,22 +113,30 @@ SimplePlanner::update(NavState & nav_state)
     return;
   }
 
-  if (!nav_state.has("map.dynamic")) {
-    RCLCPP_WARN(get_node()->get_logger(), "SimplePlanner::update map.dynamic map not found");
+  if (!nav_state.has("map")) {
+    RCLCPP_WARN(get_node()->get_logger(), "SimplePlanner::update map map not found");
     return;
   }
 
   SimpleMap map_typed;
-  if (nav_state.has("map.dynamic")) {
-    map_typed = nav_state.get<SimpleMap>("map.dynamic");
+  if (nav_state.has("map")) {
+    map_typed = nav_state.get<SimpleMap>("map");
   } else {
-    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.dynamic map");
+    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map");
     return;
   }
 
   const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+  const auto clock_type = get_node()->get_clock()->get_clock_type();
+  rclcpp::Time latest_stamp(robot_pose.header.stamp, clock_type);
+  if (rclcpp::Time(goals.goals.front().header.stamp,
+      latest_stamp.get_clock_type()) > latest_stamp)
+  {
+    latest_stamp = rclcpp::Time(goals.goals.front().header.stamp, latest_stamp.get_clock_type());
+  }
 
   auto downsampled_map = map_typed.downsample(0.2);
 
@@ -151,13 +159,13 @@ SimplePlanner::update(NavState & nav_state)
     downsampled_map->resolution());
 
   if (!poses.empty()) {
-    current_path_.header.stamp = get_node()->now();
+    current_path_.header.stamp = latest_stamp;
     current_path_.header.frame_id = goals.header.frame_id;
 
     for (const auto & pose : poses) {
       geometry_msgs::msg::PoseStamped pose_stamped;
       pose_stamped.header.frame_id = goals.header.frame_id;
-      pose_stamped.header.stamp = get_node()->now();
+      pose_stamped.header.stamp = latest_stamp;
       pose_stamped.pose = pose;
       current_path_.poses.push_back(pose_stamped);
     }

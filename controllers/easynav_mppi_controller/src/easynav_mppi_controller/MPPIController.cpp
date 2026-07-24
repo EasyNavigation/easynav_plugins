@@ -17,7 +17,7 @@
 /// \brief Implementation of the MPPIController class.
 
 #include "easynav_mppi_controller/MPPIController.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_system/GoalManager.hpp"
@@ -182,7 +182,7 @@ MPPIController::update_rt(NavState & nav_state)
   }
 
   const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})

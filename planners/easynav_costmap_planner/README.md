@@ -96,7 +96,7 @@ This plugin does not create subscriptions or services directly; it reads inputs 
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `goals` | `nav_msgs::msg::Goals` | **Read** | Goal list used as planner targets. |
-| `map.dynamic` | `Costmap2D` | **Read** | Dynamic costmap used for A* search. |
+| `map` | `Costmap2D` | **Read** | Dynamic costmap used for A* search. |
 | `robot_pose` | `nav_msgs::msg::Odometry` | **Read** | Current robot pose used as the start position. |
 | `path` | `nav_msgs::msg::Path` | **Write** | Output path to follow. |
 

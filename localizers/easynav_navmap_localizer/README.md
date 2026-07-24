@@ -59,6 +59,7 @@ All parameters are declared under the plugin name namespace, i.e., `/<node_fqn>/
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
 | Subscription | `/odom` | `nav_msgs/msg/Odometry` | Used only when `<plugin>.compute_odom_from_tf = false` | SensorDataQoS (reliable) |
+| Subscription | `initialpose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Initialize particles pose to the received pose, using covariance | depth=10 |
 | Publisher | `<node_fqn>/<plugin>/particles` | `geometry_msgs/msg/PoseArray` | Publishes the current particle set | depth=10 |
 | Publisher | `<node_fqn>/<plugin>/pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Publishes the estimated pose with covariance | depth=10 |
 

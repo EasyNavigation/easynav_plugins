@@ -267,6 +267,10 @@ sensors_node:
     gps:
       topic: /gps/fix
       type: sensor_msgs/msg/NavSatFix
+<<<<<<< HEAD
+=======
+      group: gnss
+>>>>>>> kilted
     laser1:
       topic: /front_laser/points
       type: sensor_msgs/msg/PointCloud2

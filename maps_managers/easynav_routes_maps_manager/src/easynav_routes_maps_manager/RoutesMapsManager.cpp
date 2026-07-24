@@ -20,6 +20,8 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <filesystem>
+
 #include "ament_index_cpp/get_package_share_directory.hpp"
 
 #include "rclcpp/rclcpp.hpp"
@@ -73,17 +75,18 @@ void RoutesMapsManager::on_initialize()
 
   map_path_.clear();
   if (package_name.empty() && map_path_file.empty()) {
-    // Accepted: we will use a default in-memory route in load_routes_from_yaml().
+    // No path configured: default to /tmp so that save_routes still works.
+    map_path_ = "/tmp/routes.yaml";
     RCLCPP_INFO(
       node->get_logger(),
-      "[%s] No package or map_path_file specified, using default in-memory route",
-      plugin_name.c_str());
+      "[%s] No package or map_path_file specified, routes will be saved to %s",
+      plugin_name.c_str(), map_path_.c_str());
   } else if (!map_path_file.empty() && map_path_file[0] == '/') {
     // Absolute path: ignore package_name.
     map_path_ = map_path_file;
   } else if (!package_name.empty() && !map_path_file.empty()) {
-    const auto pkgpath = ament_index_cpp::get_package_share_directory(package_name);
-    map_path_ = pkgpath + "/" + map_path_file;
+    const std::filesystem::path pkgpath(ament_index_cpp::get_package_share_directory(package_name));
+    map_path_ = (pkgpath / map_path_file).string();
   } else {
     throw std::runtime_error(
       "Parameters '" + plugin_name + ".package' and '" + plugin_name +
@@ -160,11 +163,16 @@ void RoutesMapsManager::on_initialize()
         out << YAML::EndMap;
 
         std::ofstream file(map_path_);
+        if (!file.is_open()) {
+          response->success = false;
+          response->message = "Could not open file for writing: " + map_path_;
+          return;
+        }
         file << out.c_str();
         file.close();
 
         response->success = true;
-        response->message = "Routes saved";
+        response->message = "Routes saved to " + map_path_;
       } catch (const std::exception & e) {
         response->success = false;
         response->message = e.what();

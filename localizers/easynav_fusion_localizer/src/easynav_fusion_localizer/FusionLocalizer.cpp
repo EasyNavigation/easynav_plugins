@@ -4,13 +4,21 @@
 
 #include "easynav_common/RTTFBuffer.hpp"
 
+<<<<<<< HEAD
 #include "easynav_common/types/IMUPerception.hpp"
 #include "easynav_common/types/GNSSPerception.hpp"
+=======
+#include "easynav_sensors/types/IMUPerception.hpp"
+#include "easynav_sensors/types/GNSSPerception.hpp"
+>>>>>>> kilted
 #include "sensor_msgs/msg/nav_sat_status.hpp"
 
 #include <GeographicLib/UTMUPS.hpp>
 
 #include "easynav_common/YTSession.hpp"
+
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
+#include "tf2/LinearMath/Quaternion.hpp"
 
 namespace easynav
 {
@@ -22,8 +30,16 @@ void FusionLocalizer::on_initialize()
 
     auto node = get_node();
 
+    // Subscribe to initial pose
+    init_pose_sub_ = node->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
+      "initialpose", 10,
+      std::bind(&FusionLocalizer::init_pose_callback, this, std::placeholders::_1));
+
+<<<<<<< HEAD
+=======
     auto localizer_node = std::dynamic_pointer_cast<LocalizerNode>(node);
 
+>>>>>>> kilted
     const std::string & plugin_name = this->get_plugin_name();
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -120,6 +136,7 @@ void FusionLocalizer::on_initialize()
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
 }
 
+<<<<<<< HEAD
 void FusionLocalizer::update_rt(NavState & nav_state)
 {
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
@@ -173,6 +190,89 @@ void FusionLocalizer::update_rt(NavState & nav_state)
   }
 
   if (has_local_filter_) {
+=======
+void FusionLocalizer::init_pose_callback(
+  const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
+{
+  if (has_global_filter_) {
+    nav_msgs::msg::Odometry global_odom;
+    // Get current position to calculate the offset
+    if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
+      double current_x = global_odom.pose.pose.position.x;
+      double current_y = global_odom.pose.pose.position.y;
+
+      // Shift the UTM origin so that the current GPS position will now map to msg's position
+      UTM_origin_x_ += (current_x - msg->pose.pose.position.x);
+      UTM_origin_y_ += (current_y - msg->pose.pose.position.y);
+
+      RCLCPP_INFO(get_node()->get_logger(),
+        "Initial pose reset UTM origin. Shifted X by %.2f, Y by %.2f to match pose (%.2f, %.2f)",
+        (current_x - msg->pose.pose.position.x), (current_y - msg->pose.pose.position.y),
+        msg->pose.pose.position.x, msg->pose.pose.position.y);
+    }
+
+    // Forward initial pose to global filter to make the state jump immediately
+    ukf_global_->setPoseCallback(msg);
+    first_pose_received_ = true;
+  }
+
+  if (has_local_filter_) {
+    ukf_local_->setPoseCallback(msg);
+  }
+}
+
+void FusionLocalizer::update_rt(NavState & nav_state)
+{
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+  if (has_global_filter_) {
+    if (n_gps_sensors_ && nav_state.has_group("gnss")) {
+      auto gps_data = nav_state.get_group<easynav::GNSSPerception>(std::string("gnss"));
+      const auto & gps_cb_arr = ukf_global_->getGpsCallbackDataArr();
+      for (int i = 0; i < n_gps_sensors_; ++i) {
+        if (gps_data[i]->data.status.status < sensor_msgs::msg::NavSatStatus::STATUS_FIX) {
+          continue;
+        }
+        rclcpp::Time gps_time(gps_data[i]->data.header.stamp);
+        if (gps_time > last_gps_stamp_[i]) {
+          EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_process_gps");
+          last_gps_stamp_[i] = gps_time;
+          auto pose =
+            std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(navsatfix_to_pose(
+              gps_data[i]->data));
+          if (!first_pose_received_) {
+            RCLCPP_INFO(get_node()->get_logger(),
+                "First valid GPS fix received. Initializing filter state.");
+            if (nav_state.has("imu")) {
+              auto imu_data = nav_state.get<IMUPerception>(std::string("imu"));
+              pose->pose.pose.orientation = imu_data.data.orientation;
+            }
+            ukf_global_->setPoseCallback(pose);
+            first_pose_received_ = true;
+            continue;
+          }
+          ukf_global_->poseCallback(
+            pose,
+            gps_cb_arr[i],
+            tf_info.map_frame,
+            gps_data[i]->data.header.frame_id,
+            false
+          );
+        }
+      }
+    }
+
+    ukf_global_->periodicUpdate();
+
+    nav_msgs::msg::Odometry global_odom;
+    if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
+      nav_state.set("robot_pose", global_odom);
+      navsat_pub_->publish(odom_to_navsatfix(global_odom));
+    }
+  }
+
+  if (has_local_filter_) {
+>>>>>>> kilted
     ukf_local_->periodicUpdate();
 
     nav_msgs::msg::Odometry local_odom;

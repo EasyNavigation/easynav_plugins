@@ -110,6 +110,17 @@ SimpleController::update_rt(NavState & nav_state)
   // If we're very close to the final path pose, stop the robot.
   const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const auto & goal_pose = path.poses.back().pose;
+
+  const auto clock_type = get_node()->get_clock()->get_clock_type();
+  rclcpp::Time latest_stamp(
+    nav_state.get<nav_msgs::msg::Odometry>("robot_pose").header.stamp,
+    clock_type);
+  if (rclcpp::Time(path.poses.back().header.stamp,
+      latest_stamp.get_clock_type()) > latest_stamp)
+  {
+    latest_stamp = rclcpp::Time(path.poses.back().header.stamp, latest_stamp.get_clock_type());
+  }
+
   double dist_to_goal = get_distance(pose, goal_pose);
   double angle_to_goal = get_diff_angle(pose.orientation, goal_pose.orientation);
 
@@ -118,7 +129,7 @@ SimpleController::update_rt(NavState & nav_state)
     last_vlin_ = 0.0;
     last_vrot_ = 0.0;
     twist_stamped_.header.frame_id = path.header.frame_id;
-    twist_stamped_.header.stamp = get_node()->now();
+    twist_stamped_.header.stamp = latest_stamp;
     twist_stamped_.twist.linear.x = 0.0;
     twist_stamped_.twist.angular.z = 0.0;
     // reset PID internal state to avoid windup / residual derivative
@@ -164,7 +175,7 @@ SimpleController::update_rt(NavState & nav_state)
   last_vrot_ = vrot;
 
   twist_stamped_.header.frame_id = path.header.frame_id;
-  twist_stamped_.header.stamp = get_node()->now();
+  twist_stamped_.header.stamp = latest_stamp;
   twist_stamped_.twist.linear.x = vlin;
   twist_stamped_.twist.angular.z = vrot;
 

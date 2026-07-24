@@ -17,7 +17,7 @@
 /// \brief Implementation of the SimpleMapsManager class.
 
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
@@ -138,20 +138,26 @@ SimpleMapsManager::update(NavState & nav_state)
 
   dynamic_map_.deep_copy(static_map_);
 
-  if (!nav_state.has("points")) {
-    nav_state.set("map.static", static_map_);
-    nav_state.set("map.dynamic", dynamic_map_);
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
+  }
+
+  if (perceptions.empty()) {
+    nav_state.set("map.base", static_map_);
+    nav_state.set("map", dynamic_map_);
     return;
   }
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  auto fused = PointPerceptionsOpsView(perceptions)
-    .downsample(dynamic_map_.resolution())
-    .fuse(tf_info.map_frame)
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-    .as_points();
+  rclcpp::Time stamp;
+  auto view = PointPerceptionsOpsView(perceptions);
+  view.downsample(dynamic_map_.resolution())
+  .fuse(tf_info.map_frame, stamp, false)
+  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN});
+
+  const auto & fused = view.as_points();
 
   for (const auto & p : fused) {
     if (dynamic_map_.check_bounds_metric(p.x, p.y)) {
@@ -160,12 +166,12 @@ SimpleMapsManager::update(NavState & nav_state)
     }
   }
 
-  nav_state.set("map.static", static_map_);
-  nav_state.set("map.dynamic", dynamic_map_);
+  nav_state.set("map.base", static_map_);
+  nav_state.set("map", dynamic_map_);
 
   dynamic_map_.to_occupancy_grid(dynamic_grid_msg_);
   dynamic_grid_msg_.header.frame_id = tf_info.map_frame;
-  dynamic_grid_msg_.header.stamp = get_node()->now();
+  dynamic_grid_msg_.header.stamp = stamp;
   dynamic_occ_pub_->publish(dynamic_grid_msg_);
 }
 

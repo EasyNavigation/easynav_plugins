@@ -44,6 +44,7 @@
 #include <climits>
 #include <vector>
 #include <mutex>
+#include "rclcpp/time.hpp"
 #include "geometry_msgs/msg/point.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
 
@@ -126,9 +127,28 @@ public:
    *
    * The resulting OccupancyGrid message contains metadata such as resolution, size, and origin,
    * and its data field is populated with cost values from the costmap. Cells with a value of
-   * NO_INFORMATION are mapped to -1; other values are cast to int8_t directly.
+    * NO_INFORMATION are mapped to -1; other values are cast to int8_t directly.
+    *
+    * The output message header stamp is set to the internal last-modified timestamp.
    */
   void toOccupancyGridMsg(nav_msgs::msg::OccupancyGrid & msg) const;
+
+  /**
+   * @brief Get timestamp of last costmap modification.
+   *
+   * Set by constructors and copy/assignment, and may be updated by some mutating operations.
+   * For high-frequency per-cell updates (e.g., many `setCost()` calls in a loop), prefer calling
+   * `touch()` once after the batch update.
+   */
+  rclcpp::Time getLastModifiedStamp() const;
+
+  /**
+   * @brief Mark the costmap as modified.
+   *
+   * This bumps the internal last-modified stamp by 1 nanosecond while preserving the clock type.
+   * It is intended to be called after bulk updates to avoid per-cell overhead.
+   */
+  void touch();
 
   /**
    * @brief Copies the (x0,y0)..(xn,yn) window from source costmap into a current costmap
@@ -579,6 +599,10 @@ protected:
   double origin_y_;
   unsigned char * costmap_;
   unsigned char default_value_;
+
+  // Timestamp indicating when the costmap was last modified.
+  // Set by constructors and copy/assignment, and bumped by some mutating operations.
+  rclcpp::Time last_modified_;
 
   // *INDENT-OFF* Uncrustify doesn't handle indented public/private labels
   class MarkCell

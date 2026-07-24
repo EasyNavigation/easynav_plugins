@@ -18,7 +18,7 @@
 
 #include "easynav_vff_controller/VffController.hpp"
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/goals.hpp"
@@ -60,7 +60,7 @@ void VffController::on_initialize()
 
   // Initialize the odometry message
   cmd_vel_.header.stamp = node->now();
-  cmd_vel_.header.frame_id = tf_info.map_frame;
+  cmd_vel_.header.frame_id = tf_info.robot_frame;
   cmd_vel_.twist.linear.x = 0.0;
   cmd_vel_.twist.linear.y = 0.0;
   cmd_vel_.twist.linear.z = 0.0;
@@ -252,13 +252,17 @@ void VffController::update_rt(NavState & nav_state)
     // Calculate the angle error
     double angle_error = normalize_angle(bearing - yaw);
 
-    const auto & perceptions = nav_state.get<PointPerceptions>("points");
+    const auto & perceptions = nav_state.get_no_group<PointPerception>();
 
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
+<<<<<<< HEAD
       .fuse(tf_info.map_frame)
+=======
+      .fuse(tf_info.robot_frame)
+>>>>>>> kilted
       .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
           obstacle_detection_z_max_})

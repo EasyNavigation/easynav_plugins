@@ -59,7 +59,7 @@ All parameters are declared under the plugin namespace, i.e.
 | `<plugin>.height_threshold` | `double` | `0.25` | Minimum vertical height (in meters) between max and min z to mark as an obstacle. |
 | `<plugin>.downsample` | `double` | `0.3` | Voxel size used to downsample point clouds before obstacle detection. |
 | `<plugin>.fuse_frame` | `string` | `"map"` | Frame in which points are fused before projection into NavMap. |
-| **Input Key:** | | | Reads point clouds from `NavState` key `"points"`. |
+| **Input Key:** | | | Reads list of point clouds from `NavState` group `"points"`. |
 | **Output Layer:** | | | Updates or creates NavMap layer `"obstacles"`. |
 
 #### **InflationFilter**

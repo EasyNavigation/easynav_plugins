@@ -113,7 +113,7 @@ OctomapMapsManager::on_initialize()
 
 //   if (!package_name.empty() && !occmap_path_file.empty()) {
 //     try {
-//       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
+//       const std::string pkgpath = ament_index_cpp::get_package_share_path(package_name);
 //       map_path_ = pkgpath + std::string("/") + occmap_path_file;
 //     } catch (ament_index_cpp::PackageNotFoundError & ex) {
 //       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
@@ -136,7 +136,7 @@ OctomapMapsManager::on_initialize()
 //
 //   if (!package_name.empty() && !octomap_path_file.empty()) {
 //     try {
-//       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
+//       const std::string pkgpath = ament_index_cpp::get_package_share_path(package_name);
 //       map_path_ = pkgpath + std::string("/") + occmap_path_file;
 //     } catch (ament_index_cpp::PackageNotFoundError & ex) {
 //       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());

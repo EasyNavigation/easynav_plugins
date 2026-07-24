@@ -66,7 +66,7 @@ This package does not create service servers or clients.
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `points` | `PointPerceptions` | **Read** | Perception point clouds used in correction. |
-| `map.static` | `Costmap2D` | **Read** | Static costmap for likelihood evaluation. |
+| `map.base` | `Costmap2D` | **Read** | Base costmap for likelihood evaluation. |
 
 ## TF Frames
 

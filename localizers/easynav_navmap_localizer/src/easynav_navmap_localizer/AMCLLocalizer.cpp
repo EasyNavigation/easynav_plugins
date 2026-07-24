@@ -34,8 +34,8 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/PointPerception.hpp"
-#include "easynav_common/types/IMUPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
+#include "easynav_sensors/types/IMUPerception.hpp"
 
 #include "navmap_core/NavMap.hpp"
 
@@ -415,6 +415,22 @@ void AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".top_keep_fraction", top_keep_fraction_);
   node->get_parameter<double>(plugin_name + ".downsampled_cloud_size", downsampled_cloud_size_);
 
+
+  // Check if any of the standard deviations are non-positive
+  // This is undefined behavior in std::normal_distribution and may result in a runtime assertion
+  if (
+    std_dev_xy <= 0.0 ||
+    std_dev_yaw <= 0.0 ||
+    noise_translation_ <= 0.0 ||
+    noise_rotation_ <= 0.0 ||
+    noise_translation_to_rotation_ <= 0.0 ||
+    min_noise_xy_ <= 0.0 ||
+    min_noise_yaw_ <= 0.0)
+  {
+    throw std::runtime_error("AMCLLocalizer: standard deviations must be positive");
+  }
+
+
   if (!std::isfinite(inflation_stddev_) || inflation_stddev_ <= 0.0) {inflation_stddev_ = 1.5;}
   if (!std::isfinite(inflation_prob_min_) || inflation_prob_min_ <= 0.0) {
     inflation_prob_min_ = 0.01;
@@ -449,7 +465,8 @@ void AMCLLocalizer::on_initialize()
   tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(get_node());
 
   auto node_typed = std::dynamic_pointer_cast<LocalizerNode>(get_node());
-  auto rt_cbg = node_typed->get_real_time_cbg();
+  auto rt_cbg = node_typed ? node_typed->get_real_time_cbg() :
+    get_node()->get_node_base_interface()->get_default_callback_group();
   rclcpp::SubscriptionOptions options; options.callback_group = rt_cbg;
 
   if (!compute_odom_from_tf_) {
@@ -463,6 +480,10 @@ void AMCLLocalizer::on_initialize()
   estimate_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
     node->get_fully_qualified_name() + std::string("/") + plugin_name + "/pose", 10);
 
+  init_pose_sub_ = get_node()->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
+    "initialpose", 10,
+    std::bind(&AMCLLocalizer::init_pose_callback, this, std::placeholders::_1));
+
   last_reseed_ = get_node()->now();
   get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
 }
@@ -473,6 +494,153 @@ void AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
   tf2::fromMsg(msg->pose.pose, odom_);
   last_input_time_ = msg->header.stamp;
   if (!initialized_odom_) {last_odom_ = odom_; initialized_odom_ = true;}
+}
+
+void
+AMCLLocalizer::init_pose_callback(
+  geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg)
+{
+  if (particles_.empty()) {
+    return;
+  }
+
+  auto logger = get_node()->get_logger();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
+  // Check expected frame (map)
+  const std::string expected_frame = tf_info.map_frame;
+  if (!msg->header.frame_id.empty() && msg->header.frame_id != expected_frame) {
+    RCLCPP_WARN(
+      logger,
+      "AMCLLocalizer::init_pose_callback: received initial pose in frame '%s' but expected '%s'. "
+      "Ignoring message.",
+      msg->header.frame_id.c_str(), expected_frame.c_str());
+    return;
+  }
+
+  last_input_time_ = msg->header.stamp;
+
+  // Extract pose mean (x, y, yaw) expressed in map frame
+  const auto & pose = msg->pose.pose;
+  const double mean_x = pose.position.x;
+  const double mean_y = pose.position.y;
+
+  tf2::Quaternion q(
+    pose.orientation.x,
+    pose.orientation.y,
+    pose.orientation.z,
+    pose.orientation.w);
+  double roll, pitch, yaw;
+  tf2::Matrix3x3(q).getRPY(roll, pitch, yaw);
+  const double mean_yaw = yaw;
+
+  // Extract 6x6 covariance (ROS order: x, y, z, roll, pitch, yaw)
+  const auto & cov = msg->pose.covariance;
+
+  // Positional covariance terms
+  double var_x = cov[0];
+  double cov_xy = cov[1];
+  double var_y = cov[7];
+
+  // Yaw variance
+  double var_yaw = cov[35];
+
+  // Ensure non-negative variances
+  var_x = std::max(var_x, 0.0);
+  var_y = std::max(var_y, 0.0);
+  var_yaw = std::max(var_yaw, 0.0);
+
+  // 2D Cholesky decomposition of covariance(x,y):
+  // [ var_x   cov_xy ]
+  // [ cov_xy  var_y  ]
+  double l00 = std::sqrt(var_x);
+  double l10 = 0.0;
+  double l11 = 0.0;
+
+  if (l00 > 0.0) {
+    l10 = cov_xy / l00;
+    double tmp = var_y - l10 * l10;
+    if (tmp < 0.0) {
+      tmp = 0.0;
+    }
+    l11 = std::sqrt(tmp);
+  } else {
+    // Degenerate case: fallback to diagonal stddevs
+    l00 = std::sqrt(var_x);
+    l10 = 0.0;
+    l11 = std::sqrt(var_y);
+  }
+
+  // Enforce minimum translational noise if covariance is too small
+  const double std_xy = std::sqrt(0.5 * std::max(0.0, var_x + var_y));
+  if (std_xy < min_noise_xy_) {
+    const double safe_std_xy = (std_xy > 1e-6) ? std_xy : 1.0;
+    const double scale = min_noise_xy_ / safe_std_xy;
+    l00 *= scale;
+    l10 *= scale;
+    l11 *= scale;
+  }
+
+  // Yaw noise with minimum enforced
+  double yaw_stddev = std::sqrt(var_yaw);
+  yaw_stddev = std::max(yaw_stddev, min_noise_yaw_);
+
+  std::normal_distribution<double> standard_normal(0.0, 1.0);
+  std::normal_distribution<double> yaw_noise(0.0, yaw_stddev);
+
+  const std::size_t N = particles_.size();
+  for (std::size_t i = 0; i < N; ++i) {
+    const double z0 = standard_normal(rng_);
+    const double z1 = standard_normal(rng_);
+
+    const double dx = l00 * z0;
+    const double dy = l10 * z0 + l11 * z1;
+
+    const double new_x = mean_x + dx;
+    const double new_y = mean_y + dy;
+    const double new_yaw = mean_yaw + yaw_noise(rng_);
+
+    tf2::Quaternion q_particle;
+    q_particle.setRPY(0.0, 0.0, new_yaw);
+
+    particles_[i].pose.setOrigin(tf2::Vector3(new_x, new_y, 0.0));
+    particles_[i].pose.setRotation(q_particle);
+
+    particles_[i].hits = 0;
+    particles_[i].possible_hits = 0;
+    particles_[i].weight = 1.0 / static_cast<double>(N);
+  }
+
+  // Normalize particle weights (safety)
+  double total_weight = 0.0;
+  for (const auto & p : particles_) {
+    total_weight += p.weight;
+  }
+  if (total_weight > 0.0) {
+    for (auto & p : particles_) {
+      p.weight /= total_weight;
+    }
+  }
+
+  // Prevent immediate reseed after initialization
+  last_reseed_ = get_node()->now();
+
+  // Compute map->basefootprint estimate
+  tf2::Transform map2bf = getEstimatedPose();
+
+  // Publish TF if odom transform is already known
+  if (initialized_odom_) {
+    tf2::Transform map2odom = map2bf * odom_.inverse();
+    publishTF(map2odom);
+  }
+
+  publishEstimatedPose(map2bf);
+  publishParticles();
+
+  RCLCPP_INFO(
+    logger,
+    "AMCLLocalizer::init_pose_callback: reinitialized %zu particles around (%.3f, %.3f, %.3f)",
+    N, mean_x, mean_y, mean_yaw);
 }
 
 void AMCLLocalizer::update_odom_from_tf()
@@ -496,9 +664,8 @@ void AMCLLocalizer::update_odom_from_tf()
 std::optional<tf2::Quaternion> get_latest_imu_quat(const NavState & nav_state)
 {
   if (!nav_state.has("imu")) {return std::nullopt;}
-  const auto & imus = nav_state.get<IMUPerceptions>("imu");
-  if (imus.empty() || !imus.back()) {return std::nullopt;}
-  const auto & imu_msg = imus.back()->data;
+  const auto & imu = nav_state.get<IMUPerception>("imu");
+  const auto & imu_msg = imu.data;
   tf2::Quaternion q(imu_msg.orientation.x, imu_msg.orientation.y,
     imu_msg.orientation.z, imu_msg.orientation.w);
   if (q.length2() < 1e-12) {return std::nullopt;}
@@ -689,11 +856,11 @@ static ScoreAgg score_particle_sensor_cloud(
 // ---------- correct() ----------
 void AMCLLocalizer::correct(NavState & nav_state)
 {
-  if (!nav_state.has("points")) {
-    RCLCPP_WARN(get_node()->get_logger(), "No points perceptions yet");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
 
   if (!nav_state.has("map.bonxai")) {
     RCLCPP_WARN(get_node()->get_logger(), "No Bonxai map yet");

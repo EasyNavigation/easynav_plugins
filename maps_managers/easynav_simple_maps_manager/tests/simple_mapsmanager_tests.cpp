@@ -17,7 +17,7 @@
 
 #include "easynav_simple_common/SimpleMap.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
 
 #include "rclcpp/rclcpp.hpp"
@@ -68,7 +68,7 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
 
   easynav::NavState navstate;
   auto perception = std::make_shared<easynav::PointPerception>();
-  navstate.set("points", easynav::PointPerceptions());
+  navstate.set("laser", easynav::PointPerception());
 
   perception->data.points.resize(6);
   perception->data.points[0].x = 1.0;
@@ -94,14 +94,13 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
   perception->frame_id = "map";
   perception->valid = true;
 
-  easynav::PointPerceptions perceptions;
-  perceptions.push_back(perception);
-  navstate.set("points", perceptions);
+  navstate.set("laser", perception);
+  // navstate.set_group("points", {"laser"});
 
   manager->update(navstate);
 
-  ASSERT_TRUE(navstate.has("map.dynamic"));
-  auto map = navstate.get<easynav::SimpleMap>("map.dynamic");
+  ASSERT_TRUE(navstate.has("map"));
+  auto map = navstate.get<easynav::SimpleMap>("map");
 
   auto cell1 = map.metric_to_cell(1.0, 1.0);
   EXPECT_TRUE(map.at(cell1.first, cell1.second));
@@ -149,8 +148,8 @@ TEST_F(SimpleMapsManagerTest, IncomingOccupancyGridUpdatesMaps)
   manager->update(navstate);
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-  ASSERT_TRUE(navstate.has("map.static"));
-  const auto & map = navstate.get<easynav::SimpleMap>("map.static");
+  ASSERT_TRUE(navstate.has("map.base"));
+  const auto & map = navstate.get<easynav::SimpleMap>("map.base");
 
   EXPECT_EQ(map.at(5, 5), 1);
   EXPECT_EQ(map.at(1, 1), 0);

@@ -17,7 +17,7 @@
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_common/cost_values.hpp"
@@ -40,13 +40,17 @@ ObstacleFilter::on_initialize()
 void
 ObstacleFilter::update(NavState & nav_state)
 {
-  if (!nav_state.has("points")) {
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
-
-  auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map.dynamic.filtered");
+  auto dynamic_map_ptr = nav_state.get_ptr<Costmap2D>("map");
+  if (!dynamic_map_ptr) {
+    RCLCPP_WARN(get_node()->get_logger(), "There is no map in NavState");
+    return;
+  }
   Costmap2D & dynamic_map = *dynamic_map_ptr;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -54,7 +58,7 @@ ObstacleFilter::update(NavState & nav_state)
 
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(dynamic_map.getResolution())
-  .fuse(tf_info.robot_frame)
+  .fuse(tf_info.map_frame)
   .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN});
 
   const auto & fused = view.as_points();
@@ -80,7 +84,7 @@ ObstacleFilter::update(NavState & nav_state)
 
   if (!fused.empty()) {
     ObstacleBounds bb{min_x, min_y, max_x, max_y};
-    nav_state.set("map.dynamic.obstacle_bounds", bb);
+    nav_state.set("map.obstacle_bounds", bb);
   }
 }
 
