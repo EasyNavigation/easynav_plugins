@@ -52,6 +52,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
 | Subscription | `/odom` | `nav_msgs/msg/Odometry` | Read odometry when compute_odom_from_tf=false (not present here). | SensorDataQoS (reliable) |
+| Subscription | `initialpose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Initialize particles pose to the received pose, using covariance. | depth=10 |
 | Publisher | `<node_fqn>/<plugin>/particles` | `geometry_msgs/msg/PoseArray` | Publishes the current particle set. | depth=10 |
 | Publisher | `<node_fqn>/<plugin>/pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Estimated pose with covariance. | depth=10 |
 
@@ -64,7 +65,7 @@ This package does not create service servers or clients.
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `points` | `PointPerceptions` | **Read** | Perception point clouds used in correction. |
-| `map.static` | `SimpleMap` | **Read** | Static map for likelihood evaluation. |
+| `map.base` | `SimpleMap` | **Read** | Static map for likelihood evaluation. |
 | `robot_pose` | `nav_msgs::msg::Odometry` | **Write** | Estimated robot pose. |
 
 ## TF Frames

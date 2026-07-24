@@ -21,10 +21,12 @@
 
 #include "nav_msgs/msg/odometry.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
+#include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "easynav_core/LocalizerMethodBase.hpp"
 #include "tf2_ros/static_transform_broadcaster.hpp"
 #include "sensor_msgs/msg/imu.hpp"
 #include <GeographicLib/UTMUPS.hpp>
+#include <optional>
 
 namespace easynav
 {
@@ -82,6 +84,16 @@ public:
    * @param nav_state The current navigation state of the system.
    */
   virtual void update(NavState & nav_state) override;
+
+protected:
+  /// Subscriber for the initial pose.
+  rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr init_pose_sub_;
+
+  /// Initial pose received but not yet applied (e.g. waiting for a valid GPS fix).
+  std::optional<geometry_msgs::msg::PoseWithCovarianceStamped> pending_init_pose_;
+
+  /// Callback for /initialpose.
+  void init_pose_callback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);
 
 private:
   /**

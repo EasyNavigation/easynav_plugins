@@ -28,7 +28,13 @@ GPS-based localizer that fuses NavSatFix and IMU to publish odometry in an odom-
 
 ## Parameters
 
-This plugin does not declare configurable ROS parameters.
+All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easynav_gps_localizer/GpsLocalizer/...`.
+
+| Name | Type | Default | Description |
+|---|---|---:|---|
+| `<plugin>.initial_pose.x` | `double` | `0.0` | Initial X position (m). |
+| `<plugin>.initial_pose.y` | `double` | `0.0` | Initial Y position (m). |
+| `<plugin>.initial_pose.yaw` | `double` | `0.0` | Initial yaw (rad). |
 
 ## Interfaces (Topics and Services)
 
@@ -38,6 +44,7 @@ This plugin does not declare configurable ROS parameters.
 |---|---|---|---|---|
 | Subscription | `robot/gps/fix` | `sensor_msgs/msg/NavSatFix` | Raw GPS fix. | SensorDataQoS (reliable) |
 | Subscription | `imu/data` | `sensor_msgs/msg/Imu` | IMU orientation for yaw fusion. | SensorDataQoS (reliable) |
+| Subscription | `initialpose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Seed/reset the localizer pose from an external initial pose estimate. | depth=10 |
 | Publisher | `robot/odom_gps` | `nav_msgs/msg/Odometry` | Odometry fused from GPS + IMU (UTM-projected). | SensorDataQoS |
 
 ### Services

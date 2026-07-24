@@ -97,7 +97,7 @@ has been written to the NavState on each update cycle.
 - **Plugin Name:** `easynav_routes_maps_manager/RoutesCostmapFilter`
 - **Type:** `easynav::RoutesCostmapFilter`
 - **Description:**
-	Reads the current `RoutesMap` and a dynamic costmap (`map.dynamic.filtered`)
+	Reads the current `RoutesMap` and a dynamic costmap (`map`)
 	from the NavState and raises the cost of all cells that do not lie within a
 	corridor around any route segment. This effectively constrains path planners
 	to stay close to the defined routes.
@@ -114,7 +114,7 @@ has been written to the NavState on each update cycle.
 | Key | Type | Access | Description |
 |---|---|---|---|
 | `routes` | `RoutesMap` | **Read** | In-memory set of route segments written by `RoutesMapsManager` on each update. |
-| `map.dynamic.filtered` | `Costmap2D` | **Read/Write** | Dynamic costmap that is modified in place: cells outside the corridor are raised to at least `min_cost`. |
+| `map` | `Costmap2D` | **Read/Write** | Dynamic costmap that is modified in place: cells outside the corridor are raised to at least `min_cost`. |
 
 In addition, the filter publishes a debug `nav_msgs/msg/OccupancyGrid` topic
 with the filtered costmap for visualization. Other routes filters may use

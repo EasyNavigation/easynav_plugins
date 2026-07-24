@@ -17,8 +17,8 @@
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/Perceptions.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "octomap_core/Octomap.hpp"
 
@@ -45,11 +45,13 @@ ObstacleFilter::update(::easynav::NavState & nav_state)
   if (!nav_state.has("map")) {
     return;
   }
-  if (!nav_state.has("points")) {
+
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
   octomap_ = nav_state.get<::octomap::Octomap>("map");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 

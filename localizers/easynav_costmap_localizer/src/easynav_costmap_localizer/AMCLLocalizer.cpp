@@ -22,7 +22,7 @@
 #include "tf2/LinearMath/Vector3.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_common/cost_values.hpp"
 
@@ -224,13 +224,27 @@ AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
   reseed_time_ = 1.0 / reseed_freq;
 
+  // Check if any of the standard deviations are non-positive
+  // This is undefined behavior in std::normal_distribution and may result in a runtime assertion
+  if (
+    std_dev_xy <= 0.0 ||
+    std_dev_yaw <= 0.0 ||
+    noise_translation_ <= 0.0 ||
+    noise_rotation_ <= 0.0 ||
+    noise_translation_to_rotation_ <= 0.0 ||
+    min_noise_xy_ <= 0.0 ||
+    min_noise_yaw_ <= 0.0)
+  {
+    throw std::runtime_error("AMCLLocalizer: standard deviations must be positive");
+  }
+
   RCLCPP_INFO(node->get_logger(), "Initialized AMCL pose with %d particles", num_particles);
   RCLCPP_INFO(node->get_logger(), "at position (%lf, %lf, %lf) std_dev [%lf, %lf]",
     x_init, y_init, yaw_init, std_dev_xy, std_dev_yaw);
 
-  std::normal_distribution<double> noise_x(x_init, std_dev_xy);
-  std::normal_distribution<double> noise_y(y_init, std_dev_xy);
-  std::normal_distribution<double> noise_yaw(yaw_init, std_dev_yaw);
+  std::normal_distribution<double> noise_x(x_init, std::max(std_dev_xy, 1e-12));
+  std::normal_distribution<double> noise_y(y_init, std::max(std_dev_xy, 1e-12));
+  std::normal_distribution<double> noise_yaw(yaw_init, std::max(std_dev_yaw, 1e-12));
 
   particles_.resize(num_particles);
   for (auto & p : particles_) {
@@ -416,7 +430,7 @@ AMCLLocalizer::init_pose_callback(
   yaw_stddev = std::max(yaw_stddev, min_noise_yaw_);
 
   std::normal_distribution<double> standard_normal(0.0, 1.0);
-  std::normal_distribution<double> yaw_noise(0.0, yaw_stddev);
+  std::normal_distribution<double> yaw_noise(0.0, std::max(yaw_stddev, 1e-12));
 
   const std::size_t N = particles_.size();
 
@@ -531,15 +545,17 @@ AMCLLocalizer::predict([[maybe_unused]] NavState & nav_state)
   double rot_len = std::abs(yaw);
 
 
+  std::normal_distribution<double> noise_dx(
+    0.0, std::max(std::abs(dx) * noise_translation_, 1e-12));
+  std::normal_distribution<double> noise_dy(
+    0.0, std::max(std::abs(dy) * noise_translation_, 1e-12));
+  std::normal_distribution<double> noise_dz(
+    0.0, std::max(std::abs(dz) * noise_translation_, 1e-12));
+  std::normal_distribution<double> noise_yaw(
+    0.0,
+    std::max(rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_, 1e-12));
+
   for (auto & p : particles_) {
-    std::normal_distribution<double> noise_dx(0.0, std::abs(dx) * noise_translation_);
-    std::normal_distribution<double> noise_dy(0.0, std::abs(dy) * noise_translation_);
-    std::normal_distribution<double> noise_dz(0.0, std::abs(dz) * noise_translation_);
-
-    std::normal_distribution<double> noise_yaw(
-      0.0,
-      rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_);
-
     tf2::Vector3 noisy_translation(
       dx + noise_dx(rng_),
       dy + noise_dy(rng_),
@@ -566,25 +582,24 @@ AMCLLocalizer::predict([[maybe_unused]] NavState & nav_state)
 void
 AMCLLocalizer::correct(NavState & nav_state)
 {
-  if (!nav_state.has("points")) {
-    RCLCPP_WARN(get_node()->get_logger(), "There is yet no points perceptions");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    RCLCPP_WARN(get_node()->get_logger(), "There are no points perceptions");
     return;
   }
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
-
-  if (!nav_state.has("map.static")) {
-    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.static map");
+  if (!nav_state.has("map.base")) {
+    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map.base map");
     return;
   }
 
-  const auto & map_static = nav_state.get<Costmap2D>("map.static");
+  const auto & map_static = nav_state.get<Costmap2D>("map.base");
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(map_static.getResolution())
-  .fuse(tf_info.robot_frame)
+  .fuse(tf_info.robot_footprint_frame, last_input_time_)
   .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
   .collapse({NAN, NAN, 0.1})
   .downsample(map_static.getResolution());
@@ -594,21 +609,6 @@ AMCLLocalizer::correct(NavState & nav_state)
     RCLCPP_WARN(get_node()->get_logger(), "No points to correct");
     return;
   }
-
-  auto latest_time = [](const PointPerceptions & perceptions){
-      rclcpp::Time latest_stamp;
-      bool inited = false;
-
-      for (const auto & perception : perceptions) {
-        if (!inited || perception->stamp > latest_stamp) {
-          latest_stamp = perception->stamp;
-          inited = true;
-        }
-      }
-      return latest_stamp;
-    };
-
-  last_input_time_ = latest_time(perceptions);
 
   for (auto & particle : particles_) {
     int hits = 0;
@@ -682,7 +682,7 @@ AMCLLocalizer::reseed()
   double yaw_variance = computeYawVariance(particles_, 0, N_top);
   double yaw_stddev = std::sqrt(yaw_variance);
   std::normal_distribution<double> yaw_noise(0.0, std::max(yaw_stddev, min_noise_yaw_));
-  std::normal_distribution<double> index_dist(0.0, 0.05 * static_cast<double>(N));
+  std::normal_distribution<double> index_dist(0.0, std::max(0.05 * static_cast<double>(N), 1e-12));
   std::normal_distribution<double> standard_normal(0.0, 1.0);
 
   for (std::size_t i = N_top; i < N; ++i) {

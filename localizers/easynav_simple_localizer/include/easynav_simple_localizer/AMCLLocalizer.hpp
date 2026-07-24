@@ -155,12 +155,22 @@ protected:
   /// Subscriber for odometry messages.
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
 
+  /// Subscriber for the initial pose.
+  rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr init_pose_sub_;
+
   /**
    * @brief Callback for receiving odometry updates.
    *
    * @param msg The incoming odometry message.
    */
   void odom_callback(nav_msgs::msg::Odometry::UniquePtr msg);
+
+  /**
+   * @brief Callback for receiving the initial pose.
+   *
+   * @param msg The incoming initial pose with covariance.
+   */
+  void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
 
   /// List of particles representing the belief distribution.
   std::vector<Particle> particles_;

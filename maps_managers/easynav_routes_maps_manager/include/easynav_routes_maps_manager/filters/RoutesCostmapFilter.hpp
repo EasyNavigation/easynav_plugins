@@ -28,7 +28,7 @@ namespace easynav
 /// @brief Costmap filter that raises costs outside navigation routes.
 ///
 /// This filter reads the current RoutesMap and a dynamic costmap
-/// ("map.dynamic.filtered") from the NavState. All cells that do not
+/// ("map") from the NavState. All cells that do not
 /// lie within a configurable corridor around any route segment have
 /// their cost raised to at least @c min_cost_. A debug occupancy grid
 /// representing the filtered costmap is also published.
@@ -56,7 +56,7 @@ public:
 
   /// @brief Apply the routes-based filtering to the costmap.
   ///
-  /// If both "routes" and "map.dynamic.filtered" entries are present
+  /// If both "routes" and "map" entries are present
   /// in the NavState, the costmap is modified in place and the debug
   /// occupancy grid is published. If either entry is missing, the
   /// function returns without making changes.

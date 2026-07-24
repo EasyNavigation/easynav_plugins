@@ -23,7 +23,7 @@
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_serest_controller/SerestController.hpp"
@@ -295,9 +295,9 @@ SerestController::closest_obstacle_distance(
   }
 
   // 2) Analyze distance sensors
-  if (!nav_state.has("points")) {return std::numeric_limits<double>::infinity();}
+  if (!nav_state.has_group("points")) {return std::numeric_limits<double>::infinity();}
 
-  const auto & perceptions = nav_state.get<PointPerceptions>("points");
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   auto view = PointPerceptionsOpsView(perceptions);
@@ -309,21 +309,14 @@ SerestController::closest_obstacle_distance(
   .downsample(0.3);
   const auto & fused = view.as_points();
 
-  auto latest_time = [](const PointPerceptions & perceptions){
-      rclcpp::Time latest_stamp;
-      bool inited = false;
-
-      for (const auto & perception : perceptions) {
-        if (!inited || perception->stamp > latest_stamp) {
-          latest_stamp = perception->stamp;
-          inited = true;
-        }
-      }
-      return latest_stamp;
-    };
-
-  if (last_input_ts_ < latest_time(perceptions)) {
-    last_input_ts_ = latest_time(perceptions);
+  {
+    const auto view_latest = view.get_latest_stamp();
+    const rclcpp::Time view_latest_same_clock(
+      view_latest.nanoseconds(),
+      last_input_ts_.get_clock_type());
+    if (last_input_ts_ < view_latest_same_clock) {
+      last_input_ts_ = view_latest_same_clock;
+    }
   }
 
   double min_dist = std::numeric_limits<double>::infinity();
@@ -382,8 +375,8 @@ SerestController::fetch_required_inputs(
 {
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map.dynamic")) {
-    publish_stop(nav_state, tf_info.robot_frame);
+  if (!nav_state.has("path") || !nav_state.has("robot_pose") || !nav_state.has("map")) {
+    publish_stop(nav_state, tf_info.robot_footprint_frame);
     return false;
   }
 
@@ -391,10 +384,10 @@ SerestController::fetch_required_inputs(
   odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
 
   if (rclcpp::Time(path.header.stamp, last_input_ts_.get_clock_type()) > last_input_ts_) {
-    last_input_ts_ = path.header.stamp;
+    last_input_ts_ = rclcpp::Time(path.header.stamp, last_input_ts_.get_clock_type());
   }
   if (rclcpp::Time(odom.header.stamp, last_input_ts_.get_clock_type()) > last_input_ts_) {
-    last_input_ts_ = odom.header.stamp;
+    last_input_ts_ = rclcpp::Time(odom.header.stamp, last_input_ts_.get_clock_type());
   }
 
   if (path.poses.empty()) {
