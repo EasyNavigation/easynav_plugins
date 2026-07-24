@@ -17,6 +17,15 @@ find_package(geographic_msgs REQUIRED)
 find_package(robot_localization REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(angles REQUIRED)
+find_package(diagnostic_msgs REQUIRED)
+find_package(diagnostic_updater REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(Eigen3 REQUIRED NO_MODULE)
 
 # Geographiclib installs FindGeographicLib.cmake to this non-standard location
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/cmake/geographiclib/")
@@ -35,6 +44,15 @@ set(dependencies
   pluginlib
   geographic_msgs
   robot_localization
+  diagnostic_msgs
+  diagnostic_updater
+  geometry_msgs
+  nav_msgs
+  sensor_msgs
+  tf2
+  tf2_geometry_msgs
+  tf2_ros
+  eigen
 )
 
 add_library(fusion_localizer SHARED
@@ -59,6 +77,15 @@ target_link_libraries(fusion_localizer
   ${robot_localization_LIBRARIES}
   angles::angles
   yaets::yaets
+  diagnostic_updater::diagnostic_updater
+  ${diagnostic_msgs_TARGETS}
+  ${geometry_msgs_TARGETS}
+  ${nav_msgs_TARGETS}
+  ${sensor_msgs_TARGETS}
+  tf2::tf2
+  tf2_geometry_msgs::tf2_geometry_msgs
+  tf2_ros::tf2_ros
+  Eigen3::Eigen
 )
 
 target_compile_definitions(fusion_localizer PUBLIC EASYNAV_DEBUG_WITH_YAETS)

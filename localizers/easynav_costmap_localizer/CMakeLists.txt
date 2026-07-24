@@ -18,6 +18,7 @@ find_package(tf2_geometry_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(Eigen3 REQUIRED NO_MODULE)
 
 
 add_library(${PROJECT_NAME} SHARED
@@ -35,6 +36,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   tf2::tf2
   tf2_ros::tf2_ros
   pluginlib::pluginlib
+  Eigen3::Eigen
   ${tf2_geometry_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
@@ -82,5 +84,6 @@ ament_export_dependencies(
   geometry_msgs
   std_srvs
   nav_msgs
+  eigen
 )
 ament_package()

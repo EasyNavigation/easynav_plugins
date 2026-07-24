@@ -15,6 +15,8 @@ find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(ament_index_cpp REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(PCL REQUIRED COMPONENTS common io filters)
 find_package(pcl_conversions REQUIRED)
 find_package(std_srvs REQUIRED)
@@ -55,6 +57,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   easynav_core::easynav_core
+  rclcpp::rclcpp
   tf2::tf2
   tf2_ros::tf2_ros
   pluginlib::pluginlib
@@ -105,6 +108,7 @@ pluginlib_export_plugin_description_file(easynav_core easynav_bonxai_maps_manage
 ament_export_dependencies(
   easynav_common
   easynav_core
+  rclcpp
   tf2
   tf2_ros
   pluginlib

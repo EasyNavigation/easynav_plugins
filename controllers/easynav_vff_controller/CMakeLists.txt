@@ -13,6 +13,7 @@ find_package(easynav_common REQUIRED)
 find_package(easynav_sensors REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(PCL REQUIRED COMPONENTS common io)
+find_package(geometry_msgs REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(tf2 REQUIRED)
@@ -25,6 +26,8 @@ set(dependencies
   easynav_sensors
   pluginlib
   visualization_msgs
+  geometry_msgs
+  nav_msgs
   tf2
 )
 
@@ -42,6 +45,7 @@ target_link_libraries(vff_controller
   easynav_sensors::easynav_sensors
   pluginlib::pluginlib
   ${nav_msgs_TARGETS}
+  ${geometry_msgs_TARGETS}
   ${visualization_msgs_TARGETS}
   ${PCL_LIBRARIES}
 )
