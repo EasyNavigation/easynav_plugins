@@ -19,7 +19,7 @@
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 
-#include "ament_index_cpp/get_package_share_path.hpp"
+#include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
 
 #include "easynav_common/YTSession.hpp"
@@ -62,7 +62,7 @@ SimpleMapsManager::on_initialize()
   if (package_name != "" && map_path_file != "") {
     std::string pkgpath;
     try {
-      pkgpath = ament_index_cpp::get_package_share_path(package_name);
+      pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + "/" + map_path_file;
     } catch(ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());

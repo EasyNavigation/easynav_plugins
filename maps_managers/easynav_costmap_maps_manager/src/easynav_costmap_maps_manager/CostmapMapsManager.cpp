@@ -24,7 +24,7 @@
 #include "easynav_costmap_maps_manager/map_io.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
-#include "ament_index_cpp/get_package_share_path.hpp"
+#include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
 
 namespace easynav
@@ -110,7 +110,7 @@ CostmapMapsManager::on_initialize()
   map_path_ = "/tmp/default.map.yaml";
   if (!package_name.empty() && !map_path_file.empty()) {
     try {
-      const std::string pkgpath = ament_index_cpp::get_package_share_path(package_name);
+      const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + map_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());

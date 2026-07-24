@@ -29,7 +29,7 @@
 #include "pcl/point_cloud.h"
 #include "pcl/filters/voxel_grid.h"
 
-#include "ament_index_cpp/get_package_share_path.hpp"
+#include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
 
 namespace easynav
