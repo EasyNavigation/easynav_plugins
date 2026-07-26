@@ -2,6 +2,14 @@
 Changelog for package easynav_costmap_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add missing easynav_sensors deps
+* Any change in the costmap set it as modified
+* Adding timestamp to costmap
+* GPLv3 -> Apache 2.0
+* Contributors: Francisco Martín Rico, Juan S. Cely G., Miguel, migueldm
+
 0.2.1 (2026-02-27)
 ------------------
 * 0.2.0

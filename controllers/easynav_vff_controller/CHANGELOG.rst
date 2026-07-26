@@ -2,6 +2,15 @@
 Changelog for package easynav_vff_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add missing easynav_sensors deps
+* Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
+* Update plugins to new sensors API
+* GPLv3 -> Apache 2.0
+* Sync to current EasyNavigation
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
+
 0.2.1 (2026-02-27)
 ------------------
 * 0.2.0

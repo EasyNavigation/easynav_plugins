@@ -2,6 +2,16 @@
 Changelog for package easynav_costmap_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Sync with Rolling branch
+* Cells cost have no real impact in path creation
+* Navstate key among filters are always map, not an arbitrary key
+* Cells cost have no real impact in path creation
+* Fix segfault in some cases and reduce extrapolation to the future
+* GPLv3 -> Apache 2.0
+* Contributors: Francisco Martín Rico, Juan S. Cely G., Miguel, migueldm
+
 0.2.1 (2026-02-27)
 ------------------
 * 0.2.0

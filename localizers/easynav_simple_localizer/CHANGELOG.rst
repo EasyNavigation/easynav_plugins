@@ -2,6 +2,21 @@
 Changelog for package easynav_simple_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add missing easynav_sensors deps
+* Avoid creating objects every loop cycle
+* Fix std::normal_distribution when stdev is zero
+* Navstate key among filters are always map, not an arbitrary key
+* Check if std is non-positive before creating std::normal_distribution
+* Navstate key among filters are always map, not an arbitrary key
+* Update README.md for all localizers
+* Reset pose from RViz2 for every localizer
+* Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
+* Update plugins to new sensors API
+* GPLv3 -> Apache 2.0
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
+
 0.2.1 (2026-02-27)
 ------------------
 * 0.2.0

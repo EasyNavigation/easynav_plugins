@@ -2,6 +2,17 @@
 Changelog for package easynav_serest_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add missing easynav_sensors deps
+* Navstate key among filters are always map, not an arbitrary key
+* Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
+* Update plugins to new sensors API
+* Fix segfault in some cases and reduce extrapolation to the future
+* GPLv3 -> Apache 2.0
+* Sync to current EasyNavigation
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
+
 0.2.1 (2026-02-27)
 ------------------
 * 0.2.0

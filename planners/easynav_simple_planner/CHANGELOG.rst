@@ -2,6 +2,15 @@
 Changelog for package easynav_simple_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Sync with Rolling branch
+* Navstate key among filters are always map, not an arbitrary key
+* Navstate key among filters are always map, not an arbitrary key
+* Fix segfault in some cases and reduce extrapolation to the future
+* GPLv3 -> Apache 2.0
+* Contributors: Francisco Martín Rico, Juan S. Cely G., Miguel, migueldm
+
 0.2.1 (2026-02-27)
 ------------------
 * 0.2.0
