@@ -2,8 +2,8 @@
 Changelog for package easynav_fusion_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * deleted tests related to initial pose param which was removed. Removed spaces
 * fix: add gnss group to gps config and ge_group has group to meet new easynav features. Initial pose now changes initial utm pose to change robot position in the map

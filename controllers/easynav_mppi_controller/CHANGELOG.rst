@@ -2,8 +2,8 @@
 Changelog for package easynav_mppi_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Update plugins to new sensors API
 * GPLv3 -> Apache 2.0

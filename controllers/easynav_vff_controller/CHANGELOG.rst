@@ -2,8 +2,8 @@
 Changelog for package easynav_vff_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
 * Update plugins to new sensors API

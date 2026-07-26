@@ -2,8 +2,8 @@
 Changelog for package easynav_gps_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * GPLv3 -> Apache 2.0
 * Contributors: Francisco Martín Rico, Juan S. Cely G., Miguel, migueldm

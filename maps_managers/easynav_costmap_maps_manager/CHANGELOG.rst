@@ -2,8 +2,8 @@
 Changelog for package easynav_costmap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Update dynamic_map\_ with map key at navstate
 * Avoid rewrite map with dynamic_map

@@ -2,8 +2,8 @@
 Changelog for package easynav_octomap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Update calls to deprecated get_package_share_directory
 * Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
