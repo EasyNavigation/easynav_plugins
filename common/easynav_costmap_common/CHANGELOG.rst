@@ -2,8 +2,8 @@
 Changelog for package easynav_costmap_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Any change in the costmap set it as modified
 * Adding timestamp to costmap

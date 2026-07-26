@@ -2,8 +2,8 @@
 Changelog for package easynav_simple_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2026-07-26)
+------------------
 * Navstate key among filters are always map, not an arbitrary key
 * Navstate key among filters are always map, not an arbitrary key
 * Fix segfault in some cases and reduce extrapolation to the future

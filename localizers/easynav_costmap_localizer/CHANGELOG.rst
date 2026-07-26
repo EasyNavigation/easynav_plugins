@@ -2,8 +2,8 @@
 Changelog for package easynav_costmap_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Avoid creating objects every loop cycle
 * Fix std::normal_distribution when stdev is zero

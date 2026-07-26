@@ -2,8 +2,8 @@
 Changelog for package easynav_simple_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2026-07-26)
+------------------
 * GPLv3 -> Apache 2.0
 * Contributors: Francisco Martín Rico, Juan S. Cely, Miguel, migueldm
 

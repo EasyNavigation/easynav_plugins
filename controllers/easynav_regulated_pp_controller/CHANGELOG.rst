@@ -2,8 +2,8 @@
 Changelog for package easynav_regulated_pp_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Fix overshoot when DWPP is activated
 * Fix license and copyright

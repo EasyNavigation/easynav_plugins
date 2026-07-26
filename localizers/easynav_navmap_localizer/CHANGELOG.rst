@@ -2,8 +2,8 @@
 Changelog for package easynav_navmap_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Check if std is non-positive before creating std::normal_distribution
 * Update README.md for all localizers

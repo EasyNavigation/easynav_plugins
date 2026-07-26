@@ -2,8 +2,8 @@
 Changelog for package easynav_simple_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.1 (2026-07-26)
+------------------
 * Add missing easynav_sensors deps
 * Fix segfault in some cases and reduce extrapolation to the future
 * GPLv3 -> Apache 2.0
