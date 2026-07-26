@@ -2,6 +2,13 @@
 Changelog for package easynav_mppi_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add missing easynav_sensors deps
+* Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
+* GPLv3 -> Apache 2.0
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely, Miguel, migueldm
+
 0.0.2 (2025-10-12)
 ------------------
 * Reorganization initial

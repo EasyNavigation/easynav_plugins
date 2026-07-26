@@ -2,6 +2,16 @@
 Changelog for package easynav_mpc_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add missing easynav_sensors deps
+* Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
+* Update plugins to new sensors API
+* GPLv3 -> Apache 2.0
+* Collision checker scope was changed
+* Collision avoidance was improved
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely, Juan S. Cely G., Miguel, migueldm
+
 0.3.1 (2026-02-27)
 ------------------
 * GPLv3 -> Apache 2.0

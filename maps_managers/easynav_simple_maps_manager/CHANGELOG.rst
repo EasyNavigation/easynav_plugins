@@ -2,6 +2,20 @@
 Changelog for package easynav_simple_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add missing easynav_sensors deps
+* Navstate key among filters are always map, not an arbitrary key
+* Update calls to deprecated get_package_share_directory
+* Update calls to deprecated get_package_share_directory
+* Navstate key among filters are always map, not an arbitrary key
+* Reset pose from RViz2 for every localizer
+* Remove group points in tests
+* Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
+* Update plugins to new sensors API
+* GPLv3 -> Apache 2.0
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely, Miguel, migueldm
+
 0.0.2 (2025-10-12)
 ------------------
 * Reorganization initial
