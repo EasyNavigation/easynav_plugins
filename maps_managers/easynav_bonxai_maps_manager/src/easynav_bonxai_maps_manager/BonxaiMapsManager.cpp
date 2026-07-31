@@ -88,11 +88,12 @@ BonxaiMapsManager::on_initialize()
         if (!std::isfinite(p.x()) || !std::isfinite(p.y()) || !std::isfinite(p.z())) {continue;}
 
         bonxai_map_->addHitPoint(p);
-        pcl_out.push_back({
+        pcl_out.push_back(
+          {
             static_cast<float>(p.x()),
             static_cast<float>(p.y()),
             static_cast<float>(p.z())
-        });
+          });
       }
 
       bonxai_msg_.data.clear();
@@ -123,7 +124,8 @@ BonxaiMapsManager::on_initialize()
   }
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
     [this](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
       update_from_pc2(*msg);
@@ -131,7 +133,8 @@ BonxaiMapsManager::on_initialize()
     });
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_occ_map",
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -173,8 +176,8 @@ BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = ::easynav::RTTFBuffer::getInstance()->lookupTransform(
-          tf_info.map_frame, pc2.header.frame_id, pc2.header.stamp,
-          rclcpp::Duration::from_seconds(0.05));
+      tf_info.map_frame, pc2.header.frame_id, pc2.header.stamp,
+      rclcpp::Duration::from_seconds(0.05));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
     return;
@@ -202,11 +205,12 @@ BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
   bonxai_result.clear();
   bonxai_map_->getOccupiedVoxels(bonxai_result);
   for (const auto & voxel : bonxai_result) {
-    pcl_out.push_back({
+    pcl_out.push_back(
+      {
         static_cast<float>(voxel.x()),
         static_cast<float>(voxel.y()),
         static_cast<float>(voxel.z())
-    });
+      });
   }
 
   bonxai_msg_.data.clear();
@@ -264,11 +268,12 @@ BonxaiMapsManager::update_from_occ(const nav_msgs::msg::OccupancyGrid & occ)
   bonxai_result.clear();
   bonxai_map_->getOccupiedVoxels(bonxai_result);
   for (const auto & voxel : bonxai_result) {
-    pcl_out.push_back({
+    pcl_out.push_back(
+      {
         static_cast<float>(voxel.x()),
         static_cast<float>(voxel.y()),
         static_cast<float>(voxel.z())
-    });
+      });
   }
 
   bonxai_msg_.data.clear();

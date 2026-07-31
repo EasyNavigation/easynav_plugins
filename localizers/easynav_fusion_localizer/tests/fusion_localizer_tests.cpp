@@ -71,7 +71,8 @@ TEST_F(FusionLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbac
 
   // Provide at least one parameter override so FusionLocalizer considers a filter configured.
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test.global_filter.frequency", 30.0),
   });
 

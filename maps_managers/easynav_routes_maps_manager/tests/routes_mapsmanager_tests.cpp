@@ -78,7 +78,8 @@ TEST_F(RoutesMapsManagerTest, LoadsRoutesFromValidYaml)
   node->declare_parameter("routes.package", std::string(""));
   node->declare_parameter("routes.map_path_file", std::string(""));
 
-  node->set_parameters({
+  node->set_parameters(
+  {
     rclcpp::Parameter("routes.map_path_file", filename),
     rclcpp::Parameter("routes.package", std::string(""))
   });
@@ -106,7 +107,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenMapPathEmpty)
   node->declare_parameter("routes.package", std::string(""));
   node->declare_parameter("routes.map_path_file", std::string(""));
 
-  node->set_parameters({
+  node->set_parameters(
+  {
     rclcpp::Parameter("routes.map_path_file", std::string("")),
     rclcpp::Parameter("routes.package", std::string(""))
   });
@@ -132,7 +134,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenYamlMissing)
   node->declare_parameter("routes.package", std::string(""));
   node->declare_parameter("routes.map_path_file", std::string("/tmp/non_existent_routes.yaml"));
 
-  node->set_parameters({
+  node->set_parameters(
+  {
     rclcpp::Parameter("routes.map_path_file", std::string("/tmp/non_existent_routes.yaml")),
     rclcpp::Parameter("routes.package", std::string(""))
   });
@@ -159,7 +162,8 @@ TEST_F(RoutesMapsManagerTest, DefaultRouteWhenNoRoutesKey)
   node->declare_parameter("routes.package", std::string(""));
   node->declare_parameter("routes.map_path_file", std::string(""));
 
-  node->set_parameters({
+  node->set_parameters(
+  {
     rclcpp::Parameter("routes.map_path_file", filename),
     rclcpp::Parameter("routes.package", std::string(""))
   });
@@ -191,7 +195,8 @@ TEST_F(RoutesMapsManagerTest, UpdateWritesRoutesIntoNavState)
   node->declare_parameter("routes.package", std::string(""));
   node->declare_parameter("routes.map_path_file", std::string(""));
 
-  node->set_parameters({
+  node->set_parameters(
+  {
     rclcpp::Parameter("routes.map_path_file", filename),
     rclcpp::Parameter("routes.package", std::string(""))
   });

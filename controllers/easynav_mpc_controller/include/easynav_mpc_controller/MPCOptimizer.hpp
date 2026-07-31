@@ -105,7 +105,7 @@ public:
   /// \param data MPCParameter pointer with parameters used by optimizer
   /// \return double cost value used by nlOpt in internal callback
   double cost_function(const std::vector<double> & u, [[maybe_unused]]
-    std::vector<double> & grad, void *data);
+    std::vector<double> & grad, void * data);
 
   /// \brief Real cost function with static propierties
   /// \param u std::vector<double> Velocity vector to be optimized
@@ -114,15 +114,15 @@ public:
   /// \return double cost value used by nlOpt in internal callback
   static double nlopt_cost_callback(
     const std::vector<double> & x,
-    std::vector<double> & grad, void *data);
+    std::vector<double> & grad, void * data);
 
 };
 
 /// \brief Struct used as element in callback.
 struct NLoptCallbackData
 {
-  MPCOptimizer *optimizer;                        ///< Pointer to optimizer.
-  MPCParameters *params;                          ///< Pointer to parameter for optimizer.
+  MPCOptimizer * optimizer;                        ///< Pointer to optimizer.
+  MPCParameters * params;                          ///< Pointer to parameter for optimizer.
 };
 
 }  // namespace easynav

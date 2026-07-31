@@ -101,7 +101,8 @@ RoutesCostmapFilter::update(NavState & nav_state)
   std::vector<Segment2D> segments;
   segments.reserve(routes.size());
   for (const auto & seg : routes) {
-    segments.push_back({
+    segments.push_back(
+      {
         seg.start.position.x,
         seg.start.position.y,
         seg.end.position.x,

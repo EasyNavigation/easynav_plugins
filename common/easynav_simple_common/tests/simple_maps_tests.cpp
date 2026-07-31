@@ -121,7 +121,8 @@ TEST_F(SimpleMapTest, OccupancyGridConversion)
   };
 
   for (std::size_t i = 0; i < grid_msg.data.size(); ++i) {
-    bool is_occupied = std::find(expected_indices.begin(),
+    bool is_occupied = std::find(
+      expected_indices.begin(),
       expected_indices.end(), i) != expected_indices.end();
     EXPECT_EQ(grid_msg.data[i], is_occupied ? 100 : 0);
   }

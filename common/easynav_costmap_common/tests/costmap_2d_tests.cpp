@@ -117,7 +117,8 @@ TEST_F(Costmap2DTest, OccupancyGridConversion)
   };
 
   for (size_t i = 0; i < grid.data.size(); ++i) {
-    bool expected = std::find(expected_indices.begin(),
+    bool expected = std::find(
+      expected_indices.begin(),
       expected_indices.end(), i) != expected_indices.end();
     EXPECT_EQ(grid.data[i], expected ? 100 : 0);
   }

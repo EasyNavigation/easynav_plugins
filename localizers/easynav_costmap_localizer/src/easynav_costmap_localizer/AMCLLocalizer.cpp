@@ -214,7 +214,8 @@ AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
   node->get_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
   node->get_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
-  node->get_parameter<double>(plugin_name + ".noise_translation_to_rotation",
+  node->get_parameter<double>(
+    plugin_name + ".noise_translation_to_rotation",
     noise_translation_to_rotation_);
   node->get_parameter<double>(plugin_name + ".min_noise_xy", min_noise_xy_);
   node->get_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
@@ -239,7 +240,8 @@ AMCLLocalizer::on_initialize()
   }
 
   RCLCPP_INFO(node->get_logger(), "Initialized AMCL pose with %d particles", num_particles);
-  RCLCPP_INFO(node->get_logger(), "at position (%lf, %lf, %lf) std_dev [%lf, %lf]",
+  RCLCPP_INFO(
+    node->get_logger(), "at position (%lf, %lf, %lf) std_dev [%lf, %lf]",
     x_init, y_init, yaw_init, std_dev_xy, std_dev_yaw);
 
   std::normal_distribution<double> noise_x(x_init, std::max(std_dev_xy, 1e-12));
@@ -272,7 +274,8 @@ AMCLLocalizer::on_initialize()
   }
 
   particles_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseArray>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/particles", 10);
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/particles",
+    10);
   estimate_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
     node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/pose", 10);
 
@@ -501,7 +504,7 @@ AMCLLocalizer::update_odom_from_tf()
   try {
     tf_msg = RTTFBuffer::getInstance()->lookupTransform(
       tf_info.odom_frame, tf_info.robot_frame, tf2::TimePointZero,
-        tf2::durationFromSec(0.0));
+      tf2::durationFromSec(0.0));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "AMCLLocalizer::update: TF failed: %s", ex.what());
     return;
@@ -663,7 +666,8 @@ AMCLLocalizer::reseed()
   const std::size_t N = particles_.size();
   const std::size_t N_top = N / 2;
 
-  std::sort(particles_.begin(), particles_.end(),
+  std::sort(
+    particles_.begin(), particles_.end(),
     [](const Particle & a, const Particle & b) {
       return a.weight > b.weight;
     });
@@ -700,8 +704,9 @@ AMCLLocalizer::reseed()
     double dx = l00 * z0;
     double dy = l10 * z0 + l11 * z1;
 
-    std::normal_distribution<double> xy_noise(0.0, std::max(sqrt(dx * dx + dy * dy),
-      min_noise_xy_));
+    std::normal_distribution<double> xy_noise(0.0, std::max(
+        sqrt(dx * dx + dy * dy),
+        min_noise_xy_));
 
     tf2::Vector3 new_origin(origin.x() + xy_noise(rng_), origin.y() + xy_noise(rng_), 0.0);
 
@@ -780,7 +785,8 @@ AMCLLocalizer::getEstimatedPose() const
   const std::size_t N_top = N / 2;
 
   std::vector<Particle> sorted_particles = particles_;
-  std::sort(sorted_particles.begin(), sorted_particles.end(),
+  std::sort(
+    sorted_particles.begin(), sorted_particles.end(),
     [](const Particle & a, const Particle & b) {
       return a.weight > b.weight;
     });
@@ -852,7 +858,8 @@ AMCLLocalizer::get_pose()
     const std::size_t N_top = N / 2;
 
     std::vector<Particle> sorted_particles = particles_;
-    std::sort(sorted_particles.begin(), sorted_particles.end(),
+    std::sort(
+      sorted_particles.begin(), sorted_particles.end(),
       [](const Particle & a, const Particle & b) {
         return a.weight > b.weight;
       });

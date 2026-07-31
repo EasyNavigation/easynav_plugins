@@ -72,7 +72,8 @@ TEST_F(AMCLLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbackG
   const double yaw1 = 2.0;
 
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test.num_particles", 100),
     rclcpp::Parameter("test.initial_pose.x", x0),
     rclcpp::Parameter("test.initial_pose.y", y0),

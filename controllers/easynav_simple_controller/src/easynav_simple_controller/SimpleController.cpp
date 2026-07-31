@@ -46,8 +46,9 @@ SimpleController::on_initialize()
   node->declare_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->declare_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->declare_parameter<double>(plugin_name + ".k_rot", k_rot_);
-  node->declare_parameter<double>(plugin_name + ".final_goal_angle_tolerance",
-      final_goal_angle_tolerance_);
+  node->declare_parameter<double>(
+    plugin_name + ".final_goal_angle_tolerance",
+    final_goal_angle_tolerance_);
   node->declare_parameter<double>(plugin_name + ".linear_kp", linear_kp_);
   node->declare_parameter<double>(plugin_name + ".linear_ki", linear_ki_);
   node->declare_parameter<double>(plugin_name + ".linear_kd", linear_kd_);
@@ -62,8 +63,9 @@ SimpleController::on_initialize()
   node->get_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->get_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->get_parameter<double>(plugin_name + ".k_rot", k_rot_);
-  node->get_parameter<double>(plugin_name + ".final_goal_angle_tolerance",
-      final_goal_angle_tolerance_);
+  node->get_parameter<double>(
+    plugin_name + ".final_goal_angle_tolerance",
+    final_goal_angle_tolerance_);
   node->get_parameter<double>(plugin_name + ".linear_kp", linear_kp_);
   node->get_parameter<double>(plugin_name + ".linear_ki", linear_ki_);
   node->get_parameter<double>(plugin_name + ".linear_kd", linear_kd_);
@@ -115,7 +117,8 @@ SimpleController::update_rt(NavState & nav_state)
   rclcpp::Time latest_stamp(
     nav_state.get<nav_msgs::msg::Odometry>("robot_pose").header.stamp,
     clock_type);
-  if (rclcpp::Time(path.poses.back().header.stamp,
+  if (rclcpp::Time(
+      path.poses.back().header.stamp,
       latest_stamp.get_clock_type()) > latest_stamp)
   {
     latest_stamp = rclcpp::Time(path.poses.back().header.stamp, latest_stamp.get_clock_type());
@@ -136,9 +139,10 @@ SimpleController::update_rt(NavState & nav_state)
     if (linear_pid_) {linear_pid_->reset();}
     if (angular_pid_) {angular_pid_->reset();}
     nav_state.set("cmd_vel", twist_stamped_);
-    RCLCPP_DEBUG(get_node()->get_logger(),
-        "%s: final goal reached (dist=%.3f, ang=%.3f), stopping.",
-        get_plugin_name().c_str(), dist_to_goal, angle_to_goal);
+    RCLCPP_DEBUG(
+      get_node()->get_logger(),
+      "%s: final goal reached (dist=%.3f, ang=%.3f), stopping.",
+      get_plugin_name().c_str(), dist_to_goal, angle_to_goal);
     return;
   }
 
@@ -147,8 +151,8 @@ SimpleController::update_rt(NavState & nav_state)
 
 
   double angle = get_angle(pose.position, ref_pose.position) - tf2::getYaw(pose.orientation);
-  while(angle > M_PI) {angle -= 2.0 * M_PI;}
-  while(angle < -M_PI) {angle += 2.0 * M_PI;}
+  while (angle > M_PI) {angle -= 2.0 * M_PI;}
+  while (angle < -M_PI) {angle += 2.0 * M_PI;}
 
   double vlin = 0.0;
   double vrot = 0.0;

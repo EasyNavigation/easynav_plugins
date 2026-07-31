@@ -59,7 +59,8 @@ TEST_F(GpsLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbackGr
   const double y1 = 0.4;
 
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test.initial_pose.x", x0),
     rclcpp::Parameter("test.initial_pose.y", y0),
     rclcpp::Parameter("test.initial_pose.yaw", 0.0),

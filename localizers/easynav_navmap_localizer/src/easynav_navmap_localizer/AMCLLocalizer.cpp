@@ -165,13 +165,13 @@ static inline tf2::Vector3 to_tf(const Eigen::Vector3f & v)
 }
 
 // ===================== probabilistic inflate (brushfire) =====================
-using ProgressCallback = std::function<void(float)>;
+using ProgressCallback = std::function<void (float)>;
 
 /// Expect the fixed comma value returned by logods()
 [[nodiscard]] static constexpr float prob(int32_t logods_fixed)
 {
   float logods = float(logods_fixed) * 1e-6;
-  return  1.0 - 1.0 / (1.0 + std::exp(logods));
+  return 1.0 - 1.0 / (1.0 + std::exp(logods));
 }
 
 std::shared_ptr<Bonxai::ProbabilisticMap>
@@ -234,7 +234,7 @@ inflate_map(
   const auto clamp_min = dst->options().clamp_min_log;
   const auto clamp_max = dst->options().clamp_max_log;
 
-  auto write_max = [&](const CoordT & c, int32_t v){
+  auto write_max = [&](const CoordT & c, int32_t v) {
       if (v == std::numeric_limits<int32_t>::min()) {return;}
       auto * cell = acc.value(c, true);
       int32_t prop = std::max(cell->probability_log, v);
@@ -350,8 +350,9 @@ AMCLLocalizer::AMCLLocalizer()
   NavState::register_printer<nav_msgs::msg::Odometry>(
     [](const nav_msgs::msg::Odometry & odom) {
       std::ostringstream ret;
-      tf2::Quaternion q(odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
-                        odom.pose.pose.orientation.z, odom.pose.pose.orientation.w);
+      tf2::Quaternion q(
+        odom.pose.pose.orientation.x, odom.pose.pose.orientation.y,
+        odom.pose.pose.orientation.z, odom.pose.pose.orientation.w);
       double r, p, y; tf2::Matrix3x3(q).getRPY(r, p, y);
       ret << "{" << rclcpp::Time(odom.header.stamp).seconds() << "} Odometry with pose: (x: " <<
         odom.pose.pose.position.x
@@ -399,8 +400,9 @@ void AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
   node->get_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
   node->get_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
-  node->get_parameter<double>(plugin_name + ".noise_translation_to_rotation",
-        noise_translation_to_rotation_);
+  node->get_parameter<double>(
+    plugin_name + ".noise_translation_to_rotation",
+    noise_translation_to_rotation_);
   node->get_parameter<double>(plugin_name + ".min_noise_xy", min_noise_xy_);
   node->get_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
   node->get_parameter<bool>(plugin_name + ".compute_odom_from_tf", compute_odom_from_tf_);
@@ -444,10 +446,12 @@ void AMCLLocalizer::on_initialize()
   reseed_time_ = 1.0 / reseed_freq;
 
   RCLCPP_INFO(node->get_logger(), "Initialized AMCL with %d particles", num_particles);
-  RCLCPP_INFO(node->get_logger(), "init pose (%.3f, %.3f, %.3f) std_dev [%.3f, %.3f]",
+  RCLCPP_INFO(
+    node->get_logger(), "init pose (%.3f, %.3f, %.3f) std_dev [%.3f, %.3f]",
     x_init, y_init, yaw_init, std_dev_xy, std_dev_yaw);
-  RCLCPP_INFO(node->get_logger(), "inflation_stddev=%.3f, inflation_prob_min=%.3f, "
-                                   "correct_max_points=%zu, weights_tau=%.3f, top_keep_fraction=%.3f",
+  RCLCPP_INFO(
+    node->get_logger(), "inflation_stddev=%.3f, inflation_prob_min=%.3f, "
+    "correct_max_points=%zu, weights_tau=%.3f, top_keep_fraction=%.3f",
     inflation_stddev_, inflation_prob_min_, correct_max_points_, weights_tau_, top_keep_fraction_);
 
   std::normal_distribution<double> noise_x(x_init, std_dev_xy);
@@ -476,7 +480,8 @@ void AMCLLocalizer::on_initialize()
   }
 
   particles_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseArray>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/particles", 10);
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/particles",
+    10);
   estimate_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
     node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/pose", 10);
 
@@ -650,8 +655,8 @@ void AMCLLocalizer::update_odom_from_tf()
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-     tf_info.odom_frame, tf_info.robot_frame, tf2::TimePointZero,
-          tf2::durationFromSec(0.0));
+      tf_info.odom_frame, tf_info.robot_frame, tf2::TimePointZero,
+      tf2::durationFromSec(0.0));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "TF failed: %s", ex.what());
     return;
@@ -734,8 +739,9 @@ void AMCLLocalizer::predict(NavState & nav_state)
       Eigen::Vector3f bary, hit_eig;
 
       const bool ok = navmap.locate_navcel(
-        Eigen::Vector3f(static_cast<float>(Pw.x()), static_cast<float>(Pw.y()),
-            static_cast<float>(Pw.z())),
+        Eigen::Vector3f(
+          static_cast<float>(Pw.x()), static_cast<float>(Pw.y()),
+          static_cast<float>(Pw.z())),
         sidx, cid, bary, &hit_eig, opts);
 
       if (ok) {
@@ -792,7 +798,7 @@ static inline tf2::Transform lookup_bf_to_sensor(
   if (sensor_frame.empty()) {return tf2::Transform::getIdentity();}
   geometry_msgs::msg::TransformStamped tf_msg =
     RTTFBuffer::getInstance()->lookupTransform(
-      robot_frame, sensor_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
+    robot_frame, sensor_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
   tf2::Transform T; tf2::fromMsg(tf_msg.transform, T);
   return T;
 }
@@ -873,8 +879,9 @@ void AMCLLocalizer::correct(NavState & nav_state)
     auto logger = get_node()->get_logger();
     auto clock = get_node()->get_clock();
     auto progress_cb = [logger, clock](float f) {
-        RCLCPP_INFO_THROTTLE(logger, *clock, 2000, "Inflating... %.1f%%",
-            static_cast<double>(f) * 100.0);
+        RCLCPP_INFO_THROTTLE(
+          logger, *clock, 2000, "Inflating... %.1f%%",
+          static_cast<double>(f) * 100.0);
       };
     std::shared_ptr<Bonxai::ProbabilisticMap> inflated_map =
       inflate_map(original_map, inflation_stddev_, inflation_prob_min_, progress_cb);
@@ -911,14 +918,16 @@ void AMCLLocalizer::correct(NavState & nav_state)
     if (!T_bf_sensor_cache.count(b.frame_id)) {
       const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
       try {
-        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(tf_info.robot_frame,
-              b.frame_id);
+        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(
+          tf_info.robot_frame,
+          b.frame_id);
 
         // const tf2::Transform & t = T_bf_sensor_cache[b.frame_id];
 
       } catch (const tf2::TransformException & ex) {
-        RCLCPP_WARN(get_node()->get_logger(), "TF bf->%s failed: %s", b.frame_id.c_str(),
-              ex.what());
+        RCLCPP_WARN(
+          get_node()->get_logger(), "TF bf->%s failed: %s", b.frame_id.c_str(),
+          ex.what());
         T_bf_sensor_cache[b.frame_id] = tf2::Transform::getIdentity();
       }
     }
@@ -979,7 +988,8 @@ AMCLLocalizer::reseed()
     };
   const std::size_t N_top = top_count(N);
 
-  std::sort(particles_.begin(), particles_.end(),
+  std::sort(
+    particles_.begin(), particles_.end(),
     [](const Particle & a, const Particle & b) {return a.weight > b.weight;});
 
   tf2::Vector3 mean = computeMean(particles_, 0, N_top);

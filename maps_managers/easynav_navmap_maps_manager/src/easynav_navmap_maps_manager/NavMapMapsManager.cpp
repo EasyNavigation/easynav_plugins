@@ -84,7 +84,8 @@ NavMapMapsManager::on_initialize()
     node->get_parameter(plugin_name + "." + navmap_filter + ".plugin", plugin);
 
     try {
-      RCLCPP_INFO(node->get_logger(),
+      RCLCPP_INFO(
+        node->get_logger(),
         "Loading NavMapFilter %s [%s]", navmap_filter.c_str(), plugin.c_str());
       std::shared_ptr<NavMapFilter> instance;
       instance = navmap_filters_loader_->createSharedInstance(plugin);
@@ -92,20 +93,24 @@ NavMapMapsManager::on_initialize()
       try {
         instance->initialize(node, plugin_name + "." + navmap_filter);
       } catch (const std::runtime_error & ex) {
-        RCLCPP_ERROR(node->get_logger(),
+        RCLCPP_ERROR(
+          node->get_logger(),
           "Unable to initialize [%s]. Error: %s", plugin.c_str(), ex.what());
         throw;
       }
 
       navmap_filters_.push_back(instance);
 
-      RCLCPP_INFO(node->get_logger(),
+      RCLCPP_INFO(
+        node->get_logger(),
         "Loaded NavMapFilter %s [%s]", navmap_filter.c_str(), plugin.c_str());
     } catch (pluginlib::PluginlibException & ex) {
-      RCLCPP_ERROR(node->get_logger(),
+      RCLCPP_ERROR(
+        node->get_logger(),
         "Unable to load plugin easynav::navmap::NavMapFilter. Error: %s", ex.what());
-      throw std::runtime_error("Unable to load plugin easynav::navmap::NavMapFilter " +
-        navmap_filter + " . Error: " + ex.what());
+      throw std::runtime_error(
+              "Unable to load plugin easynav::navmap::NavMapFilter " +
+              navmap_filter + " . Error: " + ex.what());
     }
   }
 
@@ -162,7 +167,8 @@ NavMapMapsManager::on_initialize()
   }
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_occ_map",
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -176,7 +182,8 @@ NavMapMapsManager::on_initialize()
     });
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 

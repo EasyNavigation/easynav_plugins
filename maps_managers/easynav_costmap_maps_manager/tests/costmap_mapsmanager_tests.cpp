@@ -191,7 +191,8 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
   const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map");
   ASSERT_TRUE(dyn_ptr != nullptr);
   EXPECT_EQ(dyn_ptr->getCost(5, 5), easynav::LETHAL_OBSTACLE);
-  EXPECT_EQ(dyn_ptr->getLastModifiedStamp().nanoseconds(),
+  EXPECT_EQ(
+    dyn_ptr->getLastModifiedStamp().nanoseconds(),
     base_after.getLastModifiedStamp().nanoseconds());
 }
 

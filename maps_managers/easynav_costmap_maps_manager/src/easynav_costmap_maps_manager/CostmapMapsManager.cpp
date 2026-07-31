@@ -71,7 +71,8 @@ CostmapMapsManager::on_initialize()
     node->get_parameter(plugin_name + "." + costmap_filter + ".plugin", plugin);
 
     try {
-      RCLCPP_INFO(node->get_logger(),
+      RCLCPP_INFO(
+        node->get_logger(),
         "Loading CostmapFilter %s [%s]", costmap_filter.c_str(), plugin.c_str());
 
       std::shared_ptr<CostmapFilter> instance;
@@ -80,21 +81,26 @@ CostmapMapsManager::on_initialize()
       try {
         instance->initialize(node, plugin_name + "." + costmap_filter);
       } catch (std::runtime_error & ex) {
-        RCLCPP_ERROR(node->get_logger(),
+        RCLCPP_ERROR(
+          node->get_logger(),
           "Unable to initialize [%s]. Error: %s", plugin.c_str(), ex.what());
-        throw std::runtime_error("Unable to initialize " +
-          plugin + " . Error: " + ex.what());
+        throw std::runtime_error(
+                "Unable to initialize " +
+                plugin + " . Error: " + ex.what());
       }
 
       costmap_filters_.push_back(instance);
 
-      RCLCPP_INFO(node->get_logger(),
+      RCLCPP_INFO(
+        node->get_logger(),
         "Loaded CostmapFilter %s [%s]", costmap_filter.c_str(), plugin.c_str());
     } catch (pluginlib::PluginlibException & ex) {
-      RCLCPP_ERROR(node->get_logger(),
+      RCLCPP_ERROR(
+        node->get_logger(),
         "Unable to load plugin easynav::CostmapFilter. Error: %s", ex.what());
-      throw std::runtime_error("Unable to load plugin easynav::CostmapFilter " +
-        costmap_filter + " . Error: " + ex.what());
+      throw std::runtime_error(
+              "Unable to load plugin easynav::CostmapFilter " +
+              costmap_filter + " . Error: " + ex.what());
     }
   }
 
@@ -103,7 +109,8 @@ CostmapMapsManager::on_initialize()
     rclcpp::QoS(1).transient_local().reliable());
 
   dynamic_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/dynamic_map", 100);
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/dynamic_map", 100);
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 

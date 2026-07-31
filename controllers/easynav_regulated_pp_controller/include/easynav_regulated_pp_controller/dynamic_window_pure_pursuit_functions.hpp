@@ -80,7 +80,7 @@ inline DynamicWindowBounds computeDynamicWindow(
 
   // function to compute dynamic window for a single dimension
   auto compute_window = [&](const double & current_vel, const double & max_vel,
-    const double & min_vel, const double & max_accel, const double & max_decel)
+      const double & min_vel, const double & max_accel, const double & max_decel)
     {
       double candidate_max_vel = 0.0;
       double candidate_min_vel = 0.0;

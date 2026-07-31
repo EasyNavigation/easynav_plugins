@@ -86,7 +86,8 @@ InflationFilter::on_initialize()
   node->get_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
   node->get_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
 
-  RCLCPP_INFO(node->get_logger(),
+  RCLCPP_INFO(
+    node->get_logger(),
     "InflationFilter with inflation_radius = %lf  inscribed_radius = %lf  cost_scaling_factor = %lf",
     inflation_radius_, inscribed_radius_, cost_scaling_factor_);
 

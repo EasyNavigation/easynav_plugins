@@ -217,8 +217,9 @@ bool Costmap2D::copyWindow(
   {
     const auto source_stamp = source.getLastModifiedStamp();
     std::unique_lock<mutex_t> lock(*access_);
-    const int64_t new_stamp_ns = std::max(last_modified_.nanoseconds(),
-        source_stamp.nanoseconds()) + 1;
+    const int64_t new_stamp_ns = std::max(
+      last_modified_.nanoseconds(),
+      source_stamp.nanoseconds()) + 1;
     last_modified_ = rclcpp::Time(new_stamp_ns, last_modified_.get_clock_type());
   }
   return true;

@@ -169,7 +169,8 @@ OctomapMapsManager::on_initialize()
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
@@ -177,7 +178,7 @@ OctomapMapsManager::on_initialize()
       try {
         tf_msg = RTTFBuffer::getInstance()->lookupTransform(
           tf_info.map_frame, msg->header.frame_id, msg->header.stamp,
-            rclcpp::Duration::from_seconds(0.05));
+          rclcpp::Duration::from_seconds(0.05));
       } catch (const tf2::TransformException & ex) {
         RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
         return;
@@ -192,9 +193,10 @@ OctomapMapsManager::on_initialize()
       pcl::fromROSMsg(*msg, *pcl_ds);
 
       pcl::VoxelGrid<pcl::PointXYZ> vg;
-      vg.setLeafSize(static_cast<float>(resolution),
-                 static_cast<float>(resolution),
-                 static_cast<float>(resolution));
+      vg.setLeafSize(
+        static_cast<float>(resolution),
+        static_cast<float>(resolution),
+        static_cast<float>(resolution));
       vg.filter(*pcl_ds);
 
       octomap_ = std::make_shared<::octomap::OcTree>(resolution);

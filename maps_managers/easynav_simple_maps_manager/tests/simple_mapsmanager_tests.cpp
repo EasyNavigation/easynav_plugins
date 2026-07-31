@@ -155,7 +155,8 @@ TEST_F(SimpleMapsManagerTest, IncomingOccupancyGridUpdatesMaps)
   EXPECT_EQ(map.at(1, 1), 0);
 }
 
-class FriendSimpleMapsManager : public easynav::SimpleMapsManager {
+class FriendSimpleMapsManager : public easynav::SimpleMapsManager
+{
 public:
   void force_path(const std::string & path) {map_path_ = path;}
 };

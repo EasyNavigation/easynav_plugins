@@ -143,17 +143,19 @@ template<typename PointOut, typename PointIn>
 inline PointOut ConvertPoint(const PointIn & v)
 {
   // clang-format off
-  static_assert(std::is_same_v<PointIn, PointOut>||
-                    type_has_method_x<PointIn>::value ||
-                    type_has_member_x<PointIn>::value ||
-                    type_is_vector<PointIn>::value,
-                "Can't convert from the specified type");
+  static_assert(
+    std::is_same_v<PointIn, PointOut>||
+    type_has_method_x<PointIn>::value ||
+    type_has_member_x<PointIn>::value ||
+    type_is_vector<PointIn>::value,
+    "Can't convert from the specified type");
 
-  static_assert(std::is_same_v<PointIn, PointOut>||
-                    type_has_method_x<PointOut>::value ||
-                    type_has_member_x<PointOut>::value ||
-                    type_is_vector<PointOut>::value,
-                "Can't convert to the specified type");
+  static_assert(
+    std::is_same_v<PointIn, PointOut>||
+    type_has_method_x<PointOut>::value ||
+    type_has_member_x<PointOut>::value ||
+    type_is_vector<PointOut>::value,
+    "Can't convert to the specified type");
 
   // clang-format on
   if constexpr (std::is_same_v<PointIn, PointOut>) {

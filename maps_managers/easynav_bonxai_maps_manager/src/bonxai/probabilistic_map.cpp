@@ -86,7 +86,7 @@ bool ProbabilisticMap::isFree(const CoordT & coord) const
 
 float ProbabilisticMap::queryProbability(const Bonxai::CoordT & coord) const
 {
-  if (const CellT * cell = _accessor.value(coord, /*create=*/false)) {
+  if (const CellT * cell = _accessor.value(coord, /*create=*/ false)) {
     float p = ProbabilisticMap::prob(cell->probability_log);
     return std::clamp(p, 0.0f, 1.0f);
   }

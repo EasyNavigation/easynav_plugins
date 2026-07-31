@@ -64,7 +64,7 @@ SimpleMapsManager::on_initialize()
     try {
       pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + "/" + map_path_file;
-    } catch(ament_index_cpp::PackageNotFoundError & ex) {
+    } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
@@ -78,7 +78,8 @@ SimpleMapsManager::on_initialize()
     rclcpp::QoS(1).transient_local().reliable());
 
   dynamic_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/dynamic_map", 100);
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/dynamic_map", 100);
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 

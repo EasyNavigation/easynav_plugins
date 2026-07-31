@@ -59,7 +59,8 @@ MPPIController::on_initialize()
   node->get_parameter<double>(plugin_name + ".fov", fov_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
 
-  optimizer_ = std::make_unique<MPPIOptimizer>(num_samples_, horizon_steps_, dt_, lambda_,
+  optimizer_ = std::make_unique<MPPIOptimizer>(
+    num_samples_, horizon_steps_, dt_, lambda_,
     max_lin_vel_, max_ang_vel_, fov_, safety_radius_);
 
   mppi_candidates_pub_ =
@@ -193,8 +194,9 @@ MPPIController::update_rt(NavState & nav_state)
     .as_points();
 
   if (filtered.empty()) {
-    RCLCPP_WARN(get_node()->get_logger(),
-        "No valid points available for MPPI optimization, using the path only.");
+    RCLCPP_WARN(
+      get_node()->get_logger(),
+      "No valid points available for MPPI optimization, using the path only.");
   }
 
   // Compute the control using MPPI with points

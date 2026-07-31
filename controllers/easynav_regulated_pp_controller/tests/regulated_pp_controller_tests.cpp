@@ -99,10 +99,10 @@ TEST(DynamicWindowPurePursuit, ComputeDynamicWindowClampsToAccelLimits)
   current_speed.angular.z = 0.0;
 
   const auto window = easynav::dynamic_window_pure_pursuit::computeDynamicWindow(
-    current_speed, /*max_linear_vel=*/1.0, /*min_linear_vel=*/-1.0,
-    /*max_angular_vel=*/1.0, /*min_angular_vel=*/-1.0,
-    /*max_linear_accel=*/2.0, /*max_linear_decel=*/2.0,
-    /*max_angular_accel=*/2.0, /*max_angular_decel=*/2.0, /*dt=*/0.1);
+    current_speed, /*max_linear_vel=*/ 1.0, /*min_linear_vel=*/ -1.0,
+    /*max_angular_vel=*/ 1.0, /*min_angular_vel=*/ -1.0,
+    /*max_linear_accel=*/ 2.0, /*max_linear_decel=*/ 2.0,
+    /*max_angular_accel=*/ 2.0, /*max_angular_decel=*/ 2.0, /*dt=*/ 0.1);
 
   EXPECT_NEAR(window.max_linear_vel, 0.2, 1e-9);
   EXPECT_NEAR(window.min_linear_vel, -0.2, 1e-9);
@@ -118,7 +118,7 @@ TEST(DynamicWindowPurePursuit, ComputeOptimalVelocityZeroCurvatureForward)
 
   const auto [lin, ang] =
     easynav::dynamic_window_pure_pursuit::computeOptimalVelocityWithinDynamicWindow(
-    window, /*curvature=*/0.0, /*sign=*/1.0);
+    window, /*curvature=*/ 0.0, /*sign=*/ 1.0);
 
   EXPECT_NEAR(lin, 1.0, 1e-9);
   EXPECT_NEAR(ang, 0.0, 1e-9);
@@ -148,7 +148,7 @@ TEST(RegulatedPurePursuitControllerHelpers, LookAheadPointInterpolatesOnSegment)
   robot.y = 0.0;
 
   const auto carrot = FriendRegulatedPurePursuitController::getLookAheadPoint(
-    path, robot, /*lookahead_dist=*/1.5);
+    path, robot, /*lookahead_dist=*/ 1.5);
 
   EXPECT_NEAR(carrot.x, 1.5, 1e-6);
   EXPECT_NEAR(carrot.y, 0.0, 1e-6);
@@ -172,7 +172,7 @@ TEST(RegulatedPurePursuitControllerHelpers, LookAheadPointIgnoresPathBehindRobot
   robot.y = 0.0;
 
   const auto carrot = FriendRegulatedPurePursuitController::getLookAheadPoint(
-    path, robot, /*lookahead_dist=*/0.5);
+    path, robot, /*lookahead_dist=*/ 0.5);
 
   // The carrot must be ahead of the robot (close to x=9.5), never back at the path's start (x=0).
   EXPECT_NEAR(carrot.x, 9.5, 1e-6);
@@ -209,7 +209,7 @@ TEST(RegulatedPurePursuitControllerHelpers, LookAheadPointClampsToPathEnd)
   robot.y = 0.0;
 
   const auto carrot = FriendRegulatedPurePursuitController::getLookAheadPoint(
-    path, robot, /*lookahead_dist=*/5.0);
+    path, robot, /*lookahead_dist=*/ 5.0);
 
   EXPECT_NEAR(carrot.x, 1.0, 1e-6);
 }
