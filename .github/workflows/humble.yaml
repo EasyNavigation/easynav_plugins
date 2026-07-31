@@ -16,16 +16,14 @@ jobs:
     steps:
       - name: Repo checkout
         uses: actions/checkout@v4
-        with:
-          ref: humble
       - name: Setup ROS 2
         uses: ros-tooling/setup-ros@0.7.15
       - name: build and test
         uses: ros-tooling/action-ros-ci@0.4.5
         with:
-          package-name: easynav_bonxai_maps_manager easynav_costmap_common easynav_costmap_localizer easynav_costmap_maps_manager easynav_costmap_planner easynav_gps_localizer  easynav_mppi_controller easynav_navmap_localizer easynav_navmap_maps_manager easynav_navmap_planner easynav_serest_controller easynav_simple_common easynav_simple_controller easynav_simple_localizer easynav_simple_maps_manager easynav_simple_planner easynav_vff_controller easynav_mpc_controller
+          package-name: easynav_bonxai_maps_manager easynav_costmap_common easynav_costmap_localizer easynav_costmap_maps_manager easynav_costmap_planner easynav_fusion_localizer easynav_gps_localizer easynav_mpc_controller easynav_mppi_controller easynav_navmap_localizer easynav_navmap_maps_manager easynav_navmap_planner easynav_octomap_maps_manager easynav_regulated_pp_controller easynav_routes_maps_manager easynav_serest_controller easynav_simple_common easynav_simple_controller easynav_simple_localizer easynav_simple_maps_manager easynav_simple_planner easynav_vff_controller
           target-ros2-distro: humble
-          vcs-repo-file-url: ${GITHUB_WORKSPACE}/.github/thirdparty.repos
+          vcs-repo-file-url: ${{ github.workspace }}/.github/thirdparty.repos
           skip-tests: false
           colcon-defaults: |
             {
