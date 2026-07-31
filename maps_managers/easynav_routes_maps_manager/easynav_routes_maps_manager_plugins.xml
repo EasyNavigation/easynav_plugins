@@ -1,0 +1,11 @@
+<class_libraries>
+  <library path="easynav_routes_maps_manager">
+    <class name="easynav_routes_maps_manager/RoutesMapsManager"  type="easynav::RoutesMapsManager" base_class_type="easynav::MapsManagerBase">
+      <description>
+      A default "routes" implementation for the Maps Manager.
+      This maps manager does nothing. It serves as an example, and will be used as a default plugin implementation
+      if the navigation system configuration does not specify one.
+      </description>
+    </class>
+  </library>
+</class_libraries>

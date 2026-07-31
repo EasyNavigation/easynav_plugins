@@ -2,17 +2,21 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>easynav_mppi_controller</name>
-  <version>0.0.2</version>
+  <version>0.4.0</version>
   <description>Easy Navigation: MPPI Controller package.</description>
   <maintainer email="josemiguel.guerrero@urjc.es">Jose Miguel Guerrero Hernandez</maintainer>
-  <license>GPL-3.0-only</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>easynav_common</depend>
   <depend>easynav_core</depend>
+  <depend>easynav_system</depend>
+  <depend>easynav_sensors</depend>
   <depend>pluginlib</depend>
   <depend>tf2_ros</depend>
+  <depend>tf2</depend>
+  <depend>tf2_geometry_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>visualization_msgs</depend>

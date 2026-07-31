@@ -1,7 +1,7 @@
 repositories:
   ThirdParty/EasyNavigation:
     type: git
-    url: https://github.com/EasyNavigation/EasyNavigation.git
+    url: https://github.com/juanscelyg/EasyNavigation.git
     version: humble
   ThirdParty/yaets:
     type: git
@@ -9,5 +9,5 @@ repositories:
     version: humble
   ThirdParty/NavMap:
     type: git
-    url: https://github.com/EasyNavigation/NavMap.git
+    url: https://github.com/juanscelyg/NavMap.git
     version: humble

@@ -1,21 +1,17 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /// \file
 /// \brief Declaration of the CostmapMapsManager method.
@@ -24,25 +20,15 @@
 #define EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "std_srvs/srv/trigger.hpp"
-
-#include "tf2_ros/buffer.hpp"
-#include "tf2_ros/transform_listener.hpp"
 
 #include "easynav_core/MapsManagerBase.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
 
 #include "easynav_costmap_maps_manager/filters/CostmapFilter.hpp"
 #include "pluginlib/class_loader.hpp"
-
-#include "yaets/tracing.hpp"
 
 namespace easynav
 {
@@ -73,9 +59,9 @@ public:
    *
    * Creates necessary publishers/subscribers and initializes the map instances.
    *
-   * @return std::expected<void, std::string> Success or error string.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -92,7 +78,7 @@ public:
    *
    * @param new_map Shared pointer to a new map object. Must be of type SimpleMap.
    */
-  void set_static_map(const Costmap2D & new_map);
+  void set_base_map(const Costmap2D & new_map);
 
 protected:
   /**
@@ -102,14 +88,19 @@ protected:
 
 private:
   /**
-   * @brief Internal static map.
+   * @brief Internal base map.
    */
-  Costmap2D static_map_;
+  Costmap2D map_base_;
 
   /**
-   * @brief Publisher for the static occupancy grid.
+   * @brief Internal static map.
    */
-  rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr static_occ_pub_;
+  std::shared_ptr<Costmap2D> dynamic_map_;
+
+  /**
+   * @brief Publisher for the base occupancy grid.
+   */
+  rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr base_occ_pub_;
 
   /**
    * @brief Publisher for the dynamic occupancy grid.
@@ -127,9 +118,9 @@ private:
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr savemap_srv_;
 
   /**
-   * @brief Cached occupancy grid message for the static map.
+   * @brief Cached occupancy grid message for the base map.
    */
-  nav_msgs::msg::OccupancyGrid static_grid_msg_;
+  nav_msgs::msg::OccupancyGrid base_grid_msg_;
 
   /**
    * @brief Cached occupancy grid message for the dynamic map.

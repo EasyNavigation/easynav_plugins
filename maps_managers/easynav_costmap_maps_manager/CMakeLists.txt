@@ -5,19 +5,21 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake_modules)
 
 find_package(ament_cmake REQUIRED)
 find_package(easynav_common REQUIRED)
 find_package(easynav_core REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(Eigen3 REQUIRED NO_MODULE)
 find_package(pluginlib REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(easynav_costmap_common REQUIRED)
+find_package(easynav_sensors REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
 find_package(yaets REQUIRED)
@@ -39,10 +41,15 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   easynav_core::easynav_core
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
   tf2_ros::tf2_ros
+  tf2::tf2
+  Eigen3::Eigen
   pluginlib::pluginlib
   ament_index_cpp::ament_index_cpp
   easynav_costmap_common::easynav_costmap_common
+  easynav_sensors::easynav_sensors
   yaets::yaets
   ${nav_msgs_TARGETS}
   ${std_srvs_TARGETS}
@@ -86,11 +93,16 @@ pluginlib_export_plugin_description_file(easynav_costmap_maps_manager easynav_co
 ament_export_dependencies(
   easynav_common
   easynav_core
+  rclcpp
+  rclcpp_lifecycle
   tf2_ros
+  tf2
+  eigen
   pluginlib
   nav_msgs
   ament_index_cpp
   easynav_costmap_common
+  easynav_sensors
   std_srvs
   yaets
   yaml_cpp_vendor

@@ -2,6 +2,30 @@
 Changelog for package easynav_simple_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.4.0 (2026-07-26)
+------------------
+* Sync with Rolling branch
+* Navstate key among filters are always map, not an arbitrary key
+* Navstate key among filters are always map, not an arbitrary key
+* Fix segfault in some cases and reduce extrapolation to the future
+* GPLv3 -> Apache 2.0
+* Contributors: Francisco Martín Rico, Juan S. Cely G., Miguel, migueldm
+
+0.2.1 (2026-02-27)
+------------------
+* 0.2.0
+* GPLv3 -> Apache 2.0
+* Documentation was corrected
+* Add a base_footprint frame in TFInfo
+* Remove C++20/C++23 features and update to new MethodBase interface
+* TFInfo in RTTFBuffer
+* Refactor to use TFInfo
+* Referencing base class if ot void
+* Optimize execution
+* Cleanup unused headers
+* Update sheets
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel
+
 0.0.2 (2025-10-12)
 ------------------
 * Reorganization initial

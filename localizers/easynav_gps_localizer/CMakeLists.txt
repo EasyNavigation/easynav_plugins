@@ -5,16 +5,19 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(easynav_core REQUIRED)
+find_package(easynav_common REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(geographic_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 # Geographiclib installs FindGeographicLib.cmake to this non-standard location
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/cmake/geographiclib/")
@@ -27,8 +30,15 @@ set(dependencies
   rclcpp
   rclcpp_lifecycle
   easynav_core
+  easynav_common
   pluginlib
   geographic_msgs
+  geometry_msgs
+  nav_msgs
+  sensor_msgs
+  tf2
+  tf2_geometry_msgs
+  tf2_ros
 )
 
 add_library(gps_localizer SHARED
@@ -40,10 +50,17 @@ target_include_directories(gps_localizer PUBLIC
 )
 target_link_libraries(gps_localizer
   easynav_core::easynav_core
+  easynav_common::easynav_common
   pluginlib::pluginlib
   ${geographic_msgs_TARGETS}
   ${GeographicLib_LIBRARIES}
   ${GeographicLib_LIBRARIES}
+  ${geometry_msgs_TARGETS}
+  ${nav_msgs_TARGETS}
+  ${sensor_msgs_TARGETS}
+  tf2::tf2
+  tf2_geometry_msgs::tf2_geometry_msgs
+  tf2_ros::tf2_ros
 )
 
 install(DIRECTORY include/
@@ -63,6 +80,9 @@ if(BUILD_TESTING)
   set(ament_cmake_copyright_FOUND TRUE)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+
+  find_package(ament_cmake_gtest REQUIRED)
+  add_subdirectory(tests)
 endif()
 
 ament_export_include_directories(include)

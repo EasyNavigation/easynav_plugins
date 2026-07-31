@@ -1,17 +1,24 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #ifndef EASYNAV_SIMPLE_CONTROLLER__SIMPLECONTROLLER_HPP_
 #define EASYNAV_SIMPLE_CONTROLLER__SIMPLECONTROLLER_HPP_
 
 #include <memory>
-#include <expected>
 #include <string>
 
-#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "geometry_msgs/msg/point.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "nav_msgs/msg/path.hpp"
@@ -33,8 +40,8 @@ public:
   ~SimpleController() override;
 
   /// \brief Initializes parameters and PID controllers.
-  /// \return std::expected<void, std::string> success or error message.
-  std::expected<void, std::string> on_initialize() override;
+  /// \throws std::runtime_error on initialization error.
+  void on_initialize() override;
 
   /// \brief Updates the controller using the given NavState.
   /// \param nav_state Current navigation state, including odometry and planned path.

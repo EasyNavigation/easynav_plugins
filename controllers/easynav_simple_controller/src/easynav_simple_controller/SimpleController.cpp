@@ -1,27 +1,23 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /// \file
 /// \brief Implementation of the SimpleController class.
 
-#include <expected>
 #include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include "easynav_simple_controller/SimpleController.hpp"
 
@@ -37,7 +33,7 @@ SimpleController::SimpleController()
 
 SimpleController::~SimpleController() = default;
 
-std::expected<void, std::string>
+void
 SimpleController::on_initialize()
 {
   auto node = get_node();
@@ -50,8 +46,9 @@ SimpleController::on_initialize()
   node->declare_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->declare_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->declare_parameter<double>(plugin_name + ".k_rot", k_rot_);
-  node->declare_parameter<double>(plugin_name + ".final_goal_angle_tolerance",
-      final_goal_angle_tolerance_);
+  node->declare_parameter<double>(
+    plugin_name + ".final_goal_angle_tolerance",
+    final_goal_angle_tolerance_);
   node->declare_parameter<double>(plugin_name + ".linear_kp", linear_kp_);
   node->declare_parameter<double>(plugin_name + ".linear_ki", linear_ki_);
   node->declare_parameter<double>(plugin_name + ".linear_kd", linear_kd_);
@@ -66,8 +63,9 @@ SimpleController::on_initialize()
   node->get_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->get_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->get_parameter<double>(plugin_name + ".k_rot", k_rot_);
-  node->get_parameter<double>(plugin_name + ".final_goal_angle_tolerance",
-      final_goal_angle_tolerance_);
+  node->get_parameter<double>(
+    plugin_name + ".final_goal_angle_tolerance",
+    final_goal_angle_tolerance_);
   node->get_parameter<double>(plugin_name + ".linear_kp", linear_kp_);
   node->get_parameter<double>(plugin_name + ".linear_ki", linear_ki_);
   node->get_parameter<double>(plugin_name + ".linear_kd", linear_kd_);
@@ -85,8 +83,6 @@ SimpleController::on_initialize()
   last_vlin_ = 0.0;
   last_vrot_ = 0.0;
   last_update_ts_ = node->now();
-
-  return {};
 }
 
 
@@ -99,7 +95,7 @@ SimpleController::update_rt(NavState & nav_state)
   if (!nav_state.has("path")) {return;}
   if (!nav_state.has("robot_pose")) {return;}
 
-  const auto path = nav_state.get<nav_msgs::msg::Path>("path");
+  const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
 
   if (path.poses.empty()) {
     twist_stamped_.header.frame_id = path.header.frame_id;
@@ -114,8 +110,20 @@ SimpleController::update_rt(NavState & nav_state)
   }
 
   // If we're very close to the final path pose, stop the robot.
-  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const auto & goal_pose = path.poses.back().pose;
+
+  const auto clock_type = get_node()->get_clock()->get_clock_type();
+  rclcpp::Time latest_stamp(
+    nav_state.get<nav_msgs::msg::Odometry>("robot_pose").header.stamp,
+    clock_type);
+  if (rclcpp::Time(
+      path.poses.back().header.stamp,
+      latest_stamp.get_clock_type()) > latest_stamp)
+  {
+    latest_stamp = rclcpp::Time(path.poses.back().header.stamp, latest_stamp.get_clock_type());
+  }
+
   double dist_to_goal = get_distance(pose, goal_pose);
   double angle_to_goal = get_diff_angle(pose.orientation, goal_pose.orientation);
 
@@ -124,16 +132,17 @@ SimpleController::update_rt(NavState & nav_state)
     last_vlin_ = 0.0;
     last_vrot_ = 0.0;
     twist_stamped_.header.frame_id = path.header.frame_id;
-    twist_stamped_.header.stamp = get_node()->now();
+    twist_stamped_.header.stamp = latest_stamp;
     twist_stamped_.twist.linear.x = 0.0;
     twist_stamped_.twist.angular.z = 0.0;
     // reset PID internal state to avoid windup / residual derivative
     if (linear_pid_) {linear_pid_->reset();}
     if (angular_pid_) {angular_pid_->reset();}
     nav_state.set("cmd_vel", twist_stamped_);
-    RCLCPP_DEBUG(get_node()->get_logger(),
-        "%s: final goal reached (dist=%.3f, ang=%.3f), stopping.",
-        get_plugin_name().c_str(), dist_to_goal, angle_to_goal);
+    RCLCPP_DEBUG(
+      get_node()->get_logger(),
+      "%s: final goal reached (dist=%.3f, ang=%.3f), stopping.",
+      get_plugin_name().c_str(), dist_to_goal, angle_to_goal);
     return;
   }
 
@@ -142,8 +151,8 @@ SimpleController::update_rt(NavState & nav_state)
 
 
   double angle = get_angle(pose.position, ref_pose.position) - tf2::getYaw(pose.orientation);
-  while(angle > M_PI) {angle -= 2.0 * M_PI;}
-  while(angle < -M_PI) {angle += 2.0 * M_PI;}
+  while (angle > M_PI) {angle -= 2.0 * M_PI;}
+  while (angle < -M_PI) {angle += 2.0 * M_PI;}
 
   double vlin = 0.0;
   double vrot = 0.0;
@@ -170,7 +179,7 @@ SimpleController::update_rt(NavState & nav_state)
   last_vrot_ = vrot;
 
   twist_stamped_.header.frame_id = path.header.frame_id;
-  twist_stamped_.header.stamp = get_node()->now();
+  twist_stamped_.header.stamp = latest_stamp;
   twist_stamped_.twist.linear.x = vlin;
   twist_stamped_.twist.angular.z = vrot;
 

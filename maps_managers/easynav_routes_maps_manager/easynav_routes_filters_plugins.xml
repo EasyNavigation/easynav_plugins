@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_routes_maps_manager">
+    <class name="easynav_routes_maps_manager/RoutesCostmapFilter"  type="easynav::RoutesCostmapFilter" base_class_type="easynav::RoutesFilter">
+      <description>
+      Routes-based costmap filter that enforces a minimum cost outside route segments.
+      </description>
+    </class>
+  </library>
+</class_libraries>
