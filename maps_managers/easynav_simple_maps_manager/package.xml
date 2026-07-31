@@ -2,10 +2,10 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>easynav_simple_maps_manager</name>
-  <version>0.0.2</version>
+  <version>0.4.0</version>
   <description>Easy Navigation: Simple MapsManager package.</description>
   <maintainer email="fmrico@gmail.com">Francisco Martín Rico</maintainer>
-  <license>GPL-3.0-only</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
@@ -24,6 +24,9 @@
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
   <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>easynav_sensors</test_depend>
+  <test_depend>rclcpp</test_depend>
+  <test_depend>rclcpp_lifecycle</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

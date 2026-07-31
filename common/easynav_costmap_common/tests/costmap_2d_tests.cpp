@@ -1,26 +1,22 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #include <gtest/gtest.h>
 #include "easynav_costmap_common/costmap_2d.hpp"
-#include "easynav_costmap_common/cost_values.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
+#include "rclcpp/time.hpp"
 
 using easynav::Costmap2D;
 
@@ -125,4 +121,83 @@ TEST_F(Costmap2DTest, OccupancyGridConversion)
       expected_indices.end(), i) != expected_indices.end();
     EXPECT_EQ(grid.data[i], expected ? 100 : 0);
   }
+}
+
+TEST_F(Costmap2DTest, TimestampFromOccupancyGridConstructor)
+{
+  nav_msgs::msg::OccupancyGrid in;
+  in.header.stamp.sec = 123;
+  in.header.stamp.nanosec = 456u;
+
+  in.info.width = 2u;
+  in.info.height = 3u;
+  in.info.resolution = 0.5;
+  in.info.origin.position.x = 1.0;
+  in.info.origin.position.y = -2.0;
+  in.data.assign(in.info.width * in.info.height, 0);
+
+  Costmap2D map(in);
+  const int64_t expected_ns = 123LL * 1000000000LL + 456LL;
+  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns);
+
+  nav_msgs::msg::OccupancyGrid out;
+  map.toOccupancyGridMsg(out);
+
+  EXPECT_EQ(out.header.stamp.sec, in.header.stamp.sec);
+  EXPECT_EQ(out.header.stamp.nanosec, in.header.stamp.nanosec);
+}
+
+TEST_F(Costmap2DTest, TimestampFromCopyConstructor)
+{
+  nav_msgs::msg::OccupancyGrid in;
+  in.header.stamp.sec = 10;
+  in.header.stamp.nanosec = 20u;
+  in.info.width = 1u;
+  in.info.height = 1u;
+  in.info.resolution = 1.0;
+  in.info.origin.position.x = 0.0;
+  in.info.origin.position.y = 0.0;
+  in.data.assign(1u, 0);
+
+  Costmap2D original(in);
+  Costmap2D copy(original);
+
+  const int64_t expected_ns = 10LL * 1000000000LL + 20LL;
+  EXPECT_EQ(copy.getLastModifiedStamp().nanoseconds(), expected_ns);
+
+  nav_msgs::msg::OccupancyGrid out;
+  copy.toOccupancyGridMsg(out);
+  EXPECT_EQ(out.header.stamp.sec, in.header.stamp.sec);
+  EXPECT_EQ(out.header.stamp.nanosec, in.header.stamp.nanosec);
+}
+
+TEST_F(Costmap2DTest, TimestampUpdatedBySetCost)
+{
+  nav_msgs::msg::OccupancyGrid in;
+  in.header.stamp.sec = 7;
+  in.header.stamp.nanosec = 8u;
+  in.info.width = 3u;
+  in.info.height = 3u;
+  in.info.resolution = 1.0;
+  in.info.origin.position.x = 0.0;
+  in.info.origin.position.y = 0.0;
+  in.data.assign(in.info.width * in.info.height, 0);
+
+  Costmap2D map(in);
+  const int64_t expected_ns = 7LL * 1000000000LL + 8LL;
+
+  map.setCost(1, 1, 100);
+  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns + 1);
+
+  // Setting the same value should not change the stamp.
+  map.setCost(1, 1, 100);
+  EXPECT_EQ(map.getLastModifiedStamp().nanoseconds(), expected_ns + 1);
+
+  nav_msgs::msg::OccupancyGrid out;
+  map.toOccupancyGridMsg(out);
+
+  const int64_t out_ns =
+    static_cast<int64_t>(out.header.stamp.sec) * 1000000000LL +
+    static_cast<int64_t>(out.header.stamp.nanosec);
+  EXPECT_EQ(out_ns, expected_ns + 1);
 }

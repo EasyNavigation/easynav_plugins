@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="fusion_localizer">
+    <class name="easynav_fusion_localizer/FusionLocalizer"  type="easynav::FusionLocalizer" base_class_type="easynav::LocalizerMethodBase">
+      <description>
+      A Kalman Filter implementation for the Localizer Method.
+      </description>
+    </class>
+  </library>
+</class_libraries>

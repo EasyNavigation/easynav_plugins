@@ -1,0 +1,4 @@
+ament_add_gtest(regulated_pp_controller_tests regulated_pp_controller_tests.cpp)
+target_link_libraries(regulated_pp_controller_tests
+  ${PROJECT_NAME}
+)

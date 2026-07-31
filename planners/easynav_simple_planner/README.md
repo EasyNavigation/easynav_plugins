@@ -1,6 +1,6 @@
 # easynav_simple_planner
 
-[![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
+[![ROS 2: humble](https://img.shields.io/badge/ROS%202-humble-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#) [![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#)
 
 ## Description
 A simple A* planner over a lightweight `SimpleMap` grid. It reads the dynamic simple map, goals, and robot pose from NavState and publishes a `nav_msgs/Path`.
@@ -12,6 +12,8 @@ A simple A* planner over a lightweight `SimpleMap` grid. It reads the dynamic si
 ## Supported ROS 2 Distributions
 | Distribution | Status |
 |---|---|
+| humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
+| jazzy | ![kilted](https://img.shields.io/badge/jazzy-supported-brightgreen) |
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
@@ -45,7 +47,7 @@ This plugin does not create subscriptions or services directly; it reads inputs 
 | Key | Type | Access | Notes |
 |---|---|---|---|
 | `goals` | `nav_msgs::msg::Goals` | **Read** | Planner targets. |
-| `map.dynamic` | `SimpleMap` | **Read** | Dynamic `SimpleMap` grid used for search. |
+| `map` | `SimpleMap` | **Read** | Dynamic `SimpleMap` grid used for search. |
 | `robot_pose` | `nav_msgs::msg::Odometry` | **Read** | Start pose for path planning. |
 | `path` | `nav_msgs::msg::Path` | **Write** | Output path to follow. |
 
@@ -54,4 +56,4 @@ This plugin does not create subscriptions or services directly; it reads inputs 
 This plugin does not perform TF lookups directly; frame consistency is assumed between map, robot pose, and published path.
 
 ## License
-GPL-3.0-only
+Apache-2.0

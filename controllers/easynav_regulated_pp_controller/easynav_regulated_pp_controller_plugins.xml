@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_regulated_pp_controller">
+    <class name="easynav_regulated_pp_controller/RegulatedPurePursuitController"  type="easynav::RegulatedPurePursuitController" base_class_type="easynav::ControllerMethodBase">
+      <description>
+      EasyNav port of the Nav2 Regulated Pure Pursuit Controller, with optional Dynamic Window Pure Pursuit (DWPP) extension.
+      </description>
+    </class>
+  </library>
+</class_libraries>

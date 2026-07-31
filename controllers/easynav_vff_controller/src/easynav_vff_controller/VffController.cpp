@@ -1,33 +1,27 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /// \file
 /// \brief Implementation of the VffController class.
 
-#include <expected>
 #include "easynav_vff_controller/VffController.hpp"
 #include "easynav_common/types/NavState.hpp"
-#include "easynav_common/types/PointPerception.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/goals.hpp"
-#include "nav_msgs/msg/path.hpp"
 
 #include <tf2/LinearMath/Quaternion.hpp>
 #include <tf2/LinearMath/Matrix3x3.hpp>
@@ -35,7 +29,7 @@
 namespace easynav
 {
 
-std::expected<void, std::string> VffController::on_initialize()
+void VffController::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
@@ -62,9 +56,11 @@ std::expected<void, std::string> VffController::on_initialize()
   node->get_parameter<double>(plugin_name + ".max_speed", max_speed_);
   node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
 
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+
   // Initialize the odometry message
   cmd_vel_.header.stamp = node->now();
-  cmd_vel_.header.frame_id = get_tf_prefix() + "base_link";
+  cmd_vel_.header.frame_id = tf_info.robot_frame;
   cmd_vel_.twist.linear.x = 0.0;
   cmd_vel_.twist.linear.y = 0.0;
   cmd_vel_.twist.linear.z = 0.0;
@@ -75,8 +71,6 @@ std::expected<void, std::string> VffController::on_initialize()
   // Publisher for visualization markers
   marker_array_pub_ = node->create_publisher<visualization_msgs::msg::MarkerArray>(
     "vff/markers_vff", 10);
-
-  return {};
 }
 
 visualization_msgs::msg::MarkerArray
@@ -213,9 +207,10 @@ void VffController::update_rt(NavState & nav_state)
   if (!nav_state.has("robot_pose")) {return;}
 
   const auto & all_goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (all_goals.goals.empty()) {
-    cmd_vel_.header.frame_id = get_tf_prefix() + "map";
+    cmd_vel_.header.frame_id = tf_info.map_frame;
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = 0.0;
     cmd_vel_.twist.angular.z = 0.0;
@@ -257,18 +252,20 @@ void VffController::update_rt(NavState & nav_state)
     // Calculate the angle error
     double angle_error = normalize_angle(bearing - yaw);
 
-    const auto perceptions = nav_state.get<PointPerceptions>("points");
+    const auto & perceptions = nav_state.get_no_group<PointPerception>();
 
+    const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
-      .fuse(get_tf_prefix() + "base_link")
-      ->filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
+      .fuse(tf_info.robot_frame)
+      .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
         {obstacle_detection_x_max_, obstacle_detection_y_max_,
-          obstacle_detection_z_max_}).as_points();
+          obstacle_detection_z_max_})
+      .as_points();
 
     // Get VFF vectors
-    const VFFVectors & vff = get_vff(angle_error, fused, get_tf_prefix() + "base_link");
+    const VFFVectors & vff = get_vff(angle_error, fused, tf_info.robot_frame);
 
     // Use result vector to calculate output speed
     const auto & v = vff.result;

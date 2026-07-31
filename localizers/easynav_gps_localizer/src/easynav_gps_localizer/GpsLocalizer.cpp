@@ -1,41 +1,41 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /// \file
 /// \brief Implementation of the GpsLocalizer class.
 
-#include <expected>
 #include "easynav_gps_localizer/GpsLocalizer.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
 
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
+#include "tf2/LinearMath/Quaternion.hpp"
+
 namespace easynav
 {
 
-std::expected<void, std::string> GpsLocalizer::on_initialize()
+void GpsLocalizer::on_initialize()
 {
   auto node = get_node();
+  const auto & plugin_name = get_plugin_name();
 
   // Initialize the odometry message
   odom_.header.stamp = get_node()->now();
-  odom_.header.frame_id = get_tf_prefix() + "map";
-  odom_.child_frame_id = get_tf_prefix() + "base_link";
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  odom_.header.frame_id = tf_info.map_frame;
+  odom_.child_frame_id = tf_info.robot_frame;
 
   // Create subscriber to GPS data
   gps_subscriber_ = node->create_subscription<sensor_msgs::msg::NavSatFix>(
@@ -50,6 +50,38 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
     "imu/data", rclcpp::SensorDataQoS().reliable(),
     std::bind(&GpsLocalizer::imu_callback, this, std::placeholders::_1));
 
+  // Subscribe to initial pose
+  init_pose_sub_ = node->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
+    "initialpose", 10,
+    std::bind(&GpsLocalizer::init_pose_callback, this, std::placeholders::_1));
+
+  // Optional initial pose from parameters (kept consistent with AMCL parameter names)
+  node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
+  node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
+  node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
+
+  double init_x = 0.0;
+  double init_y = 0.0;
+  double init_yaw = 0.0;
+  node->get_parameter(plugin_name + ".initial_pose.x", init_x);
+  node->get_parameter(plugin_name + ".initial_pose.y", init_y);
+  node->get_parameter(plugin_name + ".initial_pose.yaw", init_yaw);
+
+  if (std::abs(init_x) > 1e-12 || std::abs(init_y) > 1e-12 || std::abs(init_yaw) > 1e-12) {
+    geometry_msgs::msg::PoseWithCovarianceStamped init_pose;
+    init_pose.header.stamp = node->now();
+    const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+    init_pose.header.frame_id = tf_info.map_frame;
+    init_pose.pose.pose.position.x = init_x;
+    init_pose.pose.pose.position.y = init_y;
+    init_pose.pose.pose.position.z = 0.0;
+    tf2::Quaternion q;
+    q.setRPY(0.0, 0.0, init_yaw);
+    init_pose.pose.pose.orientation = tf2::toMsg(q);
+    init_pose.pose.covariance.fill(0.0);
+    pending_init_pose_ = init_pose;
+  }
+
   // Create publisher
   odom_pub_ = node->create_publisher<nav_msgs::msg::Odometry>(
     "robot/odom_gps", rclcpp::SensorDataQoS().reliable());
@@ -57,8 +89,8 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
   // Create static transform
   geometry_msgs::msg::TransformStamped transform;
   transform.header.stamp = node->now();
-  transform.header.frame_id = get_tf_prefix() + "map";
-  transform.child_frame_id = get_tf_prefix() + "odom";
+  transform.header.frame_id = tf_info.map_frame;
+  transform.child_frame_id = tf_info.odom_frame;
   transform.transform.translation.x = 0.0;
   transform.transform.translation.y = 0.0;
   transform.transform.translation.z = 0.0;
@@ -72,8 +104,6 @@ std::expected<void, std::string> GpsLocalizer::on_initialize()
 
   time_1_ = get_node()->now().seconds();
   alpha_ = 0.99;
-
-  return {};
 }
 
 void GpsLocalizer::gps_callback(const sensor_msgs::msg::NavSatFix::SharedPtr msg)
@@ -85,6 +115,12 @@ void GpsLocalizer::gps_callback(const sensor_msgs::msg::NavSatFix::SharedPtr msg
 void GpsLocalizer::imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
   imu_msg_ = std::move(*msg);
+}
+
+void GpsLocalizer::init_pose_callback(
+  const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
+{
+  pending_init_pose_ = *msg;
 }
 
 
@@ -104,6 +140,14 @@ void GpsLocalizer::update(NavState & nav_state)
   GeographicLib::UTMUPS::Forward(lat, lon, zone, northp, utm_x, utm_y);
   std::string utm_zone = std::to_string(zone) + (northp ? "N" : "S");
 
+  // If an initial pose was provided, align the UTM origin so that the current
+  // GPS fix maps to that pose in the map frame.
+  if (pending_init_pose_.has_value() && gps_msg_ != sensor_msgs::msg::NavSatFix()) {
+    origin_utm_.x = utm_x - pending_init_pose_->pose.pose.position.x;
+    origin_utm_.y = utm_y - pending_init_pose_->pose.pose.position.y;
+    pending_init_pose_.reset();
+  }
+
   if (origin_utm_ == geometry_msgs::msg::Point() &&
     gps_msg_ != sensor_msgs::msg::NavSatFix())
   {
@@ -114,8 +158,9 @@ void GpsLocalizer::update(NavState & nav_state)
 
   // Get XY cartesian coordinates respect to the origin
   odom_.header.stamp = gps_msg_.header.stamp;
-  odom_.header.frame_id = get_tf_prefix() + "map";
-  odom_.child_frame_id = get_tf_prefix() + "base_link";
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  odom_.header.frame_id = tf_info.map_frame;
+  odom_.child_frame_id = tf_info.robot_frame;
   odom_.pose.pose.position.x = utm_x - origin_utm_.x;
   odom_.pose.pose.position.y = utm_y - origin_utm_.y;
 

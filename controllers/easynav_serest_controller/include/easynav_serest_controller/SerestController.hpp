@@ -1,35 +1,28 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #ifndef EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_
 #define EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_
 
-#include <expected>
 #include <vector>
 #include <string>
-#include <optional>
 
-#include "rclcpp/rclcpp.hpp"
+#include "rclcpp/time.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/path.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
-#include "tf2/utils.hpp"
 
 #include "easynav_core/ControllerMethodBase.hpp"
 #include "easynav_common/types/NavState.hpp"
@@ -65,9 +58,9 @@ public:
 
   /**
    * @brief Initialize parameters and internal state.
-   * @return std::expected<void, std::string> Empty on success; error message otherwise.
+   * @throws std::runtime_error on initialization error.
    */
-  std::expected<void, std::string> on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Real-time control update (called ~20–30 Hz).
@@ -185,7 +178,7 @@ private:
    * @return double Minimum obstacle distance (m). Infinity if none is found.
    */
   double closest_obstacle_distance(
-    const NavState & nav_state) const;
+    const NavState & nav_state);
 
   /**
    * @brief Compute a safe linear speed bound from obstacle distance and slope.
@@ -229,7 +222,7 @@ private:
   void safety_limits(
     const NavState & nav_state,
     const RefKinematics & rk,
-    double & d_closest, double & v_safe, double & v_curv) const;
+    double & d_closest, double & v_safe, double & v_curv);
 
   // Aplica corner‑guard: ajusta v_prog_ref y obtiene omega_boost + término ápice.
   void apply_corner_guard(
@@ -357,6 +350,8 @@ private:
   double last_vrot_{0.0};
   /// @brief Last update timestamp.
   rclcpp::Time last_update_ts_;
+  /// @brief Last input timestamp (max of path and odom).
+  rclcpp::Time last_input_ts_;
   /// @brief Output TwistStamped buffer.
   geometry_msgs::msg::TwistStamped twist_stamped_;
 };
