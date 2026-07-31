@@ -110,11 +110,11 @@ NavMapMapsManager::on_initialize()
   }
 
   navmap_pub_ = node->create_publisher<navmap_ros_interfaces::msg::NavMap>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   layer_updates_pub_ = node->create_publisher<navmap_ros_interfaces::msg::NavMapLayer>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/map_updates",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/map_updates",
     rclcpp::QoS(100));
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
@@ -162,7 +162,7 @@ NavMapMapsManager::on_initialize()
   }
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -176,7 +176,7 @@ NavMapMapsManager::on_initialize()
     });
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
@@ -191,7 +191,7 @@ NavMapMapsManager::on_initialize()
 
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

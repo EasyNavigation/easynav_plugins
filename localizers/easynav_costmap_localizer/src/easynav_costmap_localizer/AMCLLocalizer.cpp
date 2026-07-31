@@ -272,9 +272,9 @@ AMCLLocalizer::on_initialize()
   }
 
   particles_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseArray>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/particles", 10);
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/particles", 10);
   estimate_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/pose", 10);
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/pose", 10);
 
   init_pose_sub_ = get_node()->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "initialpose", 10, std::bind(&AMCLLocalizer::init_pose_callback, this, std::placeholders::_1));

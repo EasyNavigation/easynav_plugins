@@ -167,7 +167,7 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
   rclcpp::executors::SingleThreadedExecutor executor;
   executor.add_node(node->get_node_base_interface());
 
-  const std::string topic = node->get_fully_qualified_name() + std::string("/test/incoming_map");
+  const std::string topic = node->get_name() + std::string("/test/incoming_map");
   auto pub = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     topic, rclcpp::QoS(1).transient_local().reliable());
   pub->on_activate();

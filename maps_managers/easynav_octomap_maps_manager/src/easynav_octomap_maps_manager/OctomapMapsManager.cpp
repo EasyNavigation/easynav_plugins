@@ -108,7 +108,7 @@ OctomapMapsManager::on_initialize()
   //  }
 
   octomap_pub_ = node->create_publisher<octomap_msgs::msg::Octomap>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
 //   if (!package_name.empty() && !occmap_path_file.empty()) {
@@ -153,7 +153,7 @@ OctomapMapsManager::on_initialize()
 //   }
 
 //  incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-//    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
+//    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_occ_map",
 //    rclcpp::QoS(1).transient_local().reliable(),
 //    [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 //
@@ -169,7 +169,7 @@ OctomapMapsManager::on_initialize()
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
@@ -233,7 +233,7 @@ OctomapMapsManager::on_initialize()
 
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

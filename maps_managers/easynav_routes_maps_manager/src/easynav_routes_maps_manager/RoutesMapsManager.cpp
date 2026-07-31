@@ -94,14 +94,14 @@ void RoutesMapsManager::on_initialize()
   }
 
   routes_pub_ = node->create_publisher<visualization_msgs::msg::MarkerArray>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes",
+    node->get_name() + std::string("/") + plugin_name + "/routes",
     rclcpp::QoS(10).transient_local().reliable());
 
   imarker_server_ = std::make_shared<interactive_markers::InteractiveMarkerServer>(
     plugin_name + std::string("_imarkers"), node, false);
 
   save_routes_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/save_routes",
+    node->get_name() + std::string("/") + plugin_name + "/save_routes",
     [this](const std_srvs::srv::Trigger::Request::SharedPtr,
     std_srvs::srv::Trigger::Response::SharedPtr response) {
       try {

@@ -99,11 +99,11 @@ CostmapMapsManager::on_initialize()
   }
 
   base_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
+    node->get_name() + std::string("/") + plugin_name + "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   dynamic_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/dynamic_map", 100);
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/dynamic_map", 100);
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -129,7 +129,7 @@ CostmapMapsManager::on_initialize()
   }
 
   incoming_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
       base_grid_msg_ = *msg;
@@ -143,7 +143,7 @@ CostmapMapsManager::on_initialize()
     });
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_name() + std::string("/") + plugin_name + "/savemap",
     [&](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

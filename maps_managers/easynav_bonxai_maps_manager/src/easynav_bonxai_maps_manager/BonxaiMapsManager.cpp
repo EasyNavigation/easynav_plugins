@@ -66,7 +66,7 @@ BonxaiMapsManager::on_initialize()
   node->get_parameter(plugin_name + ".resolution", resolution_);
 
   bonxai_pub_ = node->create_publisher<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   map_path_ = "/tmp/bonxai_map.pcd";
@@ -123,7 +123,7 @@ BonxaiMapsManager::on_initialize()
   }
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
     [this](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
       update_from_pc2(*msg);
@@ -131,7 +131,7 @@ BonxaiMapsManager::on_initialize()
     });
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -140,7 +140,7 @@ BonxaiMapsManager::on_initialize()
     });
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

@@ -61,7 +61,7 @@ RoutesCostmapFilter::initialize(
     (dot_pos == std::string::npos) ? plugin_ns_ : plugin_ns_.substr(0, dot_pos);
 
   routes_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes_map",
+    node->get_name() + std::string("/") + plugin_name + "/routes_map",
     rclcpp::QoS(1).reliable());
 }
 
