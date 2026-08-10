@@ -38,7 +38,8 @@ struct EmptyVoxel {};
  * DIM will be 8 and SIZE 512 (8³)
  */
 template<typename DataT>
-class Grid {
+class Grid
+{
 private:
   uint8_t dim_ = 0;
   // total number of elements in the cube
@@ -98,14 +99,14 @@ public:
   [[nodiscard]] DataT & cell(size_t index)
   {
     static_assert(
-        !std::is_same_v<DataT, EmptyVoxel>, "Cells have no value, when DataT == EmptyVoxel");
+      !std::is_same_v<DataT, EmptyVoxel>, "Cells have no value, when DataT == EmptyVoxel");
     return data_[index];
   }
 
   [[nodiscard]] const DataT & cell(size_t index) const
   {
     static_assert(
-        !std::is_same_v<DataT, EmptyVoxel>, "Cells have no value, when DataT == EmptyVoxel");
+      !std::is_same_v<DataT, EmptyVoxel>, "Cells have no value, when DataT == EmptyVoxel");
     return data_[index];
   }
 };
@@ -121,7 +122,8 @@ enum ClearOption
 };
 
 template<typename DataT>
-class VoxelGrid {
+class VoxelGrid
+{
 private:
   uint32_t INNER_BITS;
   uint32_t LEAF_BITS;
@@ -228,7 +230,8 @@ public:
   // for special cases, such as serialization or testing
   std::shared_ptr<LeafGrid> allocateLeafGrid();
 
-  class ConstAccessor {
+  class ConstAccessor
+  {
 public:
     ConstAccessor(const VoxelGrid & grid)
     : grid_(grid) {}
@@ -273,7 +276,8 @@ protected:
    *
    *  Create an instance of this object with the method VoxelGrid::createAccessor()
    */
-  class Accessor : public ConstAccessor {
+  class Accessor : public ConstAccessor
+  {
 public:
     Accessor(VoxelGrid & grid)
     : ConstAccessor(grid),
@@ -481,9 +485,9 @@ template<typename DataT>
 inline bool VoxelGrid<DataT>::Accessor::setValue(const CoordT & coord, const DataT & value)
 {
   static_assert(
-      !std::is_same_v<DataT, EmptyVoxel>,
-      "You can not access a value when using type EmptyVoxel. Use "
-      "setCellOn / setCellOff");
+    !std::is_same_v<DataT, EmptyVoxel>,
+    "You can not access a value when using type EmptyVoxel. Use "
+    "setCellOn / setCellOff");
 
   const CoordT inner_key = mutable_grid_.getInnerKey(coord);
   if (inner_key != prev_inner_coord_ || prev_leaf_ptr_ == nullptr) {
@@ -502,9 +506,9 @@ template<typename DataT>
 inline DataT * VoxelGrid<DataT>::Accessor::value(const CoordT & coord, bool create_if_missing)
 {
   static_assert(
-      !std::is_same_v<DataT, EmptyVoxel>,
-      "You can not access a value when using type EmptyVoxel. Use "
-      "isCellOn / setCellOn / setCellOff");
+    !std::is_same_v<DataT, EmptyVoxel>,
+    "You can not access a value when using type EmptyVoxel. Use "
+    "isCellOn / setCellOn / setCellOff");
 
   const CoordT inner_key = mutable_grid_.getInnerKey(coord);
 
@@ -530,8 +534,8 @@ template<typename DataT>
 inline const DataT * VoxelGrid<DataT>::ConstAccessor::value(const CoordT & coord) const
 {
   static_assert(
-      !std::is_same_v<DataT, EmptyVoxel>,
-      "You can not access a value when using type EmptyVoxel. Use isCellOn");
+    !std::is_same_v<DataT, EmptyVoxel>,
+    "You can not access a value when using type EmptyVoxel. Use isCellOn");
 
   const CoordT inner_key = grid_.getInnerKey(coord);
 

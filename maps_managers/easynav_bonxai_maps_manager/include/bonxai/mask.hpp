@@ -17,7 +17,8 @@
 namespace Bonxai
 {
 
-class Mask {
+class Mask
+{
   uint64_t * words_ = nullptr;
   // small object optimization, that will be used when
   // SIZE <= 512 bits, i.e LOG2DIM <= 3
@@ -61,7 +62,8 @@ public:
 
   uint32_t countOn() const;
 
-  class Iterator {
+  class Iterator
+  {
 public:
     Iterator(const Mask * parent)
     : pos_(parent->SIZE),
@@ -268,7 +270,7 @@ inline uint32_t Mask::findNextOn(uint32_t start) const
   while (!b && ++n < WORD_COUNT) {
     b = words_[n];
   }                                                 // find next non-zero word
-  return  !b ? SIZE : (n << 6) + FindLowestOn(b);  // catch last word=0
+  return !b ? SIZE : (n << 6) + FindLowestOn(b);   // catch last word=0
 }
 
 inline Mask::Mask(size_t log2dim)

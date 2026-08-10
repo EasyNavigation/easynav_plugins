@@ -12,6 +12,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(ament_cmake REQUIRED)
 find_package(easynav_common REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 
 add_library(${PROJECT_NAME} SHARED
@@ -24,6 +27,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   ${nav_msgs_TARGETS}
+  rclcpp::rclcpp
+  ${geometry_msgs_TARGETS}
+  tf2_geometry_msgs::tf2_geometry_msgs
 )
 
 install(
@@ -56,5 +62,8 @@ ament_export_dependencies(
   easynav_common
   # pluginlib
   nav_msgs
+  rclcpp
+  geometry_msgs
+  tf2_geometry_msgs
 )
 ament_package()

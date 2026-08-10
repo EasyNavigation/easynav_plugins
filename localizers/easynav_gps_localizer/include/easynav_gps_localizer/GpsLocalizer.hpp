@@ -1,21 +1,17 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /// \file
 /// \brief Declaration of the GpsLocalizer class, a default plugin implementation for localization.
@@ -23,16 +19,14 @@
 #ifndef EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_
 #define EASYNAV_LOCALIZER__GPSLOCALIZER_HPP_
 
-#include <expected>
 #include "nav_msgs/msg/odometry.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
+#include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "easynav_core/LocalizerMethodBase.hpp"
-#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "tf2_ros/static_transform_broadcaster.hpp"
 #include "sensor_msgs/msg/imu.hpp"
-#include "tf2/LinearMath/Quaternion.hpp"
-#include "tf2/LinearMath/Matrix3x3.hpp"
 #include <GeographicLib/UTMUPS.hpp>
+#include <optional>
 
 namespace easynav
 {
@@ -63,9 +57,9 @@ public:
    *
    * This override may be used to set up internal resources. By default, it simply succeeds.
    *
-   * @return std::expected<void, std::string> Returns success or an error message.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Updates the localization estimate based on the current navigation state.
@@ -90,6 +84,16 @@ public:
    * @param nav_state The current navigation state of the system.
    */
   virtual void update(NavState & nav_state) override;
+
+protected:
+  /// Subscriber for the initial pose.
+  rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr init_pose_sub_;
+
+  /// Initial pose received but not yet applied (e.g. waiting for a valid GPS fix).
+  std::optional<geometry_msgs::msg::PoseWithCovarianceStamped> pending_init_pose_;
+
+  /// Callback for /initialpose.
+  void init_pose_callback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);
 
 private:
   /**

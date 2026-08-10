@@ -1,21 +1,17 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 /// \file
 /// \brief Declaration of the AMCLLocalizer method.
@@ -24,11 +20,6 @@
 #define EASYNAV_SIMPLE_LOCALIZER__AMCLLOCALIZER_HPP_
 
 #include <vector>
-#include <stdexcept>
-#include <algorithm>
-#include <utility>
-#include <fstream>
-#include <sstream>
 #include <random>
 #include <Eigen/Geometry>
 
@@ -72,9 +63,9 @@ public:
    *
    * Sets up publishers, subscribers, and prepares the particle filter.
    *
-   * @return std::expected<void, std::string> Success or error message.
+   * @throws std::runtime_error if initialization fails.
    */
-  virtual std::expected<void, std::string> on_initialize() override;
+  virtual void on_initialize() override;
 
   /**
    * @brief Real-time update of the localization state.
@@ -164,12 +155,22 @@ protected:
   /// Subscriber for odometry messages.
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
 
+  /// Subscriber for the initial pose.
+  rclcpp::Subscription<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr init_pose_sub_;
+
   /**
    * @brief Callback for receiving odometry updates.
    *
    * @param msg The incoming odometry message.
    */
   void odom_callback(nav_msgs::msg::Odometry::UniquePtr msg);
+
+  /**
+   * @brief Callback for receiving the initial pose.
+   *
+   * @param msg The incoming initial pose with covariance.
+   */
+  void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
 
   /// List of particles representing the belief distribution.
   std::vector<Particle> particles_;
@@ -209,6 +210,9 @@ protected:
 
   /// Timestamp of the last reseed event.
   rclcpp::Time last_reseed_;
+
+  /// Timestamp of the last input message (odometry or initial pose).
+  rclcpp::Time last_input_time_;
 };
 
 }  // namespace easynav

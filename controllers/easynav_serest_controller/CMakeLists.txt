@@ -5,16 +5,16 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 find_package(ament_cmake REQUIRED)
 find_package(easynav_common REQUIRED)
 find_package(easynav_core REQUIRED)
+find_package(easynav_sensors REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 
 
@@ -28,7 +28,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   easynav_core::easynav_core
+  easynav_sensors::easynav_sensors
+  rclcpp::rclcpp
   tf2_ros::tf2_ros
+  tf2::tf2
+  tf2_geometry_msgs::tf2_geometry_msgs
   pluginlib::pluginlib
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
@@ -66,8 +70,12 @@ pluginlib_export_plugin_description_file(easynav_core easynav_serest_controller_
 ament_export_dependencies(
   easynav_common
   easynav_core
+  easynav_sensors
+  rclcpp
   pluginlib
   tf2_ros
+  tf2
+  tf2_geometry_msgs
   geometry_msgs
   nav_msgs
 )

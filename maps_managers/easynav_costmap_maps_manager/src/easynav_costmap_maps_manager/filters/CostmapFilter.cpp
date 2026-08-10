@@ -1,28 +1,19 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-
-#include <expected>
 #include <string>
-
-#include "easynav_costmap_common/costmap_2d.hpp"
-#include "easynav_common/types/NavState.hpp"
 
 #include "easynav_costmap_maps_manager/filters/CostmapFilter.hpp"
 
@@ -34,18 +25,15 @@ CostmapFilter::CostmapFilter()
 
 }
 
-std::expected<void, std::string>
+void
 CostmapFilter::initialize(
   const std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node,
-  const std::string & plugin_name,
-  const std::string & tf_prefix
-)
+  const std::string & plugin_name)
 {
   parent_node_ = parent_node;
   plugin_name_ = plugin_name;
-  tf_prefix_ = tf_prefix;
 
-  return on_initialize();
+  on_initialize();
 }
 
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>
@@ -60,10 +48,5 @@ CostmapFilter::get_plugin_name() const
   return plugin_name_;
 }
 
-const std::string &
-CostmapFilter::get_tf_prefix() const
-{
-  return tf_prefix_;
-}
 
 }  // namespace easynav

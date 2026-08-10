@@ -1,30 +1,22 @@
 // Copyright 2025 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
-// licensed under the GNU General Public License v3.0.
-// See <http://www.gnu.org/licenses/> for details.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// Easy Navigation program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+//     http://www.apache.org/licenses/LICENSE-2.0
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <http://www.gnu.org/licenses/>.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-#include <expected>
 #include <string>
 
 #include "easynav_bonxai_maps_manager/BonxaiMapsManager.hpp"
 
-#include "easynav_common/types/Perceptions.hpp"
-#include "easynav_common/types/PointPerception.hpp"
-#include "easynav_common/YTSession.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "bonxai/bonxai.hpp"
@@ -34,7 +26,6 @@
 #include "pcl_conversions/pcl_conversions.h"
 #include "pcl/point_types.h"
 #include "pcl/point_cloud.h"
-#include "pcl/filters/voxel_grid.h"
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
@@ -57,7 +48,7 @@ BonxaiMapsManager::BonxaiMapsManager()
 
 BonxaiMapsManager::~BonxaiMapsManager() {}
 
-std::expected<void, std::string>
+void
 BonxaiMapsManager::on_initialize()
 {
   auto node = get_node();
@@ -68,16 +59,14 @@ BonxaiMapsManager::on_initialize()
   node->declare_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
   node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->declare_parameter(plugin_name + ".resolution", resolution_);
-  node->declare_parameter(plugin_name + ".frame_id", frame_id_);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
   node->get_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->get_parameter(plugin_name + ".resolution", resolution_);
-  node->get_parameter(plugin_name + ".frame_id", frame_id_);
 
   bonxai_pub_ = node->create_publisher<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   map_path_ = "/tmp/bonxai_map.pcd";
@@ -87,7 +76,7 @@ BonxaiMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + bonxai_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::make_unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     std::vector<Eigen::Vector3d> bonxai_result;
@@ -99,11 +88,12 @@ BonxaiMapsManager::on_initialize()
         if (!std::isfinite(p.x()) || !std::isfinite(p.y()) || !std::isfinite(p.z())) {continue;}
 
         bonxai_map_->addHitPoint(p);
-        pcl_out.push_back({
+        pcl_out.push_back(
+          {
             static_cast<float>(p.x()),
             static_cast<float>(p.y()),
             static_cast<float>(p.z())
-        });
+          });
       }
 
       bonxai_msg_.data.clear();
@@ -120,13 +110,13 @@ BonxaiMapsManager::on_initialize()
       const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
       map_path_ = pkgpath + std::string("/") + occmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      return std::make_unexpected("Package " + package_name + " not found. Error: " + ex.what());
+      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
     nav_msgs::msg::OccupancyGrid occ_msg;
     if (auto ret = loadMapFromYaml(map_path_, occ_msg) != LOAD_MAP_SUCCESS) {
       std::cerr << "loadMapFromYaml returned" << ret << std::endl;
-      return std::make_unexpected("YAML file [" + map_path_ + "] not found or invalid: ");
+      throw std::runtime_error("YAML file [" + map_path_ + "] not found or invalid: ");
     }
 
     update_from_occ(occ_msg);
@@ -134,7 +124,8 @@ BonxaiMapsManager::on_initialize()
   }
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/incoming_pc2_map",
     rclcpp::QoS(100),
     [this](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
       update_from_pc2(*msg);
@@ -142,7 +133,8 @@ BonxaiMapsManager::on_initialize()
     });
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
+    node->get_node_base_interface()->get_name() + std::string(
+      "/") + plugin_name + "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -151,7 +143,7 @@ BonxaiMapsManager::on_initialize()
     });
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)
@@ -165,8 +157,6 @@ BonxaiMapsManager::on_initialize()
       Bonxai::WritePointsFromPCD(map_path_, bonxai_result);  // This can overwrite yaml occ maps
       // ToDo
     });
-
-  return {};
 }
 
 void
@@ -181,11 +171,13 @@ BonxaiMapsManager::update(::easynav::NavState & nav_state)
 void
 BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
 {
+  const auto & tf_info = ::easynav::RTTFBuffer::getInstance()->get_tf_info();
 
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = ::easynav::RTTFBuffer::getInstance()->lookupTransform(
-          frame_id_, pc2.header.frame_id, pc2.header.stamp, rclcpp::Duration::from_seconds(0.05));
+      tf_info.map_frame, pc2.header.frame_id, pc2.header.stamp,
+      rclcpp::Duration::from_seconds(0.05));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
     return;
@@ -213,11 +205,12 @@ BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
   bonxai_result.clear();
   bonxai_map_->getOccupiedVoxels(bonxai_result);
   for (const auto & voxel : bonxai_result) {
-    pcl_out.push_back({
+    pcl_out.push_back(
+      {
         static_cast<float>(voxel.x()),
         static_cast<float>(voxel.y()),
         static_cast<float>(voxel.z())
-    });
+      });
   }
 
   bonxai_msg_.data.clear();
@@ -275,11 +268,12 @@ BonxaiMapsManager::update_from_occ(const nav_msgs::msg::OccupancyGrid & occ)
   bonxai_result.clear();
   bonxai_map_->getOccupiedVoxels(bonxai_result);
   for (const auto & voxel : bonxai_result) {
-    pcl_out.push_back({
+    pcl_out.push_back(
+      {
         static_cast<float>(voxel.x()),
         static_cast<float>(voxel.y()),
         static_cast<float>(voxel.z())
-    });
+      });
   }
 
   bonxai_msg_.data.clear();
@@ -289,7 +283,9 @@ BonxaiMapsManager::update_from_occ(const nav_msgs::msg::OccupancyGrid & occ)
 void
 BonxaiMapsManager::publish_map()
 {
-  bonxai_msg_.header.frame_id = frame_id_;
+  const auto & tf_info = ::easynav::RTTFBuffer::getInstance()->get_tf_info();
+
+  bonxai_msg_.header.frame_id = tf_info.map_frame;
   bonxai_msg_.header.stamp = this->get_node()->now();
   bonxai_pub_->publish(bonxai_msg_);
 
