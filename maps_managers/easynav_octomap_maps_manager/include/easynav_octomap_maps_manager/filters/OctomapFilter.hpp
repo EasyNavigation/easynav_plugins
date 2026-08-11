@@ -50,10 +50,6 @@ protected:
   const std::string & get_plugin_name() const;
 
 protected:
-  /// Held as a weak_ptr, not a shared_ptr: this filter is owned (transitively) by the
-  /// same LifecycleNode passed in here. A strong shared_ptr back to it would form a
-  /// reference cycle that never reaches a zero refcount, so the owning node would
-  /// never be destructed.
   std::weak_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_;
   std::string plugin_name_;
 
