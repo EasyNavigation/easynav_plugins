@@ -127,6 +127,11 @@ private:
    */
   nav_msgs::msg::OccupancyGrid dynamic_grid_msg_;
 
+  /// Declared before \ref costmap_filters_ so it is destroyed *after* it: members are
+  /// destroyed in reverse declaration order, and each filter instance's vtable/code
+  /// lives inside the shared library this loader dlopen()s. Destroying the loader
+  /// (and therefore dlclose()-ing the library) before the instances would make their
+  /// destructors call into unloaded code.
   std::unique_ptr<pluginlib::ClassLoader<CostmapFilter>> costmap_filters_loader_;
 
   std::vector<std::shared_ptr<CostmapFilter>> costmap_filters_;

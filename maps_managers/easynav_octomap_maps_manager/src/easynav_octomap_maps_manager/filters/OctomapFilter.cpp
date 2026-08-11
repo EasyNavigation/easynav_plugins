@@ -43,7 +43,7 @@ OctomapFilter::initialize(
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>
 OctomapFilter::get_node() const
 {
-  return parent_node_;
+  return parent_node_.lock();
 }
 
 const std::string &
