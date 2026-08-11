@@ -108,7 +108,7 @@ SimpleController::update_rt(NavState & nav_state)
   }
 
   // If we're very close to the final path pose, stop the robot.
-  const auto & pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const auto & goal_pose = path.poses.back().pose;
 
   const auto clock_type = get_node()->get_clock()->get_clock_type();

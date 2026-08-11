@@ -425,7 +425,7 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
     return;
   }
 
-  const auto & robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const double robot_yaw = tf2::getYaw(robot_pose.orientation);
 
   const auto & goal_pose = path.poses.back().pose;
