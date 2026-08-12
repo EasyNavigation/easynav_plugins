@@ -50,7 +50,7 @@ protected:
   const std::string & get_plugin_name() const;
 
 protected:
-  std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_ {nullptr};
+  std::weak_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_;
   std::string plugin_name_;
 
   float map_resolution_ {0.1};
