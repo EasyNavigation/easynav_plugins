@@ -166,6 +166,14 @@ protected:
     double robot_yaw);
 
   /// \brief Whether the robot should rotate in place towards \p angle_to_path.
+  /// \param angle_to_path Current angle (rad) from the robot's heading to the path.
+  /// \param currently_rotating Whether the previous tick was already rotating in place.
+  ///   Hysteretic on \p currently_rotating: entering rotate-in-place mode requires
+  ///   \p angle_to_path to exceed \ref rotate_to_heading_min_angle_, but once in it, leaving
+  ///   requires dropping to half that value (well-aligned, not merely back under the entry
+  ///   threshold) -- otherwise a noisy angle hovering near the boundary (as it reliably does at
+  ///   a sharp turn, where the lookahead carrot itself is geometrically unstable tick to tick)
+  ///   chatters the controller between rotate-in-place and curve-follow mode every tick.
   bool shouldRotateToPath(double angle_to_path, bool currently_rotating) const;
 
   /// \brief Computes a kinematically-feasible rotate-in-place command towards \p angle_to_target.
