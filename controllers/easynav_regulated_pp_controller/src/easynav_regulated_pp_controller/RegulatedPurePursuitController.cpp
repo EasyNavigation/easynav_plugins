@@ -277,9 +277,14 @@ RegulatedPurePursuitController::toRobotFrame(
 }
 
 bool
-RegulatedPurePursuitController::shouldRotateToPath(double angle_to_path) const
+RegulatedPurePursuitController::shouldRotateToPath(
+  double angle_to_path, bool currently_rotating) const
 {
-  return use_rotate_to_heading_ && std::fabs(angle_to_path) > rotate_to_heading_min_angle_;
+  if (!use_rotate_to_heading_) {return false;}
+  const double threshold = currently_rotating ?
+    0.5 * rotate_to_heading_min_angle_ :
+    rotate_to_heading_min_angle_;
+  return std::fabs(angle_to_path) > threshold;
 }
 
 void
@@ -489,7 +494,7 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
     const double regulation_curvature = heuristics::calculateCurvature(
       curvature_local.x, curvature_local.y);
 
-    if (shouldRotateToPath(angle_to_path)) {
+    if (shouldRotateToPath(angle_to_path, is_rotating_to_heading_)) {
       is_rotating_to_heading_ = true;
       rotateToHeading(linear_vel, angular_vel, angle_to_path, dt);
     } else {

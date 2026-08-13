@@ -166,7 +166,7 @@ protected:
     double robot_yaw);
 
   /// \brief Whether the robot should rotate in place towards \p angle_to_path.
-  bool shouldRotateToPath(double angle_to_path) const;
+  bool shouldRotateToPath(double angle_to_path, bool currently_rotating) const;
 
   /// \brief Computes a kinematically-feasible rotate-in-place command towards \p angle_to_target.
   void rotateToHeading(

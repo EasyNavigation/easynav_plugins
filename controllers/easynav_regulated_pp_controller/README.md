@@ -90,7 +90,7 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
 | `use_velocity_scaled_lookahead_dist` | Use velocity-scaled lookahead distance instead of the fixed `lookahead_dist`. |
 | `rotate_to_heading_angular_vel` | Angular velocity used while rotating in place. |
 | `use_rotate_to_heading` | Enable rotate-in-place behaviors (rough path heading and final goal heading). |
-| `rotate_to_heading_min_angle` | Angle to the carrot beyond which the robot rotates in place first. |
+| `rotate_to_heading_min_angle` | Angle to the carrot beyond which the robot rotates in place first. Hysteretic: leaving rotate-in-place mode requires the angle to drop to *half* this value (well-aligned), not just back under it, to avoid chattering between rotate-in-place and curve-follow mode near sharp turns where the carrot itself is geometrically unstable tick to tick. |
 | `use_regulated_linear_velocity_scaling` | Enable curvature-based velocity regulation. |
 | `regulated_linear_scaling_min_radius` | Turning radius below which curvature regulation kicks in. |
 | `regulated_linear_scaling_min_speed` | Minimum velocity kept under regulation. |
