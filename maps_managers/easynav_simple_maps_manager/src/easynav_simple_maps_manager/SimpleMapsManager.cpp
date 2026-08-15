@@ -90,7 +90,7 @@ SimpleMapsManager::on_initialize()
       dynamic_map_.from_occupancy_grid(*msg);
 
       static_map_.to_occupancy_grid(static_grid_msg_);
-      static_grid_msg_.header.frame_id = tf_info.map_frame;
+      static_grid_msg_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
       static_grid_msg_.header.stamp = this->get_node()->now();
 
       static_occ_pub_->publish(static_grid_msg_);
