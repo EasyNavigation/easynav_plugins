@@ -36,32 +36,11 @@
 #include "easynav_core/MapsManagerBase.hpp"
 
 #include "easynav_routes_maps_manager/RoutesFilter.hpp"
+#include "easynav_routes_maps_manager/routes_map.hpp"
+#include "easynav_routes_maps_manager/msg/routes_map.hpp"
 
 namespace easynav
 {
-
-/// @brief Simple directed segment between two poses.
-///
-/// Each RouteSegment represents a straight-line connection between two
-/// poses in the navigation frame. The segment can be individually
-/// edited and identified via its @ref id field.
-struct RouteSegment
-{
-  /// @brief Unique identifier for this segment.
-  std::string id;
-
-  /// @brief Start pose of the segment.
-  geometry_msgs::msg::Pose start;
-
-  /// @brief End pose of the segment.
-  geometry_msgs::msg::Pose end;
-
-  /// @brief Whether this segment is currently in edit mode.
-  bool edit_mode{false};
-};
-
-/// @brief Container type representing a full set of navigation routes.
-using RoutesMap = std::vector<RouteSegment>;
 
 /**
  * @class RoutesMapsManager
@@ -147,6 +126,12 @@ private:
 
   /// @brief Service for saving current routes back to disk.
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr save_routes_srv_;
+
+  /// @brief Subscription that, on receipt, replaces @ref routes_ with
+  /// whatever was published -- same convention as
+  /// easynav_costmap_maps_manager's own "incoming_map" topic.
+  rclcpp::Subscription<easynav_routes_maps_manager::msg::RoutesMap>::SharedPtr
+    incoming_routes_sub_;
 };
 
 }  // namespace easynav

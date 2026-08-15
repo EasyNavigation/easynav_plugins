@@ -16,6 +16,7 @@
 
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
+#include "easynav_routes_maps_manager/route_io.hpp"
 
 #include <fstream>
 
@@ -186,6 +187,19 @@ void RoutesMapsManager::on_initialize()
     throw std::runtime_error(std::string{"Failed to load routes: "} + e.what());
   }
 
+  // A message received here replaces routes_ outright (last-writer-wins,
+  // same convention as easynav_costmap_maps_manager's own "incoming_map"
+  // topic) -- e.g. a fleet-wide navigation manager publishing on
+  // /global_routes, remapped to this topic.
+  incoming_routes_sub_ = node->create_subscription<easynav_routes_maps_manager::msg::RoutesMap>(
+    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_routes",
+    rclcpp::QoS(1).transient_local().reliable(),
+    [this](easynav_routes_maps_manager::msg::RoutesMap::UniquePtr msg) {
+      routes_ = from_msg(*msg);
+      publish_routes_markers();
+      publish_interactive_markers();
+    });
+
   // Instantiate and initialize configured route filters
   for (const auto & filter_name : routes_filters_names) {
     std::string plugin;
@@ -243,126 +257,7 @@ void RoutesMapsManager::update(NavState & nav_state)
 
 void RoutesMapsManager::load_routes_from_yaml()
 {
-  routes_.clear();
-
-  if (map_path_.empty()) {
-    // No map path configured: initialize a default single route segment.
-    RouteSegment segment;
-    segment.id = "route0";
-    segment.start.position.x = 0.0;
-    segment.start.position.y = 0.0;
-    segment.start.position.z = 0.0;
-    segment.start.orientation.x = 0.0;
-    segment.start.orientation.y = 0.0;
-    segment.start.orientation.z = 0.0;
-    segment.start.orientation.w = 1.0;
-
-    segment.end.position.x = 1.0;
-    segment.end.position.y = 0.0;
-    segment.end.position.z = 0.0;
-    segment.end.orientation.x = 0.0;
-    segment.end.orientation.y = 0.0;
-    segment.end.orientation.z = 0.0;
-    segment.end.orientation.w = 1.0;
-
-    routes_.push_back(segment);
-    next_route_id_ = 1;
-    return;
-  }
-
-  YAML::Node root;
-  try {
-    root = YAML::LoadFile(map_path_);
-  } catch (const std::exception &) {
-    // File missing or invalid: fall back to a default single route.
-    RouteSegment segment;
-    segment.id = "route0";
-    segment.start.position.x = 0.0;
-    segment.start.position.y = 0.0;
-    segment.start.position.z = 0.0;
-    segment.start.orientation.x = 0.0;
-    segment.start.orientation.y = 0.0;
-    segment.start.orientation.z = 0.0;
-    segment.start.orientation.w = 1.0;
-
-    segment.end.position.x = 1.0;
-    segment.end.position.y = 0.0;
-    segment.end.position.z = 0.0;
-    segment.end.orientation.x = 0.0;
-    segment.end.orientation.y = 0.0;
-    segment.end.orientation.z = 0.0;
-    segment.end.orientation.w = 1.0;
-
-    routes_.push_back(segment);
-    next_route_id_ = 1;
-    return;
-  }
-
-  if (!root["routes"]) {
-    // No explicit routes list: use a default single route.
-    RouteSegment segment;
-    segment.id = "route0";
-    segment.start.position.x = 0.0;
-    segment.start.position.y = 0.0;
-    segment.start.position.z = 0.0;
-    segment.start.orientation.x = 0.0;
-    segment.start.orientation.y = 0.0;
-    segment.start.orientation.z = 0.0;
-    segment.start.orientation.w = 1.0;
-
-    segment.end.position.x = 1.0;
-    segment.end.position.y = 0.0;
-    segment.end.position.z = 0.0;
-    segment.end.orientation.x = 0.0;
-    segment.end.orientation.y = 0.0;
-    segment.end.orientation.z = 0.0;
-    segment.end.orientation.w = 1.0;
-
-    routes_.push_back(segment);
-    next_route_id_ = 1;
-    return;
-  }
-
-  // routes: [route1, route2, ...]
-  const auto & names_node = root["routes"];
-  for (std::size_t i = 0; i < names_node.size(); ++i) {
-    const auto name = names_node[i].as<std::string>();
-
-    if (!root[name]) {
-      continue;
-    }
-
-    const auto & route_node = root[name];
-    if (!route_node["start"] || !route_node["end"]) {
-      continue;
-    }
-
-    RouteSegment segment;
-    segment.id = name;
-
-    const auto & start = route_node["start"];
-    const auto & end = route_node["end"];
-
-    segment.start.position.x = start["x"].as<double>();
-    segment.start.position.y = start["y"].as<double>();
-    segment.start.position.z = start["z"].as<double>(0.0);
-
-    segment.start.orientation.x = start["qx"].as<double>(0.0);
-    segment.start.orientation.y = start["qy"].as<double>(0.0);
-    segment.start.orientation.z = start["qz"].as<double>(0.0);
-    segment.start.orientation.w = start["qw"].as<double>(1.0);
-
-    segment.end.position.x = end["x"].as<double>();
-    segment.end.position.y = end["y"].as<double>();
-    segment.end.position.z = end["z"].as<double>(0.0);
-
-    segment.end.orientation.x = end["qx"].as<double>(0.0);
-    segment.end.orientation.y = end["qy"].as<double>(0.0);
-    segment.end.orientation.z = end["qz"].as<double>(0.0);
-    segment.end.orientation.w = end["qw"].as<double>(1.0);
-
-    routes_.push_back(segment);
-  }
+  routes_ = easynav::load_routes_from_yaml(map_path_);
 
   // Initialize next_route_id_ so that newly created routes get
   // unique IDs that don't clash with existing ones.
