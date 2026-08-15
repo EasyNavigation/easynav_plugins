@@ -210,7 +210,7 @@ InflationFilter::update(::easynav::NavState & nav_state)
   if (!inflate_layer_u8(octomap_, "obstacles", "inflated_obstacles",
     inflation_radius_, cost_scaling_factor_, 0.3))
   {
-    RCLCPP_ERROR(parent_node_->get_logger(), "Error inflating at ObstacleFilter");
+    RCLCPP_ERROR(get_node()->get_logger(), "Error inflating at ObstacleFilter");
   }
 
   nav_state.set("map", octomap_);

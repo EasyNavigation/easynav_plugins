@@ -235,7 +235,7 @@ void InflationFilter::update(::easynav::NavState & nav_state)
     inscribed_radius_);
 
   if (!ok) {
-    RCLCPP_ERROR(parent_node_->get_logger(), "InflationFilter: inflate_layer_u8() failed");
+    RCLCPP_ERROR(get_node()->get_logger(), "InflationFilter: inflate_layer_u8() failed");
     return;
   }
 

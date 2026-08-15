@@ -51,7 +51,7 @@ protected:
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> get_node() const;
 
 protected:
-  std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_ {nullptr};
+  std::weak_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_;
   std::string plugin_name_;
 };
 }  // namespace easynav

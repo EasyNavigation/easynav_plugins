@@ -170,7 +170,7 @@ NavMapMapsManager::on_initialize()
       navmap_ = navmap_ros::from_occupancy_grid(*msg);
 
       navmap_msg_ = navmap_ros::to_msg(navmap_);
-      navmap_msg_.header.frame_id = tf_info.map_frame;
+      navmap_msg_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
       navmap_msg_.header.stamp = this->get_node()->now();
       navmap_pub_->publish(navmap_msg_);
     });
@@ -184,7 +184,7 @@ NavMapMapsManager::on_initialize()
       navmap_ = navmap_ros::from_pointcloud2(*msg, navmap_msg_, params);
 
 
-      navmap_msg_.header.frame_id = tf_info.map_frame;
+      navmap_msg_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
       navmap_msg_.header.stamp = this->get_node()->now();
       navmap_pub_->publish(navmap_msg_);
     });

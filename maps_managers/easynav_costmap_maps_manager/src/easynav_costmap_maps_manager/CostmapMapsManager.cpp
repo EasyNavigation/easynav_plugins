@@ -134,7 +134,7 @@ CostmapMapsManager::on_initialize()
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
       base_grid_msg_ = *msg;
 
-      base_grid_msg_.header.frame_id = tf_info.map_frame;
+      base_grid_msg_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
       base_grid_msg_.header.stamp = this->get_node()->now();
 
       map_base_ = Costmap2D(base_grid_msg_);
