@@ -94,6 +94,14 @@ private:
   /// from (0, 0, 0) to (1, 0, 0) is created instead.
   void load_routes_from_yaml();
 
+  /// @brief Recompute @ref next_route_id_ from whatever is currently in
+  /// @ref routes_, so newly interactively-created routes get IDs that
+  /// don't clash with existing ones. Called after both a fresh YAML
+  /// load and an incoming_routes message, since either can replace
+  /// @ref routes_ wholesale with IDs this manager itself never
+  /// generated.
+  void recompute_next_route_id();
+
   /// @brief Publish the current routes as visualization markers.
   void publish_routes_markers();
 

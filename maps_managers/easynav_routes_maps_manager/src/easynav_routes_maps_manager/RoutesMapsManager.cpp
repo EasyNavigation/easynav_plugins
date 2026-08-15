@@ -196,6 +196,7 @@ void RoutesMapsManager::on_initialize()
     rclcpp::QoS(1).transient_local().reliable(),
     [this](easynav_routes_maps_manager::msg::RoutesMap::UniquePtr msg) {
       routes_ = from_msg(*msg);
+      recompute_next_route_id();
       publish_routes_markers();
       publish_interactive_markers();
     });
@@ -258,9 +259,17 @@ void RoutesMapsManager::update(NavState & nav_state)
 void RoutesMapsManager::load_routes_from_yaml()
 {
   routes_ = easynav::load_routes_from_yaml(map_path_);
+  recompute_next_route_id();
+}
 
-  // Initialize next_route_id_ so that newly created routes get
-  // unique IDs that don't clash with existing ones.
+void RoutesMapsManager::recompute_next_route_id()
+{
+  // (Re)initialize next_route_id_ from whatever is currently in routes_,
+  // so that newly created routes (the interactive marker's "add_segment"
+  // control) get unique IDs that don't clash with existing ones --
+  // called both after a fresh YAML load and after an incoming_routes
+  // message replaces routes_ wholesale, since either can introduce IDs
+  // (e.g. "route7") this manager itself never generated.
   next_route_id_ = 0;
   for (const auto & seg : routes_) {
     if (seg.id.rfind("route", 0) == 0 && seg.id.size() > 5) {
