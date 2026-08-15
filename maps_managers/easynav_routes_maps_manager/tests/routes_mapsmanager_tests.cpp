@@ -15,12 +15,15 @@
 
 
 #include <gtest/gtest.h>
+#include <chrono>
 #include <fstream>
+#include <thread>
 
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
+#include "easynav_routes_maps_manager/msg/routes_map.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
@@ -211,6 +214,73 @@ TEST_F(RoutesMapsManagerTest, UpdateWritesRoutesIntoNavState)
   ASSERT_EQ(routes.size(), 1u);
   EXPECT_DOUBLE_EQ(routes[0].start.position.x, 0.0);
   EXPECT_DOUBLE_EQ(routes[0].end.position.x, 1.0);
+}
+
+TEST_F(RoutesMapsManagerTest, IncomingRoutesTopicUpdatesInternalAndNavState)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "routes_mapsmanager_test_node_incoming");
+
+  node->declare_parameter("routes.package", std::string(""));
+  node->declare_parameter("routes.map_path_file", std::string(""));
+
+  auto manager = std::make_shared<RoutesMapsManager>();
+  easynav::TFInfo tf_info;
+  easynav::RTTFBuffer::getInstance()->set_tf_info(tf_info);
+
+  ASSERT_NO_THROW(manager->initialize(node, "routes"));
+
+  // Before any message arrives, the manager holds the (empty-path)
+  // default single segment.
+  ASSERT_EQ(manager->get_routes().size(), 1u);
+
+  rclcpp::executors::SingleThreadedExecutor executor;
+  executor.add_node(node->get_node_base_interface());
+
+  const std::string topic =
+    node->get_fully_qualified_name() + std::string("/routes/incoming_routes");
+  auto pub = node->create_publisher<easynav_routes_maps_manager::msg::RoutesMap>(
+    topic, rclcpp::QoS(1).transient_local().reliable());
+  pub->on_activate();
+
+  easynav_routes_maps_manager::msg::RoutesMap msg;
+
+  easynav_routes_maps_manager::msg::RouteSegment seg1;
+  seg1.id = "incoming1";
+  seg1.start.position.x = 5.0;
+  seg1.end.position.x = 6.0;
+  seg1.end.orientation.w = 1.0;
+  msg.routes.push_back(seg1);
+
+  easynav_routes_maps_manager::msg::RouteSegment seg2;
+  seg2.id = "incoming2";
+  seg2.start.position.y = 7.0;
+  seg2.end.position.y = 8.0;
+  seg2.end.orientation.w = 1.0;
+  msg.routes.push_back(seg2);
+
+  pub->publish(msg);
+
+  executor.spin_some();
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  executor.spin_some();
+
+  const auto & routes = manager->get_routes();
+  ASSERT_EQ(routes.size(), 2u);
+  EXPECT_EQ(routes[0].id, "incoming1");
+  EXPECT_DOUBLE_EQ(routes[0].start.position.x, 5.0);
+  EXPECT_DOUBLE_EQ(routes[0].end.position.x, 6.0);
+  EXPECT_EQ(routes[1].id, "incoming2");
+  EXPECT_DOUBLE_EQ(routes[1].start.position.y, 7.0);
+  EXPECT_DOUBLE_EQ(routes[1].end.position.y, 8.0);
+
+  easynav::NavState nav_state;
+  manager->update(nav_state);
+  ASSERT_TRUE(nav_state.has("routes"));
+  const auto & nav_routes = nav_state.get<RoutesMap>("routes");
+  ASSERT_EQ(nav_routes.size(), 2u);
+  EXPECT_EQ(nav_routes[0].id, "incoming1");
+  EXPECT_EQ(nav_routes[1].id, "incoming2");
 }
 
 int main(int argc, char ** argv)
