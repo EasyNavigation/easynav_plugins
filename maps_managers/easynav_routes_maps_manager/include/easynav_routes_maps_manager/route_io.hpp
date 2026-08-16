@@ -63,6 +63,28 @@ easynav_routes_maps_manager::msg::RoutesMap to_msg(const RoutesMap & routes);
  */
 RoutesMap from_msg(const easynav_routes_maps_manager::msg::RoutesMap & msg);
 
+/**
+ * @brief Persist a RoutesMap to a routes YAML file, in the exact format
+ * load_routes_from_yaml() reads back: a top-level `routes: [name, ...]`
+ * list plus one `start`/`end` pose-pair entry per name.
+ *
+ * A free function (rather than a RoutesMapsManager member) for the same
+ * reason load_routes_from_yaml()/to_msg()/from_msg() are: so any other
+ * node wanting to persist edited routes to the same file format --
+ * RoutesMapsManager's own `save_routes` service included -- can do so
+ * without depending on RoutesMapsManager itself.
+ *
+ * @param yaml_file Path to write to.
+ * @param routes Routes to persist. Segment ids are used as the YAML
+ *   keys; segments with an empty id are named "route<index>".
+ * @param error_message Set to a human-readable reason on failure;
+ *   untouched on success.
+ * @return true on success, false if the file could not be opened for
+ *   writing (see error_message).
+ */
+bool save_routes_to_yaml(
+  const std::string & yaml_file, const RoutesMap & routes, std::string & error_message);
+
 }  // namespace easynav
 
 #endif  // EASYNAV_ROUTES_MAPS_MANAGER__ROUTE_IO_HPP_
