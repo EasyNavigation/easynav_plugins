@@ -18,10 +18,6 @@
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_routes_maps_manager/route_io.hpp"
 
-#include <fstream>
-
-#include <yaml-cpp/yaml.h>
-
 #include "ament_index_cpp/get_package_share_path.hpp"
 
 #include "rclcpp/rclcpp.hpp"
@@ -105,74 +101,14 @@ void RoutesMapsManager::on_initialize()
     [this](const std_srvs::srv::Trigger::Request::SharedPtr,
     std_srvs::srv::Trigger::Response::SharedPtr response) {
       try {
-        // Persist current routes_ back to YAML file using the
-        // structure:
-        // routes: [route1, route2]
-        // route1: { start: ..., end: ... }
-        YAML::Emitter out;
-        out << YAML::BeginMap;
-
-        // Collect route names from ids (or generate generic ones).
-        std::vector<std::string> names;
-        names.reserve(routes_.size());
-        for (std::size_t i = 0; i < routes_.size(); ++i) {
-          const auto & seg = routes_[i];
-          if (!seg.id.empty()) {
-            names.push_back(seg.id);
-          } else {
-            names.push_back("route" + std::to_string(i));
-          }
-        }
-
-        out << YAML::Key << "routes" << YAML::Value << YAML::Flow << YAML::BeginSeq;
-        for (const auto & n : names) {
-          out << n;
-        }
-        out << YAML::EndSeq;
-
-        // Now define each route as a separate key in the map.
-        for (std::size_t i = 0; i < routes_.size(); ++i) {
-          const auto & seg = routes_[i];
-          const auto & name = names[i];
-
-          out << YAML::Key << name << YAML::Value << YAML::BeginMap;
-
-          out << YAML::Key << "start" << YAML::Value << YAML::BeginMap;
-          out << YAML::Key << "x" << YAML::Value << seg.start.position.x;
-          out << YAML::Key << "y" << YAML::Value << seg.start.position.y;
-          out << YAML::Key << "z" << YAML::Value << seg.start.position.z;
-          out << YAML::Key << "qx" << YAML::Value << seg.start.orientation.x;
-          out << YAML::Key << "qy" << YAML::Value << seg.start.orientation.y;
-          out << YAML::Key << "qz" << YAML::Value << seg.start.orientation.z;
-          out << YAML::Key << "qw" << YAML::Value << seg.start.orientation.w;
-          out << YAML::EndMap;
-
-          out << YAML::Key << "end" << YAML::Value << YAML::BeginMap;
-          out << YAML::Key << "x" << YAML::Value << seg.end.position.x;
-          out << YAML::Key << "y" << YAML::Value << seg.end.position.y;
-          out << YAML::Key << "z" << YAML::Value << seg.end.position.z;
-          out << YAML::Key << "qx" << YAML::Value << seg.end.orientation.x;
-          out << YAML::Key << "qy" << YAML::Value << seg.end.orientation.y;
-          out << YAML::Key << "qz" << YAML::Value << seg.end.orientation.z;
-          out << YAML::Key << "qw" << YAML::Value << seg.end.orientation.w;
-          out << YAML::EndMap;
-
-          out << YAML::EndMap;
-        }
-
-        out << YAML::EndMap;
-
-        std::ofstream file(map_path_);
-        if (!file.is_open()) {
+        std::string error_message;
+        if (easynav::save_routes_to_yaml(map_path_, routes_, error_message)) {
+          response->success = true;
+          response->message = "Routes saved to " + map_path_;
+        } else {
           response->success = false;
-          response->message = "Could not open file for writing: " + map_path_;
-          return;
+          response->message = error_message;
         }
-        file << out.c_str();
-        file.close();
-
-        response->success = true;
-        response->message = "Routes saved to " + map_path_;
       } catch (const std::exception & e) {
         response->success = false;
         response->message = e.what();

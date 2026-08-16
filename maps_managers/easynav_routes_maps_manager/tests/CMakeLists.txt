@@ -5,6 +5,7 @@ ament_add_gtest(routes_mapsmanager_tests
 target_link_libraries(routes_mapsmanager_tests
   ${PROJECT_NAME}_lib
   easynav_common::easynav_common
+  easynav_costmap_common::easynav_costmap_common
   rclcpp::rclcpp
   rclcpp_lifecycle::rclcpp_lifecycle)
 

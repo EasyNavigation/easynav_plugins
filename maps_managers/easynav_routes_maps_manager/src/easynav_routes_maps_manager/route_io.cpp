@@ -15,6 +15,10 @@
 
 #include "easynav_routes_maps_manager/route_io.hpp"
 
+#include <fstream>
+#include <string>
+#include <vector>
+
 #include <yaml-cpp/yaml.h>
 
 namespace easynav
@@ -141,6 +145,84 @@ RoutesMap from_msg(const easynav_routes_maps_manager::msg::RoutesMap & msg)
     routes.push_back(seg);
   }
   return routes;
+}
+
+bool save_routes_to_yaml(
+  const std::string & yaml_file, const RoutesMap & routes, std::string & error_message)
+{
+  // routes: [route1, route2]
+  // route1: { start: ..., end: ... }
+  YAML::Emitter out;
+  out << YAML::BeginMap;
+
+  // Collect route names from ids (or generate generic ones).
+  std::vector<std::string> names;
+  names.reserve(routes.size());
+  for (std::size_t i = 0; i < routes.size(); ++i) {
+    const auto & seg = routes[i];
+    if (!seg.id.empty()) {
+      names.push_back(seg.id);
+    } else {
+      names.push_back("route" + std::to_string(i));
+    }
+  }
+
+  out << YAML::Key << "routes" << YAML::Value << YAML::Flow << YAML::BeginSeq;
+  for (const auto & n : names) {
+    out << n;
+  }
+  out << YAML::EndSeq;
+
+  // Now define each route as a separate key in the map.
+  for (std::size_t i = 0; i < routes.size(); ++i) {
+    const auto & seg = routes[i];
+    const auto & name = names[i];
+
+    out << YAML::Key << name << YAML::Value << YAML::BeginMap;
+
+    out << YAML::Key << "start" << YAML::Value << YAML::BeginMap;
+    out << YAML::Key << "x" << YAML::Value << seg.start.position.x;
+    out << YAML::Key << "y" << YAML::Value << seg.start.position.y;
+    out << YAML::Key << "z" << YAML::Value << seg.start.position.z;
+    out << YAML::Key << "qx" << YAML::Value << seg.start.orientation.x;
+    out << YAML::Key << "qy" << YAML::Value << seg.start.orientation.y;
+    out << YAML::Key << "qz" << YAML::Value << seg.start.orientation.z;
+    out << YAML::Key << "qw" << YAML::Value << seg.start.orientation.w;
+    out << YAML::EndMap;
+
+    out << YAML::Key << "end" << YAML::Value << YAML::BeginMap;
+    out << YAML::Key << "x" << YAML::Value << seg.end.position.x;
+    out << YAML::Key << "y" << YAML::Value << seg.end.position.y;
+    out << YAML::Key << "z" << YAML::Value << seg.end.position.z;
+    out << YAML::Key << "qx" << YAML::Value << seg.end.orientation.x;
+    out << YAML::Key << "qy" << YAML::Value << seg.end.orientation.y;
+    out << YAML::Key << "qz" << YAML::Value << seg.end.orientation.z;
+    out << YAML::Key << "qw" << YAML::Value << seg.end.orientation.w;
+    out << YAML::EndMap;
+
+    out << YAML::EndMap;
+  }
+
+  out << YAML::EndMap;
+
+  if (!out.good()) {
+    error_message = "Failed to serialize routes to YAML: " + out.GetLastError();
+    return false;
+  }
+
+  std::ofstream file(yaml_file);
+  if (!file.is_open()) {
+    error_message = "Could not open file for writing: " + yaml_file;
+    return false;
+  }
+  file << out.c_str();
+  file.close();
+  if (file.fail()) {
+    error_message = "Failed writing routes to file: " + yaml_file;
+    return false;
+  }
+
+  return true;
 }
 
 }  // namespace easynav
