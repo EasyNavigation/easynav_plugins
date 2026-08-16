@@ -373,6 +373,7 @@ TEST_F(RoutesMapsManagerTest, LiveIncomingRoutesEditRefreshesCostmapFilterOnNext
   // cycle's map is reset fresh (as CostmapMapsManager does every real
   // cycle) before the routes filter runs again.
   publish_single_route(0.0, 2.0);
+  ASSERT_EQ(manager->get_routes().size(), 1u);
   ASSERT_DOUBLE_EQ(manager->get_routes()[0].start.position.x, 0.0);
 
   Costmap2D map2(10, 1, 1.0, 0.0, 0.0);

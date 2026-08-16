@@ -205,6 +205,11 @@ bool save_routes_to_yaml(
 
   out << YAML::EndMap;
 
+  if (!out.good()) {
+    error_message = "Failed to serialize routes to YAML: " + out.GetLastError();
+    return false;
+  }
+
   std::ofstream file(yaml_file);
   if (!file.is_open()) {
     error_message = "Could not open file for writing: " + yaml_file;
@@ -212,6 +217,10 @@ bool save_routes_to_yaml(
   }
   file << out.c_str();
   file.close();
+  if (file.fail()) {
+    error_message = "Failed writing routes to file: " + yaml_file;
+    return false;
+  }
 
   return true;
 }
