@@ -2359,7 +2359,7 @@ void UkfWrapper::periodicUpdate()
       RCLCPP_ERROR(
         parent_node_->get_logger(),
         "Critical Error, NaNs were detected in the output state of the filter. "
-        "This was likely due to poorly coniditioned process, noise, or sensor "
+        "This was likely due to poorly conditioned process, noise, or sensor "
         "covariances. Resetting the filter.");
       reset();
       filter_state_valid = false;
