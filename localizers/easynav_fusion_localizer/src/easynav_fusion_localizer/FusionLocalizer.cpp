@@ -174,9 +174,21 @@ void FusionLocalizer::update_rt(NavState & nav_state)
         if (gps_time > last_gps_stamp_[i]) {
           EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_process_gps");
           last_gps_stamp_[i] = gps_time;
-          auto pose =
-            std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(navsatfix_to_pose(
-              gps_data[i]->data));
+          std::shared_ptr<geometry_msgs::msg::PoseWithCovarianceStamped> pose;
+          try {
+            pose = std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(
+              navsatfix_to_pose(gps_data[i]->data));
+          } catch (const GeographicLib::GeographicErr & e) {
+            // A GPS fix whose UTM projection falls outside the zone pinned
+            // at startup (UTM_zone_number_, from latitude_origin/
+            // longitude_origin) throws here rather than clamping/wrapping.
+            // Discarding this one fix is safer than letting the exception
+            // escape update_rt() uncaught, which previously crashed the
+            // whole system_main process.
+            RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 5000,
+                "Discarding a GPS fix that could not be converted to UTM: %s", e.what());
+            continue;
+          }
           if (!first_pose_received_) {
             RCLCPP_INFO(get_node()->get_logger(),
                 "First valid GPS fix received. Initializing filter state.");
@@ -204,7 +216,21 @@ void FusionLocalizer::update_rt(NavState & nav_state)
     nav_msgs::msg::Odometry global_odom;
     if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
       nav_state.set("robot_pose", global_odom);
-      navsat_pub_->publish(odom_to_navsatfix(global_odom));
+      // odom_to_navsatfix() re-projects the *current fused estimate* back to
+      // lat/lon via GeographicLib::UTMUPS::Reverse, which throws if that
+      // estimate has drifted far enough from UTM_origin_x_/y_ to fall
+      // outside the pinned UTM zone (e.g. a diverging filter under a slow
+      // RT cycle). That's only this debug/convenience re-publish, not the
+      // pose estimate itself (already stored above via nav_state.set), so
+      // skip just this one publish rather than letting the exception
+      // escape update_rt() uncaught and crash system_main.
+      try {
+        navsat_pub_->publish(odom_to_navsatfix(global_odom));
+      } catch (const GeographicLib::GeographicErr & e) {
+        RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 5000,
+            "Could not re-project the current position estimate back to a "
+            "NavSatFix (likely a diverged UKF estimate): %s", e.what());
+      }
     }
   }
 

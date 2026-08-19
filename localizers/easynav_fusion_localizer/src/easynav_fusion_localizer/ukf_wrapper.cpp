@@ -941,14 +941,16 @@ void UkfWrapper::loadParams()
       "values, it must not match the map_frame or odom_frame.");
   }
 
-  if (!tf_prefix_.empty()) {
-    // Append the tf prefix in a tf2-friendly manner
-    filter_utilities::appendPrefix(tf_prefix_, map_frame_id_);
-    filter_utilities::appendPrefix(tf_prefix_, odom_frame_id_);
-    filter_utilities::appendPrefix(tf_prefix_, base_link_frame_id_);
-    filter_utilities::appendPrefix(tf_prefix_, base_link_output_frame_id_);
-    filter_utilities::appendPrefix(tf_prefix_, world_frame_id_);
-  }
+  // NOTE: no tf_prefix_ re-prefixing here (unlike upstream robot_localization,
+  // which this code is adapted from): map_frame_id_/odom_frame_id_/
+  // base_link_frame_id_/base_link_output_frame_id_/world_frame_id_ above are
+  // read from RTTFBuffer's TFInfo (tf_info.map_frame etc.), which
+  // RTTFBuffer::set_tf_info() (easynav_common/RTTFBuffer.hpp) already
+  // prefixes with tf_prefix once. Appending it again here produced doubled
+  // frame ids ("robot_1/robot_1/odom"), which never match the
+  // single-prefixed frames robot_state_publisher/ros2_control actually
+  // publish, so the global filter's TF lookups always failed and
+  // map->odom was never broadcast.
 
   // Whether we're publshing the world_frame->base_link_frame transform
   publish_transform_ = parent_node_->declare_parameter(param_prefix + "publish_tf", true);
@@ -965,9 +967,16 @@ void UkfWrapper::loadParams()
   double offset_tmp = parent_node_->declare_parameter(param_prefix + "transform_time_offset", 0.0);
   tf_time_offset_ = rclcpp::Duration::from_seconds(offset_tmp);
 
-  // Transform timeout
-  double timeout_tmp = parent_node_->declare_parameter(param_prefix + "transform_timeout", 0.0);
-  tf_timeout_ = rclcpp::Duration::from_seconds(timeout_tmp);
+  // Transform timeout: intentionally NOT a parameter. preparePose()/
+  // prepareTwist() call ros_filter_utilities::lookupTransformSafe(...,
+  // tf_timeout_, ...) from odometryCallback/accelerationCallback, which run
+  // inside easynav_system's SCHED_FIFO real-time executor thread (rt_cbg,
+  // see loadParams()'s "Get callback_group" above). Any nonzero timeout here
+  // makes that RT thread block synchronously on tf2 -- with map/odom
+  // momentarily unavailable this alone inflated a 5ms RT cycle to ~200ms.
+  // Keep this hardcoded at zero (fail-fast, never wait) so it can't be
+  // reintroduced via config.
+  tf_timeout_ = rclcpp::Duration(0, 0);
 
   // Update frequency and sensor timeout
   frequency_ = parent_node_->declare_parameter(param_prefix + "frequency", 30.0);
@@ -2332,8 +2341,32 @@ void UkfWrapper::periodicUpdate()
   auto filtered_position = std::make_unique<nav_msgs::msg::Odometry>();
 
   bool corrected_data = false;
+  bool got_odometry = getFilteredOdometryMessage(filtered_position.get());
+  // Also gates the acceleration publish below, since getFilteredAccelMessage()
+  // reads the same (possibly-NaN) filter_.getState().
+  bool filter_state_valid = true;
 
-  if (getFilteredOdometryMessage(filtered_position.get())) {
+  if (got_odometry) {
+    // Validate *before* touching world_base_link_trans_msg_/broadcasting/
+    // publishing: this used to run after those side effects and only log,
+    // so a NaN-diverged filter_ (e.g. an ill-conditioned covariance driving
+    // the UKF's internal Cholesky decomposition to produce garbage) kept
+    // broadcasting a NaN map->odom transform forever, with TF silently
+    // dropping every one of those broadcasts and no way to recover short of
+    // restarting system_main. Resetting here makes the filter reinitialize
+    // cleanly from the next valid measurement instead.
+    if (!validateFilterOutput(filtered_position.get())) {
+      RCLCPP_ERROR(
+        parent_node_->get_logger(),
+        "Critical Error, NaNs were detected in the output state of the filter. "
+        "This was likely due to poorly coniditioned process, noise, or sensor "
+        "covariances. Resetting the filter.");
+      reset();
+      filter_state_valid = false;
+    }
+  }
+
+  if (got_odometry && filter_state_valid) {
     world_base_link_trans_msg_.header.stamp =
       static_cast<rclcpp::Time>(filtered_position->header.stamp) + tf_time_offset_;
     world_base_link_trans_msg_.header.frame_id =
@@ -2349,16 +2382,6 @@ void UkfWrapper::periodicUpdate()
       filtered_position->pose.pose.position.z;
     world_base_link_trans_msg_.transform.rotation =
       filtered_position->pose.pose.orientation;
-
-    // The filtered_position is the message containing the state and covariances:
-    // nav_msgs Odometry
-    if (!validateFilterOutput(filtered_position.get())) {
-      RCLCPP_ERROR(
-        parent_node_->get_logger(),
-        "Critical Error, NaNs were detected in the output state of the filter. "
-        "This was likely due to poorly coniditioned process, noise, or sensor "
-        "covariances.");
-    }
 
     // If we're trying to publish with the same time stamp, it means that we had a measurement get
     // inserted into the filter history, and our state estimate was updated after it was already
@@ -2455,7 +2478,7 @@ void UkfWrapper::periodicUpdate()
 
   // Publish the acceleration if desired and filter is initialized
   auto filtered_acceleration = std::make_unique<geometry_msgs::msg::AccelWithCovarianceStamped>();
-  if (!corrected_data && publish_acceleration_ &&
+  if (filter_state_valid && !corrected_data && publish_acceleration_ &&
     getFilteredAccelMessage(filtered_acceleration.get()))
   {
     accel_pub_->publish(std::move(filtered_acceleration));
