@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['🧭_20planners_0',['🧭 Planners',['../index.html#autotoc_md4',1,'']]]
+  ['🧭_20planners_0',['🧭 Planners',['../index.html#autotoc_md6',1,'']]]
 ];

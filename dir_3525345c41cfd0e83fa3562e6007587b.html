@@ -132,19 +132,19 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_aeaeec51d03b26407b2a47447e0cea20.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md37"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md39"></a>
 easynav_simple_controller</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md38"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md40"></a>
 Description</h1>
 <p>Simple path-following controller that uses PID controllers and a look-ahead reference pose to follow a planned path. It produces velocity commands (<span class="tt">cmd_vel</span>) based on the reference pose sampled at a look-ahead distance and limits linear/angular speeds and accelerations.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md39"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md41"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab <br  />
 </li>
 <li><b>Maintainers:</b> Francisco Martín Rico <a href="#" onclick="location.href='mai'+'lto:'+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'; return false;">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md40"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md42"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -158,7 +158,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyRight"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md41"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md43"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_simple_controller/SimpleController</span></li>
@@ -167,7 +167,7 @@ Plugin (pluginlib)</h1>
 <li><b>Library:</b> <span class="tt">easynav_simple_controller</span></li>
 <li><b>Description:</b> Path-following controller using PID (linear and angular) and a look-ahead strategy.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md42"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md44"></a>
 Parameters</h1>
 <p>All parameters are declared under the plugin namespace, i.e., <span class="tt">/&lt;node_fqn&gt;/easynav_simple_controller/SimpleController/...</span>.</p>
 <blockquote class="doxtable">
@@ -205,9 +205,9 @@ Parameters</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">angular_kd</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.08</span>  </td><td class="markdownTableBodyNone">Derivative gain for the angular PID controller.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md43"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md45"></a>
 Interfaces (NavState, Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md44"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md46"></a>
 NavState</h2>
 <p>This controller uses the shared <span class="tt">NavState</span> bag provided by the <span class="tt">easynav_core</span> framework. The following keys are used at runtime by <span class="tt">SimpleController</span>:</p>
 <table class="markdownTable">
@@ -220,13 +220,13 @@ NavState</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">cmd_vel</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs::msg::TwistStamped</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Output velocity command. Header.frame_id is set to <span class="tt">path.header.frame_id</span> when available and stamp to the controller node clock.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md45"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md47"></a>
 Topics / Services</h2>
 <p>The controller itself does not create ROS publishers/subscribers or service servers. It interacts via the <span class="tt">NavState</span> abstraction; how <span class="tt">NavState</span> is exposed (topics or other IPC mechanisms) depends on the integrating node.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md46"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md48"></a>
 TF Frames</h1>
 <p>This controller reads pose from <span class="tt">nav_msgs/Odometry</span> (NavState key <span class="tt">robot_pose</span>). TF is not directly used in this plugin.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md47"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md49"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

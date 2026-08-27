@@ -125,19 +125,19 @@ Directories</h2></td></tr>
 <tr class="memitem:src" id="r_src"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_0a6697157408c622816def8ad064c98a.html">src</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md160"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md162"></a>
 easynav_octomap_maps_manager</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md161"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md163"></a>
 Description</h1>
 <p>Maps Manager that maintains an <a href="https://octomap.github.io/">OctoMap</a> (probabilistic 3D occupancy tree), supports filter plugins (e.g., inflation and obstacle filters), and exposes the map through ROS 2 topics. This README documents <b>plugin-level parameters only</b>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md162"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md164"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab <br  />
 </li>
 <li><b>Maintainers:</b> Francisco Martín Rico <a href="#" onclick="location.href='mai'+'lto:'+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'; return false;">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md163"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md165"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -147,7 +147,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md164"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md166"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_octomap_maps_manager/OctomapMapsManager</span></li>
@@ -157,15 +157,15 @@ Plugin (pluginlib)</h1>
 <li><b>Description:</b> Maintains an OctoMap instance, handles map loading/import, point-cloud ingestion, and filter application.</li>
 </ul>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md166"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md168"></a>
 Parameters</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md167"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md169"></a>
 Plugin Parameters</h2>
 <p>The current code (<a class="el" href="OctomapMapsManager_8cpp.html">OctomapMapsManager.cpp</a>) has the high-level parameter declarations for package and map paths commented out. Active runtime parameters are therefore limited to filter plugin namespaces populated by entries in <span class="tt">filters</span> (if/when enabled). Until the declarations are restored, only filter-local parameters are honored.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md168"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md170"></a>
 Filter Parameters</h2>
 <p>Each entry in <span class="tt">&lt;plugin&gt;.filters</span> defines a sub-namespace <span class="tt">&lt;plugin&gt;.&lt;filter&gt;</span> with at least the key <span class="tt">plugin</span>, plus any specific parameters.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md169"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md171"></a>
 InflationFilter</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -177,10 +177,10 @@ InflationFilter</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.inflation.inscribed_radius</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3</span>  </td><td class="markdownTableBodyNone">Inscribed radius (m) used by the inflation model.  </td></tr>
 </table>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md170"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md172"></a>
 ObstacleFilter</h3>
 <p>This filter does not declare additional ROS parameters apart from <span class="tt">plugin</span>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md171"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md173"></a>
 Example Configuration</h1>
 <div class="fragment"><div class="line">maps_manager_node:</div>
 <div class="line">  ros__parameters:</div>
@@ -198,9 +198,9 @@ Example Configuration</h1>
 <div class="line">      obstacles:</div>
 <div class="line">        plugin: easynav_octomap_maps_manager/ObstacleFilter</div>
 </div><!-- fragment --><hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md173"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md175"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md174"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md176"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -210,7 +210,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_pc2_map</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs/msg/PointCloud2</span>  </td><td class="markdownTableBodyNone">Input point cloud used to build/update the OctoMap.  </td><td class="markdownTableBodyNone">depth=100  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md175"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md177"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -219,7 +219,7 @@ Services</h2>
 <td class="markdownTableBodyNone">Service Server  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</span>  </td><td class="markdownTableBodyNone"><span class="tt">std_srvs/srv/Trigger</span>  </td><td class="markdownTableBodyNone">Saves the current OctoMap to disk.  </td></tr>
 </table>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md177"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md179"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -228,7 +228,7 @@ NavState Keys</h1>
 <td class="markdownTableBodyNone"><span class="tt">map</span>  </td><td class="markdownTableBodyNone"><span class="tt">::octomap::Octomap</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">If present in NavState, used as an input/seed map. (Plugin currently does not write back to NavState.)  </td></tr>
 </table>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md179"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md181"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -237,7 +237,7 @@ TF Frames</h1>
 <td class="markdownTableBodyNone">Publishes  </td><td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyNone">This manager does not broadcast TF; outputs are stamped using the configured frame(s) in the map data.  </td></tr>
 </table>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md181"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md183"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

@@ -125,18 +125,18 @@ Directories</h2></td></tr>
 <tr class="memitem:src" id="r_src"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_349ddcec05ab83d23f6989804ca81dfc.html">src</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md48"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md50"></a>
 easynav_vff_controller</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md49"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md51"></a>
 Description</h1>
 <p>Vector Field Histogram (VFF) style local obstacle avoidance controller. Generates <span class="tt">cmd_vel</span> commands from proximity/cost data and a target path reference using a histogram-based steering selection.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md50"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md52"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab</li>
 <li><b>Maintainers:</b> Jose Miguel Guerrero Hernandez <a href="#" onclick="location.href='mai'+'lto:'+'jos'+'em'+'igu'+'el'+'.gu'+'er'+'rer'+'o@'+'urj'+'c.'+'es'; return false;">josem<span class="obfuscator">.nosp@m.</span>igue<span class="obfuscator">.nosp@m.</span>l.gue<span class="obfuscator">.nosp@m.</span>rrer<span class="obfuscator">.nosp@m.</span>o@urj<span class="obfuscator">.nosp@m.</span>c.es</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md51"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md53"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -150,7 +150,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md52"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md54"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_vff_controller/VffController</span> <br  />
@@ -159,15 +159,15 @@ Plugin (pluginlib)</h1>
  <b>Library:</b> <span class="tt">easynav_vff_controller</span> <br  />
  <b>Description:</b> Histogram-based obstacle avoidance controller producing velocity commands.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md53"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md55"></a>
 Parameters</h1>
 <p>No ROS parameters are currently declared in code. (Add declarations in the plugin to enable runtime tuning.)</p>
 <blockquote class="doxtable">
 <p>This plugin derives from <a href="https://github.com/EasyNavigation/EasyNavigation/tree/rolling/easynav_core#easynavcontrollermethodbase"><span class="tt">easynav::ControllerMethodBase</span></a>. \ See that section for shared collision-checking parameters and debug markers common to all controllers. </p>
 </blockquote>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md54"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md56"></a>
 Interfaces</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md55"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md57"></a>
 NavState Keys</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -179,7 +179,7 @@ NavState Keys</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">cmd_vel</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs::msg::TwistStamped</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Output velocity command.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md56"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md58"></a>
 Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -187,13 +187,13 @@ Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">/vff/markers</span>  </td><td class="markdownTableBodyNone"><span class="tt">visualization_msgs/msg/MarkerArray</span>  </td><td class="markdownTableBodyNone">Histogram / debug visualization (name inferred from code marker publisher variable).  </td><td class="markdownTableBodyNone">depth=10  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md57"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md59"></a>
 Subscriptions / Services</h2>
 <p>None directly; relies on NavState for data sharing.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md58"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md60"></a>
 TF Frames</h1>
 <p>Relies on frames stamped in <span class="tt">robot_pose</span>; does not query TF directly.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md59"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md61"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

@@ -125,18 +125,18 @@ Directories</h2></td></tr>
 <tr class="memitem:src" id="r_src"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_f91573d283a012184a0a050bf6a7719f.html">src</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md108"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md110"></a>
 easynav_bonxai_maps_manager</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md109"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md111"></a>
 Description</h1>
 <p>Maps Manager that maintains a <a href="https://github.com/facontidavide/Bonxai">Bonxai</a> probabilistic 3D occupancy map and exposes it via ROS topics, NavState, and a save-map service.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md110"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md112"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab</li>
 <li><b>Maintainers:</b> Francisco Martín Rico <a href="#" onclick="location.href='mai'+'lto:'+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'; return false;">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md111"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md113"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -150,7 +150,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md112"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md114"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_bonxai_maps_manager/BonxaiMapsManager</span></li>
@@ -159,9 +159,9 @@ Plugin (pluginlib)</h1>
 <li><b>Library:</b> <span class="tt">easynav_bonxai_maps_manager</span></li>
 <li><b>Description:</b> Maps Manager that maintains a <a class="el" href="namespaceBonxai.html">Bonxai</a> probabilistic 3D occupancy map and exposes it via ROS topics, NavState, and a save-map service.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md113"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md115"></a>
 Parameters</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md114"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md116"></a>
 Plugin Parameters (namespace: <span class="tt">/&lt;node_fqn&gt;/easynav_bonxai_maps_manager/BonxaiMapsManager/...</span>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -177,9 +177,9 @@ Plugin Parameters (namespace: <span class="tt">/&lt;node_fqn&gt;/easynav_bonxai_
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.frame_id</span>  </td><td class="markdownTableBodyNone"><span class="tt">string</span>  </td><td class="markdownTableBodyRight"><span class="tt">"map"</span>  </td><td class="markdownTableBodyNone">Frame ID stamped on published map messages.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md115"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md117"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md116"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md118"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -191,7 +191,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/map</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs/msg/PointCloud2</span>  </td><td class="markdownTableBodyNone">Published <a class="el" href="namespaceBonxai.html">Bonxai</a> map as a point cloud.  </td><td class="markdownTableBodyNone">QoS depth=1, transient_local, reliable  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md117"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md119"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -199,7 +199,7 @@ Services</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Service Server  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</span>  </td><td class="markdownTableBodyNone"><span class="tt">std_srvs/srv/Trigger</span>  </td><td class="markdownTableBodyNone">Save current <a class="el" href="namespaceBonxai.html">Bonxai</a> map to disk.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md118"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md120"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -207,7 +207,7 @@ NavState Keys</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">map.bonxai</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classBonxai_1_1ProbabilisticMap.html" title="The ProbabilisticMap class is meant to behave as much as possible as octomap::Octree,...">Bonxai::ProbabilisticMap</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Stores the current <a class="el" href="namespaceBonxai.html">Bonxai</a> map instance.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md119"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md121"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -215,7 +215,7 @@ TF Frames</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publishes  </td><td class="markdownTableBodyNone"><span class="tt">—</span>  </td><td class="markdownTableBodyNone">No TF broadcast; outputs use the configured frame_id.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md120"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md122"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

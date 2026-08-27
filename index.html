@@ -103,16 +103,19 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_README"></a></p>
 <p><a href="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/doxygen-doc.yml"><img src="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/doxygen-doc.yml/badge.svg" alt="Doxygen Deployment" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/rolling.yaml"><img src="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/rolling.yaml/badge.svg?branch=rolling" alt="rolling" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/lyrical.yaml"><img src="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/lyrical.yaml/badge.svg?branch=lyrical" alt="lyrical" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/kilted.yaml"><img src="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/kilted.yaml/badge.svg?branch=kilted" alt="kilted" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/jazzy.yaml"><img src="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/jazzy.yaml/badge.svg?branch=jazzy" alt="jazzy" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/humble.yaml"><img src="https://github.com/EasyNavigation/easynav_plugins/actions/workflows/humble.yaml/badge.svg?branch=humble" alt="humble" style="pointer-events: none;" class="inline"/></a></p>
+<hr  />
+<p><img src="https://github.com/user-attachments/assets/fedfcf13-6af6-43d7-8290-fe22da4e1db0" alt="MICIU+Cofinanciado+AEI" width="240" height="47" class="inline"/> <img src="https://github.com/user-attachments/assets/b11da974-9201-4f79-902e-c9c20e8aa7a4" alt="eu_funded_en" width="240" height="50" class="inline"/> Funded by the European Union through the Horizon Europe programme under Grant Agreement No. 101070254 (CoreSense), and by MICIU/AEI/10.13039/501100011033 and ERDF/EU under grants PERMAP PID2024-161761OB-C21 and PLANNAV PID2024-161761OB-C22 (AURORAS).</p>
+<hr  />
 <p>📋 Roadmap Project: <a href="https://github.com/EasyNavigation/EasyNavigation/blob/rolling/ROADMAP.md">RoadMap</a></p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md1"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
 Description</h1>
 <p><b>EasyNav Plugins</b> provides the official collection of plugins for the <a href="https://github.com/EasyNavigation">Easy Navigation (EasyNav)</a> framework. <br  />
  These plugins extend the navigation core with planners, controllers, map managers, and localizers compatible with ROS 2.</p>
 <p>Each plugin resides in its own ROS 2 package and is registered via <span class="tt">pluginlib</span>, allowing dynamic loading at runtime.</p>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
 Repository Structure</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
 🧭 Planners</h2>
 <p>Path planning plugins implementing A*, costmap, or NavMap–based methods.</p>
 <table class="markdownTable">
@@ -126,7 +129,7 @@ Repository Structure</h1>
 <td class="markdownTableBodyNone"><span class="tt">easynav_navmap_planner</span>  </td><td class="markdownTableBodyNone">A* planner over a NavMap mesh.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_db2f5015239ad27e3bfa6b159a1302c4.html" title="/github/workspace/planners/easynav_navmap_planner/README.md">README</a>  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
 ⚙️ Controllers</h2>
 <p>Motion controllers for trajectory tracking and reactive behaviors.</p>
 <table class="markdownTable">
@@ -146,7 +149,7 @@ Repository Structure</h1>
 <td class="markdownTableBodyNone"><span class="tt">easynav_regulated_pp_controller</span>  </td><td class="markdownTableBodyNone">Regulated Pure Pursuit controller, with optional Dynamic Window (DWPP) extension.  </td><td class="markdownTableBodyNone">README  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 🗺️ Maps Managers</h2>
 <p>Map management plugins that provide, update, and store different environment representations.</p>
 <table class="markdownTable">
@@ -164,7 +167,7 @@ Repository Structure</h1>
 <td class="markdownTableBodyNone"><span class="tt">easynav_simple_maps_manager</span>  </td><td class="markdownTableBodyNone">Minimal example map manager (SimpleMap).  </td><td class="markdownTableBodyNone"><a class="el" href="dir_b2163fc9645c24f19b8f26c39339fde7.html" title="/github/workspace/maps_managers/easynav_simple_maps_manager/README.md">README</a>  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 📍 Localizers</h2>
 <p>Localization plugins based on different map types and sensors.</p>
 <table class="markdownTable">
@@ -182,7 +185,7 @@ Repository Structure</h1>
 <td class="markdownTableBodyNone"><span class="tt">easynav_fusion_localizer</span>  </td><td class="markdownTableBodyNone">Multi-sensor fusion localizer (e.g., GPS + odometry + map).  </td><td class="markdownTableBodyNone">README  </td></tr>
 </table>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
 License</h1>
 <p>All packages in this repository are released under <b>Apache-2.0</b> unless stated otherwise in the individual package. </p>
 </div></div><!-- PageDoc -->
