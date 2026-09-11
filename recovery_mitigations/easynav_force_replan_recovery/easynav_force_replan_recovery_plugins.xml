@@ -1,0 +1,10 @@
+<class_libraries>
+  <library path="easynav_force_replan_recovery">
+    <class name="easynav_force_replan_recovery/ForceReplanRecovery" type="easynav::ForceReplanRecovery" base_class_type="easynav::RecoveryMitigationBase">
+      <description>
+      Forces an immediate replan (hardware_id "planner", level ERROR) via
+      PlannerMethodBase::force_update(). Does not take control_owner.
+      </description>
+    </class>
+  </library>
+</class_libraries>

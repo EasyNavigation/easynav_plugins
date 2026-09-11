@@ -1,0 +1,10 @@
+<class_libraries>
+  <library path="easynav_obstacle_too_close_evaluator">
+    <class name="easynav_obstacle_too_close_evaluator/ObstacleTooCloseEvaluator" type="easynav::ObstacleTooCloseEvaluator" base_class_type="easynav::RecoveryEvaluatorBase">
+      <description>
+      Diagnoses the robot being stopped (near-zero measured velocity) too close to an
+      obstacle. Deliberately compound: it does not fire while the robot is still moving/braking.
+      </description>
+    </class>
+  </library>
+</class_libraries>

@@ -1,0 +1,2 @@
+ament_add_gtest(force_replan_recovery_tests force_replan_recovery_tests.cpp)
+target_link_libraries(force_replan_recovery_tests ${PROJECT_NAME})

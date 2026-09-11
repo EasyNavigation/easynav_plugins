@@ -1,0 +1,10 @@
+<class_libraries>
+  <library path="easynav_clear_map_recovery">
+    <class name="easynav_clear_map_recovery/ClearMapRecovery" type="easynav::ClearMapRecovery" base_class_type="easynav::RecoveryMitigationBase">
+      <description>
+      Requests every loaded MapsManagerBase plugin to reset/clear its data (hardware_id
+      "planner", level ERROR). Does not take control_owner.
+      </description>
+    </class>
+  </library>
+</class_libraries>
