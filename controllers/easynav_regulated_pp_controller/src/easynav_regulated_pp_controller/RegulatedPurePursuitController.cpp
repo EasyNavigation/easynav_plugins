@@ -96,6 +96,10 @@ RegulatedPurePursuitController::on_initialize()
     use_obstacle_regulated_linear_velocity_scaling_);
   declare_and_get("obstacle_scaling_dist", obstacle_scaling_dist_);
   declare_and_get("obstacle_scaling_gain", obstacle_scaling_gain_);
+  declare_and_get("robot_radius", robot_radius_);
+  declare_and_get("safety_margin", safety_margin_);
+  declare_and_get("z_min_filter", z_min_filter_);
+  declare_and_get("robot_height", robot_height_);
 
   declare_and_get("min_approach_linear_velocity", min_approach_linear_velocity_);
   declare_and_get("approach_velocity_scaling_dist", approach_velocity_scaling_dist_);

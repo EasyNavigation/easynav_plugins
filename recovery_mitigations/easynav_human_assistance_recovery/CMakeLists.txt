@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(easynav_clear_map_recovery)
+project(easynav_human_assistance_recovery)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -13,7 +13,7 @@ find_package(rclcpp REQUIRED)
 find_package(diagnostic_msgs REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
-  src/easynav_clear_map_recovery/ClearMapRecovery.cpp
+  src/easynav_human_assistance_recovery/HumanAssistanceRecovery.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -55,7 +55,7 @@ ament_export_libraries(${PROJECT_NAME})
 ament_export_targets(export_${PROJECT_NAME})
 
 # Register the recovery mitigation plugin
-pluginlib_export_plugin_description_file(easynav_core easynav_clear_map_recovery_plugins.xml)
+pluginlib_export_plugin_description_file(easynav_core easynav_human_assistance_recovery_plugins.xml)
 
 ament_export_dependencies(
   easynav_common

@@ -15,6 +15,7 @@
 /// \file
 /// \brief Implementation of the NoPathEvaluator class.
 
+#include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/path.hpp"
 
 #include "easynav_no_path_evaluator/NoPathEvaluator.hpp"
@@ -32,7 +33,16 @@ void NoPathEvaluator::update(NavState & nav_state)
   status.name = get_plugin_name();
   status.hardware_id = "planner";
 
-  if (!nav_state.has("path")) {
+  // "goals" is written by GoalManager on the same non-RT thread this evaluator runs on, so a
+  // plain get() is safe here too. No active goal means there is nothing to plan toward, so a
+  // missing/empty "path" is expected, not something this evaluator should flag.
+  const bool has_active_goal = nav_state.has("goals") &&
+    !nav_state.get<nav_msgs::msg::Goals>("goals").goals.empty();
+
+  if (!has_active_goal) {
+    status.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
+    status.message = "no active goal";
+  } else if (!nav_state.has("path")) {
     status.level = diagnostic_msgs::msg::DiagnosticStatus::WARN;
     status.message = "no path published yet";
   } else {

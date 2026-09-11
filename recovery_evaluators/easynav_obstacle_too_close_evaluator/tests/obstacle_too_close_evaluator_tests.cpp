@@ -119,7 +119,11 @@ TEST_F(ObstacleTooCloseEvaluatorTestCase, OkWhenStoppedButNoObstacleNearby)
 
 TEST_F(ObstacleTooCloseEvaluatorTestCase, ErrorWhenStoppedTooCloseToAnObstacle)
 {
-  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_stopped_close_node");
+  // debounce_duration is overridden to 0 so a single sample already counts as "sustained
+  // stopped" — the debounce window itself has its own dedicated tests below.
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_stopped_close_node",
+    rclcpp::NodeOptions().append_parameter_override("close4.debounce_duration", 0.0));
   auto eval = make_ready_evaluator(node, "close4");
 
   easynav::NavState nav_state;
@@ -135,4 +139,87 @@ TEST_F(ObstacleTooCloseEvaluatorTestCase, ErrorWhenStoppedTooCloseToAnObstacle)
   ASSERT_EQ(status.values.size(), 2u);
   EXPECT_EQ(status.values[0].key, "distance");
   EXPECT_NEAR(std::stod(status.values[0].value), 0.2, 1e-3);
+}
+
+// ---------------------------------------------------------------------------
+// Debounce window (§5.2): "stopped" must be sustained for a short interval before it is
+// trusted, so a single low-velocity sample taken mid-brake (RT and non-RT cycles run in
+// parallel) cannot be mistaken for "already stopped".
+// ---------------------------------------------------------------------------
+
+TEST_F(ObstacleTooCloseEvaluatorTestCase, RemainsOkWithinDebounceWindowEvenIfObstacleIsClose)
+{
+  // Default debounce_duration (0.2 s): a single sample right after stopping must not yet
+  // trigger ERROR, however close the obstacle is.
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_debounce_ok_node");
+  auto eval = make_ready_evaluator(node, "close5");
+
+  easynav::NavState nav_state;
+  nav_state.set("robot_pose", make_odom(0.0, 0.0));
+  nav_state.set("obstacle_scan", make_obstacle_at(0.2, 0.0));
+
+  eval->internal_update(nav_state);
+
+  const auto & status =
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.close5");
+  EXPECT_EQ(status.level, diagnostic_msgs::msg::DiagnosticStatus::OK);
+}
+
+TEST_F(ObstacleTooCloseEvaluatorTestCase, ErrorOnceDebounceWindowElapses)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_debounce_elapses_node",
+    rclcpp::NodeOptions()
+    .append_parameter_override("close6.debounce_duration", 0.05)
+    .append_parameter_override("close6.freq", 200.0));
+  auto eval = make_ready_evaluator(node, "close6");
+
+  easynav::NavState nav_state;
+  nav_state.set("robot_pose", make_odom(0.0, 0.0));
+  nav_state.set("obstacle_scan", make_obstacle_at(0.2, 0.0));
+
+  eval->internal_update(nav_state);  // starts the debounce timer, still OK
+  ASSERT_EQ(
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.close6").level,
+    diagnostic_msgs::msg::DiagnosticStatus::OK);
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(60));  // past the 50 ms debounce
+  eval->internal_update(nav_state);
+
+  EXPECT_EQ(
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.close6").level,
+    diagnostic_msgs::msg::DiagnosticStatus::ERROR);
+}
+
+TEST_F(ObstacleTooCloseEvaluatorTestCase, DebounceResetsIfRobotMovesAgain)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_debounce_reset_node",
+    rclcpp::NodeOptions()
+    .append_parameter_override("close7.debounce_duration", 0.05)
+    .append_parameter_override("close7.freq", 200.0));
+  auto eval = make_ready_evaluator(node, "close7");
+
+  easynav::NavState nav_state;
+  nav_state.set("obstacle_scan", make_obstacle_at(0.2, 0.0));
+
+  // Stops, most of the way through the debounce window...
+  nav_state.set("robot_pose", make_odom(0.0, 0.0));
+  eval->internal_update(nav_state);
+  std::this_thread::sleep_for(std::chrono::milliseconds(60));  // would clear a 50 ms debounce
+
+  // ...but moves again before it fires, which must restart the debounce clock.
+  nav_state.set("robot_pose", make_odom(0.5, 0.0));
+  eval->internal_update(nav_state);
+  // 10 ms << the 50 ms debounce: well within a fresh window if the reset actually happened.
+  std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+  // Stops again: if the clock had NOT been reset, elapsed time since the very first stop would
+  // already exceed the debounce window and this would incorrectly report ERROR.
+  nav_state.set("robot_pose", make_odom(0.0, 0.0));
+  eval->internal_update(nav_state);
+
+  EXPECT_EQ(
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.close7").level,
+    diagnostic_msgs::msg::DiagnosticStatus::OK);
 }

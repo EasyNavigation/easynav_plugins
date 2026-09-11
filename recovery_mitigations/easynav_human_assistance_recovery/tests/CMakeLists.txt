@@ -1,0 +1,2 @@
+ament_add_gtest(human_assistance_recovery_tests human_assistance_recovery_tests.cpp)
+target_link_libraries(human_assistance_recovery_tests ${PROJECT_NAME})
