@@ -18,6 +18,10 @@
 #ifndef EASYNAV_OBSTACLE_TOO_CLOSE_EVALUATOR__OBSTACLETOOCLOSEEVALUATOR_HPP_
 #define EASYNAV_OBSTACLE_TOO_CLOSE_EVALUATOR__OBSTACLETOOCLOSEEVALUATOR_HPP_
 
+#include <optional>
+
+#include "rclcpp/time.hpp"
+
 #include "easynav_core/RecoveryEvaluatorBase.hpp"
 
 namespace easynav
@@ -36,6 +40,11 @@ namespace easynav
  * "already stopped" condition is checked against an independent, physically measured signal
  * (the robot's own commanded/estimated velocity from "robot_pose"), so this evaluator works
  * correctly regardless of *why* the robot stopped.
+ *
+ * Per §5.2, "stopped" must also be *sustained* for a short debounce window before it is
+ * trusted: the RT and non-RT cycles run in parallel, so a single low-velocity sample could
+ * still be taken mid-brake. While within that window this evaluator reports OK (informational,
+ * matched by no mitigator's can_handle()), not yet the real proximity check.
  */
 class ObstacleTooCloseEvaluator : public easynav::RecoveryEvaluatorBase
 {
@@ -58,6 +67,12 @@ private:
 
   /// @brief Below this angular speed (rad/s), the robot is considered stopped.
   double angular_velocity_epsilon_ {0.05};
+
+  /// @brief Seconds the "stopped" condition must hold, uninterrupted, before it is trusted.
+  double debounce_duration_ {0.2};
+
+  /// @brief Timestamp since the robot has been continuously stopped, reset the moment it moves.
+  std::optional<rclcpp::Time> stopped_since_;
 };
 
 }  // namespace easynav

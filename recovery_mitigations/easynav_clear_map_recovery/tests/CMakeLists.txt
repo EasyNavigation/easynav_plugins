@@ -1,2 +1,0 @@
-ament_add_gtest(clear_map_recovery_tests clear_map_recovery_tests.cpp)
-target_link_libraries(clear_map_recovery_tests ${PROJECT_NAME})

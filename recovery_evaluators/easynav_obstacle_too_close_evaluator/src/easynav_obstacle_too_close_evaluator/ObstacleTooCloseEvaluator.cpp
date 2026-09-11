@@ -36,11 +36,13 @@ void ObstacleTooCloseEvaluator::on_initialize()
     plugin_name + ".linear_velocity_epsilon", linear_velocity_epsilon_);
   node->declare_parameter<double>(
     plugin_name + ".angular_velocity_epsilon", angular_velocity_epsilon_);
+  node->declare_parameter<double>(plugin_name + ".debounce_duration", debounce_duration_);
 
   node->get_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
   node->get_parameter<double>(plugin_name + ".linear_velocity_epsilon", linear_velocity_epsilon_);
   node->get_parameter<double>(
     plugin_name + ".angular_velocity_epsilon", angular_velocity_epsilon_);
+  node->get_parameter<double>(plugin_name + ".debounce_duration", debounce_duration_);
 }
 
 void ObstacleTooCloseEvaluator::update(NavState & nav_state)
@@ -54,6 +56,7 @@ void ObstacleTooCloseEvaluator::update(NavState & nav_state)
   status.message = "no obstacle too close";
 
   if (!nav_state.has("robot_pose")) {
+    stopped_since_.reset();
     publish_diagnostic(nav_state, status);
     return;
   }
@@ -73,6 +76,23 @@ void ObstacleTooCloseEvaluator::update(NavState & nav_state)
     // Still moving (e.g. the level-0 reflex is still braking): too early to judge proximity as
     // something this evaluator should act on. See the compound-condition rationale in the
     // class doc comment.
+    stopped_since_.reset();
+    status.message = "still moving";
+    publish_diagnostic(nav_state, status);
+    return;
+  }
+
+  if (!stopped_since_.has_value()) {
+    stopped_since_ = get_node()->now();
+  }
+
+  const double stopped_for = (get_node()->now() - *stopped_since_).seconds();
+  if (stopped_for < debounce_duration_) {
+    // §5.2: "stopped" must be sustained for a short debounce window before it is trusted — the
+    // RT and non-RT cycles run in parallel, so a single low-velocity sample could still be
+    // taken mid-brake. Report as OK (informational, no mitigator's can_handle() matches it)
+    // rather than evaluating proximity yet.
+    status.message = "recently stopped, confirming before evaluating proximity";
     publish_diagnostic(nav_state, status);
     return;
   }

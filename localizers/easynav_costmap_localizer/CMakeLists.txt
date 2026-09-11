@@ -18,6 +18,7 @@ find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(diagnostic_msgs REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 
 
@@ -43,6 +44,34 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   ${nav_msgs_TARGETS}
 )
 
+add_library(amcl_convergence_evaluator SHARED
+  src/easynav_costmap_localizer/AmclConvergenceEvaluator.cpp
+)
+target_include_directories(amcl_convergence_evaluator PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+)
+target_link_libraries(amcl_convergence_evaluator PUBLIC
+  easynav_core::easynav_core
+  pluginlib::pluginlib
+  ${diagnostic_msgs_TARGETS}
+)
+
+add_library(amcl_relocalize_mitigation SHARED
+  src/easynav_costmap_localizer/AmclRelocalizeMitigation.cpp
+)
+target_include_directories(amcl_relocalize_mitigation PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+)
+target_link_libraries(amcl_relocalize_mitigation PUBLIC
+  easynav_common::easynav_common
+  easynav_core::easynav_core
+  pluginlib::pluginlib
+  ${diagnostic_msgs_TARGETS}
+  ${geometry_msgs_TARGETS}
+)
+
 install(
   DIRECTORY include/
   DESTINATION include/${PROJECT_NAME}
@@ -50,6 +79,8 @@ install(
 
 install(TARGETS
   ${PROJECT_NAME}
+  amcl_convergence_evaluator
+  amcl_relocalize_mitigation
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
@@ -67,7 +98,11 @@ if(BUILD_TESTING)
 endif()
 
 ament_export_include_directories("include/${PROJECT_NAME}")
-ament_export_libraries(${PROJECT_NAME})
+ament_export_libraries(
+  ${PROJECT_NAME}
+  amcl_convergence_evaluator
+  amcl_relocalize_mitigation
+)
 ament_export_targets(export_${PROJECT_NAME})
 
 # Register the planning plugins
@@ -86,6 +121,7 @@ ament_export_dependencies(
   rclcpp
   geometry_msgs
   nav_msgs
+  diagnostic_msgs
   Eigen3
 )
 ament_package()

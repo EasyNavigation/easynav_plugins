@@ -85,6 +85,7 @@ protected:
   double last_w_{0.0};                  ///< Last value for angular velocity before than collision
   bool collision_state_{false};         ///< Collision state flag
   double collision_factor_{0.618033};   ///< Collision avoidance for recalculate velocities
+  bool collision_checker_active_{false};  ///< Enables the in-loop obstacle constraint above
 
   // Fallback goal tolerances if GoalManager does not publish them
   double fallback_goal_pos_tol_{0.05};   ///< Default positional tolerance (meters).

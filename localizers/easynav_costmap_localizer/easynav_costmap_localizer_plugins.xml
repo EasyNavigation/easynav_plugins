@@ -6,4 +6,20 @@
       </description>
     </class>
   </library>
+  <library path="amcl_convergence_evaluator">
+    <class name="easynav_costmap_localizer/AmclConvergenceEvaluator" type="easynav::AmclConvergenceEvaluator" base_class_type="easynav::RecoveryEvaluatorBase">
+      <description>
+      Diagnoses AMCL particle-filter divergence from the pose covariance trace. See
+      docs/recoveries_easynav.md §5.9.
+      </description>
+    </class>
+  </library>
+  <library path="amcl_relocalize_mitigation">
+    <class name="easynav_costmap_localizer/AmclRelocalizeMitigation" type="easynav::AmclRelocalizeMitigation" base_class_type="easynav::RecoveryMitigationBase">
+      <description>
+      Rotates in place to help AMCL relocalize after a divergence diagnostic. See
+      docs/recoveries_easynav.md §5.9.
+      </description>
+    </class>
+  </library>
 </class_libraries>
