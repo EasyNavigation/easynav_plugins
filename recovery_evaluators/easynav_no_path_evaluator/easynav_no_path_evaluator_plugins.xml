@@ -1,0 +1,10 @@
+<class_libraries>
+  <library path="easynav_no_path_evaluator">
+    <class name="easynav_no_path_evaluator/NoPathEvaluator" type="easynav::NoPathEvaluator" base_class_type="easynav::RecoveryEvaluatorBase">
+      <description>
+      Diagnoses a missing or empty planner path: WARN if the planner has not published one yet,
+      ERROR if it published an empty path, OK otherwise.
+      </description>
+    </class>
+  </library>
+</class_libraries>

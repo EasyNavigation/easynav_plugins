@@ -1,0 +1,2 @@
+ament_add_gtest(notify_and_hold_recovery_tests notify_and_hold_recovery_tests.cpp)
+target_link_libraries(notify_and_hold_recovery_tests ${PROJECT_NAME})

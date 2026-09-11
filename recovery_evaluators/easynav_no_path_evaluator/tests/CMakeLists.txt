@@ -1,0 +1,2 @@
+ament_add_gtest(no_path_evaluator_tests no_path_evaluator_tests.cpp)
+target_link_libraries(no_path_evaluator_tests ${PROJECT_NAME})

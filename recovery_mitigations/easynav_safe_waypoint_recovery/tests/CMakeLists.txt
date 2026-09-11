@@ -1,0 +1,2 @@
+ament_add_gtest(safe_waypoint_recovery_tests safe_waypoint_recovery_tests.cpp)
+target_link_libraries(safe_waypoint_recovery_tests ${PROJECT_NAME})

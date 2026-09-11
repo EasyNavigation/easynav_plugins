@@ -1,0 +1,12 @@
+<class_libraries>
+  <library path="easynav_notify_and_hold_recovery">
+    <class name="easynav_notify_and_hold_recovery/NotifyAndHoldRecovery" type="easynav::NotifyAndHoldRecovery" base_class_type="easynav::RecoveryMitigationBase">
+      <description>
+      Last-resort mitigation: stops the robot, reports the mission as failed/errored via
+      GoalManager, and holds (takes control_owner) until a new goal is accepted. Unconditional
+      can_handle() for any ERROR-or-above diagnostic -- meant to be listed last in
+      mitigation_types.
+      </description>
+    </class>
+  </library>
+</class_libraries>
