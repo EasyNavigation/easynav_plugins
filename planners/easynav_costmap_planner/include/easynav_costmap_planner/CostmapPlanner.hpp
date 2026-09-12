@@ -93,6 +93,12 @@ protected:
     const Costmap2D & map,
     const geometry_msgs::msg::Pose & start,
     const geometry_msgs::msg::Pose & goal);
+
+  /// @brief Clears current_path_ (if not already empty), publishes it once to path_pub_ (RViz)
+  /// and to NavState's "path" (the controller) -- called from every branch of update() that
+  /// gives up on the current goal (no goal, wrong frame, goal outside the map, A* found no
+  /// route), so a failed plan is never masked by whatever path was last computed successfully.
+  void clear_current_path(NavState & nav_state);
 };
 
 }  // namespace easynav
