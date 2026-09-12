@@ -1,0 +1,12 @@
+<class_libraries>
+  <library path="easynav_advance_recovery">
+    <class name="easynav_advance_recovery/AdvanceRecovery" type="easynav::AdvanceRecovery" base_class_type="easynav::RecoveryMitigationBase">
+      <description>
+      Advances a short configured distance for diagnostics with hardware_id
+      "controller_stuck" (ControllerStuckEvaluator). Never reports success as "fixed" — each
+      activation just completes one advance; if the same episode keeps recurring for too long
+      in total, it gives up and escalates instead of retrying forever.
+      </description>
+    </class>
+  </library>
+</class_libraries>

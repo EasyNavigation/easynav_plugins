@@ -18,6 +18,10 @@
 #ifndef EASYNAV_HUMAN_ASSISTANCE_RECOVERY__HUMANASSISTANCERECOVERY_HPP_
 #define EASYNAV_HUMAN_ASSISTANCE_RECOVERY__HUMANASSISTANCERECOVERY_HPP_
 
+#include <optional>
+
+#include "rclcpp/time.hpp"
+
 #include "easynav_core/RecoveryMitigationBase.hpp"
 
 namespace easynav
@@ -27,20 +31,21 @@ namespace easynav
  * @class HumanAssistanceRecovery
  * @brief Level-1 last-resort mitigation: asks a human operator for help.
  *
- * See docs/recoveries_easynav.md §5.15 — this is a simplified instance of the design's
- * HumanAssistanceRecovery (no `teleop` mode, no episode-id `ack`: the "ack" here is physical,
- * whatever fixed the problem shows up as the offending diagnostic going back to OK). Generic
- * and domain-agnostic by design: unlike SafeRetreatRecovery/AmclRelocalizeMitigation, it does
- * not know or care which component raised the diagnostic — can_handle() accepts any ERROR,
- * meant to be configured with the lowest priority (or listed last in "mitigation_types") so it
- * is only reached once every more specific mitigator has been tried and excluded (see
- * RecoveryManagerNode's per-diagnostic exclusion, docs/recoveries_easynav_implementation.md).
+ * Deliberately simplified: no `teleop` mode, no episode-id `ack` — the "ack" here is physical,
+ * whatever fixed the problem shows up as the offending diagnostic going back to OK. Generic and
+ * domain-agnostic: unlike SafeRetreatRecovery/AmclRelocalizeMitigation, it does not know or care
+ * which component raised the diagnostic — can_handle() accepts any ERROR, meant to be configured
+ * with the lowest priority (or listed last in "mitigation_types") so it is only reached once
+ * every more specific mitigator has been tried and excluded.
  *
- * Not to be confused with the now-removed NotifyAndHoldRecovery (Fase 4, retired in the
- * Sesión 11 of the implementation log), which treated its trigger as a mission failure
- * (`GoalManager::set_failed`). This one does not: once every diagnostic is observed back at OK
- * — presumably because a human fixed whatever was wrong — it returns control and the robot
- * resumes its current mission, exactly as §5.15 specifies for a human-certified recovery.
+ * Once every diagnostic is observed back at OK — presumably because a human fixed whatever was
+ * wrong — it returns control and the robot resumes its current mission; it never fails the
+ * mission itself (that is a different mitigation's job).
+ *
+ * Optionally bounded by "timeout" (seconds, default 0.0 = wait forever): if a human has not
+ * fixed things within that time, this mitigation gives up (FAILED) instead of waiting
+ * indefinitely, so a lower-priority candidate — e.g. a mission-level "give up" mitigation — can
+ * take over.
  */
 class HumanAssistanceRecovery : public easynav::RecoveryMitigationBase
 {
@@ -56,6 +61,18 @@ public:
 protected:
   void on_start(NavState & nav_state) override;
   RecoveryStatus on_cycle(NavState & nav_state) override;
+
+private:
+  /// @brief Seconds to wait before giving up. 0.0 (the default) means wait forever.
+  double timeout_ {0.0};
+
+  rclcpp::Time start_time_;
+
+  /// @brief When the last "still waiting" report() was sent, to throttle it to once per
+  /// wait_report_period_ instead of every RT cycle.
+  std::optional<rclcpp::Time> last_wait_report_;
+
+  static constexpr double wait_report_period_ {10.0};
 };
 
 }  // namespace easynav

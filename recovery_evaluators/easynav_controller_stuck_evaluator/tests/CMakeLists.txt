@@ -1,0 +1,2 @@
+ament_add_gtest(controller_stuck_evaluator_tests controller_stuck_evaluator_tests.cpp)
+target_link_libraries(controller_stuck_evaluator_tests ${PROJECT_NAME})

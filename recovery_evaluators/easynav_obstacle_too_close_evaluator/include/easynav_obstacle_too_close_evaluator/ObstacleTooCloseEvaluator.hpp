@@ -31,20 +31,18 @@ namespace easynav
  * @class ObstacleTooCloseEvaluator
  * @brief Level-1 recovery evaluator: diagnoses "stopped too close to an obstacle".
  *
- * See docs/recoveries_easynav.md §5.2/§5.13. This is deliberately a *compound* condition, not
- * just "is something close": it requires the robot to already be (near) stationary before
- * reporting ERROR. Rationale — the RT-level CollisionSafetyReflex reacts first and stops the
- * robot; this evaluator must not fire while that stop is still happening (still decelerating),
- * or a movement mitigation like SafeRetreatRecovery could take over mid-brake and substitute an
- * unsafe motion for a controlled one. Rather than coupling to the reflex's internal state, the
- * "already stopped" condition is checked against an independent, physically measured signal
- * (the robot's own commanded/estimated velocity from "robot_pose"), so this evaluator works
- * correctly regardless of *why* the robot stopped.
+ * Deliberately a *compound* condition, not just "is something close": it requires the robot to
+ * already be (near) stationary before reporting ERROR. The RT-level CollisionSafetyReflex reacts
+ * first and stops the robot; this evaluator must not fire while that stop is still happening
+ * (still decelerating), or a movement mitigation like SafeRetreatRecovery could take over
+ * mid-brake and substitute an unsafe motion for a controlled one. Rather than coupling to the
+ * reflex's internal state, "already stopped" is checked against an independent, physically
+ * measured signal (the robot's own velocity from "robot_pose"), so this works regardless of
+ * *why* the robot stopped.
  *
- * Per §5.2, "stopped" must also be *sustained* for a short debounce window before it is
- * trusted: the RT and non-RT cycles run in parallel, so a single low-velocity sample could
- * still be taken mid-brake. While within that window this evaluator reports OK (informational,
- * matched by no mitigator's can_handle()), not yet the real proximity check.
+ * "Stopped" must also be *sustained* for a short debounce window before it is trusted: the RT
+ * and non-RT cycles run in parallel, so a single low-velocity sample could still be taken
+ * mid-brake. Within that window this evaluator reports OK, not yet the real proximity check.
  */
 class ObstacleTooCloseEvaluator : public easynav::RecoveryEvaluatorBase
 {

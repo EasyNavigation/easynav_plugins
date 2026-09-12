@@ -88,10 +88,9 @@ void ObstacleTooCloseEvaluator::update(NavState & nav_state)
 
   const double stopped_for = (get_node()->now() - *stopped_since_).seconds();
   if (stopped_for < debounce_duration_) {
-    // §5.2: "stopped" must be sustained for a short debounce window before it is trusted — the
-    // RT and non-RT cycles run in parallel, so a single low-velocity sample could still be
-    // taken mid-brake. Report as OK (informational, no mitigator's can_handle() matches it)
-    // rather than evaluating proximity yet.
+    // "Stopped" must be sustained for a short debounce window before it is trusted — the RT
+    // and non-RT cycles run in parallel, so a single low-velocity sample could still be taken
+    // mid-brake.
     status.message = "recently stopped, confirming before evaluating proximity";
     publish_diagnostic(nav_state, status);
     return;

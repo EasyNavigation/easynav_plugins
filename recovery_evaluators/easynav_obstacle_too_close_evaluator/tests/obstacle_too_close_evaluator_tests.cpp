@@ -86,7 +86,7 @@ TEST_F(ObstacleTooCloseEvaluatorTestCase, OkWithoutRobotPose)
 TEST_F(ObstacleTooCloseEvaluatorTestCase, OkWhileStillMovingEvenIfObstacleIsClose)
 {
   // Compound condition: must not fire while the robot is still moving (e.g. the level-0 reflex
-  // is still braking). See docs/recoveries_easynav.md, §5.2.
+  // is still braking).
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_moving_node");
   auto eval = make_ready_evaluator(node, "close2");
 
@@ -142,9 +142,9 @@ TEST_F(ObstacleTooCloseEvaluatorTestCase, ErrorWhenStoppedTooCloseToAnObstacle)
 }
 
 // ---------------------------------------------------------------------------
-// Debounce window (§5.2): "stopped" must be sustained for a short interval before it is
-// trusted, so a single low-velocity sample taken mid-brake (RT and non-RT cycles run in
-// parallel) cannot be mistaken for "already stopped".
+// Debounce window: "stopped" must be sustained for a short interval before it is trusted, so a
+// single low-velocity sample taken mid-brake (RT and non-RT cycles run in parallel) cannot be
+// mistaken for "already stopped".
 // ---------------------------------------------------------------------------
 
 TEST_F(ObstacleTooCloseEvaluatorTestCase, RemainsOkWithinDebounceWindowEvenIfObstacleIsClose)

@@ -27,22 +27,16 @@ namespace easynav
  * @class SafeRetreatRecovery
  * @brief Level-1 movement mitigation: retreats straight back from a too-close obstacle.
  *
- * See docs/recoveries_easynav.md §5.11/§5.13. Selected for diagnostics with
- * hardware_id == "obstacle_proximity" (the vocabulary shared with ObstacleTooCloseEvaluator,
- * matched by string, not by a compile-time dependency between the two plugins). Takes control
- * of "cmd_vel" (requires_control() == true) and commands a slow, straight-backward motion each
- * RT cycle, re-checking the nearest-obstacle distance every cycle until it exceeds this
- * mitigation's own safe_distance parameter.
+ * Selected for diagnostics with hardware_id == "obstacle_proximity" (shared with
+ * ObstacleTooCloseEvaluator, matched by string). Takes control of "cmd_vel"
+ * (requires_control() == true) and commands a slow, straight-backward motion each RT cycle,
+ * re-checking the nearest-obstacle distance until it exceeds safe_distance.
  *
- * Deliberate simplification versus the full design ambition (see
- * docs/recoveries_easynav_implementation.md): this only retreats straight back, which is safe
- * and correct when the obstacle is roughly ahead of the robot (the scenario this was designed
- * for — an obstacle appearing in the direction of travel), and matches Nav2's own BackUp
- * behaviour (also reverse-only) as well as the differential-drive robots this workspace's own
- * configs target (a diff-drive base cannot strafe toward an arbitrary escape direction anyway).
- * If the nearest obstacle is behind the robot instead, reversing would drive toward it rather
- * than away, so on_cycle() recognizes that case and fails safely (stops, returns FAILED)
- * instead of blindly reversing.
+ * Only retreats straight back — correct when the obstacle is roughly ahead (an obstacle
+ * appearing in the direction of travel), matching Nav2's own reverse-only BackUp behaviour and
+ * the differential-drive robots this workspace targets (which cannot strafe anyway). If the
+ * nearest obstacle is behind the robot instead, reversing would drive toward it, so on_cycle()
+ * fails safely (stops, returns FAILED) instead of blindly reversing.
  */
 class SafeRetreatRecovery : public easynav::RecoveryMitigationBase
 {

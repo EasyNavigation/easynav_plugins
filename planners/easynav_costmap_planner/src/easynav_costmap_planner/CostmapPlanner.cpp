@@ -146,6 +146,18 @@ void CostmapPlanner::update(NavState & nav_state)
 
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty()) {
+    // No active goal: the path must reflect that too, not keep republishing whatever was last
+    // computed — otherwise a controller following a stale path toward a cancelled goal would
+    // never stop on its own.
+    if (!current_path_.poses.empty()) {
+      current_path_.poses.clear();
+      current_path_.header.stamp = get_node()->now();
+      // Also publish the cleared path once, so RViz does not keep showing the last computed
+      // path frozen on screen after the mission is cancelled.
+      if (path_pub_->get_subscription_count() > 0) {
+        path_pub_->publish(current_path_);
+      }
+    }
     nav_state.set("path", current_path_);
     return;
   }

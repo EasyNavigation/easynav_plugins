@@ -27,11 +27,10 @@ namespace easynav
  * @class AmclConvergenceEvaluator
  * @brief Level-1 recovery evaluator: diagnoses AMCL particle-filter divergence.
  *
- * See docs/recoveries_easynav.md §5.9 — the worked example of "specialized recovery,
- * co-located with the component that originates it": only the author of the localizer plugin
- * really knows that particle dispersion (here, the trace of the pose covariance AMCLLocalizer
- * already computes) is a good indicator of lost convergence, so this evaluator lives in the
- * same package as AMCLLocalizer instead of the generic recovery_evaluators catalog.
+ * Lives in the same package as AMCLLocalizer instead of the generic recovery_evaluators
+ * catalog: only the author of the localizer plugin really knows that particle dispersion (here,
+ * the trace of the pose covariance AMCLLocalizer already computes) is a good indicator of lost
+ * convergence.
  *
  * Reads the fixed key "localizer.amcl.covariance_trace" (written by AMCLLocalizer from both
  * its RT and non-RT cycles) and publishes `hardware_id = "localizer.amcl"`, matched by

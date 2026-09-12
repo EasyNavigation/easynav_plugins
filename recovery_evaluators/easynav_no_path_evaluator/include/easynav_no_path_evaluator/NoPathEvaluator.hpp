@@ -27,9 +27,9 @@ namespace easynav
  * @class NoPathEvaluator
  * @brief Level-1 recovery evaluator that diagnoses a missing or empty planner path.
  *
- * See docs/recoveries_easynav.md, level 1, evaluator catalog. A generic, domain-agnostic
- * evaluator: it only knows about the "path" key that any PlannerMethodBase-derived plugin is
- * expected to produce, not about any specific planner's internals.
+ * A generic, domain-agnostic evaluator: it only knows about the "path" key that any
+ * PlannerMethodBase-derived plugin is expected to produce, not about any specific planner's
+ * internals.
  */
 class NoPathEvaluator : public easynav::RecoveryEvaluatorBase
 {

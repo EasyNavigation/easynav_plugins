@@ -22,6 +22,11 @@ namespace easynav
 
 void HumanAssistanceRecovery::on_initialize()
 {
+  auto node = get_node();
+  const auto & plugin_name = get_plugin_name();
+
+  node->declare_parameter<double>(plugin_name + ".timeout", timeout_);
+  node->get_parameter<double>(plugin_name + ".timeout", timeout_);
 }
 
 bool HumanAssistanceRecovery::can_handle(
@@ -33,9 +38,7 @@ bool HumanAssistanceRecovery::can_handle(
 void HumanAssistanceRecovery::on_start(NavState & nav_state)
 {
   // Selection (and so on_start()) always runs from RecoveryManagerNode::cycle(), the same
-  // non-RT thread the evaluators that wrote "diagnostics" run on, so a plain get() is safe
-  // here. This is the observable "asking a human for help" signal §5.15 requires; how it
-  // reaches an actual person (app, light, sound) is a deployment decision, not this plugin's.
+  // non-RT thread the evaluators that wrote "diagnostics" run on, so a plain get() is safe here.
   std::string summary;
   for (const auto & key : nav_state.get_group_keys("diagnostics")) {
     if (!nav_state.has(key)) {continue;}
@@ -46,11 +49,15 @@ void HumanAssistanceRecovery::on_start(NavState & nav_state)
     }
   }
 
-  RCLCPP_ERROR(
-    get_node()->get_logger(),
-    "HumanAssistanceRecovery [%s]: no other mitigation resolved this — requesting human "
-    "assistance for: %s",
-    get_plugin_name().c_str(), summary.empty() ? "unknown" : summary.c_str());
+  report(
+    nav_state, rcl_interfaces::msg::Log::ERROR,
+    "HumanAssistanceRecovery [" + get_plugin_name() + "]: no other mitigation resolved this — "
+    "requesting human assistance for: " + (summary.empty() ? "unknown" : summary));
+
+  last_wait_report_.reset();
+  if (timeout_ > 0.0) {
+    start_time_ = get_node()->now();
+  }
 }
 
 RecoveryStatus HumanAssistanceRecovery::on_cycle(NavState & nav_state)
@@ -76,12 +83,27 @@ RecoveryStatus HumanAssistanceRecovery::on_cycle(NavState & nav_state)
     return RecoveryStatus::SUCCEEDED;
   }
 
-  RCLCPP_ERROR_THROTTLE(
-    get_node()->get_logger(), *get_node()->get_clock(), 10000,
-    "HumanAssistanceRecovery [%s]: still waiting for human assistance",
-    get_plugin_name().c_str());
+  if (timeout_ > 0.0 && (get_node()->now() - start_time_).seconds() >= timeout_) {
+    report(
+      nav_state, rcl_interfaces::msg::Log::ERROR,
+      "HumanAssistanceRecovery [" + get_plugin_name() + "]: no human response after " +
+      std::to_string(timeout_) + " s, giving up");
+    stop_robot(nav_state);
+    return RecoveryStatus::FAILED;
+  }
 
-  // No timeout: this is the last resort, it waits as long as it takes.
+  // Manual throttle (replaces RCLCPP_ERROR_THROTTLE): report() only keeps the single latest
+  // entry, so calling it every RT cycle would still need throttling to avoid flooding it.
+  const rclcpp::Time now = get_node()->now();
+  if (!last_wait_report_.has_value() ||
+    (now - *last_wait_report_).seconds() >= wait_report_period_)
+  {
+    report(
+      nav_state, rcl_interfaces::msg::Log::ERROR,
+      "HumanAssistanceRecovery [" + get_plugin_name() + "]: still waiting for human assistance");
+    last_wait_report_ = now;
+  }
+
   stop_robot(nav_state);
   return RecoveryStatus::RUNNING;
 }

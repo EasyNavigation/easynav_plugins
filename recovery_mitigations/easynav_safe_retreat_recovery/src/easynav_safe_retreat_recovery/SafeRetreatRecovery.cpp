@@ -45,11 +45,11 @@ bool SafeRetreatRecovery::can_handle(const diagnostic_msgs::msg::DiagnosticStatu
          status.level >= diagnostic_msgs::msg::DiagnosticStatus::ERROR;
 }
 
-void SafeRetreatRecovery::on_start(NavState &)
+void SafeRetreatRecovery::on_start(NavState & nav_state)
 {
-  RCLCPP_WARN(
-    get_node()->get_logger(), "SafeRetreatRecovery [%s]: retreating from a too-close obstacle",
-    get_plugin_name().c_str());
+  report(
+    nav_state, rcl_interfaces::msg::Log::WARN,
+    "SafeRetreatRecovery [" + get_plugin_name() + "]: retreating from a too-close obstacle");
 }
 
 RecoveryStatus SafeRetreatRecovery::on_cycle(NavState & nav_state)
@@ -65,11 +65,11 @@ RecoveryStatus SafeRetreatRecovery::on_cycle(NavState & nav_state)
   if (std::abs(obstacle.bearing) > M_PI / 2.0) {
     // The nearest obstacle is behind the robot: reversing would drive toward it, not away.
     // Fail safely instead of guessing a direction. See the class doc comment.
-    RCLCPP_ERROR(
-      get_node()->get_logger(),
-      "SafeRetreatRecovery [%s]: nearest obstacle is behind the robot (bearing=%.2f rad), "
-      "cannot safely retreat straight back",
-      get_plugin_name().c_str(), obstacle.bearing);
+    report(
+      nav_state, rcl_interfaces::msg::Log::ERROR,
+      "SafeRetreatRecovery [" + get_plugin_name() + "]: nearest obstacle is behind the robot "
+      "(bearing=" + std::to_string(obstacle.bearing) + " rad), cannot safely retreat straight "
+      "back");
     stop_robot(nav_state);
     return RecoveryStatus::FAILED;
   }
