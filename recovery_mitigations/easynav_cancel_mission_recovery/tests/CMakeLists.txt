@@ -1,0 +1,2 @@
+ament_add_gtest(cancel_mission_recovery_tests cancel_mission_recovery_tests.cpp)
+target_link_libraries(cancel_mission_recovery_tests ${PROJECT_NAME})

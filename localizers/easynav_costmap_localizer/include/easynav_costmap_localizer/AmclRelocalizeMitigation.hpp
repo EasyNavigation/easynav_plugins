@@ -29,14 +29,12 @@ namespace easynav
  * @class AmclRelocalizeMitigation
  * @brief Level-1 movement mitigation: rotates in place to help AMCL relocalize.
  *
- * See docs/recoveries_easynav.md §5.9. Selected for diagnostics with
- * hardware_id == "localizer.amcl" (the vocabulary shared with AmclConvergenceEvaluator, in the
- * same package). Takes control of "cmd_vel" (requires_control() == true) and rotates slowly in
- * place each RT cycle, re-checking the same covariance trace the evaluator reads, until it
- * drops back under threshold — or until `timeout` elapses without that happening, at which
- * point it gives up (stops, returns FAILED) rather than spinning forever. RecoveryManagerNode
- * then excludes this mitigation from being reselected for the same diagnostic occurrence (see
- * docs/recoveries_easynav_implementation.md, Fase 5).
+ * Selected for diagnostics with hardware_id == "localizer.amcl" (shared with
+ * AmclConvergenceEvaluator, in the same package). Takes control of "cmd_vel"
+ * (requires_control() == true) and rotates slowly in place each RT cycle, re-checking the same
+ * covariance trace the evaluator reads, until it drops back under threshold — or until `timeout`
+ * elapses without that happening, at which point it gives up (stops, returns FAILED) rather than
+ * spinning forever.
  */
 class AmclRelocalizeMitigation : public easynav::RecoveryMitigationBase
 {

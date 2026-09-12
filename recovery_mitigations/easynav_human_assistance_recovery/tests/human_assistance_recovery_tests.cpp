@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <chrono>
+#include <thread>
+
 #include "gtest/gtest.h"
 
 #include "rclcpp/rclcpp.hpp"
@@ -124,4 +127,42 @@ TEST_F(HumanAssistanceRecoveryTestCase, SucceedsWithNoDiagnosticsGroupAtAll)
   auto status = rec->internal_cycle(nav_state);
 
   EXPECT_EQ(status, easynav::RecoveryStatus::SUCCEEDED);
+}
+
+TEST_F(HumanAssistanceRecoveryTestCase, WaitsForeverByDefaultEvenWhenSlow)
+{
+  // timeout defaults to 0.0 (wait forever): a slow-but-still-unresolved wait must stay RUNNING,
+  // never FAILED, no matter how much time passes.
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_no_timeout_node");
+  auto rec = make_recovery(node, "human6");
+
+  easynav::NavState nav_state;
+  nav_state.set(
+    "diagnostics.planner", make_status(diagnostic_msgs::msg::DiagnosticStatus::ERROR));
+  nav_state.set_group("diagnostics", {"diagnostics.planner"});
+
+  rec->internal_start(nav_state);
+  std::this_thread::sleep_for(std::chrono::milliseconds(60));
+  auto status = rec->internal_cycle(nav_state);
+
+  EXPECT_EQ(status, easynav::RecoveryStatus::RUNNING);
+}
+
+TEST_F(HumanAssistanceRecoveryTestCase, FailsAfterTimeoutWithoutHumanResponse)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_timeout_node",
+    rclcpp::NodeOptions().append_parameter_override("human7.timeout", 0.05));
+  auto rec = make_recovery(node, "human7");
+
+  easynav::NavState nav_state;
+  nav_state.set(
+    "diagnostics.planner", make_status(diagnostic_msgs::msg::DiagnosticStatus::ERROR));
+  nav_state.set_group("diagnostics", {"diagnostics.planner"});
+
+  rec->internal_start(nav_state);
+  std::this_thread::sleep_for(std::chrono::milliseconds(60));  // past the 50 ms timeout
+  auto status = rec->internal_cycle(nav_state);
+
+  EXPECT_EQ(status, easynav::RecoveryStatus::FAILED);
 }

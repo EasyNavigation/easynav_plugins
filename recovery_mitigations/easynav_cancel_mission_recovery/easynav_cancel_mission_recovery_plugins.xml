@@ -1,0 +1,12 @@
+<class_libraries>
+  <library path="easynav_cancel_mission_recovery">
+    <class name="easynav_cancel_mission_recovery/CancelMissionRecovery" type="easynav::CancelMissionRecovery" base_class_type="easynav::RecoveryMitigationBase">
+      <description>
+      Mission-level last resort: accepts any ERROR diagnostic no other mitigation resolved (or
+      already gave up on), and requests GoalManager to cancel the active mission, reporting the
+      diagnostics that caused it. Does not take control_owner — see
+      docs/recoveries_easynav_implementation.md, Fase 5.
+      </description>
+    </class>
+  </library>
+</class_libraries>

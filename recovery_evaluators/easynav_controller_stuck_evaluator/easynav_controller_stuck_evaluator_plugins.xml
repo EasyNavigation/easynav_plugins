@@ -1,0 +1,11 @@
+<class_libraries>
+  <library path="easynav_controller_stuck_evaluator">
+    <class name="easynav_controller_stuck_evaluator/ControllerStuckEvaluator" type="easynav::ControllerStuckEvaluator" base_class_type="easynav::RecoveryEvaluatorBase">
+      <description>
+      Diagnoses a robot commanded to move ("cmd_vel" above threshold) that is not making
+      progress (robot_pose barely changing). Skips evaluation while a recovery mitigation owns
+      control_owner, while any safety reflex is intervening, or without an active goal.
+      </description>
+    </class>
+  </library>
+</class_libraries>

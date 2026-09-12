@@ -311,7 +311,7 @@ namespace
 {
 // Position + yaw dispersion in one scalar, from the 6x6 row-major covariance that get_pose()
 // already fills (indices 0/7 = var_x/var_y, 35 = var_yaw). Consumed by AmclConvergenceEvaluator
-// under the fixed key below — see docs/recoveries_easynav.md §5.9.
+// under the fixed key below.
 double covariance_trace(const nav_msgs::msg::Odometry & odom)
 {
   return odom.pose.covariance[0] + odom.pose.covariance[7] + odom.pose.covariance[35];

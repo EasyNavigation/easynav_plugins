@@ -45,13 +45,13 @@ bool AmclRelocalizeMitigation::can_handle(
          status.level >= diagnostic_msgs::msg::DiagnosticStatus::ERROR;
 }
 
-void AmclRelocalizeMitigation::on_start(NavState &)
+void AmclRelocalizeMitigation::on_start(NavState & nav_state)
 {
   start_time_ = get_node()->now();
-  RCLCPP_WARN(
-    get_node()->get_logger(),
-    "AmclRelocalizeMitigation [%s]: localization diverged, rotating in place to relocalize",
-    get_plugin_name().c_str());
+  report(
+    nav_state, rcl_interfaces::msg::Log::WARN,
+    "AmclRelocalizeMitigation [" + get_plugin_name() +
+    "]: localization diverged, rotating in place to relocalize");
 }
 
 RecoveryStatus AmclRelocalizeMitigation::on_cycle(NavState & nav_state)
@@ -68,10 +68,10 @@ RecoveryStatus AmclRelocalizeMitigation::on_cycle(NavState & nav_state)
   }
 
   if ((get_node()->now() - start_time_).seconds() >= timeout_) {
-    RCLCPP_ERROR(
-      get_node()->get_logger(),
-      "AmclRelocalizeMitigation [%s]: gave up after %.2f s without relocalizing",
-      get_plugin_name().c_str(), timeout_);
+    report(
+      nav_state, rcl_interfaces::msg::Log::ERROR,
+      "AmclRelocalizeMitigation [" + get_plugin_name() + "]: gave up after " +
+      std::to_string(timeout_) + " s without relocalizing");
     stop_robot(nav_state);
     return RecoveryStatus::FAILED;
   }
