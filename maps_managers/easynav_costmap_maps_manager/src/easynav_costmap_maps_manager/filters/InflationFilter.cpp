@@ -79,9 +79,11 @@ InflationFilter::on_initialize()
   inscribed_radius_ = 0.25;
   cost_scaling_factor_ = 3.0;
 
-  node->declare_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
-  node->declare_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
-  node->declare_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
+  if (!node->has_parameter(plugin_name_ + ".inflation_radius")) {
+    node->declare_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
+    node->declare_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
+    node->declare_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
+  }
   node->get_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
   node->get_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
   node->get_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);

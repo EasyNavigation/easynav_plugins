@@ -17,3 +17,11 @@ target_link_libraries(routes_costmap_filter_tests
   rclcpp::rclcpp
   rclcpp_lifecycle::rclcpp_lifecycle)
 
+ament_add_gtest(routes_mapsmanager_reconfigure_tests
+  routes_mapsmanager_reconfigure_tests.cpp)
+target_link_libraries(routes_mapsmanager_reconfigure_tests
+  ${PROJECT_NAME}
+  easynav_common::easynav_common
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle)
+

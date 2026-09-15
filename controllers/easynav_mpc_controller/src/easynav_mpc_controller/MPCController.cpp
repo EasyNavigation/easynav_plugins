@@ -34,15 +34,17 @@ MPCController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
-  node->declare_parameter<double>(plugin_name + ".dt", dt_);
-  node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-  node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
-  node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
+  if (!node->has_parameter(plugin_name + ".horizon_steps")) {
+    node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
+    node->declare_parameter<double>(plugin_name + ".dt", dt_);
+    node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
+    node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
+    node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+    node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
 
-  node->declare_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
-  node->declare_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+    node->declare_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
+    node->declare_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+  }
 
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);

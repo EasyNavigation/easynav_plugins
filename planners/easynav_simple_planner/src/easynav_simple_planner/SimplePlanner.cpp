@@ -89,8 +89,10 @@ SimplePlanner::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".robot_radius", 0.3);
-  node->declare_parameter<double>(plugin_name + ".clearance_distance", 0.2);
+  if (!node->has_parameter(plugin_name + ".robot_radius")) {
+    node->declare_parameter<double>(plugin_name + ".robot_radius", 0.3);
+    node->declare_parameter<double>(plugin_name + ".clearance_distance", 0.2);
+  }
   node->get_parameter<double>(plugin_name + ".robot_radius", robot_radius_);
   node->get_parameter<double>(plugin_name + ".clearance_distance", clearance_distance_);
 

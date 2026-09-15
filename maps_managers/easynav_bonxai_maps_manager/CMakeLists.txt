@@ -98,6 +98,9 @@ if(BUILD_TESTING)
   # reformatting upstream code (same rationale as copyright/cpplint above).
   set(ament_cmake_uncrustify_ADDITIONAL_EXCLUDE include/bonxai/*)
   ament_lint_auto_find_test_dependencies()
+
+  find_package(ament_cmake_gtest REQUIRED)
+  add_subdirectory(tests)
 endif()
 
 ament_export_include_directories("include/${PROJECT_NAME}")

@@ -42,57 +42,58 @@ SerestController::on_initialize()
   auto node = get_node();
   const auto & ns = get_plugin_name();
 
-  // Maximums and basic limits
-  node->declare_parameter<bool>(ns + ".allow_reverse", allow_reverse_);
-  node->declare_parameter<double>(ns + ".v_progress_min", v_progress_min_);
-  node->declare_parameter<double>(ns + ".k_s_share_max", k_s_share_max_);
+  if (!node->has_parameter(ns + ".allow_reverse")) {
+    // Maximums and basic limits
+    node->declare_parameter<bool>(ns + ".allow_reverse", allow_reverse_);
+    node->declare_parameter<double>(ns + ".v_progress_min", v_progress_min_);
+    node->declare_parameter<double>(ns + ".k_s_share_max", k_s_share_max_);
 
-  node->declare_parameter<double>(ns + ".max_linear_speed", max_linear_speed_);
-  node->declare_parameter<double>(ns + ".max_angular_speed", max_angular_speed_);
-  node->declare_parameter<double>(ns + ".max_linear_acc", max_linear_acc_);
-  node->declare_parameter<double>(ns + ".max_angular_acc", max_angular_acc_);
+    node->declare_parameter<double>(ns + ".max_linear_speed", max_linear_speed_);
+    node->declare_parameter<double>(ns + ".max_angular_speed", max_angular_speed_);
+    node->declare_parameter<double>(ns + ".max_linear_acc", max_linear_acc_);
+    node->declare_parameter<double>(ns + ".max_angular_acc", max_angular_acc_);
 
-  // Tracking
-  node->declare_parameter<double>(ns + ".k_s", k_s_);
-  node->declare_parameter<double>(ns + ".k_theta", k_theta_);
-  node->declare_parameter<double>(ns + ".k_y", k_y_);
-  node->declare_parameter<double>(ns + ".ell", ell_);
-  node->declare_parameter<double>(ns + ".v_ref", v_ref_);
-  node->declare_parameter<double>(ns + ".eps", eps_);
+    // Tracking
+    node->declare_parameter<double>(ns + ".k_s", k_s_);
+    node->declare_parameter<double>(ns + ".k_theta", k_theta_);
+    node->declare_parameter<double>(ns + ".k_y", k_y_);
+    node->declare_parameter<double>(ns + ".ell", ell_);
+    node->declare_parameter<double>(ns + ".v_ref", v_ref_);
+    node->declare_parameter<double>(ns + ".eps", eps_);
 
-  // Safety
-  node->declare_parameter<double>(ns + ".a_acc", a_acc_);
-  node->declare_parameter<double>(ns + ".a_brake", a_brake_);
-  node->declare_parameter<double>(ns + ".a_lat_max", a_lat_max_);
-  node->declare_parameter<double>(ns + ".d0_margin", d0_margin_);
-  node->declare_parameter<double>(ns + ".tau_latency", tau_latency_);
-  node->declare_parameter<double>(ns + ".d_hard", d_hard_);
-  node->declare_parameter<double>(ns + ".t_emerg", t_emerg_);
+    // Safety
+    node->declare_parameter<double>(ns + ".a_acc", a_acc_);
+    node->declare_parameter<double>(ns + ".a_brake", a_brake_);
+    node->declare_parameter<double>(ns + ".a_lat_max", a_lat_max_);
+    node->declare_parameter<double>(ns + ".d0_margin", d0_margin_);
+    node->declare_parameter<double>(ns + ".tau_latency", tau_latency_);
+    node->declare_parameter<double>(ns + ".d_hard", d_hard_);
+    node->declare_parameter<double>(ns + ".t_emerg", t_emerg_);
 
-  // Blend at vertices
-  node->declare_parameter<double>(ns + ".blend_base", blend_base_);
-  node->declare_parameter<double>(ns + ".blend_k_per_v", blend_k_per_v_);
-  node->declare_parameter<double>(ns + ".kappa_max", kappa_max_);
+    // Blend at vertices
+    node->declare_parameter<double>(ns + ".blend_base", blend_base_);
+    node->declare_parameter<double>(ns + ".blend_k_per_v", blend_k_per_v_);
+    node->declare_parameter<double>(ns + ".kappa_max", kappa_max_);
 
-  // For obstacle detection
-  node->declare_parameter<double>(ns + ".dist_search_radius", dist_search_radius_);
+    // For obstacle detection
+    node->declare_parameter<double>(ns + ".dist_search_radius", dist_search_radius_);
 
-  node->declare_parameter<double>(ns + ".goal_pos_tol", goal_pos_tol_);
-  node->declare_parameter<double>(ns + ".goal_yaw_tol_deg", goal_yaw_tol_deg_);
-  node->declare_parameter<double>(ns + ".slow_radius", slow_radius_);
-  node->declare_parameter<double>(ns + ".slow_min_speed", slow_min_speed_);
-  node->declare_parameter<double>(ns + ".final_align_k", final_align_k_);
-  node->declare_parameter<double>(ns + ".final_align_wmax", final_align_wmax_);
+    node->declare_parameter<double>(ns + ".goal_pos_tol", goal_pos_tol_);
+    node->declare_parameter<double>(ns + ".goal_yaw_tol_deg", goal_yaw_tol_deg_);
+    node->declare_parameter<double>(ns + ".slow_radius", slow_radius_);
+    node->declare_parameter<double>(ns + ".slow_min_speed", slow_min_speed_);
+    node->declare_parameter<double>(ns + ".final_align_k", final_align_k_);
+    node->declare_parameter<double>(ns + ".final_align_wmax", final_align_wmax_);
 
-  node->declare_parameter<bool>(ns + ".corner_guard_enable", corner_guard_enable_);
-  node->declare_parameter<double>(ns + ".corner_gain_ey", corner_gain_ey_);
-  node->declare_parameter<double>(ns + ".corner_gain_eth", corner_gain_eth_);
-  node->declare_parameter<double>(ns + ".corner_gain_kappa", corner_gain_kappa_);
-  node->declare_parameter<double>(ns + ".corner_min_alpha", corner_min_alpha_);
-  node->declare_parameter<double>(ns + ".corner_boost_omega", corner_boost_omega_);
-  node->declare_parameter<double>(ns + ".apex_ey_des", apex_ey_des_);
-  node->declare_parameter<double>(ns + ".a_lat_soft", a_lat_soft_);
-
+    node->declare_parameter<bool>(ns + ".corner_guard_enable", corner_guard_enable_);
+    node->declare_parameter<double>(ns + ".corner_gain_ey", corner_gain_ey_);
+    node->declare_parameter<double>(ns + ".corner_gain_eth", corner_gain_eth_);
+    node->declare_parameter<double>(ns + ".corner_gain_kappa", corner_gain_kappa_);
+    node->declare_parameter<double>(ns + ".corner_min_alpha", corner_min_alpha_);
+    node->declare_parameter<double>(ns + ".corner_boost_omega", corner_boost_omega_);
+    node->declare_parameter<double>(ns + ".apex_ey_des", apex_ey_des_);
+    node->declare_parameter<double>(ns + ".a_lat_soft", a_lat_soft_);
+  }
 
   // Get
   node->get_parameter<bool>(ns + ".allow_reverse", allow_reverse_);

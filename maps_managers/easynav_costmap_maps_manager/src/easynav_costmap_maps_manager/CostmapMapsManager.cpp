@@ -55,19 +55,25 @@ CostmapMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, map_path_file;
-  node->declare_parameter(plugin_name + ".package", package_name);
-  node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
+  if (!node->has_parameter(plugin_name + ".package")) {
+    node->declare_parameter(plugin_name + ".package", package_name);
+    node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
+  }
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".map_path_file", map_path_file);
 
   std::vector<std::string> costmap_filters;
-  node->declare_parameter(plugin_name + ".filters", costmap_filters);
+  if (!node->has_parameter(plugin_name + ".filters")) {
+    node->declare_parameter(plugin_name + ".filters", costmap_filters);
+  }
   node->get_parameter(plugin_name + ".filters", costmap_filters);
 
   for (const auto & costmap_filter : costmap_filters) {
     std::string plugin;
-    node->declare_parameter(plugin_name + "." + costmap_filter + ".plugin", plugin);
+    if (!node->has_parameter(plugin_name + "." + costmap_filter + ".plugin")) {
+      node->declare_parameter(plugin_name + "." + costmap_filter + ".plugin", plugin);
+    }
     node->get_parameter(plugin_name + "." + costmap_filter + ".plugin", plugin);
 
     try {
