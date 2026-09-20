@@ -71,8 +71,8 @@ struct ParticlesParams
  * @brief A set of particles representing one hypothesis about the robot pose.
  *
  * Each hypothesis is an independent particle filter (prediction, correction and reseed),
- * as described in "Multi-Hypothesis AMCL". Besides the weight of each particle, every
- * hypothesis has a *quality* in [0, 1]: the best fraction of the last perception that
+ * as described in "Portable Multi-Hypothesis Monte Carlo Localization for Mobile Robots".
+ * Besides the weight of each particle, every hypothesis has a *quality* in [0, 1]: the best fraction of the last perception that
  * matches an obstacle of the map, from any of its particles. Unlike the covariance, it
  * tells how well the hypothesis explains what the robot sees.
  *

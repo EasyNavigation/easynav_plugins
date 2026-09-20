@@ -3,8 +3,9 @@
 ## Description
 
 Multi-Hypothesis AMCL (MH-AMCL) localizer over a `Costmap2D` map. It is the EasyNav port of
-[mh_amcl](https://github.com/fmrico/mh_amcl), described in *Multi-Hypothesis AMCL*
-(F. Martín et al., ICRA 2023).
+[mh_amcl](https://github.com/fmrico/mh_amcl), described in *Portable Multi-Hypothesis Monte Carlo
+Localization for Mobile Robots* (A. García, F. Martín, J. M. Guerrero, F. J. Rodríguez and V. Matellán,
+ICRA 2023).
 
 Instead of a single particle filter, it keeps a set of them (*hypotheses*) about the pose of the
 robot:
