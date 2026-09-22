@@ -1,2 +1,5 @@
 ament_add_gtest(costmap_mapsmanager_tests costmap_mapsmanager_tests.cpp)
 target_link_libraries(costmap_mapsmanager_tests ${PROJECT_NAME})
+
+ament_add_gtest(costmap_mapsmanager_reconfigure_tests costmap_mapsmanager_reconfigure_tests.cpp)
+target_link_libraries(costmap_mapsmanager_reconfigure_tests ${PROJECT_NAME})

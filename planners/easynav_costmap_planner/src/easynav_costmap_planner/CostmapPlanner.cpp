@@ -124,10 +124,12 @@ void CostmapPlanner::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
-  node->declare_parameter<double>(plugin_name + ".cost_factor", 2.0);
-  node->declare_parameter<double>(plugin_name + ".inflation_penalty", 5.0);
-  node->declare_parameter<double>(plugin_name + ".heuristic_scale", 1.0);
-  node->declare_parameter<bool>(plugin_name + ".continuous_replan", true);
+  if (!node->has_parameter(plugin_name + ".cost_factor")) {
+    node->declare_parameter<double>(plugin_name + ".cost_factor", 2.0);
+    node->declare_parameter<double>(plugin_name + ".inflation_penalty", 5.0);
+    node->declare_parameter<double>(plugin_name + ".heuristic_scale", 1.0);
+    node->declare_parameter<bool>(plugin_name + ".continuous_replan", true);
+  }
 
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
   node->get_parameter(plugin_name + ".inflation_penalty", inflation_penalty_);

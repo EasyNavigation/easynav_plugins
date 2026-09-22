@@ -195,19 +195,21 @@ AMCLLocalizer::on_initialize()
   double std_dev_yaw = 0.5;
   double reseed_freq = 1.0;
 
-  node->declare_parameter<int>(plugin_name + ".num_particles", num_particles);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.x", x_init);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.y", y_init);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", yaw_init);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", std_dev_xy);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
-  node->declare_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
-  node->declare_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
-  node->declare_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
-  node->declare_parameter<double>(plugin_name + ".noise_translation_to_rotation",
-    noise_translation_to_rotation_);
-  node->declare_parameter<double>(plugin_name + ".min_noise_xy", min_noise_xy_);
-  node->declare_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
+  if (!node->has_parameter(plugin_name + ".num_particles")) {
+    node->declare_parameter<int>(plugin_name + ".num_particles", num_particles);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.x", x_init);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.y", y_init);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", yaw_init);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", std_dev_xy);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
+    node->declare_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
+    node->declare_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
+    node->declare_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
+    node->declare_parameter<double>(plugin_name + ".noise_translation_to_rotation",
+      noise_translation_to_rotation_);
+    node->declare_parameter<double>(plugin_name + ".min_noise_xy", min_noise_xy_);
+    node->declare_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
+  }
 
   node->get_parameter<int>(plugin_name + ".num_particles", num_particles);
   node->get_parameter<double>(plugin_name + ".initial_pose.x", x_init);

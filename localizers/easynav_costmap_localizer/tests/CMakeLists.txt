@@ -9,3 +9,10 @@ target_link_libraries(costmap_localizer_tests
   rclcpp_lifecycle::rclcpp_lifecycle
   ${std_srvs_TARGETS}
 )
+
+ament_add_gtest(costmap_localizer_reconfigure_tests costmap_localizer_reconfigure_tests.cpp)
+target_link_libraries(costmap_localizer_reconfigure_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+)
