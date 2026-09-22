@@ -101,6 +101,13 @@ protected:
   double obstacle_scaling_dist_{0.3};   ///< Distance below which obstacle regulation is triggered (m).
   double obstacle_scaling_gain_{1.0};   ///< Gain (<=1.0) applied when scaling down the velocity.
 
+  // Robot geometry used by computeMinObstacleDistance() (own copy: this is a distinct
+  // speed-regulation heuristic, unrelated to the level-0 CollisionSafetyReflex).
+  double robot_radius_{0.35};   ///< Robot radius used when measuring obstacle distance (m).
+  double safety_margin_{0.1};   ///< Safety margin added to the robot radius (m).
+  double z_min_filter_{0.0};    ///< Minimum Z considered when filtering point clouds (m).
+  double robot_height_{0.5};    ///< Vertical extent of the robot used for filtering (m).
+
   // --- Approach to goal ---
   double min_approach_linear_velocity_{0.05};  ///< Minimum linear velocity while approaching goal.
   double approach_velocity_scaling_dist_{1.0}; ///< Remaining-path distance at which to start slowing.

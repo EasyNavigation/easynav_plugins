@@ -146,7 +146,7 @@ void CostmapPlanner::update(NavState & nav_state)
 
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty()) {
-    nav_state.set("path", current_path_);
+    clear_current_path(nav_state);
     return;
   }
 
@@ -169,6 +169,7 @@ void CostmapPlanner::update(NavState & nav_state)
   if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",
         goals.header.frame_id.c_str());
+    clear_current_path(nav_state);
     return;
   }
 
@@ -176,6 +177,7 @@ void CostmapPlanner::update(NavState & nav_state)
   if (!map.worldToMap(goal.position.x, goal.position.y, gx, gy)) {
     RCLCPP_WARN(get_node()->get_logger(), "Goal (%.2f, %.2f) is outside the map", goal.position.x,
         goal.position.y);
+    clear_current_path(nav_state);
     return;
   }
 
@@ -249,6 +251,22 @@ void CostmapPlanner::update(NavState & nav_state)
     }
     last_goal_pose = goal;
     last_plan_time = get_node()->now();
+    nav_state.set("path", current_path_);
+  } else {
+    // A* found no route (e.g. the goal is unreachable, walled off) -- clear the path instead of
+    // silently republishing whatever was last computed for a previous, reachable goal.
+    clear_current_path(nav_state);
+  }
+}
+
+void CostmapPlanner::clear_current_path(NavState & nav_state)
+{
+  if (!current_path_.poses.empty()) {
+    current_path_.poses.clear();
+    current_path_.header.stamp = get_node()->now();
+    if (path_pub_->get_subscription_count() > 0) {
+      path_pub_->publish(current_path_);
+    }
   }
   nav_state.set("path", current_path_);
 }
@@ -313,6 +331,14 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
     }
   }
 
+  if (!std::isfinite(cost_so_far[idx(static_cast<int>(gx), static_cast<int>(gy))])) {
+    // The search explored every cell reachable from the start without ever reaching the goal
+    // cell: it is genuinely unreachable (e.g. walled off), not just "trivially close" -- must
+    // not be masked as a valid path (see the start == goal case below, which is the only
+    // legitimate reason for an empty backtrack).
+    return {};
+  }
+
   std::vector<geometry_msgs::msg::Pose> path;
   int cx = static_cast<int>(gx), cy = static_cast<int>(gy);
   while (parent_x[idx(cx, cy)] != -1) {
@@ -330,6 +356,8 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
   }
   std::reverse(path.begin(), path.end());
 
+  // Reached (cost_so_far finite, checked above) but zero hops: start and goal are the same
+  // cell, not a failed search.
   if (path.empty()) {path.push_back(goal);}
   return path;
 }

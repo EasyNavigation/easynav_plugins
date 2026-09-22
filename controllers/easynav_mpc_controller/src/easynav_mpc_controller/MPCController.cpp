@@ -43,6 +43,8 @@ MPCController::on_initialize()
 
   node->declare_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
   node->declare_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+  node->declare_parameter<bool>(
+    plugin_name + ".colision_checker.active", collision_checker_active_);
 
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
@@ -53,6 +55,7 @@ MPCController::on_initialize()
 
   node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
   node->get_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+  node->get_parameter<bool>(plugin_name + ".colision_checker.active", collision_checker_active_);
 
   optimizer_ = std::make_unique<MPCOptimizer>();
 
@@ -282,7 +285,7 @@ MPCController::update_rt(NavState & nav_state)
     std::cerr << "Optimization Error: " << e.what() << std::endl;
   }
 
-  if (ControllerMethodBase::collision_checker_active_) {
+  if (collision_checker_active_) {
     collision_checker(&params, u);
   }
 
