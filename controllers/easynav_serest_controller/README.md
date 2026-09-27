@@ -63,10 +63,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.k_theta` | `double` | `` | Heading error gain. |
 | `<plugin>.k_y` | `double` | `` | Lateral error gain. |
 | `<plugin>.kappa_max` | `double` | `2.5` | Maximum allowed curvature (1/m). |
-| `<plugin>.max_angular_acc` | `double` | `2.0` | Angular acceleration limit (rad/s²). |
-| `<plugin>.max_angular_speed` | `double` | `1.5` | Angular speed limit (rad/s). |
-| `<plugin>.max_linear_acc` | `double` | `0.8` | Linear acceleration limit (m/s²). |
-| `<plugin>.max_linear_speed` | `double` | `0.6` | Speed limit (m/s). |
+| — | — | — | Velocity and acceleration limits are not this plugin's: they are the robot limits of `controller_node` (`robot_limits.max_linear_vel`, `min_linear_vel`, `max_angular_vel`, `max_linear_acc`, `max_linear_decel`, `max_angular_acc`, `max_angular_decel`), queried with `ControllerMethodBase::get_robot_limits()` and also enforced by ControllerNode's velocity smoother. |
 | `<plugin>.slow_min_speed` | `double` | `0.03` | Minimum speed within slow zone (m/s). |
 | `<plugin>.slow_radius` | `double` | `0.60` | Radius to start slowing down near goal (m). |
 | `<plugin>.t_emerg` | `double` | `0.25` | Emergency stop time horizon (s). |

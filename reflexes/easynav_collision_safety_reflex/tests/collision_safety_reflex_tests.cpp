@@ -21,6 +21,7 @@
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
 #include "easynav_collision_safety_reflex/CollisionSafetyReflex.hpp"
+#include "easynav_core/VelocityCommand.hpp"
 
 class CollisionSafetyReflexTest : public ::testing::Test
 {
@@ -54,6 +55,7 @@ TEST_F(CollisionSafetyReflexTest, DoesNotInterveneWithoutCommandedMotion)
   easynav::NavState nav_state;
   EXPECT_FALSE(reflex->internal_check_and_mitigate(nav_state));
 
-  nav_state.set("cmd_vel", geometry_msgs::msg::TwistStamped());
+  easynav::velocity_command::propose(
+    nav_state, easynav::VelocitySource::CONTROLLER, geometry_msgs::msg::TwistStamped());
   EXPECT_FALSE(reflex->internal_check_and_mitigate(nav_state));
 }

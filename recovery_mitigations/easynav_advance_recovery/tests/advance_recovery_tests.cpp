@@ -25,6 +25,7 @@
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_advance_recovery/AdvanceRecovery.hpp"
+#include "easynav_core/VelocityCommand.hpp"
 
 class AdvanceRecoveryTestCase : public ::testing::Test
 {
@@ -96,8 +97,11 @@ TEST_F(AdvanceRecoveryTestCase, AdvancesForwardWhileNotYetAtDistance)
   auto status = rec->internal_cycle(nav_state);
 
   EXPECT_EQ(status, easynav::RecoveryStatus::RUNNING);
-  ASSERT_TRUE(nav_state.has("cmd_vel"));
-  const auto & cmd = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  // Movement mitigations propose their command; ControllerNode publishes it.
+  const auto proposed =
+    easynav::velocity_command::peek(nav_state, easynav::VelocitySource::RECOVERY);
+  ASSERT_TRUE(proposed.has_value());
+  const auto & cmd = *proposed;
   EXPECT_DOUBLE_EQ(cmd.twist.linear.x, 0.4);
 }
 
@@ -116,8 +120,11 @@ TEST_F(AdvanceRecoveryTestCase, SucceedsOnceDistanceReachedButDoesNotClaimFixed)
   auto status = rec->internal_cycle(nav_state);
 
   EXPECT_EQ(status, easynav::RecoveryStatus::SUCCEEDED);
-  ASSERT_TRUE(nav_state.has("cmd_vel"));
-  const auto & cmd = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  // Movement mitigations propose their command; ControllerNode publishes it.
+  const auto proposed =
+    easynav::velocity_command::peek(nav_state, easynav::VelocitySource::RECOVERY);
+  ASSERT_TRUE(proposed.has_value());
+  const auto & cmd = *proposed;
   EXPECT_DOUBLE_EQ(cmd.twist.linear.x, 0.0);
 }
 

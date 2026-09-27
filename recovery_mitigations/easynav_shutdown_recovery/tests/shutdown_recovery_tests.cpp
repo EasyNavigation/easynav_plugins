@@ -26,6 +26,7 @@
 #include "nav_msgs/msg/goals.hpp"
 
 #include "easynav_shutdown_recovery/ShutdownRecovery.hpp"
+#include "easynav_core/VelocityCommand.hpp"
 
 using diagnostic_msgs::msg::DiagnosticStatus;
 
@@ -143,14 +144,14 @@ TEST_F(ShutdownRecoveryTestCase, HoldsTheRobotStillAndNeverFinishes)
   auto rec = make_recovery(node, "shutdown5");
 
   easynav::NavState nav_state;
-  geometry_msgs::msg::TwistStamped moving;
-  moving.twist.linear.x = 0.5;
-  nav_state.set("cmd_vel", moving);
 
   for (int i = 0; i < 3; ++i) {
     EXPECT_EQ(rec->internal_cycle(nav_state), easynav::RecoveryStatus::RUNNING);
   }
-  const auto cmd = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  const auto proposed =
+    easynav::velocity_command::peek(nav_state, easynav::VelocitySource::RECOVERY);
+  ASSERT_TRUE(proposed.has_value());
+  const auto & cmd = *proposed;
   EXPECT_DOUBLE_EQ(cmd.twist.linear.x, 0.0);
   EXPECT_DOUBLE_EQ(cmd.twist.angular.z, 0.0);
 }

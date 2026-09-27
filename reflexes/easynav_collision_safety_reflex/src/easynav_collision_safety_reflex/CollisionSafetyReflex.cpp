@@ -72,14 +72,16 @@ CollisionSafetyReflex::check(NavState & nav_state)
   EASYNAV_TRACE_EVENT;
   bool imminent = false;
 
-  if (!nav_state.has("cmd_vel")) {return false;}
+  // The command about to be sent this cycle (a recovery mitigation's or the controller's).
+  const auto commanded = commanded_velocity(nav_state);
+  if (!commanded) {return false;}
 
   const auto & perceptions = nav_state.get_by_type<PointPerception>();
   if (perceptions.empty()) {
     return false;
   }
 
-  const auto & twist = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  const auto & twist = *commanded;
   const auto & tf_info = easynav::RTTFBuffer::getInstance()->get_tf_info();
   const auto & robot_frame = tf_info.robot_frame;
 

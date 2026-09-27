@@ -23,6 +23,7 @@
 #include "geometry_msgs/msg/twist_stamped.hpp"
 
 #include "easynav_human_assistance_recovery/HumanAssistanceRecovery.hpp"
+#include "easynav_core/VelocityCommand.hpp"
 
 class HumanAssistanceRecoveryTestCase : public ::testing::Test
 {
@@ -120,8 +121,11 @@ TEST_F(HumanAssistanceRecoveryTestCase, RunsWhileAnyDiagnosticIsStillError)
   auto status = rec->internal_cycle(nav_state);
 
   EXPECT_EQ(status, easynav::RecoveryStatus::RUNNING);
-  ASSERT_TRUE(nav_state.has("cmd_vel"));
-  const auto & cmd = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  // Movement mitigations propose their command; ControllerNode publishes it.
+  const auto proposed =
+    easynav::velocity_command::peek(nav_state, easynav::VelocitySource::RECOVERY);
+  ASSERT_TRUE(proposed.has_value());
+  const auto & cmd = *proposed;
   EXPECT_DOUBLE_EQ(cmd.twist.linear.x, 0.0);
   EXPECT_DOUBLE_EQ(cmd.twist.angular.z, 0.0);
 }

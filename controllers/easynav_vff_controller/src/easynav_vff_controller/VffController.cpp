@@ -43,8 +43,6 @@ void VffController::on_initialize()
     node->declare_parameter<float>(plugin_name + ".obstacle_detection_y_max", 10.0);
     node->declare_parameter<float>(plugin_name + ".obstacle_detection_z_min", 0.10);
     node->declare_parameter<float>(plugin_name + ".obstacle_detection_z_max", 1.00);
-    node->declare_parameter<double>(plugin_name + ".max_speed", 0.8);
-    node->declare_parameter<double>(plugin_name + ".max_angular_speed", 1.5);
   }
 
   node->get_parameter<float>(plugin_name + ".distance_obstacle_detection",
@@ -55,8 +53,11 @@ void VffController::on_initialize()
   node->get_parameter<float>(plugin_name + ".obstacle_detection_y_max", obstacle_detection_y_max_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_z_min", obstacle_detection_z_min_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_z_max", obstacle_detection_z_max_);
-  node->get_parameter<double>(plugin_name + ".max_speed", max_speed_);
-  node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
+  // Velocity and acceleration limits: the robot's, as configured in ControllerNode
+  // ("robot_limits.*"), not this plugin's own.
+  const auto limits = get_robot_limits();
+  max_speed_ = limits.max_linear_vel;
+  max_angular_speed_ = limits.max_angular_vel;
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 

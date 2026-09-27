@@ -39,11 +39,7 @@ SimpleController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  if (!node->has_parameter(plugin_name + ".max_linear_speed")) {
-    node->declare_parameter<double>(plugin_name + ".max_linear_speed", max_linear_speed_);
-    node->declare_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
-    node->declare_parameter<double>(plugin_name + ".max_linear_acc", max_linear_acc_);
-    node->declare_parameter<double>(plugin_name + ".max_angular_acc", max_angular_acc_);
+  if (!node->has_parameter(plugin_name + ".look_ahead_dist")) {
     node->declare_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
     node->declare_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
     node->declare_parameter<double>(plugin_name + ".k_rot", k_rot_);
@@ -57,10 +53,13 @@ SimpleController::on_initialize()
     node->declare_parameter<double>(plugin_name + ".angular_kd", angular_kd_);
   }
 
-  node->get_parameter<double>(plugin_name + ".max_linear_speed", max_linear_speed_);
-  node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
-  node->get_parameter<double>(plugin_name + ".max_linear_acc", max_linear_acc_);
-  node->get_parameter<double>(plugin_name + ".max_angular_acc", max_angular_acc_);
+  // Velocity and acceleration limits: the robot's, as configured in ControllerNode
+  // ("robot_limits.*"), not this plugin's own.
+  const auto limits = get_robot_limits();
+  max_linear_speed_ = limits.max_linear_vel;
+  max_angular_speed_ = limits.max_angular_vel;
+  max_linear_acc_ = limits.max_linear_acc;
+  max_angular_acc_ = limits.max_angular_acc;
   node->get_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->get_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->get_parameter<double>(plugin_name + ".k_rot", k_rot_);

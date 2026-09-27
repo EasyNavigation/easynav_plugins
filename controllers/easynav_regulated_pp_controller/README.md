@@ -79,11 +79,7 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
 
 | Parameter | Description |
 |-----|----|
-| `max_linear_vel` | Maximum linear velocity. |
-| `min_linear_vel` | Minimum linear velocity, used when `use_dynamic_window` is `true`. |
-| `max_angular_vel` / `min_angular_vel` | Angular velocity bounds, used when `use_dynamic_window` is `true`. |
-| `max_linear_accel` / `max_linear_decel` | Linear acceleration/deceleration bounds, used when `use_dynamic_window` is `true`. |
-| `max_angular_accel` / `max_angular_decel` | Angular acceleration/deceleration bounds; also used by `rotate_to_heading`. |
+| (velocity/acceleration limits) | Not this plugin's: the robot limits of `controller_node` (`robot_limits.*`, see `ControllerMethodBase::get_robot_limits()`). `min_linear_vel` and the angular bounds (`±max_angular_vel`) are used when `use_dynamic_window` is `true`; the angular acceleration/deceleration also by `rotate_to_heading`. |
 | `lookahead_dist` | Fixed lookahead distance to find the carrot point. |
 | `min_lookahead_dist` / `max_lookahead_dist` | Bounds for the velocity-scaled lookahead distance. |
 | `lookahead_time` | Gain used to scale the lookahead distance by the current speed. |
@@ -117,18 +113,19 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
 ## Example configuration
 
 ```yaml
-controller:
+controller_node:
   ros__parameters:
-    controller_plugin: "easynav_regulated_pp_controller/RegulatedPurePursuitController"
-    RegulatedPurePursuitController:
+    robot_limits:
       max_linear_vel: 0.5
       min_linear_vel: -0.5
       max_angular_vel: 2.5
-      min_angular_vel: -2.5
-      max_linear_accel: 2.5
+      max_linear_acc: 2.5
       max_linear_decel: 2.5
-      max_angular_accel: 3.2
+      max_angular_acc: 3.2
       max_angular_decel: 3.2
+    controller_types: [rpp]
+    rpp:
+      plugin: easynav_regulated_pp_controller/RegulatedPurePursuitController
       lookahead_dist: 0.6
       min_lookahead_dist: 0.3
       max_lookahead_dist: 0.9

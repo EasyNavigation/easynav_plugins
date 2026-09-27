@@ -38,8 +38,6 @@ MPCController::on_initialize()
     node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
     node->declare_parameter<double>(plugin_name + ".dt", dt_);
     node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-    node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-    node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
     node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
 
     node->declare_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
@@ -51,8 +49,11 @@ MPCController::on_initialize()
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-  node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  // Velocity and acceleration limits: the robot's, as configured in ControllerNode
+  // ("robot_limits.*"), not this plugin's own.
+  const auto limits = get_robot_limits();
+  max_lin_vel_ = limits.max_linear_vel;
+  max_ang_vel_ = limits.max_angular_vel;
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
 
   node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);

@@ -89,7 +89,7 @@ RecoveryStatus AmclRelocalizeMitigation::on_cycle(NavState & nav_state)
   cmd.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().robot_frame;
   cmd.twist.angular.z = rotation_speed_;
 
-  nav_state.set("cmd_vel", cmd);
+  command_velocity(nav_state, cmd);
   return RecoveryStatus::RUNNING;
 }
 

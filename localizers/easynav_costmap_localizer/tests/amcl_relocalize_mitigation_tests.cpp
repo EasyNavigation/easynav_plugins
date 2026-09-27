@@ -24,6 +24,7 @@
 #include "easynav_common/RTTFBuffer.hpp"
 
 #include "easynav_costmap_localizer/AmclRelocalizeMitigation.hpp"
+#include "easynav_core/VelocityCommand.hpp"
 
 class AmclRelocalizeMitigationTestCase : public ::testing::Test
 {
@@ -87,8 +88,11 @@ TEST_F(AmclRelocalizeMitigationTestCase, RotatesInPlaceWhileDivergedAndWithinTim
   auto status = mit->internal_cycle(nav_state);
 
   EXPECT_EQ(status, easynav::RecoveryStatus::RUNNING);
-  ASSERT_TRUE(nav_state.has("cmd_vel"));
-  const auto & cmd = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  // Movement mitigations propose their command; ControllerNode publishes it.
+  const auto proposed =
+    easynav::velocity_command::peek(nav_state, easynav::VelocitySource::RECOVERY);
+  ASSERT_TRUE(proposed.has_value());
+  const auto & cmd = *proposed;
   EXPECT_DOUBLE_EQ(cmd.twist.angular.z, 0.4);
   EXPECT_DOUBLE_EQ(cmd.twist.linear.x, 0.0);
 }
@@ -107,8 +111,11 @@ TEST_F(AmclRelocalizeMitigationTestCase, SucceedsOnceCovarianceDropsBelowThresho
   auto status = mit->internal_cycle(nav_state);
 
   EXPECT_EQ(status, easynav::RecoveryStatus::SUCCEEDED);
-  ASSERT_TRUE(nav_state.has("cmd_vel"));
-  const auto & cmd = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  // Movement mitigations propose their command; ControllerNode publishes it.
+  const auto proposed =
+    easynav::velocity_command::peek(nav_state, easynav::VelocitySource::RECOVERY);
+  ASSERT_TRUE(proposed.has_value());
+  const auto & cmd = *proposed;
   EXPECT_DOUBLE_EQ(cmd.twist.angular.z, 0.0);
 }
 
@@ -127,7 +134,10 @@ TEST_F(AmclRelocalizeMitigationTestCase, FailsAfterTimeoutWithoutRelocalizing)
   auto status = mit->internal_cycle(nav_state);
 
   EXPECT_EQ(status, easynav::RecoveryStatus::FAILED);
-  ASSERT_TRUE(nav_state.has("cmd_vel"));
-  const auto & cmd = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
+  // Movement mitigations propose their command; ControllerNode publishes it.
+  const auto proposed =
+    easynav::velocity_command::peek(nav_state, easynav::VelocitySource::RECOVERY);
+  ASSERT_TRUE(proposed.has_value());
+  const auto & cmd = *proposed;
   EXPECT_DOUBLE_EQ(cmd.twist.angular.z, 0.0);
 }
