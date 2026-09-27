@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>easynav_collision_safety_reflex</name>
+  <version>0.4.2</version>
+  <description>Easy Navigation: level-0 safety reflex that stops the robot when the commanded velocity would collide within the braking distance.</description>
+  <maintainer email="fmrico@gmail.com">Francisco Martín Rico</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>easynav_common</depend>
+  <depend>easynav_core</depend>
+  <depend>easynav_sensors</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>geometry_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>pcl_ros</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>rclcpp_lifecycle</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
