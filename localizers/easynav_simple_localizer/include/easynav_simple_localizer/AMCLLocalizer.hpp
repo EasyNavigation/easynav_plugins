@@ -172,6 +172,14 @@ protected:
    */
   void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
 
+  /// @brief After a reconfiguration, starts from the last known pose instead of the configured
+  /// initial pose (see LocalizerMethodBase::on_last_known_pose()), unless
+  /// "initial_pose.use_last_known" is false.
+  void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose) override;
+
+  /// @brief Whether to start from the last known pose after a reconfiguration.
+  bool use_last_known_pose_ {true};
+
   /// List of particles representing the belief distribution.
   std::vector<Particle> particles_;
 

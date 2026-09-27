@@ -80,12 +80,20 @@ void RosGraphEvaluator::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<std::vector<std::string>>(
-    plugin_name + ".ignored_topics", ignored_topics_);
-  node->declare_parameter<std::vector<std::string>>(
-    plugin_name + ".ignored_consumers", ignored_consumers_);
-  node->declare_parameter<double>(plugin_name + ".startup_grace", startup_grace_);
-  node->declare_parameter<double>(plugin_name + ".error_debounce", error_debounce_);
+  if (!node->has_parameter(plugin_name + ".ignored_topics")) {
+    node->declare_parameter<std::vector<std::string>>(
+      plugin_name + ".ignored_topics", ignored_topics_);
+  }
+  if (!node->has_parameter(plugin_name + ".ignored_consumers")) {
+    node->declare_parameter<std::vector<std::string>>(
+      plugin_name + ".ignored_consumers", ignored_consumers_);
+  }
+  if (!node->has_parameter(plugin_name + ".startup_grace")) {
+    node->declare_parameter<double>(plugin_name + ".startup_grace", startup_grace_);
+  }
+  if (!node->has_parameter(plugin_name + ".error_debounce")) {
+    node->declare_parameter<double>(plugin_name + ".error_debounce", error_debounce_);
+  }
 
   node->get_parameter<std::vector<std::string>>(plugin_name + ".ignored_topics", ignored_topics_);
   node->get_parameter<std::vector<std::string>>(

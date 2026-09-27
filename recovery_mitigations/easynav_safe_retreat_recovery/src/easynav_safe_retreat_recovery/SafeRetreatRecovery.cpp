@@ -32,8 +32,12 @@ void SafeRetreatRecovery::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".retreat_speed", retreat_speed_);
-  node->declare_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
+  if (!node->has_parameter(plugin_name + ".retreat_speed")) {
+    node->declare_parameter<double>(plugin_name + ".retreat_speed", retreat_speed_);
+  }
+  if (!node->has_parameter(plugin_name + ".safe_distance")) {
+    node->declare_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
+  }
 
   node->get_parameter<double>(plugin_name + ".retreat_speed", retreat_speed_);
   node->get_parameter<double>(plugin_name + ".safe_distance", safe_distance_);

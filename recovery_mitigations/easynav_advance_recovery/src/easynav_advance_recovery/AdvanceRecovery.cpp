@@ -32,10 +32,18 @@ void AdvanceRecovery::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".advance_distance", advance_distance_);
-  node->declare_parameter<double>(plugin_name + ".advance_speed", advance_speed_);
-  node->declare_parameter<double>(plugin_name + ".escalate_after", escalate_after_);
-  node->declare_parameter<double>(plugin_name + ".episode_gap", episode_gap_);
+  if (!node->has_parameter(plugin_name + ".advance_distance")) {
+    node->declare_parameter<double>(plugin_name + ".advance_distance", advance_distance_);
+  }
+  if (!node->has_parameter(plugin_name + ".advance_speed")) {
+    node->declare_parameter<double>(plugin_name + ".advance_speed", advance_speed_);
+  }
+  if (!node->has_parameter(plugin_name + ".escalate_after")) {
+    node->declare_parameter<double>(plugin_name + ".escalate_after", escalate_after_);
+  }
+  if (!node->has_parameter(plugin_name + ".episode_gap")) {
+    node->declare_parameter<double>(plugin_name + ".episode_gap", episode_gap_);
+  }
 
   node->get_parameter<double>(plugin_name + ".advance_distance", advance_distance_);
   node->get_parameter<double>(plugin_name + ".advance_speed", advance_speed_);

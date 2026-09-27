@@ -94,7 +94,9 @@ MHAMCLLocalizer::on_initialize()
 
   auto param = [&](const std::string & name, auto & value) {
       using T = std::decay_t<decltype(value)>;
-      node->declare_parameter<T>(plugin_name + "." + name, value);
+      if (!node->has_parameter(plugin_name + "." + name)) {
+        node->declare_parameter<T>(plugin_name + "." + name, value);
+      }
       node->get_parameter<T>(plugin_name + "." + name, value);
     };
 
@@ -104,6 +106,7 @@ MHAMCLLocalizer::on_initialize()
   param("initial_pose.yaw", yaw_init);
   param("initial_pose.std_dev_xy", std_dev_xy);
   param("initial_pose.std_dev_yaw", std_dev_yaw);
+  param("initial_pose.use_last_known", use_last_known_pose_);
 
   // Particle filter of every hypothesis
   param("max_particles", pp.max_particles);
@@ -239,6 +242,20 @@ MHAMCLLocalizer::update(NavState & nav_state)
     std::lock_guard<std::mutex> lock(mutex_);
     publishParticles();
   }
+}
+
+
+void
+MHAMCLLocalizer::on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  if (!use_last_known_pose_) {
+    return;
+  }
+  RCLCPP_INFO(
+    get_node()->get_logger(),
+    "MHAMCLLocalizer: starting from the last known pose (%.3f, %.3f) instead of the initial pose",
+    pose.pose.pose.position.x, pose.pose.pose.position.y);
+  init_pose_callback(std::make_unique<geometry_msgs::msg::PoseWithCovarianceStamped>(pose));
 }
 
 void

@@ -25,7 +25,9 @@ void AmclConvergenceEvaluator::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".covariance_threshold", covariance_threshold_);
+  if (!node->has_parameter(plugin_name + ".covariance_threshold")) {
+    node->declare_parameter<double>(plugin_name + ".covariance_threshold", covariance_threshold_);
+  }
   node->get_parameter<double>(plugin_name + ".covariance_threshold", covariance_threshold_);
 }
 

@@ -34,8 +34,10 @@ void ShutdownRecovery::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<std::vector<std::string>>(
-    plugin_name + ".handled_hardware_ids", handled_hardware_ids_);
+  if (!node->has_parameter(plugin_name + ".handled_hardware_ids")) {
+    node->declare_parameter<std::vector<std::string>>(
+      plugin_name + ".handled_hardware_ids", handled_hardware_ids_);
+  }
   node->get_parameter<std::vector<std::string>>(
     plugin_name + ".handled_hardware_ids", handled_hardware_ids_);
 }

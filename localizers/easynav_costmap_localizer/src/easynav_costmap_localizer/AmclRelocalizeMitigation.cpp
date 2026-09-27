@@ -29,9 +29,15 @@ void AmclRelocalizeMitigation::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".rotation_speed", rotation_speed_);
-  node->declare_parameter<double>(plugin_name + ".timeout", timeout_);
-  node->declare_parameter<double>(plugin_name + ".covariance_threshold", covariance_threshold_);
+  if (!node->has_parameter(plugin_name + ".rotation_speed")) {
+    node->declare_parameter<double>(plugin_name + ".rotation_speed", rotation_speed_);
+  }
+  if (!node->has_parameter(plugin_name + ".timeout")) {
+    node->declare_parameter<double>(plugin_name + ".timeout", timeout_);
+  }
+  if (!node->has_parameter(plugin_name + ".covariance_threshold")) {
+    node->declare_parameter<double>(plugin_name + ".covariance_threshold", covariance_threshold_);
+  }
 
   node->get_parameter<double>(plugin_name + ".rotation_speed", rotation_speed_);
   node->get_parameter<double>(plugin_name + ".timeout", timeout_);

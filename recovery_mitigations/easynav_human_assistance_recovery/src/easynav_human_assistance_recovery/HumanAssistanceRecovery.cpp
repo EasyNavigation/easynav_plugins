@@ -29,11 +29,15 @@ void HumanAssistanceRecovery::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".timeout", timeout_);
+  if (!node->has_parameter(plugin_name + ".timeout")) {
+    node->declare_parameter<double>(plugin_name + ".timeout", timeout_);
+  }
   node->get_parameter<double>(plugin_name + ".timeout", timeout_);
 
-  node->declare_parameter<std::vector<std::string>>(
-    plugin_name + ".ignored_hardware_ids", ignored_hardware_ids_);
+  if (!node->has_parameter(plugin_name + ".ignored_hardware_ids")) {
+    node->declare_parameter<std::vector<std::string>>(
+      plugin_name + ".ignored_hardware_ids", ignored_hardware_ids_);
+  }
   node->get_parameter<std::vector<std::string>>(
     plugin_name + ".ignored_hardware_ids", ignored_hardware_ids_);
 }

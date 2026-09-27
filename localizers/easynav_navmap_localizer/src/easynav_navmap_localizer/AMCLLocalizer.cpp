@@ -378,6 +378,8 @@ void AMCLLocalizer::on_initialize()
     node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
     node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", 0.5);
     node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", 0.5);
+    node->declare_parameter<bool>(plugin_name + ".initial_pose.use_last_known",
+          use_last_known_pose_);
     node->declare_parameter<double>(plugin_name + ".reseed_freq", 1.0);
     node->declare_parameter<double>(plugin_name + ".noise_translation", 0.01);
     node->declare_parameter<double>(plugin_name + ".noise_rotation", 0.01);
@@ -399,6 +401,7 @@ void AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".initial_pose.yaw", yaw_init);
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", std_dev_xy);
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
+  node->get_parameter<bool>(plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
   node->get_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
   node->get_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
   node->get_parameter<double>(plugin_name + ".noise_translation_to_rotation",
@@ -496,6 +499,20 @@ void AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
   tf2::fromMsg(msg->pose.pose, odom_);
   last_input_time_ = msg->header.stamp;
   if (!initialized_odom_) {last_odom_ = odom_; initialized_odom_ = true;}
+}
+
+
+void
+AMCLLocalizer::on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  if (!use_last_known_pose_) {
+    return;
+  }
+  RCLCPP_INFO(
+    get_node()->get_logger(),
+    "AMCLLocalizer: starting from the last known pose (%.3f, %.3f) instead of the initial pose",
+    pose.pose.pose.position.x, pose.pose.pose.position.y);
+  init_pose_callback(std::make_unique<geometry_msgs::msg::PoseWithCovarianceStamped>(pose));
 }
 
 void

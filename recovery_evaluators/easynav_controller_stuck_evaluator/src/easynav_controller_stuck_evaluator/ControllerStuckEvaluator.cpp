@@ -32,11 +32,17 @@ void ControllerStuckEvaluator::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(
-    plugin_name + ".linear_velocity_threshold", linear_velocity_threshold_);
-  node->declare_parameter<double>(
-    plugin_name + ".progress_distance_threshold", progress_distance_threshold_);
-  node->declare_parameter<double>(plugin_name + ".stuck_time_threshold", stuck_time_threshold_);
+  if (!node->has_parameter(plugin_name + ".linear_velocity_threshold")) {
+    node->declare_parameter<double>(
+      plugin_name + ".linear_velocity_threshold", linear_velocity_threshold_);
+  }
+  if (!node->has_parameter(plugin_name + ".progress_distance_threshold")) {
+    node->declare_parameter<double>(
+      plugin_name + ".progress_distance_threshold", progress_distance_threshold_);
+  }
+  if (!node->has_parameter(plugin_name + ".stuck_time_threshold")) {
+    node->declare_parameter<double>(plugin_name + ".stuck_time_threshold", stuck_time_threshold_);
+  }
 
   node->get_parameter<double>(
     plugin_name + ".linear_velocity_threshold", linear_velocity_threshold_);

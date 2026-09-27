@@ -31,12 +31,20 @@ void ObstacleTooCloseEvaluator::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
-  node->declare_parameter<double>(
-    plugin_name + ".linear_velocity_epsilon", linear_velocity_epsilon_);
-  node->declare_parameter<double>(
-    plugin_name + ".angular_velocity_epsilon", angular_velocity_epsilon_);
-  node->declare_parameter<double>(plugin_name + ".debounce_duration", debounce_duration_);
+  if (!node->has_parameter(plugin_name + ".safe_distance")) {
+    node->declare_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
+  }
+  if (!node->has_parameter(plugin_name + ".linear_velocity_epsilon")) {
+    node->declare_parameter<double>(
+      plugin_name + ".linear_velocity_epsilon", linear_velocity_epsilon_);
+  }
+  if (!node->has_parameter(plugin_name + ".angular_velocity_epsilon")) {
+    node->declare_parameter<double>(
+      plugin_name + ".angular_velocity_epsilon", angular_velocity_epsilon_);
+  }
+  if (!node->has_parameter(plugin_name + ".debounce_duration")) {
+    node->declare_parameter<double>(plugin_name + ".debounce_duration", debounce_duration_);
+  }
 
   node->get_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
   node->get_parameter<double>(plugin_name + ".linear_velocity_epsilon", linear_velocity_epsilon_);
