@@ -92,17 +92,16 @@ void FusionLocalizer::on_initialize()
 
     // GPS-related setup only needed when global filter is active
     if (has_global_filter_) {
-      localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
+      if (!localizer_node->has_parameter(plugin_name + ".latitude_origin")) {
+        localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
+        localizer_node->declare_parameter(plugin_name + ".longitude_origin", double(0.0));
+        localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0));
+        localizer_node->declare_parameter(
+          plugin_name + ".navsatfix_topic", std::string("gps/filtered"));
+      }
       localizer_node->get_parameter(plugin_name + ".latitude_origin", latitude_origin_);
-
-      localizer_node->declare_parameter(plugin_name + ".longitude_origin", double(0.0));
       localizer_node->get_parameter(plugin_name + ".longitude_origin", longitude_origin_);
-
-      localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0));
       localizer_node->get_parameter(plugin_name + ".altitude_origin", altitude_origin_);
-
-      localizer_node->declare_parameter(
-        plugin_name + ".navsatfix_topic", std::string("gps/filtered"));
       localizer_node->get_parameter(plugin_name + ".navsatfix_topic", navsatfix_topic_);
       navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
         navsatfix_topic_, rclcpp::QoS(10));

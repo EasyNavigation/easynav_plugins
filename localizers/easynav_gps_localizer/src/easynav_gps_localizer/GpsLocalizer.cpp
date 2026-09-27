@@ -56,9 +56,11 @@ void GpsLocalizer::on_initialize()
     std::bind(&GpsLocalizer::init_pose_callback, this, std::placeholders::_1));
 
   // Optional initial pose from parameters (kept consistent with AMCL parameter names)
-  node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
+  if (!node->has_parameter(plugin_name + ".initial_pose.x")) {
+    node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
+  }
 
   double init_x = 0.0;
   double init_y = 0.0;

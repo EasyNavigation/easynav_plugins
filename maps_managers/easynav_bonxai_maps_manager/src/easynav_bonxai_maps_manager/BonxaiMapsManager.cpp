@@ -55,10 +55,12 @@ BonxaiMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, bonxai_path_file, occmap_path_file;
-  node->declare_parameter(plugin_name + ".package", package_name);
-  node->declare_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
-  node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
-  node->declare_parameter(plugin_name + ".resolution", resolution_);
+  if (!node->has_parameter(plugin_name + ".package")) {
+    node->declare_parameter(plugin_name + ".package", package_name);
+    node->declare_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
+    node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
+    node->declare_parameter(plugin_name + ".resolution", resolution_);
+  }
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);

@@ -9,3 +9,10 @@ target_link_libraries(simple_localizer_tests
   rclcpp_lifecycle::rclcpp_lifecycle
   ${std_srvs_TARGETS}
 )
+
+ament_add_gtest(simple_localizer_reconfigure_tests simple_localizer_reconfigure_tests.cpp)
+target_link_libraries(simple_localizer_reconfigure_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+)
