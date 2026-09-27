@@ -1,0 +1,11 @@
+<class_libraries>
+  <library path="easynav_shutdown_recovery">
+    <class name="easynav_shutdown_recovery/ShutdownRecovery" type="easynav::ShutdownRecovery" base_class_type="easynav::RecoveryMitigationBase">
+      <description>
+      System-level mitigation for unrecoverable diagnostics (by default hardware_id "ros_graph"):
+      stops the robot, cancels the active mission and requests EasyNav to terminate in an orderly
+      way, reporting the diagnostics that caused it.
+      </description>
+    </class>
+  </library>
+</class_libraries>

@@ -73,6 +73,31 @@ TEST_F(HumanAssistanceRecoveryTestCase, CanHandleAnyHardwareIdAtErrorLevelOrAbov
     rec->can_handle(make_status(diagnostic_msgs::msg::DiagnosticStatus::STALE, "whatever")));
 }
 
+TEST_F(HumanAssistanceRecoveryTestCase, IgnoresRosGraphDiagnosticsByDefault)
+{
+  // A miswired ROS graph is left to the mission-level mitigation, not to a human.
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_ignored_default_node");
+  auto rec = make_recovery(node, "human_ignored0");
+
+  EXPECT_FALSE(
+    rec->can_handle(make_status(diagnostic_msgs::msg::DiagnosticStatus::ERROR, "ros_graph")));
+}
+
+TEST_F(HumanAssistanceRecoveryTestCase, IgnoredHardwareIdsAreConfigurable)
+{
+  rclcpp::NodeOptions options;
+  options.parameter_overrides(
+    {{"human_ignored1.ignored_hardware_ids", std::vector<std::string>{"planner"}}});
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_ignored_param_node", options);
+  auto rec = make_recovery(node, "human_ignored1");
+
+  EXPECT_FALSE(
+    rec->can_handle(make_status(diagnostic_msgs::msg::DiagnosticStatus::ERROR, "planner")));
+  EXPECT_TRUE(
+    rec->can_handle(make_status(diagnostic_msgs::msg::DiagnosticStatus::ERROR, "ros_graph")));
+}
+
 TEST_F(HumanAssistanceRecoveryTestCase, DoesNotHandleWarnOrOk)
 {
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_no_ch_node");

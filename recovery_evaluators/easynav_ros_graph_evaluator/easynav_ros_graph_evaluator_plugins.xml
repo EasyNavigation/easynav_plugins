@@ -1,0 +1,11 @@
+<class_libraries>
+  <library path="easynav_ros_graph_evaluator">
+    <class name="easynav_ros_graph_evaluator/RosGraphEvaluator" type="easynav::RosGraphEvaluator" base_class_type="easynav::RecoveryEvaluatorBase">
+      <description>
+      Checks EasyNav's wiring in the ROS graph: ERROR (hardware_id "ros_graph") if a subscription
+      of an EasyNav node has no publisher, or if no velocity output of EasyNav has a subscriber.
+      OK reports whether the velocity output is consumed stamped or unstamped.
+      </description>
+    </class>
+  </library>
+</class_libraries>

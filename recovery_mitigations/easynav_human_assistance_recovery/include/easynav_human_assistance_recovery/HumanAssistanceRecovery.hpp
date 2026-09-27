@@ -19,6 +19,8 @@
 #define EASYNAV_HUMAN_ASSISTANCE_RECOVERY__HUMANASSISTANCERECOVERY_HPP_
 
 #include <optional>
+#include <string>
+#include <vector>
 
 #include "rclcpp/time.hpp"
 
@@ -46,6 +48,10 @@ namespace easynav
  * fixed things within that time, this mitigation gives up (FAILED) instead of waiting
  * indefinitely, so a lower-priority candidate — e.g. a mission-level "give up" mitigation — can
  * take over.
+ *
+ * "ignored_hardware_ids" (default {"ros_graph"}) lists diagnostics this mitigation never takes:
+ * problems no human can fix by clearing the robot's surroundings (e.g. a miswired ROS graph), so
+ * they fall straight through to the mission-level mitigation.
  */
 class HumanAssistanceRecovery : public easynav::RecoveryMitigationBase
 {
@@ -65,6 +71,9 @@ protected:
 private:
   /// @brief Seconds to wait before giving up. 0.0 (the default) means wait forever.
   double timeout_ {0.0};
+
+  /// @brief hardware_id values can_handle() rejects even at ERROR level.
+  std::vector<std::string> ignored_hardware_ids_ {"ros_graph"};
 
   rclcpp::Time start_time_;
 

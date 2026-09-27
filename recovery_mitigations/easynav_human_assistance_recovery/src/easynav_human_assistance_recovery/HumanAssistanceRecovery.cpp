@@ -15,6 +15,10 @@
 /// \file
 /// \brief Implementation of the HumanAssistanceRecovery class.
 
+#include <algorithm>
+#include <string>
+#include <vector>
+
 #include "easynav_human_assistance_recovery/HumanAssistanceRecovery.hpp"
 
 namespace easynav
@@ -27,12 +31,20 @@ void HumanAssistanceRecovery::on_initialize()
 
   node->declare_parameter<double>(plugin_name + ".timeout", timeout_);
   node->get_parameter<double>(plugin_name + ".timeout", timeout_);
+
+  node->declare_parameter<std::vector<std::string>>(
+    plugin_name + ".ignored_hardware_ids", ignored_hardware_ids_);
+  node->get_parameter<std::vector<std::string>>(
+    plugin_name + ".ignored_hardware_ids", ignored_hardware_ids_);
 }
 
 bool HumanAssistanceRecovery::can_handle(
   const diagnostic_msgs::msg::DiagnosticStatus & status) const
 {
-  return status.level >= diagnostic_msgs::msg::DiagnosticStatus::ERROR;
+  return status.level >= diagnostic_msgs::msg::DiagnosticStatus::ERROR &&
+         std::find(
+    ignored_hardware_ids_.begin(), ignored_hardware_ids_.end(), status.hardware_id) ==
+         ignored_hardware_ids_.end();
 }
 
 void HumanAssistanceRecovery::on_start(NavState & nav_state)

@@ -1,0 +1,2 @@
+ament_add_gtest(shutdown_recovery_tests shutdown_recovery_tests.cpp)
+target_link_libraries(shutdown_recovery_tests ${PROJECT_NAME})
