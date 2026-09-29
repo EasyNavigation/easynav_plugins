@@ -42,14 +42,6 @@ MPPIController::on_initialize()
   easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".horizon_steps", horizon_steps_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".lambda", lambda_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_linear_velocity",
-      max_lin_vel_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_velocity",
-      max_ang_vel_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_linear_acceleration",
-      max_lin_acc_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_acceleration",
-      max_ang_acc_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fov", fov_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
       safety_radius_);
@@ -58,10 +50,14 @@ MPPIController::on_initialize()
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
   node->get_parameter<double>(plugin_name + ".lambda", lambda_);
-  node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
-  node->get_parameter<double>(plugin_name + ".max_linear_acceleration", max_lin_acc_);
-  node->get_parameter<double>(plugin_name + ".max_angular_acceleration", max_ang_acc_);
+  // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_velocity", "", "max_angular_velocity", "max_linear_acceleration", "",
+      "max_angular_acceleration", ""});
+  max_lin_vel_ = limits.max_linear_vel;
+  max_ang_vel_ = limits.max_angular_vel;
+  max_lin_acc_ = limits.max_linear_acc;
+  max_ang_acc_ = limits.max_angular_acc;
   node->get_parameter<double>(plugin_name + ".fov", fov_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
 

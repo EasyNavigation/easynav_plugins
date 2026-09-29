@@ -39,10 +39,6 @@ MPCController::on_initialize()
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
       safety_radius_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_linear_velocity",
-      max_lin_vel_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_velocity",
-      max_ang_vel_);
   easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".verbose", verbose_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_pos_tol",
       fallback_goal_pos_tol_);
@@ -52,8 +48,11 @@ MPCController::on_initialize()
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-  node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  // Velocity limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_velocity", "", "max_angular_velocity", "", "", "", ""});
+  max_lin_vel_ = limits.max_linear_vel;
+  max_ang_vel_ = limits.max_angular_vel;
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
 
   node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);

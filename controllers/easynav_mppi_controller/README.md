@@ -39,12 +39,11 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.horizon_steps` | `int` | `10` | Number of time steps in the prediction horizon. |
 | `<plugin>.dt` | `double` | `0.1` | Integration time step (seconds). |
 | `<plugin>.lambda` | `double` | `0.1` | Temperature / control noise scaling factor. |
-| `<plugin>.max_linear_velocity` | `double` | `1.0` | Maximum linear velocity (m/s). |
-| `<plugin>.max_angular_velocity` | `double` | `1.0` | Maximum angular velocity (rad/s). |
-| `<plugin>.max_linear_acceleration` | `double` | `0.5` | Maximum linear acceleration (m/s²). |
-| `<plugin>.max_angular_acceleration` | `double` | `1.0` | Maximum angular acceleration (rad/s²). |
+| — | — | — | Velocity and acceleration limits are not this plugin's: they are the robot limits of `controller_node` (`robot_limits.max_linear_vel`, `min_linear_vel`, `max_angular_vel`, `max_linear_acc`, `max_linear_decel`, `max_angular_acc`, `max_angular_decel`), queried with `ControllerMethodBase::get_robot_limits()` and also enforced by ControllerNode's velocity smoother. |
 | `<plugin>.fov` | `double` | `M_PI/2.0` | Field of view used in trajectory sampling (radians). |
 | `<plugin>.safety_radius` | `double` | `0.6` | Safety radius around the robot (meters). |
+
+> **Deprecated:** this plugin's former limit parameters (`max_linear_velocity`, `max_angular_velocity`, `max_linear_acceleration`, `max_angular_acceleration`, under the plugin's name) still apply, with a warning, where `controller_node.robot_limits.*` does not set that limit. They will stop working soon: move them to `robot_limits`.
 
 ## Interfaces (Topics and Services)
 

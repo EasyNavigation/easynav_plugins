@@ -1,3 +1,4 @@
+find_package(easynav_controller REQUIRED)
 ament_add_gtest(regulated_pp_controller_tests regulated_pp_controller_tests.cpp)
 target_link_libraries(regulated_pp_controller_tests
   ${PROJECT_NAME}
@@ -13,3 +14,14 @@ target_link_libraries(regulated_pp_controller_reconfigure_tests
   rclcpp::rclcpp
   rclcpp_lifecycle::rclcpp_lifecycle
 )
+
+ament_add_gtest(regulated_pp_controller_robot_limits_tests regulated_pp_controller_robot_limits_tests.cpp)
+target_link_libraries(regulated_pp_controller_robot_limits_tests
+  ${PROJECT_NAME}
+  easynav_controller::easynav_controller
+)
+
+ament_add_gtest(regulated_pp_controller_legacy_params_file_tests regulated_pp_controller_legacy_params_file_tests.cpp)
+target_link_libraries(regulated_pp_controller_legacy_params_file_tests easynav_controller::easynav_controller)
+target_compile_definitions(regulated_pp_controller_legacy_params_file_tests
+  PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")

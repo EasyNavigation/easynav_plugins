@@ -1,6 +1,16 @@
 controller_node:
   ros__parameters:
     use_sim_time: true
+    # Robot velocity/acceleration limits: the controller plugins use them, and the velocity
+    # smoother enforces them on every command published (see ControllerNode).
+    robot_limits:
+      max_linear_vel: 0.8
+      min_linear_vel: -0.8
+      max_angular_vel: 1.2
+      max_linear_acc: 1.0
+      max_linear_decel: 1.0
+      max_angular_acc: 2.0
+      max_angular_decel: 2.0
     controller_types: [serest]
     dummy:
       rt_freq: 30.0
@@ -15,17 +25,11 @@ controller_node:
       dt: 0.15
       lambda: 1.0      
       fov: 1.57
-      max_linear_velocity: 1.5
-      max_angular_velocity: 1.0
-      max_linear_acceleration: 0.5
-      max_angular_acceleration: 0.5
       safety_radius: 0.3
     serest:
       rt_freq: 30.0 
       plugin: easynav_serest_controller/SerestController
       allow_reverse: true
-      max_linear_speed: 0.8
-      max_angular_speed: 1.2
       v_progress_min: 0.08        # 8 cm/s de crucero mínimo cuando alineado
       k_s_share_max: 0.5          # succión lateral no cancela >50% del avance
       k_theta: 2.5                # sube un poco
