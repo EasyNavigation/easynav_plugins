@@ -11,7 +11,7 @@ var indexSectionsWithContent =
   8: "bcgilmorst",
   9: "co",
   10: "b",
-  11: "2abcdefhiklmnoprst⚙📍🗺🧭"
+  11: "2abcdefhiklmnoprstv⚙📍🗺🧭"
 };
 
 var indexSectionNames =

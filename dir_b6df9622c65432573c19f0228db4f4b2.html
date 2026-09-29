@@ -116,7 +116,7 @@ Directory dependency graph for easynav_vff_controller:</div>
 <area shape="rect" href="dir_000090_000069.html" title="1" alt="" coords="254,109,261,124"/>
 <area shape="rect" href="dir_65d8cd67a43dc9e496e6c3090e2fe343.html" title="tests" alt="" coords="275,63,325,89"/>
 <area shape="poly" href="dir_000108_000069.html" alt="" coords="296,90,278,124,274,122,291,88"/>
-<area shape="rect" href="dir_000108_000069.html" title="1" alt="" coords="281,117,288,132"/>
+<area shape="rect" href="dir_000108_000069.html" title="2" alt="" coords="281,117,288,132"/>
 <area shape="rect" href="dir_b6df9622c65432573c19f0228db4f4b2.html" alt="" coords="27,52,336,173"/>
 <area shape="rect" href="dir_87b6ed4386158a4d6cd0ecd5fb5bd5c2.html" title="controllers" alt="" coords="16,16,347,184"/>
 </map>
@@ -183,7 +183,13 @@ NavState Keys</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">cmd_vel</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs::msg::TwistStamped</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Output velocity command.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md58"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md58"></a>
+Velocity limits</h1>
+<p>The velocity limits are the robot limits of <span class="tt">controller_node</span> (<span class="tt">robot_limits.max_linear_vel</span>, <span class="tt">robot_limits.max_angular_vel</span>), queried with <span class="tt">ControllerMethodBase::get_robot_limits()</span> and also enforced by ControllerNode's velocity smoother.</p>
+<blockquote class="doxtable">
+<p><b>Deprecated:</b> this plugin's former limit parameters (<span class="tt">max_speed</span>, <span class="tt">max_angular_speed</span>, under the plugin's name) still apply, with a warning, where <span class="tt">controller_node.robot_limits.*</span> does not set that limit. They will stop working soon: move them to <span class="tt">robot_limits</span>. </p>
+</blockquote>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md59"></a>
 Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -191,13 +197,13 @@ Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">/vff/markers</span>  </td><td class="markdownTableBodyNone"><span class="tt">visualization_msgs/msg/MarkerArray</span>  </td><td class="markdownTableBodyNone">Histogram / debug visualization (name inferred from code marker publisher variable).  </td><td class="markdownTableBodyNone">depth=10  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md59"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md60"></a>
 Subscriptions / Services</h2>
 <p>None directly; relies on NavState for data sharing.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md60"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md61"></a>
 TF Frames</h1>
 <p>Relies on frames stamped in <span class="tt">robot_pose</span>; does not query TF directly.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md61"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md62"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['📍_20localizers_0',['📍 Localizers',['../index.html#autotoc_md12',1,'']]]
+  ['⚙️_20controllers_0',['⚙️ Controllers',['../index.html#autotoc_md8',1,'']]]
 ];

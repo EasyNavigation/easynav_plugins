@@ -1,0 +1,17 @@
+<map id="controllers/easynav_mppi_controller/tests/mppi_controller_legacy_params_file_tests.cpp" name="controllers/easynav_mppi_controller/tests/mppi_controller_legacy_params_file_tests.cpp">
+<area shape="rect" id="Node000001" title="A real parameter file from before robot_limits (easynav_indoor_testcase, costmap.mppi...." alt="" coords="280,5,438,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,73,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="281,66,187,93,85,127,81,128,80,123,83,121,185,88,279,61"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,132,150,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="281,76,163,126,162,127,160,122,161,122,279,71"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="174,132,267,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="313,79,251,124,247,120,310,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="291,124,427,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="362,76,362,108,356,108,356,76"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="451,124,587,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="415,74,477,113,474,118,412,79"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="611,132,731,157"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="439,65,620,124,618,129,437,70"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="755,124,891,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="439,56,741,121,740,126,438,61"/>
+</map>

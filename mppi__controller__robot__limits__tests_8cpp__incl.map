@@ -1,0 +1,41 @@
+<map id="controllers/easynav_mppi_controller/tests/mppi_controller_robot_limits_tests.cpp" name="controllers/easynav_mppi_controller/tests/mppi_controller_robot_limits_tests.cpp">
+<area shape="rect" id="Node000001" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="130,5,279,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="22,220,89,246"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,78,106,100,83,126,73,144,66,165,59,205,54,204,60,164,68,142,79,122,103,96,132,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="45,301,103,327"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="131,76,94,98,60,126,41,147,29,165,13,213,8,233,13,252,26,273,44,290,40,294,22,276,8,254,3,233,7,212,24,163,37,144,56,122,90,94,128,71"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="93,132,186,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="185,78,158,120,153,117,180,75"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="210,132,330,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="229,75,256,117,252,120,225,78"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="354,124,490,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="280,74,367,115,365,119,278,79"/>
+<area shape="rect" id="Node000007" href="$MPPIController_8hpp.html" title=" " alt="" coords="520,124,684,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="281,59,511,117,510,122,279,64"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="520,164,502,167,390,180,301,185,213,193,103,215,96,217,95,212,101,210,212,187,301,179,389,175,502,162,519,159"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="893,220,946,246"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="685,158,780,180,882,210,884,211,882,216,880,215,779,185,684,163"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="970,213,1144,253"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="685,159,955,209,954,215,684,164"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="114,213,317,253"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="520,167,319,211,318,206,519,161"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="341,213,503,253"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="562,168,478,208,475,203,560,163"/>
+<area shape="rect" id="Node000012" href="$MPPIOptimizer_8hpp.html" title=" " alt="" coords="527,213,691,253"/>
+<area shape="poly" id="edge12_Node000007_Node000012" title=" " alt="" coords="606,165,609,197,603,197,601,165"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="715,213,868,253"/>
+<area shape="poly" id="edge20_Node000007_Node000019" title=" " alt="" coords="646,163,736,204,734,208,644,168"/>
+<area shape="poly" id="edge14_Node000012_Node000003" title=" " alt="" coords="527,254,516,256,405,271,318,279,232,287,121,304,118,304,118,299,120,299,231,282,318,273,404,266,515,251,526,249"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="918,301,969,327"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="692,249,903,298,902,304,691,254"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="133,301,197,327"/>
+<area shape="poly" id="edge15_Node000012_Node000014" title=" " alt="" coords="527,254,516,256,366,279,212,304,212,299,365,273,515,251,526,249"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="222,301,420,327"/>
+<area shape="poly" id="edge16_Node000012_Node000015" title=" " alt="" coords="537,257,381,299,379,294,536,251"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="444,301,608,327"/>
+<area shape="poly" id="edge17_Node000012_Node000016" title=" " alt="" coords="590,256,552,292,548,288,586,252"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="632,301,751,327"/>
+<area shape="poly" id="edge18_Node000012_Node000017" title=" " alt="" coords="631,252,669,288,666,292,627,256"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="775,301,893,327"/>
+<area shape="poly" id="edge19_Node000012_Node000018" title=" " alt="" coords="666,251,786,293,784,298,664,256"/>
+</map>
