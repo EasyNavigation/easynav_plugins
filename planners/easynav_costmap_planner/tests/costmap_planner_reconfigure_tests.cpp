@@ -17,6 +17,8 @@
 /// called twice on the same node (as happens across a cleanup/reconfigure
 /// cycle) without throwing.
 
+#include <vector>
+#include <string>
 #include "easynav_costmap_planner/CostmapPlanner.hpp"
 
 #include "rclcpp/rclcpp.hpp"
@@ -44,4 +46,37 @@ TEST_F(CostmapPlannerReconfigureTest, InitializeTwiceOnSameNodeDoesNotThrow)
 
   auto plugin2 = std::make_shared<easynav::CostmapPlanner>();
   ASSERT_NO_THROW(plugin2->initialize(node, "test_planner"));
+}
+
+TEST_F(CostmapPlannerReconfigureTest, InitializeWhenAnotherPluginLeftSomeOfItsParameters)
+{
+  // A plugin of another type under the same name may have left any subset of them declared.
+  std::vector<std::string> names;
+  std::vector<rclcpp::ParameterValue> values;
+  {
+    auto node = rclcpp_lifecycle::LifecycleNode::make_shared("costmap_planner_reconfigure_test");
+
+    auto plugin = std::make_shared<easynav::CostmapPlanner>();
+    plugin->initialize(node, "test_planner");
+    for (const auto & n : node->list_parameters({"test_planner"}, 10).names) {
+      try {
+        values.push_back(node->get_parameter(n).get_parameter_value());
+        names.push_back(n);
+      } catch (const rclcpp::exceptions::ParameterUninitializedException &) {
+        // Declared by type only, without a value: nothing another plugin could have left.
+      }
+    }
+  }
+  ASSERT_FALSE(names.empty());
+
+  for (std::size_t i = 0; i < names.size(); ++i) {
+    auto node = rclcpp_lifecycle::LifecycleNode::make_shared("costmap_planner_reconfigure_test");
+
+    node->declare_parameter(names[i], values[i]);
+    auto plugin = std::make_shared<easynav::CostmapPlanner>();
+    ASSERT_NO_THROW(plugin->initialize(node, "test_planner")) << "left declared: " << names[i];
+    for (const auto & n : names) {
+      EXPECT_TRUE(node->has_parameter(n)) << "left declared: " << names[i] << ", missing: " << n;
+    }
+  }
 }

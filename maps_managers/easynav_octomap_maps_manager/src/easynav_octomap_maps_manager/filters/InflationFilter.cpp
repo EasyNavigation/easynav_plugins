@@ -41,6 +41,7 @@
 
 #include <string>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/Perceptions.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
@@ -186,11 +187,12 @@ InflationFilter::on_initialize()
   cost_scaling_factor_ = 3.0;
   inscribed_radius_ = 0.3;
 
-  if (!node->has_parameter(plugin_name_ + ".inflation_radius")) {
-    node->declare_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
-    node->declare_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
-    node->declare_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".inflation_radius",
+        inflation_radius_);
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".cost_scaling_factor",
+        cost_scaling_factor_);
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".inscribed_radius",
+        inscribed_radius_);
   node->get_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
   node->get_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
   node->get_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);

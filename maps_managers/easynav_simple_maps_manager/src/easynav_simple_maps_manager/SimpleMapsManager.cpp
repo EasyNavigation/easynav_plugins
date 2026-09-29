@@ -16,6 +16,7 @@
 /// \file
 /// \brief Implementation of the SimpleMapsManager class.
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 
@@ -52,10 +53,8 @@ SimpleMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, map_path_file;
-  if (!node->has_parameter(plugin_name + ".package")) {
-    node->declare_parameter(plugin_name + ".package", package_name);
-    node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".map_path_file", map_path_file);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".map_path_file", map_path_file);

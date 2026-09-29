@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <cstdint>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_navmap_planner/AStarPlanner.hpp"
 
@@ -64,10 +65,8 @@ void AStarPlanner::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  if (!node->has_parameter(plugin_name + ".cost_factor")) {
-    node->declare_parameter<double>(plugin_name + ".cost_factor", 2.0);
-    node->declare_parameter<bool>(plugin_name + ".continuous_replan", true);
-  }
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".cost_factor", 2.0);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".continuous_replan", true);
 
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);

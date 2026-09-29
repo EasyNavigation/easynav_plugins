@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_costmap_maps_manager/CostmapMapsManager.hpp"
 
 #include "easynav_common/YTSession.hpp"
@@ -55,25 +56,20 @@ CostmapMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, map_path_file;
-  if (!node->has_parameter(plugin_name + ".package")) {
-    node->declare_parameter(plugin_name + ".package", package_name);
-    node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".map_path_file", map_path_file);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".map_path_file", map_path_file);
 
   std::vector<std::string> costmap_filters;
-  if (!node->has_parameter(plugin_name + ".filters")) {
-    node->declare_parameter(plugin_name + ".filters", costmap_filters);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".filters", costmap_filters);
   node->get_parameter(plugin_name + ".filters", costmap_filters);
 
   for (const auto & costmap_filter : costmap_filters) {
     std::string plugin;
-    if (!node->has_parameter(plugin_name + "." + costmap_filter + ".plugin")) {
-      node->declare_parameter(plugin_name + "." + costmap_filter + ".plugin", plugin);
-    }
+    easynav::declare_parameter_if_absent(*node, plugin_name + "." + costmap_filter + ".plugin",
+        plugin);
     node->get_parameter(plugin_name + "." + costmap_filter + ".plugin", plugin);
 
     try {

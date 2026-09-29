@@ -381,7 +381,7 @@ template<typename DataT>
 inline size_t Grid<DataT>::memUsage() const
 {
   auto mem = mask_.memUsage() + sizeof(uint8_t) + sizeof(uint32_t) + sizeof(DataT *);
-  if (!std::is_same_v<DataT, EmptyVoxel>&& !external_memory_) {
+  if (!std::is_same_v<DataT, EmptyVoxel> && !external_memory_) {
     mem += sizeof(DataT) * size_;
   }
   return mem;
@@ -609,7 +609,7 @@ inline bool VoxelGrid<DataT>::Accessor::setCellOff(const CoordT & coord)
 template<typename DataT>
 inline typename std::shared_ptr<Grid<DataT>> VoxelGrid<DataT>::allocateLeafGrid()
 {
-  if constexpr (std::is_trivial_v<DataT>&& !std::is_same_v<DataT, EmptyVoxel>) {
+  if constexpr (std::is_trivial_v<DataT> && !std::is_same_v<DataT, EmptyVoxel>) {
     auto allocated = leaf_block_allocator_.allocateBlock();
     DataT * memory_block = allocated.first;
     auto deleter = [deleter_impl = std::move(allocated.second)](LeafGrid * ptr) {

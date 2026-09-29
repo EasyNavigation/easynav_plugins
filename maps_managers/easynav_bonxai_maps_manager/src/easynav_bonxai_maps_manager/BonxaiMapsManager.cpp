@@ -15,6 +15,7 @@
 
 #include <string>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_bonxai_maps_manager/BonxaiMapsManager.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
@@ -55,12 +56,10 @@ BonxaiMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, bonxai_path_file, occmap_path_file;
-  if (!node->has_parameter(plugin_name + ".package")) {
-    node->declare_parameter(plugin_name + ".package", package_name);
-    node->declare_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
-    node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
-    node->declare_parameter(plugin_name + ".resolution", resolution_);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".bonxai_path_file", bonxai_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".occmap_path_file", occmap_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".resolution", resolution_);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);

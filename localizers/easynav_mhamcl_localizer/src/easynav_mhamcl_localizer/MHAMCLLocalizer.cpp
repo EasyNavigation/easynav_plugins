@@ -26,6 +26,7 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
@@ -94,9 +95,7 @@ MHAMCLLocalizer::on_initialize()
 
   auto param = [&](const std::string & name, auto & value) {
       using T = std::decay_t<decltype(value)>;
-      if (!node->has_parameter(plugin_name + "." + name)) {
-        node->declare_parameter<T>(plugin_name + "." + name, value);
-      }
+      easynav::declare_parameter_if_absent<T>(*node, plugin_name + "." + name, value);
       node->get_parameter<T>(plugin_name + "." + name, value);
     };
 

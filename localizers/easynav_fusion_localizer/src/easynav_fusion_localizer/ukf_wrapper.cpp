@@ -29,6 +29,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+#include "easynav_common/Parameters.hpp"
 #include "easynav_fusion_localizer/ukf_wrapper.hpp"
 
 #include <algorithm>
@@ -826,9 +827,7 @@ void UkfWrapper::loadParams()
   options.callback_group = rt_cbg;
 
   auto declare_or_get = [this](const std::string & name, auto default_value) {
-      if (!parent_node_->has_parameter(name)) {
-        parent_node_->declare_parameter(name, default_value);
-      }
+      easynav::declare_parameter_if_absent(*parent_node_, name, default_value);
       parent_node_->get_parameter(name, default_value);
       return default_value;
     };
@@ -1028,10 +1027,8 @@ void UkfWrapper::loadParams()
   control_timeout = declare_or_get(param_prefix + "control_timeout", 0.0);
 
   if (use_control_) {
-    if (!parent_node_->has_parameter(param_prefix + "control_config")) {
-      parent_node_->declare_parameter(param_prefix + "control_config",
-          rclcpp::PARAMETER_BOOL_ARRAY);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "control_config",
+        rclcpp::PARAMETER_BOOL_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "control_config", control_update_vector)) {
       if (control_update_vector.size() != TWIST_SIZE) {
         RCLCPP_ERROR_STREAM(
@@ -1049,10 +1046,8 @@ void UkfWrapper::loadParams()
       use_control_ = false;
     }
 
-    if (!parent_node_->has_parameter(param_prefix + "acceleration_limits")) {
-      parent_node_->declare_parameter(param_prefix + "acceleration_limits",
-          rclcpp::PARAMETER_DOUBLE_ARRAY);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "acceleration_limits",
+        rclcpp::PARAMETER_DOUBLE_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "acceleration_limits", acceleration_limits)) {
       if (acceleration_limits.size() != TWIST_SIZE) {
         RCLCPP_ERROR_STREAM(
@@ -1070,10 +1065,8 @@ void UkfWrapper::loadParams()
       acceleration_limits.resize(TWIST_SIZE, 1.0);
     }
 
-    if (!parent_node_->has_parameter(param_prefix + "acceleration_gains")) {
-      parent_node_->declare_parameter(param_prefix + "acceleration_gains",
-          rclcpp::PARAMETER_DOUBLE_ARRAY);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "acceleration_gains",
+        rclcpp::PARAMETER_DOUBLE_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "acceleration_gains", acceleration_gains)) {
       const int size = acceleration_gains.size();
       if (size != TWIST_SIZE) {
@@ -1088,10 +1081,8 @@ void UkfWrapper::loadParams()
       }
     }
 
-    if (!parent_node_->has_parameter(param_prefix + "deceleration_limits")) {
-      parent_node_->declare_parameter(param_prefix + "deceleration_limits",
-          rclcpp::PARAMETER_DOUBLE_ARRAY);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "deceleration_limits",
+        rclcpp::PARAMETER_DOUBLE_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "deceleration_limits", deceleration_limits)) {
       if (deceleration_limits.size() != TWIST_SIZE) {
         RCLCPP_ERROR_STREAM(
@@ -1108,10 +1099,8 @@ void UkfWrapper::loadParams()
       deceleration_limits = acceleration_limits;
     }
 
-    if (!parent_node_->has_parameter(param_prefix + "deceleration_gains")) {
-      parent_node_->declare_parameter(param_prefix + "deceleration_gains",
-          rclcpp::PARAMETER_DOUBLE_ARRAY);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "deceleration_gains",
+        rclcpp::PARAMETER_DOUBLE_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "deceleration_gains", deceleration_gains)) {
       const int size = deceleration_gains.size();
       if (size != TWIST_SIZE) {
@@ -1145,9 +1134,8 @@ void UkfWrapper::loadParams()
     dynamic_process_noise_covariance);
 
   std::vector<double> initial_state;
-  if (!parent_node_->has_parameter(param_prefix + "initial_state")) {
-    parent_node_->declare_parameter(param_prefix + "initial_state", rclcpp::PARAMETER_DOUBLE_ARRAY);
-  }
+  easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "initial_state",
+      rclcpp::PARAMETER_DOUBLE_ARRAY);
   if (parent_node_->get_parameter(param_prefix + "initial_state", initial_state)) {
     if (initial_state.size() != STATE_SIZE) {
       RCLCPP_ERROR_STREAM(
@@ -1255,9 +1243,8 @@ void UkfWrapper::loadParams()
     ss << "odom" << topic_ind++;
     std::string odom_topic_name = ss.str();
     std::string odom_topic;
-    if (!parent_node_->has_parameter(param_prefix + odom_topic_name)) {
-      parent_node_->declare_parameter(param_prefix + odom_topic_name, rclcpp::PARAMETER_STRING);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + odom_topic_name,
+        rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + odom_topic_name, parameter)) {
@@ -1413,9 +1400,8 @@ void UkfWrapper::loadParams()
     ss << "pose" << topic_ind++;
     std::string pose_topic_name = ss.str();
     std::string pose_topic;
-    if (!parent_node_->has_parameter(param_prefix + pose_topic_name)) {
-      parent_node_->declare_parameter(param_prefix + pose_topic_name, rclcpp::PARAMETER_STRING);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + pose_topic_name,
+        rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + pose_topic_name, parameter)) {
@@ -1533,9 +1519,8 @@ void UkfWrapper::loadParams()
     ss << "gps" << topic_ind++;
     std::string gps_topic_name = ss.str();
     std::string gps_topic;
-    if (!parent_node_->has_parameter(param_prefix + gps_topic_name)) {
-      parent_node_->declare_parameter(param_prefix + gps_topic_name, rclcpp::PARAMETER_STRING);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + gps_topic_name,
+        rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + gps_topic_name, parameter)) {
@@ -1657,9 +1642,8 @@ void UkfWrapper::loadParams()
     ss << "twist" << topic_ind++;
     std::string twist_topic_name = ss.str();
     std::string twist_topic;
-    if (!parent_node_->has_parameter(param_prefix + twist_topic_name)) {
-      parent_node_->declare_parameter(param_prefix + twist_topic_name, rclcpp::PARAMETER_STRING);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + twist_topic_name,
+        rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + twist_topic_name, parameter)) {
@@ -1739,9 +1723,8 @@ void UkfWrapper::loadParams()
     ss << "imu" << topic_ind++;
     std::string imu_topic_name = ss.str();
     std::string imu_topic;
-    if (!parent_node_->has_parameter(param_prefix + imu_topic_name)) {
-      parent_node_->declare_parameter(param_prefix + imu_topic_name, rclcpp::PARAMETER_STRING);
-    }
+    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + imu_topic_name,
+        rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + imu_topic_name, parameter)) {
@@ -2061,9 +2044,8 @@ void UkfWrapper::loadParams()
       covariance.setZero();
       std::vector<double> covar_flat;
 
-      if (!parent_node_->has_parameter(parameter)) {
-        parent_node_->declare_parameter(parameter, rclcpp::PARAMETER_DOUBLE_ARRAY);
-      }
+      easynav::declare_parameter_if_absent(*parent_node_, parameter,
+        rclcpp::PARAMETER_DOUBLE_ARRAY);
       if (parent_node_->get_parameter(parameter, covar_flat)) {
         if (covar_flat.size() == STATE_SIZE) {
           RCLCPP_INFO_STREAM(
@@ -2873,9 +2855,7 @@ std::vector<bool> UkfWrapper::loadUpdateConfig(const std::string & topic_name)
   std::string prefix = plugin_name_.empty() ? "" : plugin_name_ + ".";
   const std::string topic_config_name = prefix + topic_name + "_config";
 
-  if (!parent_node_->has_parameter(topic_config_name)) {
-    parent_node_->declare_parameter(topic_config_name, update_vector);
-  }
+  easynav::declare_parameter_if_absent(*parent_node_, topic_config_name, update_vector);
   parent_node_->get_parameter(topic_config_name, update_vector);
 
   return update_vector;
