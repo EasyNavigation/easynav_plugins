@@ -52,8 +52,10 @@ SimpleMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, map_path_file;
-  node->declare_parameter(plugin_name + ".package", package_name);
-  node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
+  if (!node->has_parameter(plugin_name + ".package")) {
+    node->declare_parameter(plugin_name + ".package", package_name);
+    node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
+  }
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".map_path_file", map_path_file);

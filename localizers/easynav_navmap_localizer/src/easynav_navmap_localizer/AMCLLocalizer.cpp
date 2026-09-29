@@ -371,25 +371,27 @@ void AMCLLocalizer::on_initialize()
   double x_init, y_init, yaw_init, std_dev_xy, std_dev_yaw;
   std::string perception_model;
 
-  node->declare_parameter<int>(plugin_name + ".num_particles", 100);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", 0.5);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", 0.5);
-  node->declare_parameter<double>(plugin_name + ".reseed_freq", 1.0);
-  node->declare_parameter<double>(plugin_name + ".noise_translation", 0.01);
-  node->declare_parameter<double>(plugin_name + ".noise_rotation", 0.01);
-  node->declare_parameter<double>(plugin_name + ".noise_translation_to_rotation", 0.01);
-  node->declare_parameter<double>(plugin_name + ".min_noise_xy", 0.05);
-  node->declare_parameter<double>(plugin_name + ".min_noise_yaw", 0.05);
-  node->declare_parameter<bool>(plugin_name + ".compute_odom_from_tf", false);
-  node->declare_parameter<double>(plugin_name + ".inflation_stddev", 0.05);
-  node->declare_parameter<double>(plugin_name + ".inflation_prob_min", 0.01);
-  node->declare_parameter<int>(plugin_name + ".correct_max_points", 1500);
-  node->declare_parameter<double>(plugin_name + ".weights_tau", 0.7);
-  node->declare_parameter<double>(plugin_name + ".top_keep_fraction", 0.2);
-  node->declare_parameter<double>(plugin_name + ".downsampled_cloud_size", 0.05);
+  if (!node->has_parameter(plugin_name + ".num_particles")) {
+    node->declare_parameter<int>(plugin_name + ".num_particles", 100);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", 0.5);
+    node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", 0.5);
+    node->declare_parameter<double>(plugin_name + ".reseed_freq", 1.0);
+    node->declare_parameter<double>(plugin_name + ".noise_translation", 0.01);
+    node->declare_parameter<double>(plugin_name + ".noise_rotation", 0.01);
+    node->declare_parameter<double>(plugin_name + ".noise_translation_to_rotation", 0.01);
+    node->declare_parameter<double>(plugin_name + ".min_noise_xy", 0.05);
+    node->declare_parameter<double>(plugin_name + ".min_noise_yaw", 0.05);
+    node->declare_parameter<bool>(plugin_name + ".compute_odom_from_tf", false);
+    node->declare_parameter<double>(plugin_name + ".inflation_stddev", 0.05);
+    node->declare_parameter<double>(plugin_name + ".inflation_prob_min", 0.01);
+    node->declare_parameter<int>(plugin_name + ".correct_max_points", 1500);
+    node->declare_parameter<double>(plugin_name + ".weights_tau", 0.7);
+    node->declare_parameter<double>(plugin_name + ".top_keep_fraction", 0.2);
+    node->declare_parameter<double>(plugin_name + ".downsampled_cloud_size", 0.05);
+  }
 
   node->get_parameter<int>(plugin_name + ".num_particles", num_particles);
   node->get_parameter<double>(plugin_name + ".initial_pose.x", x_init);
@@ -397,6 +399,11 @@ void AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".initial_pose.yaw", yaw_init);
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", std_dev_xy);
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
+  if (!node->has_parameter(plugin_name + ".initial_pose.use_last_known")) {
+    node->declare_parameter<bool>(
+      plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
+  }
+  node->get_parameter(plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
   node->get_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
   node->get_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
   node->get_parameter<double>(plugin_name + ".noise_translation_to_rotation",
@@ -494,6 +501,18 @@ void AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
   tf2::fromMsg(msg->pose.pose, odom_);
   last_input_time_ = msg->header.stamp;
   if (!initialized_odom_) {last_odom_ = odom_; initialized_odom_ = true;}
+}
+
+void
+AMCLLocalizer::on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  if (!use_last_known_pose_) {
+    return;
+  }
+  RCLCPP_INFO(
+    get_node()->get_logger(), "AMCLLocalizer: starting from the last known pose (%.3f, %.3f)",
+    pose.pose.pose.position.x, pose.pose.pose.position.y);
+  init_pose_callback(std::make_unique<geometry_msgs::msg::PoseWithCovarianceStamped>(pose));
 }
 
 void

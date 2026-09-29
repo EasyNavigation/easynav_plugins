@@ -172,6 +172,12 @@ protected:
    */
   void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
 
+  /// @brief Starts from the last known pose after a reconfiguration ("initial_pose.use_last_known").
+  void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose) override;
+
+  /// @brief Whether to start from the last known pose after a reconfiguration.
+  bool use_last_known_pose_ {true};
+
 
   /**
    * @brief Update odom from TFs instead of a odom topic

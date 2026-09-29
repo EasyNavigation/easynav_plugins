@@ -59,7 +59,9 @@ RegulatedPurePursuitController::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   auto declare_and_get = [&node, &plugin_name](const std::string & name, auto & value) {
-      node->declare_parameter(plugin_name + "." + name, value);
+      if (!node->has_parameter(plugin_name + "." + name)) {
+        node->declare_parameter(plugin_name + "." + name, value);
+      }
       node->get_parameter(plugin_name + "." + name, value);
     };
 

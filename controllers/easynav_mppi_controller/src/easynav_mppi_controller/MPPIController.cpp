@@ -37,16 +37,18 @@ MPPIController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<int>(plugin_name + ".num_samples", num_samples_);
-  node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
-  node->declare_parameter<double>(plugin_name + ".dt", dt_);
-  node->declare_parameter<double>(plugin_name + ".lambda", lambda_);
-  node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
-  node->declare_parameter<double>(plugin_name + ".max_linear_acceleration", max_lin_acc_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_acceleration", max_ang_acc_);
-  node->declare_parameter<double>(plugin_name + ".fov", fov_);
-  node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
+  if (!node->has_parameter(plugin_name + ".num_samples")) {
+    node->declare_parameter<int>(plugin_name + ".num_samples", num_samples_);
+    node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
+    node->declare_parameter<double>(plugin_name + ".dt", dt_);
+    node->declare_parameter<double>(plugin_name + ".lambda", lambda_);
+    node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
+    node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+    node->declare_parameter<double>(plugin_name + ".max_linear_acceleration", max_lin_acc_);
+    node->declare_parameter<double>(plugin_name + ".max_angular_acceleration", max_ang_acc_);
+    node->declare_parameter<double>(plugin_name + ".fov", fov_);
+    node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
+  }
 
   node->get_parameter<int>(plugin_name + ".num_samples", num_samples_);
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
