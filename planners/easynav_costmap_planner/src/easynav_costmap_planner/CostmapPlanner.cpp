@@ -18,6 +18,7 @@
 
 #include <queue>
 #include <unordered_map>
+#include <algorithm>
 #include <cmath>
 #include <tuple>
 
@@ -67,6 +68,24 @@ static double compute_path_length(const nav_msgs::msg::Path & path)
 
 // Simple path smoother: moving average over a sliding window in XY.
 // Keeps endpoints unchanged to preserve exact start and goal.
+// Whether the straight segment a-b crosses no cell in collision.
+static bool segment_free(
+  const Costmap2D & map, const geometry_msgs::msg::Point & a, const geometry_msgs::msg::Point & b)
+{
+  const double step = map.getResolution() / 10.0;  // Fine enough not to skip a cell corner.
+  const int n = std::max(1, static_cast<int>(std::ceil(std::hypot(b.x - a.x, b.y - a.y) / step)));
+  for (int k = 0; k <= n; ++k) {
+    const double t = static_cast<double>(k) / n;
+    unsigned int mx, my;
+    if (!map.worldToMap(a.x + t * (b.x - a.x), a.y + t * (b.y - a.y), mx, my) ||
+      map.getCost(mx, my) >= INSCRIBED_INFLATED_OBSTACLE)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 static void smooth_path(
   std::vector<geometry_msgs::msg::Pose> & poses, const Costmap2D & map, int window_size = 5)
 {
@@ -103,13 +122,14 @@ static void smooth_path(
     }
 
     if (count > 0) {
-      const double x = sum_x / static_cast<double>(count);
-      const double y = sum_y / static_cast<double>(count);
-      // Keep the original pose if smoothing would move it into an obstacle.
-      unsigned int mx, my;
-      if (map.worldToMap(x, y, mx, my) && map.getCost(mx, my) < INSCRIBED_INFLATED_OBSTACLE) {
-        poses[i].position.x = x;
-        poses[i].position.y = y;
+      geometry_msgs::msg::Point smoothed = poses[i].position;
+      smoothed.x = sum_x / static_cast<double>(count);
+      smoothed.y = sum_y / static_cast<double>(count);
+      // Keep the original pose if smoothing would take the path through an obstacle.
+      if (segment_free(map, poses[i - 1].position, smoothed) &&
+        segment_free(map, smoothed, original[i + 1].position))
+      {
+        poses[i].position = smoothed;
       }
     }
   }

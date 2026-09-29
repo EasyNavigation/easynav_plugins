@@ -16,6 +16,8 @@
 /// \file
 /// \brief Tests for CostmapPlanner: a failed plan leaves an empty path, not the previous one.
 
+#include <algorithm>
+#include <cmath>
 #include <cstdlib>
 #include <memory>
 #include <string>
@@ -116,6 +118,40 @@ protected:
     nav_state_.set("map", map_);
   }
 
+  // Every point along the path's segments, not just its poses, is out of collision.
+  void expect_path_clear(const nav_msgs::msg::Path & p) const
+  {
+    for (std::size_t i = 1; i < p.poses.size(); ++i) {
+      const auto & a = p.poses[i - 1].pose.position;
+      const auto & b = p.poses[i].pose.position;
+      const int n = std::max(1, static_cast<int>(std::hypot(b.x - a.x, b.y - a.y) / 0.005));
+      for (int k = 0; k <= n; ++k) {
+        const double t = static_cast<double>(k) / n;
+        const double x = a.x + t * (b.x - a.x);
+        const double y = a.y + t * (b.y - a.y);
+        unsigned int cx, cy;
+        ASSERT_TRUE(map_.worldToMap(x, y, cx, cy));
+        EXPECT_LT(map_.getCost(cx, cy), easynav::INSCRIBED_INFLATED_OBSTACLE) <<
+          "segment " << i << " (" << a.x << ", " << a.y << ") -> (" << b.x << ", " << b.y <<
+          ") crosses (" << x << ", " << y << ")";
+      }
+    }
+  }
+
+  // Lethal rectangle [x0, x1] x [y0, y1] (m).
+  void block(double x0, double y0, double x1, double y1)
+  {
+    unsigned int cx0, cy0, cx1, cy1;
+    ASSERT_TRUE(map_.worldToMap(x0, y0, cx0, cy0));
+    ASSERT_TRUE(map_.worldToMap(x1, y1, cx1, cy1));
+    for (unsigned int x = cx0; x <= cx1; ++x) {
+      for (unsigned int y = cy0; y <= cy1; ++y) {
+        map_.setCost(x, y, easynav::LETHAL_OBSTACLE);
+      }
+    }
+    nav_state_.set("map", map_);
+  }
+
   nav_msgs::msg::Path path() const
   {
     return nav_state_.get<nav_msgs::msg::Path>("path");
@@ -163,11 +199,31 @@ TEST_F(CostmapPlannerTest, PathGoesThroughTheGapOfAWall)
 
   const auto p = path();
   ASSERT_FALSE(p.poses.empty());
-  for (const auto & pose : p.poses) {
-    unsigned int cx, cy;
-    ASSERT_TRUE(map_.worldToMap(pose.pose.position.x, pose.pose.position.y, cx, cy));
-    EXPECT_LT(map_.getCost(cx, cy), easynav::INSCRIBED_INFLATED_OBSTACLE);
-  }
+  expect_path_clear(p);
+}
+
+TEST_F(CostmapPlannerTest, PathAroundACornerNeverCutsIt)
+{
+  // Block between robot and goal: the path turns around its corners.
+  block(1.2, 0.0, 2.4, 2.6);
+  set_goal(3.05, 0.55);
+  planner_->update(nav_state_);
+
+  const auto p = path();
+  ASSERT_FALSE(p.poses.empty());
+  expect_path_clear(p);
+}
+
+TEST_F(CostmapPlannerTest, PathThroughANarrowPassageStaysInside)
+{
+  // Three-cell gap in a wall: smoothing must not pull the path into its sides.
+  vertical_wall(2.05, 2.05);
+  set_goal(3.55, 0.55);
+  planner_->update(nav_state_);
+
+  const auto p = path();
+  ASSERT_FALSE(p.poses.empty());
+  expect_path_clear(p);
 }
 
 TEST_F(CostmapPlannerTest, UnreachableGoalsGiveAnEmptyPath)
