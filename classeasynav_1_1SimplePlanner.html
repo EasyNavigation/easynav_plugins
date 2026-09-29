@@ -130,15 +130,17 @@ Collaboration diagram for SimplePlanner:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1SimplePlanner__coll__graph.png" border="0" usemap="#aSimplePlanner_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aSimplePlanner_coll__map" id="aSimplePlanner_coll__map">
-<area shape="rect" title="A planner implementing the A* algorithm on a SimpleMap grid." alt="" coords="219,143,324,168"/>
+<area shape="rect" title="A planner implementing the A* algorithm on a SimpleMap grid." alt="" coords="295,143,400,168"/>
 <area shape="rect" href="classPlannerMethodBase.html" title=" " alt="" coords="5,5,144,31"/>
-<area shape="poly" title=" " alt="" coords="97,40,135,79,184,116,234,140,231,144,181,121,132,83,93,44"/>
+<area shape="poly" title=" " alt="" coords="97,40,140,80,166,100,194,116,245,135,295,146,294,151,243,140,192,121,163,104,136,84,93,44"/>
 <area shape="rect" title=" " alt="" coords="168,5,227,31"/>
-<area shape="poly" title=" " alt="" coords="193,47,191,82,194,101,201,117,213,130,229,140,226,144,210,134,196,120,188,102,185,83,188,46"/>
+<area shape="poly" title=" " alt="" coords="200,46,206,83,213,101,224,117,240,129,257,138,295,149,294,154,255,143,237,134,221,120,208,104,201,84,194,46"/>
 <area shape="rect" title=" " alt="" coords="324,5,372,31"/>
-<area shape="poly" title=" " alt="" coords="347,47,338,83,321,120,295,144,292,140,316,117,333,81,342,46"/>
+<area shape="poly" title=" " alt="" coords="350,46,350,142,345,142,345,46"/>
 <area shape="rect" title=" " alt="" coords="426,5,505,31"/>
-<area shape="poly" title=" " alt="" coords="467,47,458,85,450,104,436,121,418,131,390,140,325,151,325,146,389,134,415,126,433,117,445,101,453,83,461,46"/>
+<area shape="poly" title=" " alt="" coords="466,47,458,84,450,103,438,120,421,135,401,144,398,140,418,130,434,117,445,101,453,82,461,46"/>
+<area shape="rect" title=" " alt="" coords="541,5,586,31"/>
+<area shape="poly" title=" " alt="" coords="566,47,558,85,549,104,536,121,513,133,479,142,401,153,401,148,478,137,511,128,533,117,545,102,553,84,561,46"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -155,6 +157,8 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a7dc4f9a6c634cca808ab64f8795cd9ae" id="r_a7dc4f9a6c634cca808ab64f8795cd9ae"><td class="memItemLeft">std::vector&lt; geometry_msgs::msg::Pose &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a7dc4f9a6c634cca808ab64f8795cd9ae">a_star_path</a> (const <a class="el" href="classeasynav_1_1SimpleMap.html">SimpleMap</a> &amp;map, const geometry_msgs::msg::Pose &amp;start, const geometry_msgs::msg::Pose &amp;goal, double resolution)</td></tr>
 <tr class="memdesc:a7dc4f9a6c634cca808ab64f8795cd9ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs the A* algorithm to compute a path.  <br /></td></tr>
+<tr class="memitem:a1f05ffe4d9fcece1581e387af0aa2ca8" id="r_a1f05ffe4d9fcece1581e387af0aa2ca8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1f05ffe4d9fcece1581e387af0aa2ca8">clear_path</a> (NavState &amp;nav_state)</td></tr>
+<tr class="memdesc:a1f05ffe4d9fcece1581e387af0aa2ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the path (NavState and topic), so a failed plan never keeps the last one.  <br /></td></tr>
 <tr class="memitem:a4f0750eec3341ab23df655a729e716fa" id="r_a4f0750eec3341ab23df655a729e716fa"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a4f0750eec3341ab23df655a729e716fa">isFreeWithClearance</a> (const <a class="el" href="classeasynav_1_1SimpleMap.html">SimpleMap</a> &amp;map, int cx, int cy, double clearance_cells)</td></tr>
 <tr class="memdesc:a4f0750eec3341ab23df655a729e716fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a map cell is free, considering a clearance area.  <br /></td></tr>
 </table><table class="memberdecls">
@@ -166,6 +170,8 @@ Protected Attributes</h2></td></tr>
 <tr class="memdesc:a8dc6b25f90bfb16f7f1d95b51800aa00"><td class="mdescLeft">&#160;</td><td class="mdescRight">The last computed path.  <br /></td></tr>
 <tr class="memitem:ac44f0fe3c3f35ae18c498ef6ecb47dd6" id="r_ac44f0fe3c3f35ae18c498ef6ecb47dd6"><td class="memItemLeft">rclcpp::Publisher&lt; nav_msgs::msg::Path &gt;::SharedPtr&#160;</td><td class="memItemRight"><a class="el" href="#ac44f0fe3c3f35ae18c498ef6ecb47dd6">path_pub_</a></td></tr>
 <tr class="memdesc:ac44f0fe3c3f35ae18c498ef6ecb47dd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publisher for the computed navigation path.  <br /></td></tr>
+<tr class="memitem:a45d5e9aed5914daf2a4d1b4da15f6261" id="r_a45d5e9aed5914daf2a4d1b4da15f6261"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a45d5e9aed5914daf2a4d1b4da15f6261">path_published_</a> {false}</td></tr>
+<tr class="memdesc:a45d5e9aed5914daf2a4d1b4da15f6261"><td class="mdescLeft">&#160;</td><td class="mdescRight">A non-empty path was published, so the topic must be cleared on failure.  <br /></td></tr>
 <tr class="memitem:a6ad83f7f5a09b0babb739d6eebaa48a6" id="r_a6ad83f7f5a09b0babb739d6eebaa48a6"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a6ad83f7f5a09b0babb739d6eebaa48a6">robot_radius_</a></td></tr>
 <tr class="memdesc:a6ad83f7f5a09b0babb739d6eebaa48a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Radius of the robot used for collision checking.  <br /></td></tr>
 </table>
@@ -249,6 +255,33 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A sequence of poses representing the planned path. </dd></dl>
+
+</div>
+</div>
+<a id="a1f05ffe4d9fcece1581e387af0aa2ca8" name="a1f05ffe4d9fcece1581e387af0aa2ca8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f05ffe4d9fcece1581e387af0aa2ca8">&#9670;&#160;</a></span>clear_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void clear_path </td>
+          <td>(</td>
+          <td class="paramtype">NavState &amp;</td>          <td class="paramname"><span class="paramname"><em>nav_state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Empties the path (NavState and topic), so a failed plan never keeps the last one. </p>
 
 </div>
 </div>
@@ -442,6 +475,30 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Publisher for the computed navigation path. </p>
+
+</div>
+</div>
+<a id="a45d5e9aed5914daf2a4d1b4da15f6261" name="a45d5e9aed5914daf2a4d1b4da15f6261"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45d5e9aed5914daf2a4d1b4da15f6261">&#9670;&#160;</a></span>path_published_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool path_published_ {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A non-empty path was published, so the topic must be cleared on failure. </p>
 
 </div>
 </div>

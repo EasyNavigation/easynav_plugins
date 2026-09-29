@@ -1,0 +1,17 @@
+<map id="NavMapPlannerTest" name="NavMapPlannerTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="297,161,437,187"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="65,5,113,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,16,199,25,238,36,274,53,304,78,329,107,361,160,357,162,325,110,301,82,271,58,236,41,198,30,128,21"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="70,55,108,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,68,194,80,235,91,274,105,318,131,353,159,349,163,315,136,272,110,233,96,193,85,123,73"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="59,108,119,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="134,124,273,148,318,158,316,163,272,153,133,129"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="49,157,129,183"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="144,169,197,171,296,171,296,177,197,176,144,175"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,207,173,248"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="188,214,272,200,326,185,327,190,273,205,188,220"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="34,272,144,298"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="159,274,215,261,272,241,316,214,350,186,353,190,319,218,274,246,217,267,160,279"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="51,323,127,348"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="142,331,207,320,240,309,271,294,301,269,325,239,357,186,362,189,330,243,305,273,274,298,242,314,208,325,143,336"/>
+</map>

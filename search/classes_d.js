@@ -9,5 +9,6 @@ var searchData=
   ['simplemapsmanager_6',['SimpleMapsManager',['../classeasynav_1_1SimpleMapsManager.html',1,'easynav']]],
   ['simplemapsmanagertest_7',['SimpleMapsManagerTest',['../classSimpleMapsManagerTest.html',1,'']]],
   ['simplemaptest_8',['SimpleMapTest',['../classSimpleMapTest.html',1,'']]],
-  ['simpleplanner_9',['SimplePlanner',['../classeasynav_1_1SimplePlanner.html',1,'easynav']]]
+  ['simpleplanner_9',['SimplePlanner',['../classeasynav_1_1SimplePlanner.html',1,'easynav']]],
+  ['simpleplannertest_10',['SimplePlannerTest',['../classSimplePlannerTest.html',1,'']]]
 ];

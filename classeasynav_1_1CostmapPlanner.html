@@ -159,6 +159,8 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:ad8dd8ff2b3fee4c3dca90b0e2b091d66" id="r_ad8dd8ff2b3fee4c3dca90b0e2b091d66"><td class="memItemLeft">std::vector&lt; geometry_msgs::msg::Pose &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ad8dd8ff2b3fee4c3dca90b0e2b091d66">a_star_path</a> (const <a class="el" href="classCostmap2D.html">Costmap2D</a> &amp;map, const geometry_msgs::msg::Pose &amp;start, const geometry_msgs::msg::Pose &amp;goal)</td></tr>
 <tr class="memdesc:ad8dd8ff2b3fee4c3dca90b0e2b091d66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal A* path planning routine.  <br /></td></tr>
+<tr class="memitem:a13406c93a98eb535a0335b12478ffa35" id="r_a13406c93a98eb535a0335b12478ffa35"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a13406c93a98eb535a0335b12478ffa35">clear_current_path</a> (NavState &amp;nav_state)</td></tr>
+<tr class="memdesc:a13406c93a98eb535a0335b12478ffa35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the path (NavState and topic), so a failed plan never keeps the last one.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -258,6 +260,33 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A vector of poses representing the planned path. </dd></dl>
+
+</div>
+</div>
+<a id="a13406c93a98eb535a0335b12478ffa35" name="a13406c93a98eb535a0335b12478ffa35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13406c93a98eb535a0335b12478ffa35">&#9670;&#160;</a></span>clear_current_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void clear_current_path </td>
+          <td>(</td>
+          <td class="paramtype">NavState &amp;</td>          <td class="paramname"><span class="paramname"><em>nav_state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Empties the path (NavState and topic), so a failed plan never keeps the last one. </p>
 
 </div>
 </div>

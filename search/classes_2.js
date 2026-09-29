@@ -13,5 +13,6 @@ var searchData=
   ['costmapmapsmanager_10',['CostmapMapsManager',['../classeasynav_1_1CostmapMapsManager.html',1,'easynav']]],
   ['costmapmapsmanagertest_11',['CostmapMapsManagerTest',['../classCostmapMapsManagerTest.html',1,'']]],
   ['costmapplanner_12',['CostmapPlanner',['../classeasynav_1_1CostmapPlanner.html',1,'easynav']]],
-  ['costmaptest_13',['CostmapTest',['../classCostmapTest.html',1,'']]]
+  ['costmapplannertest_13',['CostmapPlannerTest',['../classCostmapPlannerTest.html',1,'']]],
+  ['costmaptest_14',['CostmapTest',['../classCostmapTest.html',1,'']]]
 ];
