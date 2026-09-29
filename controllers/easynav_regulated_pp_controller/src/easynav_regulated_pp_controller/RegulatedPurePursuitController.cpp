@@ -70,14 +70,22 @@ RegulatedPurePursuitController::on_initialize()
   declare_and_get("lookahead_time", lookahead_time_);
   declare_and_get("use_velocity_scaled_lookahead_dist", use_velocity_scaled_lookahead_dist_);
 
-  declare_and_get("max_linear_vel", max_linear_vel_);
-  declare_and_get("min_linear_vel", min_linear_vel_);
-  declare_and_get("max_angular_vel", max_angular_vel_);
-  declare_and_get("min_angular_vel", min_angular_vel_);
-  declare_and_get("max_linear_accel", max_linear_accel_);
-  declare_and_get("max_linear_decel", max_linear_decel_);
-  declare_and_get("max_angular_accel", max_angular_accel_);
-  declare_and_get("max_angular_decel", max_angular_decel_);
+  // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_vel", "min_linear_vel", "max_angular_vel", "max_linear_accel",
+      "max_linear_decel", "max_angular_accel", "max_angular_decel"});
+  max_linear_vel_ = limits.max_linear_vel;
+  min_linear_vel_ = limits.min_linear_vel;
+  max_angular_vel_ = limits.max_angular_vel;
+  max_linear_accel_ = limits.max_linear_acc;
+  max_linear_decel_ = limits.max_linear_decel;
+  max_angular_accel_ = limits.max_angular_acc;
+  max_angular_decel_ = limits.max_angular_decel;
+  // Symmetric by default; a deprecated "min_angular_vel" still applies.
+  min_angular_vel_ = -max_angular_vel_;
+  get_deprecated_parameter(
+    "min_angular_vel", "controller_node.robot_limits.max_angular_vel (symmetric)",
+    min_angular_vel_);
   declare_and_get("use_dynamic_window", use_dynamic_window_);
   declare_and_get("allow_reversing", allow_reversing_);
 

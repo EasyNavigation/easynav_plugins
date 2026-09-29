@@ -43,6 +43,12 @@ No ROS parameters are currently declared in code. (Add declarations in the plugi
 | `path` | `nav_msgs::msg::Path` | **Read** | Planned path reference. |
 | `cmd_vel` | `geometry_msgs::msg::TwistStamped` | **Write** | Output velocity command. |
 
+## Velocity limits
+
+The velocity limits are the robot limits of `controller_node` (`robot_limits.max_linear_vel`, `robot_limits.max_angular_vel`), queried with `ControllerMethodBase::get_robot_limits()` and also enforced by ControllerNode's velocity smoother.
+
+> **Deprecated:** this plugin's former limit parameters (`max_speed`, `max_angular_speed`, under the plugin's name) still apply, with a warning, where `controller_node.robot_limits.*` does not set that limit. They will stop working soon: move them to `robot_limits`.
+
 ### Publications
 
 | Topic | Type | Purpose | QoS |

@@ -48,11 +48,6 @@ SerestController::on_initialize()
   easynav::declare_parameter_if_absent<double>(*node, ns + ".v_progress_min", v_progress_min_);
   easynav::declare_parameter_if_absent<double>(*node, ns + ".k_s_share_max", k_s_share_max_);
 
-  easynav::declare_parameter_if_absent<double>(*node, ns + ".max_linear_speed", max_linear_speed_);
-  easynav::declare_parameter_if_absent<double>(*node, ns + ".max_angular_speed",
-      max_angular_speed_);
-  easynav::declare_parameter_if_absent<double>(*node, ns + ".max_linear_acc", max_linear_acc_);
-  easynav::declare_parameter_if_absent<double>(*node, ns + ".max_angular_acc", max_angular_acc_);
 
   // Tracking
   easynav::declare_parameter_if_absent<double>(*node, ns + ".k_s", k_s_);
@@ -104,10 +99,13 @@ SerestController::on_initialize()
   node->get_parameter<double>(ns + ".v_progress_min", v_progress_min_);
   node->get_parameter<double>(ns + ".k_s_share_max", k_s_share_max_);
 
-  node->get_parameter<double>(ns + ".max_linear_speed", max_linear_speed_);
-  node->get_parameter<double>(ns + ".max_angular_speed", max_angular_speed_);
-  node->get_parameter<double>(ns + ".max_linear_acc", max_linear_acc_);
-  node->get_parameter<double>(ns + ".max_angular_acc", max_angular_acc_);
+  // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_speed", "", "max_angular_speed", "max_linear_acc", "", "max_angular_acc", ""});
+  max_linear_speed_ = limits.max_linear_vel;
+  max_angular_speed_ = limits.max_angular_vel;
+  max_linear_acc_ = limits.max_linear_acc;
+  max_angular_acc_ = limits.max_angular_acc;
 
   node->get_parameter<double>(ns + ".k_s", k_s_);
   node->get_parameter<double>(ns + ".k_theta", k_theta_);

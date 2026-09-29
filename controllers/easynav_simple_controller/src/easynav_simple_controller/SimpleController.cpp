@@ -40,14 +40,6 @@ SimpleController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_linear_speed",
-      max_linear_speed_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_speed",
-      max_angular_speed_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_linear_acc",
-      max_linear_acc_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_acc",
-      max_angular_acc_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".look_ahead_dist",
       look_ahead_dist_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".tolerance_dist",
@@ -62,10 +54,13 @@ SimpleController::on_initialize()
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".angular_ki", angular_ki_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".angular_kd", angular_kd_);
 
-  node->get_parameter<double>(plugin_name + ".max_linear_speed", max_linear_speed_);
-  node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
-  node->get_parameter<double>(plugin_name + ".max_linear_acc", max_linear_acc_);
-  node->get_parameter<double>(plugin_name + ".max_angular_acc", max_angular_acc_);
+  // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_speed", "", "max_angular_speed", "max_linear_acc", "", "max_angular_acc", ""});
+  max_linear_speed_ = limits.max_linear_vel;
+  max_angular_speed_ = limits.max_angular_vel;
+  max_linear_acc_ = limits.max_linear_acc;
+  max_angular_acc_ = limits.max_angular_acc;
   node->get_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->get_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->get_parameter<double>(plugin_name + ".k_rot", k_rot_);
