@@ -1,16 +1,22 @@
 <map id="maps_managers/easynav_bonxai_maps_manager/include/bonxai/probabilistic_map.hpp" name="maps_managers/easynav_bonxai_maps_manager/include/bonxai/probabilistic_map.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="303,5,483,76"/>
-<area shape="rect" id="Node000002" href="$easynav__navmap__localizer_2include_2easynav__navmap__localizer_2AMCLLocalizer_8hpp.html" title="Declaration of the AMCLLocalizer method." alt="" coords="179,124,359,195"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="347,89,308,125,304,121,343,85"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="527,5,707,76"/>
+<area shape="rect" id="Node000002" href="$easynav__navmap__localizer_2include_2easynav__navmap__localizer_2AMCLLocalizer_8hpp.html" title="Declaration of the AMCLLocalizer method." alt="" coords="403,124,583,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="571,89,532,125,528,121,567,85"/>
 <area shape="rect" id="Node000003" href="$easynav__navmap__localizer_2src_2easynav__navmap__localizer_2AMCLLocalizer_8cpp.html" title="AMCLLocalizer implementation (Bonxai + probabilistic inflation + ray casting)." alt="" coords="5,243,186,313"/>
-<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="289,64,225,88,195,105,168,126,145,153,128,183,106,243,101,241,123,181,141,150,164,122,192,101,223,83,287,59"/>
-<area shape="rect" id="Node000005" href="$BonxaiMapsManager_8hpp.html" title="Declaration of the BonxaiMapsManager method." alt="" coords="384,124,650,195"/>
-<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="443,85,482,121,478,125,439,89"/>
-<area shape="rect" id="Node000007" href="$probabilistic__map_8cpp.html" title=" " alt="" coords="674,124,843,195"/>
-<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="499,70,663,121,674,125,672,130,661,127,497,75"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="207,206,149,244,146,240,204,201"/>
-<area shape="rect" id="Node000004" href="$navmap__localizer__tests_8cpp.html" title=" " alt="" coords="210,250,395,306"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="285,209,297,249,292,250,280,210"/>
-<area shape="rect" id="Node000006" href="$BonxaiMapsManager_8cpp.html" title=" " alt="" coords="419,243,646,313"/>
-<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="526,209,531,242,525,243,521,210"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="513,79,391,126,265,187,158,244,155,240,263,182,389,122,511,74"/>
+<area shape="rect" id="Node000007" href="$BonxaiMapsManager_8hpp.html" title="Declaration of the BonxaiMapsManager method." alt="" coords="706,124,973,195"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="698,81,774,121,772,126,695,86"/>
+<area shape="rect" id="Node000010" href="$probabilistic__map_8cpp.html" title=" " alt="" coords="996,124,1166,195"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="723,59,849,87,986,121,996,125,995,130,984,127,848,92,722,65"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="389,191,198,245,187,249,185,243,196,240,387,186"/>
+<area shape="rect" id="Node000004" href="$navmap__localizer__last__known__pose__tests_8cpp.html" title="After a reconfiguration, the localizer starts from the pose the previous one left in NavState (&quot;robot..." alt="" coords="210,243,371,313"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="421,205,352,244,349,240,418,200"/>
+<area shape="rect" id="Node000005" href="$navmap__localizer__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="395,243,590,313"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="496,210,496,242,490,242,490,210"/>
+<area shape="rect" id="Node000006" href="$navmap__localizer__tests_8cpp.html" title=" " alt="" coords="615,250,800,306"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="571,200,659,247,656,252,569,205"/>
+<area shape="rect" id="Node000008" href="$BonxaiMapsManager_8cpp.html" title=" " alt="" coords="824,243,1052,313"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="880,205,911,241,907,244,876,208"/>
+<area shape="rect" id="Node000009" href="$bonxai__maps__manager__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="1076,243,1267,313"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="954,198,1077,241,1075,246,952,203"/>
 </map>

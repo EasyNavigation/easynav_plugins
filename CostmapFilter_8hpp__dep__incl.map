@@ -1,19 +1,21 @@
 <map id="maps_managers/easynav_costmap_maps_manager/include/easynav_costmap_maps_manager/filters/CostmapFilter.hpp" name="maps_managers/easynav_costmap_maps_manager/include/easynav_costmap_maps_manager/filters/CostmapFilter.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="612,5,874,76"/>
-<area shape="rect" id="Node000002" href="$CostmapMapsManager_8hpp.html" title="Declaration of the CostmapMapsManager method." alt="" coords="211,132,490,202"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="620,84,462,133,460,128,618,78"/>
-<area shape="rect" id="Node000005" href="$easynav__costmap__maps__manager_2include_2easynav__costmap__maps__manager_2filters_2InflationFilter_8hpp.html" title=" " alt="" coords="514,124,716,210"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="698,89,660,125,657,121,694,85"/>
-<area shape="rect" id="Node000007" href="$easynav__costmap__maps__manager_2include_2easynav__costmap__maps__manager_2filters_2ObstacleFilter_8hpp.html" title=" " alt="" coords="740,132,1002,202"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="791,85,837,129,833,133,787,89"/>
-<area shape="rect" id="Node000009" href="$CostmapFilter_8cpp.html" title=" " alt="" coords="1025,132,1247,202"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="875,78,1014,121,1036,129,1034,134,1013,127,873,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="811,5,1072,76"/>
+<area shape="rect" id="Node000002" href="$CostmapMapsManager_8hpp.html" title="Declaration of the CostmapMapsManager method." alt="" coords="319,132,598,202"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="796,82,595,133,594,128,795,77"/>
+<area shape="rect" id="Node000006" href="$easynav__costmap__maps__manager_2include_2easynav__costmap__maps__manager_2filters_2InflationFilter_8hpp.html" title=" " alt="" coords="713,124,914,210"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="897,89,859,125,855,121,893,85"/>
+<area shape="rect" id="Node000008" href="$easynav__costmap__maps__manager_2include_2easynav__costmap__maps__manager_2filters_2ObstacleFilter_8hpp.html" title=" " alt="" coords="939,132,1200,202"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="990,85,1035,129,1032,133,986,89"/>
+<area shape="rect" id="Node000010" href="$CostmapFilter_8cpp.html" title=" " alt="" coords="1224,132,1446,202"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1074,78,1213,121,1235,129,1233,134,1211,127,1072,83"/>
 <area shape="rect" id="Node000003" href="$CostmapMapsManager_8cpp.html" title=" " alt="" coords="5,258,246,328"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="276,212,190,259,187,255,273,208"/>
-<area shape="rect" id="Node000004" href="$costmap__mapsmanager__tests_8cpp.html" title=" " alt="" coords="270,258,467,328"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="360,217,366,257,361,257,355,218"/>
-<area shape="rect" id="Node000006" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2InflationFilter_8cpp.html" title=" " alt="" coords="507,258,722,328"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="618,225,618,257,612,257,612,225"/>
-<area shape="rect" id="Node000008" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2ObstacleFilter_8cpp.html" title=" " alt="" coords="760,258,982,328"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="874,218,874,257,868,257,868,218"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="352,211,220,260,218,255,350,206"/>
+<area shape="rect" id="Node000004" href="$costmap__mapsmanager__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="270,258,467,328"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="427,216,396,259,391,255,423,213"/>
+<area shape="rect" id="Node000005" href="$costmap__mapsmanager__tests_8cpp.html" title=" " alt="" coords="491,258,688,328"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="508,211,555,255,551,259,504,215"/>
+<area shape="rect" id="Node000007" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2InflationFilter_8cpp.html" title=" " alt="" coords="712,258,928,328"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="819,225,821,257,816,257,814,226"/>
+<area shape="rect" id="Node000009" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2ObstacleFilter_8cpp.html" title=" " alt="" coords="958,258,1181,328"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1072,218,1072,257,1067,257,1067,218"/>
 </map>

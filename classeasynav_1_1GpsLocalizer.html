@@ -130,13 +130,15 @@ Collaboration diagram for GpsLocalizer:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1GpsLocalizer__coll__graph.png" border="0" usemap="#aGpsLocalizer_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aGpsLocalizer_coll__map" id="aGpsLocalizer_coll__map">
-<area shape="rect" title="A default &quot;do&#45;nothing&quot; implementation of the LocalizerMethodBase." alt="" coords="391,55,488,80"/>
+<area shape="rect" title="A default &quot;do&#45;nothing&quot; implementation of the LocalizerMethodBase." alt="" coords="416,88,513,114"/>
 <area shape="rect" title=" " alt="" coords="41,5,188,31"/>
-<area shape="poly" title=" " alt="" coords="204,17,284,23,367,37,410,52,409,57,366,42,283,28,203,22"/>
+<area shape="poly" title=" " alt="" coords="203,15,296,24,345,34,393,49,424,66,450,85,447,90,422,70,391,54,344,40,295,30,203,21"/>
 <area shape="rect" title=" " alt="" coords="75,55,154,80"/>
-<area shape="poly" title=" " alt="" coords="170,65,390,65,390,70,170,70"/>
+<area shape="poly" title=" " alt="" coords="170,70,415,94,415,99,170,75"/>
 <area shape="rect" title=" " alt="" coords="5,105,224,161"/>
-<area shape="poly" title=" " alt="" coords="238,118,302,108,366,93,408,78,410,83,367,98,303,113,239,123"/>
+<area shape="poly" title=" " alt="" coords="239,130,314,126,391,117,418,112,419,117,392,122,315,131,239,135"/>
+<area shape="rect" title=" " alt="" coords="92,185,137,211"/>
+<area shape="poly" title=" " alt="" coords="153,197,202,196,263,191,328,180,391,159,424,137,450,112,454,116,428,141,393,164,329,185,263,197,202,202,153,202"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -157,6 +159,8 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:aa381d32b539a52c8f30eeee90c5dc80b" id="r_aa381d32b539a52c8f30eeee90c5dc80b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa381d32b539a52c8f30eeee90c5dc80b">init_pose_callback</a> (const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)</td></tr>
 <tr class="memdesc:aa381d32b539a52c8f30eeee90c5dc80b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback for /initialpose.  <br /></td></tr>
+<tr class="memitem:a5720f6af39830d0f8c1150a9063705da" id="r_a5720f6af39830d0f8c1150a9063705da"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a5720f6af39830d0f8c1150a9063705da">on_last_known_pose</a> (const geometry_msgs::msg::PoseWithCovarianceStamped &amp;pose) override</td></tr>
+<tr class="memdesc:a5720f6af39830d0f8c1150a9063705da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts from the last known pose after a reconfiguration ("initial_pose.use_last_known").  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -164,6 +168,8 @@ Protected Attributes</h2></td></tr>
 <tr class="memdesc:a73f46d41412aa74599db28b349e90221"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscriber for the initial pose.  <br /></td></tr>
 <tr class="memitem:a47e99774f485997fc4a8c5c1025de320" id="r_a47e99774f485997fc4a8c5c1025de320"><td class="memItemLeft">std::optional&lt; geometry_msgs::msg::PoseWithCovarianceStamped &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a47e99774f485997fc4a8c5c1025de320">pending_init_pose_</a></td></tr>
 <tr class="memdesc:a47e99774f485997fc4a8c5c1025de320"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initial pose received but not yet applied (e.g. waiting for a valid GPS fix).  <br /></td></tr>
+<tr class="memitem:af5b53fd8602f36ebbcb154e50d25436f" id="r_af5b53fd8602f36ebbcb154e50d25436f"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#af5b53fd8602f36ebbcb154e50d25436f">use_last_known_pose_</a> {true}</td></tr>
+<tr class="memdesc:af5b53fd8602f36ebbcb154e50d25436f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to start from the last known pose after a reconfiguration.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A default "do-nothing" implementation of the <a class="el" href="classLocalizerMethodBase.html">LocalizerMethodBase</a>. </p>
@@ -285,6 +291,33 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5720f6af39830d0f8c1150a9063705da" name="a5720f6af39830d0f8c1150a9063705da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5720f6af39830d0f8c1150a9063705da">&#9670;&#160;</a></span>on_last_known_pose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void on_last_known_pose </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::msg::PoseWithCovarianceStamped &amp;</td>          <td class="paramname"><span class="paramname"><em>pose</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Starts from the last known pose after a reconfiguration ("initial_pose.use_last_known"). </p>
+
+</div>
+</div>
 <a id="a24ddfd2eba3d3d6a90d492e8d25ff0da" name="a24ddfd2eba3d3d6a90d492e8d25ff0da"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a24ddfd2eba3d3d6a90d492e8d25ff0da">&#9670;&#160;</a></span>update()</h2>
 
@@ -399,6 +432,30 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Initial pose received but not yet applied (e.g. waiting for a valid GPS fix). </p>
+
+</div>
+</div>
+<a id="af5b53fd8602f36ebbcb154e50d25436f" name="af5b53fd8602f36ebbcb154e50d25436f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5b53fd8602f36ebbcb154e50d25436f">&#9670;&#160;</a></span>use_last_known_pose_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool use_last_known_pose_ {true}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether to start from the last known pose after a reconfiguration. </p>
 
 </div>
 </div>

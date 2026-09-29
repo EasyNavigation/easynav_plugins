@@ -1,0 +1,29 @@
+<map id="planners/easynav_simple_planner/tests/simple_planner_reconfigure_tests.cpp" name="planners/easynav_simple_planner/tests/simple_planner_reconfigure_tests.cpp">
+<area shape="rect" id="Node000001" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="248,5,449,61"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,294,63,320"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,51,171,73,132,90,97,111,73,130,58,148,47,170,37,198,30,240,32,279,27,279,25,240,31,197,42,167,53,145,70,126,94,107,130,85,169,68,247,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="107,116,161,142"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="283,64,174,111,173,112,171,107,172,107,281,59"/>
+<area shape="rect" id="Node000004" href="$SimplePlanner_8hpp.html" title="Declaration of the SimplePlanner class implementing A* path planning." alt="" coords="184,109,348,150"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="327,63,295,99,291,96,323,60"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="372,116,491,142"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="375,60,413,103,409,107,371,63"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="515,109,676,150"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="421,59,531,101,529,106,419,64"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="701,116,794,142"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="450,51,565,76,689,106,699,109,697,114,688,112,564,81,449,56"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="185,151,110,173,80,186,61,200,49,217,42,238,36,279,31,278,37,236,45,215,57,196,78,181,108,168,183,146"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="71,205,234,231"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="242,152,182,198,179,194,239,148"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="258,198,450,238"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="288,148,325,185,321,189,284,152"/>
+<area shape="rect" id="Node000007" href="$SimpleMap_8hpp.html" title="Declaration of the SimpleMap type." alt="" coords="474,198,645,238"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="334,148,479,190,478,195,332,153"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="669,198,831,238"/>
+<area shape="poly" id="edge11_Node000004_Node000010" title=" " alt="" coords="348,145,360,147,655,195,654,200,359,152,347,150"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="474,239,462,241,78,302,77,296,462,236,473,234"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="464,294,516,320"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="546,241,511,284,507,280,542,237"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="539,286,716,327"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="577,237,605,273,601,276,573,241"/>
+</map>

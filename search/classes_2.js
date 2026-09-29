@@ -10,9 +10,12 @@ var searchData=
   ['costmap2dtest_7',['Costmap2DTest',['../classCostmap2DTest.html',1,'']]],
   ['costmapaction_8',['CostmapAction',['../classCostmapAction.html',1,'']]],
   ['costmapfilter_9',['CostmapFilter',['../classeasynav_1_1CostmapFilter.html',1,'easynav']]],
-  ['costmapmapsmanager_10',['CostmapMapsManager',['../classeasynav_1_1CostmapMapsManager.html',1,'easynav']]],
-  ['costmapmapsmanagertest_11',['CostmapMapsManagerTest',['../classCostmapMapsManagerTest.html',1,'']]],
-  ['costmapplanner_12',['CostmapPlanner',['../classeasynav_1_1CostmapPlanner.html',1,'easynav']]],
-  ['costmapplannertest_13',['CostmapPlannerTest',['../classCostmapPlannerTest.html',1,'']]],
-  ['costmaptest_14',['CostmapTest',['../classCostmapTest.html',1,'']]]
+  ['costmaplocalizerreconfiguretest_10',['CostmapLocalizerReconfigureTest',['../classCostmapLocalizerReconfigureTest.html',1,'']]],
+  ['costmapmapsmanager_11',['CostmapMapsManager',['../classeasynav_1_1CostmapMapsManager.html',1,'easynav']]],
+  ['costmapmapsmanagerreconfiguretest_12',['CostmapMapsManagerReconfigureTest',['../classCostmapMapsManagerReconfigureTest.html',1,'']]],
+  ['costmapmapsmanagertest_13',['CostmapMapsManagerTest',['../classCostmapMapsManagerTest.html',1,'']]],
+  ['costmapplanner_14',['CostmapPlanner',['../classeasynav_1_1CostmapPlanner.html',1,'easynav']]],
+  ['costmapplannerreconfiguretest_15',['CostmapPlannerReconfigureTest',['../classCostmapPlannerReconfigureTest.html',1,'']]],
+  ['costmapplannertest_16',['CostmapPlannerTest',['../classCostmapPlannerTest.html',1,'']]],
+  ['costmaptest_17',['CostmapTest',['../classCostmapTest.html',1,'']]]
 ];

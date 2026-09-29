@@ -267,13 +267,13 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno"><a class="line" href="namespaceBonxai.html#ab8f283baecaf86641f7f97e3df01cc91">  143</a></span><span class="keyword">inline</span> PointOut <a class="code hl_function" href="namespaceBonxai.html#ab8f283baecaf86641f7f97e3df01cc91">ConvertPoint</a>(<span class="keyword">const</span> PointIn &amp; v)</div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>{</div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  <span class="comment">// clang-format off</span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  <span class="keyword">static_assert</span>(std::is_same_v&lt;PointIn, PointOut&gt;||</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  <span class="keyword">static_assert</span>(std::is_same_v&lt;PointIn, PointOut&gt; ||</div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                    <a class="code hl_struct" href="structBonxai_1_1type__has__method__x.html">type_has_method_x&lt;PointIn&gt;::value</a> ||</div>
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                    <a class="code hl_struct" href="structBonxai_1_1type__has__member__x.html">type_has_member_x&lt;PointIn&gt;::value</a> ||</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>                    <a class="code hl_struct" href="structBonxai_1_1type__is__vector.html">type_is_vector&lt;PointIn&gt;::value</a>,</div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>                <span class="stringliteral">&quot;Can&#39;t convert from the specified type&quot;</span>);</div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="keyword">static_assert</span>(std::is_same_v&lt;PointIn, PointOut&gt;||</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="keyword">static_assert</span>(std::is_same_v&lt;PointIn, PointOut&gt; ||</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                    <a class="code hl_struct" href="structBonxai_1_1type__has__method__x.html">type_has_method_x&lt;PointOut&gt;::value</a> ||</div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>                    <a class="code hl_struct" href="structBonxai_1_1type__has__member__x.html">type_has_member_x&lt;PointOut&gt;::value</a> ||</div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>                    <a class="code hl_struct" href="structBonxai_1_1type__is__vector.html">type_is_vector&lt;PointOut&gt;::value</a>,</div>

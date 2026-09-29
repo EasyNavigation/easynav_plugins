@@ -15,8 +15,10 @@ var searchData=
   ['bonxai_2ehpp_12',['bonxai.hpp',['../bonxai_8hpp.html',1,'']]],
   ['bonxai_3a_3adetails_13',['details',['../namespaceBonxai_1_1details.html',1,'Bonxai']]],
   ['bonxai_5fmap_5f_14',['bonxai_map_',['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#a259305db58b5f74104a940060871c814',1,'easynav::navmap::AMCLLocalizer']]],
-  ['bonxai_5fuse_5fintrinsics_15',['BONXAI_USE_INTRINSICS',['../mask_8hpp.html#aadbab231c74f08c2f7c0619995f61edf',1,'mask.hpp']]],
-  ['bonxaimapsmanager_16',['BonxaiMapsManager',['../classeasynav__bonxai_1_1BonxaiMapsManager.html',1,'BonxaiMapsManager'],['../classeasynav__bonxai_1_1BonxaiMapsManager.html#a98b7d5ef6cefefaa3bc86c39ca1094be',1,'easynav_bonxai::BonxaiMapsManager::BonxaiMapsManager()'],['../dir_15d4fba5d3442ae9632b472039ab173e.html#autotoc_md116',1,'Plugin Parameters (namespace: &lt;span class=&quot;tt&quot;&gt;/&amp;lt;node_fqn&amp;gt;/easynav_bonxai_maps_manager/BonxaiMapsManager/...&lt;/span&gt;)']]],
-  ['bonxaimapsmanager_2ecpp_17',['BonxaiMapsManager.cpp',['../BonxaiMapsManager_8cpp.html',1,'']]],
-  ['bonxaimapsmanager_2ehpp_18',['BonxaiMapsManager.hpp',['../BonxaiMapsManager_8hpp.html',1,'']]]
+  ['bonxai_5fmaps_5fmanager_5freconfigure_5ftests_2ecpp_15',['bonxai_maps_manager_reconfigure_tests.cpp',['../bonxai__maps__manager__reconfigure__tests_8cpp.html',1,'']]],
+  ['bonxai_5fuse_5fintrinsics_16',['BONXAI_USE_INTRINSICS',['../mask_8hpp.html#aadbab231c74f08c2f7c0619995f61edf',1,'mask.hpp']]],
+  ['bonxaimapsmanager_17',['BonxaiMapsManager',['../classeasynav__bonxai_1_1BonxaiMapsManager.html',1,'BonxaiMapsManager'],['../classeasynav__bonxai_1_1BonxaiMapsManager.html#a98b7d5ef6cefefaa3bc86c39ca1094be',1,'easynav_bonxai::BonxaiMapsManager::BonxaiMapsManager()'],['../dir_15d4fba5d3442ae9632b472039ab173e.html#autotoc_md116',1,'Plugin Parameters (namespace: &lt;span class=&quot;tt&quot;&gt;/&amp;lt;node_fqn&amp;gt;/easynav_bonxai_maps_manager/BonxaiMapsManager/...&lt;/span&gt;)']]],
+  ['bonxaimapsmanager_2ecpp_18',['BonxaiMapsManager.cpp',['../BonxaiMapsManager_8cpp.html',1,'']]],
+  ['bonxaimapsmanager_2ehpp_19',['BonxaiMapsManager.hpp',['../BonxaiMapsManager_8hpp.html',1,'']]],
+  ['bonxaimapsmanagerreconfiguretest_20',['BonxaiMapsManagerReconfigureTest',['../classBonxaiMapsManagerReconfigureTest.html',1,'']]]
 ];

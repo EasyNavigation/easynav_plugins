@@ -1,5 +1,7 @@
 <map id="controllers/easynav_mppi_controller/include/easynav_mppi_controller/MPPIController.hpp" name="controllers/easynav_mppi_controller/include/easynav_mppi_controller/MPPIController.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,174,76"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="105,5,274,76"/>
 <area shape="rect" id="Node000002" href="$MPPIController_8cpp.html" title="Implementation of the MPPIController class." alt="" coords="5,124,174,195"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,91,92,124,87,124,87,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,89,121,125,117,122,148,86"/>
+<area shape="rect" id="Node000003" href="$mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="198,124,381,195"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,86,262,122,258,125,227,89"/>
 </map>

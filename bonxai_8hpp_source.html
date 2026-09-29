@@ -465,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="line"><a id="l00381" name="l00381"></a><span class="lineno"><a class="line" href="classBonxai_1_1Grid.html#a11fad25577340b7b31df24025314a844">  381</a></span><span class="keyword">inline</span> <span class="keywordtype">size_t</span> <a class="code hl_function" href="classBonxai_1_1Grid.html#a11fad25577340b7b31df24025314a844">Grid&lt;DataT&gt;::memUsage</a>()<span class="keyword"> const</span></div>
 <div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span><span class="keyword"></span>{</div>
 <div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>  <span class="keyword">auto</span> mem = mask_.memUsage() + <span class="keyword">sizeof</span>(uint8_t) + <span class="keyword">sizeof</span>(uint32_t) + <span class="keyword">sizeof</span>(DataT *);</div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>  <span class="keywordflow">if</span> (!std::is_same_v&lt;DataT, EmptyVoxel&gt;&amp;&amp; !external_memory_) {</div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>  <span class="keywordflow">if</span> (!std::is_same_v&lt;DataT, EmptyVoxel&gt; &amp;&amp; !external_memory_) {</div>
 <div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>    mem += <span class="keyword">sizeof</span>(DataT) * size_;</div>
 <div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>  }</div>
 <div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>  <span class="keywordflow">return</span> mem;</div>
@@ -723,7 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="foldopen" id="foldopen00610" data-start="{" data-end="}">
 <div class="line"><a id="l00610" name="l00610"></a><span class="lineno"><a class="line" href="classBonxai_1_1VoxelGrid.html#ab89ed26d435db829dd1d0aa154002497">  610</a></span><span class="keyword">inline</span> <span class="keyword">typename</span> std::shared_ptr&lt;Grid&lt;DataT&gt;&gt; <a class="code hl_function" href="classBonxai_1_1VoxelGrid.html#ab89ed26d435db829dd1d0aa154002497">VoxelGrid&lt;DataT&gt;::allocateLeafGrid</a>()</div>
 <div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>{</div>
-<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_trivial_v&lt;DataT&gt;&amp;&amp; !std::is_same_v&lt;DataT, EmptyVoxel&gt;) {</div>
+<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (std::is_trivial_v&lt;DataT&gt; &amp;&amp; !std::is_same_v&lt;DataT, EmptyVoxel&gt;) {</div>
 <div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>    <span class="keyword">auto</span> allocated = leaf_block_allocator_.allocateBlock();</div>
 <div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>    DataT * memory_block = allocated.first;</div>
 <div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>    <span class="keyword">auto</span> deleter = [deleter_impl = std::move(allocated.second)](<a class="code hl_typedef" href="classBonxai_1_1VoxelGrid.html#a8522ca4bc99f36eab121f7c90e2511ac">LeafGrid</a> * ptr) {</div>

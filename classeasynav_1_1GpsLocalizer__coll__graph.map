@@ -1,9 +1,11 @@
 <map id="GpsLocalizer" name="GpsLocalizer">
-<area shape="rect" id="Node000001" title="A default &quot;do&#45;nothing&quot; implementation of the LocalizerMethodBase." alt="" coords="391,55,488,80"/>
+<area shape="rect" id="Node000001" title="A default &quot;do&#45;nothing&quot; implementation of the LocalizerMethodBase." alt="" coords="416,88,513,114"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="41,5,188,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,17,284,23,367,37,410,52,409,57,366,42,283,28,203,22"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,15,296,24,345,34,393,49,424,66,450,85,447,90,422,70,391,54,344,40,295,30,203,21"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="75,55,154,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,65,390,65,390,70,170,70"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,70,415,94,415,99,170,75"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="5,105,224,161"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="238,118,302,108,366,93,408,78,410,83,367,98,303,113,239,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,130,314,126,391,117,418,112,419,117,392,122,315,131,239,135"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="92,185,137,211"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="153,197,202,196,263,191,328,180,391,159,424,137,450,112,454,116,428,141,393,164,329,185,263,197,202,202,153,202"/>
 </map>

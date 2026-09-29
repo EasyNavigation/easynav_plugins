@@ -1,0 +1,28 @@
+<map id="planners/easynav_navmap_planner/tests/navmap_planner_reconfigure_tests.cpp" name="planners/easynav_navmap_planner/tests/navmap_planner_reconfigure_tests.cpp">
+<area shape="rect" id="Node000001" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="312,5,513,61"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,205,63,231"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="313,55,234,77,193,93,155,111,126,130,99,152,56,195,52,191,96,148,123,126,153,107,191,88,232,72,311,50"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="166,116,219,142"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="345,64,232,111,232,112,229,107,230,107,343,59"/>
+<area shape="rect" id="Node000004" href="$AStarPlanner_8hpp.html" title="Declaration of the AStarPlanner class implementing A* path planning using navmap::NavMap." alt="" coords="243,109,414,150"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="390,63,358,99,354,96,386,60"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="438,116,558,142"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="439,60,479,104,475,107,435,63"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="581,109,743,150"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="486,59,597,101,595,106,484,64"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="767,116,861,142"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="514,51,630,76,756,106,765,109,764,114,755,112,629,81,513,56"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="243,152,161,173,75,200,72,201,70,196,73,195,159,168,242,147"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="86,205,147,231"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="277,153,159,200,157,201,155,196,157,195,275,148"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="170,205,255,231"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="304,152,242,198,239,194,301,148"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="279,205,442,231"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="338,149,353,190,348,192,333,151"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="466,198,658,238"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="383,148,495,189,494,194,381,153"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="682,205,858,231"/>
+<area shape="poly" id="edge9_Node000004_Node000009" title=" " alt="" coords="415,145,427,147,694,199,693,204,425,152,414,150"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="883,198,1044,238"/>
+<area shape="poly" id="edge10_Node000004_Node000010" title=" " alt="" coords="415,145,426,147,548,163,645,171,743,179,868,195,867,200,742,184,645,176,548,168,426,152,414,150"/>
+</map>
