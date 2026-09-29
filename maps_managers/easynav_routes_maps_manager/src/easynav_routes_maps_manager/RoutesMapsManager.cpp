@@ -14,6 +14,7 @@
 // limitations under the License.
 
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_routes_maps_manager/route_io.hpp"
@@ -52,21 +53,15 @@ void RoutesMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, map_path_file;
-  if (!node->has_parameter(plugin_name + ".package")) {
-    node->declare_parameter(plugin_name + ".package", package_name);
-  }
-  if (!node->has_parameter(plugin_name + ".map_path_file")) {
-    node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".map_path_file", map_path_file);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".map_path_file", map_path_file);
 
   // Load route filters plugins configuration
   std::vector<std::string> routes_filters_names;
-  if (!node->has_parameter(plugin_name + ".filters")) {
-    node->declare_parameter(plugin_name + ".filters", routes_filters_names);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".filters", routes_filters_names);
   node->get_parameter(plugin_name + ".filters", routes_filters_names);
 
   map_path_.clear();
@@ -140,9 +135,8 @@ void RoutesMapsManager::on_initialize()
   // Instantiate and initialize configured route filters
   for (const auto & filter_name : routes_filters_names) {
     std::string plugin;
-    if (!node->has_parameter(plugin_name + "." + filter_name + ".plugin")) {
-      node->declare_parameter(plugin_name + "." + filter_name + ".plugin", plugin);
-    }
+    easynav::declare_parameter_if_absent(*node, plugin_name + "." + filter_name + ".plugin",
+        plugin);
     node->get_parameter(plugin_name + "." + filter_name + ".plugin", plugin);
 
     if (plugin.empty()) {

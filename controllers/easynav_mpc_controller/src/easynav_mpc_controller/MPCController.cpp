@@ -16,6 +16,7 @@
 /// \file
 /// \brief Implementation of the MPCController class.
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_mpc_controller/MPCController.hpp"
 #include "easynav_system/GoalManager.hpp"
 
@@ -34,15 +35,19 @@ MPCController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
-  node->declare_parameter<double>(plugin_name + ".dt", dt_);
-  node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-  node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
-  node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
-
-  node->declare_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
-  node->declare_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".horizon_steps", horizon_steps_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
+      safety_radius_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_linear_velocity",
+      max_lin_vel_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_velocity",
+      max_ang_vel_);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".verbose", verbose_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_pos_tol",
+      fallback_goal_pos_tol_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_yaw_tol",
+      fallback_goal_yaw_tol_);
 
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);

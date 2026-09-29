@@ -14,3 +14,15 @@ target_link_libraries(mhamcl_localizer_tests
   rclcpp_lifecycle::rclcpp_lifecycle
   ${std_srvs_TARGETS}
 )
+
+ament_add_gtest(mhamcl_localizer_reconfigure_tests mhamcl_localizer_reconfigure_tests.cpp)
+target_link_libraries(mhamcl_localizer_reconfigure_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+)
+
+ament_add_gtest(mhamcl_localizer_last_known_pose_tests mhamcl_localizer_last_known_pose_tests.cpp)
+target_link_libraries(mhamcl_localizer_last_known_pose_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+)

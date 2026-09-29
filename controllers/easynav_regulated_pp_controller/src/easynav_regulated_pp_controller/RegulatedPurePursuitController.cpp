@@ -28,6 +28,7 @@
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_regulated_pp_controller/RegulatedPurePursuitController.hpp"
 #include "easynav_regulated_pp_controller/regulation_functions.hpp"
 #include "easynav_regulated_pp_controller/dynamic_window_pure_pursuit_functions.hpp"
@@ -59,7 +60,7 @@ RegulatedPurePursuitController::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   auto declare_and_get = [&node, &plugin_name](const std::string & name, auto & value) {
-      node->declare_parameter(plugin_name + "." + name, value);
+      easynav::declare_parameter_if_absent(*node, plugin_name + "." + name, value);
       node->get_parameter(plugin_name + "." + name, value);
     };
 

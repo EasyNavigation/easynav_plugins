@@ -16,6 +16,7 @@
 /// \file
 /// \brief Implementation of the MPPIController class.
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_mppi_controller/MPPIController.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
@@ -37,16 +38,21 @@ MPPIController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<int>(plugin_name + ".num_samples", num_samples_);
-  node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
-  node->declare_parameter<double>(plugin_name + ".dt", dt_);
-  node->declare_parameter<double>(plugin_name + ".lambda", lambda_);
-  node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
-  node->declare_parameter<double>(plugin_name + ".max_linear_acceleration", max_lin_acc_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_acceleration", max_ang_acc_);
-  node->declare_parameter<double>(plugin_name + ".fov", fov_);
-  node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
+  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".num_samples", num_samples_);
+  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".horizon_steps", horizon_steps_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".lambda", lambda_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_linear_velocity",
+      max_lin_vel_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_velocity",
+      max_ang_vel_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_linear_acceleration",
+      max_lin_acc_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_acceleration",
+      max_ang_acc_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fov", fov_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
+      safety_radius_);
 
   node->get_parameter<int>(plugin_name + ".num_samples", num_samples_);
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);

@@ -16,6 +16,7 @@
 /// \file
 /// \brief Implementation of the GpsLocalizer class.
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_gps_localizer/GpsLocalizer.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
@@ -56,9 +57,9 @@ void GpsLocalizer::on_initialize()
     std::bind(&GpsLocalizer::init_pose_callback, this, std::placeholders::_1));
 
   // Optional initial pose from parameters (kept consistent with AMCL parameter names)
-  node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.x", 0.0);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.y", 0.0);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.yaw", 0.0);
 
   double init_x = 0.0;
   double init_y = 0.0;
@@ -66,6 +67,10 @@ void GpsLocalizer::on_initialize()
   node->get_parameter(plugin_name + ".initial_pose.x", init_x);
   node->get_parameter(plugin_name + ".initial_pose.y", init_y);
   node->get_parameter(plugin_name + ".initial_pose.yaw", init_yaw);
+
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".initial_pose.use_last_known",
+      use_last_known_pose_);
+  node->get_parameter(plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
 
   if (std::abs(init_x) > 1e-12 || std::abs(init_y) > 1e-12 || std::abs(init_yaw) > 1e-12) {
     geometry_msgs::msg::PoseWithCovarianceStamped init_pose;
@@ -115,6 +120,14 @@ void GpsLocalizer::gps_callback(const sensor_msgs::msg::NavSatFix::SharedPtr msg
 void GpsLocalizer::imu_callback(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
   imu_msg_ = std::move(*msg);
+}
+
+void GpsLocalizer::on_last_known_pose(
+  const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  if (use_last_known_pose_) {
+    pending_init_pose_ = pose;  // Applied with the next GPS fix.
+  }
 }
 
 void GpsLocalizer::init_pose_callback(

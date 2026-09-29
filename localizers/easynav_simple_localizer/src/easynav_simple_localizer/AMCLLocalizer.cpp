@@ -21,6 +21,7 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_simple_common/SimpleMap.hpp"
@@ -195,19 +196,24 @@ AMCLLocalizer::on_initialize()
   double std_dev_yaw = 0.5;
   double reseed_freq = 1.0;
 
-  node->declare_parameter<int>(plugin_name + ".num_particles", num_particles);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.x", x_init);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.y", y_init);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", yaw_init);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", std_dev_xy);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
-  node->declare_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
-  node->declare_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
-  node->declare_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
-  node->declare_parameter<double>(plugin_name + ".noise_translation_to_rotation",
-    noise_translation_to_rotation_);
-  node->declare_parameter<double>(plugin_name + ".min_noise_xy", min_noise_xy_);
-  node->declare_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
+  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".num_particles", num_particles);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.x", x_init);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.y", y_init);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.yaw", yaw_init);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.std_dev_xy",
+      std_dev_xy);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.std_dev_yaw",
+      std_dev_yaw);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".reseed_freq", reseed_freq);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".noise_translation",
+      noise_translation_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".noise_rotation",
+      noise_rotation_);
+  easynav::declare_parameter_if_absent<double>(*node,
+      plugin_name + ".noise_translation_to_rotation", noise_translation_to_rotation_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_noise_xy", min_noise_xy_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_noise_yaw",
+      min_noise_yaw_);
 
   node->get_parameter<int>(plugin_name + ".num_particles", num_particles);
   node->get_parameter<double>(plugin_name + ".initial_pose.x", x_init);
@@ -215,6 +221,9 @@ AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".initial_pose.yaw", yaw_init);
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", std_dev_xy);
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".initial_pose.use_last_known",
+      use_last_known_pose_);
+  node->get_parameter(plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
   node->get_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
   node->get_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
   node->get_parameter<double>(plugin_name + ".noise_translation_to_rotation",
@@ -337,6 +346,18 @@ AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
     last_odom_ = odom_;
     initialized_odom_ = true;
   }
+}
+
+void
+AMCLLocalizer::on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  if (!use_last_known_pose_) {
+    return;
+  }
+  RCLCPP_INFO(
+    get_node()->get_logger(), "AMCLLocalizer: starting from the last known pose (%.3f, %.3f)",
+    pose.pose.pose.position.x, pose.pose.pose.position.y);
+  init_pose_callback(std::make_unique<geometry_msgs::msg::PoseWithCovarianceStamped>(pose));
 }
 
 void

@@ -16,6 +16,7 @@
 /// \file
 /// \brief Implementation of the VffController class.
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_vff_controller/VffController.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
@@ -34,16 +35,23 @@ void VffController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<float>(plugin_name + ".distance_obstacle_detection", 3.0);
-  node->declare_parameter<float>(plugin_name + ".distance_to_goal", 1.0);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_x_min", 0.5);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_x_max", 10.0);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_y_min", -10.0);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_y_max", 10.0);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_z_min", 0.10);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_z_max", 1.00);
-  node->declare_parameter<double>(plugin_name + ".max_speed", 0.8);
-  node->declare_parameter<double>(plugin_name + ".max_angular_speed", 1.5);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".distance_obstacle_detection",
+      3.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".distance_to_goal", 1.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_x_min",
+      0.5);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_x_max",
+      10.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_y_min",
+      -10.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_y_max",
+      10.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_z_min",
+      0.10);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_z_max",
+      1.00);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_speed", 0.8);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".max_angular_speed", 1.5);
 
   node->get_parameter<float>(plugin_name + ".distance_obstacle_detection",
       distance_obstacle_detection_);

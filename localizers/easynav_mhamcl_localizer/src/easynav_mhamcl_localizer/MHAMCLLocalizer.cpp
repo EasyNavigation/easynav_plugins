@@ -26,6 +26,7 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
@@ -94,7 +95,7 @@ MHAMCLLocalizer::on_initialize()
 
   auto param = [&](const std::string & name, auto & value) {
       using T = std::decay_t<decltype(value)>;
-      node->declare_parameter<T>(plugin_name + "." + name, value);
+      easynav::declare_parameter_if_absent<T>(*node, plugin_name + "." + name, value);
       node->get_parameter<T>(plugin_name + "." + name, value);
     };
 
@@ -102,6 +103,7 @@ MHAMCLLocalizer::on_initialize()
   param("initial_pose.x", x_init);
   param("initial_pose.y", y_init);
   param("initial_pose.yaw", yaw_init);
+  param("initial_pose.use_last_known", use_last_known_pose_);
   param("initial_pose.std_dev_xy", std_dev_xy);
   param("initial_pose.std_dev_yaw", std_dev_yaw);
 
@@ -239,6 +241,18 @@ MHAMCLLocalizer::update(NavState & nav_state)
     std::lock_guard<std::mutex> lock(mutex_);
     publishParticles();
   }
+}
+
+void
+MHAMCLLocalizer::on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  if (!use_last_known_pose_) {
+    return;
+  }
+  RCLCPP_INFO(
+    get_node()->get_logger(), "MHAMCLLocalizer: starting from the last known pose (%.3f, %.3f)",
+    pose.pose.pose.position.x, pose.pose.pose.position.y);
+  init_pose_callback(std::make_unique<geometry_msgs::msg::PoseWithCovarianceStamped>(pose));
 }
 
 void

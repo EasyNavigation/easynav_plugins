@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_navmap_maps_manager/NavMapMapsManager.hpp"
 
 #include "easynav_common/YTSession.hpp"
@@ -66,21 +67,22 @@ NavMapMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, occmap_path_file, navmap_path_file;
-  node->declare_parameter(plugin_name + ".package", package_name);
-  node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
-  node->declare_parameter(plugin_name + ".navmap_path_file", navmap_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".occmap_path_file", occmap_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".navmap_path_file", navmap_path_file);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->get_parameter(plugin_name + ".navmap_path_file", navmap_path_file);
 
   std::vector<std::string> navmap_filters;
-  node->declare_parameter(plugin_name + ".filters", navmap_filters);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".filters", navmap_filters);
   node->get_parameter(plugin_name + ".filters", navmap_filters);
 
   for (const auto & navmap_filter : navmap_filters) {
     std::string plugin;
-    node->declare_parameter(plugin_name + "." + navmap_filter + ".plugin", plugin);
+    easynav::declare_parameter_if_absent(*node, plugin_name + "." + navmap_filter + ".plugin",
+          plugin);
     node->get_parameter(plugin_name + "." + navmap_filter + ".plugin", plugin);
 
     try {
