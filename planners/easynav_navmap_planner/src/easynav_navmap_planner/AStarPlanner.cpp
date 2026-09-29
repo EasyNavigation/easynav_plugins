@@ -83,7 +83,7 @@ void AStarPlanner::update(NavState & nav_state)
 
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty() || !nav_state.has("map.navmap")) {
-    nav_state.set("path", current_path_);
+    clear_path(nav_state);
     return;
   }
 
@@ -97,6 +97,7 @@ void AStarPlanner::update(NavState & nav_state)
     RCLCPP_WARN(
       get_node()->get_logger(), "Goals frame is not 'map': %s",
       goals.header.frame_id.c_str());
+    clear_path(nav_state);
     return;
   }
 
@@ -126,8 +127,23 @@ void AStarPlanner::update(NavState & nav_state)
 
     if (path_pub_->get_subscription_count() > 0) {
       path_pub_->publish(current_path_);
+      path_published_ = true;
     }
+    nav_state.set("path", current_path_);
+  } else {
+    // No route to the goal.
+    clear_path(nav_state);
   }
+}
+
+void AStarPlanner::clear_path(NavState & nav_state)
+{
+  current_path_.poses.clear();
+  if (path_published_ && path_pub_->get_subscription_count() > 0) {
+    current_path_.header.stamp = get_node()->now();
+    path_pub_->publish(current_path_);
+  }
+  path_published_ = false;
   nav_state.set("path", current_path_);
 }
 

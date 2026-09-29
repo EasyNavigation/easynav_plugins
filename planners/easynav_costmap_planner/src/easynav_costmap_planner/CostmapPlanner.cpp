@@ -67,7 +67,8 @@ static double compute_path_length(const nav_msgs::msg::Path & path)
 
 // Simple path smoother: moving average over a sliding window in XY.
 // Keeps endpoints unchanged to preserve exact start and goal.
-static void smooth_path(std::vector<geometry_msgs::msg::Pose> & poses, int window_size = 5)
+static void smooth_path(
+  std::vector<geometry_msgs::msg::Pose> & poses, const Costmap2D & map, int window_size = 5)
 {
   if (poses.size() < 3 || window_size <= 1) {
     return;
@@ -102,8 +103,14 @@ static void smooth_path(std::vector<geometry_msgs::msg::Pose> & poses, int windo
     }
 
     if (count > 0) {
-      poses[i].position.x = sum_x / static_cast<double>(count);
-      poses[i].position.y = sum_y / static_cast<double>(count);
+      const double x = sum_x / static_cast<double>(count);
+      const double y = sum_y / static_cast<double>(count);
+      // Keep the original pose if smoothing would move it into an obstacle.
+      unsigned int mx, my;
+      if (map.worldToMap(x, y, mx, my) && map.getCost(mx, my) < INSCRIBED_INFLATED_OBSTACLE) {
+        poses[i].position.x = x;
+        poses[i].position.y = y;
+      }
     }
   }
 }
@@ -146,7 +153,7 @@ void CostmapPlanner::update(NavState & nav_state)
 
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty()) {
-    nav_state.set("path", current_path_);
+    clear_current_path(nav_state);
     return;
   }
 
@@ -169,6 +176,7 @@ void CostmapPlanner::update(NavState & nav_state)
   if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",
         goals.header.frame_id.c_str());
+    clear_current_path(nav_state);
     return;
   }
 
@@ -176,6 +184,7 @@ void CostmapPlanner::update(NavState & nav_state)
   if (!map.worldToMap(goal.position.x, goal.position.y, gx, gy)) {
     RCLCPP_WARN(get_node()->get_logger(), "Goal (%.2f, %.2f) is outside the map", goal.position.x,
         goal.position.y);
+    clear_current_path(nav_state);
     return;
   }
 
@@ -225,7 +234,7 @@ void CostmapPlanner::update(NavState & nav_state)
   auto poses = a_star_path(map, robot_pose.pose.pose, goal);
   if (!poses.empty()) {
     // Apply a light smoothing to the raw grid path
-    smooth_path(poses);
+    smooth_path(poses, map);
 
     current_path_.poses.clear();
     current_path_.header.stamp = get_node()->now();
@@ -249,6 +258,21 @@ void CostmapPlanner::update(NavState & nav_state)
     }
     last_goal_pose = goal;
     last_plan_time = get_node()->now();
+    nav_state.set("path", current_path_);
+  } else {
+    // No route to the goal.
+    clear_current_path(nav_state);
+  }
+}
+
+void CostmapPlanner::clear_current_path(NavState & nav_state)
+{
+  if (!current_path_.poses.empty()) {
+    current_path_.poses.clear();
+    current_path_.header.stamp = get_node()->now();
+    if (path_pub_->get_subscription_count() > 0) {
+      path_pub_->publish(current_path_);
+    }
   }
   nav_state.set("path", current_path_);
 }
@@ -313,6 +337,11 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
     }
   }
 
+  if (!std::isfinite(cost_so_far[idx(static_cast<int>(gx), static_cast<int>(gy))])) {
+    // Goal never reached: unreachable.
+    return {};
+  }
+
   std::vector<geometry_msgs::msg::Pose> path;
   int cx = static_cast<int>(gx), cy = static_cast<int>(gy);
   while (parent_x[idx(cx, cy)] != -1) {
@@ -330,6 +359,7 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
   }
   std::reverse(path.begin(), path.end());
 
+  // Zero hops: start and goal are the same cell.
   if (path.empty()) {path.push_back(goal);}
   return path;
 }
