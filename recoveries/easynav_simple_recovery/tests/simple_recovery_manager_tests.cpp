@@ -27,6 +27,8 @@
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
+#include "easynav_common/RobotGeometry.hpp"
+#include "easynav_common/testing/LogCapture.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_core/SystemActions.hpp"
 #include "easynav_core/VelocityCommand.hpp"
@@ -79,6 +81,8 @@ protected:
       {"recovery_manager.relocalize_timeout", 0.1},
     };
     params.insert(params.end(), overrides.begin(), overrides.end());
+    // The system's geometry, as SystemNode leaves it (not configured explicitly).
+    easynav::RobotGeometryRegistry::getInstance()->set_geometry({0.3, 0.3, 2.0});
     node_ = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
       "simple_recovery_test_node", rclcpp::NodeOptions().parameter_overrides(params));
     manager_ = std::make_shared<easynav::SimpleRecoveryManager>();
@@ -256,6 +260,75 @@ TEST_F(SimpleRecoveryManagerTest, DoesNotBrakeWithoutPerceptions)
 {
   controller_commands(0.3);
   EXPECT_FALSE(rt_cycle().second);
+}
+
+TEST_F(SimpleRecoveryManagerTest, AreaAheadFollowsTheRobotGeometry)
+{
+  make_manager();
+  easynav::RobotGeometryRegistry::getInstance()->set_geometry(
+    {0.6, 0.6, 1.0}, {"radius", "height"});
+  manager_ = std::make_shared<easynav::SimpleRecoveryManager>();
+  manager_->initialize(node_, "recovery_manager");
+  controller_commands(0.3);
+
+  perceive({{0.8, 0.5, 0.5}});  // Within radius 0.6 + stop_distance 0.3, and its width
+  EXPECT_TRUE(rt_cycle().second);
+  perceive({{0.4, 0.0, 1.5}});  // Above its height
+  EXPECT_FALSE(rt_cycle().second);
+}
+
+TEST_F(SimpleRecoveryManagerTest, DeprecatedGeometryParametersStillApply)
+{
+  make_manager({
+    {"recovery_manager.robot_radius", 0.6},
+    {"recovery_manager.max_obstacle_z", 1.0}});
+  controller_commands(0.3);
+  perceive({{0.8, 0.5, 0.5}});
+  EXPECT_TRUE(rt_cycle().second);
+  perceive({{0.4, 0.0, 1.5}});
+  EXPECT_FALSE(rt_cycle().second);
+}
+
+TEST_F(SimpleRecoveryManagerTest, RobotGeometryTakesPrecedenceOverDeprecatedParameters)
+{
+  make_manager({{"recovery_manager.robot_radius", 0.6}});
+  easynav::RobotGeometryRegistry::getInstance()->set_geometry({0.3, 0.3, 2.0}, {"radius"});
+  manager_ = std::make_shared<easynav::SimpleRecoveryManager>();
+  manager_->initialize(node_, "recovery_manager");
+  controller_commands(0.3);
+  perceive({{0.8, 0.5, 0.5}});
+  EXPECT_FALSE(rt_cycle().second) << "radius 0.3: outside the area ahead";
+}
+
+TEST_F(SimpleRecoveryManagerTest, WarnsAboutDeprecatedGeometryParameters)
+{
+  {
+    easynav::testing::LogCapture log;
+    make_manager({
+      {"recovery_manager.robot_radius", 0.6},
+      {"recovery_manager.max_obstacle_z", 1.0}});
+    EXPECT_EQ(
+      log.count(
+        {"'recovery_manager.robot_radius' is deprecated: configure",
+          "system_node.robot_geometry.radius"}), 1u);
+    EXPECT_EQ(
+      log.count(
+        {"'recovery_manager.max_obstacle_z' is deprecated: configure",
+          "system_node.robot_geometry.height"}), 1u);
+  }
+  {
+    make_manager({{"recovery_manager.robot_radius", 0.6}});
+    easynav::RobotGeometryRegistry::getInstance()->set_geometry({0.3, 0.3, 2.0}, {"radius"});
+    easynav::testing::LogCapture log;
+    manager_ = std::make_shared<easynav::SimpleRecoveryManager>();
+    manager_->initialize(node_, "recovery_manager");
+    EXPECT_EQ(log.count({"'recovery_manager.robot_radius' is deprecated and ignored"}), 1u);
+  }
+  {
+    easynav::testing::LogCapture log;
+    make_manager();
+    EXPECT_EQ(log.count({"deprecated"}), 0u);
+  }
 }
 
 TEST_F(SimpleRecoveryManagerTest, CustomStopDistance)

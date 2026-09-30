@@ -88,7 +88,7 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.inflation_radius` | `double` | `0.3` | Maximum inflation distance (m) from obstacles. Cells farther than this receive no inflation cost. |
-| `<plugin>.inscribed_radius` | `double` | `0.25` | Radius of the inscribed zone (m). Cells within this distance of an obstacle are marked with high constant cost (`INSCRIBED_INFLATED_OBSTACLE`, value 253) before exponential decay begins. |
+| `<plugin>.inscribed_radius` | `double` | — | **Deprecated**: the robot's `system_node.robot_geometry.inscribed_radius`, used unless only this one is configured (with a warning). Radius of the inscribed zone (m). Cells within this distance of an obstacle are marked with high constant cost (`INSCRIBED_INFLATED_OBSTACLE`, value 253) before exponential decay begins. |
 | `<plugin>.cost_scaling_factor` | `double` | `3.0` | Exponential decay rate controlling how quickly cost decreases with distance beyond the inscribed radius. Higher values produce steeper cost gradients. |
 
 **NavState Keys:**

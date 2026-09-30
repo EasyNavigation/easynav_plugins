@@ -45,9 +45,12 @@ SimpleRecoveryManager::on_initialize()
     };
 
   param("stop_distance", stop_distance_);
-  param("robot_radius", robot_radius_);
   param("min_obstacle_z", min_obstacle_z_);
-  param("max_obstacle_z", max_obstacle_z_);
+
+  // The area checked ahead is the robot's: "system_node.robot_geometry" (deprecated here).
+  const auto geometry = get_robot_geometry({"robot_radius", "", "max_obstacle_z"});
+  robot_radius_ = geometry.radius;
+  max_obstacle_z_ = geometry.height;
   param("sensors_timeout", sensors_timeout_);
   param("max_position_variance", max_position_variance_);
   param("relocalize_timeout", relocalize_timeout_);

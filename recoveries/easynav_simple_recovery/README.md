@@ -21,15 +21,16 @@ A recovery system is a `RecoveryManagerBase` plugin hosted by `recovery_node`. E
 
 ## Usage
 
+The area checked ahead is the robot's: its radius and height come from
+`system_node.robot_geometry` (`robot_radius` and `max_obstacle_z` here are deprecated).
+
 ```yaml
 recovery_node:
   ros__parameters:
     recovery_manager:
       plugin: easynav_simple_recovery/SimpleRecoveryManager
-      stop_distance: 0.3          # [m] beyond robot_radius
-      robot_radius: 0.3           # [m]
+      stop_distance: 0.3          # [m] beyond the robot radius
       min_obstacle_z: 0.05        # [m]
-      max_obstacle_z: 2.0         # [m]
       sensors_timeout: 5.0        # [s]
       max_position_variance: 1.0  # [m^2]
       relocalize_timeout: 20.0    # [s]

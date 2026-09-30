@@ -108,9 +108,9 @@ private:
 
   // Parameters.
   double stop_distance_ {0.3};         // Brake if an obstacle is this close ahead [m]
-  double robot_radius_ {0.3};          // Half width of the area checked ahead [m]
+  double robot_radius_ {0.3};          // Half width of the area checked ahead [m] (geometry)
   double min_obstacle_z_ {0.05};       // Ignore points below (floor) [m]
-  double max_obstacle_z_ {2.0};        // Ignore points above the robot [m]
+  double max_obstacle_z_ {0.5};        // Ignore points above the robot [m] (geometry)
   double sensors_timeout_ {5.0};       // No sensor data for this long: sensors lost [s]
   double max_position_variance_ {1.0}; // Above it (x or y): localization lost [m^2]
   double relocalize_timeout_ {20.0};   // Rotating longer than this: abort the mission [s]
