@@ -16,7 +16,7 @@ A recovery system is a `RecoveryManagerBase` plugin hosted by `recovery_node`. E
 |---|---|
 | No new sensor data for `sensors_timeout` (counted from activation until the first data arrives) | `request_shutdown()` |
 | Localization lost (x or y variance > `max_position_variance`) | `hold_mission_progress(true)` and rotate; `abort_mission()` after `relocalize_timeout` |
-| Stuck (commanded but not moving for `stuck_time`) | back up for `backup_time`; `abort_mission()` after `max_backup_attempts` |
+| Stuck (commanded but not moving for `stuck_time`) | back up for `backup_time`; after `max_backup_attempts`, slow down (`request_reconfigure()` of `controller_node.robot_limits.max_linear_vel` to `slow_down_max_linear_vel`); still stuck, `abort_mission()`. The speed is restored when the mission ends (`request_restore_parameters()`) |
 | Otherwise | nothing: the controller drives |
 
 ## Usage
@@ -39,4 +39,13 @@ recovery_node:
       backup_speed: 0.1           # [m/s]
       backup_time: 2.0            # [s]
       max_backup_attempts: 3
+      slow_down_max_linear_vel: 0.1  # [m/s], 0: never slow down
 ```
+
+## Reconfiguring as a mitigation
+
+`request_reconfigure()` changes parameters of any EasyNav node and reconfigures EasyNav to apply
+them, between cycles: the mission goes on, and the robot only stops during the transitions. The
+recovery system is reloaded too, so a new instance starts with fresh members: keep in NavState
+what you need to remember. EasyNav lists the parameters changed so far in
+`reconfigured_parameters` (`"node/parameter"`), and `request_restore_parameters()` restores them.

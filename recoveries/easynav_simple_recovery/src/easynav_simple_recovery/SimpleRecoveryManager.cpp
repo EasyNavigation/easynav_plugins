@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <cmath>
 #include <string>
+#include <vector>
 
 #include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/odometry.hpp"
@@ -56,6 +57,7 @@ SimpleRecoveryManager::on_initialize()
   param("backup_speed", backup_speed_);
   param("backup_time", backup_time_);
   param("max_backup_attempts", max_backup_attempts_);
+  param("slow_down_max_linear_vel", slow_down_max_linear_vel_);
 }
 
 void
@@ -108,10 +110,13 @@ SimpleRecoveryManager::update(NavState & nav_state)
     return;
   }
 
-  // No mission, nothing to recover.
+  // No mission, nothing to recover. Undo the slow down of the last one, if any.
   if (!has_mission(nav_state)) {
     stop_mitigation();
     backup_attempts_ = 0;
+    if (slowed_down(nav_state)) {
+      request_restore_parameters("mission ended: normal speed again");
+    }
     return;
   }
 
@@ -134,12 +139,19 @@ SimpleRecoveryManager::update(NavState & nav_state)
   }
 
   // Case 3: the robot does not move although the controller commands it. Back up for a while,
-  // then let the controller try again.
+  // then let the controller try again. If that is not enough, try again slower; then give up.
   if (robot_stuck(nav_state)) {
-    if (++backup_attempts_ > max_backup_attempts_) {
-      abort_mission("stuck after " + std::to_string(max_backup_attempts_) + " attempts");
-    } else {
+    if (++backup_attempts_ <= max_backup_attempts_) {
       start(Mitigation::BACK_UP);
+    } else if (slow_down_max_linear_vel_ > 0.0 && !slowed_down(nav_state)) {
+      // EasyNav applies it between cycles, reconfiguring: this recovery system is reloaded too,
+      // so its members start over (NavState tells the new one it slowed down).
+      request_reconfigure(
+        {{"controller_node",
+          rclcpp::Parameter("robot_limits.max_linear_vel", slow_down_max_linear_vel_)}},
+        "stuck: slowing down");
+    } else {
+      abort_mission("stuck after " + std::to_string(max_backup_attempts_) + " attempts");
     }
     return;
   }
@@ -197,6 +209,19 @@ SimpleRecoveryManager::localization_lost(const NavState & nav_state) const
   const auto & covariance =
     nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.covariance;
   return covariance[0] > max_position_variance_ || covariance[7] > max_position_variance_;
+}
+
+bool
+SimpleRecoveryManager::slowed_down(const NavState & nav_state) const
+{
+  // Parameters changed through request_reconfigure(), kept by EasyNav across the reload.
+  if (!nav_state.has("reconfigured_parameters")) {
+    return false;
+  }
+  const auto changed = nav_state.get_safe<std::vector<std::string>>("reconfigured_parameters");
+  return std::find(
+    changed.begin(), changed.end(), "controller_node/robot_limits.max_linear_vel") !=
+         changed.end();
 }
 
 bool

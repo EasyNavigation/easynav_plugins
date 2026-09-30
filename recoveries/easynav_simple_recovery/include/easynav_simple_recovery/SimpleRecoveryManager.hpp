@@ -55,7 +55,11 @@ namespace easynav
  *                           data for sensors_timeout (real time, also since activation).
  *   2. Localization lost -> hold_mission_progress() and rotate in place to relocalize;
  *                           abort_mission() if it takes too long.
- *   3. Robot stuck       -> back up for a while; abort_mission() after too many attempts.
+ *   3. Robot stuck       -> back up for a while. After too many attempts, reduce the robot's
+ *                           speed (request_reconfigure(): changes a parameter and reconfigures
+ *                           EasyNav, reloading this plugin). Still stuck: abort_mission().
+ *                           The speed is restored when the mission ends
+ *                           (request_restore_parameters()).
  *   4. Otherwise         -> no mitigation: the controller drives.
  *
  * Parameters (under "recovery_manager."): see on_initialize().
@@ -90,6 +94,7 @@ private:
   bool has_mission(const NavState & nav_state) const;
   bool localization_lost(const NavState & nav_state) const;
   bool robot_stuck(const NavState & nav_state);
+  bool slowed_down(const NavState & nav_state) const;
 
   // Checked by update_rt() (RT).
   bool obstacle_ahead(const NavState & nav_state) const;
@@ -114,7 +119,8 @@ private:
   double stuck_distance_ {0.05};       // Moving less than this is not moving [m]
   double backup_speed_ {0.1};          // [m/s]
   double backup_time_ {2.0};           // [s]
-  int max_backup_attempts_ {3};        // Per mission
+  int max_backup_attempts_ {3};        // Per mission, and again once slowed down
+  double slow_down_max_linear_vel_ {0.1};  // Still stuck: max_linear_vel [m/s] (0: never)
 
   // Read by update_rt(), written by update().
   std::atomic<Mitigation> mitigation_ {Mitigation::NONE};

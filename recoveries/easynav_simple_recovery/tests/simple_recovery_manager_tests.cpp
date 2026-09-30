@@ -50,9 +50,17 @@ public:
   void abort_mission(const std::string & reason) override {aborted.push_back(reason);}
   void request_shutdown(const std::string & reason) override {shutdowns.push_back(reason);}
   void hold_mission_progress(bool hold) override {holds.push_back(hold);}
+  void request_reconfigure(
+    const std::vector<easynav::ParameterChange> & changes, const std::string &) override
+  {
+    reconfigures.push_back(changes);
+  }
+  void request_restore_parameters(const std::string &) override {++restores;}
   std::vector<std::string> aborted;
   std::vector<std::string> shutdowns;
   std::vector<bool> holds;
+  std::vector<std::vector<easynav::ParameterChange>> reconfigures;
+  int restores {0};
 };
 
 }  // namespace
@@ -82,6 +90,23 @@ protected:
   }
 
   void SetUp() override {make_manager();}
+
+  // What EasyNav does with the last request_reconfigure()/request_restore_parameters(): records
+  // the changed parameters in NavState and reloads the recovery system (a new instance).
+  void apply_reconfigure(bool restore = false)
+  {
+    std::vector<std::string> changed;
+    if (!restore) {
+      for (const auto & change : actions_->reconfigures.back()) {
+        changed.push_back(change.node + "/" + change.parameter.get_name());
+      }
+    }
+    nav_state_->set("reconfigured_parameters", changed);
+    manager_ = std::make_shared<easynav::SimpleRecoveryManager>();
+    manager_->initialize(node_, "recovery_manager");
+    manager_->set_system_actions(actions_);
+    manager_->on_activate();
+  }
 
   void set_mission(bool active)
   {
@@ -587,22 +612,84 @@ TEST_F(SimpleRecoveryManagerTest, StuckWithoutAMissionIsIgnored)
   EXPECT_EQ(manager_->get_mitigation(), Mitigation::NONE);
 }
 
-TEST_F(SimpleRecoveryManagerTest, TooManyAttemptsAbortTheMission)
+TEST_F(SimpleRecoveryManagerTest, TooManyAttemptsSlowDownThenAbort)
 {
   make_manager({{"recovery_manager.max_backup_attempts", 2}});
   set_mission(true);
 
-  for (int attempt = 1; attempt <= 2; ++attempt) {
-    get_stuck();
-    ASSERT_EQ(manager_->get_mitigation(), Mitigation::BACK_UP) << attempt;
-    rclcpp::sleep_for(150ms);
-    cycle();
-    ASSERT_EQ(manager_->get_mitigation(), Mitigation::NONE) << attempt;
-  }
+  auto back_up_twice = [this]() {
+      for (int attempt = 1; attempt <= 2; ++attempt) {
+        get_stuck();
+        ASSERT_EQ(manager_->get_mitigation(), Mitigation::BACK_UP) << attempt;
+        rclcpp::sleep_for(150ms);
+        cycle();
+        ASSERT_EQ(manager_->get_mitigation(), Mitigation::NONE) << attempt;
+      }
+    };
 
+  back_up_twice();
   get_stuck();
   EXPECT_EQ(manager_->get_mitigation(), Mitigation::NONE);
+  EXPECT_TRUE(actions_->aborted.empty()) << "slows down first";
+  ASSERT_EQ(actions_->reconfigures.size(), 1u);
+  ASSERT_EQ(actions_->reconfigures[0].size(), 1u);
+  EXPECT_EQ(actions_->reconfigures[0][0].node, "controller_node");
+  EXPECT_EQ(actions_->reconfigures[0][0].parameter.get_name(), "robot_limits.max_linear_vel");
+  EXPECT_DOUBLE_EQ(actions_->reconfigures[0][0].parameter.as_double(), 0.1);
+
+  // EasyNav reconfigures: a new instance, which learns from NavState that it slowed down.
+  apply_reconfigure();
+  back_up_twice();
+  get_stuck();
+  EXPECT_EQ(actions_->reconfigures.size(), 1u) << "slows down once";
   EXPECT_EQ(actions_->aborted, std::vector<std::string>({"stuck after 2 attempts"}));
+}
+
+TEST_F(SimpleRecoveryManagerTest, NoSlowDownIfDisabled)
+{
+  make_manager({
+    {"recovery_manager.max_backup_attempts", 1},
+    {"recovery_manager.slow_down_max_linear_vel", 0.0}});
+  set_mission(true);
+  get_stuck();
+  rclcpp::sleep_for(150ms);
+  cycle();
+  get_stuck();
+  EXPECT_TRUE(actions_->reconfigures.empty());
+  EXPECT_EQ(actions_->aborted, std::vector<std::string>({"stuck after 1 attempts"}));
+}
+
+TEST_F(SimpleRecoveryManagerTest, SpeedRestoredWhenTheMissionEnds)
+{
+  make_manager({
+    {"recovery_manager.max_backup_attempts", 0},
+    {"recovery_manager.slow_down_max_linear_vel", 0.05}});
+  set_mission(true);
+  get_stuck();
+  ASSERT_EQ(actions_->reconfigures.size(), 1u);
+  EXPECT_DOUBLE_EQ(actions_->reconfigures[0][0].parameter.as_double(), 0.05);
+  apply_reconfigure();
+
+  cycle();
+  EXPECT_EQ(actions_->restores, 0) << "still in the mission";
+
+  set_mission(false);
+  cycle();
+  EXPECT_EQ(actions_->restores, 1);
+  apply_reconfigure(true);
+  cycle();
+  EXPECT_EQ(actions_->restores, 1) << "nothing left to restore";
+}
+
+TEST_F(SimpleRecoveryManagerTest, NothingToRestoreWithoutASlowDown)
+{
+  set_mission(true);
+  cycle();
+  set_mission(false);
+  cycle();
+  nav_state_->set("reconfigured_parameters", std::vector<std::string>{"other_node/other"});
+  cycle();
+  EXPECT_EQ(actions_->restores, 0);
 }
 
 TEST_F(SimpleRecoveryManagerTest, AttemptsRestartWithANewMission)
