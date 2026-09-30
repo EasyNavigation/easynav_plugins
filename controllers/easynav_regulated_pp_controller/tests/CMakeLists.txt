@@ -25,3 +25,11 @@ ament_add_gtest(regulated_pp_controller_legacy_params_file_tests regulated_pp_co
 target_link_libraries(regulated_pp_controller_legacy_params_file_tests easynav_controller::easynav_controller)
 target_compile_definitions(regulated_pp_controller_legacy_params_file_tests
   PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
+
+find_package(easynav_sensors REQUIRED)
+ament_add_gtest(regulated_pp_controller_obstacle_area_tests
+  regulated_pp_controller_obstacle_area_tests.cpp)
+target_link_libraries(regulated_pp_controller_obstacle_area_tests
+  ${PROJECT_NAME}
+  easynav_sensors::easynav_sensors
+)
