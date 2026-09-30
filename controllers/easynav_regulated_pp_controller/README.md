@@ -48,9 +48,9 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
   costmap cost (see `heuristics::obstacleConstraint` in
   [`regulation_functions.hpp`](include/easynav_regulated_pp_controller/regulation_functions.hpp)).
 - **No per-controller collision-arc checking.** Nav2's RPP throws a `NoValidControl` exception
-  when it predicts a collision along a forward-simulated arc. EasyNav already performs this kind
-  of safety stop uniformly for every controller in `ControllerMethodBase` (see the shared
-  `colision_checker.*` parameters), so this controller does not duplicate it.
+  when it predicts a collision along a forward-simulated arc. In EasyNav, braking before an
+  obstacle is the recovery system's job (`recovery_node`), the same for every controller, so this
+  controller does not duplicate it.
 - **No separate goal-checker plugin.** Nav2 relies on an independent `GoalChecker` plugin to
   decide when the robot has reached the goal. This controller checks the distance/angle to the
   last path pose directly, using `goal_tolerance.position` / `goal_tolerance.yaw` from the
@@ -96,6 +96,9 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
 | `use_obstacle_regulated_linear_velocity_scaling` | Enable obstacle-proximity velocity regulation (EasyNav adaptation of Nav2's cost-based term). |
 | `obstacle_scaling_dist` | Distance below which obstacle regulation is triggered. |
 | `obstacle_scaling_gain` | Gain (`<= 1.0`) applied when scaling down the velocity near obstacles. |
+| `robot_radius` | Robot radius used when measuring the distance to obstacles (m, default `0.35`). |
+| `safety_margin` | Margin added to `robot_radius` for the obstacle corridor (m, default `0.1`). |
+| `z_min_filter` / `robot_height` | Height range of the points considered obstacles (m, default `0.0` / `0.5`). |
 | `min_approach_linear_velocity` | Minimum velocity while approaching the goal. |
 | `approach_velocity_scaling_dist` | Remaining path distance at which approach-to-goal slow-down starts. |
 | `allow_reversing` | Allow driving backwards when the carrot point is behind the robot. |

@@ -40,6 +40,8 @@ MPCController::on_initialize()
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
       safety_radius_);
   easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".verbose", verbose_);
+  easynav::declare_parameter_if_absent<bool>(
+    *node, plugin_name + ".use_collision_checker", use_collision_checker_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_pos_tol",
       fallback_goal_pos_tol_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_yaw_tol",
@@ -54,6 +56,7 @@ MPCController::on_initialize()
   max_lin_vel_ = limits.max_linear_vel;
   max_ang_vel_ = limits.max_angular_vel;
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
+  node->get_parameter<bool>(plugin_name + ".use_collision_checker", use_collision_checker_);
 
   node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
   node->get_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
@@ -286,7 +289,7 @@ MPCController::update_rt(NavState & nav_state)
     std::cerr << "Optimization Error: " << e.what() << std::endl;
   }
 
-  if (ControllerMethodBase::collision_checker_active_) {
+  if (use_collision_checker_) {
     collision_checker(&params, u);
   }
 
