@@ -1,0 +1,10 @@
+<class_libraries>
+  <library path="easynav_simple_recovery">
+    <class name="easynav_simple_recovery/SimpleRecoveryManager" type="easynav::SimpleRecoveryManager" base_class_type="easynav::RecoveryManagerBase">
+      <description>
+      A simple recovery system, meant as an example: brakes before an obstacle ahead, rotates to
+      relocalize, backs up when stuck, and aborts the mission or shuts EasyNav down when that fails.
+      </description>
+    </class>
+  </library>
+</class_libraries>
