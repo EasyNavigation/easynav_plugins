@@ -16,7 +16,8 @@ var searchData=
   ['simplemapsmanagertest_13',['SimpleMapsManagerTest',['../classSimpleMapsManagerTest.html',1,'']]],
   ['simplemaptest_14',['SimpleMapTest',['../classSimpleMapTest.html',1,'']]],
   ['simpleplanner_15',['SimplePlanner',['../classeasynav_1_1SimplePlanner.html',1,'easynav']]],
-  ['simpleplannerreconfiguretest_16',['SimplePlannerReconfigureTest',['../classSimplePlannerReconfigureTest.html',1,'']]],
-  ['simpleplannertest_17',['SimplePlannerTest',['../classSimplePlannerTest.html',1,'']]],
-  ['simplerobotlimitstest_18',['SimpleRobotLimitsTest',['../classSimpleRobotLimitsTest.html',1,'']]]
+  ['simpleplannergeometrytest_16',['SimplePlannerGeometryTest',['../classSimplePlannerGeometryTest.html',1,'']]],
+  ['simpleplannerreconfiguretest_17',['SimplePlannerReconfigureTest',['../classSimplePlannerReconfigureTest.html',1,'']]],
+  ['simpleplannertest_18',['SimplePlannerTest',['../classSimplePlannerTest.html',1,'']]],
+  ['simplerobotlimitstest_19',['SimpleRobotLimitsTest',['../classSimpleRobotLimitsTest.html',1,'']]]
 ];

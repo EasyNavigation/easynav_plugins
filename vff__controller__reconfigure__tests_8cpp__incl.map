@@ -1,25 +1,27 @@
 <map id="controllers/easynav_vff_controller/tests/vff_controller_reconfigure_tests.cpp" name="controllers/easynav_vff_controller/tests/vff_controller_reconfigure_tests.cpp">
-<area shape="rect" id="Node000001" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="457,5,626,76"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="229,132,286,157"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="458,71,300,126,298,127,296,123,298,122,456,66"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="311,132,364,157"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="473,79,377,127,375,122,471,74"/>
-<area shape="rect" id="Node000004" href="$VffController_8hpp.html" title="Declaration of the VffController method." alt="" coords="388,124,538,165"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="517,78,490,113,485,110,513,75"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="562,132,682,157"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="571,75,605,117,601,121,567,78"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="705,124,866,165"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="626,74,725,115,723,120,624,79"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="891,132,984,157"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="627,58,747,87,880,121,888,124,887,129,878,127,746,92,626,63"/>
+<area shape="rect" id="Node000001" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="493,5,662,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="265,132,322,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="494,71,336,126,334,127,332,123,334,122,492,66"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="347,132,400,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="509,79,413,127,411,122,507,74"/>
+<area shape="rect" id="Node000004" href="$VffController_8hpp.html" title="Declaration of the VffController method." alt="" coords="424,124,574,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="553,78,526,113,521,110,549,75"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="598,132,718,157"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="607,75,641,117,637,121,603,78"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="741,124,902,165"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="662,74,761,115,759,120,660,79"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="927,132,1020,157"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="663,58,783,87,916,121,924,124,923,129,914,127,782,92,662,63"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="5,220,124,246"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="388,165,377,167,257,190,137,215,124,218,122,213,136,210,256,185,376,162,387,160"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="148,213,352,253"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="416,168,313,209,311,204,414,163"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="376,213,550,253"/>
-<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="466,165,466,197,460,197,460,165"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="575,213,706,253"/>
-<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="505,163,588,203,586,208,502,168"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="730,213,884,253"/>
-<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="539,162,716,206,715,211,538,167"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="424,165,413,167,275,190,137,215,123,218,122,213,136,210,274,185,412,162,423,160"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="148,220,266,246"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="433,168,263,218,262,213,432,163"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="291,213,494,253"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="477,167,430,205,427,201,473,163"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="519,213,693,253"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="525,163,572,201,568,205,522,167"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="718,213,849,253"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="565,163,705,205,703,210,563,168"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="873,213,1026,253"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="575,160,586,162,858,210,858,215,585,167,574,165"/>
 </map>

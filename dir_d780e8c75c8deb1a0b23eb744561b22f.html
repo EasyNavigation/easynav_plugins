@@ -175,7 +175,7 @@ InflationFilter</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.inflation.cost_scaling_factor</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">3.0</span>  </td><td class="markdownTableBodyNone">Exponential decay controlling the reduction of cost with distance.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.inflation.inscribed_radius</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3</span>  </td><td class="markdownTableBodyNone">Inscribed radius (m) used by the inflation model.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.inflation.inscribed_radius</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight">—  </td><td class="markdownTableBodyNone"><b>Deprecated</b>: the robot's <span class="tt">system_node.robot_geometry.inscribed_radius</span>, used unless only this one is configured (with a warning).  </td></tr>
 </table>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md173"></a>
 ObstacleFilter</h3>
@@ -194,7 +194,6 @@ Example Configuration</h1>
 <div class="line">        plugin: easynav_octomap_maps_manager/InflationFilter</div>
 <div class="line">        inflation_radius: 0.3</div>
 <div class="line">        cost_scaling_factor: 3.0</div>
-<div class="line">        inscribed_radius: 0.3</div>
 <div class="line">      obstacles:</div>
 <div class="line">        plugin: easynav_octomap_maps_manager/ObstacleFilter</div>
 </div><!-- fragment --><hr  />
