@@ -100,6 +100,11 @@ protected:
   bool use_obstacle_regulated_linear_velocity_scaling_{false};  ///< Enable obstacle-proximity regulation.
   double obstacle_scaling_dist_{0.3};   ///< Distance below which obstacle regulation is triggered (m).
   double obstacle_scaling_gain_{1.0};   ///< Gain (<=1.0) applied when scaling down the velocity.
+  // Area where obstacles regulate the velocity (computeMinObstacleDistance()).
+  double robot_radius_{0.35};   ///< Robot radius used when measuring obstacle distance (m).
+  double safety_margin_{0.1};   ///< Margin added to the robot radius (m).
+  double z_min_filter_{0.0};    ///< Minimum Z of the points considered (m).
+  double robot_height_{0.5};    ///< Maximum Z of the points considered (m).
 
   // --- Approach to goal ---
   double min_approach_linear_velocity_{0.05};  ///< Minimum linear velocity while approaching goal.

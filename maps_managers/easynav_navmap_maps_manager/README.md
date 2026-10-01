@@ -74,7 +74,7 @@ All parameters are declared under the plugin namespace, i.e.
 |---|---|---:|---|
 | `<plugin>.inflation_radius` | `double` | `0.3` | Maximum inflation distance (m) from obstacles. |
 | `<plugin>.cost_scaling_factor` | `double` | `3.0` | Exponential decay rate controlling how fast cost decreases with distance. |
-| `<plugin>.inscribed_radius` | `double` | `0.3` | Radius of inscribed zone (constant high cost before decay). |
+| `<plugin>.inscribed_radius` | `double` | — | **Deprecated**: the robot's `system_node.robot_geometry.inscribed_radius`, used unless only this one is configured (with a warning). Radius of inscribed zone (constant high cost before decay). |
 | **Input Layer:** | | | Reads from `"obstacles"`. |
 | **Output Layer:** | | | Writes to `"inflated_obstacles"`. |
 

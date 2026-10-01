@@ -90,9 +90,9 @@ SimplePlanner::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".robot_radius", 0.3);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".clearance_distance", 0.2);
-  node->get_parameter<double>(plugin_name + ".robot_radius", robot_radius_);
+  // The robot's: "system_node.robot_geometry" (the planner's own is deprecated).
+  robot_radius_ = get_robot_geometry({"robot_radius", "", ""}).radius;
   node->get_parameter<double>(plugin_name + ".clearance_distance", clearance_distance_);
 
   path_pub_ = get_node()->create_publisher<nav_msgs::msg::Path>(

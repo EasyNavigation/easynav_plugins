@@ -73,6 +73,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   yaml-cpp
   ${GRAPHICSMAGICKCPP_LIBRARIES}
   ${PCL_LIBRARIES}
+  pcl_conversions::pcl_conversions
   bonxai
 )
 

@@ -3,3 +3,6 @@ target_link_libraries(navmap_mapsmanager_tests ${PROJECT_NAME})
 
 ament_add_gtest(navmap_mapsmanager_reconfigure_tests navmap_mapsmanager_reconfigure_tests.cpp)
 target_link_libraries(navmap_mapsmanager_reconfigure_tests ${PROJECT_NAME})
+
+ament_add_gtest(navmap_inflation_geometry_tests navmap_inflation_geometry_tests.cpp)
+target_link_libraries(navmap_inflation_geometry_tests ${PROJECT_NAME})

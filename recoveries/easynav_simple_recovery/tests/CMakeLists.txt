@@ -1,0 +1,4 @@
+find_package(easynav_recovery REQUIRED)
+
+ament_add_gtest(simple_recovery_manager_tests simple_recovery_manager_tests.cpp)
+target_link_libraries(simple_recovery_manager_tests ${PROJECT_NAME} easynav_recovery::easynav_recovery)

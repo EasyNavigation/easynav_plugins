@@ -14,3 +14,10 @@ target_link_libraries(simple_planner_reconfigure_tests
   rclcpp::rclcpp
   rclcpp_lifecycle::rclcpp_lifecycle
 )
+
+ament_add_gtest(simple_planner_geometry_tests simple_planner_geometry_tests.cpp)
+target_link_libraries(simple_planner_geometry_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+)
