@@ -1,0 +1,2 @@
+ament_add_gtest(obstacle_too_close_evaluator_tests obstacle_too_close_evaluator_tests.cpp)
+target_link_libraries(obstacle_too_close_evaluator_tests ${PROJECT_NAME})

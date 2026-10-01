@@ -1,32 +1,23 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>easynav_costmap_localizer</name>
+  <name>easynav_obstacle_too_close_evaluator</name>
   <version>0.4.2</version>
-  <description>Easy Navigation: Costmap Localizer package.</description>
+  <description>Easy Navigation: recovery evaluator that diagnoses the robot being stopped too close to an obstacle.</description>
   <maintainer email="fmrico@gmail.com">Francisco Martín Rico</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>easynav_common</depend>
-  <depend>easynav_costmap_common</depend>
-  <depend>easynav_localizer</depend>
   <depend>easynav_core</depend>
   <depend>easynav_diagnostic_recovery</depend>
-  <depend>easynav_sensors</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
-  <depend>tf2</depend>
-  <depend>tf2_ros</depend>
-  <depend>tf2_geometry_msgs</depend>
-  <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>diagnostic_msgs</depend>
-  <depend>eigen</depend>
 
   <test_depend>rclcpp_lifecycle</test_depend>
-  <test_depend>std_srvs</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
   <test_depend>ament_cmake_gtest</test_depend>

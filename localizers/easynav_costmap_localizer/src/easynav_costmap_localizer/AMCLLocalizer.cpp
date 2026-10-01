@@ -317,12 +317,23 @@ void printTransform(const tf2::Transform & tf)
             << rot.w() << "]\n";
 }
 
+namespace
+{
+// Position + yaw dispersion (variances x, y, yaw), read by AmclConvergenceEvaluator.
+double covariance_trace(const nav_msgs::msg::Odometry & odom)
+{
+  return odom.pose.covariance[0] + odom.pose.covariance[7] + odom.pose.covariance[35];
+}
+}  // namespace
+
 void
 AMCLLocalizer::update_rt(NavState & nav_state)
 {
   predict(nav_state);
 
-  nav_state.set("robot_pose", get_pose());
+  const auto odom = get_pose();
+  nav_state.set("robot_pose", odom);
+  nav_state.set("localizer.amcl.covariance_trace", covariance_trace(odom));
 }
 
 void
@@ -335,7 +346,9 @@ AMCLLocalizer::update(NavState & nav_state)
     last_reseed_ = get_node()->now();
   }
 
-  nav_state.set("robot_pose", get_pose());
+  const auto odom = get_pose();
+  nav_state.set("robot_pose", odom);
+  nav_state.set("localizer.amcl.covariance_trace", covariance_trace(odom));
 
   publishParticles();
 }

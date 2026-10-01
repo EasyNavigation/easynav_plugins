@@ -1,0 +1,11 @@
+<class_libraries>
+  <library path="easynav_diagnostic_recovery">
+    <class name="easynav_diagnostic_recovery/DiagnosticRecoveryManager" type="easynav_diagnostic_recovery::DiagnosticRecoveryManager" base_class_type="easynav::RecoveryManagerBase">
+      <description>
+      A diagnosis-driven recovery system: level-0 safety reflexes (RT) and level-1 evaluators and
+      mitigations with priority-based arbitration, loaded from its own "safety_reflex_types",
+      "evaluator_types" and "mitigation_types" parameters (under "recovery_manager.").
+      </description>
+    </class>
+  </library>
+</class_libraries>

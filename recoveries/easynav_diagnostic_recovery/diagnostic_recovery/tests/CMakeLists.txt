@@ -1,0 +1,16 @@
+find_package(easynav_recovery REQUIRED)
+find_package(lifecycle_msgs REQUIRED)
+
+ament_add_gtest(diagnostic_recovery_bases_tests diagnostic_recovery_bases_tests.cpp)
+target_link_libraries(diagnostic_recovery_bases_tests ${PROJECT_NAME})
+
+ament_add_gtest(obstacle_proximity_tests obstacle_proximity_tests.cpp)
+target_link_libraries(obstacle_proximity_tests ${PROJECT_NAME})
+
+ament_add_gtest(diagnostic_recovery_manager_tests diagnostic_recovery_manager_tests.cpp)
+target_link_libraries(diagnostic_recovery_manager_tests
+  ${PROJECT_NAME} easynav_recovery::easynav_recovery ${lifecycle_msgs_TARGETS})
+
+ament_add_gtest(diagnostic_recovery_manager_reflex_tests diagnostic_recovery_manager_reflex_tests.cpp)
+target_link_libraries(diagnostic_recovery_manager_reflex_tests
+  ${PROJECT_NAME} easynav_recovery::easynav_recovery ${lifecycle_msgs_TARGETS})

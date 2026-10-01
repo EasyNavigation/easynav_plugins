@@ -147,3 +147,19 @@ TEST_F(CostmapLastKnownPoseTest, ChainOfReconfigurations)
     nav_state.set("robot_pose", pose_at(-3.0 + i + 1, 4.0, -1.2));
   }
 }
+
+TEST_F(CostmapLastKnownPoseTest, PublishesItsCovarianceTrace)
+{
+  // Read by AmclConvergenceEvaluator: variances x + y + yaw of the published pose.
+  auto localizer = make_localizer(false);
+  easynav::NavState nav_state;
+  EXPECT_FALSE(nav_state.has("localizer.amcl.covariance_trace"));
+
+  localizer->internal_update_rt(nav_state, true);
+  ASSERT_TRUE(nav_state.has("localizer.amcl.covariance_trace"));
+  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  EXPECT_DOUBLE_EQ(
+    nav_state.get<double>("localizer.amcl.covariance_trace"),
+    pose.pose.covariance[0] + pose.pose.covariance[7] + pose.pose.covariance[35]);
+  EXPECT_LT(nav_state.get<double>("localizer.amcl.covariance_trace"), 0.01) << "converged";
+}
