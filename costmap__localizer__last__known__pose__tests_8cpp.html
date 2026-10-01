@@ -180,13 +180,14 @@ Functions</h2></td></tr>
 <tr class="memitem:aad69cb9244698aeb6eac0278a80cd1e8" id="r_aad69cb9244698aeb6eac0278a80cd1e8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aad69cb9244698aeb6eac0278a80cd1e8">TEST_F</a> (CostmapLastKnownPoseTest, IgnoresAPoseInAnotherFrame)</td></tr>
 <tr class="memitem:aa0c0482d43c34ed9330f6893a08efe58" id="r_aa0c0482d43c34ed9330f6893a08efe58"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa0c0482d43c34ed9330f6893a08efe58">TEST_F</a> (CostmapLastKnownPoseTest, KeepsTheInitialPoseOnAFreshStart)</td></tr>
 <tr class="memitem:a6389078d21e50f20b62771d6e1d4afb9" id="r_a6389078d21e50f20b62771d6e1d4afb9"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a6389078d21e50f20b62771d6e1d4afb9">TEST_F</a> (CostmapLastKnownPoseTest, KeepsTheInitialPoseWhenDisabled)</td></tr>
+<tr class="memitem:a64552f82e29ee5849129fa4bc5d81723" id="r_a64552f82e29ee5849129fa4bc5d81723"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a64552f82e29ee5849129fa4bc5d81723">TEST_F</a> (CostmapLastKnownPoseTest, PublishesItsCovarianceTrace)</td></tr>
 <tr class="memitem:a674f811f1c97312fc080e0f89a9eb430" id="r_a674f811f1c97312fc080e0f89a9eb430"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a674f811f1c97312fc080e0f89a9eb430">TEST_F</a> (CostmapLastKnownPoseTest, StartsFromTheLastKnownPose)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>After a reconfiguration, the localizer starts from the pose the previous one left in NavState ("robot_pose"), whatever localizer that was. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="ad20b1d8509abc88a87b51f64d67a6520" name="ad20b1d8509abc88a87b51f64d67a6520"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad20b1d8509abc88a87b51f64d67a6520">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad20b1d8509abc88a87b51f64d67a6520">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,7 +208,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="aad69cb9244698aeb6eac0278a80cd1e8" name="aad69cb9244698aeb6eac0278a80cd1e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad69cb9244698aeb6eac0278a80cd1e8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aad69cb9244698aeb6eac0278a80cd1e8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -228,7 +229,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="aa0c0482d43c34ed9330f6893a08efe58" name="aa0c0482d43c34ed9330f6893a08efe58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa0c0482d43c34ed9330f6893a08efe58">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0c0482d43c34ed9330f6893a08efe58">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -249,7 +250,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a6389078d21e50f20b62771d6e1d4afb9" name="a6389078d21e50f20b62771d6e1d4afb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6389078d21e50f20b62771d6e1d4afb9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6389078d21e50f20b62771d6e1d4afb9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -269,8 +270,29 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a64552f82e29ee5849129fa4bc5d81723" name="a64552f82e29ee5849129fa4bc5d81723"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64552f82e29ee5849129fa4bc5d81723">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype">CostmapLastKnownPoseTest</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PublishesItsCovarianceTrace</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a674f811f1c97312fc080e0f89a9eb430" name="a674f811f1c97312fc080e0f89a9eb430"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a674f811f1c97312fc080e0f89a9eb430">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a674f811f1c97312fc080e0f89a9eb430">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

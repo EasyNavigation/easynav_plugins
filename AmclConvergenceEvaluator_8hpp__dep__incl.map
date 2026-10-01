@@ -1,0 +1,7 @@
+<map id="localizers/easynav_costmap_localizer/include/easynav_costmap_localizer/AmclConvergenceEvaluator.hpp" name="localizers/easynav_costmap_localizer/include/easynav_costmap_localizer/AmclConvergenceEvaluator.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the AmclConvergenceEvaluator plugin." alt="" coords="117,5,327,76"/>
+<area shape="rect" id="Node000002" href="$AmclConvergenceEvaluator_8cpp.html" title="Implementation of the AmclConvergenceEvaluator class." alt="" coords="5,124,215,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,89,145,126,141,122,177,85"/>
+<area shape="rect" id="Node000003" href="$amcl__convergence__evaluator__tests_8cpp.html" title=" " alt="" coords="238,124,432,195"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="268,85,304,122,300,126,264,89"/>
+</map>

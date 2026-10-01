@@ -8,7 +8,9 @@ var searchData=
   ['addnewchunk_5',['addNewChunk',['../classBonxai_1_1GridBlockAllocator.html#a28457293f4b91d2dc56d0ad370667ce5',1,'Bonxai::GridBlockAllocator']]],
   ['allocateblock_6',['allocateBlock',['../classBonxai_1_1GridBlockAllocator.html#a438f29511c88cc74e66387b80a3d42cc',1,'Bonxai::GridBlockAllocator']]],
   ['allocateleafgrid_7',['allocateLeafGrid',['../classBonxai_1_1VoxelGrid.html#ab89ed26d435db829dd1d0aa154002497',1,'Bonxai::VoxelGrid']]],
-  ['amcllocalizer_8',['AMCLLocalizer',['../classeasynav_1_1AMCLLocalizer.html#ae43acada46bbf822e12270e8adc71468',1,'easynav::AMCLLocalizer::AMCLLocalizer()'],['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#ae43acada46bbf822e12270e8adc71468',1,'easynav::navmap::AMCLLocalizer::AMCLLocalizer()'],['../classeasynav_1_1AMCLLocalizer.html#ae43acada46bbf822e12270e8adc71468',1,'easynav::AMCLLocalizer::AMCLLocalizer()']]],
-  ['astarplanner_9',['AStarPlanner',['../classeasynav_1_1navmap_1_1AStarPlanner.html#a343947e2a1a19001b220b82a30f5b341',1,'easynav::navmap::AStarPlanner']]],
-  ['at_10',['at',['../classeasynav_1_1SimpleMap.html#ac83c576245df837c206ce7d700f8ddd8',1,'easynav::SimpleMap::at(int x, int y) const'],['../classeasynav_1_1SimpleMap.html#a6b852f46693bbc66ca36f749e27261bc',1,'easynav::SimpleMap::at(int x, int y)']]]
+  ['amclconvergenceevaluator_8',['AmclConvergenceEvaluator',['../classeasynav_1_1AmclConvergenceEvaluator.html#ad16ea77cd19b2b0e9971ec3ae1e18ade',1,'easynav::AmclConvergenceEvaluator']]],
+  ['amcllocalizer_9',['AMCLLocalizer',['../classeasynav_1_1AMCLLocalizer.html#ae43acada46bbf822e12270e8adc71468',1,'easynav::AMCLLocalizer::AMCLLocalizer()'],['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#ae43acada46bbf822e12270e8adc71468',1,'easynav::navmap::AMCLLocalizer::AMCLLocalizer()'],['../classeasynav_1_1AMCLLocalizer.html#ae43acada46bbf822e12270e8adc71468',1,'easynav::AMCLLocalizer::AMCLLocalizer()']]],
+  ['amclrelocalizemitigation_10',['AmclRelocalizeMitigation',['../classeasynav_1_1AmclRelocalizeMitigation.html#a0276c5ca0068409832c13e3b3c295d4a',1,'easynav::AmclRelocalizeMitigation']]],
+  ['astarplanner_11',['AStarPlanner',['../classeasynav_1_1navmap_1_1AStarPlanner.html#a343947e2a1a19001b220b82a30f5b341',1,'easynav::navmap::AStarPlanner']]],
+  ['at_12',['at',['../classeasynav_1_1SimpleMap.html#ac83c576245df837c206ce7d700f8ddd8',1,'easynav::SimpleMap::at(int x, int y) const'],['../classeasynav_1_1SimpleMap.html#a6b852f46693bbc66ca36f749e27261bc',1,'easynav::SimpleMap::at(int x, int y)']]]
 ];

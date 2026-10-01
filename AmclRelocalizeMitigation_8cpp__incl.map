@@ -1,0 +1,17 @@
+<map id="localizers/easynav_costmap_localizer/src/easynav_costmap_localizer/AmclRelocalizeMitigation.cpp" name="localizers/easynav_costmap_localizer/src/easynav_costmap_localizer/AmclRelocalizeMitigation.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the AmclRelocalizeMitigation class." alt="" coords="462,5,656,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,227,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="462,67,184,130,183,125,460,62"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="250,124,424,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="484,79,395,120,393,115,482,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="448,132,669,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="561,76,561,116,556,116,556,76"/>
+<area shape="rect" id="Node000005" href="$AmclRelocalizeMitigation_8hpp.html" title="Declaration of the AmclRelocalizeMitigation plugin." alt="" coords="694,124,888,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="639,74,733,115,731,120,637,79"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="912,124,1040,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="657,63,898,121,896,126,656,68"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="648,228,757,253"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="774,167,726,218,722,215,770,163"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="782,213,973,268"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="811,163,844,199,840,203,807,167"/>
+</map>

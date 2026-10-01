@@ -1,0 +1,7 @@
+<map id="localizers/easynav_costmap_localizer/include/easynav_costmap_localizer/AmclRelocalizeMitigation.hpp" name="localizers/easynav_costmap_localizer/include/easynav_costmap_localizer/AmclRelocalizeMitigation.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the AmclRelocalizeMitigation plugin." alt="" coords="50,5,244,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,139,115,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,78,81,129,77,125,117,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="139,124,330,180"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="177,75,205,110,201,114,172,78"/>
+</map>

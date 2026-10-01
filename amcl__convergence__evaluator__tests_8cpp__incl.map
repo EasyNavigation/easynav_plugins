@@ -1,0 +1,17 @@
+<map id="localizers/easynav_costmap_localizer/tests/amcl_convergence_evaluator_tests.cpp" name="localizers/easynav_costmap_localizer/tests/amcl_convergence_evaluator_tests.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="186,5,381,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,66,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,79,79,126,77,128,75,123,77,122,194,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="90,132,147,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="228,79,152,125,150,121,226,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="172,132,265,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="264,78,236,120,232,117,259,75"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="289,132,408,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="308,75,335,117,331,120,303,78"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="432,124,594,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="363,74,456,115,454,120,361,79"/>
+<area shape="rect" id="Node000007" href="$AmclConvergenceEvaluator_8hpp.html" title="Declaration of the AmclConvergenceEvaluator plugin." alt="" coords="618,124,827,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="381,62,623,117,622,123,380,67"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="628,213,817,268"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="725,165,725,197,720,197,720,165"/>
+</map>
