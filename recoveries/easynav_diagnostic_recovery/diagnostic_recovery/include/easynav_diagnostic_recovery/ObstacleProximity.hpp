@@ -37,6 +37,10 @@ struct ObstacleProximity
 
   /// @brief Bearing to the nearest perceived point (rad), 0 = straight ahead, atan2 convention.
   double bearing {0.0};
+
+  /// @brief Whether any point perception had data. If not, distance = +infinity means "unknown",
+  /// not "nothing near".
+  bool perceived {false};
 };
 
 /**
@@ -49,10 +53,15 @@ struct ObstacleProximity
  * to resume, or in which direction to retreat).
  *
  * @param nav_state Current navigation state.
- * @return The nearest perception's distance and bearing, or distance = +infinity if there is no
- * point-cloud perception available.
+ * @param z_min Points below this height (robot frame) are ignored, e.g. the ground.
+ * @param z_max Points above this height (robot frame) are ignored, e.g. above the robot.
+ * @return The nearest perception's distance and bearing, or distance = +infinity if no point is
+ * in range (see ObstacleProximity::perceived).
  */
-ObstacleProximity compute_nearest_obstacle(easynav::NavState & nav_state);
+ObstacleProximity compute_nearest_obstacle(
+  easynav::NavState & nav_state,
+  double z_min = -std::numeric_limits<double>::infinity(),
+  double z_max = std::numeric_limits<double>::infinity());
 
 }  // namespace easynav_diagnostic_recovery
 

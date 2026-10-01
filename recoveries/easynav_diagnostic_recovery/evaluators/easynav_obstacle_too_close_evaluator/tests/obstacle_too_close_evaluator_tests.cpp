@@ -141,6 +141,47 @@ TEST_F(ObstacleTooCloseEvaluatorTestCase, ErrorWhenStoppedTooCloseToAnObstacle)
   EXPECT_NEAR(std::stod(status.values[0].value), 0.2, 1e-3);
 }
 
+TEST_F(ObstacleTooCloseEvaluatorTestCase, IgnoresPointsOutsideTheRobotHeight)
+{
+  // The ground seen by a 3D lidar (below z_min_filter) and anything above the robot
+  // (robot_geometry height) are not obstacles.
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_height_node",
+    rclcpp::NodeOptions()
+    .append_parameter_override("close_h.debounce_duration", 0.0)
+    .append_parameter_override("close_h.z_min_filter", 0.1)
+    .append_parameter_override("close_h.freq", 200.0));
+  auto eval = make_ready_evaluator(node, "close_h");
+
+  easynav::NavState nav_state;
+  nav_state.set("robot_pose", make_odom(0.0, 0.0));
+  auto ground = make_obstacle_at(0.2, 0.0);  // z = 0.0
+  nav_state.set("obstacle_scan", ground);
+  std::this_thread::sleep_for(std::chrono::milliseconds(10));  // At most at "freq"
+  eval->internal_update(nav_state);
+  EXPECT_EQ(
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.close_h").level,
+    diagnostic_msgs::msg::DiagnosticStatus::OK) << "the ground";
+
+  auto above = make_obstacle_at(0.2, 0.0);
+  above.data.points[0].z = 3.0;
+  nav_state.set("obstacle_scan", above);
+  std::this_thread::sleep_for(std::chrono::milliseconds(10));  // At most at "freq"
+  eval->internal_update(nav_state);
+  EXPECT_EQ(
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.close_h").level,
+    diagnostic_msgs::msg::DiagnosticStatus::OK) << "above the robot";
+
+  auto real = make_obstacle_at(0.2, 0.0);
+  real.data.points[0].z = 0.3;
+  nav_state.set("obstacle_scan", real);
+  std::this_thread::sleep_for(std::chrono::milliseconds(10));  // At most at "freq"
+  eval->internal_update(nav_state);
+  EXPECT_EQ(
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.close_h").level,
+    diagnostic_msgs::msg::DiagnosticStatus::ERROR);
+}
+
 // ---------------------------------------------------------------------------
 // Debounce window: "stopped" must be sustained for a short interval before it is trusted, so a
 // single low-velocity sample taken mid-brake (RT and non-RT cycles run in parallel) cannot be

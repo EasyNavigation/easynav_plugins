@@ -25,12 +25,16 @@
 namespace easynav_diagnostic_recovery
 {
 
-ObstacleProximity compute_nearest_obstacle(easynav::NavState & nav_state)
+ObstacleProximity compute_nearest_obstacle(
+  easynav::NavState & nav_state, double z_min, double z_max)
 {
   ObstacleProximity result;
 
   const auto & perceptions = nav_state.get_by_type<easynav::PointPerception>();
-  if (perceptions.empty()) {
+  for (const auto & perception : perceptions) {
+    result.perceived = result.perceived || perception->valid;
+  }
+  if (!result.perceived) {
     return result;
   }
 
@@ -46,6 +50,7 @@ ObstacleProximity compute_nearest_obstacle(easynav::NavState & nav_state)
 
   for (const auto & p : cloud.points) {
     if (!std::isfinite(p.x) || !std::isfinite(p.y) || !std::isfinite(p.z)) {continue;}
+    if (p.z < z_min || p.z > z_max) {continue;}
 
     const double d_sq = static_cast<double>(p.x) * p.x + static_cast<double>(p.y) * p.y;
     if (d_sq < min_dist_sq) {

@@ -82,19 +82,19 @@ CollisionSafetyReflex::check(NavState & nav_state)
   const double a_brake = std::max(brake_acc_, 1e-3);
   const double t_stop = v_norm / a_brake;
 
-  std::vector<double> min({
-      static_cast<double>(-robot_radius_ - safety_margin_),
-      static_cast<double>(-robot_radius_ - safety_margin_),
-      static_cast<double>(z_min_filter_)});
-  std::vector<double> max({
-      static_cast<double>(robot_radius_ + safety_margin_ +
-      std::max(0.0, v_norm * v_norm / (2.0 * std::max(brake_acc_, 1e-3)))),
-      static_cast<double>(robot_radius_ + safety_margin_),
-      static_cast<double>(robot_height_)});
+  // Broad phase: the robot, plus its stopping distance in the direction it moves (forward,
+  // backward or sideways).
+  const double reach = robot_radius_ + safety_margin_;
+  const double stop_distance = v_norm * v_norm / (2.0 * a_brake);
+  const double ext_x = v_norm > 1e-6 ? stop_distance * vx / v_norm : 0.0;
+  const double ext_y = v_norm > 1e-6 ? stop_distance * vy / v_norm : 0.0;
+  std::vector<double> min({-reach + std::min(0.0, ext_x), -reach + std::min(0.0, ext_y),
+      z_min_filter_});
+  std::vector<double> max({reach + std::max(0.0, ext_x), reach + std::max(0.0, ext_y),
+      robot_height_});
 
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(downsample_leaf_size_)
-  .filter({-2.0, -2.0, -2.0}, {2.0, 2.0, 2.0}, false)
   .fuse(robot_frame)
   .filter(min, max);
 

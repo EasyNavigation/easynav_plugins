@@ -20,6 +20,7 @@
 
 #include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -126,6 +127,10 @@ private:
   std::vector<std::shared_ptr<SafetyReflexBase>> safety_reflexes_;
   std::vector<std::shared_ptr<RecoveryEvaluatorBase>> evaluators_;
   std::vector<std::shared_ptr<RecoveryMitigationBase>> mitigations_;
+
+  /// @brief Guards the arbitration state below, shared by update() (selects, cycles
+  /// non-control mitigations) and update_rt() (cycles the control-owning one).
+  mutable std::mutex arbitration_mutex_;
 
   std::shared_ptr<RecoveryMitigationBase> active_mitigation_;
 

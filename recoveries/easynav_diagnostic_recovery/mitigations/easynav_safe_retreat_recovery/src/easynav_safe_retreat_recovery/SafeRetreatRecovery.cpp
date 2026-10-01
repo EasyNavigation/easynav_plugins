@@ -40,6 +40,10 @@ void SafeRetreatRecovery::on_initialize()
 
   node->get_parameter<double>(plugin_name + ".retreat_speed", retreat_speed_);
   node->get_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".z_min_filter", z_min_filter_);
+  node->get_parameter<double>(plugin_name + ".z_min_filter", z_min_filter_);
+  robot_height_ = get_robot_geometry().height;
 }
 
 bool SafeRetreatRecovery::can_handle(const diagnostic_msgs::msg::DiagnosticStatus & status) const
@@ -57,10 +61,21 @@ void SafeRetreatRecovery::on_start(NavState & nav_state)
 
 easynav_diagnostic_recovery::RecoveryStatus SafeRetreatRecovery::on_cycle(NavState & nav_state)
 {
-  const auto obstacle = easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state);
+  const auto obstacle = easynav_diagnostic_recovery::compute_nearest_obstacle(
+    nav_state, z_min_filter_, robot_height_);
+
+  if (!obstacle.perceived) {
+    // Blind: neither this nor the collision reflex can see the obstacle. Stay stopped and give
+    // up, so the next mitigation (e.g. waiting for a human) takes over.
+    report(
+      nav_state, rcl_interfaces::msg::Log::ERROR,
+      "SafeRetreatRecovery [" + get_plugin_name() + "]: no perception, cannot retreat safely");
+    stop_robot(nav_state);
+    return easynav_diagnostic_recovery::RecoveryStatus::FAILED;
+  }
 
   if (!std::isfinite(obstacle.distance) || obstacle.distance >= safe_distance_) {
-    // Nothing to retreat from (perception lost) or already far enough: done.
+    // Nothing near anymore, or already far enough: done.
     stop_robot(nav_state);
     return easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED;
   }

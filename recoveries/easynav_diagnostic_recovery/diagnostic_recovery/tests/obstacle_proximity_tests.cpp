@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <array>
 #include <cmath>
+#include <vector>
 
 #include "gtest/gtest.h"
 
@@ -83,4 +85,68 @@ TEST_F(ObstacleProximityTest, ReportsBearingForAnObstacleBehindTheRobot)
   ASSERT_TRUE(std::isfinite(result.distance));
   EXPECT_NEAR(result.distance, 1.0, 1e-6);
   EXPECT_NEAR(std::abs(result.bearing), M_PI, 1e-6);  // behind: bearing near +-pi
+}
+
+namespace
+{
+
+easynav::PointPerception scan_with(std::vector<std::array<float, 3>> points, bool valid = true)
+{
+  easynav::PointPerception perception;
+  perception.frame_id = "base_link";
+  perception.stamp = rclcpp::Time(0);
+  perception.valid = valid;
+  for (const auto & p : points) {
+    perception.data.push_back(pcl::PointXYZ(p[0], p[1], p[2]));
+  }
+  return perception;
+}
+
+}  // namespace
+
+TEST_F(ObstacleProximityTest, NotPerceivedWithoutPerceptionsOrData)
+{
+  easynav::NavState nav_state;
+  EXPECT_FALSE(easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state).perceived);
+
+  nav_state.set("scan", scan_with({{1.0, 0.0, 0.2}}, false));  // Before its first data
+  const auto result = easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state);
+  EXPECT_FALSE(result.perceived);
+  EXPECT_FALSE(std::isfinite(result.distance));
+}
+
+TEST_F(ObstacleProximityTest, PerceivedButNothingInRangeIsAClearScene)
+{
+  easynav::NavState nav_state;
+  nav_state.set("scan", scan_with({}));
+  const auto result = easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state);
+  EXPECT_TRUE(result.perceived);
+  EXPECT_FALSE(std::isfinite(result.distance));
+}
+
+TEST_F(ObstacleProximityTest, IgnoresPointsOutsideTheHeightRange)
+{
+  // E.g. the ground seen by a 3D lidar, and a ceiling above the robot.
+  easynav::NavState nav_state;
+  nav_state.set("scan", scan_with({{0.3, 0.0, -0.2}, {0.4, 0.0, 2.5}, {1.5, 0.0, 0.5}}));
+
+  auto all = easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state);
+  EXPECT_NEAR(all.distance, 0.3, 1e-6) << "no range: every point counts";
+
+  auto in_range = easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state, 0.0, 1.0);
+  EXPECT_TRUE(in_range.perceived);
+  EXPECT_NEAR(in_range.distance, 1.5, 1e-6);
+
+  auto none = easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state, 0.6, 1.0);
+  EXPECT_TRUE(none.perceived);
+  EXPECT_FALSE(std::isfinite(none.distance));
+}
+
+TEST_F(ObstacleProximityTest, HeightRangeIsInclusive)
+{
+  easynav::NavState nav_state;
+  nav_state.set("scan", scan_with({{1.0, 0.0, 0.0}, {2.0, 0.0, 1.0}}));
+  EXPECT_NEAR(
+    easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state, 0.0, 1.0).distance, 1.0,
+    1e-6) << "a 2D laser at the robot frame's height counts";
 }

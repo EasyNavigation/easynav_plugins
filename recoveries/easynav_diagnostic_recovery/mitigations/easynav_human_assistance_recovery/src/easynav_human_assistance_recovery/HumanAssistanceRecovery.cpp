@@ -52,12 +52,11 @@ bool HumanAssistanceRecovery::can_handle(
 
 void HumanAssistanceRecovery::on_start(NavState & nav_state)
 {
-  // Selection (and so on_start()) always runs from RecoveryManagerNode::cycle(), the same
-  // non-RT thread the evaluators that wrote "diagnostics" run on, so a plain get() is safe here.
+  // The group also holds safety-reflex diagnostics, written from the RT cycle: get_safe().
   std::string summary;
   for (const auto & key : nav_state.get_group_keys("diagnostics")) {
     if (!nav_state.has(key)) {continue;}
-    const auto & status = nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>(key);
+    const auto status = nav_state.get_safe<diagnostic_msgs::msg::DiagnosticStatus>(key);
     if (status.level >= diagnostic_msgs::msg::DiagnosticStatus::ERROR) {
       if (!summary.empty()) {summary += ", ";}
       summary += key + " (" + status.message + ")";
@@ -84,7 +83,9 @@ easynav_diagnostic_recovery::RecoveryStatus HumanAssistanceRecovery::on_cycle(Na
   for (const auto & key : nav_state.get_group_keys("diagnostics")) {
     if (!nav_state.has(key)) {continue;}
     const auto status = nav_state.get_safe<diagnostic_msgs::msg::DiagnosticStatus>(key);
-    if (status.level >= diagnostic_msgs::msg::DiagnosticStatus::ERROR) {
+    // Only errors it handles: an ignored one (e.g. ros_graph) is for another mitigation, which
+    // can only be selected once this one ends.
+    if (can_handle(status)) {
       any_error = true;
       break;
     }

@@ -123,16 +123,50 @@ TEST_F(SafeRetreatRecoveryTestCase, SucceedsOnceFarEnough)
   EXPECT_DOUBLE_EQ(cmd.twist.linear.x, 0.0);
 }
 
-TEST_F(SafeRetreatRecoveryTestCase, SucceedsWhenNoObstaclePerceptionAtAll)
+TEST_F(SafeRetreatRecoveryTestCase, FailsStoppedWithoutPerception)
 {
+  // Blind: the obstacle may still be there; another mitigation must take over.
   auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_none_node");
   auto rec = make_recovery(node, "retreat4");
 
   easynav::NavState nav_state;  // no perception at all
+  EXPECT_EQ(rec->internal_cycle(nav_state), easynav_diagnostic_recovery::RecoveryStatus::FAILED);
+  auto stop = easynav::velocity_command::peek(nav_state, easynav::VelocitySource::TAKEOVER);
+  ASSERT_TRUE(stop.has_value());
+  EXPECT_DOUBLE_EQ(stop->twist.linear.x, 0.0);
 
-  auto status = rec->internal_cycle(nav_state);
+  easynav::PointPerception no_data_yet;
+  nav_state.set("scan", no_data_yet);
+  EXPECT_EQ(rec->internal_cycle(nav_state), easynav_diagnostic_recovery::RecoveryStatus::FAILED);
+}
 
-  EXPECT_EQ(status, easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED);
+TEST_F(SafeRetreatRecoveryTestCase, SucceedsWhenTheSceneIsClear)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_clear_node");
+  auto rec = make_recovery(node, "retreat5");
+
+  easynav::NavState nav_state;
+  easynav::PointPerception empty_scan;
+  empty_scan.frame_id = "base_link";
+  empty_scan.valid = true;  // Perceiving, nothing in range
+  nav_state.set("scan", empty_scan);
+  EXPECT_EQ(
+    rec->internal_cycle(nav_state), easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED);
+}
+
+TEST_F(SafeRetreatRecoveryTestCase, IgnoresTheGround)
+{
+  // A 3D lidar sees the ground right in front of the robot: not an obstacle to retreat from.
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_ground_node",
+    rclcpp::NodeOptions().append_parameter_override("retreat6.z_min_filter", 0.1));
+  auto rec = make_recovery(node, "retreat6");
+
+  easynav::NavState nav_state;
+  auto ground = make_obstacle_at(0.2, 0.0);  // z = 0.0
+  nav_state.set("scan", ground);
+  EXPECT_EQ(
+    rec->internal_cycle(nav_state), easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED);
 }
 
 TEST_F(SafeRetreatRecoveryTestCase, FailsSafelyWhenObstacleIsBehind)

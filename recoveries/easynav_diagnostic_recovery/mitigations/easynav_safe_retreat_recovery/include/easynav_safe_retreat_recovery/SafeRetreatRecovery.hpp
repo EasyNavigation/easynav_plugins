@@ -59,6 +59,12 @@ private:
 
   /// @brief Distance (m) at which the retreat is considered complete.
   double safe_distance_ {0.6};
+
+  /// @brief Points below it (robot frame) are not obstacles, e.g. the ground (m).
+  double z_min_filter_ {0.0};
+
+  /// @brief Points above it are not obstacles: the robot's height (robot_geometry).
+  double robot_height_ {0.5};
 };
 
 }  // namespace easynav

@@ -247,6 +247,9 @@ DiagnosticRecoveryManager::update(easynav::NavState & nav_state)
     evaluator->internal_update(nav_state);
   }
 
+  // The RT cycle never sees a mitigation half started or half stopped.
+  std::lock_guard<std::mutex> lock(arbitration_mutex_);
+
   if (active_mitigation_) {
     // Only cycle it here if it does not require control (control-owning mitigations are
     // driven by update_rt() instead). Either way, do not attempt a new selection in the same
@@ -281,8 +284,11 @@ DiagnosticRecoveryManager::update_rt(easynav::NavState & nav_state)
 
   bool commanded = false;
 
-  // 1. A control-owning mitigation commands the robot instead of the controller.
-  if (active_mitigation_ && active_mitigation_->requires_control()) {
+  // 1. A control-owning mitigation commands the robot instead of the controller. Never blocks:
+  // if update() is selecting or stopping a mitigation, this cycle skips it (the velocity mux
+  // keeps the last target for one cycle).
+  std::unique_lock<std::mutex> lock(arbitration_mutex_, std::try_to_lock);
+  if (lock.owns_lock() && active_mitigation_ && active_mitigation_->requires_control()) {
     RecoveryStatus status = active_mitigation_->internal_cycle(nav_state);
     if (status != RecoveryStatus::RUNNING) {
       if (status == RecoveryStatus::FAILED) {
@@ -294,6 +300,9 @@ DiagnosticRecoveryManager::update_rt(easynav::NavState & nav_state)
       nav_state.set("control_owner", std::string("controller"));
     }
     commanded = true;
+  }
+  if (lock.owns_lock()) {
+    lock.unlock();
   }
 
   // 2. Level-0 safety reflexes: every RT cycle, against the command about to be sent (the
@@ -435,7 +444,8 @@ DiagnosticRecoveryManager::try_select_mitigation(easynav::NavState & nav_state)
     if (!nav_state.has(key)) {
       continue;
     }
-    const auto & status = nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>(key);
+    // Some entries (e.g. a SafetyReflexBase's) are written from the RT cycle: get_safe().
+    const auto status = nav_state.get_safe<diagnostic_msgs::msg::DiagnosticStatus>(key);
     if (status.level == diagnostic_msgs::msg::DiagnosticStatus::OK) {
       // Resolved: forget which mitigations were already excluded for it, so a future
       // recurrence of this diagnostic starts escalation from the first candidate again.
@@ -461,14 +471,15 @@ DiagnosticRecoveryManager::try_select_mitigation(easynav::NavState & nav_state)
         get_node()->get_logger(), "Selecting mitigation [%s] for diagnostic [%s]",
         mitigation->get_plugin_name().c_str(), key.c_str());
 
+      // Fully started before it becomes the active one (under arbitration_mutex_).
+      mitigation->internal_start(nav_state);
+      if (mitigation->requires_control()) {
+        nav_state.set(
+          "control_owner", std::string("recovery:") + mitigation->get_plugin_name());
+      }
       active_mitigation_ = mitigation;
       active_diagnostic_key_ = key;
       keys_with_mitigation_history_.insert(key);
-      active_mitigation_->internal_start(nav_state);
-      if (active_mitigation_->requires_control()) {
-        nav_state.set(
-          "control_owner", std::string("recovery:") + active_mitigation_->get_plugin_name());
-      }
       return;
     }
   }
@@ -477,6 +488,7 @@ DiagnosticRecoveryManager::try_select_mitigation(easynav::NavState & nav_state)
 std::string
 DiagnosticRecoveryManager::get_active_mitigation_name() const
 {
+  std::lock_guard<std::mutex> lock(arbitration_mutex_);
   return active_mitigation_ ? active_mitigation_->get_plugin_name() : std::string();
 }
 

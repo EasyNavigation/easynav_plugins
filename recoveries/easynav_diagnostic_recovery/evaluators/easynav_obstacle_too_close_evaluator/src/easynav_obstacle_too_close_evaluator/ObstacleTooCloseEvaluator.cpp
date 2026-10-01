@@ -42,6 +42,10 @@ void ObstacleTooCloseEvaluator::on_initialize()
       debounce_duration_);
 
   node->get_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".z_min_filter", z_min_filter_);
+  node->get_parameter<double>(plugin_name + ".z_min_filter", z_min_filter_);
+  robot_height_ = get_robot_geometry().height;
   node->get_parameter<double>(plugin_name + ".linear_velocity_epsilon", linear_velocity_epsilon_);
   node->get_parameter<double>(
     plugin_name + ".angular_velocity_epsilon", angular_velocity_epsilon_);
@@ -99,7 +103,8 @@ void ObstacleTooCloseEvaluator::update(NavState & nav_state)
     return;
   }
 
-  const auto obstacle = easynav_diagnostic_recovery::compute_nearest_obstacle(nav_state);
+  const auto obstacle = easynav_diagnostic_recovery::compute_nearest_obstacle(
+    nav_state, z_min_filter_, robot_height_);
   if (std::isfinite(obstacle.distance) && obstacle.distance < safe_distance_) {
     status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
     status.message = "stopped too close to an obstacle";

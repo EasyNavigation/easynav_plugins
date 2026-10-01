@@ -123,11 +123,8 @@ SafetyReflexBase::report_diagnostic(
   const std::string key = "diagnostics." + get_plugin_name();
   nav_state.set(key, status);
 
-  auto members = nav_state.get_group_keys("diagnostics");
-  if (std::find(members.begin(), members.end(), key) == members.end()) {
-    members.push_back(key);
-    nav_state.set_group("diagnostics", members);
-  }
+  // Atomic: evaluators (non-RT) and safety reflexes (RT) add their keys concurrently.
+  nav_state.add_to_group("diagnostics", key);
 }
 
 }  // namespace easynav_diagnostic_recovery

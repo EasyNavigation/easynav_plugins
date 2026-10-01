@@ -173,6 +173,27 @@ TEST_F(CollisionSafetyReflexCheckTest, BrakesWhenReversingIntoAnObstacle)
   EXPECT_TRUE(brakes());
 }
 
+TEST_F(CollisionSafetyReflexCheckTest, ReversingLooksAsFarAsItsStoppingDistance)
+{
+  // Behind, beyond robot_radius + safety_margin but within the reverse braking distance.
+  make_reflex({{"collision.brake_acc", 0.1}});  // 0.5 m/s stops in 1.25 m
+  command(VelocitySource::CONTROLLER, -0.5);
+  obstacle_at(-1.2, 0.0);
+  EXPECT_TRUE(brakes());
+
+  command(VelocitySource::CONTROLLER, 0.5);  // Moving away from it
+  EXPECT_FALSE(brakes());
+}
+
+TEST_F(CollisionSafetyReflexCheckTest, LooksBeyondTwoMetersWhenItsStoppingDistanceDoes)
+{
+  // No fixed range limit: what matters is the stopping distance.
+  make_reflex({{"collision.brake_acc", 0.1}});  // 0.8 m/s stops in 3.2 m
+  command(VelocitySource::CONTROLLER, 0.8);
+  obstacle_at(2.8, 0.0);
+  EXPECT_TRUE(brakes());
+}
+
 TEST_F(CollisionSafetyReflexCheckTest, IgnoresObstaclesBesideItsPath)
 {
   make_reflex();

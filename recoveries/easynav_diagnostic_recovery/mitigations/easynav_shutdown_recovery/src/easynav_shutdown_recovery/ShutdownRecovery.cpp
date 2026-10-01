@@ -52,13 +52,12 @@ bool ShutdownRecovery::can_handle(const diagnostic_msgs::msg::DiagnosticStatus &
 
 void ShutdownRecovery::on_start(NavState & nav_state)
 {
-  // Selection (and so on_start()) runs on the same non-RT thread the evaluators that wrote
-  // "diagnostics" run on, so a plain get() is safe here.
+  // The group also holds safety-reflex diagnostics, written from the RT cycle: get_safe().
   std::string reason;
   std::vector<std::string> names;
   for (const auto & key : nav_state.get_group_keys("diagnostics")) {
     if (!nav_state.has(key)) {continue;}
-    const auto & status = nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>(key);
+    const auto status = nav_state.get_safe<diagnostic_msgs::msg::DiagnosticStatus>(key);
     if (!can_handle(status)) {continue;}
     if (!reason.empty()) {reason += "\n";}
     reason += status.name + ": " + status.message;

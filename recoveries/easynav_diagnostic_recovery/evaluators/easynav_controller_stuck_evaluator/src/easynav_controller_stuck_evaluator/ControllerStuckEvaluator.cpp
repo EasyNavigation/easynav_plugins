@@ -80,8 +80,9 @@ void ControllerStuckEvaluator::update(NavState & nav_state)
   // failure. Freeze reference_position_ while this holds, so the first cycle back under
   // "controller" compares against a possibly-stale reference — any real movement made by the
   // mitigation already counts as progress then.
+  // control_owner is reset from the RT cycle: get_safe().
   if (nav_state.has("control_owner") &&
-    nav_state.get<std::string>("control_owner") != "controller")
+    nav_state.get_safe<std::string>("control_owner") != "controller")
   {
     status.message = "a recovery mitigation owns control_owner";
     publish_diagnostic(nav_state, status);
@@ -92,11 +93,13 @@ void ControllerStuckEvaluator::update(NavState & nav_state)
   // because a reflex is holding it back from something real, that is not "stuck".
   for (const auto & key : nav_state.get_group_keys("diagnostics")) {
     if (!nav_state.has(key)) {continue;}
-    const auto & reflex_status = nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>(key);
+    // Reflex diagnostics are written from the RT cycle: get_safe().
+    const auto reflex_status = nav_state.get_safe<diagnostic_msgs::msg::DiagnosticStatus>(key);
     if (reflex_status.hardware_id == "safety_reflex" &&
       reflex_status.level != diagnostic_msgs::msg::DiagnosticStatus::OK)
     {
       status.message = "a safety reflex is intervening";
+      reference_position_.reset();  // A fresh window once it clears
       publish_diagnostic(nav_state, status);
       return;
     }
@@ -107,6 +110,7 @@ void ControllerStuckEvaluator::update(NavState & nav_state)
     !nav_state.get<nav_msgs::msg::Goals>("goals").goals.empty();
   if (!has_active_goal) {
     status.message = "no active goal";
+    reference_position_.reset();
     publish_diagnostic(nav_state, status);
     return;
   }
@@ -124,6 +128,7 @@ void ControllerStuckEvaluator::update(NavState & nav_state)
   const double commanded_speed = std::hypot(cmd.twist.linear.x, cmd.twist.linear.y);
   if (commanded_speed < linear_velocity_threshold_) {
     status.message = "not commanded to move";
+    reference_position_.reset();
     publish_diagnostic(nav_state, status);
     return;
   }
