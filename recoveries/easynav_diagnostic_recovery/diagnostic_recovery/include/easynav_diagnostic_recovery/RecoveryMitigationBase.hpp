@@ -39,7 +39,7 @@ enum class RecoveryStatus
 {
   RUNNING,    ///< Still working; call on_cycle() again next cycle.
   SUCCEEDED,  ///< Done; the diagnostic that triggered this mitigation is considered resolved.
-  FAILED      ///< Gave up; RecoveryManagerNode may try the next applicable mitigator, if any.
+  FAILED      ///< Gave up; DiagnosticRecoveryManager may try the next applicable mitigation.
 };
 
 /**
