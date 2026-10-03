@@ -52,12 +52,18 @@ public:
   void abort_mission(const std::string & reason) override {aborted.push_back(reason);}
   void request_shutdown(const std::string & reason) override {shutdowns.push_back(reason);}
   void hold_mission_progress(bool hold) override {holds.push_back(hold);}
-  void request_reconfigure(
+  bool request_reconfigure(
     const std::vector<easynav::ParameterChange> & changes, const std::string &) override
   {
     reconfigures.push_back(changes);
+    return accept;
   }
-  void request_restore_parameters(const std::string &) override {++restores;}
+  bool request_restore_parameters(const std::string &) override
+  {
+    ++restores;
+    return accept;
+  }
+  bool accept {true};
   std::vector<std::string> aborted;
   std::vector<std::string> shutdowns;
   std::vector<bool> holds;
@@ -716,6 +722,26 @@ TEST_F(SimpleRecoveryManagerTest, TooManyAttemptsSlowDownThenAbort)
   get_stuck();
   EXPECT_EQ(actions_->reconfigures.size(), 1u) << "slows down once";
   EXPECT_EQ(actions_->aborted, std::vector<std::string>({"stuck after 2 attempts"}));
+}
+
+TEST_F(SimpleRecoveryManagerTest, RejectedSlowDownAbortsTheMission)
+{
+  // E.g. EasyNav in safety mode: its configuration is frozen.
+  make_manager({{"recovery_manager.max_backup_attempts", 0}});
+  actions_->accept = false;
+  set_mission(true);
+  get_stuck();
+  EXPECT_EQ(actions_->reconfigures.size(), 1u);
+  EXPECT_EQ(actions_->aborted, std::vector<std::string>({"stuck, and unable to slow down"}));
+
+  // A new mission, stuck again: asks again (it may be accepted now), not in a loop.
+  set_mission(false);
+  cycle();
+  set_mission(true);
+  get_stuck();
+  EXPECT_EQ(actions_->reconfigures.size(), 2u);
+  EXPECT_EQ(actions_->aborted.size(), 2u);
+  EXPECT_EQ(actions_->restores, 0) << "nothing was slowed down";
 }
 
 TEST_F(SimpleRecoveryManagerTest, NoSlowDownIfDisabled)
