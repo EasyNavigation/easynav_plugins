@@ -15,6 +15,9 @@
 /// \file
 /// \brief Implementation of the CollisionSafetyReflex plugin.
 
+#include <algorithm>
+#include <cmath>
+
 #include "easynav_common/Parameters.hpp"
 #include "easynav_common/RobotGeometry.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
@@ -65,12 +68,16 @@ CollisionSafetyReflex::check(NavState & nav_state)
   const auto commanded = commanded_velocity(nav_state);
   if (!commanded) {return false;}
 
+  const auto & twist = *commanded;
   const auto & perceptions = nav_state.get_by_type<PointPerception>();
-  if (perceptions.empty()) {
-    return false;
+  const bool has_data = std::any_of(
+    perceptions.begin(), perceptions.end(), [](const auto & p) {return p && p->valid;});
+  no_perception_ = !has_data;
+  if (!has_data) {
+    // Nothing fresh to check against: fail safe, unless only rotating in place.
+    return std::hypot(twist.twist.linear.x, twist.twist.linear.y) > 1e-6;
   }
 
-  const auto & twist = *commanded;
   const auto & tf_info = easynav::RTTFBuffer::getInstance()->get_tf_info();
   const auto & robot_frame = tf_info.robot_frame;
 
@@ -143,7 +150,8 @@ CollisionSafetyReflex::mitigate(NavState & nav_state)
 {
   RCLCPP_WARN_THROTTLE(
     get_node()->get_logger(), *get_node()->get_clock(), 1000,
-    "CollisionSafetyReflex [%s]: imminent collision, stopping", get_plugin_name().c_str());
+    "CollisionSafetyReflex [%s]: %s, stopping", get_plugin_name().c_str(),
+    no_perception_ ? "no valid point perception to check against" : "imminent collision");
 
   stop_robot(nav_state);
 }

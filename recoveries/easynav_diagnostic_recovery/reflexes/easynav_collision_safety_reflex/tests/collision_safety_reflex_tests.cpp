@@ -241,9 +241,65 @@ TEST_F(CollisionSafetyReflexCheckTest, StoppedRobotNeverBrakes)
   EXPECT_FALSE(brakes());
 }
 
-TEST_F(CollisionSafetyReflexCheckTest, NoPerceptionsNoBrake)
+TEST_F(CollisionSafetyReflexCheckTest, WithoutPerceptionsItBrakesWhenMoving)
 {
   make_reflex();
+  command(VelocitySource::CONTROLLER, 0.5);
+  EXPECT_TRUE(brakes()) << "nothing to check against: fail safe";
+  command(VelocitySource::CONTROLLER, -0.2);
+  EXPECT_TRUE(brakes());
+}
+
+TEST_F(CollisionSafetyReflexCheckTest, WithoutPerceptionsItLetsTheRobotRotateInPlace)
+{
+  make_reflex();
+  command(VelocitySource::CONTROLLER, 0.0, 1.0);
+  EXPECT_FALSE(brakes()) << "a round robot rotating in place cannot hit anything";
+}
+
+TEST_F(CollisionSafetyReflexCheckTest, InvalidPerceptionsCountAsNone)
+{
+  make_reflex();
+  obstacle_at(5.0, 0.0);  // Far away: it would not brake if the data were valid.
+  auto perception = nav_state_.get<easynav::PointPerception>("scan");
+  perception.valid = false;  // As sensors_node leaves data older than forget_time.
+  nav_state_.set("scan", perception);
+  command(VelocitySource::CONTROLLER, 0.5);
+  EXPECT_TRUE(brakes());
+}
+
+TEST_F(CollisionSafetyReflexCheckTest, OneValidPerceptionIsEnough)
+{
+  make_reflex();
+  obstacle_at(5.0, 0.0);
+  easynav::PointPerception stale;
+  stale.data.push_back(pcl::PointXYZ(0.35, 0.0, 0.2));  // Would brake if it were used.
+  stale.frame_id = "base_link";
+  stale.stamp = node_->now();
+  stale.valid = false;
+  nav_state_.set("old_scan", stale);
+  command(VelocitySource::CONTROLLER, 0.5);
+  EXPECT_FALSE(brakes()) << "the valid scan sees the path clear; the stale one is ignored";
+}
+
+TEST_F(CollisionSafetyReflexCheckTest, AValidScanWithNoPointsIsAFreePath)
+{
+  make_reflex();
+  easynav::PointPerception empty;
+  empty.frame_id = "base_link";
+  empty.stamp = node_->now();
+  empty.valid = true;
+  nav_state_.set("scan", empty);
+  command(VelocitySource::CONTROLLER, 0.5);
+  EXPECT_FALSE(brakes());
+}
+
+TEST_F(CollisionSafetyReflexCheckTest, ItMovesAgainWhenFreshDataArrives)
+{
+  make_reflex();
+  command(VelocitySource::CONTROLLER, 0.5);
+  ASSERT_TRUE(brakes());
+  obstacle_at(5.0, 0.0);
   command(VelocitySource::CONTROLLER, 0.5);
   EXPECT_FALSE(brakes());
 }

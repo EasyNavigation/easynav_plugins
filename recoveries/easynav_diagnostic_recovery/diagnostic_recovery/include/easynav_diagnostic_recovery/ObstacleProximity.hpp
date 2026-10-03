@@ -63,6 +63,25 @@ ObstacleProximity compute_nearest_obstacle(
   double z_min = -std::numeric_limits<double>::infinity(),
   double z_max = std::numeric_limits<double>::infinity());
 
+/**
+ * @brief How far the robot can move straight along its x axis before touching a perceived point.
+ *
+ * Only the points in the corridor the robot sweeps (|y| < \p robot_radius) and on the side it
+ * moves towards count. Used to check that a straight escape (forward or backward) is clear.
+ *
+ * @param nav_state Current navigation state.
+ * @param direction +1 to move forward, -1 backward.
+ * @param robot_radius The robot's circumscribed radius (m).
+ * @param z_min Points below this height (robot frame) are ignored.
+ * @param z_max Points above this height (robot frame) are ignored.
+ * @return The free distance (m): 0 if already touching, +infinity if nothing is in the way. Without
+ * any valid perception, 0 (nothing says it is clear).
+ */
+double free_distance_along_x(
+  easynav::NavState & nav_state, int direction, double robot_radius,
+  double z_min = -std::numeric_limits<double>::infinity(),
+  double z_max = std::numeric_limits<double>::infinity());
+
 }  // namespace easynav_diagnostic_recovery
 
 #endif  // EASYNAV_DIAGNOSTIC_RECOVERY__OBSTACLEPROXIMITY_HPP_

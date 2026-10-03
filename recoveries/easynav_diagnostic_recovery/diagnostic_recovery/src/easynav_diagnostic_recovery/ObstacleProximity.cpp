@@ -15,7 +15,9 @@
 /// \file
 /// \brief Implementation of compute_nearest_obstacle().
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
 
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
@@ -66,6 +68,36 @@ ObstacleProximity compute_nearest_obstacle(
   }
 
   return result;
+}
+
+double free_distance_along_x(
+  easynav::NavState & nav_state, int direction, double robot_radius, double z_min, double z_max)
+{
+  const auto & perceptions = nav_state.get_by_type<easynav::PointPerception>();
+  bool perceived = false;
+  for (const auto & perception : perceptions) {
+    perceived = perceived || perception->valid;
+  }
+  if (!perceived) {
+    return 0.0;
+  }
+
+  auto view = easynav::PointPerceptionsOpsView(perceptions);
+  view.fuse(easynav::RTTFBuffer::getInstance()->get_tf_info().robot_frame);
+  const auto & cloud = view.as_points();
+
+  double free = std::numeric_limits<double>::infinity();
+  for (const auto & p : cloud.points) {
+    if (!std::isfinite(p.x) || !std::isfinite(p.y) || !std::isfinite(p.z)) {continue;}
+    if (p.z < z_min || p.z > z_max) {continue;}
+    const double ahead = direction * static_cast<double>(p.x);  // Along the motion.
+    const double lateral = std::abs(static_cast<double>(p.y));
+    if (lateral >= robot_radius || ahead <= 0.0) {continue;}  // Outside the swept corridor.
+    // The robot's disk touches the point once its center is this far along x from it.
+    const double reach = std::sqrt(robot_radius * robot_radius - lateral * lateral);
+    free = std::min(free, std::max(0.0, ahead - reach));
+  }
+  return free;
 }
 
 }  // namespace easynav_diagnostic_recovery

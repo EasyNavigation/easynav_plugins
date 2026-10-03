@@ -41,6 +41,9 @@ namespace easynav
  *
  * Forward-projects the commanded "cmd_vel" against nearby point-cloud perceptions to decide
  * whether continuing would cause a collision within the current braking distance.
+ *
+ * Fails safe: commanded to move with no valid point perception (none, or all older than
+ * sensors_node's "forget_time"), it cannot check, so it brakes too. Rotating in place is allowed.
  */
 class CollisionSafetyReflex : public easynav_diagnostic_recovery::SafetyReflexBase
 {
@@ -71,6 +74,7 @@ private:
   double downsample_leaf_size_{0.1};
 
   rclcpp::Time collision_stamp_;
+  bool no_perception_{false};  ///< Why check() last triggered: no data, or a collision.
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr collision_marker_pub_;
 };
 
