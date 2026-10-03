@@ -31,7 +31,7 @@ what the active mitigation reports). The EasyNav TUI shows both.
 |---|---|
 | `diagnostic_recovery/` | Package `easynav_diagnostic_recovery`: the manager, the three plugin interfaces, `ObstacleProximity`, and dummy plugins. Everything is in the `easynav_diagnostic_recovery` namespace. |
 | `reflexes/` | `CollisionSafetyReflex` |
-| `evaluators/` | `NoPathEvaluator`, `ObstacleTooCloseEvaluator`, `ControllerStuckEvaluator`, `RosGraphEvaluator` |
+| `evaluators/` | `NoPathEvaluator`, `ObstacleTooCloseEvaluator`, `ControllerStuckEvaluator`, `RosGraphEvaluator`, `SafetyChannelEvaluator` |
 | `mitigations/` | `SafeRetreatRecovery`, `AdvanceRecovery`, `ShutdownRecovery`, `HumanAssistanceRecovery`, `CancelMissionRecovery` |
 
 A component can also ship recovery for its own failures. For example, `easynav_costmap_localizer`
@@ -47,8 +47,9 @@ Each plugin's parameters are under `recovery_manager.<type>.`. Every mitigation 
 | `easynav_collision_safety_reflex/CollisionSafetyReflex` | Brakes if the commanded motion would hit an obstacle within its stopping distance. The robot's radius and height come from `system_node.robot_geometry`. | `brake_acc` (0.5), `safety_margin` (0.1), `z_min_filter` (0.0), `downsample_leaf_size` (0.1), `debug_markers` (false) |
 | `easynav_no_path_evaluator/NoPathEvaluator` | `ERROR` (`planner`) if there is a goal but the path is empty (`WARN` until the first path). | — |
 | `easynav_obstacle_too_close_evaluator/ObstacleTooCloseEvaluator` | `ERROR` (`obstacle_proximity`) if the robot is stopped closer than `safe_distance` (from the robot center) to an obstacle (after `debounce_duration` s stopped). Points below `z_min_filter` or above the robot height (`robot_geometry`) are ignored. | `safe_distance` (0.6), `z_min_filter` (0.0), `debounce_duration` (0.2), `linear_velocity_epsilon` (0.02), `angular_velocity_epsilon` (0.05) |
-| `easynav_controller_stuck_evaluator/ControllerStuckEvaluator` | `ERROR` (`controller_stuck`) if commanded to move but not progressing. | `linear_velocity_threshold` (0.02), `progress_distance_threshold` (0.05), `stuck_time_threshold` (2.0) |
+| `easynav_controller_stuck_evaluator/ControllerStuckEvaluator` | `ERROR` (`controller_stuck`) if commanded to move but not progressing (not while paused or during a protective stop). | `linear_velocity_threshold` (0.02), `progress_distance_threshold` (0.05), `stuck_time_threshold` (2.0) |
 | `easynav_ros_graph_evaluator/RosGraphEvaluator` | `ERROR` (`ros_graph`) if an EasyNav subscription has no publisher, or its velocity output has no consumer. | `freq` (10.0), `startup_grace` (15.0), `error_debounce` (2.0), `ignored_topics`, `ignored_consumers` |
+| `easynav_safety_channel_evaluator/SafetyChannelEvaluator` | `WARN` (`safety_channel`) during a protective stop of the safety channel, or with its status lost (`safety_status`, see `system_node`'s `safety.status.timeout`); `ERROR` once it lasts `max_stop_time` s. | `max_stop_time` (0: never `ERROR`) |
 | `easynav_safe_retreat_recovery/SafeRetreatRecovery` | Handles `obstacle_proximity`: backs away until `safe_distance` (from the robot center). Fails, stopped, without perception. | `safe_distance` (0.6), `retreat_speed` (0.15), `z_min_filter` (0.0) |
 | `easynav_advance_recovery/AdvanceRecovery` | Handles `controller_stuck`: moves forward a little. Gives up after `escalate_after` s of repeated attempts. | `advance_distance` (0.3), `advance_speed` (0.1), `escalate_after` (15.0), `episode_gap` (10.0) |
 | `easynav_shutdown_recovery/ShutdownRecovery` | Handles the listed diagnostics by terminating EasyNav. | `handled_hardware_ids` ([`ros_graph`]) |

@@ -29,6 +29,7 @@
 #include "nav_msgs/msg/odometry.hpp"
 
 #include "easynav_controller_stuck_evaluator/ControllerStuckEvaluator.hpp"
+#include "easynav_core/SafetyChannel.hpp"
 
 class ControllerStuckEvaluatorTestCase : public ::testing::Test
 {
@@ -337,4 +338,72 @@ TEST_F(ControllerStuckFreshWindowTest, AfterAPeriodWithoutCommand)
     "test_fresh_zero_cmd_node", [](easynav::NavState & nav_state, bool active) {
       set_commanded_motion(nav_state, active ? 0.0 : 0.3);
     });
+}
+
+TEST_F(ControllerStuckFreshWindowTest, AfterAProtectiveStop)
+{
+  check_fresh_window(
+    "test_fresh_protective_stop_node", [](easynav::NavState & nav_state, bool active) {
+      easynav::SafetyChannelState state;
+      state.protective_stop = active;
+      nav_state.set(easynav::kSafetyStatusKey, state);
+    });
+}
+
+TEST_F(ControllerStuckFreshWindowTest, AfterLosingTheSafetyStatus)
+{
+  check_fresh_window(
+    "test_fresh_status_lost_node", [](easynav::NavState & nav_state, bool active) {
+      easynav::SafetyChannelState state;
+      state.protective_stop = active;
+      state.status_lost = active;
+      nav_state.set(easynav::kSafetyStatusKey, state);
+    });
+}
+
+TEST_F(ControllerStuckEvaluatorTestCase, ReportsTheProtectiveStop)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_protective_stop_node");
+  auto eval = make_ready_evaluator(node, "stuck8");
+
+  easynav::NavState nav_state;
+  set_active_goal(nav_state);
+  set_commanded_motion(nav_state);
+  set_robot_position(nav_state, 1.0, 1.0);
+  easynav::SafetyChannelState state;
+  state.protective_stop = true;
+  nav_state.set(easynav::kSafetyStatusKey, state);
+  eval->internal_update(nav_state);
+
+  const auto & status =
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.stuck8");
+  EXPECT_EQ(status.level, diagnostic_msgs::msg::DiagnosticStatus::OK);
+  EXPECT_EQ(status.message, "protective stop by the safety channel");
+}
+
+TEST_F(ControllerStuckEvaluatorTestCase, ASpeedLimitDoesNotHideAStuckRobot)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_speed_limit_node",
+    rclcpp::NodeOptions()
+    .append_parameter_override("stuck9.stuck_time_threshold", 0.05)
+    .append_parameter_override("stuck9.freq", 200.0));
+  auto eval = make_ready_evaluator(node, "stuck9");
+
+  easynav::NavState nav_state;
+  set_active_goal(nav_state);
+  set_commanded_motion(nav_state);
+  set_robot_position(nav_state, 1.0, 1.0);
+  easynav::SafetyChannelState state;
+  state.max_linear_vel = 0.1;
+  state.max_angular_vel = 0.2;
+  nav_state.set(easynav::kSafetyStatusKey, state);
+
+  eval->internal_update(nav_state);
+  std::this_thread::sleep_for(std::chrono::milliseconds(80));
+  eval->internal_update(nav_state);
+
+  EXPECT_EQ(
+    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.stuck9").level,
+    diagnostic_msgs::msg::DiagnosticStatus::ERROR);
 }
