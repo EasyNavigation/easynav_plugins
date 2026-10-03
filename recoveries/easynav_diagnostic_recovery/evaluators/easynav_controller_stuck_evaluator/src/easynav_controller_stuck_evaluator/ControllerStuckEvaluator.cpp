@@ -19,6 +19,7 @@
 #include <string>
 
 #include "easynav_common/Parameters.hpp"
+#include "easynav_core/SafetyChannel.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/odometry.hpp"
@@ -61,9 +62,15 @@ void ControllerStuckEvaluator::update(NavState & nav_state)
   // robot genuinely does not move while paused, so a frozen reference_time_ would already be
   // older than stuck_time_threshold_ once navigation resumes, firing an immediate false ERROR.
   // Re-arm the reference every cycle instead, so a full window of real non-progress is required
-  // again after resuming.
-  if (nav_state.has("navigation_paused") && nav_state.get<bool>("navigation_paused")) {
-    status.message = "navigation paused";
+  // again after resuming. The same during a protective stop of the safety channel.
+  const bool paused = nav_state.has("navigation_paused") &&
+    nav_state.get<bool>("navigation_paused");
+  // Written from the RT cycle: get_safe().
+  const bool protective_stop = nav_state.has(kSafetyStatusKey) &&
+    nav_state.get_safe<SafetyChannelState>(kSafetyStatusKey).protective_stop;
+  if (paused || protective_stop) {
+    status.message =
+      protective_stop ? "protective stop by the safety channel" : "navigation paused";
     if (nav_state.has("robot_pose")) {
       const auto odom = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
       reference_position_ = {odom.pose.pose.position.x, odom.pose.pose.position.y};

@@ -41,7 +41,7 @@ namespace easynav
  *   is zeroed, elsewhere). Unlike the other preconditions, this one re-arms
  *   reference_position_/reference_time_ every cycle instead of freezing them, since the robot
  *   genuinely does not move while paused and a frozen reference would fire a false ERROR the
- *   instant navigation resumes.
+ *   instant navigation resumes. The same during a protective stop of the safety channel.
  * - "control_owner" must be "controller": an evaluator that watches cmd_vel/the controller must
  *   not evaluate while a recovery mitigation owns control, or it would self-diagnose the very
  *   recovery it is part of as a new failure. This one freezes its progress-tracking state
