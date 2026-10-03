@@ -2258,7 +2258,7 @@ void UkfWrapper::initialize()
   diagnostic_updater_->setHardwareID("none");
 
   world_transform_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(
-    parent_node_);
+    *parent_node_);
 
   loadParams();
 

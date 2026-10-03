@@ -44,7 +44,7 @@ void GpsLocalizer::on_initialize()
     std::bind(&GpsLocalizer::gps_callback, this, std::placeholders::_1));
 
   // Create static broadcaster
-  static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(node);
+  static_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(*node);
 
   // Create subscriber to IMU data
   imu_subscriber_ = node->create_subscription<sensor_msgs::msg::Imu>(

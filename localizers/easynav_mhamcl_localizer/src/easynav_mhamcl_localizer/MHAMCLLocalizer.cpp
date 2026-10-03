@@ -190,7 +190,7 @@ MHAMCLLocalizer::on_initialize()
     tf2::Transform(q, tf2::Vector3(x_init, y_init, 0.0)), std_dev_xy, std_dev_yaw, 0.5);
   hypotheses_.push_back(current_);
 
-  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(get_node());
+  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*get_node());
 
   const std::string prefix = node->get_fully_qualified_name() + std::string("/") + plugin_name;
   particles_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseArray>(

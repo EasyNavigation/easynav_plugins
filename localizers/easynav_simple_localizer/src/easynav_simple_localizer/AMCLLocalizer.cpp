@@ -269,7 +269,7 @@ AMCLLocalizer::on_initialize()
     p.weight = 1.0 / num_particles;
   }
 
-  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(get_node());
+  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*get_node());
 
   auto node_typed = std::dynamic_pointer_cast<LocalizerNode>(get_node());
   auto rt_cbg = node_typed ? node_typed->get_real_time_cbg() :
