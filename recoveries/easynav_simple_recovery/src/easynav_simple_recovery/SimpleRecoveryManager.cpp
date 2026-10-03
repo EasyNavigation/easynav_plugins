@@ -149,10 +149,13 @@ SimpleRecoveryManager::update(NavState & nav_state)
     } else if (slow_down_max_linear_vel_ > 0.0 && !slowed_down(nav_state)) {
       // EasyNav applies it between cycles, reconfiguring: this recovery system is reloaded too,
       // so its members start over (NavState tells the new one it slowed down).
-      request_reconfigure(
+      const bool accepted = request_reconfigure(
         {{"controller_node",
           rclcpp::Parameter("robot_limits.max_linear_vel", slow_down_max_linear_vel_)}},
         "stuck: slowing down");
+      if (!accepted) {  // E.g. safety mode: the configuration is frozen.
+        abort_mission("stuck, and unable to slow down");
+      }
     } else {
       abort_mission("stuck after " + std::to_string(max_backup_attempts_) + " attempts");
     }
