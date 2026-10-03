@@ -43,7 +43,11 @@ void SafeRetreatRecovery::on_initialize()
   easynav::declare_parameter_if_absent<double>(
     *node, plugin_name + ".z_min_filter", z_min_filter_);
   node->get_parameter<double>(plugin_name + ".z_min_filter", z_min_filter_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".min_clearance", min_clearance_);
+  node->get_parameter<double>(plugin_name + ".min_clearance", min_clearance_);
   robot_height_ = get_robot_geometry().height;
+  robot_radius_ = get_robot_geometry().radius;
 }
 
 bool SafeRetreatRecovery::can_handle(const diagnostic_msgs::msg::DiagnosticStatus & status) const
@@ -54,6 +58,7 @@ bool SafeRetreatRecovery::can_handle(const diagnostic_msgs::msg::DiagnosticStatu
 
 void SafeRetreatRecovery::on_start(NavState & nav_state)
 {
+  direction_ = 0;  // Chosen on the first cycle, from where the obstacle is then.
   report(
     nav_state, rcl_interfaces::msg::Log::WARN,
     "SafeRetreatRecovery [" + get_plugin_name() + "]: retreating from a too-close obstacle");
@@ -80,14 +85,35 @@ easynav_diagnostic_recovery::RecoveryStatus SafeRetreatRecovery::on_cycle(NavSta
     return easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED;
   }
 
-  if (std::abs(obstacle.bearing) > M_PI / 2.0) {
-    // The nearest obstacle is behind the robot: reversing would drive toward it, not away.
-    // Fail safely instead of guessing a direction. See the class doc comment.
+  auto clear = [&](int direction) {
+      return easynav_diagnostic_recovery::free_distance_along_x(
+        nav_state, direction, robot_radius_, z_min_filter_, robot_height_) >= min_clearance_;
+    };
+
+  if (direction_ == 0) {
+    // Away from the obstacle: backward if it is ahead, forward if it is behind or beside.
+    const int preferred = std::cos(obstacle.bearing) > 0.0 ? -1 : 1;
+    const bool beside = std::abs(std::cos(obstacle.bearing)) < 0.5;  // 60-120 deg
+    if (clear(preferred)) {
+      direction_ = preferred;
+    } else if (beside && clear(-preferred)) {
+      direction_ = -preferred;
+    } else {
+      report(
+        nav_state, rcl_interfaces::msg::Log::ERROR,
+        "SafeRetreatRecovery [" + get_plugin_name() + "]: no clear way away from the obstacle "
+        "(bearing=" + std::to_string(obstacle.bearing) + " rad)");
+      stop_robot(nav_state);
+      return easynav_diagnostic_recovery::RecoveryStatus::FAILED;
+    }
+    report(
+      nav_state, rcl_interfaces::msg::Log::WARN,
+      "SafeRetreatRecovery [" + get_plugin_name() + "]: moving " +
+      (direction_ > 0 ? "forward" : "backward") + " away from the obstacle");
+  } else if (!clear(direction_)) {
     report(
       nav_state, rcl_interfaces::msg::Log::ERROR,
-      "SafeRetreatRecovery [" + get_plugin_name() + "]: nearest obstacle is behind the robot "
-      "(bearing=" + std::to_string(obstacle.bearing) + " rad), cannot safely retreat straight "
-      "back");
+      "SafeRetreatRecovery [" + get_plugin_name() + "]: the way is blocked, stopping");
     stop_robot(nav_state);
     return easynav_diagnostic_recovery::RecoveryStatus::FAILED;
   }
@@ -97,7 +123,7 @@ easynav_diagnostic_recovery::RecoveryStatus SafeRetreatRecovery::on_cycle(NavSta
     cmd.header.stamp = node->now();
   }
   cmd.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().robot_frame;
-  cmd.twist.linear.x = -retreat_speed_;
+  cmd.twist.linear.x = direction_ * retreat_speed_;
 
   command_velocity(nav_state, cmd);
   return easynav_diagnostic_recovery::RecoveryStatus::RUNNING;

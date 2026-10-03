@@ -33,3 +33,11 @@ target_link_libraries(regulated_pp_controller_obstacle_area_tests
   ${PROJECT_NAME}
   easynav_sensors::easynav_sensors
 )
+
+find_package(easynav_planner REQUIRED)
+ament_add_gtest(regulated_pp_faulty_planner_tests regulated_pp_faulty_planner_tests.cpp)
+target_link_libraries(regulated_pp_faulty_planner_tests
+  ${PROJECT_NAME}
+  easynav_controller::easynav_controller
+  easynav_planner::faulty_planner
+)

@@ -25,18 +25,19 @@ namespace easynav
 
 /**
  * @class SafeRetreatRecovery
- * @brief Level-1 movement mitigation: retreats straight back from a too-close obstacle.
+ * @brief Level-1 movement mitigation: moves straight away from a too-close obstacle.
  *
  * Selected for diagnostics with hardware_id == "obstacle_proximity" (shared with
  * ObstacleTooCloseEvaluator, matched by string). Takes control of "cmd_vel"
- * (requires_control() == true) and commands a slow, straight-backward motion each RT cycle,
- * re-checking the nearest-obstacle distance until it exceeds safe_distance.
+ * (requires_control() == true) and commands a slow, straight motion each RT cycle, re-checking
+ * the nearest-obstacle distance until it exceeds safe_distance.
  *
- * Only retreats straight back — correct when the obstacle is roughly ahead (an obstacle
- * appearing in the direction of travel), matching Nav2's own reverse-only BackUp behaviour and
- * the differential-drive robots this workspace targets (which cannot strafe anyway). If the
- * nearest obstacle is behind the robot instead, reversing would drive toward it, so on_cycle()
- * fails safely (stops, returns FAILED) instead of blindly reversing.
+ * The direction, chosen on the first cycle and kept: backward if the nearest obstacle is ahead,
+ * forward if it is behind or beside (a differential-drive robot cannot strafe; moving along its
+ * axis also moves it away from an obstacle beside it). If that way is not clear
+ * ("min_clearance" along the robot's corridor) and the obstacle is roughly beside (60-120 deg),
+ * the other way is tried. It fails, stopped, when no way is clear, when the way gets blocked
+ * while moving, or without perception.
  */
 class SafeRetreatRecovery : public easynav_diagnostic_recovery::RecoveryMitigationBase
 {
@@ -54,7 +55,7 @@ protected:
   easynav_diagnostic_recovery::RecoveryStatus on_cycle(NavState & nav_state) override;
 
 private:
-  /// @brief Backward linear speed commanded while retreating (m/s, positive magnitude).
+  /// @brief Linear speed commanded while moving away (m/s, positive magnitude).
   double retreat_speed_ {0.15};
 
   /// @brief Distance (m) at which the retreat is considered complete.
@@ -65,6 +66,15 @@ private:
 
   /// @brief Points above it are not obstacles: the robot's height (robot_geometry).
   double robot_height_ {0.5};
+
+  /// @brief The robot's radius (robot_geometry).
+  double robot_radius_ {0.3};
+
+  /// @brief Free distance (m) required along the way it moves.
+  double min_clearance_ {0.05};
+
+  /// @brief +1 forward, -1 backward, 0 not chosen yet (this episode).
+  int direction_ {0};
 };
 
 }  // namespace easynav

@@ -12,6 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cmath>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "gtest/gtest.h"
 
 #include "rclcpp/rclcpp.hpp"
@@ -169,21 +175,123 @@ TEST_F(SafeRetreatRecoveryTestCase, IgnoresTheGround)
     rec->internal_cycle(nav_state), easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED);
 }
 
-TEST_F(SafeRetreatRecoveryTestCase, FailsSafelyWhenObstacleIsBehind)
+// ─── Direction ──────────────────────────────────────────────────────────────────────────────
+
+namespace
 {
-  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_behind_node");
-  auto rec = make_recovery(node, "retreat5");
 
-  easynav::NavState nav_state;
-  nav_state.set("scan", make_obstacle_at(-0.2, 0.0));  // directly behind, close
+// Robot radius 0.3 (robot_geometry default); min_clearance 0.05.
+easynav::PointPerception obstacles(std::vector<std::pair<double, double>> points)
+{
+  easynav::PointPerception perception;
+  perception.frame_id = "base_link";
+  perception.stamp = rclcpp::Time(0);
+  perception.valid = true;
+  for (const auto & [x, y] : points) {
+    perception.data.points.emplace_back(x, y, 0.0);
+  }
+  return perception;
+}
 
-  auto status = rec->internal_cycle(nav_state);
+double proposed_vx(easynav::NavState & nav_state)
+{
+  const auto cmd = easynav::velocity_command::peek(nav_state, easynav::VelocitySource::TAKEOVER);
+  return cmd ? cmd->twist.linear.x : std::nan("");
+}
 
-  EXPECT_EQ(status, easynav_diagnostic_recovery::RecoveryStatus::FAILED);
-  // Movement mitigations propose their command; ControllerNode publishes it.
-  const auto proposed =
-    easynav::velocity_command::peek(nav_state, easynav::VelocitySource::TAKEOVER);
-  ASSERT_TRUE(proposed.has_value());
-  const auto & cmd = *proposed;
-  EXPECT_DOUBLE_EQ(cmd.twist.linear.x, 0.0);
+}  // namespace
+
+class SafeRetreatDirectionTest : public SafeRetreatRecoveryTestCase
+{
+protected:
+  void SetUp() override
+  {
+    SafeRetreatRecoveryTestCase::SetUp();
+    node_ = std::make_shared<rclcpp_lifecycle::LifecycleNode>("retreat_direction_node");
+    rec_ = make_recovery(node_, "retreat");
+    rec_->internal_start(nav_state_);
+  }
+
+  easynav_diagnostic_recovery::RecoveryStatus cycle(std::vector<std::pair<double, double>> points)
+  {
+    nav_state_.set("scan", obstacles(points));
+    return rec_->internal_cycle(nav_state_);
+  }
+
+  rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
+  std::shared_ptr<easynav::SafeRetreatRecovery> rec_;
+  easynav::NavState nav_state_;
+};
+
+using easynav_diagnostic_recovery::RecoveryStatus;
+
+TEST_F(SafeRetreatDirectionTest, AnObstacleBehindMakesItMoveForward)
+{
+  EXPECT_EQ(cycle({{-0.35, 0.0}}), RecoveryStatus::RUNNING);
+  EXPECT_GT(proposed_vx(nav_state_), 0.0);
+}
+
+TEST_F(SafeRetreatDirectionTest, AnObstacleBesideMakesItMoveForward)
+{
+  // The case seen in simulation: 0.36 m away, to the right and slightly behind.
+  EXPECT_EQ(cycle({{0.36 * std::cos(-1.71), 0.36 * std::sin(-1.71)}}), RecoveryStatus::RUNNING);
+  EXPECT_GT(proposed_vx(nav_state_), 0.0);
+}
+
+TEST_F(SafeRetreatDirectionTest, AnObstacleBesideAndAWallAheadMakeItMoveBackward)
+{
+  EXPECT_EQ(cycle({{0.0, -0.36}, {0.32, 0.0}}), RecoveryStatus::RUNNING);
+  EXPECT_LT(proposed_vx(nav_state_), 0.0) << "forward is not clear, backward is";
+}
+
+TEST_F(SafeRetreatDirectionTest, AnObstacleAheadWithTheWayBackBlockedFails)
+{
+  EXPECT_EQ(cycle({{0.32, 0.0}, {-0.34, 0.0}}), RecoveryStatus::FAILED);
+  EXPECT_DOUBLE_EQ(proposed_vx(nav_state_), 0.0) << "stopped";
+}
+
+TEST_F(SafeRetreatDirectionTest, AnObstacleBehindWithTheWayForwardBlockedFails)
+{
+  // Not beside: moving backward would approach the nearest obstacle.
+  EXPECT_EQ(cycle({{-0.32, 0.0}, {0.34, 0.0}}), RecoveryStatus::FAILED);
+  EXPECT_DOUBLE_EQ(proposed_vx(nav_state_), 0.0);
+}
+
+TEST_F(SafeRetreatDirectionTest, PointsOutsideTheCorridorDoNotBlockTheWay)
+{
+  // Beside the robot, ahead: not in the corridor it sweeps moving forward.
+  EXPECT_EQ(cycle({{-0.35, 0.0}, {0.32, 0.31}}), RecoveryStatus::RUNNING);
+  EXPECT_GT(proposed_vx(nav_state_), 0.0);
+}
+
+TEST_F(SafeRetreatDirectionTest, TheDirectionIsKeptDuringTheEpisode)
+{
+  ASSERT_EQ(cycle({{-0.35, 0.0}}), RecoveryStatus::RUNNING);
+  ASSERT_GT(proposed_vx(nav_state_), 0.0);
+  // The nearest obstacle is now ahead-ish but outside the corridor: it keeps moving forward.
+  EXPECT_EQ(cycle({{0.1, 0.4}, {-0.45, 0.0}}), RecoveryStatus::RUNNING);
+  EXPECT_GT(proposed_vx(nav_state_), 0.0);
+}
+
+TEST_F(SafeRetreatDirectionTest, ItStopsWhenTheWayGetsBlocked)
+{
+  ASSERT_EQ(cycle({{-0.35, 0.0}}), RecoveryStatus::RUNNING);
+  EXPECT_EQ(cycle({{-0.4, 0.0}, {0.33, 0.0}}), RecoveryStatus::FAILED);
+  EXPECT_DOUBLE_EQ(proposed_vx(nav_state_), 0.0);
+}
+
+TEST_F(SafeRetreatDirectionTest, ANewEpisodeChoosesAgain)
+{
+  ASSERT_EQ(cycle({{-0.35, 0.0}}), RecoveryStatus::RUNNING);
+  ASSERT_GT(proposed_vx(nav_state_), 0.0);
+  rec_->internal_start(nav_state_);
+  EXPECT_EQ(cycle({{0.35, 0.0}}), RecoveryStatus::RUNNING);
+  EXPECT_LT(proposed_vx(nav_state_), 0.0);
+}
+
+TEST_F(SafeRetreatDirectionTest, ItSucceedsOnceFarEnough)
+{
+  ASSERT_EQ(cycle({{-0.35, 0.0}}), RecoveryStatus::RUNNING);
+  EXPECT_EQ(cycle({{-0.65, 0.0}}), RecoveryStatus::SUCCEEDED);
+  EXPECT_DOUBLE_EQ(proposed_vx(nav_state_), 0.0);
 }

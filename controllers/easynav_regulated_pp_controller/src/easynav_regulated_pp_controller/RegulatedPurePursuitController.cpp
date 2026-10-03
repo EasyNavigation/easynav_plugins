@@ -442,6 +442,20 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
     stop(nav_state, header);
     return;
   }
+  // A non-finite path cannot be followed: comparisons with NaN would give a finite, arbitrary
+  // command.
+  const bool finite = std::all_of(
+    path.poses.begin(), path.poses.end(), [](const geometry_msgs::msg::PoseStamped & p) {
+      return std::isfinite(p.pose.position.x) && std::isfinite(p.pose.position.y) &&
+             std::isfinite(p.pose.orientation.z) && std::isfinite(p.pose.orientation.w);
+    });
+  if (!finite) {
+    RCLCPP_WARN_THROTTLE(
+      get_node()->get_logger(), *get_node()->get_clock(), 1000,
+      "[%s] non-finite path: stopping", get_plugin_name().c_str());
+    stop(nav_state, header);
+    return;
+  }
 
   const auto robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const double robot_yaw = tf2::getYaw(robot_pose.orientation);
