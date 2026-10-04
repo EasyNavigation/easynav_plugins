@@ -340,8 +340,10 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
       // Reject cells that would cause collision (>= INSCRIBED_INFLATED_OBSTACLE = 253)
       if (cell_cost >= INSCRIBED_INFLATED_OBSTACLE) {continue;}
 
-      // Calculate traversal cost: cost_factor_ acts as a direct multiplier on cell cost
-      double traversal_cost = 1.0 + cost_factor_ * static_cast<double>(cell_cost);
+      const double normalized_cost =
+        static_cast<double>(cell_cost) / INSCRIBED_INFLATED_OBSTACLE;
+      const double traversal_cost =
+        1.0 + (cost_factor_ + inflation_penalty_) * normalized_cost;
 
       double step_cost = (dx == 0 || dy == 0) ? axial_cost : diagonal_cost;
       double new_cost = cost_so_far[idx(current.x, current.y)] + traversal_cost * step_cost;

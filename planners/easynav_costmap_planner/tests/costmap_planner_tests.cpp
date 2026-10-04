@@ -35,6 +35,12 @@
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_planner/CostmapPlanner.hpp"
 
+class TestableCostmapPlanner : public easynav::CostmapPlanner
+{
+public:
+  using CostmapPlanner::a_star_path;
+};
+
 class CostmapPlannerTest : public ::testing::Test
 {
 protected:
@@ -51,7 +57,7 @@ protected:
     static int test_count = 0;
     node_ = rclcpp_lifecycle::LifecycleNode::make_shared(
       "costmap_planner_test_" + std::to_string(test_count++));
-    planner_ = std::make_shared<easynav::CostmapPlanner>();
+    planner_ = std::make_shared<TestableCostmapPlanner>();
     planner_->initialize(node_, "planner");
 
     // Free 4 x 4 m map, robot near a corner.
@@ -158,7 +164,7 @@ protected:
   }
 
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
-  std::shared_ptr<easynav::CostmapPlanner> planner_;
+  std::shared_ptr<TestableCostmapPlanner> planner_;
   easynav::Costmap2D map_;
   easynav::NavState nav_state_;
 };
@@ -224,6 +230,32 @@ TEST_F(CostmapPlannerTest, PathThroughANarrowPassageStaysInside)
   const auto p = path();
   ASSERT_FALSE(p.poses.empty());
   expect_path_clear(p);
+}
+
+TEST_F(CostmapPlannerTest, LowInflationCostDoesNotOutweighASingleCellDetour)
+{
+  set_cell(2.05, 0.55, 1);
+
+  geometry_msgs::msg::Pose start;
+  start.position.x = 0.55;
+  start.position.y = 0.55;
+  geometry_msgs::msg::Pose goal;
+  goal.position.x = 3.45;
+  goal.position.y = 0.55;
+  goal.orientation.w = 1.0;
+
+  const auto poses = planner_->a_star_path(map_, start, goal);
+  ASSERT_FALSE(poses.empty());
+
+  unsigned int low_cost_x, low_cost_y;
+  ASSERT_TRUE(map_.worldToMap(2.05, 0.55, low_cost_x, low_cost_y));
+  const bool traverses_low_cost_cell = std::any_of(
+    poses.begin(), poses.end(), [&](const geometry_msgs::msg::Pose & pose) {
+      unsigned int x, y;
+      return map_.worldToMap(pose.position.x, pose.position.y, x, y) &&
+             x == low_cost_x && y == low_cost_y;
+    });
+  EXPECT_TRUE(traverses_low_cost_cell);
 }
 
 TEST_F(CostmapPlannerTest, UnreachableGoalsGiveAnEmptyPath)

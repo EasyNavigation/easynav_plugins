@@ -14,6 +14,7 @@
 // limitations under the License.
 
 #include <gtest/gtest.h>
+#include "easynav_costmap_common/cost_values.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "rclcpp/time.hpp"
@@ -119,8 +120,30 @@ TEST_F(Costmap2DTest, OccupancyGridConversion)
   for (size_t i = 0; i < grid.data.size(); ++i) {
     bool expected = std::find(expected_indices.begin(),
       expected_indices.end(), i) != expected_indices.end();
-    EXPECT_EQ(grid.data[i], expected ? 100 : 0);
+    EXPECT_EQ(grid.data[i], expected ? 39 : 0);
   }
+}
+
+TEST_F(Costmap2DTest, OccupancyGridConversionPreservesSpecialCostValues)
+{
+  Costmap2D map(7, 1, 0.2, 0.0, 0.0, easynav::FREE_SPACE);
+  map.setCost(1, 0, 1);
+  map.setCost(2, 0, 128);
+  map.setCost(3, 0, easynav::MAX_NON_OBSTACLE);
+  map.setCost(4, 0, easynav::INSCRIBED_INFLATED_OBSTACLE);
+  map.setCost(5, 0, easynav::LETHAL_OBSTACLE);
+  map.setCost(6, 0, easynav::NO_INFORMATION);
+
+  nav_msgs::msg::OccupancyGrid grid;
+  map.toOccupancyGridMsg(grid);
+
+  EXPECT_EQ(grid.data[0], 0);
+  EXPECT_EQ(grid.data[1], 1);
+  EXPECT_EQ(grid.data[2], 50);
+  EXPECT_EQ(grid.data[3], 98);
+  EXPECT_EQ(grid.data[4], 99);
+  EXPECT_EQ(grid.data[5], 100);
+  EXPECT_EQ(grid.data[6], -1);
 }
 
 TEST_F(Costmap2DTest, TimestampFromOccupancyGridConstructor)

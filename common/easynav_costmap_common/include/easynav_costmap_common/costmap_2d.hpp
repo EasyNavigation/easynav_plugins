@@ -126,10 +126,10 @@ public:
    * @param  msg A reference to the OccupancyGrid message that will be filled
    *
    * The resulting OccupancyGrid message contains metadata such as resolution, size, and origin,
-   * and its data field is populated with cost values from the costmap. Cells with a value of
-    * NO_INFORMATION are mapped to -1; other values are cast to int8_t directly.
-    *
-    * The output message header stamp is set to the internal last-modified timestamp.
+   * and its data field is populated using the OccupancyGrid cost translation: free is 0,
+   * intermediate costs map to 1–98, inscribed obstacles map to 99, lethal obstacles to 100,
+   * and NO_INFORMATION to -1. The output message header stamp is set to the internal
+   * last-modified timestamp.
    */
   void toOccupancyGridMsg(nav_msgs::msg::OccupancyGrid & msg) const;
 
