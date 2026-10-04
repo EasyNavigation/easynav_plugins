@@ -190,12 +190,14 @@ Include dependency graph for costmap_planner_tests.cpp:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:CostmapPlannerTest" id="r_CostmapPlannerTest"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a></td></tr>
+<tr class="memitem:TestableCostmapPlanner" id="r_TestableCostmapPlanner"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classTestableCostmapPlanner.html">TestableCostmapPlanner</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a1681d0e4656da4c3bedc4a62d6351a9a" id="r_a1681d0e4656da4c3bedc4a62d6351a9a"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a1681d0e4656da4c3bedc4a62d6351a9a">TEST_F</a> (<a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a>, GoalInAnotherFrameClearsThePath)</td></tr>
 <tr class="memitem:a74524923e0359259c062a336be27445c" id="r_a74524923e0359259c062a336be27445c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a74524923e0359259c062a336be27445c">TEST_F</a> (<a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a>, GoalOnTheRobotCellGivesASinglePose)</td></tr>
 <tr class="memitem:adf399e4066ea4919ae75ce9d0154e07f" id="r_adf399e4066ea4919ae75ce9d0154e07f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#adf399e4066ea4919ae75ce9d0154e07f">TEST_F</a> (<a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a>, GoalOutsideTheMapClearsThePath)</td></tr>
+<tr class="memitem:a788d56b9c35cd6eeadeede0e505200dc" id="r_a788d56b9c35cd6eeadeede0e505200dc"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a788d56b9c35cd6eeadeede0e505200dc">TEST_F</a> (<a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a>, LowInflationCostDoesNotOutweighASingleCellDetour)</td></tr>
 <tr class="memitem:aeb5efa70a7c09fb291c26b823654224b" id="r_aeb5efa70a7c09fb291c26b823654224b"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aeb5efa70a7c09fb291c26b823654224b">TEST_F</a> (<a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a>, NoGoalClearsThePath)</td></tr>
 <tr class="memitem:a49fe0dbc3e23249e5e7ac23f29c9a7cd" id="r_a49fe0dbc3e23249e5e7ac23f29c9a7cd"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a49fe0dbc3e23249e5e7ac23f29c9a7cd">TEST_F</a> (<a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a>, NothingPlannedWithoutInputs)</td></tr>
 <tr class="memitem:abcb38c6b9618a4a690af609e6ce1b121" id="r_abcb38c6b9618a4a690af609e6ce1b121"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#abcb38c6b9618a4a690af609e6ce1b121">TEST_F</a> (<a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a>, PathAroundACornerNeverCutsIt)</td></tr>
@@ -211,7 +213,7 @@ Functions</h2></td></tr>
 <div class="textblock"><p>Tests for CostmapPlanner: a failed plan leaves an empty path, not the previous one. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a1681d0e4656da4c3bedc4a62d6351a9a" name="a1681d0e4656da4c3bedc4a62d6351a9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1681d0e4656da4c3bedc4a62d6351a9a">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1681d0e4656da4c3bedc4a62d6351a9a">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -232,7 +234,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a74524923e0359259c062a336be27445c" name="a74524923e0359259c062a336be27445c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a74524923e0359259c062a336be27445c">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a74524923e0359259c062a336be27445c">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -253,7 +255,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="adf399e4066ea4919ae75ce9d0154e07f" name="adf399e4066ea4919ae75ce9d0154e07f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf399e4066ea4919ae75ce9d0154e07f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adf399e4066ea4919ae75ce9d0154e07f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,8 +275,29 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a788d56b9c35cd6eeadeede0e505200dc" name="a788d56b9c35cd6eeadeede0e505200dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a788d56b9c35cd6eeadeede0e505200dc">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classCostmapPlannerTest.html">CostmapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LowInflationCostDoesNotOutweighASingleCellDetour</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aeb5efa70a7c09fb291c26b823654224b" name="aeb5efa70a7c09fb291c26b823654224b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb5efa70a7c09fb291c26b823654224b">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb5efa70a7c09fb291c26b823654224b">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -295,7 +318,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a49fe0dbc3e23249e5e7ac23f29c9a7cd" name="a49fe0dbc3e23249e5e7ac23f29c9a7cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49fe0dbc3e23249e5e7ac23f29c9a7cd">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a49fe0dbc3e23249e5e7ac23f29c9a7cd">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -316,7 +339,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="abcb38c6b9618a4a690af609e6ce1b121" name="abcb38c6b9618a4a690af609e6ce1b121"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abcb38c6b9618a4a690af609e6ce1b121">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abcb38c6b9618a4a690af609e6ce1b121">&#9670;&#160;</a></span>TEST_F() <span class="overload">[7/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -337,7 +360,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="aeda330775ef6cb24a7a13e8e78b8ce94" name="aeda330775ef6cb24a7a13e8e78b8ce94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeda330775ef6cb24a7a13e8e78b8ce94">&#9670;&#160;</a></span>TEST_F() <span class="overload">[7/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aeda330775ef6cb24a7a13e8e78b8ce94">&#9670;&#160;</a></span>TEST_F() <span class="overload">[8/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -358,7 +381,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a215fa4436a8a2a949d444742514c89b8" name="a215fa4436a8a2a949d444742514c89b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a215fa4436a8a2a949d444742514c89b8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[8/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a215fa4436a8a2a949d444742514c89b8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[9/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -379,7 +402,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="aa5c592c7f42a8027bed3fa345713a219" name="aa5c592c7f42a8027bed3fa345713a219"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5c592c7f42a8027bed3fa345713a219">&#9670;&#160;</a></span>TEST_F() <span class="overload">[9/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5c592c7f42a8027bed3fa345713a219">&#9670;&#160;</a></span>TEST_F() <span class="overload">[10/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -400,7 +423,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a3d6493e7fbc9751bd4f1896c30a4e219" name="a3d6493e7fbc9751bd4f1896c30a4e219"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d6493e7fbc9751bd4f1896c30a4e219">&#9670;&#160;</a></span>TEST_F() <span class="overload">[10/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d6493e7fbc9751bd4f1896c30a4e219">&#9670;&#160;</a></span>TEST_F() <span class="overload">[11/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -421,7 +444,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ac3ecb5d77eed5a9a61b90bcbc1238268" name="ac3ecb5d77eed5a9a61b90bcbc1238268"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac3ecb5d77eed5a9a61b90bcbc1238268">&#9670;&#160;</a></span>TEST_F() <span class="overload">[11/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3ecb5d77eed5a9a61b90bcbc1238268">&#9670;&#160;</a></span>TEST_F() <span class="overload">[12/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -442,7 +465,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="abca1f6aa6969d2e8c2f64d0e77086ce6" name="abca1f6aa6969d2e8c2f64d0e77086ce6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abca1f6aa6969d2e8c2f64d0e77086ce6">&#9670;&#160;</a></span>TEST_F() <span class="overload">[12/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abca1f6aa6969d2e8c2f64d0e77086ce6">&#9670;&#160;</a></span>TEST_F() <span class="overload">[13/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -463,7 +486,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a75b6c1daf17a428980cc5bfd712b590a" name="a75b6c1daf17a428980cc5bfd712b590a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75b6c1daf17a428980cc5bfd712b590a">&#9670;&#160;</a></span>TEST_F() <span class="overload">[13/13]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a75b6c1daf17a428980cc5bfd712b590a">&#9670;&#160;</a></span>TEST_F() <span class="overload">[14/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

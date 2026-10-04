@@ -1687,8 +1687,7 @@ template&lt;class ActionType&gt; </div>
   </table>
   </dd>
 </dl>
-<p>The resulting OccupancyGrid message contains metadata such as resolution, size, and origin, and its data field is populated with cost values from the costmap. Cells with a value of NO_INFORMATION are mapped to -1; other values are cast to int8_t directly.</p>
-<p>The output message header stamp is set to the internal last-modified timestamp. </p>
+<p>The resulting OccupancyGrid message contains metadata such as resolution, size, and origin, and its data field is populated using the OccupancyGrid cost translation: free is 0, intermediate costs map to 1–98, inscribed obstacles map to 99, lethal obstacles to 100, and NO_INFORMATION to -1. The output message header stamp is set to the internal last-modified timestamp. </p>
 
 </div>
 </div>

@@ -1,0 +1,17 @@
+<map id="TestableCostmapPlanner" name="TestableCostmapPlanner">
+<area shape="rect" id="Node000001" title=" " alt="" coords="326,218,493,243"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1CostmapPlanner.html" title="A planner implementing the A* algorithm on a Costmap2D grid." alt="" coords="350,143,468,168"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="412,184,412,217,406,217,406,184"/>
+<area shape="rect" id="Node000003" href="$classPlannerMethodBase.html" title=" " alt="" coords="5,5,144,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,41,136,81,162,100,189,116,229,131,271,142,350,151,350,156,271,147,228,136,187,121,159,105,133,85,92,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="168,5,227,31"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="196,46,198,83,204,101,215,117,236,129,270,138,350,148,350,154,269,143,234,134,211,121,199,104,193,84,191,46"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="312,5,357,31"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="330,47,328,82,331,101,338,117,350,130,366,140,364,144,347,134,334,120,326,102,323,83,325,46"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="461,5,509,31"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="484,47,476,83,458,120,433,144,429,140,454,117,471,81,479,46"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="577,5,628,31"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="604,47,596,85,587,104,574,121,556,131,530,139,469,150,468,145,529,134,554,126,570,117,582,101,591,83,599,46"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="680,5,760,31"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="722,47,715,85,706,105,692,121,676,130,653,138,595,149,469,157,468,151,594,144,652,133,674,126,689,117,701,102,710,84,717,46"/>
+</map>
