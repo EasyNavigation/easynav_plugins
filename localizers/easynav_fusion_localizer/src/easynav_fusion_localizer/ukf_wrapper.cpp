@@ -83,6 +83,33 @@ namespace robot_localization
 {
 using namespace std::chrono_literals;
 
+namespace
+{
+
+// The UKF averages the sigma points' angles circularly: past a variance of 2 rad^2 the mean flips
+// by pi and the filter diverges to NaN. Unobserved angles (a velocities-only filter) are capped.
+constexpr double kMaxAngleVariance = 1.0;
+
+void cap_angle_variances(Ukf & filter)
+{
+  Eigen::MatrixXd cov = filter.getEstimateErrorCovariance();
+  bool capped = false;
+  for (const int i : {StateMemberRoll, StateMemberPitch, StateMemberYaw}) {
+    if (cov(i, i) > kMaxAngleVariance) {
+      // Scaling row and column keeps the covariance positive semidefinite.
+      const double s = std::sqrt(kMaxAngleVariance / cov(i, i));
+      cov.row(i) *= s;
+      cov.col(i) *= s;
+      capped = true;
+    }
+  }
+  if (capped) {
+    filter.setEstimateErrorCovariance(cov);
+  }
+}
+
+}  // namespace
+
 UkfWrapper::UkfWrapper(
   std::shared_ptr<easynav::LocalizerNode> parent_node,
   const std::string & tf_prefix,
@@ -118,7 +145,7 @@ UkfWrapper::UkfWrapper(
   tf_time_offset_(0ns),
   local_filter_(local_filter)
 {
-  parent_node_ = parent_node;
+  parent_node_ = parent_node.get();
   tf_prefix_ = tf_prefix;
   plugin_name_ = plugin_name;
 
@@ -738,6 +765,7 @@ void UkfWrapper::integrateMeasurements(const rclcpp::Time & current_time)
 
       // This will call predict and, if necessary, correct
       filter_.processMeasurement(*(measurement.get()));
+      cap_angle_variances(filter_);
 
       // Store old states and measurements if we're smoothing
       if (smooth_lagged_data_) {
@@ -782,6 +810,7 @@ void UkfWrapper::integrateMeasurements(const rclcpp::Time & current_time)
 
     filter_.validateDelta(last_update_delta);
     filter_.predict(current_time, last_update_delta);
+    cap_angle_variances(filter_);
 
     // Update the last measurement time and last update time
     filter_.setLastMeasurementTime(
