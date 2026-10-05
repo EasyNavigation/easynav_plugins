@@ -1,9 +1,11 @@
 <map id="controllers/easynav_mppi_controller/include/easynav_mppi_controller/MPPIController.hpp" name="controllers/easynav_mppi_controller/include/easynav_mppi_controller/MPPIController.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="205,5,374,76"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="299,5,467,76"/>
 <area shape="rect" id="Node000002" href="$MPPIController_8cpp.html" title="Implementation of the MPPIController class." alt="" coords="5,124,174,195"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,86,150,126,148,121,216,82"/>
-<area shape="rect" id="Node000003" href="$mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="198,124,381,195"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="292,91,292,124,287,124,287,91"/>
-<area shape="rect" id="Node000004" href="$mppi__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="406,124,555,195"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="360,82,425,121,422,126,358,87"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="285,83,175,127,173,122,283,78"/>
+<area shape="rect" id="Node000003" href="$mppi__controller__obstacle__points__tests_8cpp.html" title="MPPI takes the obstacle points in the robot frame, towards where it moves." alt="" coords="198,124,368,195"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="346,89,314,125,310,122,342,86"/>
+<area shape="rect" id="Node000004" href="$mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="391,124,574,195"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="424,86,455,122,451,125,420,89"/>
+<area shape="rect" id="Node000005" href="$mppi__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="599,124,748,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="482,79,599,125,597,130,480,84"/>
 </map>

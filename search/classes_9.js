@@ -6,7 +6,8 @@ var searchData=
   ['mppicontroller_3',['MPPIController',['../classeasynav_1_1MPPIController.html',1,'easynav']]],
   ['mppicontrollerreconfiguretest_4',['MPPIControllerReconfigureTest',['../classMPPIControllerReconfigureTest.html',1,'']]],
   ['mppilegacyparamsfiletest_5',['MppiLegacyParamsFileTest',['../classMppiLegacyParamsFileTest.html',1,'']]],
-  ['mppioptimizer_6',['MPPIOptimizer',['../classeasynav_1_1MPPIOptimizer.html',1,'easynav']]],
-  ['mppiresult_7',['MPPIResult',['../structeasynav_1_1MPPIResult.html',1,'easynav']]],
-  ['mppirobotlimitstest_8',['MppiRobotLimitsTest',['../classMppiRobotLimitsTest.html',1,'']]]
+  ['mppiobstaclepointstest_6',['MppiObstaclePointsTest',['../classMppiObstaclePointsTest.html',1,'']]],
+  ['mppioptimizer_7',['MPPIOptimizer',['../classeasynav_1_1MPPIOptimizer.html',1,'easynav']]],
+  ['mppiresult_8',['MPPIResult',['../structeasynav_1_1MPPIResult.html',1,'easynav']]],
+  ['mppirobotlimitstest_9',['MppiRobotLimitsTest',['../classMppiRobotLimitsTest.html',1,'']]]
 ];

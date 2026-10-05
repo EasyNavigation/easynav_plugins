@@ -1,8 +1,20 @@
 var searchData=
 [
-  ['navmapfilter_0',['NavMapFilter',['../classeasynav_1_1navmap_1_1NavMapFilter.html#a225602ee95bfbf08d63951860087b115',1,'easynav::navmap::NavMapFilter']]],
-  ['navmapmapsmanager_1',['NavMapMapsManager',['../classeasynav_1_1navmap_1_1NavMapMapsManager.html#a8dfd720a6f4a06ea73bb7fafdf6c50ad',1,'easynav::navmap::NavMapMapsManager']]],
-  ['needs_5frecompute_5fbase_5f_2',['needs_recompute_base_',['../classeasynav_1_1InflationFilter.html#abd1883cdb809b6fc4d169f86dc0ff6bd',1,'easynav::InflationFilter']]],
-  ['norm_3',['norm',['../namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915',1,'easynav']]],
-  ['normalize_4',['normalize',['../namespaceeasynav.html#a8073b4d2bf21d487cd8619896aed9959',1,'easynav']]]
+  ['main_0',['main',['../costmap__bresenham__2d_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'costmap_bresenham_2d.cpp']]],
+  ['make_1',['make',['../classMppiObstaclePointsTest.html#a279b971312907aaaaa745a670a517a74',1,'MppiObstaclePointsTest']]],
+  ['make_5fmitigation_2',['make_mitigation',['../classAmclRelocalizeMitigationTestCase.html#a03106d29a21e40ca6c09f16ab124d432',1,'AmclRelocalizeMitigationTestCase']]],
+  ['make_5fready_5fevaluator_3',['make_ready_evaluator',['../classAmclConvergenceEvaluatorTestCase.html#a384edba8b54bd9368715496dec982a9f',1,'AmclConvergenceEvaluatorTestCase']]],
+  ['map_5fmode_5ffrom_5fstring_4',['map_mode_from_string',['../namespaceeasynav__bonxai.html#a3d2f4dd22af2ddf3876da9a81ac82acd',1,'easynav_bonxai::map_mode_from_string()'],['../namespaceeasynav.html#a3d2f4dd22af2ddf3876da9a81ac82acd',1,'easynav::map_mode_from_string()'],['../namespaceeasynav_1_1navmap.html#a3d2f4dd22af2ddf3876da9a81ac82acd',1,'easynav::navmap::map_mode_from_string()'],['../namespaceeasynav_1_1octomap.html#a3d2f4dd22af2ddf3876da9a81ac82acd',1,'easynav::octomap::map_mode_from_string()']]],
+  ['map_5fmode_5fto_5fstring_5',['map_mode_to_string',['../namespaceeasynav__bonxai.html#adfd93b4666d4f4b6e883c7124701a34c',1,'easynav_bonxai::map_mode_to_string()'],['../namespaceeasynav.html#adfd93b4666d4f4b6e883c7124701a34c',1,'easynav::map_mode_to_string()'],['../namespaceeasynav_1_1navmap.html#adfd93b4666d4f4b6e883c7124701a34c',1,'easynav::navmap::map_mode_to_string()'],['../namespaceeasynav_1_1octomap.html#adfd93b4666d4f4b6e883c7124701a34c',1,'easynav::octomap::map_mode_to_string()']]],
+  ['maptoworld_6',['mapToWorld',['../classeasynav_1_1Costmap2D.html#ad5d9bee06e3a189ec304c1dce6d39ffc',1,'easynav::Costmap2D::mapToWorld()'],['../classCostmap2D.html#ad5d9bee06e3a189ec304c1dce6d39ffc',1,'Costmap2D::mapToWorld()']]],
+  ['maptoworldnobounds_7',['mapToWorldNoBounds',['../classeasynav_1_1Costmap2D.html#a35471c783a2bb44515c672595ff3ed57',1,'easynav::Costmap2D::mapToWorldNoBounds()'],['../classCostmap2D.html#a35471c783a2bb44515c672595ff3ed57',1,'Costmap2D::mapToWorldNoBounds()']]],
+  ['markcell_8',['MarkCell',['../classeasynav_1_1Costmap2D_1_1MarkCell.html#a17636f34a7a05bce3e90b8bb55ef87b2',1,'easynav::Costmap2D::MarkCell::MarkCell()'],['../classCostmap2D_1_1MarkCell.html#a17636f34a7a05bce3e90b8bb55ef87b2',1,'Costmap2D::MarkCell::MarkCell()']]],
+  ['mask_9',['Mask',['../classBonxai_1_1Mask.html#a4124ae4a2b71eacef02125859d8f1d10',1,'Bonxai::Mask::Mask(size_t log2dim)'],['../classBonxai_1_1Mask.html#a01c1979423e44bf955d8f99cb0e7b21d',1,'Bonxai::Mask::Mask(size_t log2dim, bool on)'],['../classBonxai_1_1Mask.html#a73c4b9f0cff37d9e10f69becedb69b14',1,'Bonxai::Mask::Mask(const Mask &amp;other)'],['../classBonxai_1_1Mask.html#a4a7ddf00358399674740109a621b4a6e',1,'Bonxai::Mask::Mask(Mask &amp;&amp;other)']]],
+  ['mask_10',['mask',['../classBonxai_1_1Grid.html#a4139462be2f8e1f9f51da3a328db662c',1,'Bonxai::Grid::mask()'],['../classBonxai_1_1Grid.html#a7cc87dc0548e8bae4f95bf76719438f1',1,'Bonxai::Grid::mask() const']]],
+  ['matchsize_11',['matchSize',['../classeasynav_1_1InflationFilter.html#a73fb2b6c1ef8af4cbf395fcd07433525',1,'easynav::InflationFilter']]],
+  ['memusage_12',['memUsage',['../classBonxai_1_1Grid.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::Grid::memUsage()'],['../classBonxai_1_1VoxelGrid.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::VoxelGrid::memUsage()'],['../classBonxai_1_1GridBlockAllocator.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::GridBlockAllocator::memUsage()'],['../classBonxai_1_1Mask.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::Mask::memUsage()']]],
+  ['metric_5fto_5fcell_13',['metric_to_cell',['../classeasynav_1_1SimpleMap.html#a2dcdba2d7252c38369bcf831bc754434',1,'easynav::SimpleMap']]],
+  ['min_5fby_14',['min_by',['../namespaceeasynav.html#a59672d31699bbc5315de772437430212',1,'easynav']]],
+  ['mppicontroller_15',['MPPIController',['../classeasynav_1_1MPPIController.html#ad9b24cab72366c4f858ec99e057815fc',1,'easynav::MPPIController']]],
+  ['mppioptimizer_16',['MPPIOptimizer',['../classeasynav_1_1MPPIOptimizer.html#a54815c8e6d0d383acb2a2ede86d70c50',1,'easynav::MPPIOptimizer']]]
 ];

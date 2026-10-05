@@ -116,7 +116,7 @@ Directory dependency graph for easynav_mppi_controller:</div>
 <area shape="rect" href="dir_000087_000066.html" title="2" alt="" coords="269,109,276,124"/>
 <area shape="rect" href="dir_e8973b27e8769fd2e8494c1d8d8125ba.html" title="tests" alt="" coords="290,63,340,89"/>
 <area shape="poly" href="dir_000105_000066.html" alt="" coords="311,90,293,124,288,122,306,88"/>
-<area shape="rect" href="dir_000105_000066.html" title="2" alt="" coords="296,117,303,132"/>
+<area shape="rect" href="dir_000105_000066.html" title="3" alt="" coords="296,117,303,132"/>
 <area shape="rect" href="dir_afbb35b9fe2a1f2f9444bbb0d694d2aa.html" alt="" coords="27,52,351,173"/>
 <area shape="rect" href="dir_87b6ed4386158a4d6cd0ecd5fb5bd5c2.html" title="controllers" alt="" coords="16,16,361,184"/>
 </map>
@@ -186,6 +186,10 @@ Parameters</h1>
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.fov</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">M_PI/2.0</span>  </td><td class="markdownTableBodyNone">Field of view used in trajectory sampling (radians).  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.safety_radius</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.6</span>  </td><td class="markdownTableBodyNone">Safety radius around the robot (meters).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.obstacle_range</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">2.0</span>  </td><td class="markdownTableBodyNone">Obstacle points are taken (robot frame) from just behind the robot (<span class="tt">robot_geometry.radius</span>) up to this distance ahead, and this far to each side; mirrored when moving backward.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.z_min_filter</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">Points below this height (robot frame) are the ground; above <span class="tt">robot_geometry.height</span> they are ignored too.  </td></tr>
 </table>
 <blockquote class="doxtable">
 <p><b>Deprecated:</b> this plugin's former limit parameters (<span class="tt">max_linear_velocity</span>, <span class="tt">max_angular_velocity</span>, <span class="tt">max_linear_acceleration</span>, <span class="tt">max_angular_acceleration</span>, under the plugin's name) still apply, with a warning, where <span class="tt">controller_node.robot_limits.*</span> does not set that limit. They will stop working soon: move them to <span class="tt">robot_limits</span>. </p>
