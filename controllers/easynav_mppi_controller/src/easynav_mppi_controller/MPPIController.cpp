@@ -60,6 +60,14 @@ MPPIController::on_initialize()
   max_ang_acc_ = limits.max_angular_acc;
   node->get_parameter<double>(plugin_name + ".fov", fov_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".obstacle_range", obstacle_range_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".z_min_filter", z_min_filter_);
+  node->get_parameter<double>(plugin_name + ".obstacle_range", obstacle_range_);
+  node->get_parameter<double>(plugin_name + ".z_min_filter", z_min_filter_);
+  const auto geometry = get_robot_geometry();
+  robot_radius_ = geometry.radius;
+  robot_height_ = geometry.height;
 
   optimizer_ = std::make_unique<MPPIOptimizer>(num_samples_, horizon_steps_, dt_, lambda_,
     max_lin_vel_, max_ang_vel_, fov_, safety_radius_);
@@ -135,6 +143,26 @@ void MPPIController::publish_mppi_markers(
 }
 
 
+pcl::PointCloud<pcl::PointXYZ>
+MPPIController::obstacle_points(const NavState & nav_state, bool backward) const
+{
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  // Robot frame: from just behind the robot to obstacle_range ahead (mirrored when backward).
+  const double x_min = backward ? -obstacle_range_ : -robot_radius_;
+  const double x_max = backward ? robot_radius_ : obstacle_range_;
+  // Downsampled first (indices only): fewer points to transform in the filter.
+  return PointPerceptionsOpsView(perceptions)
+         .downsample(0.1)
+         .fuse(tf_info.robot_frame)
+         .filter({x_min, -obstacle_range_, z_min_filter_},
+           {x_max, obstacle_range_, robot_height_}, false)
+         .fuse(tf_info.map_frame)
+         .collapse({NAN, NAN, 0.1})
+         .downsample(0.1)
+         .as_points();
+}
+
 void
 MPPIController::update_rt(NavState & nav_state)
 {
@@ -184,20 +212,9 @@ MPPIController::update_rt(NavState & nav_state)
   }
 
   const auto pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
-  const auto & perceptions = nav_state.get_no_group<PointPerception>();
-  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
-  const auto & filtered = PointPerceptionsOpsView(perceptions)
-    .filter({-1.0, -1.0, -1.0}, {1.0, 1.0, 1.0})
-    .fuse(tf_info.map_frame)
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-    .collapse({NAN, NAN, 0.1})
-    .downsample(0.1)
-    .as_points();
-
-  if (filtered.empty()) {
-    RCLCPP_WARN(get_node()->get_logger(),
-        "No valid points available for MPPI optimization, using the path only.");
-  }
+  const bool backward = nav_state.has("cmd_vel") &&
+    nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel").twist.linear.x < 0.0;
+  const auto filtered = obstacle_points(nav_state, backward);
 
   // Compute the control using MPPI with points
   auto result = optimizer_->compute_control(pose, path, filtered);
