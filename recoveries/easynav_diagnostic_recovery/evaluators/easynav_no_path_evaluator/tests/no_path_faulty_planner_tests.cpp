@@ -42,7 +42,8 @@ protected:
   {
     node_ = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
       "no_path_faulty_planner", rclcpp::NodeOptions().parameter_overrides(
-        {{"plan.fault", fault}, {"plan.fault_after", fault_after}, {"no_path.freq", 1000.0}}));
+        {{"plan.fault", fault}, {"plan.fault_after", fault_after}, {"no_path.freq", 1000.0},
+          {"no_path.debounce_duration", 0.0}}));
     planner_ = std::make_shared<easynav::FaultyPlanner>();
     planner_->initialize(node_, "plan");
     evaluator_ = std::make_shared<easynav::NoPathEvaluator>();

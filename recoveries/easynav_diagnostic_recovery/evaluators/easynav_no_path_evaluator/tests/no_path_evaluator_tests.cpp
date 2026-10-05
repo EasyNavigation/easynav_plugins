@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <chrono>
+#include <string>
 #include <thread>
 
 #include "gtest/gtest.h"
@@ -98,7 +99,9 @@ TEST_F(NoPathEvaluatorTestCase, WarnsWhenNoPathYetWithAnActiveGoal)
 
 TEST_F(NoPathEvaluatorTestCase, ErrorsOnEmptyPathWithAnActiveGoal)
 {
-  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_empty_path_node");
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_empty_path_node", rclcpp::NodeOptions().parameter_overrides(
+      {{"no_path3.debounce_duration", 0.0}}));
   easynav::NoPathEvaluator eval;
   eval.initialize(node, "no_path3");
 
@@ -132,4 +135,107 @@ TEST_F(NoPathEvaluatorTestCase, OkWhenPathHasPosesWithAnActiveGoal)
   EXPECT_EQ(
     nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.no_path4").level,
     diagnostic_msgs::msg::DiagnosticStatus::OK);
+}
+
+// Debounce: a new goal leaves the path empty until the next planner cycle.
+class NoPathDebounceTest : public NoPathEvaluatorTestCase
+{
+protected:
+  void make(double debounce)
+  {
+    static int count = 0;
+    node_ = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+      "test_no_path_debounce_" + std::to_string(count++),
+      rclcpp::NodeOptions().parameter_overrides(
+        {{"no_path.freq", 1000.0}, {"no_path.debounce_duration", debounce}}));
+    eval_.initialize(node_, "no_path");
+    set_active_goal(nav_state_);
+  }
+
+  void set_path(bool with_poses)
+  {
+    nav_msgs::msg::Path path;
+    if (with_poses) {
+      path.poses.push_back(geometry_msgs::msg::PoseStamped());
+    }
+    nav_state_.set("path", path);
+  }
+
+  uint8_t level_after(int ms)
+  {
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+    eval_.internal_update(nav_state_);
+    return nav_state_.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.no_path").level;
+  }
+
+  rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
+  easynav::NoPathEvaluator eval_;
+  easynav::NavState nav_state_;
+};
+
+using diagnostic_msgs::msg::DiagnosticStatus;
+
+TEST_F(NoPathDebounceTest, DefaultsToTwoSeconds)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_no_path_default");
+  easynav::NoPathEvaluator eval;
+  eval.initialize(node, "no_path");
+  EXPECT_DOUBLE_EQ(node->get_parameter("no_path.debounce_duration").as_double(), 2.0);
+}
+
+TEST_F(NoPathDebounceTest, AShortEmptyPathIsOnlyAWarning)
+{
+  make(0.5);
+  set_path(false);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::WARN);
+  EXPECT_EQ(level_after(100), DiagnosticStatus::WARN);
+  set_path(true);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::OK);
+}
+
+TEST_F(NoPathDebounceTest, ASustainedEmptyPathIsAnError)
+{
+  make(0.2);
+  set_path(false);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::WARN);
+  EXPECT_EQ(level_after(250), DiagnosticStatus::ERROR);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::ERROR);   // and stays so
+}
+
+TEST_F(NoPathDebounceTest, APathInBetweenRestartsTheWait)
+{
+  make(0.3);
+  set_path(false);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::WARN);
+  set_path(true);
+  EXPECT_EQ(level_after(200), DiagnosticStatus::OK);
+  set_path(false);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::WARN);
+  EXPECT_EQ(level_after(200), DiagnosticStatus::WARN);   // 0.2 s since it became empty again
+  EXPECT_EQ(level_after(150), DiagnosticStatus::ERROR);
+}
+
+TEST_F(NoPathDebounceTest, LosingTheGoalRestartsTheWait)
+{
+  make(0.3);
+  set_path(false);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::WARN);
+  nav_state_.set("goals", nav_msgs::msg::Goals());
+  EXPECT_EQ(level_after(200), DiagnosticStatus::OK);
+  set_active_goal(nav_state_);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::WARN);    // the wait starts again here
+  EXPECT_EQ(level_after(200), DiagnosticStatus::WARN);
+  EXPECT_EQ(level_after(150), DiagnosticStatus::ERROR);
+}
+
+TEST_F(NoPathDebounceTest, AnErrorClearsOnceThereIsAPath)
+{
+  make(0.1);
+  set_path(false);
+  level_after(5);
+  EXPECT_EQ(level_after(150), DiagnosticStatus::ERROR);
+  set_path(true);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::OK);
+  set_path(false);
+  EXPECT_EQ(level_after(5), DiagnosticStatus::WARN);
 }

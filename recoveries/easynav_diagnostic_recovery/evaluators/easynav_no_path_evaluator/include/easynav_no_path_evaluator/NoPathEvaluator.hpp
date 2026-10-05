@@ -18,6 +18,10 @@
 #ifndef EASYNAV_NO_PATH_EVALUATOR__NOPATHEVALUATOR_HPP_
 #define EASYNAV_NO_PATH_EVALUATOR__NOPATHEVALUATOR_HPP_
 
+#include <optional>
+
+#include "rclcpp/time.hpp"
+
 #include "easynav_diagnostic_recovery/RecoveryEvaluatorBase.hpp"
 
 namespace easynav
@@ -41,6 +45,10 @@ public:
 
 protected:
   void update(NavState & nav_state) override;
+
+private:
+  double debounce_duration_ {2.0};          ///< An empty path is an ERROR after this long (s).
+  std::optional<rclcpp::Time> empty_since_;  ///< When the path became empty, if it is.
 };
 
 }  // namespace easynav

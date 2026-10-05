@@ -15,6 +15,7 @@
 /// \file
 /// \brief Implementation of the NoPathEvaluator class.
 
+#include "easynav_common/Parameters.hpp"
 #include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/path.hpp"
 
@@ -25,6 +26,11 @@ namespace easynav
 
 void NoPathEvaluator::on_initialize()
 {
+  auto node = get_node();
+  const auto & plugin_name = get_plugin_name();
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".debounce_duration",
+      debounce_duration_);
+  node->get_parameter<double>(plugin_name + ".debounce_duration", debounce_duration_);
 }
 
 void NoPathEvaluator::update(NavState & nav_state)
@@ -36,6 +42,7 @@ void NoPathEvaluator::update(NavState & nav_state)
   // "goals" is written by GoalManager on the same non-RT thread this evaluator runs on, so a
   // plain get() is safe here too. No active goal means there is nothing to plan toward, so a
   // missing/empty "path" is expected, not something this evaluator should flag.
+  bool empty_path = false;
   const bool has_active_goal = nav_state.has("goals") &&
     !nav_state.get<nav_msgs::msg::Goals>("goals").goals.empty();
 
@@ -50,15 +57,29 @@ void NoPathEvaluator::update(NavState & nav_state)
     // a plain get() is safe here and avoids copying a potentially large Path (see NavState's
     // own get()/get_safe() guidance in NavState.hpp).
     const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
-    if (path.poses.empty()) {
-      status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
-      status.message = "planner produced an empty path";
+    empty_path = path.poses.empty();
+    if (empty_path) {
+      // A new goal leaves the path empty until the next planner cycle: only a sustained empty
+      // path is an error.
+      if (!empty_since_.has_value()) {
+        empty_since_ = get_node()->now();
+      }
+      if ((get_node()->now() - *empty_since_).seconds() >= debounce_duration_) {
+        status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
+        status.message = "planner produced an empty path";
+      } else {
+        status.level = diagnostic_msgs::msg::DiagnosticStatus::WARN;
+        status.message = "empty path, waiting for the planner";
+      }
     } else {
       status.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
       status.message = "path available";
     }
   }
 
+  if (!empty_path) {
+    empty_since_.reset();
+  }
   publish_diagnostic(nav_state, status);
 }
 
