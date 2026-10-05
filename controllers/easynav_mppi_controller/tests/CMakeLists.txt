@@ -21,3 +21,6 @@ ament_add_gtest(mppi_controller_legacy_params_file_tests mppi_controller_legacy_
 target_link_libraries(mppi_controller_legacy_params_file_tests easynav_controller::easynav_controller)
 target_compile_definitions(mppi_controller_legacy_params_file_tests
   PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
+
+ament_add_gtest(mppi_controller_obstacle_points_tests mppi_controller_obstacle_points_tests.cpp)
+target_link_libraries(mppi_controller_obstacle_points_tests ${PROJECT_NAME})

@@ -42,6 +42,8 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | — | — | — | Velocity and acceleration limits are not this plugin's: they are the robot limits of `controller_node` (`robot_limits.max_linear_vel`, `min_linear_vel`, `max_angular_vel`, `max_linear_acc`, `max_linear_decel`, `max_angular_acc`, `max_angular_decel`), queried with `ControllerMethodBase::get_robot_limits()` and also enforced by ControllerNode's velocity smoother. |
 | `<plugin>.fov` | `double` | `M_PI/2.0` | Field of view used in trajectory sampling (radians). |
 | `<plugin>.safety_radius` | `double` | `0.6` | Safety radius around the robot (meters). |
+| `<plugin>.obstacle_range` | `double` | `2.0` | Obstacle points are taken (robot frame) from just behind the robot (`robot_geometry.radius`) up to this distance ahead, and this far to each side; mirrored when moving backward. |
+| `<plugin>.z_min_filter` | `double` | `0.0` | Points below this height (robot frame) are the ground; above `robot_geometry.height` they are ignored too. |
 
 > **Deprecated:** this plugin's former limit parameters (`max_linear_velocity`, `max_angular_velocity`, `max_linear_acceleration`, `max_angular_acceleration`, under the plugin's name) still apply, with a warning, where `controller_node.robot_limits.*` does not set that limit. They will stop working soon: move them to `robot_limits`.
 
