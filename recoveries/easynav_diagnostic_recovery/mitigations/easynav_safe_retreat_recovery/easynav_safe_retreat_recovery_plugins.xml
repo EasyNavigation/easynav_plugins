@@ -1,6 +1,6 @@
 <class_libraries>
   <library path="easynav_safe_retreat_recovery">
-    <class name="easynav_safe_retreat_recovery/SafeRetreatRecovery" type="easynav::SafeRetreatRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+    <class name="easynav_diagnostic_recovery/SafeRetreatRecovery" type="easynav::SafeRetreatRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
       <description>
       Retreats straight back from a too-close obstacle (hardware_id "obstacle_proximity") until
       reaching a safe distance. Fails safely if the obstacle is behind the robot instead of

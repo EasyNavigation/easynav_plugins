@@ -1,6 +1,6 @@
 <class_libraries>
   <library path="easynav_human_assistance_recovery">
-    <class name="easynav_human_assistance_recovery/HumanAssistanceRecovery" type="easynav::HumanAssistanceRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+    <class name="easynav_diagnostic_recovery/HumanAssistanceRecovery" type="easynav::HumanAssistanceRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
       <description>
       Last-resort, generic mitigation: accepts any ERROR diagnostic, holds the robot stopped and
       makes the problem observable, and resumes normal operation as soon as no diagnostic is
