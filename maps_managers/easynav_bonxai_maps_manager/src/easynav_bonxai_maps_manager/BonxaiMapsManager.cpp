@@ -97,7 +97,13 @@ BonxaiMapsManager::on_initialize()
       }
 
       bonxai_msg_.data.clear();
-      pcl::toROSMsg(pcl_out, bonxai_msg_);
+      // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
+      if (!pcl_out.empty()) {
+        pcl::toROSMsg(pcl_out, bonxai_msg_);
+      } else {
+        bonxai_msg_.width = 0;
+        bonxai_msg_.row_step = 0;
+      }
 
       publish_map();
     } else {
@@ -211,7 +217,13 @@ BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
   }
 
   bonxai_msg_.data.clear();
-  pcl::toROSMsg(pcl_out, bonxai_msg_);
+  // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
+  if (!pcl_out.empty()) {
+    pcl::toROSMsg(pcl_out, bonxai_msg_);
+  } else {
+    bonxai_msg_.width = 0;
+    bonxai_msg_.row_step = 0;
+  }
 }
 
 void
@@ -273,7 +285,13 @@ BonxaiMapsManager::update_from_occ(const nav_msgs::msg::OccupancyGrid & occ)
   }
 
   bonxai_msg_.data.clear();
-  pcl::toROSMsg(pcl_out, bonxai_msg_);
+  // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
+  if (!pcl_out.empty()) {
+    pcl::toROSMsg(pcl_out, bonxai_msg_);
+  } else {
+    bonxai_msg_.width = 0;
+    bonxai_msg_.row_step = 0;
+  }
 }
 
 void
