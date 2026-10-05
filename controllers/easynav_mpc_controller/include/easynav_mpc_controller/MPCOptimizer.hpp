@@ -43,7 +43,8 @@ public:
   Eigen::Vector2d goal;                           ///< Goal pose (x,y) to optimizer.
   Eigen::Vector3d x0;                             ///< Init pos (x,y,z).
   Eigen::Vector3d theta0;                         ///< Init orientation (roll,pitch,yaw).
-  const pcl::PointCloud<pcl::PointXYZ> & points;  ///< Filtered Point Cloud to detect collisions.
+  const pcl::PointCloud<pcl::PointXYZ> & points;  ///< Obstacle points (map frame).
+  double safety_radius {0.0};  ///< Predicted positions closer than this to a point are penalized.
 
   /// \brief Get the number of horizont steps
   /// \return integer value of amount of horizont step used in optimization

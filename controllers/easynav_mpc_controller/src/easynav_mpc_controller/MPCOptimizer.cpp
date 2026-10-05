@@ -16,6 +16,8 @@
 /// \file
 /// \brief Implementation of MPCParameters and MPCOptimizer classes.
 
+#include <cmath>
+
 #include "easynav_mpc_controller/MPCOptimizer.hpp"
 
 namespace easynav
@@ -68,6 +70,11 @@ MPCParameters::get_smooth_cost()
   return Rd_;
 }
 
+namespace
+{
+constexpr double kObstacleWeight = 1000.0;  // dominates tracking within the safety radius
+}  // namespace
+
 MPCOptimizer::MPCOptimizer() {}
 
 MPCOptimizer::~MPCOptimizer() = default;
@@ -116,6 +123,9 @@ MPCOptimizer::cost_function(
     }
 
     state = MPCOptimizer::kinematic_model(position, orientation, v, w, dt);
+    // Each step starts where the previous one ended.
+    position.head<2>() = state.head<2>();
+    orientation[2] = state[2];
 
     Eigen::Vector2d pos = state.head<2>();
     Eigen::Vector2d error = params->goal - pos;
@@ -130,6 +140,13 @@ MPCOptimizer::cost_function(
     cost += R(0, 0) * v * v + R(1, 1) * w * w;
     // Smooth Cost
     cost += Rd(0, 0) * dv * dv + Rd(1, 1) * dw * dw;
+    // Obstacle cost: closer than the safety radius to an obstacle point
+    for (const auto & p : params->points) {
+      const double d = std::hypot(p.x - state[0], p.y - state[1]);
+      if (d < params->safety_radius) {
+        cost += kObstacleWeight * (params->safety_radius - d) * (params->safety_radius - d);
+      }
+    }
   }
 
   return cost;

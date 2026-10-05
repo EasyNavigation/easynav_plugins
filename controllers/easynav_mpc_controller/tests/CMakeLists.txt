@@ -22,5 +22,8 @@ target_link_libraries(mpc_controller_legacy_params_file_tests easynav_controller
 target_compile_definitions(mpc_controller_legacy_params_file_tests
   PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
 
-ament_add_gtest(mpc_controller_collision_checker_tests mpc_controller_collision_checker_tests.cpp)
-target_link_libraries(mpc_controller_collision_checker_tests ${PROJECT_NAME})
+ament_add_gtest(mpc_controller_obstacles_tests mpc_controller_obstacles_tests.cpp)
+target_link_libraries(mpc_controller_obstacles_tests ${PROJECT_NAME})
+
+ament_add_gtest(mpc_controller_no_obstacles_tests mpc_controller_no_obstacles_tests.cpp)
+target_link_libraries(mpc_controller_no_obstacles_tests ${PROJECT_NAME})

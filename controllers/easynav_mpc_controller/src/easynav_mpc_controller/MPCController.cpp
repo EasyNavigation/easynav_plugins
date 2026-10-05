@@ -40,8 +40,9 @@ MPCController::on_initialize()
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
       safety_radius_);
   easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".verbose", verbose_);
-  easynav::declare_parameter_if_absent<bool>(
-    *node, plugin_name + ".use_collision_checker", use_collision_checker_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".obstacle_range", obstacle_range_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".z_min_filter", z_min_filter_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_pos_tol",
       fallback_goal_pos_tol_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_yaw_tol",
@@ -56,7 +57,19 @@ MPCController::on_initialize()
   max_lin_vel_ = limits.max_linear_vel;
   max_ang_vel_ = limits.max_angular_vel;
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
-  node->get_parameter<bool>(plugin_name + ".use_collision_checker", use_collision_checker_);
+  node->get_parameter<double>(plugin_name + ".obstacle_range", obstacle_range_);
+  node->get_parameter<double>(plugin_name + ".z_min_filter", z_min_filter_);
+  const auto geometry = get_robot_geometry();
+  robot_radius_ = geometry.radius;
+  robot_height_ = geometry.height;
+  // Collision stops are the recovery's (CollisionSafetyReflex); obstacles are in the MPC cost.
+  if (node->get_node_parameters_interface()->get_parameter_overrides().count(
+      plugin_name + ".use_collision_checker"))
+  {
+    RCLCPP_WARN(node->get_logger(),
+      "'%s.use_collision_checker' no longer exists: obstacles are part of the MPC cost",
+      plugin_name.c_str());
+  }
 
   node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
   node->get_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
@@ -79,6 +92,8 @@ MPCController::publish_mpc_path(
   nav_msgs::msg::Path mpc_path_;
 
   if (best_vel.size() > 0) {
+    Eigen::Vector3d position = params->x0;
+    Eigen::Vector3d orientation = params->theta0;
     mpc_path_.header.stamp = get_node()->now();
     mpc_path_.header.frame_id = path.header.frame_id;
     for (size_t i = 0; i + 1 < best_vel.size(); i += 2) {
@@ -87,7 +102,9 @@ MPCController::publish_mpc_path(
       double w = best_vel[i + 1];
       pose_stamped.header.frame_id = path.header.frame_id;
       pose_stamped.header.stamp = path.header.stamp;
-      auto state = optimizer_->kinematic_model(params->x0, params->theta0, v, w, dt_);
+      const auto state = optimizer_->kinematic_model(position, orientation, v, w, dt_);
+      position.head<2>() = state.head<2>();
+      orientation[2] = state[2];
       pose_stamped.pose.position.x = state[0];
       pose_stamped.pose.position.y = state[1];
       mpc_path_.poses.push_back(pose_stamped);
@@ -97,41 +114,24 @@ MPCController::publish_mpc_path(
   }
 }
 
-void
-MPCController::collision_checker(void *data, std::vector<double> & u)
+pcl::PointCloud<pcl::PointXYZ>
+MPCController::obstacle_points(const NavState & nav_state, bool backward) const
 {
-  MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
-  double x_m = 0.0, y_m = 0.0, dist = 0.0, angle = 0.0;
-  size_t real_points = 0;
-  for (const auto & point : params->points) {
-    if(!std::isnan(point.x) || !std::isnan(point.y)) {
-      x_m += (point.x - params->x0[0]);
-      y_m += (point.y - params->x0[1]);
-      real_points++;
-    }
-  }
-  if(real_points != 0) {
-    x_m /= real_points;
-    y_m /= real_points;
-    dist = std::hypot(x_m, y_m);
-    angle = std::atan2(y_m, x_m) - params->theta0[2];
-    if(dist < safety_radius_) {
-      if(!collision_state_) {
-        collision_state_ = true;
-        last_v_ = u[0];
-        last_w_ = u[1];
-      }
-      RCLCPP_WARN(get_node()->get_logger(),
-        "[COLLISION] Collision detected at: [%f] m and Theta: [%f] degrees", dist,
-        (angle * 180.00 / M_PI) );
-      last_v_ = collision_factor_ * last_v_ * safety_radius_ / dist;
-      last_w_ = collision_factor_ * last_w_ * safety_radius_ / dist;
-      u[0] = -last_v_;
-      u[1] = -last_w_;
-    } else {
-      collision_state_ = false;
-    }
-  }
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  // Robot frame: from just behind the robot to obstacle_range ahead (mirrored when backward).
+  const double x_min = backward ? -obstacle_range_ : -robot_radius_;
+  const double x_max = backward ? robot_radius_ : obstacle_range_;
+  // Downsampled first (indices only): fewer points to transform in the filter.
+  return PointPerceptionsOpsView(perceptions)
+         .downsample(0.1)
+         .fuse(tf_info.robot_frame)
+         .filter({x_min, -obstacle_range_, z_min_filter_},
+           {x_max, obstacle_range_, robot_height_}, false)
+         .fuse(tf_info.map_frame)
+         .collapse({NAN, NAN, 0.1})
+         .downsample(0.1)
+         .as_points();
 }
 
 void
@@ -217,21 +217,18 @@ MPCController::update_rt(NavState & nav_state)
     local_horizon = num_elements - 1;
   }
   const auto & last_pose = path.poses[local_horizon].pose.position;
-  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
-  const auto & filtered = PointPerceptionsOpsView(perceptions)
-    .filter({-2.0, -0.35, -1.0}, {0.0, 0.35, 1.0})
-    .fuse(tf_info.map_frame)
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
-    .collapse({NAN, NAN, 0.1})
-    .downsample(0.1)
-    .as_points();
+  const bool backward = cmd_vel_.twist.linear.x < 0.0;
+  const auto filtered = obstacle_points(nav_state, backward);
 
-  sensor_msgs::msg::PointCloud2 cloud_out;
-  pcl::toROSMsg(filtered, cloud_out);
-  cloud_out.header.frame_id = path.header.frame_id;
-  cloud_out.header.stamp = get_node()->now();
-  detection_pub_->publish(cloud_out);
+  // pcl::toROSMsg() indexes the data of an empty cloud (an assertion aborts the process)
+  if (!filtered.empty()) {
+    sensor_msgs::msg::PointCloud2 cloud_out;
+    pcl::toROSMsg(filtered, cloud_out);
+    cloud_out.header.frame_id = path.header.frame_id;
+    cloud_out.header.stamp = get_node()->now();
+    detection_pub_->publish(cloud_out);
+  }
 
   const auto pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   double roll_, pitch_, yaw_;
@@ -254,6 +251,7 @@ MPCController::update_rt(NavState & nav_state)
     filtered,
     static_cast<int>(horizon_steps_),
     dt_);
+  params.safety_radius = safety_radius_;
 
   NLoptCallbackData cbdata{optimizer_.get(), &params};
 
@@ -287,10 +285,6 @@ MPCController::update_rt(NavState & nav_state)
 
   } catch (std::exception & e) {
     std::cerr << "Optimization Error: " << e.what() << std::endl;
-  }
-
-  if (use_collision_checker_) {
-    collision_checker(&params, u);
   }
 
   // Final alignment phase with hysteresis on distance:
