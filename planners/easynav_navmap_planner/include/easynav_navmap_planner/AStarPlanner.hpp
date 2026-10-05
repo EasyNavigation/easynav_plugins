@@ -68,10 +68,10 @@ public:
   void update(NavState & nav_state) override;
 
 protected:
-  double cost_factor_;        ///< Scaling factor applied to cell cost values.
-  double inflation_penalty_;  ///< Extra cost penalty for paths near inflated obstacles.
-  double cost_axial_;         ///< Cost multiplier for axial (horizontal/vertical) moves.
-  double cost_diagonal_;      ///< Cost multiplier for diagonal moves.
+  double cost_factor_ {2.0};        ///< Scaling factor applied to cell cost values.
+  double cost_weight_ {5.0};        ///< Weight of the cell cost (inflation) against length.
+  double cost_axial_ {1.0};         ///< Cost multiplier for axial (horizontal/vertical) moves.
+  double cost_diagonal_ {1.0};      ///< Cost multiplier for diagonal moves.
   std::string layer_name_;
   bool continuous_replan_ {true};     ///< Whether to replan the path at control frequency.
   nav_msgs::msg::Path current_path_;  ///< Most recently computed path.
