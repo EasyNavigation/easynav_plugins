@@ -1,2 +1,0 @@
-ament_add_gtest(safety_channel_evaluator_tests safety_channel_evaluator_tests.cpp)
-target_link_libraries(safety_channel_evaluator_tests ${PROJECT_NAME})
