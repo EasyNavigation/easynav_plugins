@@ -6,3 +6,9 @@ target_link_libraries(navmap_mapsmanager_reconfigure_tests ${PROJECT_NAME})
 
 ament_add_gtest(navmap_inflation_geometry_tests navmap_inflation_geometry_tests.cpp)
 target_link_libraries(navmap_inflation_geometry_tests ${PROJECT_NAME})
+
+ament_add_gtest(navmap_obstacle_filter_tests navmap_obstacle_filter_tests.cpp)
+target_link_libraries(navmap_obstacle_filter_tests ${PROJECT_NAME})
+
+ament_add_gtest(navmap_inflation_filter_tests navmap_inflation_filter_tests.cpp)
+target_link_libraries(navmap_inflation_filter_tests ${PROJECT_NAME})
