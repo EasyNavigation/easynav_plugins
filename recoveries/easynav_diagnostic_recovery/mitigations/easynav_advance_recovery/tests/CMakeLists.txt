@@ -1,2 +1,0 @@
-ament_add_gtest(advance_recovery_tests advance_recovery_tests.cpp)
-target_link_libraries(advance_recovery_tests ${PROJECT_NAME})

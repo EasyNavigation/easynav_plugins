@@ -1,0 +1,105 @@
+<class_libraries>
+  <library path="easynav_diagnostic_recovery">
+    <class name="easynav_diagnostic_recovery/ControllerStuckEvaluator" type="easynav::ControllerStuckEvaluator" base_class_type="easynav_diagnostic_recovery::RecoveryEvaluatorBase">
+      <description>
+      Diagnoses a robot commanded to move ("cmd_vel" above threshold) that is not making
+      progress (robot_pose barely changing). Skips evaluation while a recovery mitigation owns
+      control_owner, while any safety reflex is intervening, or without an active goal.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/NoPathEvaluator" type="easynav::NoPathEvaluator" base_class_type="easynav_diagnostic_recovery::RecoveryEvaluatorBase">
+      <description>
+      Diagnoses a missing or empty planner path: WARN if the planner has not published one yet,
+      ERROR if it published an empty path, OK otherwise.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/ObstacleTooCloseEvaluator" type="easynav::ObstacleTooCloseEvaluator" base_class_type="easynav_diagnostic_recovery::RecoveryEvaluatorBase">
+      <description>
+      Diagnoses the robot being stopped (near-zero measured velocity) too close to an
+      obstacle. Deliberately compound: it does not fire while the robot is still moving/braking.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/RosGraphEvaluator" type="easynav::RosGraphEvaluator" base_class_type="easynav_diagnostic_recovery::RecoveryEvaluatorBase">
+      <description>
+      Checks EasyNav's wiring in the ROS graph: ERROR (hardware_id "ros_graph") if a subscription
+      of an EasyNav node has no publisher, or if no velocity output of EasyNav has a subscriber.
+      OK reports whether the velocity output is consumed stamped or unstamped.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/SafetyChannelEvaluator" type="easynav::SafetyChannelEvaluator" base_class_type="easynav_diagnostic_recovery::RecoveryEvaluatorBase">
+      <description>
+      Reports protective stops of the safety channel ("safety_status") as WARN, and as ERROR
+      once one lasts max_stop_time seconds, so a mitigation (e.g. asking for human assistance)
+      can handle it.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/AdvanceRecovery" type="easynav::AdvanceRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+      <description>
+      Advances a short configured distance for diagnostics with hardware_id
+      "controller_stuck" (ControllerStuckEvaluator). Never reports success as "fixed" — each
+      activation just completes one advance; if the same episode keeps recurring for too long
+      in total, it gives up and escalates instead of retrying forever.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/CancelMissionRecovery" type="easynav::CancelMissionRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+      <description>
+      Mission-level last resort: accepts any ERROR diagnostic no other mitigation resolved (or
+      already gave up on), and requests GoalManager to cancel the active mission, reporting the
+      diagnostics that caused it. Does not take control_owner — see
+      docs/recoveries_easynav_implementation.md, Fase 5.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/HumanAssistanceRecovery" type="easynav::HumanAssistanceRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+      <description>
+      Last-resort, generic mitigation: accepts any ERROR diagnostic, holds the robot stopped and
+      makes the problem observable, and resumes normal operation as soon as no diagnostic is
+      left at ERROR level. Does not fail the mission (see docs/recoveries_easynav.md §5.15).
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/SafeRetreatRecovery" type="easynav::SafeRetreatRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+      <description>
+      Retreats straight back from a too-close obstacle (hardware_id "obstacle_proximity") until
+      reaching a safe distance. Fails safely if the obstacle is behind the robot instead of
+      ahead of it.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/ShutdownRecovery" type="easynav::ShutdownRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+      <description>
+      System-level mitigation for unrecoverable diagnostics (by default hardware_id "ros_graph"):
+      stops the robot, cancels the active mission and requests EasyNav to terminate in an orderly
+      way, reporting the diagnostics that caused it.
+      </description>
+    </class>
+    <class name="easynav_diagnostic_recovery/CollisionSafetyReflex" type="easynav::CollisionSafetyReflex" base_class_type="easynav_diagnostic_recovery::SafetyReflexBase">
+      <description>
+      Level-0 (real-time) safety reflex that stops the robot when the forward-projected
+      "cmd_vel" would cause a collision within the current braking distance. See
+      docs/recoveries_easynav.md, level 0.
+      </description>
+    </class>
+  </library>
+  <library path="dummy_evaluator">
+    <class name="easynav_diagnostic_recovery/DummyEvaluator" type="easynav_diagnostic_recovery::DummyEvaluator" base_class_type="easynav_diagnostic_recovery::RecoveryEvaluatorBase">
+      <description>
+      A "dummy" implementation for RecoveryEvaluatorBase. Always reports OK.
+      This evaluator does nothing. It serves as an example and a reference plugin.
+      </description>
+    </class>
+  </library>
+  <library path="dummy_mitigation">
+    <class name="easynav_diagnostic_recovery/DummyMitigation" type="easynav_diagnostic_recovery::DummyMitigation" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+      <description>
+      A "dummy" implementation for RecoveryMitigationBase. Accepts any non-OK diagnostic and
+      immediately reports SUCCEEDED. Serves as an example and a reference plugin.
+      </description>
+    </class>
+  </library>
+  <library path="dummy_safety_reflex">
+    <class name="easynav_diagnostic_recovery/DummySafetyReflex" type="easynav_diagnostic_recovery::DummySafetyReflex" base_class_type="easynav_diagnostic_recovery::SafetyReflexBase">
+      <description>
+      A "dummy" implementation for SafetyReflexBase. Never intervenes unless its "trigger"
+      parameter is true, then stops the robot. Serves as an example and a reference plugin.
+      </description>
+    </class>
+  </library>
+</class_libraries>
