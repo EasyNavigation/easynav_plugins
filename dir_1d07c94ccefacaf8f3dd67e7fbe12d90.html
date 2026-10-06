@@ -116,7 +116,7 @@ Directory dependency graph for easynav_navmap_maps_manager:</div>
 <area shape="rect" href="dir_000097_000076.html" title="6" alt="" coords="267,124,274,139"/>
 <area shape="rect" href="dir_191014c8ae5067e82ee00eb3abad1220.html" title="tests" alt="" coords="287,70,337,96"/>
 <area shape="poly" href="dir_000115_000076.html" alt="" coords="309,98,289,139,284,136,304,95"/>
-<area shape="rect" href="dir_000115_000076.html" title="2" alt="" coords="292,131,299,146"/>
+<area shape="rect" href="dir_000115_000076.html" title="4" alt="" coords="292,131,299,146"/>
 <area shape="rect" href="dir_1d07c94ccefacaf8f3dd67e7fbe12d90.html" alt="" coords="27,52,348,188"/>
 <area shape="rect" href="dir_0085665aa3dcf1c11f094757a0c11b94.html" title="maps_managers" alt="" coords="16,16,359,199"/>
 </map>
@@ -201,16 +201,22 @@ Filter Plugins</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Parameter  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadRight">Default  </th><th class="markdownTableHeadNone">Description  </th></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.max_range</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">10.0</span>  </td><td class="markdownTableBodyNone">Only points within this distance (x and y, robot frame) are used.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">NaN</span>  </td><td class="markdownTableBodyNone">Points below this height (robot frame) are ignored; <span class="tt">NaN</span> disables it.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.max_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">NaN</span>  </td><td class="markdownTableBodyNone">Points above this height (robot frame) are ignored; <span class="tt">NaN</span> disables it.  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.vertical_bins_min</span>  </td><td class="markdownTableBodyNone"><span class="tt">int</span>  </td><td class="markdownTableBodyRight"><span class="tt">3</span>  </td><td class="markdownTableBodyNone">Minimum number of vertical bins required to consider a column as an obstacle.  </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.height_threshold</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.25</span>  </td><td class="markdownTableBodyNone">Minimum vertical height (in meters) between max and min z to mark as an obstacle.  </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.downsample</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3</span>  </td><td class="markdownTableBodyNone">Voxel size used to downsample point clouds before obstacle detection.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.fuse_frame</span>  </td><td class="markdownTableBodyNone"><span class="tt">string</span>  </td><td class="markdownTableBodyRight"><span class="tt">"map"</span>  </td><td class="markdownTableBodyNone">Frame in which points are fused before projection into NavMap.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Input Key:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Reads list of point clouds from <span class="tt">NavState</span> group <span class="tt">"points"</span>.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.fuse_frame</span>  </td><td class="markdownTableBodyNone"><span class="tt">string</span>  </td><td class="markdownTableBodyRight"><span class="tt">"map"</span>  </td><td class="markdownTableBodyNone">Frame in which points are fused before projection into NavMap.  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Input Key:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Reads list of point clouds from <span class="tt">NavState</span> group <span class="tt">"points"</span>.  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Output Layer:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Updates or creates NavMap layer <span class="tt">"obstacles"</span>.  </td></tr>
 </table>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md155"></a>

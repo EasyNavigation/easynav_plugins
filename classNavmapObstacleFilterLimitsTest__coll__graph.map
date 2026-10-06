@@ -1,0 +1,13 @@
+<map id="NavmapObstacleFilterLimitsTest" name="NavmapObstacleFilterLimitsTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="190,177,403,203"/>
+<area shape="rect" id="Node000002" href="$classNavmapObstacleFilterTest.html" title=" " alt="" coords="5,80,183,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,111,272,174,270,179,133,115"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="70,5,118,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="97,46,97,80,91,80,91,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="206,80,286,106"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="260,119,277,152,291,175,287,178,273,154,256,121"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="309,80,386,106"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="337,121,320,154,306,178,302,175,316,152,333,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="409,80,523,106"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="449,120,431,138,409,155,381,169,353,179,351,174,379,164,406,151,427,134,445,116"/>
+</map>
