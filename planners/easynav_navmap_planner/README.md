@@ -51,9 +51,10 @@ All parameters are declared under the plugin namespace, i.e.
 | Name | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.cost_factor` | `double` | `2.0` | Multiplicative weight for geometric distance; values > 1 increase the relative importance of distance. |
+| `<plugin>.cost_weight` | `double` | `5.0` | Weight of the cell cost (inflation) against the path length; higher values keep paths farther from obstacles. |
 | `<plugin>.continuous_replan` | `bool` | `true` | If true, recomputes the path whenever `NavState` updates; if false, plans once per goal. |
 
-**Note:** The planner internally uses hardcoded values for `layer_name` (prefers `"inflated_obstacles"`, fallback to `"obstacles"`), `inflation_penalty` (value used in cost calculation), `cost_axial`, and `cost_diagonal`. These are not runtime-configurable parameters.
+**Note:** The planner internally uses hardcoded values for `layer_name` (prefers `"inflated_obstacles"`, fallback to `"obstacles"`), `cost_axial`, and `cost_diagonal`. These are not runtime-configurable parameters.
 
 ## Interfaces (Topics and Services)
 

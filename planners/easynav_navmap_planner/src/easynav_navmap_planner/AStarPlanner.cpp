@@ -66,9 +66,11 @@ void AStarPlanner::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".cost_factor", 2.0);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".cost_weight", 5.0);
   easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".continuous_replan", true);
 
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
+  node->get_parameter(plugin_name + ".cost_weight", cost_weight_);
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
@@ -388,8 +390,17 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
     occ_[c] = nm.layer_get<std::uint8_t>(cost_layer, c, FREE_SPACE);
   }
 
-  // Traversability: block lethal and unknown.
+  // Traversability: block lethal, unknown and inscribed (the robot would touch an obstacle),
+  // as the costmap planner does.
   auto traversable = [&](NavCelId c) -> bool {
+      const std::uint8_t v = occ_[c];
+      return v < INSCRIBED_INFLATED_OBSTACLE;
+    };
+  // How far from the start inscribed cells are still traversable (m).
+  constexpr double kEscapeDistance = 1.0;
+  // The robot may already be within the inscribed band (e.g. stopped by a reflex): it can
+  // leave it, unless it is on an obstacle or an unknown cell.
+  auto can_start_at = [&](NavCelId c) -> bool {
       const std::uint8_t v = occ_[c];
       return (v != LETHAL_OBSTACLE) && (v != NO_INFORMATION);
     };
@@ -406,13 +417,13 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
       return static_cast<double>(v) / max_cost;  // FREE=0 → 0.0, INSCRIBED=253 → 1.0
     };
 
-  // If start or goal lands on non-traversable, do not plan.
-  if (!traversable(cid_start) || !traversable(cid_goal)) {
+  // If the start is on an obstacle/unknown cell, or the goal is not traversable, do not plan.
+  if (!can_start_at(cid_start) || !traversable(cid_goal)) {
     return {};
   }
 
   // Weighted step cost:
-  //   base geometric cost (edge length) scaled by (cost_factor_ + inflation_penalty_ * norm_cost(target)).
+  //   base geometric cost (edge length) scaled by (cost_factor_ + cost_weight_ * norm_cost(target)).
   // This preserves admissibility with heuristic h = Euclidean distance, since the minimal multiplier ≥ 1.
   auto step_cost = [&](NavCelId from, NavCelId to) -> double {
       const double base = euclid(from, to);
@@ -428,7 +439,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
       // Ensure the multiplier is at least 1.0 so h = euclid remains admissible.
       // If your cost_factor_ is already ≥ 1, this holds. Otherwise we clamp.
       const double cf = std::max(1.0, static_cast<double>(cost_factor_));
-      const double mult = cf + static_cast<double>(inflation_penalty_) * ncost;
+      const double mult = cf + static_cast<double>(cost_weight_) * ncost;
 
       return base * mult;
     };
@@ -472,8 +483,11 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
         continue;
       }
 
-      // Skip non-traversable neighbors (lethal or unknown).
-      if (!traversable(v)) {continue;}
+      // Skip non-traversable neighbors (lethal, unknown or inscribed); inscribed ones only
+      // near the start, so a robot within the inscribed band can leave it.
+      const bool escaping = can_start_at(v) &&
+        (centroids_[v] - centroids_[cid_start]).norm() < kEscapeDistance;
+      if (!traversable(v) && !escaping) {continue;}
 
       const double sc = step_cost(u, v);
       if (!std::isfinite(sc)) {continue;}
@@ -509,6 +523,10 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   std::reverse(path.begin(), path.end());
 
   if (path.empty()) {path.push_back(goal);}
+  // End at the goal, not at the centroid of its NavCel (which can be far with large cells);
+  // keep the cell's height, so the point stays on the surface.
+  path.back().position.x = goal.position.x;
+  path.back().position.y = goal.position.y;
   return path;
 }
 
