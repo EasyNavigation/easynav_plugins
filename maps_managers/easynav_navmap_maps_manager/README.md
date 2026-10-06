@@ -55,6 +55,9 @@ All parameters are declared under the plugin namespace, i.e.
 
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
+| `<plugin>.max_range` | `double` | `10.0` | Only points within this distance (x and y, robot frame) are used. |
+| `<plugin>.min_height` | `double` | `NaN` | Points below this height (robot frame) are ignored; `NaN` disables it. |
+| `<plugin>.max_height` | `double` | `NaN` | Points above this height (robot frame) are ignored; `NaN` disables it. |
 | `<plugin>.vertical_bins_min` | `int` | `3` | Minimum number of vertical bins required to consider a column as an obstacle. |
 | `<plugin>.height_threshold` | `double` | `0.25` | Minimum vertical height (in meters) between max and min z to mark as an obstacle. |
 | `<plugin>.downsample` | `double` | `0.3` | Voxel size used to downsample point clouds before obstacle detection. |

@@ -17,6 +17,7 @@
 #include <string>
 #include <cstdint>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
@@ -39,7 +40,15 @@ ObstacleFilter::ObstacleFilter()
 
 void
 ObstacleFilter::on_initialize()
-{}
+{
+  auto node = get_node();
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".max_range", max_range_);
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".min_height", min_height_);
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".max_height", max_height_);
+  node->get_parameter(plugin_name_ + ".max_range", max_range_);
+  node->get_parameter(plugin_name_ + ".min_height", min_height_);
+  node->get_parameter(plugin_name_ + ".max_height", max_height_);
+}
 
 void ObstacleFilter::update(::easynav::NavState & nav_state)
 {
@@ -54,11 +63,25 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
+  // Start from the static map, if the NavMap has one (built from an occupancy grid): what the
+  // sensors do not see right now (behind something, far, too low) is still an obstacle.
   navmap_.layer_clear<uint8_t>(get_layer_name(), navmap_ros::FREE_SPACE);
+  if (navmap_.has_layer("occupancy")) {
+    for (std::size_t c = 0; c < navmap_.navcels.size(); ++c) {
+      const auto cid = static_cast<::navmap::NavCelId>(c);
+      const auto v = navmap_.layer_get<uint8_t>("occupancy", cid, navmap_ros::FREE_SPACE);
+      if (v != navmap_ros::FREE_SPACE) {
+        navmap_.layer_set<uint8_t>(get_layer_name(), cid, v);
+      }
+    }
+  }
 
+  // Only the points around the robot and within its height band (robot frame), downsampled
+  // first (indices only) so that fewer points are transformed.
   const auto & points = PointPerceptionsOpsView(perceptions)
-    .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
     .downsample(0.3)
+    .fuse(tf_info.robot_frame)
+    .filter({-max_range_, -max_range_, min_height_}, {max_range_, max_range_, max_height_}, false)
     .fuse(tf_info.map_frame)
     .as_points();
 

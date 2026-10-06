@@ -22,6 +22,8 @@
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
 
+#include <limits>
+
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
 
 namespace easynav
@@ -42,6 +44,9 @@ public:
 
 private:
   ::navmap::NavMap navmap_;
+  double max_range_ {10.0};   ///< Points farther than this from the robot (x or y) are ignored.
+  double min_height_ {std::numeric_limits<double>::quiet_NaN()};  ///< Robot frame; NaN: no limit.
+  double max_height_ {std::numeric_limits<double>::quiet_NaN()};  ///< Robot frame; NaN: no limit.
 };
 
 }  // namespace navmap

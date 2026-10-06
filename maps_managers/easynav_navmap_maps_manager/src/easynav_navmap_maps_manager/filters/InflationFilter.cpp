@@ -180,10 +180,7 @@ bool InflationFilter::inflate_layer_u8(
       const size_t vidx = static_cast<size_t>(v);
       if (vidx >= N) {continue;}
 
-      if (src[v] == NO_INFORMATION) {
-        continue;
-      }
-
+      // Unknown cells carry the distance (as in costmap_2d) but keep their value.
       const float step = (C[u] - C[v]).norm();
       if (step <= 0.0f) {continue;}
       const float alt = du + step;
