@@ -729,16 +729,20 @@ void AMCLLocalizer::predict(NavState & nav_state)
   double r, p, yaw; tf2::Matrix3x3(delta.getRotation()).getRPY(r, p, yaw);
   double rot_len = std::abs(yaw);
 
-  std::normal_distribution<double> n_dx(0.0, std::abs(dx) * noise_translation_);
-  std::normal_distribution<double> n_dy(0.0, std::abs(dy) * noise_translation_);
-  std::normal_distribution<double> n_dz(0.0, std::abs(dz) * noise_translation_);
-  std::normal_distribution<double> n_yaw(0.0,
-    rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_);
+  // Zero-mean noise; a zero deviation (e.g. the robot still) is no noise: std::normal_distribution
+  // is undefined for it.
+  auto noise = [this](double stddev) {
+      return stddev > 0.0 ? std::normal_distribution<double>(0.0, stddev)(rng_) : 0.0;
+    };
+  const double sd_dx = std::abs(dx) * noise_translation_;
+  const double sd_dy = std::abs(dy) * noise_translation_;
+  const double sd_dz = std::abs(dz) * noise_translation_;
+  const double sd_yaw = rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_;
 
-  double noisy_y = yaw + n_yaw(rng_);
+  double noisy_y = yaw + noise(sd_yaw);
 
   for (auto & p : particles_) {
-    tf2::Vector3 noisy_t(dx + n_dx(rng_), dy + n_dy(rng_), dz + n_dz(rng_));
+    tf2::Vector3 noisy_t(dx + noise(sd_dx), dy + noise(sd_dy), dz + noise(sd_dz));
     tf2::Quaternion noisy_q; noisy_q.setRPY(0.0, 0.0, noisy_y);
     p.pose = p.pose * tf2::Transform(noisy_q, noisy_t);
 
