@@ -226,7 +226,7 @@ SerestController::ref_heading_and_curvature(
 
   // Determine if we are near the beginning or end of a segment
   double s_i = pd.s_acc[i];
-  double s_ip1 = pd.s_acc[i + 1];
+  double s_ip1 = (i + 1 < pd.s_acc.size()) ? pd.s_acc[i + 1] : s_i;  // single-point path
   double s = prj.s_star;
 
   // Default: constant segment heading, kappa = 0
@@ -649,6 +649,14 @@ SerestController::update_rt(NavState & nav_state)
   // 2) Robot state (position + yaw)
   Vec2 robot_xy; double yaw = 0.0;
   robot_state_from_odom(odom, robot_xy, yaw);
+
+  // A single pose (goal in or next to the robot's cell): the segment goes from the robot to it.
+  if (path.poses.size() == 1) {
+    geometry_msgs::msg::PoseStamped from = path.poses.front();
+    from.pose.position.x = robot_xy.x;
+    from.pose.position.y = robot_xy.y;
+    path.poses.insert(path.poses.begin(), from);
+  }
 
   // 3) Path primitives, closest-point projection, and local reference kinematics
   PathData pd = build_path_data(path);
