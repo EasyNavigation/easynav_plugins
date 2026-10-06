@@ -19,3 +19,10 @@ target_link_libraries(fusion_localizer_reconfigure_tests
   rclcpp_lifecycle::rclcpp_lifecycle
   easynav_localizer::easynav_localizer
 )
+
+ament_add_gtest(fusion_localizer_local_filter_tests fusion_localizer_local_filter_tests.cpp)
+target_link_libraries(fusion_localizer_local_filter_tests
+  fusion_localizer
+  rclcpp::rclcpp
+  easynav_localizer::easynav_localizer
+)
