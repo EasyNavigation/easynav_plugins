@@ -188,9 +188,11 @@ Parameters</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.cost_factor</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">2.0</span>  </td><td class="markdownTableBodyNone">Multiplicative weight for geometric distance; values &gt; 1 increase the relative importance of distance.  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.cost_weight</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">5.0</span>  </td><td class="markdownTableBodyNone">Weight of the cell cost (inflation) against the path length; higher values keep paths farther from obstacles.  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.continuous_replan</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">true</span>  </td><td class="markdownTableBodyNone">If true, recomputes the path whenever <span class="tt">NavState</span> updates; if false, plans once per goal.  </td></tr>
 </table>
-<p><b>Note:</b> The planner internally uses hardcoded values for <span class="tt">layer_name</span> (prefers <span class="tt">"inflated_obstacles"</span>, fallback to <span class="tt">"obstacles"</span>), <span class="tt">inflation_penalty</span> (value used in cost calculation), <span class="tt">cost_axial</span>, and <span class="tt">cost_diagonal</span>. These are not runtime-configurable parameters.</p>
+<p><b>Note:</b> The planner internally uses hardcoded values for <span class="tt">layer_name</span> (prefers <span class="tt">"inflated_obstacles"</span>, fallback to <span class="tt">"obstacles"</span>), <span class="tt">cost_axial</span>, and <span class="tt">cost_diagonal</span>. These are not runtime-configurable parameters.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md223"></a>
 Interfaces (Topics and Services)</h1>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md224"></a>

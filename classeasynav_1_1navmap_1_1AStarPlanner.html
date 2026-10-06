@@ -182,20 +182,20 @@ Protected Attributes</h2></td></tr>
 <tr class="memdesc:a1c68c5c1a142a2c320026fa32c39fcc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cached centroids for each NavCel (same indexing as ::navmap::NavMap::navcels).  <br /></td></tr>
 <tr class="memitem:a35e94cf5823e535adf42e15573b348d8" id="r_a35e94cf5823e535adf42e15573b348d8"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a35e94cf5823e535adf42e15573b348d8">continuous_replan_</a> {true}</td></tr>
 <tr class="memdesc:a35e94cf5823e535adf42e15573b348d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to replan the path at control frequency.  <br /></td></tr>
-<tr class="memitem:a3a0cc9d7035b71dd3eae451181ee896f" id="r_a3a0cc9d7035b71dd3eae451181ee896f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3a0cc9d7035b71dd3eae451181ee896f">cost_axial_</a></td></tr>
+<tr class="memitem:a3a0cc9d7035b71dd3eae451181ee896f" id="r_a3a0cc9d7035b71dd3eae451181ee896f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3a0cc9d7035b71dd3eae451181ee896f">cost_axial_</a> {1.0}</td></tr>
 <tr class="memdesc:a3a0cc9d7035b71dd3eae451181ee896f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cost multiplier for axial (horizontal/vertical) moves.  <br /></td></tr>
-<tr class="memitem:aae88bf99367ef2892c348393a3ee8f84" id="r_aae88bf99367ef2892c348393a3ee8f84"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#aae88bf99367ef2892c348393a3ee8f84">cost_diagonal_</a></td></tr>
+<tr class="memitem:aae88bf99367ef2892c348393a3ee8f84" id="r_aae88bf99367ef2892c348393a3ee8f84"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#aae88bf99367ef2892c348393a3ee8f84">cost_diagonal_</a> {1.0}</td></tr>
 <tr class="memdesc:aae88bf99367ef2892c348393a3ee8f84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cost multiplier for diagonal moves.  <br /></td></tr>
-<tr class="memitem:a89eb78013dffcbf2780471861a37b90a" id="r_a89eb78013dffcbf2780471861a37b90a"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a89eb78013dffcbf2780471861a37b90a">cost_factor_</a></td></tr>
+<tr class="memitem:a89eb78013dffcbf2780471861a37b90a" id="r_a89eb78013dffcbf2780471861a37b90a"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a89eb78013dffcbf2780471861a37b90a">cost_factor_</a> {2.0}</td></tr>
 <tr class="memdesc:a89eb78013dffcbf2780471861a37b90a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scaling factor applied to cell cost values.  <br /></td></tr>
+<tr class="memitem:ad8fbe8dfcc629c91463bb118140b17e4" id="r_ad8fbe8dfcc629c91463bb118140b17e4"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ad8fbe8dfcc629c91463bb118140b17e4">cost_weight_</a> {5.0}</td></tr>
+<tr class="memdesc:ad8fbe8dfcc629c91463bb118140b17e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weight of the cell cost (inflation) against length.  <br /></td></tr>
 <tr class="memitem:aa6594c58e9975c44d0602a32f8b89d96" id="r_aa6594c58e9975c44d0602a32f8b89d96"><td class="memItemLeft">geometry_msgs::msg::Pose&#160;</td><td class="memItemRight"><a class="el" href="#aa6594c58e9975c44d0602a32f8b89d96">current_goal_</a></td></tr>
 <tr class="memdesc:aa6594c58e9975c44d0602a32f8b89d96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current goal.  <br /></td></tr>
 <tr class="memitem:a8dc6b25f90bfb16f7f1d95b51800aa00" id="r_a8dc6b25f90bfb16f7f1d95b51800aa00"><td class="memItemLeft">nav_msgs::msg::Path&#160;</td><td class="memItemRight"><a class="el" href="#a8dc6b25f90bfb16f7f1d95b51800aa00">current_path_</a></td></tr>
 <tr class="memdesc:a8dc6b25f90bfb16f7f1d95b51800aa00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most recently computed path.  <br /></td></tr>
 <tr class="memitem:aaae83fae4ab4251d4580a3a13cd6dfc7" id="r_aaae83fae4ab4251d4580a3a13cd6dfc7"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aaae83fae4ab4251d4580a3a13cd6dfc7">g_</a></td></tr>
 <tr class="memdesc:aaae83fae4ab4251d4580a3a13cd6dfc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reusable buffers for A* search cost and parent links.  <br /></td></tr>
-<tr class="memitem:afa42e78400a5504304ee9b56e2160d5c" id="r_afa42e78400a5504304ee9b56e2160d5c"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#afa42e78400a5504304ee9b56e2160d5c">inflation_penalty_</a></td></tr>
-<tr class="memdesc:afa42e78400a5504304ee9b56e2160d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extra cost penalty for paths near inflated obstacles.  <br /></td></tr>
 <tr class="memitem:a6aebe3bf30640adc22c8787dea894c8c" id="r_a6aebe3bf30640adc22c8787dea894c8c"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a6aebe3bf30640adc22c8787dea894c8c">layer_name_</a></td></tr>
 <tr class="memitem:ade3608f9f9cbd5937b6fd0b77718b477" id="r_ade3608f9f9cbd5937b6fd0b77718b477"><td class="memItemLeft">std::vector&lt; std::uint8_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ade3608f9f9cbd5937b6fd0b77718b477">occ_</a></td></tr>
 <tr class="memdesc:ade3608f9f9cbd5937b6fd0b77718b477"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cached per-NavCel occupancy / cost values (0..255).  <br /></td></tr>
@@ -535,7 +535,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double cost_axial_</td>
+          <td class="memname">double cost_axial_ {1.0}</td>
         </tr>
       </table>
   </td>
@@ -559,7 +559,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double cost_diagonal_</td>
+          <td class="memname">double cost_diagonal_ {1.0}</td>
         </tr>
       </table>
   </td>
@@ -583,7 +583,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double cost_factor_</td>
+          <td class="memname">double cost_factor_ {2.0}</td>
         </tr>
       </table>
   </td>
@@ -594,6 +594,30 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Scaling factor applied to cell cost values. </p>
+
+</div>
+</div>
+<a id="ad8fbe8dfcc629c91463bb118140b17e4" name="ad8fbe8dfcc629c91463bb118140b17e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8fbe8dfcc629c91463bb118140b17e4">&#9670;&#160;</a></span>cost_weight_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double cost_weight_ {5.0}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Weight of the cell cost (inflation) against length. </p>
 
 </div>
 </div>
@@ -666,30 +690,6 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reusable buffers for A* search cost and parent links. </p>
-
-</div>
-</div>
-<a id="afa42e78400a5504304ee9b56e2160d5c" name="afa42e78400a5504304ee9b56e2160d5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa42e78400a5504304ee9b56e2160d5c">&#9670;&#160;</a></span>inflation_penalty_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double inflation_penalty_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Extra cost penalty for paths near inflated obstacles. </p>
 
 </div>
 </div>

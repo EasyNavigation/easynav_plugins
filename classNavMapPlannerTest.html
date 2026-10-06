@@ -141,9 +141,15 @@ Collaboration diagram for NavMapPlannerTest:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:aaee5ff1075e7cb064b22e443674c7f8f" id="r_aaee5ff1075e7cb064b22e443674c7f8f"><td class="memTemplParams" colspan="2">template&lt;typename Cost&gt; </td></tr>
+<tr class="memitem:aaee5ff1075e7cb064b22e443674c7f8f template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aaee5ff1075e7cb064b22e443674c7f8f">inflate</a> (Cost cost)</td></tr>
+<tr class="memitem:a22a29fa04fb452b6bd509d751a2dade0" id="r_a22a29fa04fb452b6bd509d751a2dade0"><td class="memTemplParams" colspan="2">template&lt;typename Pred&gt; </td></tr>
+<tr class="memitem:a22a29fa04fb452b6bd509d751a2dade0 template"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a22a29fa04fb452b6bd509d751a2dade0">inscribe</a> (Pred inside)</td></tr>
+<tr class="memitem:acb908eced788a0be1149e35411722bed" id="r_acb908eced788a0be1149e35411722bed"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#acb908eced788a0be1149e35411722bed">length_inside</a> (double x0, double x1, double y0, double y1) const</td></tr>
 <tr class="memitem:ac1eaea2ee36935568e359510c71fbbef" id="r_ac1eaea2ee36935568e359510c71fbbef"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac1eaea2ee36935568e359510c71fbbef">occupy_cell</a> (int x, int y)</td></tr>
 <tr class="memitem:a15df632ab3876f7f21f0cee208b41759" id="r_a15df632ab3876f7f21f0cee208b41759"><td class="memItemLeft">nav_msgs::msg::Path&#160;</td><td class="memItemRight"><a class="el" href="#a15df632ab3876f7f21f0cee208b41759">path</a> () const</td></tr>
 <tr class="memitem:a6b529a99ecf2d4604f45455d88abd5b2" id="r_a6b529a99ecf2d4604f45455d88abd5b2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6b529a99ecf2d4604f45455d88abd5b2">set_goal</a> (double x, double y, const std::string &amp;frame=&quot;map&quot;)</td></tr>
+<tr class="memitem:ae4f9c1562f13d23c0a25cf9dd191005c" id="r_ae4f9c1562f13d23c0a25cf9dd191005c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae4f9c1562f13d23c0a25cf9dd191005c">set_robot</a> (double x, double y)</td></tr>
 <tr class="memitem:a3a1707f6479611fdc609a3eb8a0cef1b" id="r_a3a1707f6479611fdc609a3eb8a0cef1b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a3a1707f6479611fdc609a3eb8a0cef1b">SetUp</a> () override</td></tr>
 <tr class="memitem:a0fab249d13840de1118233347e024ab8" id="r_a0fab249d13840de1118233347e024ab8"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a0fab249d13840de1118233347e024ab8">to_cell</a> (double m) const</td></tr>
 <tr class="memitem:acadf8427c0c941ab62f5a6078d569666" id="r_acadf8427c0c941ab62f5a6078d569666"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#acadf8427c0c941ab62f5a6078d569666">update_map</a> ()</td></tr>
@@ -163,6 +169,99 @@ Static Protected Attributes</h2></td></tr>
 <tr class="memitem:a0502a115401ad138cd230a41ea6ee7fd" id="r_a0502a115401ad138cd230a41ea6ee7fd"><td class="memItemLeft">static constexpr double&#160;</td><td class="memItemRight"><a class="el" href="#a0502a115401ad138cd230a41ea6ee7fd">kResolution</a> = 0.1</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="aaee5ff1075e7cb064b22e443674c7f8f" name="aaee5ff1075e7cb064b22e443674c7f8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaee5ff1075e7cb064b22e443674c7f8f">&#9670;&#160;</a></span>inflate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Cost&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void inflate </td>
+          <td>(</td>
+          <td class="paramtype">Cost</td>          <td class="paramname"><span class="paramname"><em>cost</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22a29fa04fb452b6bd509d751a2dade0" name="a22a29fa04fb452b6bd509d751a2dade0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22a29fa04fb452b6bd509d751a2dade0">&#9670;&#160;</a></span>inscribe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Pred&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void inscribe </td>
+          <td>(</td>
+          <td class="paramtype">Pred</td>          <td class="paramname"><span class="paramname"><em>inside</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acb908eced788a0be1149e35411722bed" name="acb908eced788a0be1149e35411722bed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb908eced788a0be1149e35411722bed">&#9670;&#160;</a></span>length_inside()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double length_inside </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x0</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x1</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y0</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y1</em></span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac1eaea2ee36935568e359510c71fbbef" name="ac1eaea2ee36935568e359510c71fbbef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac1eaea2ee36935568e359510c71fbbef">&#9670;&#160;</a></span>occupy_cell()</h2>
 
@@ -240,6 +339,35 @@ Static Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>frame</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;map&quot;</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae4f9c1562f13d23c0a25cf9dd191005c" name="ae4f9c1562f13d23c0a25cf9dd191005c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f9c1562f13d23c0a25cf9dd191005c">&#9670;&#160;</a></span>set_robot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void set_robot </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

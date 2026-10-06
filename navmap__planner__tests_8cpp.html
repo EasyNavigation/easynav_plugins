@@ -111,9 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <p>Tests for the NavMap A* planner: a failed plan leaves an empty path, not the previous one.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
+<div class="textblock"><code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;gtest/gtest.h&quot;</code><br />
 <code>#include &quot;nav_msgs/msg/goals.hpp&quot;</code><br />
 <code>#include &quot;nav_msgs/msg/occupancy_grid.hpp&quot;</code><br />
@@ -130,45 +133,50 @@ Include dependency graph for navmap_planner_tests.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="navmap__planner__tests_8cpp__incl.png" border="0" usemap="#aplanners_2easynav__navmap__planner_2tests_2navmap__planner__tests_8cpp" loading="lazy" alt=""/></div>
 <map name="aplanners_2easynav__navmap__planner_2tests_2navmap__planner__tests_8cpp" id="aplanners_2easynav__navmap__planner_2tests_2navmap__planner__tests_8cpp">
-<area shape="rect" title="Tests for the NavMap A* planner: a failed plan leaves an empty path, not the previous one." alt="" coords="725,5,900,61"/>
+<area shape="rect" title="Tests for the NavMap A* planner: a failed plan leaves an empty path, not the previous one." alt="" coords="654,5,830,61"/>
+<area shape="rect" title=" " alt="" coords="95,116,152,142"/>
+<area shape="poly" title=" " alt="" coords="654,42,555,50,433,63,302,84,172,112,166,113,164,108,171,106,301,78,433,58,554,45,654,37"/>
 <area shape="rect" title=" " alt="" coords="5,205,66,231"/>
-<area shape="poly" title=" " alt="" coords="725,41,630,49,516,62,392,82,271,112,214,131,159,155,70,200,68,195,157,150,212,126,269,106,391,77,515,57,630,44,725,36"/>
-<area shape="rect" title=" " alt="" coords="647,116,714,142"/>
-<area shape="poly" title=" " alt="" coords="776,64,711,110,708,105,773,59"/>
-<area shape="rect" title=" " alt="" coords="738,116,792,142"/>
-<area shape="poly" title=" " alt="" coords="801,63,780,104,775,102,797,60"/>
-<area shape="rect" title=" " alt="" coords="816,116,909,142"/>
-<area shape="poly" title=" " alt="" coords="829,60,851,102,847,104,825,63"/>
-<area shape="rect" title=" " alt="" coords="934,116,1103,142"/>
-<area shape="poly" title=" " alt="" coords="873,59,979,107,977,112,871,64"/>
-<area shape="rect" title=" " alt="" coords="1127,109,1304,150"/>
-<area shape="poly" title=" " alt="" coords="901,52,1117,102,1116,108,900,58"/>
-<area shape="rect" title=" " alt="" coords="1328,116,1519,142"/>
-<area shape="poly" title=" " alt="" coords="901,44,1316,106,1342,111,1341,116,1315,112,901,49"/>
-<area shape="rect" title=" " alt="" coords="90,205,253,231"/>
-<area shape="poly" title=" " alt="" coords="725,43,647,51,555,64,459,84,364,112,318,131,274,154,202,198,199,194,271,149,316,126,363,106,457,79,555,59,646,46,725,37"/>
-<area shape="rect" title=" " alt="" coords="1544,116,1663,142"/>
-<area shape="poly" title=" " alt="" coords="901,37,1183,59,1357,79,1532,106,1548,110,1547,115,1531,112,1357,85,1183,64,901,42"/>
-<area shape="rect" title=" " alt="" coords="1687,109,1848,150"/>
-<area shape="poly" title=" " alt="" coords="901,36,1236,58,1451,79,1672,106,1671,111,1450,84,1235,64,901,41"/>
-<area shape="rect" title=" " alt="" coords="277,205,453,231"/>
-<area shape="poly" title=" " alt="" coords="725,42,633,49,534,63,448,83,415,96,392,111,379,128,371,148,366,190,361,189,366,147,375,125,388,107,412,91,446,78,533,57,632,44,724,36"/>
-<area shape="rect" title=" " alt="" coords="1872,116,2063,142"/>
-<area shape="poly" title=" " alt="" coords="901,35,1316,57,1587,78,1861,106,1891,111,1890,116,1861,112,1587,83,1316,62,901,40"/>
+<area shape="poly" title=" " alt="" coords="654,43,540,53,412,67,293,87,245,99,210,111,197,120,188,130,166,152,75,200,73,196,163,148,184,126,193,116,208,107,244,93,292,82,411,62,540,47,654,38"/>
+<area shape="rect" title=" " alt="" coords="624,116,692,142"/>
+<area shape="poly" title=" " alt="" coords="720,63,681,107,677,103,716,60"/>
+<area shape="rect" title=" " alt="" coords="716,116,769,142"/>
+<area shape="poly" title=" " alt="" coords="745,62,745,101,740,101,740,62"/>
+<area shape="rect" title=" " alt="" coords="792,116,844,142"/>
+<area shape="poly" title=" " alt="" coords="766,60,801,103,797,106,762,63"/>
+<area shape="rect" title=" " alt="" coords="90,205,147,231"/>
+<area shape="poly" title=" " alt="" coords="654,40,572,46,476,59,375,80,277,111,216,148,147,198,144,194,213,144,274,107,373,75,475,54,572,41,654,34"/>
+<area shape="rect" title=" " alt="" coords="868,116,961,142"/>
+<area shape="poly" title=" " alt="" coords="793,59,880,106,878,111,791,64"/>
+<area shape="rect" title=" " alt="" coords="986,116,1155,142"/>
+<area shape="poly" title=" " alt="" coords="831,57,1014,109,1013,114,830,62"/>
+<area shape="rect" title=" " alt="" coords="1179,109,1356,150"/>
+<area shape="poly" title=" " alt="" coords="831,47,1165,106,1164,111,830,52"/>
+<area shape="rect" title=" " alt="" coords="1380,116,1571,142"/>
+<area shape="poly" title=" " alt="" coords="831,41,1073,68,1368,106,1395,111,1395,116,1367,112,1073,73,830,46"/>
+<area shape="rect" title=" " alt="" coords="171,205,334,231"/>
+<area shape="poly" title=" " alt="" coords="654,44,563,53,465,68,378,87,343,98,318,111,300,128,284,149,264,191,259,189,280,146,296,125,315,107,341,93,376,82,464,62,563,48,654,39"/>
+<area shape="rect" title=" " alt="" coords="1596,116,1715,142"/>
+<area shape="poly" title=" " alt="" coords="830,35,974,42,1163,55,1373,76,1584,106,1600,110,1599,115,1583,112,1372,81,1162,60,974,47,830,40"/>
+<area shape="rect" title=" " alt="" coords="1739,109,1900,150"/>
+<area shape="poly" title=" " alt="" coords="830,35,1215,55,1466,76,1724,106,1723,111,1466,81,1214,61,830,40"/>
+<area shape="rect" title=" " alt="" coords="683,205,860,231"/>
+<area shape="poly" title=" " alt="" coords="655,60,614,76,580,97,570,108,564,121,564,134,571,148,589,163,620,176,696,199,695,204,618,181,587,167,567,151,559,135,559,120,565,105,577,93,611,71,653,55"/>
+<area shape="rect" title=" " alt="" coords="1924,116,2115,142"/>
+<area shape="poly" title=" " alt="" coords="830,34,1025,41,1294,54,1602,75,1913,106,1944,111,1943,116,1913,112,1601,81,1294,59,1025,46,830,39"/>
 <area shape="rect" title=" " alt="" coords="884,198,1046,238"/>
-<area shape="poly" title=" " alt="" coords="726,59,682,76,646,97,635,109,629,121,630,134,638,148,661,172,685,186,710,193,736,194,796,192,831,191,869,195,869,200,831,197,796,197,736,200,709,198,683,191,658,176,633,151,625,135,624,120,631,106,643,93,679,71,724,54"/>
-<area shape="rect" href="AStarPlanner_8hpp.html" title="Declaration of the AStarPlanner class implementing A* path planning using navmap::NavMap." alt="" coords="402,109,573,150"/>
-<area shape="poly" title=" " alt="" coords="726,62,570,107,569,102,724,57"/>
-<area shape="poly" title=" " alt="" coords="402,141,250,162,163,178,79,200,75,201,73,196,77,195,162,173,249,156,401,136"/>
-<area shape="poly" title=" " alt="" coords="416,153,231,203,230,198,415,148"/>
-<area shape="poly" title=" " alt="" coords="461,152,396,198,392,194,458,148"/>
-<area shape="poly" title=" " alt="" coords="574,144,592,147,870,195,869,200,591,152,573,149"/>
-<area shape="rect" title=" " alt="" coords="478,205,535,231"/>
-<area shape="poly" title=" " alt="" coords="494,150,503,190,498,191,489,151"/>
-<area shape="rect" title=" " alt="" coords="559,205,643,231"/>
-<area shape="poly" title=" " alt="" coords="515,148,575,194,572,198,512,152"/>
-<area shape="rect" title=" " alt="" coords="667,198,860,238"/>
-<area shape="poly" title=" " alt="" coords="551,148,687,190,686,195,550,153"/>
+<area shape="poly" title=" " alt="" coords="676,64,644,82,619,103,611,114,607,125,608,136,615,148,632,161,658,171,726,183,869,195,869,200,725,188,656,176,629,166,611,151,603,138,602,124,606,112,615,99,641,78,674,59"/>
+<area shape="rect" href="AStarPlanner_8hpp.html" title="Declaration of the AStarPlanner class implementing A* path planning using navmap::NavMap." alt="" coords="328,109,500,150"/>
+<area shape="poly" title=" " alt="" coords="655,62,498,107,497,102,653,57"/>
+<area shape="poly" title=" " alt="" coords="328,145,208,166,78,200,74,202,72,196,76,195,207,161,327,139"/>
+<area shape="poly" title=" " alt="" coords="329,152,247,173,160,200,158,201,156,196,159,195,245,168,327,147"/>
+<area shape="poly" title=" " alt="" coords="379,153,290,200,287,195,376,148"/>
+<area shape="poly" title=" " alt="" coords="496,148,707,198,706,204,495,153"/>
+<area shape="poly" title=" " alt="" coords="501,139,667,163,869,195,869,200,666,168,500,144"/>
+<area shape="rect" title=" " alt="" coords="575,205,659,231"/>
+<area shape="poly" title=" " alt="" coords="461,148,576,196,574,201,459,153"/>
+<area shape="rect" title=" " alt="" coords="358,198,550,238"/>
+<area shape="poly" title=" " alt="" coords="426,149,441,183,436,185,421,151"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -178,18 +186,133 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a1ce615087fab59285e4314b9d462973e" id="r_a1ce615087fab59285e4314b9d462973e"><td class="memItemLeft">std::uint8_t&#160;</td><td class="memItemRight"><a class="el" href="#a1ce615087fab59285e4314b9d462973e">cost_gradient</a> (float x, float y)</td></tr>
+<tr class="memitem:a536ccc3075e96570fce2d97d824c5a22" id="r_a536ccc3075e96570fce2d97d824c5a22"><td class="memItemLeft">std::uint8_t&#160;</td><td class="memItemRight"><a class="el" href="#a536ccc3075e96570fce2d97d824c5a22">costly_box</a> (float x, float y)</td></tr>
+<tr class="memitem:a80030ce38231cba71e3bb146a779f336" id="r_a80030ce38231cba71e3bb146a779f336"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a80030ce38231cba71e3bb146a779f336">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, AnInscribedGoalIsNotPlanned)</td></tr>
+<tr class="memitem:a454d7f87c1d1ada18c57f5bd23e9633a" id="r_a454d7f87c1d1ada18c57f5bd23e9633a"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a454d7f87c1d1ada18c57f5bd23e9633a">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, ARobotWithinTheInscribedBandCanLeaveIt)</td></tr>
+<tr class="memitem:aa17e7fc7cefccf8b8e989cb2b8821db7" id="r_aa17e7fc7cefccf8b8e989cb2b8821db7"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa17e7fc7cefccf8b8e989cb2b8821db7">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, CostWeightIsAParameterWithADefault)</td></tr>
 <tr class="memitem:a99b6118a499b7d56d2449440372834b0" id="r_a99b6118a499b7d56d2449440372834b0"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a99b6118a499b7d56d2449440372834b0">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, GoalInAnotherFrameClearsThePath)</td></tr>
+<tr class="memitem:afdba04557b31074b2f338d5beecc8731" id="r_afdba04557b31074b2f338d5beecc8731"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#afdba04557b31074b2f338d5beecc8731">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, InflationCostKeepsThePathAwayFromObstacles)</td></tr>
+<tr class="memitem:ae15b89fc9417fe9625f293c3e34b9b6e" id="r_ae15b89fc9417fe9625f293c3e34b9b6e"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae15b89fc9417fe9625f293c3e34b9b6e">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, InscribedCellsAreNotCrossed)</td></tr>
 <tr class="memitem:aac6e4e60fb2f2cc73e9788a6dbe25c60" id="r_aac6e4e60fb2f2cc73e9788a6dbe25c60"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aac6e4e60fb2f2cc73e9788a6dbe25c60">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, NoGoalClearsThePath)</td></tr>
+<tr class="memitem:a297cfc04d4862840350b21d0a4899ffb" id="r_a297cfc04d4862840350b21d0a4899ffb"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a297cfc04d4862840350b21d0a4899ffb">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, PathEndsExactlyAtTheGoalNotAtItsCellCentroid)</td></tr>
+<tr class="memitem:a24fc860ad496374f5cb9b70c3f5bacda" id="r_a24fc860ad496374f5cb9b70c3f5bacda"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a24fc860ad496374f5cb9b70c3f5bacda">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, PathPrefersLowerCostsInAGradient)</td></tr>
 <tr class="memitem:a20a5bf0a0329497ffbe15cdad113813f" id="r_a20a5bf0a0329497ffbe15cdad113813f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a20a5bf0a0329497ffbe15cdad113813f">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, PlansAgainOnceTheGoalIsReachable)</td></tr>
 <tr class="memitem:aafd2a68243b4e3693e59f561d6dcb8ec" id="r_aafd2a68243b4e3693e59f561d6dcb8ec"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aafd2a68243b4e3693e59f561d6dcb8ec">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, ReachableGoalProducesAPathEndingNearTheGoal)</td></tr>
 <tr class="memitem:a005d2cb4dde9affb00830b13575fa4a3" id="r_a005d2cb4dde9affb00830b13575fa4a3"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a005d2cb4dde9affb00830b13575fa4a3">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, UnreachableGoalDoesNotKeepThePreviousPath)</td></tr>
 <tr class="memitem:a7f649312ef0a5d289a4781c2541855e9" id="r_a7f649312ef0a5d289a4781c2541855e9"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a7f649312ef0a5d289a4781c2541855e9">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, UnreachableGoalsGiveAnEmptyPath)</td></tr>
+<tr class="memitem:a0b12e0e5c26bf551673dc0cc35d4f142" id="r_a0b12e0e5c26bf551673dc0cc35d4f142"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a0b12e0e5c26bf551673dc0cc35d4f142">TEST_F</a> (<a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a>, ZeroCostWeightIgnoresTheCost)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Tests for the NavMap A* planner: a failed plan leaves an empty path, not the previous one. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a1ce615087fab59285e4314b9d462973e" name="a1ce615087fab59285e4314b9d462973e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ce615087fab59285e4314b9d462973e">&#9670;&#160;</a></span>cost_gradient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::uint8_t cost_gradient </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>y</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a536ccc3075e96570fce2d97d824c5a22" name="a536ccc3075e96570fce2d97d824c5a22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a536ccc3075e96570fce2d97d824c5a22">&#9670;&#160;</a></span>costly_box()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::uint8_t costly_box </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>y</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a80030ce38231cba71e3bb146a779f336" name="a80030ce38231cba71e3bb146a779f336"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80030ce38231cba71e3bb146a779f336">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AnInscribedGoalIsNotPlanned</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a454d7f87c1d1ada18c57f5bd23e9633a" name="a454d7f87c1d1ada18c57f5bd23e9633a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a454d7f87c1d1ada18c57f5bd23e9633a">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ARobotWithinTheInscribedBandCanLeaveIt</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa17e7fc7cefccf8b8e989cb2b8821db7" name="aa17e7fc7cefccf8b8e989cb2b8821db7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa17e7fc7cefccf8b8e989cb2b8821db7">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CostWeightIsAParameterWithADefault</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a99b6118a499b7d56d2449440372834b0" name="a99b6118a499b7d56d2449440372834b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99b6118a499b7d56d2449440372834b0">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a99b6118a499b7d56d2449440372834b0">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,8 +332,50 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="afdba04557b31074b2f338d5beecc8731" name="afdba04557b31074b2f338d5beecc8731"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdba04557b31074b2f338d5beecc8731">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InflationCostKeepsThePathAwayFromObstacles</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae15b89fc9417fe9625f293c3e34b9b6e" name="ae15b89fc9417fe9625f293c3e34b9b6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae15b89fc9417fe9625f293c3e34b9b6e">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InscribedCellsAreNotCrossed</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aac6e4e60fb2f2cc73e9788a6dbe25c60" name="aac6e4e60fb2f2cc73e9788a6dbe25c60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac6e4e60fb2f2cc73e9788a6dbe25c60">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aac6e4e60fb2f2cc73e9788a6dbe25c60">&#9670;&#160;</a></span>TEST_F() <span class="overload">[7/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -230,8 +395,50 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a297cfc04d4862840350b21d0a4899ffb" name="a297cfc04d4862840350b21d0a4899ffb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a297cfc04d4862840350b21d0a4899ffb">&#9670;&#160;</a></span>TEST_F() <span class="overload">[8/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PathEndsExactlyAtTheGoalNotAtItsCellCentroid</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24fc860ad496374f5cb9b70c3f5bacda" name="a24fc860ad496374f5cb9b70c3f5bacda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24fc860ad496374f5cb9b70c3f5bacda">&#9670;&#160;</a></span>TEST_F() <span class="overload">[9/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PathPrefersLowerCostsInAGradient</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a20a5bf0a0329497ffbe15cdad113813f" name="a20a5bf0a0329497ffbe15cdad113813f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a20a5bf0a0329497ffbe15cdad113813f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a20a5bf0a0329497ffbe15cdad113813f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[10/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -252,7 +459,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="aafd2a68243b4e3693e59f561d6dcb8ec" name="aafd2a68243b4e3693e59f561d6dcb8ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafd2a68243b4e3693e59f561d6dcb8ec">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aafd2a68243b4e3693e59f561d6dcb8ec">&#9670;&#160;</a></span>TEST_F() <span class="overload">[11/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,7 +480,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a005d2cb4dde9affb00830b13575fa4a3" name="a005d2cb4dde9affb00830b13575fa4a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a005d2cb4dde9affb00830b13575fa4a3">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a005d2cb4dde9affb00830b13575fa4a3">&#9670;&#160;</a></span>TEST_F() <span class="overload">[12/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -294,7 +501,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a7f649312ef0a5d289a4781c2541855e9" name="a7f649312ef0a5d289a4781c2541855e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f649312ef0a5d289a4781c2541855e9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f649312ef0a5d289a4781c2541855e9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[13/14]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -308,6 +515,27 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">UnreachableGoalsGiveAnEmptyPath</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0b12e0e5c26bf551673dc0cc35d4f142" name="a0b12e0e5c26bf551673dc0cc35d4f142"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b12e0e5c26bf551673dc0cc35d4f142">&#9670;&#160;</a></span>TEST_F() <span class="overload">[14/14]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classNavMapPlannerTest.html">NavMapPlannerTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ZeroCostWeightIgnoresTheCost</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
