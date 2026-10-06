@@ -12,9 +12,10 @@ var searchData=
   ['mask_9',['Mask',['../classBonxai_1_1Mask.html#a4124ae4a2b71eacef02125859d8f1d10',1,'Bonxai::Mask::Mask(size_t log2dim)'],['../classBonxai_1_1Mask.html#a01c1979423e44bf955d8f99cb0e7b21d',1,'Bonxai::Mask::Mask(size_t log2dim, bool on)'],['../classBonxai_1_1Mask.html#a73c4b9f0cff37d9e10f69becedb69b14',1,'Bonxai::Mask::Mask(const Mask &amp;other)'],['../classBonxai_1_1Mask.html#a4a7ddf00358399674740109a621b4a6e',1,'Bonxai::Mask::Mask(Mask &amp;&amp;other)']]],
   ['mask_10',['mask',['../classBonxai_1_1Grid.html#a4139462be2f8e1f9f51da3a328db662c',1,'Bonxai::Grid::mask()'],['../classBonxai_1_1Grid.html#a7cc87dc0548e8bae4f95bf76719438f1',1,'Bonxai::Grid::mask() const']]],
   ['matchsize_11',['matchSize',['../classeasynav_1_1InflationFilter.html#a73fb2b6c1ef8af4cbf395fcd07433525',1,'easynav::InflationFilter']]],
-  ['memusage_12',['memUsage',['../classBonxai_1_1Grid.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::Grid::memUsage()'],['../classBonxai_1_1VoxelGrid.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::VoxelGrid::memUsage()'],['../classBonxai_1_1GridBlockAllocator.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::GridBlockAllocator::memUsage()'],['../classBonxai_1_1Mask.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::Mask::memUsage()']]],
-  ['metric_5fto_5fcell_13',['metric_to_cell',['../classeasynav_1_1SimpleMap.html#a2dcdba2d7252c38369bcf831bc754434',1,'easynav::SimpleMap']]],
-  ['min_5fby_14',['min_by',['../namespaceeasynav.html#a59672d31699bbc5315de772437430212',1,'easynav']]],
-  ['mppicontroller_15',['MPPIController',['../classeasynav_1_1MPPIController.html#ad9b24cab72366c4f858ec99e057815fc',1,'easynav::MPPIController']]],
-  ['mppioptimizer_16',['MPPIOptimizer',['../classeasynav_1_1MPPIOptimizer.html#a54815c8e6d0d383acb2a2ede86d70c50',1,'easynav::MPPIOptimizer']]]
+  ['mean_12',['mean',['../classNavmapAmclPredictTest.html#a7516e48573c4d6f3226ff006542efb34',1,'NavmapAmclPredictTest']]],
+  ['memusage_13',['memUsage',['../classBonxai_1_1Grid.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::Grid::memUsage()'],['../classBonxai_1_1VoxelGrid.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::VoxelGrid::memUsage()'],['../classBonxai_1_1GridBlockAllocator.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::GridBlockAllocator::memUsage()'],['../classBonxai_1_1Mask.html#a11fad25577340b7b31df24025314a844',1,'Bonxai::Mask::memUsage()']]],
+  ['metric_5fto_5fcell_14',['metric_to_cell',['../classeasynav_1_1SimpleMap.html#a2dcdba2d7252c38369bcf831bc754434',1,'easynav::SimpleMap']]],
+  ['min_5fby_15',['min_by',['../namespaceeasynav.html#a59672d31699bbc5315de772437430212',1,'easynav']]],
+  ['mppicontroller_16',['MPPIController',['../classeasynav_1_1MPPIController.html#ad9b24cab72366c4f858ec99e057815fc',1,'easynav::MPPIController']]],
+  ['mppioptimizer_17',['MPPIOptimizer',['../classeasynav_1_1MPPIOptimizer.html#a54815c8e6d0d383acb2a2ede86d70c50',1,'easynav::MPPIOptimizer']]]
 ];
