@@ -368,8 +368,8 @@ void AMCLLocalizer::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  int num_particles;
-  double x_init, y_init, yaw_init, std_dev_xy, std_dev_yaw;
+  int num_particles = 100;
+  double x_init = 0.0, y_init = 0.0, yaw_init = 0.0, std_dev_xy = 0.5, std_dev_yaw = 0.5;
   std::string perception_model;
 
   easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".num_particles", 100);

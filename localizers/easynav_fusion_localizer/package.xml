@@ -10,28 +10,29 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>rclcpp</depend>
-  <depend>rclcpp_lifecycle</depend>
-  <depend>easynav_core</depend>
-  <depend>easynav_common</depend>
-  <depend>easynav_localizer</depend>
-  <depend>easynav_sensors</depend>
-  <depend>pluginlib</depend>
-  <depend>geographiclib</depend>
-  <depend>robot_localization</depend>
-  <depend>std_srvs</depend>
   <depend>angles</depend>
   <depend>diagnostic_msgs</depend>
   <depend>diagnostic_updater</depend>
-  <depend>sensor_msgs</depend>
+  <depend>easynav_common</depend>
+  <depend>easynav_core</depend>
+  <depend>easynav_localizer</depend>
+  <depend>easynav_sensors</depend>
+  <depend>eigen</depend>
+  <depend>geographiclib</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>robot_localization</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_srvs</depend>
   <depend>tf2</depend>
-  <depend>tf2_ros</depend>
   <depend>tf2_geometry_msgs</depend>
-  <depend>eigen</depend>
+  <depend>tf2_ros</depend>
   <depend>yaets</depend>
 
+  <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
   <test_depend>robot_localization</test_depend>

@@ -16,7 +16,7 @@
 
 #include <string>
 
-#include "octomap/octomap.h"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 
 #include "easynav_octomap_maps_manager/filters/OctomapFilter.hpp"
 

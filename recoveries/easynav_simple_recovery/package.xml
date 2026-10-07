@@ -12,16 +12,17 @@
   <depend>easynav_common</depend>
   <depend>easynav_core</depend>
   <depend>easynav_sensors</depend>
-  <depend>pluginlib</depend>
-  <depend>rclcpp</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
 
-  <test_depend>rclcpp_lifecycle</test_depend>
-  <test_depend>easynav_recovery</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
-  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>easynav_recovery</test_depend>
+  <test_depend>lifecycle_msgs</test_depend>
+  <test_depend>rclcpp_lifecycle</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

@@ -21,7 +21,7 @@
 
 #include "pluginlib/class_loader.hpp"
 
-#include "octomap/octomap.h"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 #include "easynav_common/types/NavState.hpp"
 
 #include "easynav_octomap_maps_manager/filters/OctomapFilter.hpp"

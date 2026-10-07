@@ -20,7 +20,7 @@
 #include "easynav_common/YTSession.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
-#include "octomap/octomap.h"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 #include "octomap_msgs/conversions.h"
 #include "easynav_octomap_maps_manager/map_io.hpp"
 

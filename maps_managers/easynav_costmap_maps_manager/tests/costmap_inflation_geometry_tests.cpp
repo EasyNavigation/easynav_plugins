@@ -57,7 +57,8 @@ protected:
   }
 
   static double inscribed_radius(
-    const std::vector<rclcpp::Parameter> & overrides = {}, const rclcpp::NodeOptions & base = {})
+    const std::vector<rclcpp::Parameter> & overrides = {},
+    const rclcpp::NodeOptions & base = rclcpp::NodeOptions())
   {
     auto options = base;
     for (const auto & parameter : overrides) {

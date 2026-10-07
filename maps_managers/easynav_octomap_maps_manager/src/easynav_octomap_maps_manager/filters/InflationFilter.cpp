@@ -47,7 +47,7 @@
 #include "easynav_sensors/types/Perceptions.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 
-#include "octomap/octomap.h"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 
 #include "easynav_octomap_maps_manager/filters/InflationFilter.hpp"
 

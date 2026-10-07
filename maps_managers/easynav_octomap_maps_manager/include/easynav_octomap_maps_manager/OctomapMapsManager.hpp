@@ -27,7 +27,7 @@
 #include "sensor_msgs/msg/point_cloud2.hpp"
 
 #include "easynav_core/MapsManagerBase.hpp"
-#include "octomap/octomap.h"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 
 #include "easynav_octomap_maps_manager/filters/OctomapFilter.hpp"
 #include "pluginlib/class_loader.hpp"

@@ -89,6 +89,7 @@ ament_export_dependencies(
   geometry_msgs
   nav_msgs
   visualization_msgs
+  PCL
 )
 
 ament_package()

@@ -21,9 +21,14 @@ find_package(pcl_conversions REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 find_package(PCL REQUIRED COMPONENTS common io)
 
-# Try to find NLopt package from system first, or get it through CMake FetchContent to build it
+# NLopt comes from the system (rosdep); downloading it is opt-in (no network on the buildfarm)
+option(EASYNAV_MPC_FETCH_NLOPT "Download and build NLopt if it is not installed" OFF)
 find_package(NLopt QUIET)
 if(NOT NLopt_FOUND)
+  if(NOT EASYNAV_MPC_FETCH_NLOPT)
+    message(FATAL_ERROR
+      "NLopt not found: install it (rosdep install) or set -DEASYNAV_MPC_FETCH_NLOPT=ON")
+  endif()
   include(FetchContent)
   # Force FetchContent to download and build in the workspace build dir
   set(FETCH_CONTENT_BASE_DIR "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/_deps>")
@@ -113,7 +118,8 @@ ament_export_dependencies(
   sensor_msgs
   pcl_conversions
   Eigen3
-  nlopt
+  NLopt
+  PCL
 )
 
 ament_package()

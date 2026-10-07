@@ -79,5 +79,5 @@ ament_export_targets(
 )
 # Register the control plugins
 pluginlib_export_plugin_description_file(easynav_core easynav_vff_controller_plugins.xml)
-ament_export_dependencies(${dependencies})
+ament_export_dependencies(${dependencies} PCL)
 ament_package()

@@ -19,7 +19,7 @@
 
 #include <string>
 
-#include "octomap/octomap.h"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 
