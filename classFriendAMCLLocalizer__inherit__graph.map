@@ -1,17 +1,16 @@
 <map id="FriendAMCLLocalizer" name="FriendAMCLLocalizer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="176,153,322,178"/>
-<area shape="rect" id="Node000002" href="$classeasynav_1_1navmap_1_1AMCLLocalizer.html" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="42,79,152,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,109,224,150,222,154,136,114"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,5,152,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,45,97,78,91,79,83,46"/>
-<area shape="rect" id="Node000004" href="$classeasynav_1_1AMCLLocalizer.html" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="194,79,304,105"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="243,120,245,152,240,152,238,120"/>
-<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="261,120,259,152,253,152,255,120"/>
-<area shape="rect" id="Node000005" href="$classLocalizerMethodBase.html" title=" " alt="" coords="176,5,322,31"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="243,46,245,78,240,79,238,46"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="261,46,259,79,253,78,255,46"/>
-<area shape="rect" id="Node000006" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="346,79,462,105"/>
-<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="365,114,277,154,274,150,363,109"/>
-<area shape="rect" id="Node000007" href="$classControllerMethodBase.html" title=" " alt="" coords="346,5,496,31"/>
-<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="417,47,409,79,404,78,412,45"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="122,153,268,178"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1navmap_1_1AMCLLocalizer.html" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="5,79,116,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,110,173,150,171,154,96,115"/>
+<area shape="rect" id="Node000003" href="$classLocalizerMethodBase.html" title=" " alt="" coords="113,5,259,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="153,41,83,81,81,76,150,37"/>
+<area shape="rect" id="Node000004" href="$classeasynav_1_1AMCLLocalizer.html" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="140,79,250,105"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="183,46,189,78,184,79,178,47"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="201,46,203,78,198,79,195,46"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="189,120,191,152,186,152,184,120"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="207,120,205,152,199,152,201,120"/>
+<area shape="rect" id="Node000005" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="292,79,408,105"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="311,114,223,154,220,150,309,109"/>
+<area shape="rect" id="Node000006" href="$classControllerMethodBase.html" title=" " alt="" coords="283,5,432,31"/>
+<area shape="poly" id="edge8_Node000005_Node000006" title=" " alt="" coords="357,46,354,79,349,78,352,46"/>
 </map>

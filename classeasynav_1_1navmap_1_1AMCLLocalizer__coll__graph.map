@@ -1,6 +1,6 @@
 <map id="AMCLLocalizer" name="AMCLLocalizer">
 <area shape="rect" id="Node000001" title="A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach." alt="" coords="378,497,488,523"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="16,15,163,40"/>
+<area shape="rect" id="Node000002" href="$classLocalizerMethodBase.html" title=" " alt="" coords="16,15,163,40"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,9,206,4,259,5,310,17,334,29,355,44,368,59,379,80,397,133,411,198,421,269,431,406,434,497,429,497,426,407,415,270,406,199,392,134,374,82,364,62,352,48,331,33,309,22,258,10,207,9,159,14"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="6,65,173,105"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,67,232,67,276,73,318,88,356,112,376,142,392,187,405,242,416,302,428,418,434,497,428,497,423,419,410,303,400,243,387,189,371,145,352,116,316,92,275,79,231,73,189,73"/>
