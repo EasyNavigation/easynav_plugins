@@ -21,3 +21,10 @@ ament_add_gtest(serest_controller_legacy_params_file_tests serest_controller_leg
 target_link_libraries(serest_controller_legacy_params_file_tests easynav_controller::easynav_controller)
 target_compile_definitions(serest_controller_legacy_params_file_tests
   PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
+
+ament_add_gtest(serest_controller_short_path_tests serest_controller_short_path_tests.cpp)
+target_link_libraries(serest_controller_short_path_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+)
