@@ -2,8 +2,8 @@
 Changelog for package easynav_bonxai_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration
 * Empty clouds are guarded
 * Builds on Humble, Jazzy, Kilted, Lyrical and Rolling

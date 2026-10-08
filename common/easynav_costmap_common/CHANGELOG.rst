@@ -2,8 +2,8 @@
 Changelog for package easynav_costmap_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Fixed OccupancyGrid values
 * Removed unused dependencies
 * Contributors: Francisco Martín Rico

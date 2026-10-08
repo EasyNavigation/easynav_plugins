@@ -2,8 +2,8 @@
 Changelog for package easynav_serest_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Velocity smoother support and runtime reconfiguration
 * Fixed failures with short paths
 * Tolerance parameters take effect

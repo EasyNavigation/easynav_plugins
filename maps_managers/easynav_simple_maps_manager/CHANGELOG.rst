@@ -2,8 +2,8 @@
 Changelog for package easynav_simple_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration
 * Configurable min_height (was a fixed 0.1 m)
 * Fixed std::bad_alloc

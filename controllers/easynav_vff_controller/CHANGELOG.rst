@@ -2,8 +2,8 @@
 Changelog for package easynav_vff_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Velocity smoother support and runtime reconfiguration
 * The collision checker is no longer part of the controller
 * Contributors: Francisco Martín Rico

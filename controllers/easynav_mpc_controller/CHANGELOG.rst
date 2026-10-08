@@ -2,8 +2,8 @@
 Changelog for package easynav_mpc_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Velocity smoother support and runtime reconfiguration
 * NLopt: its own copy (NLopt 2.11.0, static and private) when the system has none; no NLopt rosdep keys (none exist for RHEL)
 * Configurable min_height (was a fixed 0.1 m)

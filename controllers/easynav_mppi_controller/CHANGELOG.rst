@@ -2,8 +2,8 @@
 Changelog for package easynav_mppi_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Velocity smoother support and runtime reconfiguration
 * Obstacle points in the robot frame
 * Removed unused dependencies

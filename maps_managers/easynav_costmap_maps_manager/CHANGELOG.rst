@@ -2,8 +2,8 @@
 Changelog for package easynav_costmap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration
 * Robot geometry from system_node
 * Configurable min_height in the ObstacleFilter (was a fixed 0.1 m)

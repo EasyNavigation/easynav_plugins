@@ -2,8 +2,8 @@
 Changelog for package easynav_navmap_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration
 * Fixed the particle distribution
 * Builds on Humble, Jazzy, Kilted, Lyrical and Rolling

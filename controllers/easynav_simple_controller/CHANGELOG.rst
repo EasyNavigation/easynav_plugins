@@ -2,8 +2,8 @@
 Changelog for package easynav_simple_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Velocity smoother support and runtime reconfiguration
 * Contributors: Francisco Martín Rico
 

@@ -2,8 +2,8 @@
 Changelog for package easynav_navmap_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration
 * Planners never keep a stale path
 * The path ends at the goal, inscribed cells are not crossed, and cost_weight balances cost against length

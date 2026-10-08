@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>easynav_diagnostic_recovery</name>
-  <version>0.4.2</version>
+  <version>0.5.0</version>
   <description>Easy Navigation: diagnosis-driven recovery system (safety reflexes, evaluators and mitigations with priority-based arbitration), the plugin interfaces it is composed of and the reference safety reflexes, evaluators and mitigations.</description>
   <maintainer email="fmrico@gmail.com">Francisco Martín Rico</maintainer>
   <license>Apache-2.0</license>

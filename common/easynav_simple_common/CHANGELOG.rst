@@ -2,8 +2,8 @@
 Changelog for package easynav_simple_common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Removed unused dependencies
 * Contributors: Francisco Martín Rico
 

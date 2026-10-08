@@ -2,8 +2,8 @@
 Changelog for package easynav_regulated_pp_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Velocity smoother support and runtime reconfiguration
 * Fixed oscillation when following the path
 * The collision reflex fails safe without data

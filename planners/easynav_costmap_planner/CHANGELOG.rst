@@ -2,8 +2,8 @@
 Changelog for package easynav_costmap_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration
 * Planners never keep a stale path
 * Fixed OccupancyGrid values

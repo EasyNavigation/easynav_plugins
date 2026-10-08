@@ -2,8 +2,8 @@
 Changelog for package easynav_navmap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration (rejected ones are reported)
 * Robot geometry from system_node
 * ObstacleFilter: keeps the static map; range and height limits; a column is an obstacle when it rises more than min_height above the NavMap surface (so a 2D laser sees obstacles, and the ground and ramps are not ones); min_height_per_meter and downsample_resolution parameters

@@ -2,8 +2,8 @@
 Changelog for package easynav_octomap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration
 * Robot geometry from system_node
 * Fixed std::bad_alloc

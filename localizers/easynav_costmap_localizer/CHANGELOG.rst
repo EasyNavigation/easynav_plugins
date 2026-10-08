@@ -2,8 +2,8 @@
 Changelog for package easynav_costmap_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2026-10-08)
+------------------
 * Runtime reconfiguration
 * AMCL convergence evaluator and relocalization mitigation for the diagnostic recovery manager
 * Configurable min_height (was a fixed 0.1 m)
