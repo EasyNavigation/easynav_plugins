@@ -259,7 +259,7 @@ TEST_F(ControllerStuckEvaluatorTestCase, ErrorAfterNotMovingLongEnough)
 class ControllerStuckFreshWindowTest : public ControllerStuckEvaluatorTestCase
 {
 protected:
-  using Interruption = std::function<void(easynav::NavState &, bool)>;
+  using Interruption = std::function<void (easynav::NavState &, bool)>;
 
   uint8_t level(easynav::NavState & nav_state)
   {

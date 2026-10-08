@@ -111,8 +111,8 @@ MapMatcher::get_matches(const std::vector<tf2::Vector3> & points, double min_wei
     };
 
   // Evaluate a free cell of a level with all the orientations
-  auto eval_cell = [&](int level, unsigned int i, unsigned int j,
-    std::vector<TransformWeighted> & out) {
+  using Candidates = std::vector<TransformWeighted>;
+  auto eval_cell = [&](int level, unsigned int i, unsigned int j, Candidates & out) {
       const auto & costmap = *levels_[level];
       if (costmap.getCost(i, j) != easynav::FREE_SPACE) {return;}
 
@@ -143,8 +143,9 @@ MapMatcher::get_matches(const std::vector<tf2::Vector3> & points, double min_wei
     std::set<std::pair<unsigned int, unsigned int>> cells;
     for (const auto & c : candidates) {
       unsigned int mx, my;
-      if (levels_[level]->worldToMap(c.transform.getOrigin().x(), c.transform.getOrigin().y(),
-        mx, my))
+      if (levels_[level]->worldToMap(
+          c.transform.getOrigin().x(), c.transform.getOrigin().y(),
+          mx, my))
       {
         cells.emplace(mx, my);
       }

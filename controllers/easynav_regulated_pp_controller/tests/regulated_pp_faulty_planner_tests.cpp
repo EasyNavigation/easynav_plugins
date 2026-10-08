@@ -50,7 +50,8 @@ protected:
   void start(const std::string & fault, int fault_after)
   {
     controller_node_ = std::make_shared<easynav::ControllerNode>(
-      rclcpp::NodeOptions().parameter_overrides({
+      rclcpp::NodeOptions().parameter_overrides(
+    {
       {"controller_types", std::vector<std::string>{"rpp"}},
       {"rpp.plugin", "easynav_regulated_pp_controller/RegulatedPurePursuitController"},
       {"rpp.rt_freq", 200.0},

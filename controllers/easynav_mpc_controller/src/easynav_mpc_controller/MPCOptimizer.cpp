@@ -28,7 +28,7 @@ MPCParameters::MPCParameters(
   const pcl::PointCloud<pcl::PointXYZ> & points,
   int N,
   double dt)
-:goal(goal), x0(x0), theta0(theta0), points(points), N_(N), dt_(dt) {}
+: goal(goal), x0(x0), theta0(theta0), points(points), N_(N), dt_(dt) {}
 
 MPCParameters::~MPCParameters() = default;
 
@@ -87,9 +87,9 @@ MPCOptimizer::kinematic_model(
 double
 MPCOptimizer::cost_function(
   const std::vector<double> & u,
-  [[maybe_unused]] std::vector<double> & grad, void *data)
+  [[maybe_unused]] std::vector<double> & grad, void * data)
 {
-  MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
+  MPCParameters * params = reinterpret_cast<MPCParameters *>(data);
 
   Eigen::Vector3d position = params->x0;
   Eigen::Vector3d orientation = params->theta0;
@@ -107,7 +107,7 @@ MPCOptimizer::cost_function(
     double v = u[2 * i];
     double w = u[2 * i + 1];
     double dv, dw;
-    if(i < (N - 1)) {
+    if (i < (N - 1)) {
       dv = u[2 * (i + 1)] - u[2 * i];
       dw = u[2 * (i + 1) + 1] - u[2 * i + 1];
     } else {
@@ -124,7 +124,8 @@ MPCOptimizer::cost_function(
     Eigen::Vector2d duk(dv, dw);
 
     // Tracking cost
-    cost += Q(0, 0) * error[0] * error[0] + Q(1,
+    cost += Q(0, 0) * error[0] * error[0] + Q(
+      1,
       1) * error[1] * error[1] + qtheta * error_theta * error_theta;
     // Effort Cost
     cost += R(0, 0) * v * v + R(1, 1) * w * w;
@@ -140,9 +141,9 @@ double
 MPCOptimizer::nlopt_cost_callback(
   const std::vector<double> & x,
   std::vector<double> & grad,
-  void *data)
+  void * data)
 {
-  auto *cbdata = static_cast<NLoptCallbackData *>(data);
+  auto * cbdata = static_cast<NLoptCallbackData *>(data);
   return cbdata->optimizer->cost_function(x, grad, cbdata->params);
 }
 

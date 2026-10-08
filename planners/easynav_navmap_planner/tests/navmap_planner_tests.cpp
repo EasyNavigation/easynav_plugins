@@ -487,7 +487,8 @@ TEST_F(NavMapPlannerTest, TheShortcutDoesNotCrossCostlierCells)
 {
   // A costly (not inscribed) square between start and goal: the A* goes around it, and the
   // straight shortcut must not cut through it
-  inflate([](float x, float y) -> std::uint8_t {
+  inflate(
+    [](float x, float y) -> std::uint8_t {
       return (x > 1.5f && x < 2.5f && y > 0.0f && y < 1.6f) ? 200 : 0;
     });
   set_robot(0.55, 0.55);

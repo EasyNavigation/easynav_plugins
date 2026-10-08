@@ -26,8 +26,9 @@ void DummyMitigation::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".requires_control",
-      requires_control_);
+  easynav::declare_parameter_if_absent<bool>(
+    *node, plugin_name + ".requires_control",
+    requires_control_);
   node->get_parameter<bool>(plugin_name + ".requires_control", requires_control_);
 
   easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".should_fail", should_fail_);
@@ -47,5 +48,6 @@ RecoveryStatus DummyMitigation::on_cycle(easynav::NavState &)
 }  // namespace easynav_diagnostic_recovery
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav_diagnostic_recovery::DummyMitigation,
+PLUGINLIB_EXPORT_CLASS(
+  easynav_diagnostic_recovery::DummyMitigation,
   easynav_diagnostic_recovery::RecoveryMitigationBase)

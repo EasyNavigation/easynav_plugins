@@ -27,7 +27,8 @@ namespace Bonxai
  * Each chunk allocates memory for 512 Grids
  */
 template<typename DataT>
-class GridBlockAllocator {
+class GridBlockAllocator
+{
 public:
   // use log2dim of the block to be allocated
   GridBlockAllocator(size_t log2dim);
@@ -38,7 +39,7 @@ public:
   GridBlockAllocator & operator=(const GridBlockAllocator & other) = delete;
   GridBlockAllocator & operator=(GridBlockAllocator && other) = default;
 
-  using Deleter = std::function<void()>;
+  using Deleter = std::function<void ()>;
 
   std::pair<DataT *, Deleter> allocateBlock();
 
@@ -133,11 +134,12 @@ inline void GridBlockAllocator<DataT>::releaseUnusedMemory()
 {
   std::unique_lock lock(*mutex_);
   int to_be_erased_count = 0;
-  auto remove_if = std::remove_if(chunks_.begin(), chunks_.end(), [&](const auto & chunk) -> bool {
-        bool notUsed = chunk->mask.isOn();
-        to_be_erased_count += (notUsed) ? 1 : 0;
-        return notUsed;
-  });
+  auto remove_if = std::remove_if(
+    chunks_.begin(), chunks_.end(), [&](const auto & chunk) -> bool {
+      bool notUsed = chunk->mask.isOn();
+      to_be_erased_count += (notUsed) ? 1 : 0;
+      return notUsed;
+    });
   chunks_.erase(remove_if, chunks_.end());
   capacity_ -= to_be_erased_count * blocks_per_chunk;
 }

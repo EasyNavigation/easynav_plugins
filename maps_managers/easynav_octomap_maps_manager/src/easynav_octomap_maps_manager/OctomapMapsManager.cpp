@@ -109,7 +109,7 @@ OctomapMapsManager::on_initialize()
 
   octomap_pub_ = node->create_publisher<octomap_msgs::msg::Octomap>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/map",
+    "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
 //   if (!package_name.empty() && !occmap_path_file.empty()) {
@@ -169,7 +169,7 @@ OctomapMapsManager::on_initialize()
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/incoming_pc2_map",
+    "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
@@ -192,9 +192,10 @@ OctomapMapsManager::on_initialize()
       pcl::fromROSMsg(*msg, *pcl_ds);
 
       pcl::VoxelGrid<pcl::PointXYZ> vg;
-      vg.setLeafSize(static_cast<float>(resolution),
-                 static_cast<float>(resolution),
-                 static_cast<float>(resolution));
+      vg.setLeafSize(
+        static_cast<float>(resolution),
+        static_cast<float>(resolution),
+        static_cast<float>(resolution));
       vg.filter(*pcl_ds);
 
       octomap_ = std::make_shared<::octomap::OcTree>(resolution);
@@ -234,7 +235,7 @@ OctomapMapsManager::on_initialize()
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/savemap",
+    "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

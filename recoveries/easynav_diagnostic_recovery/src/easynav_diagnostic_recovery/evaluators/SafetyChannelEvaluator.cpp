@@ -94,5 +94,6 @@ void SafetyChannelEvaluator::update(NavState & nav_state)
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::SafetyChannelEvaluator,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::SafetyChannelEvaluator,
   easynav_diagnostic_recovery::RecoveryEvaluatorBase)

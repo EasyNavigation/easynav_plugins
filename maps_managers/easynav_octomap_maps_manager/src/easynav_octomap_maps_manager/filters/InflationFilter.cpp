@@ -87,8 +87,9 @@ bool InflationFilter::inflate_layer_u8(
   if (!src_view || src_view->size() != nm.navcels.size()) {
     return false;
   }
-  auto dst_view = nm.layers.add_or_get<uint8_t>(dst_layer, nm.navcels.size(),
-        layer_type_tag<uint8_t>());
+  auto dst_view = nm.layers.add_or_get<uint8_t>(
+    dst_layer, nm.navcels.size(),
+    layer_type_tag<uint8_t>());
   if (!dst_view) {return false;}
   if (dst_view->data().size() != nm.navcels.size()) {
     const_cast<std::vector<uint8_t> &>(dst_view->data()).assign(nm.navcels.size(), FREE_SPACE);
@@ -187,17 +188,20 @@ InflationFilter::on_initialize()
   inflation_radius_ = 0.3;
   cost_scaling_factor_ = 3.0;
 
-  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".inflation_radius",
-        inflation_radius_);
-  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".cost_scaling_factor",
-        cost_scaling_factor_);
+  easynav::declare_parameter_if_absent(
+    *node, plugin_name_ + ".inflation_radius",
+    inflation_radius_);
+  easynav::declare_parameter_if_absent(
+    *node, plugin_name_ + ".cost_scaling_factor",
+    cost_scaling_factor_);
   node->get_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
   node->get_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
   // The robot's: "system_node.robot_geometry" (the filter's own is deprecated).
   inscribed_radius_ = easynav::get_robot_geometry(
     *node, {"", plugin_name_ + ".inscribed_radius", ""}).inscribed_radius;
 
-  RCLCPP_INFO(node->get_logger(),
+  RCLCPP_INFO(
+    node->get_logger(),
     "InflationFilter with inflation_radius = %lf  cost_scaling_factor = %lf",
     inflation_radius_, cost_scaling_factor_);
 }
@@ -211,8 +215,9 @@ InflationFilter::update(::easynav::NavState & nav_state)
 
   octomap_ = nav_state.get<::octomap::Octomap>("map");
 
-  if (!inflate_layer_u8(octomap_, "obstacles", "inflated_obstacles",
-    inflation_radius_, cost_scaling_factor_, 0.3))
+  if (!inflate_layer_u8(
+      octomap_, "obstacles", "inflated_obstacles",
+      inflation_radius_, cost_scaling_factor_, 0.3))
   {
     RCLCPP_ERROR(get_node()->get_logger(), "Error inflating at ObstacleFilter");
   }

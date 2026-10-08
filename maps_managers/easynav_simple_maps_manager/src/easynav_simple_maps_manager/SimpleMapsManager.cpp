@@ -67,7 +67,7 @@ SimpleMapsManager::on_initialize()
     try {
       pkgpath = easynav::get_package_share_path(package_name);
       map_path_ = pkgpath + "/" + map_path_file;
-    } catch(ament_index_cpp::PackageNotFoundError & ex) {
+    } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
@@ -78,18 +78,18 @@ SimpleMapsManager::on_initialize()
 
   static_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/map",
+    "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   dynamic_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/dynamic_map", 100);
+    "/dynamic_map", 100);
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   incoming_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/incoming_map",
+    "/incoming_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
       static_map_.from_occupancy_grid(*msg);
@@ -104,7 +104,7 @@ SimpleMapsManager::on_initialize()
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/savemap",
+    "/savemap",
     [&](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

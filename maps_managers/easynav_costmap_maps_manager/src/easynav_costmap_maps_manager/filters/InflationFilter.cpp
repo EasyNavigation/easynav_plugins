@@ -80,17 +80,20 @@ InflationFilter::on_initialize()
   inflation_radius_ = 0.3;
   cost_scaling_factor_ = 3.0;
 
-  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".inflation_radius",
-      inflation_radius_);
-  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".cost_scaling_factor",
-      cost_scaling_factor_);
+  easynav::declare_parameter_if_absent(
+    *node, plugin_name_ + ".inflation_radius",
+    inflation_radius_);
+  easynav::declare_parameter_if_absent(
+    *node, plugin_name_ + ".cost_scaling_factor",
+    cost_scaling_factor_);
   node->get_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
   // The robot's: "system_node.robot_geometry" (the filter's own is deprecated).
   inscribed_radius_ = easynav::get_robot_geometry(
     *node, {"", plugin_name_ + ".inscribed_radius", ""}).inscribed_radius;
   node->get_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
 
-  RCLCPP_INFO(node->get_logger(),
+  RCLCPP_INFO(
+    node->get_logger(),
     "InflationFilter with inflation_radius = %lf  inscribed_radius = %lf  cost_scaling_factor = %lf",
     inflation_radius_, inscribed_radius_, cost_scaling_factor_);
 

@@ -60,8 +60,9 @@ protected:
       nm_.layer_set<std::uint8_t>(
         "obstacles", cid, nm_.layer_get<std::uint8_t>("occupancy", cid, FREE_SPACE));
     }
-    ASSERT_TRUE(filter_.inflate_layer_u8(
-      nm_, "obstacles", "inflated_obstacles", kRadius, kScaling, kInscribed));
+    ASSERT_TRUE(
+      filter_.inflate_layer_u8(
+        nm_, "obstacles", "inflated_obstacles", kRadius, kScaling, kInscribed));
   }
 
   std::uint8_t cost_at(float x, float y)
@@ -156,7 +157,8 @@ TEST_F(NavmapInflationFilterTest, InflatingTwiceGivesTheSameLayer)
   column(30, 100);
   inflate();
   const auto first = cost_at(2.45f, 3.0f);
-  ASSERT_TRUE(filter_.inflate_layer_u8(
-    nm_, "obstacles", "inflated_obstacles", kRadius, kScaling, kInscribed));
+  ASSERT_TRUE(
+    filter_.inflate_layer_u8(
+      nm_, "obstacles", "inflated_obstacles", kRadius, kScaling, kInscribed));
   EXPECT_EQ(cost_at(2.45f, 3.0f), first);
 }

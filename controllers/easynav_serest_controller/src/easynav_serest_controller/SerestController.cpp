@@ -72,8 +72,9 @@ SerestController::on_initialize()
   easynav::declare_parameter_if_absent<double>(*node, ns + ".kappa_max", kappa_max_);
 
   // For obstacle detection
-  easynav::declare_parameter_if_absent<double>(*node, ns + ".dist_search_radius",
-      dist_search_radius_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, ns + ".dist_search_radius",
+    dist_search_radius_);
 
   easynav::declare_parameter_if_absent<double>(*node, ns + ".goal_pos_tol", goal_pos_tol_);
   easynav::declare_parameter_if_absent<double>(*node, ns + ".goal_yaw_tol_deg", goal_yaw_tol_deg_);
@@ -82,15 +83,18 @@ SerestController::on_initialize()
   easynav::declare_parameter_if_absent<double>(*node, ns + ".final_align_k", final_align_k_);
   easynav::declare_parameter_if_absent<double>(*node, ns + ".final_align_wmax", final_align_wmax_);
 
-  easynav::declare_parameter_if_absent<bool>(*node, ns + ".corner_guard_enable",
-      corner_guard_enable_);
+  easynav::declare_parameter_if_absent<bool>(
+    *node, ns + ".corner_guard_enable",
+    corner_guard_enable_);
   easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_gain_ey", corner_gain_ey_);
   easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_gain_eth", corner_gain_eth_);
-  easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_gain_kappa",
-      corner_gain_kappa_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, ns + ".corner_gain_kappa",
+    corner_gain_kappa_);
   easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_min_alpha", corner_min_alpha_);
-  easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_boost_omega",
-      corner_boost_omega_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, ns + ".corner_boost_omega",
+    corner_boost_omega_);
   easynav::declare_parameter_if_absent<double>(*node, ns + ".apex_ey_des", apex_ey_des_);
   easynav::declare_parameter_if_absent<double>(*node, ns + ".a_lat_soft", a_lat_soft_);
 
@@ -214,7 +218,7 @@ SerestController::ref_heading_and_curvature(
       if (i + 1 >= pd.pts.size()) {return v2(1, 0);}
       return normalize(pd.pts[i + 1] - pd.pts[i]);
     };
-  auto atan2dir = [](const Vec2 & t){return std::atan2(t.y, t.x);};
+  auto atan2dir = [](const Vec2 & t) {return std::atan2(t.y, t.x);};
 
   // Relevant segment indices: i-1, i, i + 1
   const size_t i = prj.seg_idx;
@@ -306,7 +310,8 @@ SerestController::closest_obstacle_distance(
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(0.3)
   .fuse(tf_info.robot_footprint_frame)
-  .filter({-dist_search_radius_, -dist_search_radius_, NAN},
+  .filter(
+    {-dist_search_radius_, -dist_search_radius_, NAN},
     {dist_search_radius_, dist_search_radius_, 2.0})
   .collapse({NAN, NAN, 0.1})
   .downsample(0.3);
@@ -446,7 +451,7 @@ SerestController::safety_limits(
   double & d_closest, double & v_safe, double & v_curv)
 {
   d_closest = closest_obstacle_distance(nav_state);
-  v_safe = v_safe_from_distance(d_closest, /*slope_sin=*/0.0);
+  v_safe = v_safe_from_distance(d_closest, /*slope_sin=*/ 0.0);
 
   // Curvature-based limit ("soft" version of the original file)
   const double ak = std::fabs(rk.kappa_hat);
@@ -670,8 +675,9 @@ SerestController::update_rt(NavState & nav_state)
   // 5) Goal-related terms and slow/stop zone shaping
   double dist_xy_goal = 0.0, e_theta_goal = 0.0, stop_r = 0.0, slow_r = 0.0, gamma_slow = 1.0;
   Vec2 goal_xy; double yaw_goal = 0.0;
-  compute_goal_zone(path, robot_xy, yaw, dist_xy_goal, e_theta_goal,
-                    stop_r, slow_r, gamma_slow, goal_xy, yaw_goal);
+  compute_goal_zone(
+    path, robot_xy, yaw, dist_xy_goal, e_theta_goal,
+    stop_r, slow_r, gamma_slow, goal_xy, yaw_goal);
 
   // 6) Global safety limits derived from sensors and curvature
   double d_closest = 0.0, v_safe = 0.0, v_curv = 0.0;
@@ -688,7 +694,8 @@ SerestController::update_rt(NavState & nav_state)
     const double near_start_s = 0.30;  // treat the first 30 cm as the start region
 
     // Base request from the regular criterion (using the provided threshold)
-    bool tip_request = should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end,
+    bool tip_request = should_turn_in_place(
+      allow_reverse_, e_theta, e_theta_goal, dist_to_end,
       thr_enter);
 
     // Additional start-of-path gate: enforce TiP if still near s*=0 and yaw misalignment is large
@@ -774,7 +781,7 @@ SerestController::update_rt(NavState & nav_state)
 
   // 8) Final alignment inside stop zone (publishes and returns if active)
   if (maybe_final_align_and_publish(
-        nav_state, path, dist_xy_goal, stop_r, e_theta_goal, gamma_slow, dt))
+      nav_state, path, dist_xy_goal, stop_r, e_theta_goal, gamma_slow, dt))
   {
     return;
   }
@@ -802,8 +809,9 @@ SerestController::update_rt(NavState & nav_state)
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 
-    if (should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end,
-      turn_in_place_thr))
+    if (should_turn_in_place(
+        allow_reverse_, e_theta, e_theta_goal, dist_to_end,
+        turn_in_place_thr))
     {
       v_cmd_raw = 0.0;
       omega_nom = -k_theta_ * e_theta - k_y_ * std::atan(e_y / std::max(ell_, 1e-3));
