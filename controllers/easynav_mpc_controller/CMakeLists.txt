@@ -39,10 +39,15 @@ else()
   else()
     set(nlopt_build_type Release)
   endif()
+  # DOWNLOAD_EXTRACT_TIMESTAMP only exists since CMake 3.24 (Humble has 3.22)
+  set(nlopt_download_options)
+  if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set(nlopt_download_options DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
+  endif()
   externalproject_add(nlopt_bundled
     URL https://github.com/stevengj/nlopt/archive/refs/tags/v${nlopt_version}.tar.gz
     URL_HASH SHA256=53e552d83e9294d67db37f0f4a23f15933a9ef698485301a18b98b40004cf0de
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    ${nlopt_download_options}
     CMAKE_ARGS
       -DCMAKE_INSTALL_PREFIX=${nlopt_prefix}
       -DCMAKE_INSTALL_LIBDIR=lib
