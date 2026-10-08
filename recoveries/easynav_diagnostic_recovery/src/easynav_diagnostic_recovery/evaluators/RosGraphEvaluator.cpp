@@ -266,7 +266,7 @@ std::string RosGraphEvaluator::describe_unfed(const std::vector<Subscription> & 
     entries.push_back("\"" + ignored_topics_entry(sub.topic) + "\"");
   }
   msg += "\n  if optional, add to " + get_plugin_name() + ".ignored_topics of " +
-    get_node()->get_fully_qualified_name() + ": " + join(entries, ", ");
+    get_node()->get_node_base_interface()->get_fully_qualified_name() + ": " + join(entries, ", ");
   return msg;
 }
 

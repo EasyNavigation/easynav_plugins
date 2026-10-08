@@ -56,6 +56,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
   ${PCL_INCLUDE_DIRS}
 )
+# pcl_conversions exports a CMake target only since 2.8 (Kilted); older ones, variables
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${pcl_conversions_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   easynav_core::easynav_core
@@ -73,7 +75,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   yaml-cpp
   ${GRAPHICSMAGICKCPP_LIBRARIES}
   ${PCL_LIBRARIES}
-  pcl_conversions::pcl_conversions
+  ${pcl_conversions_TARGETS}
+  ${pcl_conversions_LIBRARIES}
   bonxai
 )
 

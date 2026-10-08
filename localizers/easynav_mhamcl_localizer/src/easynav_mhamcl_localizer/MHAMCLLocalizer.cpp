@@ -192,7 +192,8 @@ MHAMCLLocalizer::on_initialize()
 
   tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*get_node());
 
-  const std::string prefix = node->get_fully_qualified_name() + std::string("/") + plugin_name;
+  const std::string prefix = node->get_node_base_interface()->get_fully_qualified_name() +
+    std::string("/") + plugin_name;
   particles_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseArray>(
     prefix + "/particles", 10);
   hypotheses_pub_ = get_node()->create_publisher<visualization_msgs::msg::MarkerArray>(

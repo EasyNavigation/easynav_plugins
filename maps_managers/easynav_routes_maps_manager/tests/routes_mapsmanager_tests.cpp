@@ -241,7 +241,8 @@ TEST_F(RoutesMapsManagerTest, IncomingRoutesTopicUpdatesInternalAndNavState)
   executor.add_node(node->get_node_base_interface());
 
   const std::string topic =
-    node->get_fully_qualified_name() + std::string("/routes/incoming_routes");
+    node->get_node_base_interface()->get_fully_qualified_name() +
+    std::string("/routes/incoming_routes");
   auto pub = node->create_publisher<easynav_routes_maps_manager::msg::RoutesMap>(
     topic, rclcpp::QoS(1).transient_local().reliable());
   pub->on_activate();
@@ -326,7 +327,8 @@ TEST_F(RoutesMapsManagerTest, LiveIncomingRoutesEditRefreshesCostmapFilterOnNext
   executor.add_node(node->get_node_base_interface());
 
   const std::string topic =
-    node->get_fully_qualified_name() + std::string("/routes/incoming_routes");
+    node->get_node_base_interface()->get_fully_qualified_name() +
+    std::string("/routes/incoming_routes");
   auto pub = node->create_publisher<easynav_routes_maps_manager::msg::RoutesMap>(
     topic, rclcpp::QoS(1).transient_local().reliable());
   pub->on_activate();

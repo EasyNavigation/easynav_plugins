@@ -90,7 +90,6 @@ target_link_libraries(fusion_localizer
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
   ${std_srvs_TARGETS}
-  GeographicLib
   ${GeographicLib_LIBRARIES}
   ${robot_localization_LIBRARIES}
   angles::angles

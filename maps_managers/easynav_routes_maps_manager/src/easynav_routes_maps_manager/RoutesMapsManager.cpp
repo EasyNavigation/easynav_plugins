@@ -19,7 +19,7 @@
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_routes_maps_manager/route_io.hpp"
 
-#include "ament_index_cpp/get_package_share_path.hpp"
+#include "easynav_common/PackageShare.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -76,7 +76,7 @@ void RoutesMapsManager::on_initialize()
     // Absolute path: ignore package_name.
     map_path_ = map_path_file;
   } else if (!package_name.empty() && !map_path_file.empty()) {
-    const auto pkgpath = ament_index_cpp::get_package_share_path(package_name);
+    const auto pkgpath = easynav::get_package_share_path(package_name);
     map_path_ = pkgpath / map_path_file;
   } else {
     throw std::runtime_error(
@@ -85,14 +85,16 @@ void RoutesMapsManager::on_initialize()
   }
 
   routes_pub_ = node->create_publisher<visualization_msgs::msg::MarkerArray>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/routes",
     rclcpp::QoS(10).transient_local().reliable());
 
   imarker_server_ = std::make_shared<interactive_markers::InteractiveMarkerServer>(
     plugin_name + std::string("_imarkers"), node, false);
 
   save_routes_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/save_routes",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/save_routes",
     [this](const std_srvs::srv::Trigger::Request::SharedPtr,
     std_srvs::srv::Trigger::Response::SharedPtr response) {
       try {
@@ -123,7 +125,8 @@ void RoutesMapsManager::on_initialize()
   // topic) -- e.g. a fleet-wide navigation manager publishing on
   // /global_routes, remapped to this topic.
   incoming_routes_sub_ = node->create_subscription<easynav_routes_maps_manager::msg::RoutesMap>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_routes",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/incoming_routes",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](easynav_routes_maps_manager::msg::RoutesMap::UniquePtr msg) {
       routes_ = from_msg(*msg);
