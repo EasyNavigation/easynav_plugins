@@ -19,7 +19,6 @@
 
 #include <vector>
 #include <Eigen/Core>
-#include <nlopt.hpp>
 #include <cmath>
 
 #include <tf2/LinearMath/Quaternion.hpp>

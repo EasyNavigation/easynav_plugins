@@ -16,6 +16,8 @@
 /// \file
 /// \brief Implementation of the MPCController class.
 
+#include <nlopt.hpp>
+
 #include "easynav_common/Parameters.hpp"
 #include "easynav_mpc_controller/MPCController.hpp"
 #include "easynav_system/GoalManager.hpp"
