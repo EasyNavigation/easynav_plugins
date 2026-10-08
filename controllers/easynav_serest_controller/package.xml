@@ -26,7 +26,6 @@
   <test_depend>easynav_controller</test_depend>
   <test_depend>lifecycle_msgs</test_depend>
   <test_depend>rclcpp_lifecycle</test_depend>
-  <test_depend>std_srvs</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
