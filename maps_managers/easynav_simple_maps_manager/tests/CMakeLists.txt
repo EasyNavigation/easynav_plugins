@@ -3,3 +3,6 @@ target_link_libraries(simple_mapsmanager_tests ${PROJECT_NAME})
 
 ament_add_gtest(simple_mapsmanager_reconfigure_tests simple_mapsmanager_reconfigure_tests.cpp)
 target_link_libraries(simple_mapsmanager_reconfigure_tests ${PROJECT_NAME})
+
+ament_add_gtest(simple_mapsmanager_min_height_tests simple_mapsmanager_min_height_tests.cpp)
+target_link_libraries(simple_mapsmanager_min_height_tests ${PROJECT_NAME})

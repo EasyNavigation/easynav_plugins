@@ -114,6 +114,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.reseed_noise_yaw` | `double` | `0.05` | Std dev of the yaw noise of a reseeded particle (rad). |
 | `<plugin>.distance_perception_error` | `double` | `0.05` | Precision (sigma) of the sensor (m). Obstacles farther than 3 sigma from a point do not count. |
 | `<plugin>.correct_max_points` | `int` | `500` | Maximum number of points per correction (after downsampling). |
+| `<plugin>.min_height` | `double` | `0.1` | Points lower than this (m, `base_footprint` frame) are the floor and do not correct the particles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high). |
 
 ### Motion model
 

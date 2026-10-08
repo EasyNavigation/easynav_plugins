@@ -58,6 +58,8 @@ SimpleMapsManager::on_initialize()
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".map_path_file", map_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".min_height", min_height_);
+  node->get_parameter(plugin_name + ".min_height", min_height_);
 
   map_path_ = "/tmp/default.map";
   if (package_name != "" && map_path_file != "") {
@@ -160,7 +162,7 @@ SimpleMapsManager::update(NavState & nav_state)
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(dynamic_map_.resolution())
   .fuse(tf_info.map_frame, stamp, false)
-  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN});
+  .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN});
 
   const auto & fused = view.as_points();
 

@@ -202,6 +202,9 @@ protected:
   /// Minimum yaw noise threshold.
   double min_noise_yaw_ {0.05};
 
+  /// Points below this height (m, robot footprint frame) are ignored: floor hits
+  double min_height_ {0.1};
+
   /// Last odometry transform received.
   tf2::Transform odom_{tf2::Transform::getIdentity()};
 

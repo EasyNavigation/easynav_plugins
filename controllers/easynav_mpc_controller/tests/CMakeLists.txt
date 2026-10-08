@@ -24,3 +24,6 @@ target_compile_definitions(mpc_controller_legacy_params_file_tests
 
 ament_add_gtest(mpc_controller_collision_checker_tests mpc_controller_collision_checker_tests.cpp)
 target_link_libraries(mpc_controller_collision_checker_tests ${PROJECT_NAME})
+
+ament_add_gtest(mpc_controller_min_height_tests mpc_controller_min_height_tests.cpp)
+target_link_libraries(mpc_controller_min_height_tests ${PROJECT_NAME})

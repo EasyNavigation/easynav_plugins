@@ -33,6 +33,10 @@ public:
 
   virtual void on_initialize();
   virtual void update(NavState & nav_state);
+
+protected:
+  /// Points below this height (m, map frame) are ignored: floor hits ("<plugin>.min_height")
+  double min_height_ {0.1};
 };
 
 }  // namespace easynav

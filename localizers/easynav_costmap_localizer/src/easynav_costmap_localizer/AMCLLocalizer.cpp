@@ -234,6 +234,8 @@ AMCLLocalizer::on_initialize()
     noise_translation_to_rotation_);
   node->get_parameter<double>(plugin_name + ".min_noise_xy", min_noise_xy_);
   node->get_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
+  node->get_parameter<double>(plugin_name + ".min_height", min_height_);
   node->get_parameter<bool>(plugin_name + ".compute_odom_from_tf", compute_odom_from_tf_);
 
   node->get_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
@@ -642,7 +644,7 @@ AMCLLocalizer::correct(NavState & nav_state)
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(map_static.getResolution())
   .fuse(tf_info.robot_footprint_frame, last_input_time_)
-  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+  .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN})
   .collapse({NAN, NAN, 0.1})
   .downsample(map_static.getResolution());
   const auto & filtered = view.as_points();

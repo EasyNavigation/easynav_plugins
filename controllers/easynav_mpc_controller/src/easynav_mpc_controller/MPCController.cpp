@@ -62,6 +62,8 @@ MPCController::on_initialize()
 
   node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
   node->get_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
+  node->get_parameter<double>(plugin_name + ".min_height", min_height_);
 
   optimizer_ = std::make_unique<MPCOptimizer>();
 
@@ -224,7 +226,7 @@ MPCController::update_rt(NavState & nav_state)
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-2.0, -0.35, -1.0}, {0.0, 0.35, 1.0})
     .fuse(tf_info.map_frame)
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(0.1)
     .as_points();

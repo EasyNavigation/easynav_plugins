@@ -32,3 +32,6 @@ ament_add_gtest(amcl_relocalize_mitigation_tests amcl_relocalize_mitigation_test
 target_link_libraries(amcl_relocalize_mitigation_tests
   amcl_relocalize_mitigation
 )
+
+ament_add_gtest(costmap_localizer_min_height_tests costmap_localizer_min_height_tests.cpp)
+target_link_libraries(costmap_localizer_min_height_tests ${PROJECT_NAME})

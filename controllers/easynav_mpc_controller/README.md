@@ -33,6 +33,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | — | — | — | Velocity and acceleration limits are not this plugin's: they are the robot limits of `controller_node` (`robot_limits.max_linear_vel`, `min_linear_vel`, `max_angular_vel`, `max_linear_acc`, `max_linear_decel`, `max_angular_acc`, `max_angular_decel`), queried with `ControllerMethodBase::get_robot_limits()` and also enforced by ControllerNode's velocity smoother. |
 | `<plugin>.verbose` | `bool` | `false` | Show data on terminal about Optimization. |
 | `<plugin>.use_collision_checker` | `bool` | `false` | Enables the in-loop obstacle constraint (within `safety_radius`). |
+| `<plugin>.min_height` | `double` | `0.1` | Perceived points lower than this (m, map frame) are the floor, not obstacles to avoid. Lower it for sensors mounted lower (e.g. a laser 0.095 m high). |
 
 > **Deprecated:** this plugin's former limit parameters (`max_linear_velocity`, `max_angular_velocity`, under the plugin's name) still apply, with a warning, where `controller_node.robot_limits.*` does not set that limit. They will stop working soon: move them to `robot_limits`.
 

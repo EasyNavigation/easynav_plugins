@@ -125,6 +125,7 @@ MHAMCLLocalizer::on_initialize()
   param("noise_translation_to_rotation", pp.noise_translation_to_rotation);
   param("min_noise_xy", min_noise_xy_);
   param("min_noise_yaw", min_noise_yaw_);
+  param("min_height", min_height_);
   param("odom_key", odom_key_);
 
   // Hypotheses
@@ -422,7 +423,7 @@ MHAMCLLocalizer::correct(NavState & nav_state)
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(map.getResolution())
   .fuse(tf_info.robot_footprint_frame, last_input_time_)
-  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+  .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN})
   .collapse({NAN, NAN, 0.1})
   .downsample(map.getResolution());
   const auto & filtered = view.as_points();

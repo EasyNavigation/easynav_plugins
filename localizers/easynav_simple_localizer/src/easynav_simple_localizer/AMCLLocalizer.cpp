@@ -230,6 +230,8 @@ AMCLLocalizer::on_initialize()
     noise_translation_to_rotation_);
   node->get_parameter<double>(plugin_name + ".min_noise_xy", min_noise_xy_);
   node->get_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
+  node->get_parameter<double>(plugin_name + ".min_height", min_height_);
 
   // Check if any of the standard deviations are non-positive
   // This is undefined behavior in std::normal_distribution and may result in a runtime assertion
@@ -583,7 +585,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .downsample(map_static.resolution())
     .fuse(tf_info.robot_footprint_frame, last_input_time_)
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(map_static.resolution())
     .as_points();

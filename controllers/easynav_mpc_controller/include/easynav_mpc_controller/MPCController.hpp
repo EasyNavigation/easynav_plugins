@@ -89,6 +89,7 @@ protected:
   // Fallback goal tolerances if GoalManager does not publish them
   double fallback_goal_pos_tol_{0.05};   ///< Default positional tolerance (meters).
   double fallback_goal_yaw_tol_{0.05};   ///< Default angular tolerance (radians).
+  double min_height_{0.1};  ///< Points below this height (m) are ignored: floor hits.
 
   std::unique_ptr<MPCOptimizer> optimizer_;  ///< MPC optimizer
 

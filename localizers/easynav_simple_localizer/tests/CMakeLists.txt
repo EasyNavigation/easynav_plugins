@@ -22,3 +22,6 @@ target_link_libraries(simple_localizer_last_known_pose_tests
   ${PROJECT_NAME}
   rclcpp::rclcpp
 )
+
+ament_add_gtest(simple_localizer_min_height_tests simple_localizer_min_height_tests.cpp)
+target_link_libraries(simple_localizer_min_height_tests ${PROJECT_NAME})

@@ -207,6 +207,8 @@ protected:
 
   double reseed_time_ {3.0};
   double hypotheses_time_ {3.0};
+  /// Points below this height (m, robot footprint frame) are ignored: floor hits
+  double min_height_ {0.1};
   rclcpp::Time last_reseed_;
   rclcpp::Time last_hypotheses_;
   rclcpp::Time last_input_time_;
