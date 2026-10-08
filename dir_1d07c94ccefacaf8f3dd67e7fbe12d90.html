@@ -186,10 +186,10 @@ Filter Plugins</h2>
 <b>ObstacleFilter</b></h3>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter</span></li>
-<li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1navmap_1_1ObstacleFilter.html">easynav::navmap::ObstacleFilter</a></span></li>
+<li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1navmap_1_1ObstacleFilter.html" title="Marks as obstacles the NavCels under the points that rise above the NavMap surface.">easynav::navmap::ObstacleFilter</a></span></li>
 <li><b>Description:</b> <br  />
- Detects occupied NavCels from input point clouds (<span class="tt">points</span> key in <span class="tt">NavState</span>) and marks them as <span class="tt">LETHAL_OBSTACLE</span> in the <span class="tt">"obstacles"</span> layer. <br  />
- The filter groups 3D points into voxels and marks cells as occupied if a sufficient vertical structure is detected (either multiple bins along the z-axis or a vertical span exceeding a threshold).</li>
+ Detects occupied NavCels from the point perceptions in <span class="tt">NavState</span> and marks them as <span class="tt">LETHAL_OBSTACLE</span> in the <span class="tt">"obstacles"</span> layer, on top of the static map's <span class="tt">"occupancy"</span> layer (if any). <br  />
+ The points are downsampled, those within <span class="tt">max_range</span> and below <span class="tt">max_height</span> (robot frame) are grouped in 0.3 m columns, and a column is an obstacle when its highest point is more than <span class="tt">min_height</span> (plus <span class="tt">min_height_per_meter</span> for each meter from the robot) above the NavMap surface under it (along the surface's normal). So a 2D laser detects obstacles too, and the ground or a ramp, being on the surface, is not one.</li>
 </ul>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -197,17 +197,13 @@ Filter Plugins</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.max_range</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">10.0</span>  </td><td class="markdownTableBodyNone">Only points within this distance (x and y, robot frame) are used.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">NaN</span>  </td><td class="markdownTableBodyNone">Points below this height (robot frame) are ignored; <span class="tt">NaN</span> disables it.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Height above the NavMap surface below which points are the ground.  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_height_per_meter</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone"><span class="tt">min_height</span> grows this much per meter of horizontal distance from the robot (<span class="tt">&lt; 0</span> or not finite: <span class="tt">0</span>). On rough terrain, a small error in the robot's tilt lifts the ground more the farther it is; e.g. <span class="tt">0.05</span> adds 0.25 m at 5 m.  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.max_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">NaN</span>  </td><td class="markdownTableBodyNone">Points above this height (robot frame) are ignored; <span class="tt">NaN</span> disables it.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.vertical_bins_min</span>  </td><td class="markdownTableBodyNone"><span class="tt">int</span>  </td><td class="markdownTableBodyRight"><span class="tt">3</span>  </td><td class="markdownTableBodyNone">Minimum number of vertical bins required to consider a column as an obstacle.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.height_threshold</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.25</span>  </td><td class="markdownTableBodyNone">Minimum vertical height (in meters) between max and min z to mark as an obstacle.  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.downsample</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3</span>  </td><td class="markdownTableBodyNone">Voxel size used to downsample point clouds before obstacle detection.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.fuse_frame</span>  </td><td class="markdownTableBodyNone"><span class="tt">string</span>  </td><td class="markdownTableBodyRight"><span class="tt">"map"</span>  </td><td class="markdownTableBodyNone">Frame in which points are fused before projection into NavMap.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.downsample_resolution</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3</span>  </td><td class="markdownTableBodyNone">Voxel size (m) the points are reduced to first; <span class="tt">&lt;= 0</span> disables it.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Input Key:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Reads list of point clouds from <span class="tt">NavState</span> group <span class="tt">"points"</span>.  </td></tr>
 <tr class="markdownTableRowOdd">

@@ -115,9 +115,9 @@ Directory dependency graph for easynav_costmap_maps_manager:</div>
 <area shape="rect" href="dir_000091_000002.html" title="7" alt="" coords="286,198,293,213"/>
 <area shape="rect" href="dir_f3fb240574863be83e0bdebde262679b.html" title="tests" alt="" coords="291,70,341,96"/>
 <area shape="poly" href="dir_000108_000071.html" alt="" coords="303,99,249,143,246,139,300,95"/>
-<area shape="rect" href="dir_000108_000071.html" title="3" alt="" coords="252,139,259,154"/>
+<area shape="rect" href="dir_000108_000071.html" title="4" alt="" coords="252,139,259,154"/>
 <area shape="poly" href="dir_000108_000002.html" alt="" coords="319,97,319,142,311,199,306,213,301,211,305,198,314,142,314,97"/>
-<area shape="rect" href="dir_000108_000002.html" title="2" alt="" coords="309,205,316,220"/>
+<area shape="rect" href="dir_000108_000002.html" title="4" alt="" coords="309,205,316,220"/>
 <area shape="rect" href="dir_387f3d42e11fa51c666d550b507db418.html" alt="" coords="27,52,352,188"/>
 <area shape="rect" href="dir_0085665aa3dcf1c11f094757a0c11b94.html" title="maps_managers" alt="" coords="16,16,363,199"/>
 </map>
@@ -201,15 +201,16 @@ Filter Plugins</h2>
 <li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1ObstacleFilter.html">easynav::ObstacleFilter</a></span></li>
 <li><b>Description:</b> <br  />
  Detects occupied cells from input point clouds (<span class="tt">points</span> key in <span class="tt">NavState</span>) and marks them as <span class="tt">LETHAL_OBSTACLE</span> in the dynamic costmap. <br  />
- The filter fuses incoming 3D points into the map frame, downsamples them to the costmap resolution, filters out ground-level points (z &lt; 0.1 m), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (<span class="tt">ObstacleBounds</span>) of updated obstacles to enable efficient incremental inflation.</li>
+ The filter fuses incoming 3D points into the map frame, downsamples them to the costmap resolution, filters out ground-level points (z below <span class="tt">min_height</span>, in the map frame), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (<span class="tt">ObstacleBounds</span>) of updated obstacles to enable efficient incremental inflation.</li>
 </ul>
 <p><b>Parameters:</b></p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Parameter  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadRight">Default  </th><th class="markdownTableHeadNone">Description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><em>(None)</em>  </td><td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyRight">—  </td><td class="markdownTableBodyNone">This filter does not declare additional ROS parameters beyond <span class="tt">plugin</span>. Downsampling resolution and frame fusion use the costmap's own resolution and <span class="tt">map</span> frame.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.&lt;filter&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Points lower than this (m, map frame) are the floor, not obstacles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high).  </td></tr>
 </table>
+<p>Downsampling resolution and frame fusion use the costmap's own resolution and <span class="tt">map</span> frame.</p>
 <p><b>NavState Keys:</b></p>
 <table class="markdownTable">
 <tr class="markdownTableHead">

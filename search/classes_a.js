@@ -10,5 +10,6 @@ var searchData=
   ['navmapmapsmanagertest_7',['NavMapMapsManagerTest',['../classNavMapMapsManagerTest.html',1,'']]],
   ['navmapobstaclefilterlimitstest_8',['NavmapObstacleFilterLimitsTest',['../classNavmapObstacleFilterLimitsTest.html',1,'']]],
   ['navmapobstaclefiltertest_9',['NavmapObstacleFilterTest',['../classNavmapObstacleFilterTest.html',1,'']]],
-  ['navmapplannertest_10',['NavMapPlannerTest',['../classNavMapPlannerTest.html',1,'']]]
+  ['navmapplannertest_10',['NavMapPlannerTest',['../classNavMapPlannerTest.html',1,'']]],
+  ['neighbor_11',['Neighbor',['../structeasynav_1_1navmap_1_1AStarPlanner_1_1Neighbor.html',1,'easynav::navmap::AStarPlanner']]]
 ];

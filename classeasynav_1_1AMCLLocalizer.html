@@ -146,12 +146,12 @@ Collaboration diagram for AMCLLocalizer:</div>
 <area shape="poly" title=" " alt="" coords="187,520,268,514,310,506,351,494,387,473,415,449,419,453,390,477,353,499,312,511,269,519,187,525"/>
 <area shape="rect" title=" " alt="" coords="55,558,133,584"/>
 <area shape="poly" title=" " alt="" coords="148,576,194,579,247,577,300,568,350,548,376,526,397,500,422,450,427,452,402,502,380,530,353,552,302,573,247,583,194,585,148,582"/>
-<area shape="rect" title=" " alt="" coords="64,754,124,780"/>
-<area shape="poly" title=" " alt="" coords="139,776,188,784,244,786,300,776,326,766,350,750,366,729,381,695,403,607,418,515,426,451,431,451,423,516,409,608,386,697,371,731,353,754,329,770,302,781,244,791,187,789,138,781"/>
-<area shape="rect" title=" " alt="" coords="54,829,134,854"/>
-<area shape="poly" title=" " alt="" coords="150,846,205,851,264,853,317,849,336,843,350,836,370,808,387,764,400,709,410,649,422,530,426,450,432,451,427,531,415,649,405,710,392,766,375,811,353,840,338,848,317,854,265,858,205,856,150,851"/>
-<area shape="rect" title=" " alt="" coords="69,903,119,929"/>
-<area shape="poly" title=" " alt="" coords="135,925,184,935,241,938,271,936,299,929,326,918,350,902,362,887,373,868,391,816,404,751,414,680,424,542,427,451,432,451,429,542,419,680,409,752,396,817,377,870,366,890,353,905,329,923,301,934,272,941,241,943,183,940,134,930"/>
+<area shape="rect" title=" " alt="" coords="64,774,124,800"/>
+<area shape="poly" title=" " alt="" coords="139,796,188,804,244,806,301,797,327,786,350,771,367,747,382,711,405,616,419,518,426,450,431,451,424,519,410,617,387,713,372,750,354,774,329,791,302,802,244,812,187,810,139,801"/>
+<area shape="rect" title=" " alt="" coords="54,849,134,874"/>
+<area shape="poly" title=" " alt="" coords="150,866,205,871,264,873,317,869,336,864,350,856,371,827,388,780,401,722,411,658,423,534,427,451,432,451,428,535,417,659,407,723,393,782,376,829,353,860,338,869,317,874,265,878,205,876,150,871"/>
+<area shape="rect" title=" " alt="" coords="69,923,119,949"/>
+<area shape="poly" title=" " alt="" coords="135,945,184,955,241,958,271,956,300,949,326,938,350,922,362,907,373,886,392,832,406,764,415,689,425,546,427,451,432,451,430,546,420,690,411,765,397,833,378,888,367,910,353,925,329,943,301,954,272,961,241,964,183,960,134,950"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -247,6 +247,8 @@ Protected Attributes</h2></td></tr>
 <tr class="memdesc:a9fed33e11517278eab40fa7fd968e3c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Previous odometry transform (used to compute deltas).  <br /></td></tr>
 <tr class="memitem:a5af295a79a8e77c50258e092c65e2a42" id="r_a5af295a79a8e77c50258e092c65e2a42"><td class="memItemLeft">rclcpp::Time&#160;</td><td class="memItemRight"><a class="el" href="#a5af295a79a8e77c50258e092c65e2a42">last_reseed_</a></td></tr>
 <tr class="memdesc:a5af295a79a8e77c50258e092c65e2a42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Timestamp of the last reseed event.  <br /></td></tr>
+<tr class="memitem:af1e2f36252144f016f961d68d3ce9c3f" id="r_af1e2f36252144f016f961d68d3ce9c3f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#af1e2f36252144f016f961d68d3ce9c3f">min_height_</a> {0.1}</td></tr>
+<tr class="memdesc:af1e2f36252144f016f961d68d3ce9c3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points below this height (m, robot footprint frame) are ignored: floor hits.  <br /></td></tr>
 <tr class="memitem:a349a1c83ea7737e2dcd4c6a481f0a841" id="r_a349a1c83ea7737e2dcd4c6a481f0a841"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a349a1c83ea7737e2dcd4c6a481f0a841">min_noise_xy_</a> {0.05}</td></tr>
 <tr class="memdesc:a349a1c83ea7737e2dcd4c6a481f0a841"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum translation noise threshold.  <br /></td></tr>
 <tr class="memitem:a10aa9871bc893ca5e38beae5ba25edb3" id="r_a10aa9871bc893ca5e38beae5ba25edb3"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a10aa9871bc893ca5e38beae5ba25edb3">min_noise_yaw_</a> {0.05}</td></tr>
@@ -1447,6 +1449,30 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Timestamp of the last reseed event. </p>
+
+</div>
+</div>
+<a id="af1e2f36252144f016f961d68d3ce9c3f" name="af1e2f36252144f016f961d68d3ce9c3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1e2f36252144f016f961d68d3ce9c3f">&#9670;&#160;</a></span>min_height_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double min_height_ {0.1}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Points below this height (m, robot footprint frame) are ignored: floor hits. </p>
 
 </div>
 </div>

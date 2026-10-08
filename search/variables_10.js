@@ -3,12 +3,13 @@ var searchData=
   ['safety_5fradius_5f_0',['safety_radius_',['../classeasynav_1_1MPPIController.html#a325e56d896dee4cab40d843ce180b331',1,'easynav::MPPIController']]],
   ['seen_5f_1',['seen_',['../classeasynav_1_1InflationFilter.html#abb2b9edac340324c01897f3d57e3dc64',1,'easynav::InflationFilter']]],
   ['serest_5f_2',['serest_',['../classSerestShortPathTest.html#a432d71dac86e3554923f1bb819ddec9f',1,'SerestShortPathTest']]],
-  ['size_5f_3',['size_',['../classBonxai_1_1GridBlockAllocator.html#a5f31775800bbb46b35b5791def1f3acc',1,'Bonxai::GridBlockAllocator']]],
-  ['size_5fx_4',['size_x',['../structeasynav_1_1InflationFilter_1_1BaseGeomSignature.html#abacd0ed966bb3626470dfd326fcb0767',1,'easynav::InflationFilter::BaseGeomSignature']]],
-  ['size_5fx_5f_5',['size_x_',['../classeasynav_1_1Costmap2D.html#a2948c17a18b96e24016e6a6b0584f784',1,'easynav::Costmap2D::size_x_'],['../classCostmap2D.html#a2948c17a18b96e24016e6a6b0584f784',1,'Costmap2D::size_x_']]],
-  ['size_5fy_6',['size_y',['../structeasynav_1_1InflationFilter_1_1BaseGeomSignature.html#a4ef53376807fed9ed7580fc1122e393a',1,'easynav::InflationFilter::BaseGeomSignature']]],
-  ['size_5fy_5f_7',['size_y_',['../classeasynav_1_1Costmap2D.html#ac631eb180b5d63060e47c7d64b44efe7',1,'easynav::Costmap2D::size_y_'],['../classCostmap2D.html#ac631eb180b5d63060e47c7d64b44efe7',1,'Costmap2D::size_y_']]],
-  ['src_5fx_5f_8',['src_x_',['../classeasynav_1_1CellData.html#ac61d0509b0d93c3a93d961cea9415ada',1,'easynav::CellData']]],
-  ['src_5fy_5f_9',['src_y_',['../classeasynav_1_1CellData.html#ad1f6a7a6a64a113f367d582ff46ddcc9',1,'easynav::CellData']]],
-  ['stamp_5fns_10',['stamp_ns',['../structeasynav_1_1InflationFilter_1_1BaseGeomSignature.html#adece1f662a0a129815f3f565f4d3abfa',1,'easynav::InflationFilter::BaseGeomSignature']]]
+  ['shared_5fvertex_3',['shared_vertex',['../structeasynav_1_1navmap_1_1AStarPlanner_1_1Neighbor.html#aaf70a6481ecff894174bacdcd6ca49be',1,'easynav::navmap::AStarPlanner::Neighbor']]],
+  ['size_5f_4',['size_',['../classBonxai_1_1GridBlockAllocator.html#a5f31775800bbb46b35b5791def1f3acc',1,'Bonxai::GridBlockAllocator']]],
+  ['size_5fx_5',['size_x',['../structeasynav_1_1InflationFilter_1_1BaseGeomSignature.html#abacd0ed966bb3626470dfd326fcb0767',1,'easynav::InflationFilter::BaseGeomSignature']]],
+  ['size_5fx_5f_6',['size_x_',['../classeasynav_1_1Costmap2D.html#a2948c17a18b96e24016e6a6b0584f784',1,'easynav::Costmap2D::size_x_'],['../classCostmap2D.html#a2948c17a18b96e24016e6a6b0584f784',1,'Costmap2D::size_x_']]],
+  ['size_5fy_7',['size_y',['../structeasynav_1_1InflationFilter_1_1BaseGeomSignature.html#a4ef53376807fed9ed7580fc1122e393a',1,'easynav::InflationFilter::BaseGeomSignature']]],
+  ['size_5fy_5f_8',['size_y_',['../classeasynav_1_1Costmap2D.html#ac631eb180b5d63060e47c7d64b44efe7',1,'easynav::Costmap2D::size_y_'],['../classCostmap2D.html#ac631eb180b5d63060e47c7d64b44efe7',1,'Costmap2D::size_y_']]],
+  ['src_5fx_5f_9',['src_x_',['../classeasynav_1_1CellData.html#ac61d0509b0d93c3a93d961cea9415ada',1,'easynav::CellData']]],
+  ['src_5fy_5f_10',['src_y_',['../classeasynav_1_1CellData.html#ad1f6a7a6a64a113f367d582ff46ddcc9',1,'easynav::CellData']]],
+  ['stamp_5fns_11',['stamp_ns',['../structeasynav_1_1InflationFilter_1_1BaseGeomSignature.html#adece1f662a0a129815f3f565f4d3abfa',1,'easynav::InflationFilter::BaseGeomSignature']]]
 ];

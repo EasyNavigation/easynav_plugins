@@ -130,7 +130,9 @@ easynav_navmap_planner</h1>
 Description</h1>
 <p><b>A*</b> path planner operating over a <span class="tt">NavMap</span> triangular mesh. <br  />
  The planner computes the <b>minimum-cost path</b> between the robot and the goal, taking into account both the geometric distance between triangles and the cost values stored in a selected NavMap layer (typically <span class="tt">"inflated_obstacles"</span>).</p>
-<p>Instead of simply avoiding non-free NavCels, the planner integrates their cost values (0–255) into the path evaluation. Cells marked as <span class="tt">LETHAL_OBSTACLE</span> or <span class="tt">NO_INFORMATION</span> are considered non-traversable, while inflated or inscribed cells are allowed but penalized proportionally to their cost. <br  />
+<p>Instead of simply avoiding non-free NavCels, the planner integrates their cost values (0–255) into the path evaluation. Cells marked as <span class="tt">LETHAL_OBSTACLE</span>, <span class="tt">NO_INFORMATION</span> or inscribed (<span class="tt">INSCRIBED_INFLATED_OBSTACLE</span>) are non-traversable (inscribed ones only near the start, so a robot inside that band can leave it), while inflated cells are allowed but penalized proportionally to their cost. <br  />
+</p>
+<p>The search moves between NavCels that share a vertex, not only an edge, so no direction is favored by how the mesh is split; a move through a shared vertex is only taken when every NavCel around that vertex is traversable, so the path never slips between two obstacles that touch at a corner. Then the path is shortened by line of sight: from each waypoint it goes straight to the farthest one whose segment crosses only traversable NavCels no costlier than the waypoints it replaces, and the result is resampled at the NavCel spacing on the surface. The path ends exactly at the goal. <br  />
 </p>
 <p>This enables smoother and safer trajectories that still respect proximity constraints imposed by obstacle inflation.</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md206"></a>

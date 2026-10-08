@@ -97,9 +97,11 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
 <a href="classeasynav_1_1navmap_1_1AStarPlanner-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">AStarPlanner Class Reference</div></div>
 </div><!--header-->
@@ -124,32 +126,43 @@ Collaboration diagram for AStarPlanner:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1navmap_1_1AStarPlanner__coll__graph.png" border="0" usemap="#aAStarPlanner_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aAStarPlanner_coll__map" id="aAStarPlanner_coll__map">
-<area shape="rect" title="A planner implementing the A* algorithm on a navmap::NavMap grid." alt="" coords="362,349,460,375"/>
-<area shape="rect" href="classPlannerMethodBase.html" title=" " alt="" coords="30,10,169,36"/>
-<area shape="poly" title=" " alt="" coords="176,5,217,3,261,6,302,17,339,40,357,63,371,99,392,190,405,283,411,348,406,349,400,284,387,191,366,100,352,66,336,44,300,22,260,11,217,8,177,10"/>
-<area shape="rect" title=" " alt="" coords="70,114,129,140"/>
-<area shape="poly" title=" " alt="" coords="145,125,253,131,304,140,339,154,360,176,377,201,399,256,409,310,412,348,407,349,404,310,394,258,372,203,356,179,336,159,303,145,252,136,144,130"/>
-<area shape="rect" title=" " alt="" coords="73,168,126,193"/>
-<area shape="poly" title=" " alt="" coords="142,178,251,185,303,194,339,208,356,223,370,240,391,280,404,318,410,348,405,349,399,320,386,282,366,243,352,226,336,212,302,199,250,190,142,184"/>
-<area shape="rect" title=" " alt="" coords="77,242,122,268"/>
-<area shape="poly" title=" " alt="" coords="138,251,180,252,232,257,287,268,339,287,359,300,377,316,403,347,399,350,373,320,356,305,336,292,285,273,231,262,180,257,138,256"/>
-<area shape="rect" title=" " alt="" coords="75,296,124,321"/>
-<area shape="poly" title=" " alt="" coords="140,308,231,317,338,335,375,346,373,351,337,340,230,322,139,314"/>
-<area shape="rect" title=" " alt="" coords="74,349,125,375"/>
-<area shape="poly" title=" " alt="" coords="141,359,361,359,361,364,141,364"/>
-<area shape="rect" title=" " alt="" coords="60,402,139,428"/>
-<area shape="poly" title=" " alt="" coords="154,411,241,404,337,388,380,373,382,378,338,393,241,409,155,416"/>
-<area shape="rect" title=" " alt="" coords="16,456,183,481"/>
-<area shape="poly" title=" " alt="" coords="198,467,268,458,303,448,336,434,356,421,374,405,399,373,403,377,378,409,360,426,339,439,305,453,269,463,198,473"/>
-<area shape="rect" title=" " alt="" coords="28,509,171,535"/>
-<area shape="poly" title=" " alt="" coords="186,529,224,528,263,523,301,512,336,495,364,468,384,434,397,401,404,374,409,376,402,402,389,436,368,471,339,499,303,517,264,528,224,533,186,534"/>
-<area shape="rect" title=" " alt="" coords="41,562,158,588"/>
-<area shape="poly" title=" " alt="" coords="173,587,214,590,257,587,299,577,336,557,356,538,372,515,393,463,403,413,407,375,412,375,409,413,398,465,377,518,360,542,339,562,300,582,257,593,214,595,173,592"/>
-<area shape="rect" title=" " alt="" coords="5,616,194,641"/>
-<area shape="poly" title=" " alt="" coords="163,642,206,648,251,648,296,640,317,631,336,619,350,602,362,575,383,504,397,429,405,375,411,376,403,430,388,505,367,577,354,605,339,623,320,636,298,645,252,654,205,654,163,648"/>
+<area shape="rect" title="A planner implementing the A* algorithm on a navmap::NavMap grid." alt="" coords="389,452,487,478"/>
+<area shape="rect" href="classPlannerMethodBase.html" title=" " alt="" coords="44,13,182,39"/>
+<area shape="poly" title=" " alt="" coords="184,7,229,3,278,5,325,17,347,28,367,43,388,74,404,122,417,181,426,245,436,368,439,451,434,452,431,369,421,245,412,181,399,124,383,77,363,47,344,33,323,22,277,11,229,9,184,13"/>
+<area shape="rect" title=" " alt="" coords="83,137,143,163"/>
+<area shape="poly" title=" " alt="" coords="158,147,274,153,329,162,351,169,366,179,382,199,395,230,416,310,430,392,438,451,432,452,425,393,411,311,390,232,377,202,363,183,349,174,328,167,274,158,158,152"/>
+<area shape="rect" title=" " alt="" coords="86,191,140,216"/>
+<area shape="poly" title=" " alt="" coords="155,201,272,208,328,218,350,225,366,235,389,259,407,287,420,318,429,350,438,409,439,451,434,451,432,409,423,351,414,320,402,290,385,262,363,239,348,230,327,223,272,214,155,206"/>
+<area shape="rect" title=" " alt="" coords="90,265,136,291"/>
+<area shape="poly" title=" " alt="" coords="152,276,269,285,327,295,366,310,383,326,397,343,418,383,431,421,437,451,432,452,425,423,413,385,393,346,379,329,363,315,325,300,268,290,151,282"/>
+<area shape="rect" title=" " alt="" coords="89,319,137,344"/>
+<area shape="poly" title=" " alt="" coords="153,330,269,340,326,350,366,364,390,383,409,407,433,450,429,453,405,410,386,387,363,368,325,355,268,346,153,336"/>
+<area shape="rect" title=" " alt="" coords="87,372,139,398"/>
+<area shape="poly" title=" " alt="" coords="154,383,252,392,309,402,366,418,396,433,421,449,418,454,393,437,364,423,308,407,251,397,154,388"/>
+<area shape="rect" title=" " alt="" coords="73,425,153,451"/>
+<area shape="poly" title=" " alt="" coords="169,440,388,458,388,463,168,445"/>
+<area shape="rect" title=" " alt="" coords="30,475,196,500"/>
+<area shape="poly" title=" " alt="" coords="211,494,287,495,364,488,406,475,407,481,365,493,287,500,211,499"/>
+<area shape="rect" title=" " alt="" coords="79,524,147,550"/>
+<area shape="poly" title=" " alt="" coords="162,541,206,544,258,544,312,538,364,524,399,502,424,476,428,480,402,506,366,529,313,544,258,550,206,550,162,546"/>
+<area shape="rect" title=" " alt="" coords="5,574,221,630"/>
+<area shape="poly" title=" " alt="" coords="236,608,302,598,334,588,363,573,388,552,407,526,430,477,435,479,412,529,392,556,366,578,336,593,303,603,236,613"/>
+<area shape="rect" title=" " alt="" coords="31,654,195,694"/>
+<area shape="poly" title=" " alt="" coords="210,679,249,677,289,670,328,657,363,636,381,619,395,599,416,554,428,510,433,477,438,478,433,511,421,556,400,602,385,623,366,640,330,662,291,675,250,682,210,685"/>
+<area shape="rect" title=" " alt="" coords="42,719,184,744"/>
+<area shape="poly" title=" " alt="" coords="199,744,241,745,284,741,326,729,363,707,387,682,405,652,418,620,426,586,434,523,435,478,440,478,439,524,431,587,423,622,409,655,391,685,366,711,328,734,285,746,241,750,199,749"/>
+<area shape="rect" title=" " alt="" coords="54,768,172,794"/>
+<area shape="poly" title=" " alt="" coords="172,795,218,803,269,805,319,797,342,787,363,774,379,753,393,720,414,632,427,542,433,478,438,478,432,542,419,633,398,721,384,755,366,778,344,792,320,802,269,811,218,809,171,800"/>
+<area shape="rect" title=" " alt="" coords="19,821,207,847"/>
+<area shape="poly" title=" " alt="" coords="165,849,212,860,264,865,317,858,341,849,363,835,382,809,397,769,409,718,418,662,429,553,433,478,439,478,435,553,424,663,414,719,402,770,386,812,366,839,344,854,318,864,265,870,211,865,164,854"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:Neighbor" id="r_Neighbor"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1navmap_1_1AStarPlanner_1_1Neighbor.html">Neighbor</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A NavCel reachable from another: across an edge, or only through a shared vertex.  <a href="structeasynav_1_1navmap_1_1AStarPlanner_1_1Neighbor.html#details">More...</a><br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a343947e2a1a19001b220b82a30f5b341" id="r_a343947e2a1a19001b220b82a30f5b341"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a343947e2a1a19001b220b82a30f5b341">AStarPlanner</a> ()</td></tr>
@@ -169,9 +182,13 @@ Protected Member Functions</h2></td></tr>
 <tr class="memdesc:a2426d1fc1a06ccf32e590de7df424c58"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensure internal caches (centroids and A* buffers) are sized for the given map.  <br /></td></tr>
 <tr class="memitem:a3b66055e664a09df54ad4476026e4f03" id="r_a3b66055e664a09df54ad4476026e4f03"><td class="memItemLeft">nav_msgs::msg::Path&#160;</td><td class="memItemRight"><a class="el" href="#a3b66055e664a09df54ad4476026e4f03">path_smoother</a> (const nav_msgs::msg::Path &amp;in_path, const ::navmap::NavMap &amp;navmap, int iterations=5, float alpha=0.4f, float corner_keep_deg=0.0f)</td></tr>
 <tr class="memdesc:a3b66055e664a09df54ad4476026e4f03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Smooth a Path in XY while keeping every waypoint inside its original NavCel.  <br /></td></tr>
+<tr class="memitem:a1e4a279453de7e65442bc2b96b7c09dd" id="r_a1e4a279453de7e65442bc2b96b7c09dd"><td class="memItemLeft">std::vector&lt; Eigen::Vector3f &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a1e4a279453de7e65442bc2b96b7c09dd">shortcut_path</a> (const ::navmap::NavMap &amp;map, const std::vector&lt; Eigen::Vector3f &gt; &amp;points, const std::vector&lt;::navmap::NavCelId &gt; &amp;cels)</td></tr>
+<tr class="memdesc:a1e4a279453de7e65442bc2b96b7c09dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shortens a path of NavCel centroids by line of sight.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr class="memitem:ac4776ac923aca6d1bfc3059d0e53db15" id="r_ac4776ac923aca6d1bfc3059d0e53db15"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ac4776ac923aca6d1bfc3059d0e53db15">cel_spacing_</a> {0.1}</td></tr>
+<tr class="memdesc:ac4776ac923aca6d1bfc3059d0e53db15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distance between the centroids of neighbor NavCels (mean): the path's spacing.  <br /></td></tr>
 <tr class="memitem:a1c68c5c1a142a2c320026fa32c39fcc8" id="r_a1c68c5c1a142a2c320026fa32c39fcc8"><td class="memItemLeft">std::vector&lt; Eigen::Vector3f &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a1c68c5c1a142a2c320026fa32c39fcc8">centroids_</a></td></tr>
 <tr class="memdesc:a1c68c5c1a142a2c320026fa32c39fcc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cached centroids for each NavCel (same indexing as ::navmap::NavMap::navcels).  <br /></td></tr>
 <tr class="memitem:a35e94cf5823e535adf42e15573b348d8" id="r_a35e94cf5823e535adf42e15573b348d8"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a35e94cf5823e535adf42e15573b348d8">continuous_replan_</a> {true}</td></tr>
@@ -191,6 +208,8 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:aaae83fae4ab4251d4580a3a13cd6dfc7" id="r_aaae83fae4ab4251d4580a3a13cd6dfc7"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aaae83fae4ab4251d4580a3a13cd6dfc7">g_</a></td></tr>
 <tr class="memdesc:aaae83fae4ab4251d4580a3a13cd6dfc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reusable buffers for A* search cost and parent links.  <br /></td></tr>
 <tr class="memitem:a6aebe3bf30640adc22c8787dea894c8c" id="r_a6aebe3bf30640adc22c8787dea894c8c"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a6aebe3bf30640adc22c8787dea894c8c">layer_name_</a></td></tr>
+<tr class="memitem:a97d4e0fd56535522dcf30528f47a83d1" id="r_a97d4e0fd56535522dcf30528f47a83d1"><td class="memItemLeft">std::vector&lt; std::vector&lt; <a class="el" href="structeasynav_1_1navmap_1_1AStarPlanner_1_1Neighbor.html">Neighbor</a> &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a97d4e0fd56535522dcf30528f47a83d1">neighbors_</a></td></tr>
+<tr class="memdesc:a97d4e0fd56535522dcf30528f47a83d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cached neighbors of each NavCel, and NavCels around each vertex.  <br /></td></tr>
 <tr class="memitem:ade3608f9f9cbd5937b6fd0b77718b477" id="r_ade3608f9f9cbd5937b6fd0b77718b477"><td class="memItemLeft">std::vector&lt; std::uint8_t &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ade3608f9f9cbd5937b6fd0b77718b477">occ_</a></td></tr>
 <tr class="memdesc:ade3608f9f9cbd5937b6fd0b77718b477"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cached per-NavCel occupancy / cost values (0..255).  <br /></td></tr>
 <tr class="memitem:a9b754ed9c07923d408999b3c54674371" id="r_a9b754ed9c07923d408999b3c54674371"><td class="memItemLeft">std::vector&lt;::navmap::NavCelId &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a9b754ed9c07923d408999b3c54674371">parent_</a></td></tr>
@@ -198,10 +217,15 @@ Protected Attributes</h2></td></tr>
 <tr class="memdesc:ac44f0fe3c3f35ae18c498ef6ecb47dd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publisher for the computed navigation path (for visualization or monitoring).  <br /></td></tr>
 <tr class="memitem:a45d5e9aed5914daf2a4d1b4da15f6261" id="r_a45d5e9aed5914daf2a4d1b4da15f6261"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a45d5e9aed5914daf2a4d1b4da15f6261">path_published_</a> {false}</td></tr>
 <tr class="memdesc:a45d5e9aed5914daf2a4d1b4da15f6261"><td class="mdescLeft">&#160;</td><td class="mdescRight">A non-empty path was published, so the topic must be cleared on failure.  <br /></td></tr>
+<tr class="memitem:aa093bb9f082f3a9e20b96833d51033fe" id="r_aa093bb9f082f3a9e20b96833d51033fe"><td class="memItemLeft">std::vector&lt; std::vector&lt;::navmap::NavCelId &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa093bb9f082f3a9e20b96833d51033fe">vertex_cels_</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-static-attribs" class="groupheader"><a id="pro-static-attribs" name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr class="memitem:a46afcdfebd69884830292cd938c253a0" id="r_a46afcdfebd69884830292cd938c253a0"><td class="memItemLeft">static constexpr std::uint32_t&#160;</td><td class="memItemRight"><a class="el" href="#a46afcdfebd69884830292cd938c253a0">kNoVertex</a> = std::numeric_limits&lt;std::uint32_t&gt;::max()</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A planner implementing the A* algorithm on a ::navmap::NavMap grid. </p>
-<p>This class generates a collision-free path using A* search over a surface-based NavMap. It supports cost-based penalties and anisotropic movement costs. </p>
+<p>This class generates a collision-free path using A* search over a surface-based NavMap. The search moves between NavCels that share a vertex (not only an edge), so no direction is favored by how the mesh is split. Then the path is shortened by line of sight: waypoints are skipped while the straight segment stays on traversable NavCels no costlier than the ones it replaces. </p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a343947e2a1a19001b220b82a30f5b341" name="a343947e2a1a19001b220b82a30f5b341"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a343947e2a1a19001b220b82a30f5b341">&#9670;&#160;</a></span>AStarPlanner()</h2>
@@ -436,6 +460,52 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1e4a279453de7e65442bc2b96b7c09dd" name="a1e4a279453de7e65442bc2b96b7c09dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e4a279453de7e65442bc2b96b7c09dd">&#9670;&#160;</a></span>shortcut_path()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; Eigen::Vector3f &gt; shortcut_path </td>
+          <td>(</td>
+          <td class="paramtype">const ::navmap::NavMap &amp;</td>          <td class="paramname"><span class="paramname"><em>map</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; Eigen::Vector3f &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt;::navmap::NavCelId &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>cels</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Shortens a path of NavCel centroids by line of sight. </p>
+<p>From each kept waypoint, it jumps to the farthest one whose straight segment crosses only traversable NavCels with a cost no higher than the highest of the waypoints in between. The result is resampled at the NavCel spacing, on the NavMap surface.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map</td><td>The NavMap (occ_ holds the costs of this plan). </td></tr>
+    <tr><td class="paramname">points</td><td>Waypoints (first: the start's centroid, last: the goal). </td></tr>
+    <tr><td class="paramname">cels</td><td>NavCel of each waypoint. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The shortened, resampled waypoints. </dd></dl>
+
+</div>
+</div>
 <a id="a24ddfd2eba3d3d6a90d492e8d25ff0da" name="a24ddfd2eba3d3d6a90d492e8d25ff0da"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a24ddfd2eba3d3d6a90d492e8d25ff0da">&#9670;&#160;</a></span>update()</h2>
 
@@ -471,6 +541,30 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="ac4776ac923aca6d1bfc3059d0e53db15" name="ac4776ac923aca6d1bfc3059d0e53db15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4776ac923aca6d1bfc3059d0e53db15">&#9670;&#160;</a></span>cel_spacing_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double cel_spacing_ {0.1}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Distance between the centroids of neighbor NavCels (mean): the path's spacing. </p>
+
+</div>
+</div>
 <a id="a1c68c5c1a142a2c320026fa32c39fcc8" name="a1c68c5c1a142a2c320026fa32c39fcc8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1c68c5c1a142a2c320026fa32c39fcc8">&#9670;&#160;</a></span>centroids_</h2>
 
@@ -687,6 +781,28 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a46afcdfebd69884830292cd938c253a0" name="a46afcdfebd69884830292cd938c253a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46afcdfebd69884830292cd938c253a0">&#9670;&#160;</a></span>kNoVertex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::uint32_t kNoVertex = std::numeric_limits&lt;std::uint32_t&gt;::max()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6aebe3bf30640adc22c8787dea894c8c" name="a6aebe3bf30640adc22c8787dea894c8c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6aebe3bf30640adc22c8787dea894c8c">&#9670;&#160;</a></span>layer_name_</h2>
 
@@ -706,6 +822,30 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a97d4e0fd56535522dcf30528f47a83d1" name="a97d4e0fd56535522dcf30528f47a83d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97d4e0fd56535522dcf30528f47a83d1">&#9670;&#160;</a></span>neighbors_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;<a class="el" href="structeasynav_1_1navmap_1_1AStarPlanner_1_1Neighbor.html">Neighbor</a>&gt; &gt; neighbors_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cached neighbors of each NavCel, and NavCels around each vertex. </p>
 
 </div>
 </div>
@@ -800,6 +940,28 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A non-empty path was published, so the topic must be cleared on failure. </p>
+
+</div>
+</div>
+<a id="aa093bb9f082f3a9e20b96833d51033fe" name="aa093bb9f082f3a9e20b96833d51033fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa093bb9f082f3a9e20b96833d51033fe">&#9670;&#160;</a></span>vertex_cels_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;::navmap::NavCelId&gt; &gt; vertex_cels_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

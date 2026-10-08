@@ -101,8 +101,11 @@ document.addEventListener('DOMContentLoaded', codefold.init);
   <div class="headertitle"><div class="title">ObstacleFilter.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;string&gt;</code><br />
+<div class="textblock"><code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;optional&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &quot;easynav_common/Parameters.hpp&quot;</code><br />
 <code>#include &quot;easynav_common/types/NavState.hpp&quot;</code><br />
 <code>#include &quot;easynav_sensors/types/PointPerception.hpp&quot;</code><br />
@@ -116,38 +119,44 @@ Include dependency graph for ObstacleFilter.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="easynav__navmap__maps__manager_2src_2easynav__navmap__maps__manager_2filters_2ObstacleFilter_8cpp__incl.png" border="0" usemap="#amaps__managers_2easynav__navmap__maps__manager_2src_2easynav__navmap__maps__manager_2filters_2ObstacleFilter_8cpp" loading="lazy" alt=""/></div>
 <map name="amaps__managers_2easynav__navmap__maps__manager_2src_2easynav__navmap__maps__manager_2filters_2ObstacleFilter_8cpp" id="amaps__managers_2easynav__navmap__maps__manager_2src_2easynav__navmap__maps__manager_2filters_2ObstacleFilter_8cpp">
-<area shape="rect" title=" " alt="" coords="481,5,704,76"/>
-<area shape="rect" title=" " alt="" coords="698,309,751,334"/>
-<area shape="poly" title=" " alt="" coords="481,44,353,48,214,60,149,71,92,85,46,103,16,126,10,135,8,144,16,163,35,182,62,199,134,230,225,255,327,276,530,303,682,315,682,321,530,308,326,281,224,261,133,235,59,204,32,186,12,166,3,144,5,133,12,122,44,99,90,80,148,66,213,55,353,43,481,39"/>
-<area shape="rect" title=" " alt="" coords="26,132,87,157"/>
-<area shape="poly" title=" " alt="" coords="481,55,301,81,199,101,100,127,96,128,94,123,99,121,198,96,300,75,481,50"/>
-<area shape="rect" title=" " alt="" coords="111,132,333,157"/>
-<area shape="poly" title=" " alt="" coords="482,75,282,129,280,124,480,70"/>
-<area shape="rect" title=" " alt="" coords="968,301,1129,342"/>
-<area shape="poly" title=" " alt="" coords="705,45,868,55,1049,71,1202,93,1255,106,1284,122,1299,149,1298,176,1284,201,1260,225,1229,247,1193,266,1121,298,1119,293,1191,261,1226,242,1256,221,1280,198,1293,175,1294,151,1280,126,1253,111,1201,98,1048,76,867,60,704,50"/>
-<area shape="rect" title=" " alt="" coords="407,124,565,165"/>
-<area shape="poly" title=" " alt="" coords="558,78,519,115,516,111,555,74"/>
-<area shape="rect" title=" " alt="" coords="589,132,810,157"/>
-<area shape="poly" title=" " alt="" coords="631,74,678,119,674,123,627,78"/>
-<area shape="rect" title=" " alt="" coords="359,220,535,246"/>
-<area shape="poly" title=" " alt="" coords="482,66,435,89,414,106,398,125,392,146,397,168,409,189,425,208,421,211,405,192,392,170,386,146,393,123,410,102,432,85,480,61"/>
-<area shape="rect" title=" " alt="" coords="1080,132,1270,157"/>
-<area shape="poly" title=" " alt="" coords="705,59,1068,121,1092,126,1091,131,1067,127,704,64"/>
-<area shape="rect" href="easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2ObstacleFilter_8hpp.html" title=" " alt="" coords="833,124,1056,165"/>
-<area shape="poly" title=" " alt="" coords="705,71,863,117,862,122,703,77"/>
-<area shape="rect" title=" " alt="" coords="1345,124,1472,165"/>
-<area shape="poly" title=" " alt="" coords="705,48,988,75,1157,96,1326,121,1330,122,1330,127,1326,127,1156,101,987,80,704,53"/>
-<area shape="poly" title=" " alt="" coords="834,166,789,185,769,198,752,214,740,232,733,253,727,293,721,293,727,251,735,230,748,211,766,194,787,180,832,161"/>
-<area shape="poly" title=" " alt="" coords="962,164,995,211,1035,286,1031,288,990,214,957,167"/>
-<area shape="poly" title=" " alt="" coords="833,168,533,220,532,214,833,162"/>
-<area shape="rect" title=" " alt="" coords="1056,220,1108,246"/>
-<area shape="poly" title=" " alt="" coords="977,163,1051,209,1049,214,974,167"/>
-<area shape="rect" href="NavMapFilter_8hpp.html" title=" " alt="" coords="762,213,981,253"/>
-<area shape="poly" title=" " alt="" coords="930,167,900,202,896,199,926,163"/>
-<area shape="poly" title=" " alt="" coords="839,256,759,303,757,298,837,252"/>
-<area shape="poly" title=" " alt="" coords="913,251,996,292,994,297,910,256"/>
-<area shape="rect" title=" " alt="" coords="783,301,944,342"/>
-<area shape="poly" title=" " alt="" coords="872,254,869,286,864,286,867,254"/>
+<area shape="rect" title=" " alt="" coords="594,5,816,76"/>
+<area shape="rect" title=" " alt="" coords="5,132,63,157"/>
+<area shape="poly" title=" " alt="" coords="593,49,483,56,352,71,212,93,75,127,71,128,69,123,73,121,211,88,352,65,483,51,593,43"/>
+<area shape="rect" title=" " alt="" coords="86,132,147,157"/>
+<area shape="poly" title=" " alt="" coords="593,53,390,77,274,98,160,127,155,128,154,123,159,121,273,93,389,72,593,47"/>
+<area shape="rect" title=" " alt="" coords="172,132,238,157"/>
+<area shape="poly" title=" " alt="" coords="593,60,433,87,257,127,250,129,249,123,256,121,432,81,593,54"/>
+<area shape="rect" title=" " alt="" coords="1033,309,1086,334"/>
+<area shape="poly" title=" " alt="" coords="593,52,508,61,421,76,348,97,321,111,303,126,295,144,303,163,324,183,353,201,431,233,529,259,639,279,751,294,857,305,1018,316,1017,321,857,310,750,299,638,284,528,264,430,238,350,206,320,187,298,166,289,144,299,122,318,106,346,92,420,71,507,56,593,47"/>
+<area shape="rect" title=" " alt="" coords="312,132,422,157"/>
+<area shape="poly" title=" " alt="" coords="594,78,423,129,421,124,593,73"/>
+<area shape="rect" title=" " alt="" coords="446,132,667,157"/>
+<area shape="poly" title=" " alt="" coords="656,79,588,125,585,120,653,74"/>
+<area shape="rect" title=" " alt="" coords="1303,301,1464,342"/>
+<area shape="poly" title=" " alt="" coords="816,41,1032,48,1284,61,1401,72,1502,85,1577,102,1603,111,1619,122,1634,149,1633,176,1619,201,1595,225,1563,246,1528,266,1456,298,1454,293,1526,261,1561,242,1591,220,1615,198,1628,174,1629,150,1615,126,1600,116,1576,107,1501,90,1401,77,1283,67,1031,53,816,46"/>
+<area shape="rect" title=" " alt="" coords="742,124,899,165"/>
+<area shape="poly" title=" " alt="" coords="746,74,789,112,785,116,742,78"/>
+<area shape="rect" title=" " alt="" coords="923,132,1145,157"/>
+<area shape="poly" title=" " alt="" coords="817,74,981,124,979,129,815,79"/>
+<area shape="rect" title=" " alt="" coords="694,220,870,246"/>
+<area shape="poly" title=" " alt="" coords="710,76,718,119,732,164,746,187,762,207,758,210,742,190,728,166,713,120,705,77"/>
+<area shape="rect" title=" " alt="" coords="1415,132,1605,157"/>
+<area shape="poly" title=" " alt="" coords="816,50,1084,80,1402,121,1430,126,1429,131,1402,127,1083,85,816,56"/>
+<area shape="rect" href="easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2ObstacleFilter_8hpp.html" title=" " alt="" coords="1168,124,1390,165"/>
+<area shape="poly" title=" " alt="" coords="817,59,1154,118,1153,123,816,64"/>
+<area shape="rect" title=" " alt="" coords="1680,124,1807,165"/>
+<area shape="poly" title=" " alt="" coords="817,44,981,53,1192,68,1426,90,1661,121,1665,122,1664,127,1660,127,1426,96,1192,73,981,58,816,49"/>
+<area shape="poly" title=" " alt="" coords="1169,166,1124,185,1104,198,1087,214,1075,232,1067,253,1061,293,1056,293,1062,251,1070,230,1083,211,1101,194,1122,180,1167,161"/>
+<area shape="poly" title=" " alt="" coords="1297,164,1330,211,1370,286,1365,288,1325,214,1292,167"/>
+<area shape="poly" title=" " alt="" coords="1168,168,868,220,867,214,1167,162"/>
+<area shape="rect" title=" " alt="" coords="1390,220,1443,246"/>
+<area shape="poly" title=" " alt="" coords="1312,163,1386,209,1383,214,1309,167"/>
+<area shape="rect" href="NavMapFilter_8hpp.html" title=" " alt="" coords="1096,213,1316,253"/>
+<area shape="poly" title=" " alt="" coords="1265,167,1235,202,1231,199,1261,163"/>
+<area shape="poly" title=" " alt="" coords="1174,256,1094,303,1092,298,1171,252"/>
+<area shape="poly" title=" " alt="" coords="1247,251,1331,292,1329,297,1245,256"/>
+<area shape="rect" title=" " alt="" coords="1117,301,1279,342"/>
+<area shape="poly" title=" " alt="" coords="1207,254,1204,286,1199,286,1202,254"/>
 </map>
 </div>
 </div><table class="memberdecls">
