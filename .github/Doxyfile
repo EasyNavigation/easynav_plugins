@@ -867,22 +867,28 @@ WARN_LOGFILE           =
 INPUT                  = README.md \
                          common/easynav_costmap_common \
                          common/easynav_simple_common \
+                         controllers/easynav_mpc_controller \
                          controllers/easynav_mppi_controller \
+                         controllers/easynav_regulated_pp_controller \
                          controllers/easynav_serest_controller \
                          controllers/easynav_simple_controller \
                          controllers/easynav_vff_controller \
                          localizers/easynav_costmap_localizer \
-                         localizers/easynav_gps_localizer \
+                         localizers/easynav_fusion_localizer \
+                         localizers/easynav_mhamcl_localizer \
                          localizers/easynav_navmap_localizer \
                          localizers/easynav_simple_localizer \
                          maps_managers/easynav_bonxai_maps_manager \
                          maps_managers/easynav_costmap_maps_manager \
                          maps_managers/easynav_navmap_maps_manager \
                          maps_managers/easynav_octomap_maps_manager \
+                         maps_managers/easynav_routes_maps_manager \
                          maps_managers/easynav_simple_maps_manager \
                          planners/easynav_costmap_planner \
                          planners/easynav_navmap_planner \
-                         planners/easynav_simple_planner
+                         planners/easynav_simple_planner \
+                         recoveries/easynav_diagnostic_recovery \
+                         recoveries/easynav_simple_recovery
 
 
 # This tag can be used to specify the character encoding of the source files
