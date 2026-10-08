@@ -54,13 +54,14 @@ protected:
       rclcpp::init(0, nullptr);
     }
     node_ = std::make_shared<easynav::LocalizerNode>(
-      rclcpp::NodeOptions().parameter_overrides({
+      rclcpp::NodeOptions().parameter_overrides(
+    {
       rclcpp::Parameter("loc.initial_pose.x", 2.0),
       rclcpp::Parameter("loc.initial_pose.y", 2.0),
       rclcpp::Parameter("loc.initial_pose.yaw", 0.0),
       rclcpp::Parameter("loc.initial_pose.std_dev_xy", 0.01),
       rclcpp::Parameter("loc.initial_pose.std_dev_yaw", 0.01),
-      }));
+    }));
     amcl_ = std::make_shared<TestAmcl>();
     amcl_->initialize(node_, "loc");
 

@@ -145,7 +145,8 @@ protected:
   {
     auto params = velocities_only();
     params.push_back({"fusion.local_filter.imu0", "test_imu"});
-    params.push_back({"fusion.local_filter.imu0_config", std::vector<bool>{
+    params.push_back(
+      {"fusion.local_filter.imu0_config", std::vector<bool>{
           false, false, false, false, false, false,
           false, false, false, false, false, true,
           false, false, false}});
@@ -212,7 +213,8 @@ TEST_F(FusionLocalFilterTest, AnUnobservedYawWithAGrowingVarianceStaysFinite)
     ASSERT_TRUE(last.has_value());
     EXPECT_TRUE(all_finite) << vx << ", " << wz;
     // And the yaw did not jump by pi: it follows the turn rate.
-    const double yaw = 2.0 * std::atan2(last->pose.pose.orientation.z,
+    const double yaw = 2.0 * std::atan2(
+      last->pose.pose.orientation.z,
       last->pose.pose.orientation.w);
     EXPECT_LT(std::abs(std::remainder(yaw - wz * 3.0, 2.0 * M_PI)), 0.6) << vx << ", " << wz;
   }
@@ -252,7 +254,8 @@ TEST_F(FusionLocalFilterTest, TheFiltersDoNotKeepTheNodeAlive)
   auto params = with_imu_yaw_rate();
   params.push_back({"fusion.global_filter.frequency", 30.0});
   params.push_back({"fusion.global_filter.odom0", "test_odom"});
-  params.push_back({"fusion.global_filter.odom0_config", std::vector<bool>{
+  params.push_back(
+    {"fusion.global_filter.odom0_config", std::vector<bool>{
         false, false, false, false, false, false,
         true, true, false, false, false, true,
         false, false, false}});

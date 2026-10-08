@@ -65,7 +65,8 @@ protected:
   std::shared_ptr<easynav::AMCLLocalizer> make_localizer(bool use_last_known = true)
   {
     auto node = std::make_shared<easynav::LocalizerNode>(
-      rclcpp::NodeOptions().parameter_overrides({
+      rclcpp::NodeOptions().parameter_overrides(
+      {
         rclcpp::Parameter("loc.initial_pose.x", kInitX),
         rclcpp::Parameter("loc.initial_pose.y", kInitY),
         rclcpp::Parameter("loc.initial_pose.yaw", kInitYaw),

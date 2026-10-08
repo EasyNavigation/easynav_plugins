@@ -68,12 +68,14 @@ CostmapMapsManager::on_initialize()
 
   for (const auto & costmap_filter : costmap_filters) {
     std::string plugin;
-    easynav::declare_parameter_if_absent(*node, plugin_name + "." + costmap_filter + ".plugin",
-        plugin);
+    easynav::declare_parameter_if_absent(
+      *node, plugin_name + "." + costmap_filter + ".plugin",
+      plugin);
     node->get_parameter(plugin_name + "." + costmap_filter + ".plugin", plugin);
 
     try {
-      RCLCPP_INFO(node->get_logger(),
+      RCLCPP_INFO(
+        node->get_logger(),
         "Loading CostmapFilter %s [%s]", costmap_filter.c_str(), plugin.c_str());
 
       std::shared_ptr<CostmapFilter> instance;
@@ -82,32 +84,37 @@ CostmapMapsManager::on_initialize()
       try {
         instance->initialize(node, plugin_name + "." + costmap_filter);
       } catch (std::runtime_error & ex) {
-        RCLCPP_ERROR(node->get_logger(),
+        RCLCPP_ERROR(
+          node->get_logger(),
           "Unable to initialize [%s]. Error: %s", plugin.c_str(), ex.what());
-        throw std::runtime_error("Unable to initialize " +
-          plugin + " . Error: " + ex.what());
+        throw std::runtime_error(
+                "Unable to initialize " +
+                plugin + " . Error: " + ex.what());
       }
 
       costmap_filters_.push_back(instance);
 
-      RCLCPP_INFO(node->get_logger(),
+      RCLCPP_INFO(
+        node->get_logger(),
         "Loaded CostmapFilter %s [%s]", costmap_filter.c_str(), plugin.c_str());
     } catch (pluginlib::PluginlibException & ex) {
-      RCLCPP_ERROR(node->get_logger(),
+      RCLCPP_ERROR(
+        node->get_logger(),
         "Unable to load plugin easynav::CostmapFilter. Error: %s", ex.what());
-      throw std::runtime_error("Unable to load plugin easynav::CostmapFilter " +
-        costmap_filter + " . Error: " + ex.what());
+      throw std::runtime_error(
+              "Unable to load plugin easynav::CostmapFilter " +
+              costmap_filter + " . Error: " + ex.what());
     }
   }
 
   base_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/map",
+    "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   dynamic_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/dynamic_map", 100);
+    "/dynamic_map", 100);
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -134,7 +141,7 @@ CostmapMapsManager::on_initialize()
 
   incoming_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/incoming_map",
+    "/incoming_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
       base_grid_msg_ = *msg;
@@ -149,7 +156,7 @@ CostmapMapsManager::on_initialize()
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/savemap",
+    "/savemap",
     [&](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

@@ -60,7 +60,7 @@ RoutesCostmapFilter::initialize(
 
   routes_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/routes_map",
+    "/routes_map",
     rclcpp::QoS(1).reliable());
 }
 
@@ -100,7 +100,8 @@ RoutesCostmapFilter::update(NavState & nav_state)
   std::vector<Segment2D> segments;
   segments.reserve(routes.size());
   for (const auto & seg : routes) {
-    segments.push_back({
+    segments.push_back(
+      {
         seg.start.position.x,
         seg.start.position.y,
         seg.end.position.x,

@@ -79,24 +79,23 @@ inline DynamicWindowBounds computeDynamicWindow(
   constexpr double Eps = 1e-3;
 
   // function to compute dynamic window for a single dimension
-  auto compute_window = [&](const double & current_vel, const double & max_vel,
-    const double & min_vel, const double & max_accel, const double & max_decel)
+  auto compute_window = [&](double vel, double max_vel, double min_vel, double accel, double decel)
     {
       double candidate_max_vel = 0.0;
       double candidate_min_vel = 0.0;
 
-      if (current_vel > Eps) {
+      if (vel > Eps) {
         // if the current velocity is positive, acceleration means an increase in speed
-        candidate_max_vel = current_vel + max_accel * dt;
-        candidate_min_vel = current_vel - max_decel * dt;
-      } else if (current_vel < -Eps) {
+        candidate_max_vel = vel + accel * dt;
+        candidate_min_vel = vel - decel * dt;
+      } else if (vel < -Eps) {
         // if the current velocity is negative, acceleration means a decrease in speed
-        candidate_max_vel = current_vel + max_decel * dt;
-        candidate_min_vel = current_vel - max_accel * dt;
+        candidate_max_vel = vel + decel * dt;
+        candidate_min_vel = vel - accel * dt;
       } else {
         // if the current velocity is zero, allow acceleration in both directions.
-        candidate_max_vel = current_vel + max_accel * dt;
-        candidate_min_vel = current_vel - max_accel * dt;
+        candidate_max_vel = vel + accel * dt;
+        candidate_min_vel = vel - accel * dt;
       }
 
       // clip to max/min velocity limits

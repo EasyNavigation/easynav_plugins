@@ -252,8 +252,8 @@ TEST_F(CostmapPlannerTest, LowInflationCostDoesNotOutweighASingleCellDetour)
   const bool traverses_low_cost_cell = std::any_of(
     poses.begin(), poses.end(), [&](const geometry_msgs::msg::Pose & pose) {
       unsigned int x, y;
-      return map_.worldToMap(pose.position.x, pose.position.y, x, y) &&
-             x == low_cost_x && y == low_cost_y;
+      const bool in_map = map_.worldToMap(pose.position.x, pose.position.y, x, y);
+      return in_map && x == low_cost_x && y == low_cost_y;
     });
   EXPECT_TRUE(traverses_low_cost_cell);
 }

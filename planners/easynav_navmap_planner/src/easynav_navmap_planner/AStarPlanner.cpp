@@ -76,7 +76,7 @@ void AStarPlanner::on_initialize()
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/path", 10);
+    "/path", 10);
 }
 
 void AStarPlanner::update(NavState & nav_state)

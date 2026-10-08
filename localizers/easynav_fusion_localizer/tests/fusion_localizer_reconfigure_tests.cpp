@@ -41,7 +41,8 @@ protected:
 TEST_F(FusionLocalizerReconfigureTest, InitializeTwiceOnSameNodeDoesNotThrow)
 {
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test_localizer.global_filter.frequency", 30.0),
   });
 
@@ -62,7 +63,8 @@ TEST_F(FusionLocalizerReconfigureTest, InitializeWhenAnotherPluginLeftSomeOfItsP
   std::vector<rclcpp::ParameterValue> values;
   {
     rclcpp::NodeOptions options;
-    options.parameter_overrides({
+    options.parameter_overrides(
+    {
       rclcpp::Parameter("test_localizer.global_filter.frequency", 30.0),
     });
 
@@ -84,7 +86,8 @@ TEST_F(FusionLocalizerReconfigureTest, InitializeWhenAnotherPluginLeftSomeOfItsP
 
   for (std::size_t i = 0; i < names.size(); ++i) {
     rclcpp::NodeOptions options;
-    options.parameter_overrides({
+    options.parameter_overrides(
+    {
       rclcpp::Parameter("test_localizer.global_filter.frequency", 30.0),
     });
 

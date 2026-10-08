@@ -160,7 +160,8 @@ TEST_F(RosGraphEvaluatorTestCase, ErrorWhenVelocityOutputHasNoSubscriber)
 
   const auto status = wait_for_level(eval, nav_state, DiagnosticStatus::ERROR);
   EXPECT_EQ(status.level, DiagnosticStatus::ERROR);
-  EXPECT_NE(status.message.find("no subscriber for velocity output"),
+  EXPECT_NE(
+    status.message.find("no subscriber for velocity output"),
     std::string::npos) << status.message;
 }
 
@@ -371,7 +372,8 @@ TEST_F(RosGraphEvaluatorTestCase, ReportsMissingClockEvenThoughSimTimeIsStopped)
   // EasyNav launched with use_sim_time but without the simulator: /clock never arrives, so the
   // nodes' clocks stay at 0. The evaluator must still run (wall time) and say why.
   rclcpp::NodeOptions sim_options;
-  sim_options.parameter_overrides({
+  sim_options.parameter_overrides(
+  {
     {"use_sim_time", true},
     {"graph.error_debounce", 0.0},
     {"graph.startup_grace", 0.0},
@@ -401,7 +403,8 @@ TEST_F(RosGraphEvaluatorTestCase, IgnoredTopicsMatchInTheRootNamespace)
 {
   // Without a namespace, "goal_pose" must still match "/goal_pose".
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     {"graph.error_debounce", 0.0},
     {"graph.startup_grace", 0.0},
     {"graph.ignored_topics", std::vector<std::string>{"root_optional_input"}},

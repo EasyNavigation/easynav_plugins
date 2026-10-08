@@ -496,5 +496,6 @@ DiagnosticRecoveryManager::get_active_mitigation_name() const
 }  // namespace easynav_diagnostic_recovery
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav_diagnostic_recovery::DiagnosticRecoveryManager,
+PLUGINLIB_EXPORT_CLASS(
+  easynav_diagnostic_recovery::DiagnosticRecoveryManager,
   easynav::RecoveryManagerBase)

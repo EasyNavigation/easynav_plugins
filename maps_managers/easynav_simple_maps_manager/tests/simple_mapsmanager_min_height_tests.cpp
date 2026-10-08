@@ -90,7 +90,8 @@ protected:
 TEST_F(SimpleMapsManagerMinHeightTest, DefaultIgnoresPointsBelowTenCentimeters)
 {
   double min_height = 0.0;
-  EXPECT_EQ(marked({0.05f, 0.08f, 0.20f}, -1.0, &min_height),
+  EXPECT_EQ(
+    marked({0.05f, 0.08f, 0.20f}, -1.0, &min_height),
     (std::vector<bool>{false, false, true}));
   EXPECT_DOUBLE_EQ(min_height, 0.1);
 }
@@ -98,7 +99,8 @@ TEST_F(SimpleMapsManagerMinHeightTest, DefaultIgnoresPointsBelowTenCentimeters)
 TEST_F(SimpleMapsManagerMinHeightTest, LowerMinHeightKeepsALowLaser)
 {
   double min_height = 0.0;
-  EXPECT_EQ(marked({0.05f, 0.08f, 0.20f}, 0.07, &min_height),
+  EXPECT_EQ(
+    marked({0.05f, 0.08f, 0.20f}, 0.07, &min_height),
     (std::vector<bool>{false, true, true}));
   EXPECT_DOUBLE_EQ(min_height, 0.07);
 }

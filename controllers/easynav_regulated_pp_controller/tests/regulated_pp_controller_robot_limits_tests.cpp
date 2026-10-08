@@ -49,7 +49,8 @@ protected:
 
 TEST_F(RegulatedPpRobotLimitsTest, DeprecatedParametersStillApply)
 {
-  const auto limits = limits_with({
+  const auto limits = limits_with(
+  {
     {"ctrl.max_linear_vel", 0.7},
     {"ctrl.min_linear_vel", -0.4},
     {"ctrl.max_angular_vel", 1.3},
@@ -68,7 +69,8 @@ TEST_F(RegulatedPpRobotLimitsTest, DeprecatedParametersStillApply)
 
 TEST_F(RegulatedPpRobotLimitsTest, RobotLimitsTakePrecedence)
 {
-  const auto limits = limits_with({
+  const auto limits = limits_with(
+  {
     {"robot_limits.max_linear_vel", 0.25},
     {"ctrl.max_linear_vel", 0.7}});
   EXPECT_DOUBLE_EQ(limits.max_linear_vel, 0.25);
