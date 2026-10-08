@@ -230,7 +230,12 @@ MPCController::update_rt(NavState & nav_state)
     .as_points();
 
   sensor_msgs::msg::PointCloud2 cloud_out;
-  pcl::toROSMsg(filtered, cloud_out);
+  // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
+  if (!filtered.empty()) {
+    pcl::toROSMsg(filtered, cloud_out);
+  } else {
+    cloud_out.height = 1;
+  }
   cloud_out.header.frame_id = path.header.frame_id;
   cloud_out.header.stamp = get_node()->now();
   detection_pub_->publish(cloud_out);
