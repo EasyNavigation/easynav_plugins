@@ -210,6 +210,7 @@ void
 DiagnosticRecoveryManager::on_activate()
 {
   for (auto & evaluator : evaluators_) {
+    evaluator->reset_rate_monitors();  // The time inactive is not slowness
     evaluator->on_activate();
   }
 }

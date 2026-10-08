@@ -28,6 +28,7 @@ namespace easynav_diagnostic_recovery
 void
 RecoveryEvaluatorBase::internal_update(easynav::NavState & nav_state)
 {
+  report_rate(nav_state);
   if (is_time_to_update()) {
     EASYNAV_TRACE_EVENT;
 
