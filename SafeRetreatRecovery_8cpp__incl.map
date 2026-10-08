@@ -1,0 +1,36 @@
+<map id="recoveries/easynav_diagnostic_recovery/src/easynav_diagnostic_recovery/mitigations/SafeRetreatRecovery.cpp" name="recoveries/easynav_diagnostic_recovery/src/easynav_diagnostic_recovery/mitigations/SafeRetreatRecovery.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the SafeRetreatRecovery class." alt="" coords="532,5,749,91"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,154,63,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="532,56,433,64,317,80,195,105,76,141,63,148,61,143,74,137,194,100,316,75,432,59,531,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="87,154,309,180"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="532,81,260,152,258,147,531,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="332,146,506,187"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="562,94,471,141,469,137,560,89"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="530,154,751,180"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="643,91,643,138,638,138,638,91"/>
+<area shape="rect" id="Node000006" href="$ObstacleProximity_8hpp.html" title="Declaration of compute_nearest_obstacle(), a static (velocity&#45;independent) proximity query shared by ..." alt="" coords="776,146,986,187"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="729,89,828,137,826,142,726,94"/>
+<area shape="rect" id="Node000009" href="$SafeRetreatRecovery_8hpp.html" title="Declaration of the SafeRetreatRecovery plugin." alt="" coords="1010,139,1183,195"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="751,74,996,136,995,141,749,79"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="1206,146,1334,187"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="750,59,958,88,1078,110,1196,136,1205,139,1203,144,1195,142,1077,115,957,93,749,64"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="790,258,843,283"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="871,189,834,246,830,243,866,186"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="737,346,899,387"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="881,188,874,239,858,299,841,334,836,332,853,297,869,238,876,187"/>
+<area shape="rect" id="Node000010" href="$RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="1001,243,1192,298"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1099,195,1099,227,1094,227,1094,195"/>
+<area shape="poly" id="edge14_Node000010_Node000008" title=" " alt="" coords="1017,301,891,344,890,338,1015,296"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="922,354,983,380"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="1056,301,985,347,982,343,1054,297"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1007,354,1061,380"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="1081,300,1053,343,1048,340,1076,297"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="1085,346,1236,387"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="1117,297,1141,332,1137,335,1113,300"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1260,346,1389,387"/>
+<area shape="poly" id="edge13_Node000010_Node000014" title=" " alt="" coords="1164,296,1264,337,1262,342,1162,301"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1413,354,1615,380"/>
+<area shape="poly" id="edge15_Node000010_Node000015" title=" " alt="" coords="1194,291,1445,347,1444,352,1192,296"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="1640,354,1874,380"/>
+<area shape="poly" id="edge16_Node000010_Node000016" title=" " alt="" coords="1193,282,1628,344,1660,348,1659,354,1627,349,1192,288"/>
+</map>

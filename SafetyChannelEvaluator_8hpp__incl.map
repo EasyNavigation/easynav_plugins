@@ -1,0 +1,15 @@
+<map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/evaluators/SafetyChannelEvaluator.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/evaluators/SafetyChannelEvaluator.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the SafetyChannelEvaluator plugin." alt="" coords="36,5,265,91"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,154,72,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,93,63,144,59,141,108,90"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,154,205,180"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,91,153,138,148,138,148,91"/>
+<area shape="rect" id="Node000004" href="$RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="229,139,418,195"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="215,89,273,128,270,133,212,94"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="68,243,220,283"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="273,198,196,237,194,233,271,193"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="243,243,404,283"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="326,195,326,227,321,227,321,195"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="428,250,630,276"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="384,193,490,241,488,246,382,198"/>
+</map>

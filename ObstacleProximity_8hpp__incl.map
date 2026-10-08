@@ -1,0 +1,7 @@
+<map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/ObstacleProximity.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/ObstacleProximity.hpp">
+<area shape="rect" id="Node000001" title="Declaration of compute_nearest_obstacle(), a static (velocity&#45;independent) proximity query shared by ..." alt="" coords="5,5,216,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="19,132,71,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,78,63,120,59,117,86,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="95,124,256,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,75,157,109,153,112,130,78"/>
+</map>

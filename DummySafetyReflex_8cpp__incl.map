@@ -1,0 +1,23 @@
+<map id="recoveries/easynav_diagnostic_recovery/src/easynav_diagnostic_recovery/DummySafetyReflex.cpp" name="recoveries/easynav_diagnostic_recovery/src/easynav_diagnostic_recovery/DummySafetyReflex.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the DummySafetyReflex class." alt="" coords="251,5,472,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,227,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,79,160,128,158,123,276,74"/>
+<area shape="rect" id="Node000003" href="$DummySafetyReflex_8hpp.html" title="Declaration of the DummySafetyReflex class." alt="" coords="251,124,472,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="364,76,364,108,359,108,359,76"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="496,124,624,165"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="430,74,509,114,507,119,428,79"/>
+<area shape="rect" id="Node000004" href="$SafetyReflexBase_8hpp.html" title="Declaration of the abstract base class SafetyReflexBase." alt="" coords="258,213,465,253"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="364,165,364,197,359,197,359,165"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="94,309,154,334"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="301,256,168,304,165,305,163,300,166,299,299,251"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="179,309,245,334"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="329,256,247,303,245,298,326,252"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="269,309,323,334"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="349,255,316,298,312,295,344,252"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="347,301,509,342"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="379,252,406,287,401,290,374,255"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="532,309,734,334"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="424,251,581,301,580,306,423,256"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="759,309,993,334"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="466,249,789,303,788,308,465,254"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="localizers/easynav_mhamcl_localizer/include/easynav_mhamcl_localizer/MapMatcher.hpp" name="localizers/easynav_mhamcl_localizer/include/easynav_mhamcl_localizer/MapMatcher.hpp">
+<area shape="rect" id="Node000001" title="Declaration of MapMatcher, the cascade brute&#45;force map matching of MH&#45;AMCL." alt="" coords="153,5,333,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,73,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,79,78,127,76,122,172,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="181,220,238,246"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,78,156,99,137,125,132,144,137,164,155,189,178,209,174,213,151,192,133,166,127,144,133,123,152,96,176,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="147,132,339,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="246,76,246,116,240,116,240,76"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="363,132,542,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="316,74,415,122,413,127,313,79"/>
+<area shape="rect" id="Node000006" href="$costmap__2d_8hpp.html" title=" " alt="" coords="566,124,749,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="334,61,563,117,562,122,333,67"/>
+<area shape="poly" id="edge10_Node000006_Node000003" title=" " alt="" coords="566,166,254,226,253,221,565,161"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="322,220,382,246"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="566,168,483,189,396,215,392,217,390,212,394,210,481,184,565,163"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="407,220,482,246"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="610,168,489,216,487,211,608,163"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="505,220,562,246"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="631,167,565,213,562,209,628,163"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="587,220,646,246"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="651,166,631,207,626,205,646,164"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="670,220,726,246"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="669,164,688,205,683,207,664,166"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="750,220,859,246"/>
+<area shape="poly" id="edge12_Node000006_Node000012" title=" " alt="" coords="692,163,772,210,769,214,690,167"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="882,220,1081,246"/>
+<area shape="poly" id="edge13_Node000006_Node000013" title=" " alt="" coords="732,163,922,213,921,218,731,168"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1106,213,1282,253"/>
+<area shape="poly" id="edge14_Node000006_Node000014" title=" " alt="" coords="750,156,1091,210,1090,215,749,162"/>
+</map>

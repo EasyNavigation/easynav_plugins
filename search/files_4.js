@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['inflationfilter_2ecpp_0',['InflationFilter.cpp',['../easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2InflationFilter_8cpp.html',1,'(Global Namespace)'],['../easynav__navmap__maps__manager_2src_2easynav__navmap__maps__manager_2filters_2InflationFilter_8cpp.html',1,'(Global Namespace)'],['../easynav__octomap__maps__manager_2src_2easynav__octomap__maps__manager_2filters_2InflationFilter_8cpp.html',1,'(Global Namespace)']]],
-  ['inflationfilter_2ehpp_1',['InflationFilter.hpp',['../easynav__costmap__maps__manager_2include_2easynav__costmap__maps__manager_2filters_2InflationFilter_8hpp.html',1,'(Global Namespace)'],['../easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hpp.html',1,'(Global Namespace)'],['../easynav__octomap__maps__manager_2include_2easynav__octomap__maps__manager_2filters_2InflationFilter_8hpp.html',1,'(Global Namespace)']]]
+  ['fusion_5flocalizer_5flocal_5ffilter_5ftests_2ecpp_0',['fusion_localizer_local_filter_tests.cpp',['../fusion__localizer__local__filter__tests_8cpp.html',1,'']]],
+  ['fusion_5flocalizer_5freconfigure_5ftests_2ecpp_1',['fusion_localizer_reconfigure_tests.cpp',['../fusion__localizer__reconfigure__tests_8cpp.html',1,'']]],
+  ['fusion_5flocalizer_5ftests_2ecpp_2',['fusion_localizer_tests.cpp',['../fusion__localizer__tests_8cpp.html',1,'']]],
+  ['fusionlocalizer_2ecpp_3',['FusionLocalizer.cpp',['../FusionLocalizer_8cpp.html',1,'']]],
+  ['fusionlocalizer_2ehpp_4',['FusionLocalizer.hpp',['../FusionLocalizer_8hpp.html',1,'']]]
 ];

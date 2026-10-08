@@ -1,0 +1,17 @@
+<map id="SensorsLostSimTimeTest" name="SensorsLostSimTimeTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="732,112,905,138"/>
+<area shape="rect" id="Node000002" href="$classSensorsLostTest.html" title=" " alt="" coords="561,112,683,138"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="698,122,731,122,731,128,698,128"/>
+<area shape="rect" id="Node000003" href="$classSimpleRecoveryManagerTest.html" title=" " alt="" coords="321,112,512,138"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="528,122,561,122,561,128,528,128"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="79,5,127,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="142,19,215,31,298,54,353,81,398,109,395,114,351,86,296,59,214,37,141,25"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="63,55,143,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="159,72,297,94,363,109,362,114,296,99,158,77"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="12,104,194,145"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="210,122,320,122,320,128,210,128"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,170,201,210"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="215,167,296,151,360,136,362,141,297,156,216,172"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="33,235,173,276"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="187,232,241,215,296,193,350,164,395,136,398,140,353,169,298,198,243,220,189,237"/>
+</map>

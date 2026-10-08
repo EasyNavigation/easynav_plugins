@@ -1,0 +1,43 @@
+<map id="recoveries/easynav_diagnostic_recovery/tests/mitigations/safe_retreat_recovery_tests.cpp" name="recoveries/easynav_diagnostic_recovery/tests/mitigations/safe_retreat_recovery_tests.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="473,5,654,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,139,63,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="473,49,387,57,286,71,180,94,76,126,63,133,61,128,74,122,178,89,285,66,386,52,472,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="87,139,154,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="473,57,330,83,251,103,174,127,156,134,154,129,172,121,250,97,329,78,472,52"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="407,339,461,364"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="472,54,398,64,322,79,258,100,234,112,219,126,209,141,205,156,204,171,208,186,224,216,252,244,286,271,324,294,394,330,392,335,321,299,283,275,248,248,220,219,203,188,199,172,199,155,204,139,215,122,231,108,256,95,321,74,397,59,472,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="228,139,280,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="473,64,384,90,292,126,282,132,280,128,290,122,382,85,472,59"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="304,139,361,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="477,79,375,126,364,133,361,128,373,122,475,74"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="386,139,479,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="523,79,460,131,456,127,520,75"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="504,139,623,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="566,76,566,123,561,123,561,76"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="647,132,808,172"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="617,74,687,121,684,125,614,79"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="832,132,1006,172"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="655,67,841,124,840,129,654,72"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1030,139,1251,165"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="655,55,1019,121,1072,133,1071,138,1017,127,654,60"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1275,132,1433,172"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="654,45,928,70,1096,92,1264,121,1278,124,1277,130,1263,127,1095,98,928,76,654,50"/>
+<area shape="rect" id="Node000013" href="$SafeRetreatRecovery_8hpp.html" title="Declaration of the SafeRetreatRecovery plugin." alt="" coords="1457,124,1630,180"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="654,43,803,51,997,65,1217,88,1442,121,1442,126,1216,93,997,70,802,56,654,48"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="1550,339,1784,364"/>
+<area shape="poly" id="edge21_Node000001_Node000020" title=" " alt="" coords="655,40,903,44,1215,56,1364,66,1493,80,1590,99,1623,109,1644,122,1662,144,1674,170,1681,197,1685,226,1683,280,1676,324,1671,323,1678,280,1679,226,1676,198,1669,172,1657,147,1640,126,1621,114,1589,104,1492,86,1364,72,1215,61,903,49,655,45"/>
+<area shape="rect" id="Node000014" href="$RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="1038,228,1230,283"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="1457,179,1445,182,1245,231,1244,226,1444,177,1456,174"/>
+<area shape="poly" id="edge15_Node000014_Node000004" title=" " alt="" coords="1038,272,477,347,476,342,1037,267"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="726,339,787,364"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="1039,275,923,299,799,334,796,335,794,330,797,329,922,294,1037,270"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="810,331,962,372"/>
+<area shape="poly" id="edge16_Node000014_Node000016" title=" " alt="" coords="1063,286,953,328,951,323,1061,281"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="986,331,1114,372"/>
+<area shape="poly" id="edge17_Node000014_Node000017" title=" " alt="" coords="1112,286,1080,321,1076,318,1108,282"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="1139,331,1300,372"/>
+<area shape="poly" id="edge18_Node000014_Node000018" title=" " alt="" coords="1161,282,1194,318,1190,322,1157,286"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="1324,339,1526,364"/>
+<area shape="poly" id="edge19_Node000014_Node000019" title=" " alt="" coords="1219,281,1374,331,1372,336,1217,286"/>
+<area shape="poly" id="edge20_Node000014_Node000020" title=" " alt="" coords="1230,271,1584,333,1583,338,1230,276"/>
+</map>

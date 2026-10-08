@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['x_0',['x',['../structeasynav_1_1MapLocation.html#a676e0da0ef83bbbdf42538e54b97506b',1,'easynav::MapLocation::x'],['../structeasynav_1_1SerestController_1_1Vec2.html#af88b946fb90d5f08b5fb740c70e98c10',1,'easynav::SerestController::Vec2::x'],['../structBonxai_1_1Point3D.html#af88b946fb90d5f08b5fb740c70e98c10',1,'Bonxai::Point3D::x'],['../structBonxai_1_1CoordT.html#af6d3062751bd565decb1a2cd3b63bdb2',1,'Bonxai::CoordT::x'],['../structeasynav_1_1GridNode.html#a6150e0515f7202e2fb518f7206ed97dc',1,'easynav::GridNode::x']]],
-  ['x_5f_1',['x_',['../classeasynav_1_1CellData.html#abbbfebb2a2eb5ccac632a0d90476642c',1,'easynav::CellData']]]
+  ['w_0',['w',['../structeasynav_1_1MPPIResult.html#afb3248bab1c7ee0ad97e9d4c275b4c67',1,'easynav::MPPIResult::w'],['../structeasynav_1_1TrajectorySample.html#afb3248bab1c7ee0ad97e9d4c275b4c67',1,'easynav::TrajectorySample::w']]],
+  ['weight_1',['weight',['../structeasynav_1_1Particle.html#a99108733d00274978a4979dc072bd513',1,'easynav::Particle::weight'],['../structeasynav_1_1mhamcl_1_1TransformWeighted.html#a99108733d00274978a4979dc072bd513',1,'easynav::mhamcl::TransformWeighted::weight'],['../structeasynav_1_1mhamcl_1_1Particle.html#a99108733d00274978a4979dc072bd513',1,'easynav::mhamcl::Particle::weight'],['../structeasynav_1_1navmap_1_1Particle.html#a99108733d00274978a4979dc072bd513',1,'easynav::navmap::Particle::weight']]],
+  ['weights_5ftau_5f_2',['weights_tau_',['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#a8a4b614e9afd04fac7f7e8c10ccc35c7',1,'easynav::navmap::AMCLLocalizer']]],
+  ['world_5fbase_5flink_5ftrans_5fmsg_5f_3',['world_base_link_trans_msg_',['../classrobot__localization_1_1UkfWrapper.html#a2b9a3287c071ed43fecb4ace7e758e26',1,'robot_localization::UkfWrapper']]],
+  ['world_5fframe_5fid_5f_4',['world_frame_id_',['../classrobot__localization_1_1UkfWrapper.html#a46fbea315fcd48862087cb0a5992a7e6',1,'robot_localization::UkfWrapper']]],
+  ['world_5ftransform_5fbroadcaster_5f_5',['world_transform_broadcaster_',['../classrobot__localization_1_1UkfWrapper.html#ad7c829c5bb00b716151034a20b0ae356',1,'robot_localization::UkfWrapper']]]
 ];

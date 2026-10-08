@@ -8,10 +8,24 @@
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="561,76,561,116,556,116,556,76"/>
 <area shape="rect" id="Node000005" href="$AmclRelocalizeMitigation_8hpp.html" title="Declaration of the AmclRelocalizeMitigation plugin." alt="" coords="694,124,888,165"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="639,74,733,115,731,120,637,79"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="912,124,1040,165"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="657,63,898,121,896,126,656,68"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="912,124,1040,165"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="657,63,898,121,896,126,656,68"/>
 <area shape="rect" id="Node000006" title=" " alt="" coords="648,228,757,253"/>
 <area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="774,167,726,218,722,215,770,163"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="782,213,973,268"/>
+<area shape="rect" id="Node000007" href="$RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="782,213,973,268"/>
 <area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="811,163,844,199,840,203,807,167"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="475,324,536,350"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="782,268,770,271,658,292,610,301,549,319,545,320,543,315,547,314,609,296,657,286,769,266,781,263"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="560,324,613,350"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="782,269,705,291,626,319,624,320,622,315,624,314,704,286,781,263"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="638,316,789,357"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="831,271,762,311,759,306,829,267"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="813,316,942,357"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="880,269,880,301,875,301,875,269"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="966,316,1127,357"/>
+<area shape="poly" id="edge11_Node000007_Node000012" title=" " alt="" coords="928,267,999,306,997,311,925,271"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="1151,324,1353,350"/>
+<area shape="poly" id="edge12_Node000007_Node000013" title=" " alt="" coords="974,263,1190,317,1188,322,973,268"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1378,324,1612,350"/>
+<area shape="poly" id="edge13_Node000007_Node000014" title=" " alt="" coords="974,254,1400,318,1399,324,973,259"/>
 </map>

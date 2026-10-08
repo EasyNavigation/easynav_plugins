@@ -1,0 +1,7 @@
+<map id="RegulatedPurePursuitController" name="RegulatedPurePursuitController">
+<area shape="rect" id="Node000001" title="Port of nav2_regulated_pure_pursuit_controller to EasyNav." alt="" coords="5,79,208,105"/>
+<area shape="rect" id="Node000003" href="$classFriendRegulatedPurePursuitController.html" title=" " alt="" coords="15,153,198,193"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="109,120,109,152,104,152,104,120"/>
+<area shape="rect" id="Node000002" href="$classControllerMethodBase.html" title=" " alt="" coords="32,5,181,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,46,109,79,104,79,104,46"/>
+</map>

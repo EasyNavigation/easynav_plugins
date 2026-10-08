@@ -1,0 +1,7 @@
+<map id="TransformWeighted" name="TransformWeighted">
+<area shape="rect" id="Node000001" title="A candidate pose in the map and how well the perception fits it." alt="" coords="14,102,149,128"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,65,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="43,45,55,77,72,100,68,103,51,79,38,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="88,5,168,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="118,46,90,103,85,100,113,43"/>
+</map>

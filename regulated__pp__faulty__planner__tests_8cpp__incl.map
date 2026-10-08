@@ -1,0 +1,35 @@
+<map id="controllers/easynav_regulated_pp_controller/tests/regulated_pp_faulty_planner_tests.cpp" name="controllers/easynav_regulated_pp_controller/tests/regulated_pp_faulty_planner_tests.cpp">
+<area shape="rect" id="Node000001" title="The robot never receives a NaN when the planner produces NaN paths (FaultyPlanner),..." alt="" coords="829,5,999,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,66,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="829,44,684,47,496,58,286,83,180,102,78,127,73,128,71,123,76,121,179,97,285,78,495,53,684,41,829,38"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="90,132,147,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="829,45,698,50,530,62,344,87,251,104,160,127,156,128,154,123,159,121,250,99,343,81,529,57,697,44,829,40"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="171,132,238,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="829,48,713,55,568,69,409,92,251,127,245,128,244,123,250,121,408,87,567,64,712,50,828,42"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="262,132,316,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="829,48,726,56,600,70,463,93,328,127,325,128,323,123,327,121,462,88,599,65,726,50,829,43"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="340,132,398,157"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="829,51,636,76,522,98,411,127,407,128,405,123,409,121,521,93,635,71,828,46"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="422,132,516,157"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="829,60,688,89,528,127,519,129,518,124,527,121,686,83,828,55"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="539,124,713,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="829,75,697,121,695,116,828,70"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="738,124,912,165"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="886,78,854,114,850,111,882,74"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="937,124,1073,165"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="947,74,979,111,975,114,943,78"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1097,124,1233,165"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1001,74,1103,115,1101,120,999,79"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1258,132,1427,157"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1000,60,1277,125,1276,130,999,65"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="1450,132,1642,157"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1000,52,1440,121,1465,126,1464,131,1439,127,999,57"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="1666,132,1786,157"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1000,45,1291,70,1473,92,1655,121,1670,125,1669,130,1654,127,1472,98,1291,76,999,50"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1810,124,1971,165"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1000,44,1344,70,1566,92,1794,121,1794,126,1566,97,1343,75,1000,49"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="1994,124,2130,165"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1000,41,1177,48,1418,61,1696,85,1980,121,1979,126,1695,90,1418,67,1177,53,1000,47"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="2154,124,2338,165"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1000,42,1200,49,1481,64,1806,87,2140,121,2139,126,1805,92,1480,69,1200,55,1000,47"/>
+</map>

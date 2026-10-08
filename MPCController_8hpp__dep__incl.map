@@ -1,0 +1,13 @@
+<map id="controllers/easynav_mpc_controller/include/easynav_mpc_controller/MPCController.hpp" name="controllers/easynav_mpc_controller/include/easynav_mpc_controller/MPCController.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="391,5,556,76"/>
+<area shape="rect" id="Node000002" href="$MPCController_8cpp.html" title="Implementation of the MPCController class." alt="" coords="5,124,171,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="376,70,183,127,172,130,170,125,182,121,375,65"/>
+<area shape="rect" id="Node000003" href="$mpc__controller__collision__checker__tests_8cpp.html" title="MPC&#39;s in&#45;loop obstacle constraint is enabled by its own &quot;use_collision_checker&quot; (no longer by the rem..." alt="" coords="195,124,360,195"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="404,86,337,126,334,121,401,82"/>
+<area shape="rect" id="Node000004" href="$mpc__controller__min__height__tests_8cpp.html" title="MPCController &quot;min_height&quot;: points below it are floor hits, not obstacles." alt="" coords="383,124,564,195"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="476,91,476,124,471,124,471,91"/>
+<area shape="rect" id="Node000005" href="$mpc__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="587,124,768,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="548,82,618,121,615,126,546,86"/>
+<area shape="rect" id="Node000006" href="$mpc__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="792,124,938,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="571,62,673,89,781,121,792,125,791,130,779,127,671,94,570,68"/>
+</map>

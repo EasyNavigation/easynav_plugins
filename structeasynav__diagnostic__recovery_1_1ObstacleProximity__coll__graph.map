@@ -1,0 +1,7 @@
+<map id="ObstacleProximity" name="ObstacleProximity">
+<area shape="rect" id="Node000001" title="Distance and bearing (both in the robot frame) of the nearest point&#45;cloud perception." alt="" coords="16,122,142,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,65,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="33,47,33,72,39,97,48,110,60,120,57,124,44,113,34,99,27,73,28,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="100,5,146,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="116,46,96,99,86,123,82,121,91,97,111,45"/>
+</map>

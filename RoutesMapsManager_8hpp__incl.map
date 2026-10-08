@@ -1,0 +1,38 @@
+<map id="maps_managers/easynav_routes_maps_manager/include/easynav_routes_maps_manager/RoutesMapsManager.hpp" name="maps_managers/easynav_routes_maps_manager/include/easynav_routes_maps_manager/RoutesMapsManager.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the RoutesMapsManager class and related types." alt="" coords="773,5,1041,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,235,204,261"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="773,50,589,60,388,76,217,98,159,111,128,126,113,146,105,171,103,220,98,220,100,170,108,144,124,122,157,106,216,93,387,71,589,55,772,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="637,132,790,172"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="847,79,763,126,761,121,844,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="814,132,1000,172"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="910,76,910,116,904,116,904,76"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="1024,124,1185,180"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="971,74,1043,114,1041,119,969,79"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="1209,124,1344,180"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1036,74,1195,120,1193,125,1035,79"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1368,139,1526,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1042,60,1194,87,1357,121,1395,132,1394,137,1356,127,1193,92,1041,65"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="576,235,644,261"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="773,53,733,63,694,77,658,98,628,126,615,147,609,172,608,220,603,220,604,171,610,145,624,122,655,94,692,73,731,57,772,48"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="230,235,288,261"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="773,55,663,66,548,82,446,102,406,114,375,126,358,138,348,150,325,181,283,226,279,222,321,178,344,147,355,134,373,122,404,109,445,97,547,77,662,61,772,50"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1550,139,1720,165"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1042,51,1274,78,1407,98,1538,121,1582,132,1580,137,1537,127,1406,103,1274,84,1041,57"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1744,132,1932,172"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1042,47,1358,72,1546,93,1733,121,1752,125,1751,130,1732,127,1545,99,1358,77,1041,52"/>
+<area shape="rect" id="Node000012" href="$RoutesFilter_8hpp.html" title=" " alt="" coords="386,132,562,172"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="773,78,568,130,566,125,772,73"/>
+<area shape="rect" id="Node000015" href="$routes__map_8hpp.html" title="Declaration of RouteSegment/RoutesMap, split out of RoutesMapsManager.hpp so that code needing only t..." alt="" coords="137,132,312,172"/>
+<area shape="poly" id="edge16_Node000001_Node000015" title=" " alt="" coords="773,60,564,87,330,127,314,130,313,125,329,121,563,82,772,54"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="1956,124,2107,180"/>
+<area shape="poly" id="edge20_Node000001_Node000016" title=" " alt="" coords="1042,41,1219,47,1441,60,1689,84,1816,100,1940,121,1940,126,1815,106,1688,89,1441,65,1218,52,1042,46"/>
+<area shape="poly" id="edge12_Node000012_Node000008" title=" " alt="" coords="504,170,581,224,578,228,501,175"/>
+<area shape="poly" id="edge14_Node000012_Node000009" title=" " alt="" coords="428,175,302,230,300,231,298,226,299,225,426,170"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="312,235,366,261"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="447,175,370,228,367,224,444,170"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="390,228,552,268"/>
+<area shape="poly" id="edge15_Node000012_Node000014" title=" " alt="" coords="476,173,475,212,469,212,471,172"/>
+<area shape="poly" id="edge19_Node000015_Node000002" title=" " alt="" coords="201,175,133,228,130,224,198,170"/>
+<area shape="poly" id="edge18_Node000015_Node000009" title=" " alt="" coords="234,172,252,220,247,222,229,173"/>
+<area shape="poly" id="edge17_Node000015_Node000013" title=" " alt="" coords="250,170,315,223,311,227,247,175"/>
+</map>

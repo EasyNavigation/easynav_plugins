@@ -1,0 +1,7 @@
+<map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/SafeRetreatRecovery.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/SafeRetreatRecovery.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the SafeRetreatRecovery plugin." alt="" coords="117,5,335,91"/>
+<area shape="rect" id="Node000002" href="$SafeRetreatRecovery_8cpp.html" title="Implementation of the SafeRetreatRecovery class." alt="" coords="5,139,223,225"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,105,152,140,148,137,178,101"/>
+<area shape="rect" id="Node000003" href="$safe__retreat__recovery__tests_8cpp.html" title=" " alt="" coords="247,146,429,217"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="274,101,311,144,307,148,270,105"/>
+</map>

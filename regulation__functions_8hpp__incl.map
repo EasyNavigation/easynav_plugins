@@ -1,0 +1,9 @@
+<map id="controllers/easynav_regulated_pp_controller/include/easynav_regulated_pp_controller/regulation_functions.hpp" name="controllers/easynav_regulated_pp_controller/include/easynav_regulated_pp_controller/regulation_functions.hpp">
+<area shape="rect" id="Node000001" title="Pure regulation heuristics for the Regulated Pure Pursuit controller." alt="" coords="43,5,221,91"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,139,80,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,93,65,129,61,126,93,89"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="103,139,160,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="134,91,134,123,129,123,129,91"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="184,139,237,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="166,90,194,125,190,128,162,93"/>
+</map>

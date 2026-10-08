@@ -1,0 +1,7 @@
+<map id="ParticlesParams" name="ParticlesParams">
+<area shape="rect" id="Node000001" title="Parameters of a hypothesis (a particle set)." alt="" coords="39,387,156,412"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="18,5,57,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="32,46,19,107,9,188,9,232,13,277,24,321,42,361,53,374,67,384,64,388,49,378,37,364,19,322,8,278,3,233,4,188,13,106,27,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="128,5,187,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,46,167,105,167,186,156,276,146,321,131,364,113,388,109,385,126,361,141,319,151,275,161,186,162,106,158,47"/>
+</map>

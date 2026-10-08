@@ -1,0 +1,7 @@
+<map id="ControllerStuckEvaluator" name="ControllerStuckEvaluator">
+<area shape="rect" id="Node000001" title="Level&#45;1 recovery evaluator: diagnoses &quot;commanded to move, but not making progress&quot;." alt="" coords="5,153,170,178"/>
+<area shape="rect" id="Node000002" href="$classeasynav__diagnostic__recovery_1_1RecoveryEvaluatorBase.html" title="Base class for level&#45;1 (deliberative, non&#45;RT) diagnosis plugins." alt="" coords="8,79,167,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,120,90,152,85,152,85,120"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="40,5,135,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="90,46,90,79,85,79,85,46"/>
+</map>

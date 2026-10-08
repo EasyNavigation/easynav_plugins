@@ -1,3 +1,17 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structeasynav_1_1MPPIResult.html" title="Result structure for MPPI optimization containing control commands and trajectories." alt="" coords="5,5,97,31"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,129,139,155"/>
+<area shape="rect" id="Node000001" href="$classeasynav_1_1CostmapMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="187,5,342,31"/>
+<area shape="poly" id="edge30_Node000000_Node000001" title=" " alt="" coords="93,116,133,77,185,40,209,29,211,34,188,44,137,81,97,120"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1RoutesMapsManager.html" title="A plugin&#45;based map manager using the RoutesMap data structure." alt="" coords="193,55,337,80"/>
+<area shape="poly" id="edge31_Node000000_Node000002" title=" " alt="" coords="114,120,186,89,216,78,218,83,188,94,116,125"/>
+<area shape="rect" id="Node000003" href="$classeasynav_1_1SimpleMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="193,104,336,130"/>
+<area shape="poly" id="edge32_Node000000_Node000003" title=" " alt="" coords="154,129,193,124,193,129,155,134"/>
+<area shape="rect" id="Node000005" href="$classeasynav_1_1navmap_1_1NavMapMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="189,153,341,179"/>
+<area shape="poly" id="edge34_Node000000_Node000005" title=" " alt="" coords="155,150,189,154,188,159,154,155"/>
+<area shape="rect" id="Node000006" href="$classeasynav_1_1octomap_1_1OctomapMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="187,203,343,228"/>
+<area shape="poly" id="edge35_Node000000_Node000006" title=" " alt="" coords="117,159,188,189,219,200,217,205,186,194,115,164"/>
+<area shape="rect" id="Node000007" href="$classeasynav__bonxai_1_1BonxaiMapsManager.html" title="A plugin&#45;based map manager using the SimpleMap data structure." alt="" coords="194,252,336,278"/>
+<area shape="poly" id="edge36_Node000000_Node000007" title=" " alt="" coords="98,165,138,203,188,239,211,249,209,254,185,243,134,207,94,169"/>
+<area shape="rect" id="Node000004" href="$classFriendSimpleMapsManager.html" title=" " alt="" coords="391,104,570,130"/>
+<area shape="poly" id="edge33_Node000003_Node000004" title=" " alt="" coords="352,114,390,114,390,120,352,120"/>
 </map>

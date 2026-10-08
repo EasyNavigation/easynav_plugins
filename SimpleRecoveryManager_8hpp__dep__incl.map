@@ -1,0 +1,7 @@
+<map id="recoveries/easynav_simple_recovery/include/easynav_simple_recovery/SimpleRecoveryManager.hpp" name="recoveries/easynav_simple_recovery/include/easynav_simple_recovery/SimpleRecoveryManager.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the SimpleRecoveryManager class." alt="" coords="109,5,303,76"/>
+<area shape="rect" id="Node000002" href="$SimpleRecoveryManager_8cpp.html" title="Implementation of the SimpleRecoveryManager class." alt="" coords="5,124,199,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,89,135,125,131,122,163,86"/>
+<area shape="rect" id="Node000003" href="$simple__recovery__manager__tests_8cpp.html" title="Tests for SimpleRecoveryManager: each case, its actions and sequences of cases." alt="" coords="223,124,400,195"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="249,86,282,122,278,125,245,89"/>
+</map>

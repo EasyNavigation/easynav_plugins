@@ -1,0 +1,9 @@
+<map id="maps_managers/easynav_routes_maps_manager/include/easynav_routes_maps_manager/routes_map.hpp" name="maps_managers/easynav_routes_maps_manager/include/easynav_routes_maps_manager/routes_map.hpp">
+<area shape="rect" id="Node000001" title="Declaration of RouteSegment/RoutesMap, split out of RoutesMapsManager.hpp so that code needing only t..." alt="" coords="5,5,219,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,124,59,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,78,54,114,50,110,81,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="83,124,141,150"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="115,76,115,108,109,108,109,76"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="165,124,363,150"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,74,233,113,230,118,167,79"/>
+</map>

@@ -1,5 +1,7 @@
 <map id="AmclConvergenceEvaluator" name="AmclConvergenceEvaluator">
-<area shape="rect" id="Node000001" title="Level&#45;1 recovery evaluator: diagnoses AMCL particle&#45;filter divergence." alt="" coords="5,79,187,105"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="16,5,176,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,46,99,79,93,79,93,46"/>
+<area shape="rect" id="Node000001" title="Level&#45;1 recovery evaluator: diagnoses AMCL particle&#45;filter divergence." alt="" coords="5,153,187,178"/>
+<area shape="rect" id="Node000002" href="$classeasynav__diagnostic__recovery_1_1RecoveryEvaluatorBase.html" title="Base class for level&#45;1 (deliberative, non&#45;RT) diagnosis plugins." alt="" coords="16,79,176,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,120,99,152,93,152,93,120"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="49,5,143,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,46,99,79,93,79,93,46"/>
 </map>

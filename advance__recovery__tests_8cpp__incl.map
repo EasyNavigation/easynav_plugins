@@ -1,0 +1,42 @@
+<map id="recoveries/easynav_diagnostic_recovery/tests/mitigations/advance_recovery_tests.cpp" name="recoveries/easynav_diagnostic_recovery/tests/mitigations/advance_recovery_tests.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="522,5,696,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,139,66,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="521,47,428,54,315,68,195,91,135,107,78,126,65,133,62,128,76,122,134,102,194,86,314,62,427,49,521,42"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="90,139,147,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="522,51,443,59,351,74,254,96,160,126,148,133,145,128,159,122,253,91,350,69,442,54,521,45"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="172,139,265,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="522,62,405,89,278,127,257,135,255,130,276,121,403,84,521,56"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="289,139,408,165"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="527,79,393,135,391,130,525,74"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="432,132,594,172"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="580,78,542,122,538,118,576,75"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="618,132,792,172"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="641,75,680,118,676,122,637,78"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="816,139,1007,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="697,71,864,131,863,136,695,76"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1032,139,1253,165"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="697,57,1020,121,1073,133,1072,138,1019,127,696,62"/>
+<area shape="rect" id="Node000010" href="$AdvanceRecovery_8hpp.html" title="Declaration of the AdvanceRecovery plugin." alt="" coords="1277,124,1431,180"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="697,46,947,71,1103,93,1262,121,1261,126,1102,98,947,76,696,51"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="1857,339,2091,364"/>
+<area shape="poly" id="edge20_Node000001_Node000020" title=" " alt="" coords="696,39,840,43,1028,55,1236,80,1342,98,1444,121,1518,143,1593,169,1735,227,1856,284,1941,329,1938,333,1853,289,1733,232,1591,174,1517,148,1443,127,1341,104,1236,85,1027,61,840,49,696,45"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1121,243,1187,268"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="1296,183,1201,230,1188,237,1186,232,1198,225,1294,178"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="1212,243,1321,268"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="1333,182,1289,232,1285,229,1329,178"/>
+<area shape="rect" id="Node000013" href="$RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="1345,228,1536,283"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="1379,178,1410,214,1406,217,1375,182"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="955,339,1015,364"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="1345,283,1333,286,1247,299,1179,306,1112,314,1028,334,1024,335,1022,330,1027,329,1111,309,1179,300,1247,294,1332,281,1344,278"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1040,339,1093,364"/>
+<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="1345,283,1333,286,1269,298,1218,306,1168,315,1106,334,1103,335,1101,330,1104,329,1167,310,1217,301,1268,293,1332,281,1344,278"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="1117,331,1268,372"/>
+<area shape="poly" id="edge15_Node000013_Node000016" title=" " alt="" coords="1370,286,1260,328,1258,323,1368,281"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="1293,331,1421,372"/>
+<area shape="poly" id="edge16_Node000013_Node000017" title=" " alt="" coords="1419,286,1386,321,1382,318,1415,282"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="1446,331,1607,372"/>
+<area shape="poly" id="edge17_Node000013_Node000018" title=" " alt="" coords="1467,282,1501,318,1497,322,1464,286"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="1630,339,1833,364"/>
+<area shape="poly" id="edge18_Node000013_Node000019" title=" " alt="" coords="1526,281,1680,331,1679,336,1524,286"/>
+<area shape="poly" id="edge19_Node000013_Node000020" title=" " alt="" coords="1537,271,1890,333,1890,338,1536,276"/>
+</map>

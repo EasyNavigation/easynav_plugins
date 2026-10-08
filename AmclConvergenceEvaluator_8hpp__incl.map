@@ -1,5 +1,11 @@
 <map id="localizers/easynav_costmap_localizer/include/easynav_costmap_localizer/AmclConvergenceEvaluator.hpp" name="localizers/easynav_costmap_localizer/include/easynav_costmap_localizer/AmclConvergenceEvaluator.hpp">
-<area shape="rect" id="Node000001" title="Declaration of the AmclConvergenceEvaluator plugin." alt="" coords="5,5,215,76"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="15,124,205,180"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,76,113,108,107,108,107,76"/>
+<area shape="rect" id="Node000001" title="Declaration of the AmclConvergenceEvaluator plugin." alt="" coords="156,5,366,76"/>
+<area shape="rect" id="Node000002" href="$RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="166,124,356,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="264,76,264,108,258,108,258,76"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,228,157,268"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="210,183,133,222,131,218,208,178"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="180,228,342,268"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="264,180,264,212,258,212,258,180"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="365,235,568,261"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="321,178,427,226,425,231,319,183"/>
 </map>

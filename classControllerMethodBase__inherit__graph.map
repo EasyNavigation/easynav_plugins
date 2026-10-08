@@ -1,11 +1,17 @@
 <map id="ControllerMethodBase" name="ControllerMethodBase">
-<area shape="rect" id="Node000001" title=" " alt="" coords="121,5,271,31"/>
-<area shape="rect" id="Node000002" href="$classeasynav_1_1MPPIController.html" title="A MPPI Controller." alt="" coords="5,79,115,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,41,84,81,82,76,158,36"/>
-<area shape="rect" id="Node000003" href="$classeasynav_1_1SerestController.html" title="SeReST (Safe Reparameterized Time) controller for path tracking." alt="" coords="139,79,253,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,46,199,79,193,79,193,46"/>
-<area shape="rect" id="Node000004" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="278,79,394,105"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="234,36,313,76,311,81,232,41"/>
-<area shape="rect" id="Node000005" href="$classFriendAMCLLocalizer.html" title=" " alt="" coords="263,153,409,178"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="339,120,339,152,333,152,333,120"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,104,155,130"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1MPCController.html" title="A MPC Controller." alt="" coords="251,5,356,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,93,152,65,202,40,250,25,252,30,204,45,155,70,113,97"/>
+<area shape="rect" id="Node000003" href="$classeasynav_1_1MPPIController.html" title="A MPPI Controller." alt="" coords="249,55,358,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="156,97,248,77,249,82,157,103"/>
+<area shape="rect" id="Node000004" href="$classeasynav_1_1RegulatedPurePursuitController.html" title="Port of nav2_regulated_pure_pursuit_controller to EasyNav." alt="" coords="203,104,405,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,114,202,114,202,120,170,120"/>
+<area shape="rect" id="Node000006" href="$classeasynav_1_1SerestController.html" title="SeReST (Safe Reparameterized Time) controller for path tracking." alt="" coords="247,153,361,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="157,131,247,151,246,156,156,136"/>
+<area shape="rect" id="Node000007" href="$classeasynav_1_1SimpleController.html" title="A simple path&#45;following controller using PID and look&#45;ahead strategy." alt="" coords="246,203,362,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="113,137,155,164,204,189,246,202,244,207,202,194,152,169,110,141"/>
+<area shape="rect" id="Node000005" href="$classFriendRegulatedPurePursuitController.html" title=" " alt="" coords="453,96,636,137"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="421,114,453,114,453,120,421,120"/>
+<area shape="rect" id="Node000008" href="$classFriendAMCLLocalizer.html" title=" " alt="" coords="472,203,618,228"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="377,213,471,213,471,218,377,218"/>
 </map>

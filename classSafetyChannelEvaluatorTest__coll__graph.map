@@ -1,0 +1,7 @@
+<map id="SafetyChannelEvaluatorTest" name="SafetyChannelEvaluatorTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,102,191,128"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="30,5,78,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,44,95,100,90,103,64,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="102,5,182,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,46,106,103,101,100,128,44"/>
+</map>

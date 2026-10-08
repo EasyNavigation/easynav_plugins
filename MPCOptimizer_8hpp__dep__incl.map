@@ -1,0 +1,17 @@
+<map id="controllers/easynav_mpc_controller/include/easynav_mpc_controller/MPCOptimizer.hpp" name="controllers/easynav_mpc_controller/include/easynav_mpc_controller/MPCOptimizer.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="485,5,651,76"/>
+<area shape="rect" id="Node000002" href="$MPCController_8hpp.html" title=" " alt="" coords="391,124,556,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="533,89,503,125,499,122,529,86"/>
+<area shape="rect" id="Node000008" href="$MPCOptimizer_8cpp.html" title="Implementation of MPCParameters and MPCOptimizer classes." alt="" coords="580,124,745,195"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="607,86,637,122,633,125,603,89"/>
+<area shape="rect" id="Node000003" href="$MPCController_8cpp.html" title="Implementation of the MPCController class." alt="" coords="5,243,171,313"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="376,189,183,245,172,249,170,244,182,240,375,184"/>
+<area shape="rect" id="Node000004" href="$mpc__controller__collision__checker__tests_8cpp.html" title="MPC&#39;s in&#45;loop obstacle constraint is enabled by its own &quot;use_collision_checker&quot; (no longer by the rem..." alt="" coords="195,243,360,313"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="404,205,337,244,334,240,401,200"/>
+<area shape="rect" id="Node000005" href="$mpc__controller__min__height__tests_8cpp.html" title="MPCController &quot;min_height&quot;: points below it are floor hits, not obstacles." alt="" coords="383,243,564,313"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="476,210,476,242,471,242,471,210"/>
+<area shape="rect" id="Node000006" href="$mpc__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="587,243,768,313"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="548,200,618,240,615,244,546,205"/>
+<area shape="rect" id="Node000007" href="$mpc__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="792,243,938,313"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="571,193,631,207,678,216,724,225,781,240,792,244,791,249,779,245,723,230,677,221,629,212,570,198"/>
+</map>

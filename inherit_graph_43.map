@@ -1,5 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,165,31"/>
-<area shape="rect" id="Node000001" href="$classeasynav_1_1AmclConvergenceEvaluator.html" title="Level&#45;1 recovery evaluator: diagnoses AMCL particle&#45;filter divergence." alt="" coords="213,5,394,31"/>
-<area shape="poly" id="edge39_Node000000_Node000001" title=" " alt="" coords="180,16,212,16,212,21,180,21"/>
+<area shape="rect" id="Node000000" href="$structeasynav__diagnostic__recovery_1_1ObstacleProximity.html" title="Distance and bearing (both in the robot frame) of the nearest point&#45;cloud perception." alt="" coords="5,5,132,31"/>
 </map>

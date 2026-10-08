@@ -1,0 +1,15 @@
+<map id="recoveries/easynav_diagnostic_recovery/src/easynav_diagnostic_recovery/DummyEvaluator.cpp" name="recoveries/easynav_diagnostic_recovery/src/easynav_diagnostic_recovery/DummyEvaluator.cpp">
+<area shape="rect" id="Node000001" title="Implementation of the DummyEvaluator class." alt="" coords="254,5,457,76"/>
+<area shape="rect" id="Node000002" href="$DummyEvaluator_8hpp.html" title="Declaration of the DummyEvaluator plugin." alt="" coords="159,124,363,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="326,78,292,114,288,111,322,74"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="387,124,514,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="390,74,424,111,420,114,386,78"/>
+<area shape="rect" id="Node000003" href="$RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="166,213,356,268"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="264,165,264,197,258,197,258,165"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,316,157,357"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="210,271,133,311,131,306,208,267"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="180,316,342,357"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="264,269,264,301,258,301,258,269"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="365,324,568,350"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="321,266,427,315,425,320,319,271"/>
+</map>

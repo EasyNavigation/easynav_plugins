@@ -1,0 +1,26 @@
+<map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/HumanAssistanceRecovery.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/HumanAssistanceRecovery.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the HumanAssistanceRecovery plugin." alt="" coords="48,5,304,91"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,154,72,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,93,66,146,62,142,125,89"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="76,250,129,276"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,92,138,140,111,236,106,234,133,138,153,90"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="147,154,204,180"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="178,91,178,138,173,138,173,91"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="229,154,338,180"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="217,90,264,141,260,144,213,93"/>
+<area shape="rect" id="Node000006" href="$RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="375,139,566,195"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="284,89,389,130,387,135,282,94"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="375,192,142,245,140,246,138,241,140,240,374,187"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="154,250,214,276"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="375,197,226,245,224,246,222,241,224,240,374,191"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="238,243,389,283"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="426,198,360,237,358,232,424,193"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="413,243,541,283"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="475,195,477,227,472,228,470,195"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="566,243,727,283"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="523,193,598,233,595,237,520,198"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="751,250,953,276"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="567,189,788,243,787,249,566,194"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="977,250,1212,276"/>
+<area shape="poly" id="edge12_Node000006_Node000012" title=" " alt="" coords="567,180,999,245,998,250,566,185"/>
+</map>

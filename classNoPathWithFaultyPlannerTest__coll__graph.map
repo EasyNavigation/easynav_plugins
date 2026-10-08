@@ -1,0 +1,13 @@
+<map id="NoPathWithFaultyPlannerTest" name="NoPathWithFaultyPlannerTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="267,112,463,138"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="52,5,100,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,21,176,33,244,53,300,81,346,109,343,114,298,85,242,58,175,38,114,26"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="36,55,116,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,74,243,94,309,109,308,114,242,99,131,79"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,104,147,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="162,122,266,122,266,128,162,128"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,170,147,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="161,169,242,151,306,136,308,141,243,156,162,174"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="38,235,114,260"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="128,233,184,217,242,195,298,165,343,136,346,140,301,170,244,200,185,222,130,238"/>
+</map>

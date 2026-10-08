@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['leafgrid_0',['LeafGrid',['../classBonxai_1_1VoxelGrid.html#a8522ca4bc99f36eab121f7c90e2511ac',1,'Bonxai::VoxelGrid']]]
+  ['hypothesis_0',['Hypothesis',['../classeasynav_1_1mhamcl_1_1MHAMCLLocalizer.html#a2d06696b425a5b66ba5e0e074c493c40',1,'easynav::mhamcl::MHAMCLLocalizer']]]
 ];

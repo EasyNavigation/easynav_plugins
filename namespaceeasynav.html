@@ -95,8 +95,10 @@ document.addEventListener('DOMContentLoaded', codefold.init);
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">easynav Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -106,18 +108,29 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
+<tr class="memitem:dynamic_5Fwindow_5Fpure_5Fpursuit" id="r_dynamic_5Fwindow_5Fpure_5Fpursuit"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav_1_1dynamic__window__pure__pursuit.html">dynamic_window_pure_pursuit</a></td></tr>
+<tr class="memitem:heuristics" id="r_heuristics"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav_1_1heuristics.html">heuristics</a></td></tr>
+<tr class="memitem:mhamcl" id="r_mhamcl"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav_1_1mhamcl.html">mhamcl</a></td></tr>
 <tr class="memitem:navmap" id="r_navmap"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav_1_1navmap.html">navmap</a></td></tr>
 <tr class="memitem:octomap" id="r_octomap"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav_1_1octomap.html">octomap</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:AdvanceRecovery" id="r_AdvanceRecovery"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1AdvanceRecovery.html">AdvanceRecovery</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 movement mitigation: advances a short distance when the robot is stuck.  <a href="classeasynav_1_1AdvanceRecovery.html#details">More...</a><br /></td></tr>
 <tr class="memitem:AmclConvergenceEvaluator" id="r_AmclConvergenceEvaluator"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1AmclConvergenceEvaluator.html">AmclConvergenceEvaluator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 recovery evaluator: diagnoses AMCL particle-filter divergence.  <a href="classeasynav_1_1AmclConvergenceEvaluator.html#details">More...</a><br /></td></tr>
 <tr class="memitem:AMCLLocalizer" id="r_AMCLLocalizer"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1AMCLLocalizer.html">AMCLLocalizer</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach.  <a href="classeasynav_1_1AMCLLocalizer.html#details">More...</a><br /></td></tr>
 <tr class="memitem:AmclRelocalizeMitigation" id="r_AmclRelocalizeMitigation"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1AmclRelocalizeMitigation.html">AmclRelocalizeMitigation</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 movement mitigation: rotates in place to help AMCL relocalize.  <a href="classeasynav_1_1AmclRelocalizeMitigation.html#details">More...</a><br /></td></tr>
+<tr class="memitem:CancelMissionRecovery" id="r_CancelMissionRecovery"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1CancelMissionRecovery.html">CancelMissionRecovery</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 mission-level last resort: cancels the active mission, reporting the error.  <a href="classeasynav_1_1CancelMissionRecovery.html#details">More...</a><br /></td></tr>
 <tr class="memitem:CellData" id="r_CellData"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1CellData.html">CellData</a></td></tr>
+<tr class="memitem:CollisionSafetyReflex" id="r_CollisionSafetyReflex"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1CollisionSafetyReflex.html">CollisionSafetyReflex</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference level-0 safety reflex: stops the robot on imminent collision.  <a href="classeasynav_1_1CollisionSafetyReflex.html#details">More...</a><br /></td></tr>
+<tr class="memitem:ControllerStuckEvaluator" id="r_ControllerStuckEvaluator"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1ControllerStuckEvaluator.html">ControllerStuckEvaluator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 recovery evaluator: diagnoses "commanded to move, but not making progress".  <a href="classeasynav_1_1ControllerStuckEvaluator.html#details">More...</a><br /></td></tr>
 <tr class="memitem:Costmap2D" id="r_Costmap2D"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1Costmap2D.html">Costmap2D</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A 2D costmap provides a mapping between points in the world and their associated "costs".  <a href="classeasynav_1_1Costmap2D.html#details">More...</a><br /></td></tr>
 <tr class="memitem:CostmapFilter" id="r_CostmapFilter"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1CostmapFilter.html">CostmapFilter</a></td></tr>
@@ -125,24 +138,58 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A plugin-based map manager using the <a class="el" href="classeasynav_1_1SimpleMap.html" title="Simple 2D uint8_t grid using basic C++ types, with full metric conversion support.">SimpleMap</a> data structure.  <a href="classeasynav_1_1CostmapMapsManager.html#details">More...</a><br /></td></tr>
 <tr class="memitem:CostmapPlanner" id="r_CostmapPlanner"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1CostmapPlanner.html">CostmapPlanner</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A planner implementing the A* algorithm on a <a class="el" href="classeasynav_1_1Costmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a> grid.  <a href="classeasynav_1_1CostmapPlanner.html#details">More...</a><br /></td></tr>
+<tr class="memitem:FusionLocalizer" id="r_FusionLocalizer"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1FusionLocalizer.html">FusionLocalizer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plugin de localización para EasyNav que integra el UKF de <a class="el" href="namespacerobot__localization.html">robot_localization</a> para la fusión de sensores.  <a href="classeasynav_1_1FusionLocalizer.html#details">More...</a><br /></td></tr>
 <tr class="memitem:GridNode" id="r_GridNode"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1GridNode.html">GridNode</a></td></tr>
+<tr class="memitem:HumanAssistanceRecovery" id="r_HumanAssistanceRecovery"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1HumanAssistanceRecovery.html">HumanAssistanceRecovery</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 last-resort mitigation: asks a human operator for help.  <a href="classeasynav_1_1HumanAssistanceRecovery.html#details">More...</a><br /></td></tr>
 <tr class="memitem:InflationFilter" id="r_InflationFilter"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1InflationFilter.html">InflationFilter</a></td></tr>
 <tr class="memitem:LoadParameters" id="r_LoadParameters"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1LoadParameters.html">LoadParameters</a></td></tr>
 <tr class="memitem:MapLocation" id="r_MapLocation"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1MapLocation.html">MapLocation</a></td></tr>
+<tr class="memitem:MPCController" id="r_MPCController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPCController.html">MPCController</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A MPC Controller.  <a href="classeasynav_1_1MPCController.html#details">More...</a><br /></td></tr>
+<tr class="memitem:MPCOptimizer" id="r_MPCOptimizer"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPCOptimizer.html">MPCOptimizer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A MPC Optimizer class.  <a href="classeasynav_1_1MPCOptimizer.html#details">More...</a><br /></td></tr>
+<tr class="memitem:MPCParameters" id="r_MPCParameters"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPCParameters.html">MPCParameters</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A MPC parameters class.  <a href="classeasynav_1_1MPCParameters.html#details">More...</a><br /></td></tr>
 <tr class="memitem:MPPIController" id="r_MPPIController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPPIController.html">MPPIController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A MPPI Controller.  <a href="classeasynav_1_1MPPIController.html#details">More...</a><br /></td></tr>
 <tr class="memitem:MPPIOptimizer" id="r_MPPIOptimizer"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPPIOptimizer.html">MPPIOptimizer</a></td></tr>
 <tr class="memitem:MPPIResult" id="r_MPPIResult"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1MPPIResult.html">MPPIResult</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result structure for MPPI optimization containing control commands and trajectories.  <a href="structeasynav_1_1MPPIResult.html#details">More...</a><br /></td></tr>
+<tr class="memitem:NLoptCallbackData" id="r_NLoptCallbackData"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1NLoptCallbackData.html">NLoptCallbackData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct used as element in callback.  <a href="structeasynav_1_1NLoptCallbackData.html#details">More...</a><br /></td></tr>
+<tr class="memitem:NoPathEvaluator" id="r_NoPathEvaluator"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1NoPathEvaluator.html">NoPathEvaluator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 recovery evaluator that diagnoses a missing or empty planner path.  <a href="classeasynav_1_1NoPathEvaluator.html#details">More...</a><br /></td></tr>
 <tr class="memitem:ObstacleBounds" id="r_ObstacleBounds"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1ObstacleBounds.html">ObstacleBounds</a></td></tr>
 <tr class="memitem:ObstacleFilter" id="r_ObstacleFilter"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1ObstacleFilter.html">ObstacleFilter</a></td></tr>
+<tr class="memitem:ObstacleTooCloseEvaluator" id="r_ObstacleTooCloseEvaluator"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1ObstacleTooCloseEvaluator.html">ObstacleTooCloseEvaluator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 recovery evaluator: diagnoses "stopped too close to an obstacle".  <a href="classeasynav_1_1ObstacleTooCloseEvaluator.html#details">More...</a><br /></td></tr>
 <tr class="memitem:Particle" id="r_Particle"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1Particle.html">Particle</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a single particle in the AMCL algorithm.  <a href="structeasynav_1_1Particle.html#details">More...</a><br /></td></tr>
 <tr class="memitem:PIDController" id="r_PIDController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1PIDController.html">PIDController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple PID (Proportional-Integral-Derivative) controller implementation.  <a href="classeasynav_1_1PIDController.html#details">More...</a><br /></td></tr>
+<tr class="memitem:RegulatedPurePursuitController" id="r_RegulatedPurePursuitController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1RegulatedPurePursuitController.html">RegulatedPurePursuitController</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port of nav2_regulated_pure_pursuit_controller to EasyNav.  <a href="classeasynav_1_1RegulatedPurePursuitController.html#details">More...</a><br /></td></tr>
+<tr class="memitem:RosGraphEvaluator" id="r_RosGraphEvaluator"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1RosGraphEvaluator.html">RosGraphEvaluator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 recovery evaluator that checks EasyNav's wiring in the ROS graph.  <a href="classeasynav_1_1RosGraphEvaluator.html#details">More...</a><br /></td></tr>
+<tr class="memitem:RoutesCostmapFilter" id="r_RoutesCostmapFilter"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1RoutesCostmapFilter.html">RoutesCostmapFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Costmap filter that raises costs outside navigation routes.  <a href="classeasynav_1_1RoutesCostmapFilter.html#details">More...</a><br /></td></tr>
+<tr class="memitem:RouteSegment" id="r_RouteSegment"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1RouteSegment.html">RouteSegment</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simple directed segment between two poses.  <a href="structeasynav_1_1RouteSegment.html#details">More...</a><br /></td></tr>
+<tr class="memitem:RoutesFilter" id="r_RoutesFilter"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1RoutesFilter.html">RoutesFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base interface for all routes filters.  <a href="classeasynav_1_1RoutesFilter.html#details">More...</a><br /></td></tr>
+<tr class="memitem:RoutesMapsManager" id="r_RoutesMapsManager"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1RoutesMapsManager.html">RoutesMapsManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A plugin-based map manager using the <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> data structure.  <a href="classeasynav_1_1RoutesMapsManager.html#details">More...</a><br /></td></tr>
+<tr class="memitem:SafeRetreatRecovery" id="r_SafeRetreatRecovery"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1SafeRetreatRecovery.html">SafeRetreatRecovery</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 movement mitigation: moves straight away from a too-close obstacle.  <a href="classeasynav_1_1SafeRetreatRecovery.html#details">More...</a><br /></td></tr>
+<tr class="memitem:SafetyChannelEvaluator" id="r_SafetyChannelEvaluator"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1SafetyChannelEvaluator.html">SafetyChannelEvaluator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 recovery evaluator for protective stops of the safety channel.  <a href="classeasynav_1_1SafetyChannelEvaluator.html#details">More...</a><br /></td></tr>
 <tr class="memitem:SaveParameters" id="r_SaveParameters"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1SaveParameters.html">SaveParameters</a></td></tr>
 <tr class="memitem:SerestController" id="r_SerestController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1SerestController.html">SerestController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">SeReST (Safe Reparameterized Time) controller for path tracking.  <a href="classeasynav_1_1SerestController.html#details">More...</a><br /></td></tr>
+<tr class="memitem:ShutdownRecovery" id="r_ShutdownRecovery"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1ShutdownRecovery.html">ShutdownRecovery</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-1 system-level mitigation: terminates EasyNav in an orderly way.  <a href="classeasynav_1_1ShutdownRecovery.html#details">More...</a><br /></td></tr>
 <tr class="memitem:SimpleController" id="r_SimpleController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1SimpleController.html">SimpleController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple path-following controller using PID and look-ahead strategy.  <a href="classeasynav_1_1SimpleController.html#details">More...</a><br /></td></tr>
 <tr class="memitem:SimpleMap" id="r_SimpleMap"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1SimpleMap.html">SimpleMap</a></td></tr>
@@ -151,11 +198,18 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A plugin-based map manager using the <a class="el" href="classeasynav_1_1SimpleMap.html" title="Simple 2D uint8_t grid using basic C++ types, with full metric conversion support.">SimpleMap</a> data structure.  <a href="classeasynav_1_1SimpleMapsManager.html#details">More...</a><br /></td></tr>
 <tr class="memitem:SimplePlanner" id="r_SimplePlanner"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1SimplePlanner.html">SimplePlanner</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A planner implementing the A* algorithm on a <a class="el" href="classeasynav_1_1SimpleMap.html" title="Simple 2D uint8_t grid using basic C++ types, with full metric conversion support.">SimpleMap</a> grid.  <a href="classeasynav_1_1SimplePlanner.html#details">More...</a><br /></td></tr>
+<tr class="memitem:SimpleRecoveryManager" id="r_SimpleRecoveryManager"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1SimpleRecoveryManager.html">SimpleRecoveryManager</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A small, readable recovery system: a tutorial for writing your own.  <a href="classeasynav_1_1SimpleRecoveryManager.html#details">More...</a><br /></td></tr>
 <tr class="memitem:TrajectorySample" id="r_TrajectorySample"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1TrajectorySample.html">TrajectorySample</a></td></tr>
 <tr class="memitem:VffController" id="r_VffController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1VffController.html">VffController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A default "Vff" implementation for the Control Method.  <a href="classeasynav_1_1VffController.html#details">More...</a><br /></td></tr>
 <tr class="memitem:VFFVectors" id="r_VFFVectors"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1VFFVectors.html">VFFVectors</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A structure to hold the VFF vectors.  <a href="structeasynav_1_1VFFVectors.html#details">More...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a988f05128bb99c6e960f5d5a192af54d" id="r_a988f05128bb99c6e960f5d5a192af54d"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> = std::vector&lt;<a class="el" href="structRouteSegment.html">RouteSegment</a>&gt;</td></tr>
+<tr class="memdesc:a988f05128bb99c6e960f5d5a192af54d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Container type representing a full set of navigation routes.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -203,7 +257,11 @@ Functions</h2></td></tr>
 <tr class="memitem:a4cfeb59f1f792582dcc310ce537a0dc0" id="r_a4cfeb59f1f792582dcc310ce537a0dc0"><td class="memTemplParams" colspan="2">template&lt;typename Iter, typename Getter&gt; </td></tr>
 <tr class="memitem:a4cfeb59f1f792582dcc310ce537a0dc0 template"><td class="memItemLeft">Iter&#160;</td><td class="memItemRight"><a class="el" href="#a4cfeb59f1f792582dcc310ce537a0dc0">first_after_integrated_distance</a> (Iter begin, Iter end, Getter getCompareVal)</td></tr>
 <tr class="memdesc:a4cfeb59f1f792582dcc310ce537a0dc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find first element in iterator that is greater integrated distance than comparevalue.  <br /></td></tr>
+<tr class="memitem:aa3942576f265f4ad4b6d408f52423620" id="r_aa3942576f265f4ad4b6d408f52423620"><td class="memItemLeft"><a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a>&#160;</td><td class="memItemRight"><a class="el" href="#aa3942576f265f4ad4b6d408f52423620">from_msg</a> (const easynav_routes_maps_manager::msg::RoutesMap &amp;msg)</td></tr>
+<tr class="memdesc:aa3942576f265f4ad4b6d408f52423620"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a wire <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> message back to the in-memory form.  <br /></td></tr>
 <tr class="memitem:afcd1e85e181f9a1b71aefb6d573a974b" id="r_afcd1e85e181f9a1b71aefb6d573a974b"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#afcd1e85e181f9a1b71aefb6d573a974b">get_home_dir</a> ()</td></tr>
+<tr class="memitem:aa838b8b9383af3d24e142bcaecf7aca9" id="r_aa838b8b9383af3d24e142bcaecf7aca9"><td class="memItemLeft"><a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a>&#160;</td><td class="memItemRight"><a class="el" href="#aa838b8b9383af3d24e142bcaecf7aca9">load_routes_from_yaml</a> (const std::string &amp;yaml_file)</td></tr>
+<tr class="memdesc:aa838b8b9383af3d24e142bcaecf7aca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> from a routes YAML file.  <br /></td></tr>
 <tr class="memitem:ad65be2857c82bbadf9e7eb59ad067f63" id="r_ad65be2857c82bbadf9e7eb59ad067f63"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad65be2857c82bbadf9e7eb59ad067f63">loadMapFromFile</a> (const <a class="el" href="structeasynav_1_1LoadParameters.html">LoadParameters</a> &amp;load_parameters, nav_msgs::msg::OccupancyGrid &amp;map)</td></tr>
 <tr class="memdesc:ad65be2857c82bbadf9e7eb59ad067f63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the image from map file and generate an OccupancyGrid.  <br /></td></tr>
 <tr class="memitem:adada2e5c817d3b2b022048f497912d10" id="r_adada2e5c817d3b2b022048f497912d10"><td class="memItemLeft"><a class="el" href="#a3150b0c80fdf34b4b642b72a83c8b66a">LOAD_MAP_STATUS</a>&#160;</td><td class="memItemRight"><a class="el" href="#adada2e5c817d3b2b022048f497912d10">loadMapFromYaml</a> (const std::string &amp;yaml_file, nav_msgs::msg::OccupancyGrid &amp;map)</td></tr>
@@ -224,8 +282,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a6a442a5fec850c953734564959a562ba" id="r_a6a442a5fec850c953734564959a562ba"><td class="memItemLeft">geometry_msgs::msg::Quaternion&#160;</td><td class="memItemRight"><a class="el" href="#a6a442a5fec850c953734564959a562ba">orientationAroundZAxis</a> (double angle)</td></tr>
 <tr class="memdesc:a6a442a5fec850c953734564959a562ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a geometry_msgs Quaternion from a yaw angle.  <br /></td></tr>
 <tr class="memitem:afac22b36fad17acea17ac83c1394b644" id="r_afac22b36fad17acea17ac83c1394b644"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#afac22b36fad17acea17ac83c1394b644">printTransform</a> (const tf2::Transform &amp;tf)</td></tr>
+<tr class="memitem:a69b5059f2bc03a473b8f66bb61a16015" id="r_a69b5059f2bc03a473b8f66bb61a16015"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a69b5059f2bc03a473b8f66bb61a16015">save_routes_to_yaml</a> (const std::string &amp;yaml_file, const <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> &amp;routes, std::string &amp;error_message)</td></tr>
+<tr class="memdesc:a69b5059f2bc03a473b8f66bb61a16015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Persist a <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> to a routes YAML file, in the exact format <a class="el" href="#aa838b8b9383af3d24e142bcaecf7aca9" title="Load a RoutesMap from a routes YAML file.">load_routes_from_yaml()</a> reads back: a top-level <span class="tt">routes: [name, ...]</span> list plus one <span class="tt">start</span>/<span class="tt">end</span> pose-pair entry per name.  <br /></td></tr>
 <tr class="memitem:a640e338d206263877fd036bb388006a6" id="r_a640e338d206263877fd036bb388006a6"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a640e338d206263877fd036bb388006a6">saveMapToFile</a> (const nav_msgs::msg::OccupancyGrid &amp;map, const <a class="el" href="structeasynav_1_1SaveParameters.html">SaveParameters</a> &amp;save_parameters)</td></tr>
 <tr class="memdesc:a640e338d206263877fd036bb388006a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write OccupancyGrid map to file.  <br /></td></tr>
+<tr class="memitem:ab333b686eaa645a8f17890cdeea0f524" id="r_ab333b686eaa645a8f17890cdeea0f524"><td class="memItemLeft">easynav_routes_maps_manager::msg::RoutesMap&#160;</td><td class="memItemRight"><a class="el" href="#ab333b686eaa645a8f17890cdeea0f524">to_msg</a> (const <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> &amp;routes)</td></tr>
+<tr class="memdesc:ab333b686eaa645a8f17890cdeea0f524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert an in-memory <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> to its wire message form.  <br /></td></tr>
 <tr class="memitem:acc6608899967214edb5d585251ac3bcc" id="r_acc6608899967214edb5d585251ac3bcc"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#acc6608899967214edb5d585251ac3bcc">tryWriteMapToFile</a> (const nav_msgs::msg::OccupancyGrid &amp;map, const <a class="el" href="structeasynav_1_1SaveParameters.html">SaveParameters</a> &amp;save_parameters)</td></tr>
 <tr class="memdesc:acc6608899967214edb5d585251ac3bcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to write map data into a file.  <br /></td></tr>
 <tr class="memitem:a0ffc863bec70f7d80d9402116a3a6f49" id="r_a0ffc863bec70f7d80d9402116a3a6f49"><td class="memItemLeft"><a class="el" href="structeasynav_1_1SerestController_1_1Vec2.html">SerestController::Vec2</a>&#160;</td><td class="memItemRight"><a class="el" href="#a0ffc863bec70f7d80d9402116a3a6f49">v2</a> (double x, double y)</td></tr>
@@ -233,10 +295,31 @@ Functions</h2></td></tr>
 <tr class="memitem:a707e7fc5553ae52ca715c50536f19b81" id="r_a707e7fc5553ae52ca715c50536f19b81"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
 <tr class="memitem:a707e7fc5553ae52ca715c50536f19b81 template"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#a707e7fc5553ae52ca715c50536f19b81">yaml_get_value</a> (const YAML::Node &amp;node, const std::string &amp;key)</td></tr>
 <tr class="memdesc:a707e7fc5553ae52ca715c50536f19b81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the given subnode value.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a1296b5d8f82cf65d273b29f09c38da0d" id="r_a1296b5d8f82cf65d273b29f09c38da0d"><td class="memItemLeft">constexpr double&#160;</td><td class="memItemRight"><a class="el" href="#a1296b5d8f82cf65d273b29f09c38da0d">kNoOrientationCovariance</a> = 1e5</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides a mapping for often used cost values. </p>
-</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="a988f05128bb99c6e960f5d5a192af54d" name="a988f05128bb99c6e960f5d5a192af54d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a988f05128bb99c6e960f5d5a192af54d">&#9670;&#160;</a></span>RoutesMap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> = std::vector&lt;<a class="el" href="structRouteSegment.html">RouteSegment</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Container type representing a full set of navigation routes. </p>
+
+</div>
+</div>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
 <a id="a7a97a116707da5eb8ba2e97825d41814" name="a7a97a116707da5eb8ba2e97825d41814"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a97a116707da5eb8ba2e97825d41814">&#9670;&#160;</a></span>CombinationMethod</h2>
 
@@ -738,6 +821,32 @@ template&lt;typename Iter, typename Getter&gt; </div>
 
 </div>
 </div>
+<a id="aa3942576f265f4ad4b6d408f52423620" name="aa3942576f265f4ad4b6d408f52423620"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3942576f265f4ad4b6d408f52423620">&#9670;&#160;</a></span>from_msg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> from_msg </td>
+          <td>(</td>
+          <td class="paramtype">const easynav_routes_maps_manager::msg::RoutesMap &amp;</td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert a wire <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> message back to the in-memory form. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">msg</td><td>Message to convert. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The equivalent <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a>. </dd></dl>
+
+</div>
+</div>
 <a id="afcd1e85e181f9a1b71aefb6d573a974b" name="afcd1e85e181f9a1b71aefb6d573a974b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afcd1e85e181f9a1b71aefb6d573a974b">&#9670;&#160;</a></span>get_home_dir()</h2>
 
@@ -752,6 +861,33 @@ template&lt;typename Iter, typename Getter&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa838b8b9383af3d24e142bcaecf7aca9" name="aa838b8b9383af3d24e142bcaecf7aca9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa838b8b9383af3d24e142bcaecf7aca9">&#9670;&#160;</a></span>load_routes_from_yaml()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> load_routes_from_yaml </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>yaml_file</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Load a <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> from a routes YAML file. </p>
+<p>Same format used by <a class="el" href="classeasynav_1_1RoutesMapsManager.html" title="A plugin-based map manager using the RoutesMap data structure.">RoutesMapsManager</a>'s own <span class="tt">map_path_file</span> parameter: a top-level <span class="tt">routes: [name, ...]</span> list plus one <span class="tt">start</span>/<span class="tt">end</span> pose-pair entry per name. Falls back to a single default segment ((0,0,0) -&gt; (1,0,0), id "route0") when the file is empty, missing, invalid, or has no "routes" key. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">yaml_file</td><td>Path to the routes YAML file (empty means "use the
+  default segment"). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The parsed (or default) <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a>. </dd></dl>
 
 </div>
 </div>
@@ -1043,6 +1179,44 @@ template&lt;typename Iter, typename Getter&gt; </div>
 
 </div>
 </div>
+<a id="a69b5059f2bc03a473b8f66bb61a16015" name="a69b5059f2bc03a473b8f66bb61a16015"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69b5059f2bc03a473b8f66bb61a16015">&#9670;&#160;</a></span>save_routes_to_yaml()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool save_routes_to_yaml </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>yaml_file</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>routes</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>error_message</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Persist a <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> to a routes YAML file, in the exact format <a class="el" href="#aa838b8b9383af3d24e142bcaecf7aca9" title="Load a RoutesMap from a routes YAML file.">load_routes_from_yaml()</a> reads back: a top-level <span class="tt">routes: [name, ...]</span> list plus one <span class="tt">start</span>/<span class="tt">end</span> pose-pair entry per name. </p>
+<p>A free function (rather than a <a class="el" href="classeasynav_1_1RoutesMapsManager.html" title="A plugin-based map manager using the RoutesMap data structure.">RoutesMapsManager</a> member) for the same reason <a class="el" href="#aa838b8b9383af3d24e142bcaecf7aca9" title="Load a RoutesMap from a routes YAML file.">load_routes_from_yaml()</a>/to_msg()/from_msg() are: so any other node wanting to persist edited routes to the same file format &ndash; <a class="el" href="classeasynav_1_1RoutesMapsManager.html" title="A plugin-based map manager using the RoutesMap data structure.">RoutesMapsManager</a>'s own <span class="tt">save_routes</span> service included &ndash; can do so without depending on <a class="el" href="classeasynav_1_1RoutesMapsManager.html" title="A plugin-based map manager using the RoutesMap data structure.">RoutesMapsManager</a> itself.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">yaml_file</td><td>Path to write to. </td></tr>
+    <tr><td class="paramname">routes</td><td>Routes to persist. Segment ids are used as the YAML keys; segments with an empty id are named "route&lt;index&gt;". </td></tr>
+    <tr><td class="paramname">error_message</td><td>Set to a human-readable reason on failure; untouched on success. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true on success, false if the file could not be opened for writing (see error_message). </dd></dl>
+
+</div>
+</div>
 <a id="a640e338d206263877fd036bb388006a6" name="a640e338d206263877fd036bb388006a6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a640e338d206263877fd036bb388006a6">&#9670;&#160;</a></span>saveMapToFile()</h2>
 
@@ -1071,6 +1245,32 @@ template&lt;typename Iter, typename Getter&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true or false </dd></dl>
+
+</div>
+</div>
+<a id="ab333b686eaa645a8f17890cdeea0f524" name="ab333b686eaa645a8f17890cdeea0f524"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab333b686eaa645a8f17890cdeea0f524">&#9670;&#160;</a></span>to_msg()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">easynav_routes_maps_manager::msg::RoutesMap to_msg </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>routes</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert an in-memory <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> to its wire message form. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">routes</td><td>Routes to convert. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The equivalent <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> message (edit_mode is not carried over &ndash; it is UI-editor-only state). </dd></dl>
 
 </div>
 </div>
@@ -1169,6 +1369,29 @@ template&lt;typename T&gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="a1296b5d8f82cf65d273b29f09c38da0d" name="a1296b5d8f82cf65d273b29f09c38da0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1296b5d8f82cf65d273b29f09c38da0d">&#9670;&#160;</a></span>kNoOrientationCovariance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double kNoOrientationCovariance = 1e5</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

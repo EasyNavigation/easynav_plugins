@@ -1,0 +1,19 @@
+<map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/CancelMissionRecovery.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/CancelMissionRecovery.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the CancelMissionRecovery plugin." alt="" coords="291,5,524,91"/>
+<area shape="rect" id="Node000002" href="$RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="312,139,503,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="410,91,410,123,405,123,405,91"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,250,66,276"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="312,187,199,211,79,245,75,247,73,241,77,240,198,206,311,182"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="90,250,144,276"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="312,195,236,218,156,245,155,246,153,241,155,240,234,212,311,190"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="168,243,319,283"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="361,198,292,237,289,232,359,193"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="343,243,472,283"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="410,195,410,227,405,227,405,195"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="496,243,658,283"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="458,193,529,232,527,237,455,198"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="681,250,883,276"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="504,190,720,243,719,249,503,195"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="908,250,1142,276"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="504,180,930,245,929,250,503,185"/>
+</map>

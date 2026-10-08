@@ -1,0 +1,7 @@
+<map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/CancelMissionRecovery.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/CancelMissionRecovery.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the CancelMissionRecovery plugin." alt="" coords="123,5,356,91"/>
+<area shape="rect" id="Node000002" href="$CancelMissionRecovery_8cpp.html" title="Implementation of the CancelMissionRecovery class." alt="" coords="5,139,239,225"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,104,161,140,158,137,190,101"/>
+<area shape="rect" id="Node000003" href="$cancel__mission__recovery__tests_8cpp.html" title=" " alt="" coords="263,146,453,217"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="289,101,329,144,325,148,285,104"/>
+</map>

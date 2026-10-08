@@ -1,0 +1,9 @@
+<map id="RouteSegment" name="RouteSegment">
+<area shape="rect" id="Node000001" title="Simple directed segment between two poses." alt="" coords="54,122,162,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,59,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="50,42,102,120,98,123,46,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="82,5,134,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="111,47,111,122,105,122,105,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="157,5,203,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="175,47,165,73,150,100,127,124,123,120,146,97,160,71,170,45"/>
+</map>

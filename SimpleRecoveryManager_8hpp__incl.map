@@ -1,0 +1,23 @@
+<map id="recoveries/easynav_simple_recovery/include/easynav_simple_recovery/SimpleRecoveryManager.hpp" name="recoveries/easynav_simple_recovery/include/easynav_simple_recovery/SimpleRecoveryManager.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the SimpleRecoveryManager class." alt="" coords="450,5,643,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,132,66,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="450,54,275,80,175,100,78,127,74,128,72,123,76,121,174,95,274,75,449,49"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="89,132,150,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="450,60,313,86,163,127,159,128,157,123,161,121,311,81,449,54"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="174,132,241,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="450,68,354,95,254,127,250,128,248,123,252,121,353,90,448,63"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="265,132,318,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="450,79,331,126,330,127,328,122,329,122,448,74"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="342,132,540,157"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="512,78,466,123,462,119,509,74"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="564,124,739,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="584,74,622,111,618,115,580,78"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="763,132,878,157"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="641,74,775,123,773,128,639,79"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="902,132,1012,157"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="644,61,891,121,901,124,900,129,890,127,643,67"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1036,124,1198,165"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="644,55,1022,121,1021,126,643,60"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1222,124,1431,165"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="643,50,894,80,1207,121,1206,126,894,85,643,55"/>
+</map>

@@ -1,12 +1,22 @@
 var searchData=
 [
-  ['testablecostmapplanner_0',['TestableCostmapPlanner',['../classTestableCostmapPlanner.html',1,'']]],
-  ['trajectorysample_1',['TrajectorySample',['../structeasynav_1_1TrajectorySample.html',1,'easynav']]],
-  ['type_5fhas_5fmember_5fx_2',['type_has_member_x',['../structBonxai_1_1type__has__member__x.html',1,'Bonxai']]],
-  ['type_5fhas_5fmember_5fx_3c_20t_2c_20std_3a_3avoid_5ft_3c_20decltype_28t_3a_3ax_29_3e_20_3e_3',['type_has_member_x&lt; T, std::void_t&lt; decltype(T::x)&gt; &gt;',['../structBonxai_1_1type__has__member__x_3_01T_00_01std_1_1void__t_3_01decltype_07T_1_1x_08_4_01_4.html',1,'Bonxai']]],
-  ['type_5fhas_5fmethod_5fx_4',['type_has_method_x',['../structBonxai_1_1type__has__method__x.html',1,'Bonxai']]],
-  ['type_5fhas_5fmethod_5fx_3c_20t_2c_20std_3a_3avoid_5ft_3c_20decltype_28t_28_29_2ex_28_29_29_3e_20_3e_5',['type_has_method_x&lt; T, std::void_t&lt; decltype(T().x())&gt; &gt;',['../structBonxai_1_1type__has__method__x_3_01T_00_01std_1_1void__t_3_01decltype_07T_07_08_8x_07_08_08_4_01_4.html',1,'Bonxai']]],
-  ['type_5fis_5fvector_6',['type_is_vector',['../structBonxai_1_1type__is__vector.html',1,'Bonxai']]],
-  ['type_5fis_5fvector_3c_20std_3a_3aarray_3c_20t_2c_203_20_3e_20_3e_7',['type_is_vector&lt; std::array&lt; T, 3 &gt; &gt;',['../structBonxai_1_1type__is__vector_3_01std_1_1array_3_01T_00_013_01_4_01_4.html',1,'Bonxai']]],
-  ['type_5fis_5fvector_3c_20std_3a_3avector_3c_20t_2c_20a_20_3e_20_3e_8',['type_is_vector&lt; std::vector&lt; T, A &gt; &gt;',['../structBonxai_1_1type__is__vector_3_01std_1_1vector_3_01T_00_01A_01_4_01_4.html',1,'Bonxai']]]
+  ['recoverybasestestcase_0',['RecoveryBasesTestCase',['../classRecoveryBasesTestCase.html',1,'']]],
+  ['recoveryevaluatorbase_1',['RecoveryEvaluatorBase',['../classeasynav__diagnostic__recovery_1_1RecoveryEvaluatorBase.html',1,'easynav_diagnostic_recovery']]],
+  ['recoverymanagerbase_2',['RecoveryManagerBase',['../classRecoveryManagerBase.html',1,'']]],
+  ['recoverymitigationbase_3',['RecoveryMitigationBase',['../classeasynav__diagnostic__recovery_1_1RecoveryMitigationBase.html',1,'easynav_diagnostic_recovery']]],
+  ['regulatedppfaultyplannertest_4',['RegulatedPpFaultyPlannerTest',['../classRegulatedPpFaultyPlannerTest.html',1,'']]],
+  ['regulatedpplegacyparamsfiletest_5',['RegulatedPpLegacyParamsFileTest',['../classRegulatedPpLegacyParamsFileTest.html',1,'']]],
+  ['regulatedpprobotlimitstest_6',['RegulatedPpRobotLimitsTest',['../classRegulatedPpRobotLimitsTest.html',1,'']]],
+  ['regulatedpurepursuitcontroller_7',['RegulatedPurePursuitController',['../classeasynav_1_1RegulatedPurePursuitController.html',1,'easynav']]],
+  ['regulatedpurepursuitcontrollerreconfiguretest_8',['RegulatedPurePursuitControllerReconfigureTest',['../classRegulatedPurePursuitControllerReconfigureTest.html',1,'']]],
+  ['rosgraphevaluator_9',['RosGraphEvaluator',['../classeasynav_1_1RosGraphEvaluator.html',1,'easynav']]],
+  ['rosgraphevaluatortestcase_10',['RosGraphEvaluatorTestCase',['../classRosGraphEvaluatorTestCase.html',1,'']]],
+  ['routescostmapfilter_11',['RoutesCostmapFilter',['../classeasynav_1_1RoutesCostmapFilter.html',1,'RoutesCostmapFilter'],['../classRoutesCostmapFilter.html',1,'RoutesCostmapFilter']]],
+  ['routescostmapfiltertest_12',['RoutesCostmapFilterTest',['../classRoutesCostmapFilterTest.html',1,'']]],
+  ['routesegment_13',['RouteSegment',['../structeasynav_1_1RouteSegment.html',1,'RouteSegment'],['../structRouteSegment.html',1,'RouteSegment']]],
+  ['routesfilter_14',['RoutesFilter',['../classeasynav_1_1RoutesFilter.html',1,'easynav']]],
+  ['routesmapsmanager_15',['RoutesMapsManager',['../classeasynav_1_1RoutesMapsManager.html',1,'RoutesMapsManager'],['../classRoutesMapsManager.html',1,'RoutesMapsManager']]],
+  ['routesmapsmanagerreconfiguretest_16',['RoutesMapsManagerReconfigureTest',['../classRoutesMapsManagerReconfigureTest.html',1,'']]],
+  ['routesmapsmanagertest_17',['RoutesMapsManagerTest',['../classRoutesMapsManagerTest.html',1,'']]],
+  ['rppobstacleareatest_18',['RppObstacleAreaTest',['../classRppObstacleAreaTest.html',1,'']]]
 ];

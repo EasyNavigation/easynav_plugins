@@ -1,0 +1,7 @@
+<map id="MapMatcher" name="MapMatcher">
+<area shape="rect" id="Node000001" title="Finds the poses of the map from which the last perception could have been obtained." alt="" coords="134,117,227,143"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,204,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,57,174,115,169,118,126,60"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="228,13,288,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,53,211,95,192,118,188,115,206,91,238,49"/>
+</map>

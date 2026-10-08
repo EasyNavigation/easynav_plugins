@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['friendamcllocalizer_0',['FriendAMCLLocalizer',['../classFriendAMCLLocalizer.html',1,'']]],
-  ['friendsimplemapsmanager_1',['FriendSimpleMapsManager',['../classFriendSimpleMapsManager.html',1,'']]]
+  ['emptyvoxel_0',['EmptyVoxel',['../structBonxai_1_1EmptyVoxel.html',1,'Bonxai']]]
 ];

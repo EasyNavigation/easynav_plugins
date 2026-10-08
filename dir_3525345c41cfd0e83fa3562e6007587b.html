@@ -106,14 +106,14 @@ Directory dependency graph for easynav_simple_controller:</div>
 <map name="adir__3525345c41cfd0e83fa3562e6007587b__dep" id="adir__3525345c41cfd0e83fa3562e6007587b__dep">
 <area shape="rect" href="dir_0b31d44e8fbaf83a2e690edf3f21aa7b.html" title="include" alt="" coords="256,137,318,162"/>
 <area shape="rect" href="dir_79474578ce659a97f37af6359cee0398.html" title="src" alt="" coords="235,63,274,89"/>
-<area shape="poly" href="dir_000085_000065.html" alt="" coords="262,88,277,121,273,123,258,90"/>
-<area shape="rect" href="dir_000085_000065.html" title="2" alt="" coords="278,109,285,124"/>
+<area shape="poly" href="dir_000127_000093.html" alt="" coords="262,88,277,121,273,123,258,90"/>
+<area shape="rect" href="dir_000127_000093.html" title="2" alt="" coords="278,109,285,124"/>
 <area shape="rect" href="dir_aeaeec51d03b26407b2a47447e0cea20.html" title="tests" alt="" coords="299,63,349,89"/>
-<area shape="poly" href="dir_000102_000065.html" alt="" coords="320,90,302,124,298,122,315,88"/>
-<area shape="rect" href="dir_000102_000065.html" title="2" alt="" coords="305,117,312,132"/>
+<area shape="poly" href="dir_000151_000093.html" alt="" coords="320,90,302,124,298,122,315,88"/>
+<area shape="rect" href="dir_000151_000093.html" title="2" alt="" coords="305,117,312,132"/>
 <area shape="rect" href="dir_bdd9a5d540de89e9fe90efdfc6973a4f.html" title="common" alt="" coords="382,137,453,162"/>
-<area shape="poly" href="dir_000102_000002.html" alt="" coords="341,87,391,125,388,129,338,91"/>
-<area shape="rect" href="dir_000102_000002.html" title="1" alt="" coords="389,111,396,126"/>
+<area shape="poly" href="dir_000151_000002.html" alt="" coords="341,87,391,125,388,129,338,91"/>
+<area shape="rect" href="dir_000151_000002.html" title="1" alt="" coords="389,111,396,126"/>
 <area shape="rect" href="dir_3525345c41cfd0e83fa3562e6007587b.html" alt="" coords="27,52,360,173"/>
 <area shape="rect" href="dir_87b6ed4386158a4d6cd0ecd5fb5bd5c2.html" title="controllers" alt="" coords="16,16,371,184"/>
 </map>
@@ -126,19 +126,19 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_aeaeec51d03b26407b2a47447e0cea20.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md39"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md58"></a>
 easynav_simple_controller</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md40"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md59"></a>
 Description</h1>
 <p>Simple path-following controller that uses PID controllers and a look-ahead reference pose to follow a planned path. It produces velocity commands (<span class="tt">cmd_vel</span>) based on the reference pose sampled at a look-ahead distance and limits linear/angular speeds and accelerations.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md41"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md60"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab <br  />
 </li>
 <li><b>Maintainers:</b> Francisco Martín Rico <a href="mai'+'lto:+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md42"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md61"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -152,7 +152,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyRight"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md43"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md62"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_simple_controller/SimpleController</span></li>
@@ -161,7 +161,7 @@ Plugin (pluginlib)</h1>
 <li><b>Library:</b> <span class="tt">easynav_simple_controller</span></li>
 <li><b>Description:</b> Path-following controller using PID (linear and angular) and a look-ahead strategy.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md44"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md63"></a>
 Parameters</h1>
 <p>All parameters are declared under the plugin namespace, i.e., <span class="tt">/&lt;node_fqn&gt;/easynav_simple_controller/SimpleController/...</span>.</p>
 <blockquote class="doxtable">
@@ -196,9 +196,9 @@ Parameters</h1>
 <blockquote class="doxtable">
 <p><b>Deprecated:</b> this plugin's former limit parameters (<span class="tt">max_linear_speed</span>, <span class="tt">max_angular_speed</span>, <span class="tt">max_linear_acc</span>, <span class="tt">max_angular_acc</span>, under the plugin's name) still apply, with a warning, where <span class="tt">controller_node.robot_limits.*</span> does not set that limit. They will stop working soon: move them to <span class="tt">robot_limits</span>. </p>
 </blockquote>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md45"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md64"></a>
 Interfaces (NavState, Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md46"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md65"></a>
 NavState</h2>
 <p>This controller uses the shared <span class="tt">NavState</span> bag provided by the <span class="tt">easynav_core</span> framework. The following keys are used at runtime by <span class="tt">SimpleController</span>:</p>
 <table class="markdownTable">
@@ -211,13 +211,13 @@ NavState</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">cmd_vel</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs::msg::TwistStamped</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Output velocity command. Header.frame_id is set to <span class="tt">path.header.frame_id</span> when available and stamp to the controller node clock.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md47"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md66"></a>
 Topics / Services</h2>
 <p>The controller itself does not create ROS publishers/subscribers or service servers. It interacts via the <span class="tt">NavState</span> abstraction; how <span class="tt">NavState</span> is exposed (topics or other IPC mechanisms) depends on the integrating node.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md48"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md67"></a>
 TF Frames</h1>
 <p>This controller reads pose from <span class="tt">nav_msgs/Odometry</span> (NavState key <span class="tt">robot_pose</span>). TF is not directly used in this plugin.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md49"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md68"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

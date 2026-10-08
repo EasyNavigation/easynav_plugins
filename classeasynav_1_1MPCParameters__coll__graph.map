@@ -1,0 +1,9 @@
+<map id="MPCParameters" name="MPCParameters">
+<area shape="rect" id="Node000001" title="A MPC parameters class." alt="" coords="81,122,198,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,79,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,42,104,97,128,120,124,124,100,100,57,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="103,5,176,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="142,47,142,122,137,122,137,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="201,5,398,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="272,42,158,124,154,120,269,38"/>
+</map>

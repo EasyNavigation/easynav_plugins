@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['progresscallback_0',['ProgressCallback',['../namespaceeasynav_1_1navmap.html#a38a5ef5d8850a2e3d4ec867c65a79d63',1,'easynav::navmap']]]
+  ['leafgrid_0',['LeafGrid',['../classBonxai_1_1VoxelGrid.html#a8522ca4bc99f36eab121f7c90e2511ac',1,'Bonxai::VoxelGrid']]]
 ];

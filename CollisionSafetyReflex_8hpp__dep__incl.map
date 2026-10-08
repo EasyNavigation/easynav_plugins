@@ -1,0 +1,7 @@
+<map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/reflexes/CollisionSafetyReflex.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/reflexes/CollisionSafetyReflex.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the CollisionSafetyReflex plugin." alt="" coords="111,5,326,91"/>
+<area shape="rect" id="Node000002" href="$CollisionSafetyReflex_8cpp.html" title="Implementation of the CollisionSafetyReflex plugin." alt="" coords="5,139,221,225"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,105,149,140,145,137,173,101"/>
+<area shape="rect" id="Node000003" href="$collision__safety__reflex__tests_8cpp.html" title=" " alt="" coords="245,146,405,217"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="264,101,299,144,295,148,260,104"/>
+</map>

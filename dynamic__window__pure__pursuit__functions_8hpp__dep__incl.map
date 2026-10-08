@@ -1,0 +1,7 @@
+<map id="controllers/easynav_regulated_pp_controller/include/easynav_regulated_pp_controller/dynamic_window_pure_pursuit_functions.hpp" name="controllers/easynav_regulated_pp_controller/include/easynav_regulated_pp_controller/dynamic_window_pure_pursuit_functions.hpp">
+<area shape="rect" id="Node000001" title="Dynamic Window Pure Pursuit (DWPP) helper functions, ported from nav2_regulated_pure_pursuit_controll..." alt="" coords="136,5,342,91"/>
+<area shape="rect" id="Node000002" href="$RegulatedPurePursuitController_8cpp.html" title="Implementation of the RegulatedPurePursuitController class." alt="" coords="5,139,238,225"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,104,161,140,157,137,189,101"/>
+<area shape="rect" id="Node000003" href="$regulated__pp__controller__tests_8cpp.html" title=" " alt="" coords="261,146,454,217"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="289,101,328,144,324,148,285,104"/>
+</map>

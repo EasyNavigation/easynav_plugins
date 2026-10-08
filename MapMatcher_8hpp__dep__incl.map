@@ -1,0 +1,19 @@
+<map id="localizers/easynav_mhamcl_localizer/include/easynav_mhamcl_localizer/MapMatcher.hpp" name="localizers/easynav_mhamcl_localizer/include/easynav_mhamcl_localizer/MapMatcher.hpp">
+<area shape="rect" id="Node000001" title="Declaration of MapMatcher, the cascade brute&#45;force map matching of MH&#45;AMCL." alt="" coords="607,5,787,76"/>
+<area shape="rect" id="Node000002" href="$MHAMCLLocalizer_8hpp.html" title="Declaration of the MHAMCLLocalizer method." alt="" coords="403,124,583,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="624,86,555,126,552,121,622,82"/>
+<area shape="rect" id="Node000008" href="$MapMatcher_8cpp.html" title="Implementation of MapMatcher." alt="" coords="607,124,787,195"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="700,91,700,124,694,124,694,91"/>
+<area shape="rect" id="Node000009" href="$mhamcl__algorithm__tests_8cpp.html" title=" " alt="" coords="810,132,1002,187"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="774,81,859,129,856,133,771,86"/>
+<area shape="rect" id="Node000003" href="$MHAMCLLocalizer_8cpp.html" title="Implementation of the MHAMCLLocalizer class using Costmap2D." alt="" coords="5,243,186,313"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="389,191,198,245,187,249,185,243,196,240,387,186"/>
+<area shape="rect" id="Node000004" href="$mhamcl__localizer__last__known__pose__tests_8cpp.html" title="After a reconfiguration, the localizer starts from the pose the previous one left in NavState (&quot;robot..." alt="" coords="210,243,371,313"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="421,205,352,244,349,240,418,200"/>
+<area shape="rect" id="Node000005" href="$mhamcl__localizer__min__height__tests_8cpp.html" title="MHAMCLLocalizer &quot;min_height&quot;: points below it are floor hits, not used to correct." alt="" coords="395,243,590,313"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="496,210,496,242,490,242,490,210"/>
+<area shape="rect" id="Node000006" href="$mhamcl__localizer__reconfigure__tests_8cpp.html" title="Regression test: initialize() may run several times on the same node (cleanup/configure)." alt="" coords="615,243,810,313"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="573,200,649,240,646,244,570,205"/>
+<area shape="rect" id="Node000007" href="$mhamcl__localizer__tests_8cpp.html" title=" " alt="" coords="835,250,1020,306"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="598,193,712,217,823,240,847,247,846,252,822,245,711,222,597,198"/>
+</map>

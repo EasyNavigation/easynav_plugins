@@ -1,0 +1,23 @@
+<map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/AdvanceRecovery.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/mitigations/AdvanceRecovery.hpp">
+<area shape="rect" id="Node000001" title="Declaration of the AdvanceRecovery plugin." alt="" coords="94,5,372,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="88,139,154,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,78,146,130,142,126,196,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="178,139,288,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,76,236,123,230,123,230,76"/>
+<area shape="rect" id="Node000004" href="$RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="312,124,503,180"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="290,74,353,113,350,118,287,79"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,235,66,261"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="312,179,300,182,188,203,140,213,79,230,75,232,73,226,77,225,139,208,187,198,299,177,311,174"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="90,235,144,261"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="312,180,236,203,156,230,155,231,153,226,155,225,234,197,311,175"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="168,228,319,268"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="361,183,292,222,289,217,359,178"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="343,228,472,268"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="410,180,410,212,405,212,405,180"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="496,228,658,268"/>
+<area shape="poly" id="edge8_Node000004_Node000009" title=" " alt="" coords="458,178,529,217,527,222,455,183"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="681,235,883,261"/>
+<area shape="poly" id="edge9_Node000004_Node000010" title=" " alt="" coords="504,175,720,228,719,234,503,180"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="908,235,1142,261"/>
+<area shape="poly" id="edge10_Node000004_Node000011" title=" " alt="" coords="504,165,930,230,929,235,503,170"/>
+</map>
