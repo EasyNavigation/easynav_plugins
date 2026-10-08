@@ -8,11 +8,9 @@ endif()
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake_modules)
 
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(easynav_common REQUIRED)
 find_package(easynav_core REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(rclcpp_lifecycle REQUIRED)
-find_package(nav_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
@@ -24,10 +22,10 @@ find_package(PCL REQUIRED COMPONENTS common io filters)
 find_package(pcl_conversions REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
 find_package(yaets REQUIRED)
 find_package(GRAPHICSMAGICKCPP REQUIRED)
-find_package(Eigen3 REQUIRED NO_MODULE)
 
 add_library(${PROJECT_NAME} SHARED
   src/easynav_octomap_maps_manager/OctomapMapsManager.cpp
@@ -44,16 +42,16 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   ${PCL_INCLUDE_DIRS}
   ${OCTOMAP_INCLUDE_DIRS}
 )
+# pcl_conversions exports a CMake target only since 2.8 (Kilted); older ones, variables
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${pcl_conversions_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   easynav_core::easynav_core
-  rclcpp::rclcpp
-  rclcpp_lifecycle::rclcpp_lifecycle
   tf2::tf2
   tf2_ros::tf2_ros
   pluginlib::pluginlib
   ament_index_cpp::ament_index_cpp
-  Eigen3::Eigen
+  rclcpp::rclcpp
   ${sensor_msgs_TARGETS}
   ${tf2_geometry_msgs_TARGETS}
   ${octomap_msgs_TARGETS}
@@ -63,6 +61,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   yaml-cpp
   ${GRAPHICSMAGICKCPP_LIBRARIES}
   ${PCL_LIBRARIES}
+  ${pcl_conversions_TARGETS}
+  ${pcl_conversions_LIBRARIES}
   ${OCTOMAP_LIBRARIES}
 )
 
@@ -100,20 +100,19 @@ ament_export_dependencies(
   easynav_common
   easynav_core
   rclcpp
-  rclcpp_lifecycle
   tf2
   tf2_ros
+  tf2_geometry_msgs
   pluginlib
   nav_msgs
+  sensor_msgs
   ament_index_cpp
   octomap
-  octomap_ros
   octomap_msgs
   std_srvs
   yaets
   yaml_cpp_vendor
   pcl_conversions
   PCL
-  Eigen3
 )
 ament_package()

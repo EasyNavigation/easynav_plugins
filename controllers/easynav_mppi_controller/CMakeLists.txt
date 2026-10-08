@@ -11,9 +11,10 @@ find_package(easynav_core REQUIRED)
 find_package(easynav_system REQUIRED)
 find_package(easynav_sensors REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(tf2 REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
-find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
@@ -34,8 +35,9 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_core::easynav_core
   easynav_system::easynav_system
   easynav_sensors::easynav_sensors
-  tf2_ros::tf2_ros
+  rclcpp::rclcpp
   tf2::tf2
+  tf2_ros::tf2_ros
   tf2_geometry_msgs::tf2_geometry_msgs
   pluginlib::pluginlib
   ${geometry_msgs_TARGETS}
@@ -64,7 +66,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 
   find_package(ament_cmake_gtest REQUIRED)
-  # add_subdirectory(tests)
+  add_subdirectory(tests)
 endif()
 
 ament_export_include_directories("include/${PROJECT_NAME}")
@@ -77,14 +79,17 @@ pluginlib_export_plugin_description_file(easynav_core easynav_mppi_controller_pl
 ament_export_dependencies(
   easynav_common
   easynav_core
+  easynav_system
   easynav_sensors
   pluginlib
-  tf2_ros
+  rclcpp
   tf2
+  tf2_ros
   tf2_geometry_msgs
   geometry_msgs
   nav_msgs
   visualization_msgs
+  PCL
 )
 
 ament_package()

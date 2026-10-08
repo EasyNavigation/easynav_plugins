@@ -17,6 +17,7 @@
 #include <unordered_map>
 #include <cmath>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_simple_planner/SimplePlanner.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
@@ -89,13 +90,14 @@ SimplePlanner::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".robot_radius", 0.3);
-  node->declare_parameter<double>(plugin_name + ".clearance_distance", 0.2);
-  node->get_parameter<double>(plugin_name + ".robot_radius", robot_radius_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".clearance_distance", 0.2);
+  // The robot's: "system_node.robot_geometry" (the planner's own is deprecated).
+  robot_radius_ = get_robot_geometry({"robot_radius", "", ""}).radius;
   node->get_parameter<double>(plugin_name + ".clearance_distance", clearance_distance_);
 
   path_pub_ = get_node()->create_publisher<nav_msgs::msg::Path>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/path", 10);
 }
 
 void
@@ -109,24 +111,19 @@ SimplePlanner::update(NavState & nav_state)
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
 
   if (goals.goals.empty()) {
-    nav_state.set("path", current_path_);
+    clear_path(nav_state);
     return;
   }
 
   if (!nav_state.has("map")) {
     RCLCPP_WARN(get_node()->get_logger(), "SimplePlanner::update map map not found");
+    clear_path(nav_state);
     return;
   }
 
-  SimpleMap map_typed;
-  if (nav_state.has("map")) {
-    map_typed = nav_state.get<SimpleMap>("map");
-  } else {
-    RCLCPP_WARN(get_node()->get_logger(), "There is yet no a map");
-    return;
-  }
+  SimpleMap map_typed = nav_state.get<SimpleMap>("map");
 
-  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -143,12 +140,14 @@ SimplePlanner::update(NavState & nav_state)
   if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(get_node()->get_logger(),
       "SimplePlanner::update goals frame is not map (%s)", goals.header.frame_id.c_str());
+    clear_path(nav_state);
     return;
   }
 
   if (!downsampled_map->check_bounds_metric(goal.position.x, goal.position.y)) {
     RCLCPP_WARN(get_node()->get_logger(),
       "SimplePlanner::update goal (%lf, %lf) outside the map", goal.position.x, goal.position.y);
+    clear_path(nav_state);
     return;
   }
 
@@ -172,9 +171,24 @@ SimplePlanner::update(NavState & nav_state)
 
     if (path_pub_->get_subscription_count() > 0) {
       path_pub_->publish(current_path_);
+      path_published_ = true;
     }
+    nav_state.set("path", current_path_);
+  } else {
+    // No route to the goal.
+    clear_path(nav_state);
   }
+}
 
+void
+SimplePlanner::clear_path(NavState & nav_state)
+{
+  current_path_.poses.clear();
+  if (path_published_ && path_pub_->get_subscription_count() > 0) {
+    current_path_.header.stamp = get_node()->now();
+    path_pub_->publish(current_path_);
+  }
+  path_published_ = false;
   nav_state.set("path", current_path_);
 }
 
@@ -279,7 +293,10 @@ SimplePlanner::a_star_path(
   std::reverse(path.begin(), path.end());
 
   if (path.empty()) {
-    path.push_back(goal);
+    if (sx != gx || sy != gy) {
+      return {};  // Goal never reached: unreachable.
+    }
+    path.push_back(goal);  // Start and goal are the same cell.
   }
 
   return path;

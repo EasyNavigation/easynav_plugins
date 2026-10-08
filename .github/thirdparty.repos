@@ -2,12 +2,20 @@ repositories:
   ThirdParty/EasyNavigation:
     type: git
     url: https://github.com/EasyNavigation/EasyNavigation.git
-    version: kilted
+    version: rolling
   ThirdParty/yaets:
     type: git
     url: https://github.com/fmrico/yaets.git
-    version: kilted
+    version: rolling
   ThirdParty/NavMap:
     type: git
     url: https://github.com/EasyNavigation/NavMap.git
-    version: kilted
+    version: rolling
+  # robot_localization has no released .deb for rolling yet (buildfarm
+  # job is failing despite the rosdistro entry), so it is built from
+  # source here. rosdep --ignore-src will skip it once it's in src/.
+  # Remove this entry once ros-rolling-robot-localization is installable again.
+  ThirdParty/robot_localization:
+    type: git
+    url: https://github.com/cra-ros-pkg/robot_localization.git
+    version: rolling-devel

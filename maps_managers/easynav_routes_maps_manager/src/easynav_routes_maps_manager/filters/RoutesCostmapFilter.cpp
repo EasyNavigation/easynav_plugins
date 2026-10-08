@@ -14,6 +14,7 @@
 // limitations under the License.
 
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_routes_maps_manager/filters/RoutesCostmapFilter.hpp"
 
 #include <algorithm>
@@ -41,16 +42,12 @@ RoutesCostmapFilter::initialize(
   node_ = node;
   plugin_ns_ = plugin_ns;
   // Parameter for minimum cost to apply outside routes
-  if (!node->has_parameter(plugin_ns_ + ".min_cost")) {
-    node->declare_parameter(plugin_ns_ + ".min_cost", min_cost_);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_ns_ + ".min_cost", min_cost_);
   node->get_parameter(plugin_ns_ + ".min_cost", min_cost_);
 
   // Width of the route corridor around the segment (meters).
   // If set to 0.0 (default), a width of one cell is used.
-  if (!node->has_parameter(plugin_ns_ + ".route_width")) {
-    node->declare_parameter(plugin_ns_ + ".route_width", route_width_);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_ns_ + ".route_width", route_width_);
   node->get_parameter(plugin_ns_ + ".route_width", route_width_);
 
   // Publisher for the routes-influenced occupancy grid (for debugging/visualization)
@@ -62,7 +59,8 @@ RoutesCostmapFilter::initialize(
     (dot_pos == std::string::npos) ? plugin_ns_ : plugin_ns_.substr(0, dot_pos);
 
   routes_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/routes_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/routes_map",
     rclcpp::QoS(1).reliable());
 }
 

@@ -29,7 +29,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 
 | Name | Type | Default | Description |
 |---|---|---:|---|
-| `<plugin>.robot_radius` | `double` | `0.3` | Robot inscribed radius (m) used to validate traversability. |
+| `<plugin>.robot_radius` | `double` | — | **Deprecated**: the robot's `system_node.robot_geometry.radius`, used unless only this one is configured (with a warning). |
 | `<plugin>.clearance_distance` | `double` | `0.2` | Extra clearance distance (m) to keep away from obstacles. |
 
 

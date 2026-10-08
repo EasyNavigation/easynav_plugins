@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 project(easynav_fusion_localizer)
 
+# robot_localization finds Boost; use BoostConfig.cmake instead of the removed FindBoost
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW)
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -13,19 +18,19 @@ find_package(easynav_common REQUIRED)
 find_package(easynav_localizer REQUIRED)
 find_package(easynav_sensors REQUIRED)
 find_package(pluginlib REQUIRED)
-find_package(geographic_msgs REQUIRED)
 find_package(robot_localization REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(angles REQUIRED)
 find_package(diagnostic_msgs REQUIRED)
 find_package(diagnostic_updater REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
-find_package(sensor_msgs REQUIRED)
 find_package(tf2 REQUIRED)
-find_package(tf2_geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
+find_package(yaets REQUIRED)
 
 # Geographiclib installs FindGeographicLib.cmake to this non-standard location
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/cmake/geographiclib/")
@@ -42,17 +47,19 @@ set(dependencies
   easynav_localizer
   easynav_sensors
   pluginlib
-  geographic_msgs
   robot_localization
+  std_srvs
+  angles
   diagnostic_msgs
   diagnostic_updater
+  sensor_msgs
   geometry_msgs
   nav_msgs
-  sensor_msgs
   tf2
-  tf2_geometry_msgs
   tf2_ros
-  eigen
+  tf2_geometry_msgs
+  Eigen3
+  yaets
 )
 
 add_library(fusion_localizer SHARED
@@ -71,21 +78,22 @@ target_link_libraries(fusion_localizer
   easynav_localizer::easynav_localizer
   easynav_sensors::easynav_sensors
   pluginlib::pluginlib
-  ${geographic_msgs_TARGETS}
-  GeographicLib
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+  tf2::tf2
+  tf2_ros::tf2_ros
+  tf2_geometry_msgs::tf2_geometry_msgs
+  Eigen3::Eigen
+  diagnostic_updater::diagnostic_updater
+  ${diagnostic_msgs_TARGETS}
+  ${sensor_msgs_TARGETS}
+  ${geometry_msgs_TARGETS}
+  ${nav_msgs_TARGETS}
+  ${std_srvs_TARGETS}
   ${GeographicLib_LIBRARIES}
   ${robot_localization_LIBRARIES}
   angles::angles
   yaets::yaets
-  diagnostic_updater::diagnostic_updater
-  ${diagnostic_msgs_TARGETS}
-  ${geometry_msgs_TARGETS}
-  ${nav_msgs_TARGETS}
-  ${sensor_msgs_TARGETS}
-  tf2::tf2
-  tf2_geometry_msgs::tf2_geometry_msgs
-  tf2_ros::tf2_ros
-  Eigen3::Eigen
 )
 
 target_compile_definitions(fusion_localizer PUBLIC EASYNAV_DEBUG_WITH_YAETS)

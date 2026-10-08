@@ -15,6 +15,7 @@
 
 #include <string>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_bonxai_maps_manager/BonxaiMapsManager.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
@@ -27,7 +28,7 @@
 #include "pcl/point_types.h"
 #include "pcl/point_cloud.h"
 
-#include "ament_index_cpp/get_package_share_directory.hpp"
+#include "easynav_common/PackageShare.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
 
 namespace easynav_bonxai
@@ -55,10 +56,10 @@ BonxaiMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, bonxai_path_file, occmap_path_file;
-  node->declare_parameter(plugin_name + ".package", package_name);
-  node->declare_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
-  node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
-  node->declare_parameter(plugin_name + ".resolution", resolution_);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".bonxai_path_file", bonxai_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".occmap_path_file", occmap_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".resolution", resolution_);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".bonxai_path_file", bonxai_path_file);
@@ -66,14 +67,15 @@ BonxaiMapsManager::on_initialize()
   node->get_parameter(plugin_name + ".resolution", resolution_);
 
   bonxai_pub_ = node->create_publisher<sensor_msgs::msg::PointCloud2>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   map_path_ = "/tmp/bonxai_map.pcd";
 
   if (!package_name.empty() && !bonxai_path_file.empty()) {
     try {
-      const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
+      const std::string pkgpath = easynav::get_package_share_path(package_name);
       map_path_ = pkgpath + std::string("/") + bonxai_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
@@ -96,7 +98,13 @@ BonxaiMapsManager::on_initialize()
       }
 
       bonxai_msg_.data.clear();
-      pcl::toROSMsg(pcl_out, bonxai_msg_);
+      // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
+      if (!pcl_out.empty()) {
+        pcl::toROSMsg(pcl_out, bonxai_msg_);
+      } else {
+        bonxai_msg_.width = 0;
+        bonxai_msg_.row_step = 0;
+      }
 
       publish_map();
     } else {
@@ -106,7 +114,7 @@ BonxaiMapsManager::on_initialize()
 
   if (!package_name.empty() && !occmap_path_file.empty()) {
     try {
-      const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
+      const std::string pkgpath = easynav::get_package_share_path(package_name);
       map_path_ = pkgpath + std::string("/") + occmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
@@ -123,7 +131,8 @@ BonxaiMapsManager::on_initialize()
   }
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/incoming_pc2_map",
     rclcpp::QoS(100),
     [this](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
       update_from_pc2(*msg);
@@ -131,7 +140,8 @@ BonxaiMapsManager::on_initialize()
     });
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -140,7 +150,8 @@ BonxaiMapsManager::on_initialize()
     });
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)
@@ -210,7 +221,13 @@ BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
   }
 
   bonxai_msg_.data.clear();
-  pcl::toROSMsg(pcl_out, bonxai_msg_);
+  // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
+  if (!pcl_out.empty()) {
+    pcl::toROSMsg(pcl_out, bonxai_msg_);
+  } else {
+    bonxai_msg_.width = 0;
+    bonxai_msg_.row_step = 0;
+  }
 }
 
 void
@@ -272,7 +289,13 @@ BonxaiMapsManager::update_from_occ(const nav_msgs::msg::OccupancyGrid & occ)
   }
 
   bonxai_msg_.data.clear();
-  pcl::toROSMsg(pcl_out, bonxai_msg_);
+  // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
+  if (!pcl_out.empty()) {
+    pcl::toROSMsg(pcl_out, bonxai_msg_);
+  } else {
+    bonxai_msg_.width = 0;
+    bonxai_msg_.row_step = 0;
+  }
 }
 
 void

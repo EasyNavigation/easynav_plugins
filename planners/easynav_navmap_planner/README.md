@@ -6,7 +6,9 @@
 **A\*** path planner operating over a `NavMap` triangular mesh.  
 The planner computes the **minimum-cost path** between the robot and the goal, taking into account both the geometric distance between triangles and the cost values stored in a selected NavMap layer (typically `"inflated_obstacles"`).
 
-Instead of simply avoiding non-free NavCels, the planner integrates their cost values (0–255) into the path evaluation. Cells marked as `LETHAL_OBSTACLE` or `NO_INFORMATION` are considered non-traversable, while inflated or inscribed cells are allowed but penalized proportionally to their cost.  
+Instead of simply avoiding non-free NavCels, the planner integrates their cost values (0–255) into the path evaluation. Cells marked as `LETHAL_OBSTACLE`, `NO_INFORMATION` or inscribed (`INSCRIBED_INFLATED_OBSTACLE`) are non-traversable (inscribed ones only near the start, so a robot inside that band can leave it), while inflated cells are allowed but penalized proportionally to their cost.  
+
+The search moves between NavCels that share a vertex, not only an edge, so no direction is favored by how the mesh is split; a move through a shared vertex is only taken when every NavCel around that vertex is traversable, so the path never slips between two obstacles that touch at a corner. Then the path is shortened by line of sight: from each waypoint it goes straight to the farthest one whose segment crosses only traversable NavCels no costlier than the waypoints it replaces, and the result is resampled at the NavCel spacing on the surface. The path ends exactly at the goal.  
 
 This enables smoother and safer trajectories that still respect proximity constraints imposed by obstacle inflation.
 
@@ -51,9 +53,10 @@ All parameters are declared under the plugin namespace, i.e.
 | Name | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.cost_factor` | `double` | `2.0` | Multiplicative weight for geometric distance; values > 1 increase the relative importance of distance. |
+| `<plugin>.cost_weight` | `double` | `5.0` | Weight of the cell cost (inflation) against the path length; higher values keep paths farther from obstacles. |
 | `<plugin>.continuous_replan` | `bool` | `true` | If true, recomputes the path whenever `NavState` updates; if false, plans once per goal. |
 
-**Note:** The planner internally uses hardcoded values for `layer_name` (prefers `"inflated_obstacles"`, fallback to `"obstacles"`), `inflation_penalty` (value used in cost calculation), `cost_axial`, and `cost_diagonal`. These are not runtime-configurable parameters.
+**Note:** The planner internally uses hardcoded values for `layer_name` (prefers `"inflated_obstacles"`, fallback to `"obstacles"`), `cost_axial`, and `cost_diagonal`. These are not runtime-configurable parameters.
 
 ## Interfaces (Topics and Services)
 

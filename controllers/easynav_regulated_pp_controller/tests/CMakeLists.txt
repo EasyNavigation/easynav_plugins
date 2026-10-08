@@ -1,4 +1,43 @@
+find_package(easynav_controller REQUIRED)
 ament_add_gtest(regulated_pp_controller_tests regulated_pp_controller_tests.cpp)
 target_link_libraries(regulated_pp_controller_tests
   ${PROJECT_NAME}
+)
+
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
+
+ament_add_gtest(regulated_pp_controller_reconfigure_tests
+  regulated_pp_controller_reconfigure_tests.cpp)
+target_link_libraries(regulated_pp_controller_reconfigure_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+)
+
+ament_add_gtest(regulated_pp_controller_robot_limits_tests regulated_pp_controller_robot_limits_tests.cpp)
+target_link_libraries(regulated_pp_controller_robot_limits_tests
+  ${PROJECT_NAME}
+  easynav_controller::easynav_controller
+)
+
+ament_add_gtest(regulated_pp_controller_legacy_params_file_tests regulated_pp_controller_legacy_params_file_tests.cpp)
+target_link_libraries(regulated_pp_controller_legacy_params_file_tests easynav_controller::easynav_controller)
+target_compile_definitions(regulated_pp_controller_legacy_params_file_tests
+  PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
+
+find_package(easynav_sensors REQUIRED)
+ament_add_gtest(regulated_pp_controller_obstacle_area_tests
+  regulated_pp_controller_obstacle_area_tests.cpp)
+target_link_libraries(regulated_pp_controller_obstacle_area_tests
+  ${PROJECT_NAME}
+  easynav_sensors::easynav_sensors
+)
+
+find_package(easynav_planner REQUIRED)
+ament_add_gtest(regulated_pp_faulty_planner_tests regulated_pp_faulty_planner_tests.cpp)
+target_link_libraries(regulated_pp_faulty_planner_tests
+  ${PROJECT_NAME}
+  easynav_controller::easynav_controller
+  easynav_planner::faulty_planner
 )

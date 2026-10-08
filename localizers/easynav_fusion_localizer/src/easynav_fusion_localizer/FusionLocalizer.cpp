@@ -1,3 +1,4 @@
+#include "easynav_common/Parameters.hpp"
 #include "easynav_fusion_localizer/FusionLocalizer.hpp"
 
 #include "easynav_localizer/LocalizerNode.hpp"
@@ -33,6 +34,10 @@ void FusionLocalizer::on_initialize()
     auto localizer_node = std::dynamic_pointer_cast<LocalizerNode>(node);
 
     const std::string & plugin_name = this->get_plugin_name();
+    easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".initial_pose.use_last_known",
+        use_last_known_pose_);
+    node->get_parameter(plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
+
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
     RCLCPP_INFO(localizer_node->get_logger(), "Using tf_prefix: '%s'", tf_info.tf_prefix.c_str());
@@ -92,17 +97,17 @@ void FusionLocalizer::on_initialize()
 
     // GPS-related setup only needed when global filter is active
     if (has_global_filter_) {
-      localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
+      easynav::declare_parameter_if_absent(*localizer_node, plugin_name + ".latitude_origin",
+          double(0.0));
+      easynav::declare_parameter_if_absent(*localizer_node, plugin_name + ".longitude_origin",
+          double(0.0));
+      easynav::declare_parameter_if_absent(*localizer_node, plugin_name + ".altitude_origin",
+          double(0.0));
+      easynav::declare_parameter_if_absent(*localizer_node, plugin_name + ".navsatfix_topic",
+          std::string("gps/filtered"));
       localizer_node->get_parameter(plugin_name + ".latitude_origin", latitude_origin_);
-
-      localizer_node->declare_parameter(plugin_name + ".longitude_origin", double(0.0));
       localizer_node->get_parameter(plugin_name + ".longitude_origin", longitude_origin_);
-
-      localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0));
       localizer_node->get_parameter(plugin_name + ".altitude_origin", altitude_origin_);
-
-      localizer_node->declare_parameter(
-        plugin_name + ".navsatfix_topic", std::string("gps/filtered"));
       localizer_node->get_parameter(plugin_name + ".navsatfix_topic", navsatfix_topic_);
       navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
         navsatfix_topic_, rclcpp::QoS(10));
@@ -128,9 +133,19 @@ void FusionLocalizer::on_initialize()
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
 }
 
+void FusionLocalizer::on_last_known_pose(
+  const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  // Only the global filter estimates the pose in the map frame ("robot_pose").
+  if (use_last_known_pose_ && has_global_filter_) {
+    pending_last_pose_ = pose;
+  }
+}
+
 void FusionLocalizer::init_pose_callback(
   const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
 {
+  pending_last_pose_.reset();  // A newer pose supersedes the last known one.
   if (has_global_filter_) {
     nav_msgs::msg::Odometry global_odom;
     // Get current position to calculate the offset
@@ -202,6 +217,11 @@ void FusionLocalizer::update_rt(NavState & nav_state)
     ukf_global_->periodicUpdate();
 
     nav_msgs::msg::Odometry global_odom;
+    if (pending_last_pose_ && ukf_global_->getFilteredOdometryMessage(&global_odom)) {
+      init_pose_callback(
+        std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(*pending_last_pose_));
+      pending_last_pose_.reset();
+    }
     if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
       nav_state.set("robot_pose", global_odom);
       navsat_pub_->publish(odom_to_navsatfix(global_odom));

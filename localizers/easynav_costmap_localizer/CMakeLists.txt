@@ -10,13 +10,16 @@ find_package(easynav_common REQUIRED)
 find_package(easynav_costmap_common REQUIRED)
 find_package(easynav_localizer REQUIRED)
 find_package(easynav_core REQUIRED)
+find_package(easynav_diagnostic_recovery REQUIRED)
 find_package(easynav_sensors REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(diagnostic_msgs REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 
 
@@ -35,10 +38,41 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   tf2::tf2
   tf2_ros::tf2_ros
   pluginlib::pluginlib
+  rclcpp::rclcpp
   Eigen3::Eigen
   ${tf2_geometry_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
+)
+
+add_library(amcl_convergence_evaluator SHARED
+  src/easynav_costmap_localizer/AmclConvergenceEvaluator.cpp
+)
+target_include_directories(amcl_convergence_evaluator PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+)
+target_link_libraries(amcl_convergence_evaluator PUBLIC
+  easynav_core::easynav_core
+  easynav_diagnostic_recovery::easynav_diagnostic_recovery
+  pluginlib::pluginlib
+  ${diagnostic_msgs_TARGETS}
+)
+
+add_library(amcl_relocalize_mitigation SHARED
+  src/easynav_costmap_localizer/AmclRelocalizeMitigation.cpp
+)
+target_include_directories(amcl_relocalize_mitigation PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+)
+target_link_libraries(amcl_relocalize_mitigation PUBLIC
+  easynav_common::easynav_common
+  easynav_core::easynav_core
+  easynav_diagnostic_recovery::easynav_diagnostic_recovery
+  pluginlib::pluginlib
+  ${diagnostic_msgs_TARGETS}
+  ${geometry_msgs_TARGETS}
 )
 
 install(
@@ -48,6 +82,8 @@ install(
 
 install(TARGETS
   ${PROJECT_NAME}
+  amcl_convergence_evaluator
+  amcl_relocalize_mitigation
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
@@ -65,23 +101,34 @@ if(BUILD_TESTING)
 endif()
 
 ament_export_include_directories("include/${PROJECT_NAME}")
-ament_export_libraries(${PROJECT_NAME})
+ament_export_libraries(
+  ${PROJECT_NAME}
+  amcl_convergence_evaluator
+  amcl_relocalize_mitigation
+)
 ament_export_targets(export_${PROJECT_NAME})
 
 # Register the planning plugins
 pluginlib_export_plugin_description_file(easynav_core easynav_costmap_localizer_plugins.xml)
+# AMCL-specific recovery for the diagnostic recovery system (easynav_diagnostic_recovery)
+pluginlib_export_plugin_description_file(
+  easynav_diagnostic_recovery easynav_costmap_localizer_recovery_plugins.xml)
 
 ament_export_dependencies(
   easynav_common
   easynav_costmap_common
   easynav_localizer
   easynav_core
+  easynav_diagnostic_recovery
   easynav_sensors
   tf2
   tf2_ros
+  tf2_geometry_msgs
   pluginlib
+  rclcpp
   geometry_msgs
   nav_msgs
-  eigen
+  diagnostic_msgs
+  Eigen3
 )
 ament_package()

@@ -100,6 +100,11 @@ protected:
   bool use_obstacle_regulated_linear_velocity_scaling_{false};  ///< Enable obstacle-proximity regulation.
   double obstacle_scaling_dist_{0.3};   ///< Distance below which obstacle regulation is triggered (m).
   double obstacle_scaling_gain_{1.0};   ///< Gain (<=1.0) applied when scaling down the velocity.
+  // Area where obstacles regulate the velocity (computeMinObstacleDistance()).
+  double robot_radius_{0.35};   ///< Robot radius used when measuring obstacle distance (m).
+  double safety_margin_{0.1};   ///< Margin added to the robot radius (m).
+  double z_min_filter_{0.0};    ///< Minimum Z of the points considered (m).
+  double robot_height_{0.5};    ///< Maximum Z of the points considered (m).
 
   // --- Approach to goal ---
   double min_approach_linear_velocity_{0.05};  ///< Minimum linear velocity while approaching goal.
@@ -166,7 +171,15 @@ protected:
     double robot_yaw);
 
   /// \brief Whether the robot should rotate in place towards \p angle_to_path.
-  bool shouldRotateToPath(double angle_to_path) const;
+  /// \param angle_to_path Current angle (rad) from the robot's heading to the path.
+  /// \param currently_rotating Whether the previous tick was already rotating in place.
+  ///   Hysteretic on \p currently_rotating: entering rotate-in-place mode requires
+  ///   \p angle_to_path to exceed \ref rotate_to_heading_min_angle_, but once in it, leaving
+  ///   requires dropping to half that value (well-aligned, not merely back under the entry
+  ///   threshold) -- otherwise a noisy angle hovering near the boundary (as it reliably does at
+  ///   a sharp turn, where the lookahead carrot itself is geometrically unstable tick to tick)
+  ///   chatters the controller between rotate-in-place and curve-follow mode every tick.
+  bool shouldRotateToPath(double angle_to_path, bool currently_rotating) const;
 
   /// \brief Computes a kinematically-feasible rotate-in-place command towards \p angle_to_target.
   void rotateToHeading(
