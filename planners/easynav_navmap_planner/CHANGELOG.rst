@@ -2,6 +2,15 @@
 Changelog for package easynav_navmap_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Runtime reconfiguration
+* Planners never keep a stale path
+* The path ends at the goal, inscribed cells are not crossed, and cost_weight balances cost against length
+* A* over NavCels that share a vertex (no direction favored by the mesh) and line-of-sight shortcut of the path
+* Builds on Humble, Jazzy, Kilted, Lyrical and Rolling
+* Contributors: Francisco Martín Rico
+
 0.4.2 (2026-07-26)
 ------------------
 * Complete deps

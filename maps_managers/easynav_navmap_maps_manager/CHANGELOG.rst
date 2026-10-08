@@ -2,6 +2,16 @@
 Changelog for package easynav_navmap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Runtime reconfiguration (rejected ones are reported)
+* Robot geometry from system_node
+* ObstacleFilter: keeps the static map; range and height limits; a column is an obstacle when it rises more than min_height above the NavMap surface (so a 2D laser sees obstacles, and the ground and ramps are not ones); min_height_per_meter and downsample_resolution parameters
+* InflationFilter: inflates across unknown cells
+* Fixed std::bad_alloc
+* Builds on Humble, Jazzy, Kilted, Lyrical and Rolling
+* Contributors: Francisco Martín Rico
+
 0.4.2 (2026-07-26)
 ------------------
 * Complete deps
