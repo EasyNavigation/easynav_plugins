@@ -22,6 +22,7 @@
 /// \brief Implementation of the RegulatedPurePursuitController class.
 
 #include <algorithm>
+#include <iterator>
 #include <cmath>
 #include <limits>
 
@@ -446,8 +447,10 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
   // command.
   const bool finite = std::all_of(
     path.poses.begin(), path.poses.end(), [](const geometry_msgs::msg::PoseStamped & p) {
-      return std::isfinite(p.pose.position.x) && std::isfinite(p.pose.position.y) &&
-             std::isfinite(p.pose.orientation.z) && std::isfinite(p.pose.orientation.w);
+      const double values[] = {p.pose.position.x, p.pose.position.y, p.pose.orientation.z,
+        p.pose.orientation.w};
+      const auto is_finite = [](double v) {return std::isfinite(v);};
+      return std::all_of(std::begin(values), std::end(values), is_finite);
     });
   if (!finite) {
     RCLCPP_WARN_THROTTLE(

@@ -112,7 +112,8 @@ static void smooth_path(
     double sum_y = 0.0;
     int count = 0;
 
-    const int begin = static_cast<int>(std::max<size_t>(0,
+    const int begin = static_cast<int>(std::max<size_t>(
+        0,
         i > static_cast<size_t>(half) ? i - half : 0));
     const int end = static_cast<int>(std::min<size_t>(n - 1, i + half));
 
@@ -164,7 +165,7 @@ void CostmapPlanner::on_initialize()
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/path", 10);
+    "/path", 10);
 }
 
 void CostmapPlanner::update(NavState & nav_state)
@@ -188,7 +189,8 @@ void CostmapPlanner::update(NavState & nav_state)
   if (rclcpp::Time(robot_pose.header.stamp, latest_stamp.get_clock_type()) > latest_stamp) {
     latest_stamp = rclcpp::Time(robot_pose.header.stamp, latest_stamp.get_clock_type());
   }
-  if (rclcpp::Time(goals.goals.front().header.stamp,
+  if (rclcpp::Time(
+      goals.goals.front().header.stamp,
       latest_stamp.get_clock_type()) > latest_stamp)
   {
     latest_stamp = rclcpp::Time(goals.goals.front().header.stamp, latest_stamp.get_clock_type());
@@ -196,16 +198,18 @@ void CostmapPlanner::update(NavState & nav_state)
   current_path_.header.stamp = latest_stamp;
 
   if (goals.header.frame_id != tf_info.map_frame) {
-    RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",
-        goals.header.frame_id.c_str());
+    RCLCPP_WARN(
+      get_node()->get_logger(), "Goals frame is not 'map': %s",
+      goals.header.frame_id.c_str());
     clear_current_path(nav_state);
     return;
   }
 
   unsigned int gx, gy;
   if (!map.worldToMap(goal.position.x, goal.position.y, gx, gy)) {
-    RCLCPP_WARN(get_node()->get_logger(), "Goal (%.2f, %.2f) is outside the map", goal.position.x,
-        goal.position.y);
+    RCLCPP_WARN(
+      get_node()->get_logger(), "Goal (%.2f, %.2f) is outside the map", goal.position.x,
+      goal.position.y);
     clear_current_path(nav_state);
     return;
   }
@@ -227,7 +231,8 @@ void CostmapPlanner::update(NavState & nav_state)
   static rclcpp::Time last_plan_time;
 
   unsigned int sx_chk, sy_chk;
-  if (map.worldToMap(robot_pose.pose.pose.position.x, robot_pose.pose.pose.position.y, sx_chk,
+  if (map.worldToMap(
+      robot_pose.pose.pose.position.x, robot_pose.pose.pose.position.y, sx_chk,
       sy_chk))
   {
     const bool same_start_cell = (static_cast<int>(sx_chk) == last_sx) &&
@@ -322,8 +327,9 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
   std::vector<int> parent_y(total_cells, -1);
   std::vector<double> cost_so_far(total_cells, std::numeric_limits<double>::infinity());
 
-  const double initial_h = heuristic(static_cast<int>(sx), static_cast<int>(sy),
-      static_cast<int>(gx), static_cast<int>(gy)) * heuristic_scale_;
+  const double initial_h = heuristic(
+    static_cast<int>(sx), static_cast<int>(sy),
+    static_cast<int>(gx), static_cast<int>(gy)) * heuristic_scale_;
   open.push(GridNode{static_cast<int>(sx), static_cast<int>(sy), 0.0, initial_h});
   cost_so_far[idx(sx, sy)] = 0.0;
 

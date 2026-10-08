@@ -131,7 +131,8 @@ TEST_F(AMCLLocalizerTest, IncomingOccupancyGridUpdatesMaps)
   EXPECT_EQ(static_map->at(1, 1), 0);
 }
 
-class FriendAMCLLocalizer : public easynav::SimpleController {
+class FriendAMCLLocalizer : public easynav::SimpleController
+{
 public:
   void force_path(const std::string & path) {map_path_ = path;}
 };

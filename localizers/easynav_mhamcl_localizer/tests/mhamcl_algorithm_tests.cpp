@@ -127,7 +127,7 @@ TEST(ParticlesDistributionTest, InitSamplesAroundPose)
   double sum = 0.0;
   for (const auto & p : dist.get_particles()) {
     sum += p.weight;
-                                                               }
+  }
   EXPECT_NEAR(sum, 1.0, 1e-9);
 
   const auto cov = dist.get_covariance();
@@ -250,7 +250,7 @@ TEST(ParticlesDistributionTest, MergeKeepsSizeAndBestParticles)
   double sum = 0.0;
   for (const auto & p : a.get_particles()) {
     sum += p.weight;
-                                                            }
+  }
   EXPECT_NEAR(sum, 1.0, 1e-9);
 }
 

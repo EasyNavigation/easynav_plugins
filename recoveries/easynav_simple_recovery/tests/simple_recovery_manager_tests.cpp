@@ -285,7 +285,8 @@ TEST_F(SimpleRecoveryManagerTest, AreaAheadFollowsTheRobotGeometry)
 
 TEST_F(SimpleRecoveryManagerTest, DeprecatedGeometryParametersStillApply)
 {
-  make_manager({
+  make_manager(
+  {
     {"recovery_manager.robot_radius", 0.6},
     {"recovery_manager.max_obstacle_z", 1.0}});
   controller_commands(0.3);
@@ -310,7 +311,8 @@ TEST_F(SimpleRecoveryManagerTest, WarnsAboutDeprecatedGeometryParameters)
 {
   {
     easynav::testing::LogCapture log;
-    make_manager({
+    make_manager(
+    {
       {"recovery_manager.robot_radius", 0.6},
       {"recovery_manager.max_obstacle_z", 1.0}});
     EXPECT_EQ(
@@ -488,7 +490,8 @@ class SensorsLostSimTimeTest : public SensorsLostTest
 protected:
   void SetUp() override
   {
-    make_manager({
+    make_manager(
+    {
       {"recovery_manager.sensors_timeout", 0.2},
       {"use_sim_time", true}});    // No /clock: the node's time does not advance
     set_mission(true);
@@ -746,7 +749,8 @@ TEST_F(SimpleRecoveryManagerTest, RejectedSlowDownAbortsTheMission)
 
 TEST_F(SimpleRecoveryManagerTest, NoSlowDownIfDisabled)
 {
-  make_manager({
+  make_manager(
+  {
     {"recovery_manager.max_backup_attempts", 1},
     {"recovery_manager.slow_down_max_linear_vel", 0.0}});
   set_mission(true);
@@ -760,7 +764,8 @@ TEST_F(SimpleRecoveryManagerTest, NoSlowDownIfDisabled)
 
 TEST_F(SimpleRecoveryManagerTest, SpeedRestoredWhenTheMissionEnds)
 {
-  make_manager({
+  make_manager(
+  {
     {"recovery_manager.max_backup_attempts", 0},
     {"recovery_manager.slow_down_max_linear_vel", 0.05}});
   set_mission(true);
@@ -845,7 +850,8 @@ TEST_F(SimpleRecoveryManagerTest, DeactivationStopsTheMitigation)
 
 TEST_F(SimpleRecoveryManagerTest, ReadsItsParameters)
 {
-  make_manager({
+  make_manager(
+  {
     {"recovery_manager.rotate_speed", 0.8},
     {"recovery_manager.backup_speed", 0.25}});
   set_mission(true);

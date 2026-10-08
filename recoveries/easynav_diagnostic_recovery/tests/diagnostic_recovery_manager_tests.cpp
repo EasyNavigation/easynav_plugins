@@ -49,7 +49,7 @@ std::shared_ptr<easynav_diagnostic_recovery::DiagnosticRecoveryManager> default_
   const std::shared_ptr<easynav::RecoveryManagerNode> & node)
 {
   return std::dynamic_pointer_cast<easynav_diagnostic_recovery::DiagnosticRecoveryManager>(
-      node->get_recovery_manager());
+    node->get_recovery_manager());
 }
 
 // Records what the recovery system asks of the navigation system.
@@ -120,7 +120,7 @@ TEST_F(DiagnosticRecoveryManagerTest, configure_fails_with_nonexistent_plugin)
       "recovery_manager.evaluator_types", std::vector<std::string>{"eval_a"})
     .append_parameter_override(
       "recovery_manager.eval_a.plugin",
-    std::string("easynav_diagnostic_recovery/NoSuchEvaluator")));
+      std::string("easynav_diagnostic_recovery/NoSuchEvaluator")));
 
   node->trigger_transition(lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
@@ -319,7 +319,8 @@ TEST_F(DiagnosticRecoveryManagerTest, exclusion_is_forgotten_once_diagnostic_is_
   EXPECT_EQ(default_manager(node)->get_active_mitigation_name(), "recovery_manager.mit_a");
 }
 
-TEST_F(DiagnosticRecoveryManagerTest,
+TEST_F(
+  DiagnosticRecoveryManagerTest,
   lower_priority_number_is_selected_first_regardless_of_list_order)
 {
   // mit_a is first in mitigation_types but has the higher (worse) priority number; mit_b is

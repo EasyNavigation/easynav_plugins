@@ -44,8 +44,9 @@ CollisionSafetyReflex::on_initialize()
   easynav::declare_parameter_if_absent(*node, param_prefix + ".brake_acc", brake_acc_);
   easynav::declare_parameter_if_absent(*node, param_prefix + ".safety_margin", safety_margin_);
   easynav::declare_parameter_if_absent(*node, param_prefix + ".z_min_filter", z_min_filter_);
-  easynav::declare_parameter_if_absent(*node, param_prefix + ".downsample_leaf_size",
-      downsample_leaf_size_);
+  easynav::declare_parameter_if_absent(
+    *node, param_prefix + ".downsample_leaf_size",
+    downsample_leaf_size_);
 
   node->get_parameter(param_prefix + ".debug_markers", debug_markers_);
   // The robot's shape: "system_node.robot_geometry".
@@ -260,5 +261,6 @@ CollisionSafetyReflex::publish_collision_zone_marker(
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::CollisionSafetyReflex,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::CollisionSafetyReflex,
   easynav_diagnostic_recovery::SafetyReflexBase)

@@ -101,5 +101,6 @@ easynav_diagnostic_recovery::RecoveryStatus ShutdownRecovery::on_cycle(NavState 
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::ShutdownRecovery,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::ShutdownRecovery,
   easynav_diagnostic_recovery::RecoveryMitigationBase)

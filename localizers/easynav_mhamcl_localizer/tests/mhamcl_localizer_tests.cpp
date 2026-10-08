@@ -75,11 +75,12 @@ struct HypothesesFixture
   : map(200, 200, 0.1, -10.0, -10.0, easynav::FREE_SPACE)
   {
     rclcpp::NodeOptions options;
-    options.parameter_overrides({
+    options.parameter_overrides(
+      {
         rclcpp::Parameter("test.max_hypotheses", 3),
         rclcpp::Parameter("test.initial_pose.std_dev_xy", 0.05),
         rclcpp::Parameter("test.initial_pose.std_dev_yaw", 0.05),
-    });
+      });
     node = std::make_shared<easynav::LocalizerNode>(options);
     localizer = std::make_shared<FriendMHAMCLLocalizer>();
     localizer->initialize(node, "test");
@@ -102,7 +103,8 @@ protected:
 TEST_F(MHAMCLLocalizerTest, StartsAtTheInitialPoseWithOneHypothesis)
 {
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test.initial_pose.x", 1.25),
     rclcpp::Parameter("test.initial_pose.y", -2.5),
     rclcpp::Parameter("test.initial_pose.yaw", 0.4),
@@ -129,7 +131,8 @@ TEST_F(MHAMCLLocalizerTest, StartsAtTheInitialPoseWithOneHypothesis)
 TEST_F(MHAMCLLocalizerTest, RejectsNonPositiveDeviations)
 {
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test.distance_perception_error", 0.0),
   });
 
@@ -145,7 +148,8 @@ TEST_F(MHAMCLLocalizerTest, InitialPoseTopicResetsThePose)
   const double yaw1 = -1.2;
 
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test.min_noise_xy", 1e-9),
     rclcpp::Parameter("test.min_noise_yaw", 1e-9),
   });
@@ -223,7 +227,7 @@ TEST_F(MHAMCLLocalizerTest, CandidatesCreateHypothesesOnlyWhereThereIsNoneNearby
     candidate(-5.0, 4.0, 0.0, 0.8),     // new
     candidate(-6.0, -6.0, 0.0, 0.7),    // there is no room for more
     candidate(-3.0, -3.0, 0.0, 0.3),    // below the threshold
-    },
+  },
     f.map);
 
   EXPECT_EQ(f.localizer->hypotheses_.size(), 3u);
@@ -260,7 +264,7 @@ TEST_F(MHAMCLLocalizerTest, HypothesesOutOfFreeSpaceAreRemoved)
 
   for (auto & h : f.localizer->hypotheses_) {
     h->set_quality(0.9);
-                                                                 }
+  }
 
   // Wall on top of the new hypothesis
   for (unsigned int x = 140; x < 160; ++x) {
@@ -334,7 +338,8 @@ nav_msgs::msg::Odometry make_odom(double x, double y, double yaw, int sec)
 TEST_F(MHAMCLLocalizerTest, PredictsWithTheOdometryPerceptionOfNavState)
 {
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test.initial_pose.x", 1.0),
     rclcpp::Parameter("test.initial_pose.y", 1.0),
     rclcpp::Parameter("test.initial_pose.yaw", 0.0),
@@ -369,7 +374,8 @@ TEST_F(MHAMCLLocalizerTest, PredictsWithTheOdometryPerceptionOfNavState)
 TEST_F(MHAMCLLocalizerTest, WithoutOdometryPerceptionItFallsBackToTF)
 {
   rclcpp::NodeOptions options;
-  options.parameter_overrides({
+  options.parameter_overrides(
+  {
     rclcpp::Parameter("test.initial_pose.x", 1.0),
     rclcpp::Parameter("test.initial_pose.std_dev_xy", 1e-3),
     rclcpp::Parameter("test.initial_pose.std_dev_yaw", 1e-3),

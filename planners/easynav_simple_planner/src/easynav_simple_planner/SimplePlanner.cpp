@@ -97,7 +97,7 @@ SimplePlanner::on_initialize()
 
   path_pub_ = get_node()->create_publisher<nav_msgs::msg::Path>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-      "/path", 10);
+    "/path", 10);
 }
 
 void
@@ -129,7 +129,8 @@ SimplePlanner::update(NavState & nav_state)
 
   const auto clock_type = get_node()->get_clock()->get_clock_type();
   rclcpp::Time latest_stamp(robot_pose.header.stamp, clock_type);
-  if (rclcpp::Time(goals.goals.front().header.stamp,
+  if (rclcpp::Time(
+      goals.goals.front().header.stamp,
       latest_stamp.get_clock_type()) > latest_stamp)
   {
     latest_stamp = rclcpp::Time(goals.goals.front().header.stamp, latest_stamp.get_clock_type());
@@ -138,14 +139,16 @@ SimplePlanner::update(NavState & nav_state)
   auto downsampled_map = map_typed.downsample(0.2);
 
   if (goals.header.frame_id != tf_info.map_frame) {
-    RCLCPP_WARN(get_node()->get_logger(),
+    RCLCPP_WARN(
+      get_node()->get_logger(),
       "SimplePlanner::update goals frame is not map (%s)", goals.header.frame_id.c_str());
     clear_path(nav_state);
     return;
   }
 
   if (!downsampled_map->check_bounds_metric(goal.position.x, goal.position.y)) {
-    RCLCPP_WARN(get_node()->get_logger(),
+    RCLCPP_WARN(
+      get_node()->get_logger(),
       "SimplePlanner::update goal (%lf, %lf) outside the map", goal.position.x, goal.position.y);
     clear_path(nav_state);
     return;
@@ -224,7 +227,8 @@ SimplePlanner::a_star_path(
   double resolution)
 {
   RCLCPP_DEBUG(get_node()->get_logger(), "Running A* ============");
-  RCLCPP_DEBUG(get_node()->get_logger(), "Path from (%lf m, %lf m) ->  (%lf m, %lf m)",
+  RCLCPP_DEBUG(
+    get_node()->get_logger(), "Path from (%lf m, %lf m) ->  (%lf m, %lf m)",
     start.position.x, start.position.y,
     goal.position.x, goal.position.y);
 
@@ -234,7 +238,8 @@ SimplePlanner::a_star_path(
   auto [sx, sy] = map.metric_to_cell(start.position.x, start.position.y);
   auto [gx, gy] = map.metric_to_cell(goal.position.x, goal.position.y);
 
-  RCLCPP_DEBUG(get_node()->get_logger(), "Path from (%d, %d) ->  (%d, %d)",
+  RCLCPP_DEBUG(
+    get_node()->get_logger(), "Path from (%d, %d) ->  (%d, %d)",
     sx, sy, gx, gy);
 
   std::priority_queue<GridNode, std::vector<GridNode>, std::greater<GridNode>> open;
@@ -285,7 +290,8 @@ SimplePlanner::a_star_path(
 
     path.push_back(pose);
 
-    RCLCPP_DEBUG(get_node()->get_logger(), "\t(%d, %d) = (%lf m, %lf m)",
+    RCLCPP_DEBUG(
+      get_node()->get_logger(), "\t(%d, %d) = (%lf m, %lf m)",
       cx, cy, px, py);
 
     std::tie(cx, cy) = came_from[idx(cx, cy)];

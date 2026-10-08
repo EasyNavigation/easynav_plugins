@@ -116,7 +116,7 @@ private:
   {
     size_t seg_idx{0};   ///< Current segment index [i, i+1].
     double s_star{0.0};  ///< Arc-length at the closest point.
-    Vec2   closest{0.0, 0.0}; ///< Closest point coordinates on the path.
+    Vec2 closest{0.0, 0.0};   ///< Closest point coordinates on the path.
     double t{0.0};       ///< Segment parameter in [0,1].
   };
 
@@ -259,7 +259,7 @@ private:
   // --- Parameters ---
 
   /// @brief Allow reverse motion (if false, forward-only).
-  bool   allow_reverse_{false};
+  bool allow_reverse_{false};
   /// @brief Minimal forward progress (m/s) when reasonably aligned.
   double v_progress_min_{0.05};
   /// @brief Max fraction of forward progress that -k_s * e_y can cancel.
@@ -321,7 +321,7 @@ private:
   double final_align_wmax_{0.6};
 
   /// @brief Enable corner-guard behavior in tight turns.
-  bool  corner_guard_enable_{true};
+  bool corner_guard_enable_{true};
   /// @brief Corner-guard weight for outside lateral error (e_y_out) in speed reduction.
   double corner_gain_ey_{1.5};
   /// @brief Corner-guard weight for |e_theta| in speed reduction.

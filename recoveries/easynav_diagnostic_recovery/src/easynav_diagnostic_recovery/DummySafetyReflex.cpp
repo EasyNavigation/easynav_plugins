@@ -43,5 +43,6 @@ void DummySafetyReflex::mitigate(easynav::NavState & nav_state)
 }  // namespace easynav_diagnostic_recovery
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav_diagnostic_recovery::DummySafetyReflex,
+PLUGINLIB_EXPORT_CLASS(
+  easynav_diagnostic_recovery::DummySafetyReflex,
   easynav_diagnostic_recovery::SafetyReflexBase)

@@ -81,12 +81,14 @@ NavMapMapsManager::on_initialize()
 
   for (const auto & navmap_filter : navmap_filters) {
     std::string plugin;
-    easynav::declare_parameter_if_absent(*node, plugin_name + "." + navmap_filter + ".plugin",
-          plugin);
+    easynav::declare_parameter_if_absent(
+      *node, plugin_name + "." + navmap_filter + ".plugin",
+      plugin);
     node->get_parameter(plugin_name + "." + navmap_filter + ".plugin", plugin);
 
     try {
-      RCLCPP_INFO(node->get_logger(),
+      RCLCPP_INFO(
+        node->get_logger(),
         "Loading NavMapFilter %s [%s]", navmap_filter.c_str(), plugin.c_str());
       std::shared_ptr<NavMapFilter> instance;
       instance = navmap_filters_loader_->createSharedInstance(plugin);
@@ -94,31 +96,35 @@ NavMapMapsManager::on_initialize()
       try {
         instance->initialize(node, plugin_name + "." + navmap_filter);
       } catch (const std::runtime_error & ex) {
-        RCLCPP_ERROR(node->get_logger(),
+        RCLCPP_ERROR(
+          node->get_logger(),
           "Unable to initialize [%s]. Error: %s", plugin.c_str(), ex.what());
         throw;
       }
 
       navmap_filters_.push_back(instance);
 
-      RCLCPP_INFO(node->get_logger(),
+      RCLCPP_INFO(
+        node->get_logger(),
         "Loaded NavMapFilter %s [%s]", navmap_filter.c_str(), plugin.c_str());
     } catch (pluginlib::PluginlibException & ex) {
-      RCLCPP_ERROR(node->get_logger(),
+      RCLCPP_ERROR(
+        node->get_logger(),
         "Unable to load plugin easynav::navmap::NavMapFilter. Error: %s", ex.what());
-      throw std::runtime_error("Unable to load plugin easynav::navmap::NavMapFilter " +
-        navmap_filter + " . Error: " + ex.what());
+      throw std::runtime_error(
+              "Unable to load plugin easynav::navmap::NavMapFilter " +
+              navmap_filter + " . Error: " + ex.what());
     }
   }
 
   navmap_pub_ = node->create_publisher<navmap_ros_interfaces::msg::NavMap>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/map",
+    "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   layer_updates_pub_ = node->create_publisher<navmap_ros_interfaces::msg::NavMapLayer>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/map_updates",
+    "/map_updates",
     rclcpp::QoS(100));
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
@@ -167,7 +173,7 @@ NavMapMapsManager::on_initialize()
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/incoming_occ_map",
+    "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -182,7 +188,7 @@ NavMapMapsManager::on_initialize()
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/incoming_pc2_map",
+    "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
@@ -198,7 +204,7 @@ NavMapMapsManager::on_initialize()
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
-        "/savemap",
+    "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

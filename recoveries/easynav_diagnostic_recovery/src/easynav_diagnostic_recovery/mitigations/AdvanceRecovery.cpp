@@ -33,12 +33,15 @@ void AdvanceRecovery::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".advance_distance",
-      advance_distance_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".advance_speed",
-      advance_speed_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".escalate_after",
-      escalate_after_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".advance_distance",
+    advance_distance_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".advance_speed",
+    advance_speed_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".escalate_after",
+    escalate_after_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".episode_gap", episode_gap_);
 
   node->get_parameter<double>(plugin_name + ".advance_distance", advance_distance_);
@@ -117,5 +120,6 @@ void AdvanceRecovery::on_stop(NavState &)
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::AdvanceRecovery,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::AdvanceRecovery,
   easynav_diagnostic_recovery::RecoveryMitigationBase)

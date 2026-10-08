@@ -14,10 +14,11 @@ void RayIterator(const CoordT & key_origin, const CoordT & key_end, const Functo
 inline void ComputeRay(const CoordT & key_origin, const CoordT & key_end, std::vector<CoordT> & ray)
 {
   ray.clear();
-  RayIterator(key_origin, key_end, [&ray](const CoordT & coord) {
+  RayIterator(
+    key_origin, key_end, [&ray](const CoordT & coord) {
       ray.push_back(coord);
       return true;
-  });
+    });
 }
 
 /**
@@ -26,7 +27,8 @@ inline void ComputeRay(const CoordT & key_origin, const CoordT & key_end, std::v
  *
  * Insert a point cloud to update the current probability
  */
-class ProbabilisticMap {
+class ProbabilisticMap
+{
 public:
   using Vector3D = Eigen::Vector3d;
 
@@ -42,7 +44,7 @@ public:
   [[nodiscard]] static constexpr float prob(int32_t logods_fixed)
   {
     float logods = float(logods_fixed) * 1e-6;
-    return  1.0 - 1.0 / (1.0 + std::exp(logods));
+    return 1.0 - 1.0 / (1.0 + std::exp(logods));
   }
 
   struct CellT

@@ -50,7 +50,8 @@ TEST_F(RegulatedPurePursuitControllerReconfigureTest, InitializeTwiceOnSameNodeD
   ASSERT_NO_THROW(plugin2->initialize(node, "test_controller"));
 }
 
-TEST_F(RegulatedPurePursuitControllerReconfigureTest,
+TEST_F(
+  RegulatedPurePursuitControllerReconfigureTest,
   InitializeWhenAnotherPluginLeftSomeOfItsParameters)
 {
   // A plugin of another type under the same name may have left any subset of them declared.

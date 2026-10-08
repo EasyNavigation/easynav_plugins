@@ -32,14 +32,18 @@ void ObstacleTooCloseEvaluator::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safe_distance",
-      safe_distance_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".linear_velocity_epsilon",
-      linear_velocity_epsilon_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".angular_velocity_epsilon",
-      angular_velocity_epsilon_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".debounce_duration",
-      debounce_duration_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".safe_distance",
+    safe_distance_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".linear_velocity_epsilon",
+    linear_velocity_epsilon_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".angular_velocity_epsilon",
+    angular_velocity_epsilon_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".debounce_duration",
+    debounce_duration_);
 
   node->get_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
   easynav::declare_parameter_if_absent<double>(
@@ -126,5 +130,6 @@ void ObstacleTooCloseEvaluator::update(NavState & nav_state)
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::ObstacleTooCloseEvaluator,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::ObstacleTooCloseEvaluator,
   easynav_diagnostic_recovery::RecoveryEvaluatorBase)

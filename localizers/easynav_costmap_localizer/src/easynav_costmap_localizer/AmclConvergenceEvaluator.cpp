@@ -26,8 +26,9 @@ void AmclConvergenceEvaluator::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".covariance_threshold",
-      covariance_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".covariance_threshold",
+    covariance_threshold_);
   node->get_parameter<double>(plugin_name + ".covariance_threshold", covariance_threshold_);
 }
 
@@ -66,5 +67,6 @@ void AmclConvergenceEvaluator::update(NavState & nav_state)
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::AmclConvergenceEvaluator,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::AmclConvergenceEvaluator,
   easynav_diagnostic_recovery::RecoveryEvaluatorBase)

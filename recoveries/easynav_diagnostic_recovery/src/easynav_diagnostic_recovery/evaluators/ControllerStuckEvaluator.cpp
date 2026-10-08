@@ -34,12 +34,15 @@ void ControllerStuckEvaluator::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".linear_velocity_threshold",
-      linear_velocity_threshold_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".progress_distance_threshold",
-      progress_distance_threshold_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".stuck_time_threshold",
-      stuck_time_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".linear_velocity_threshold",
+    linear_velocity_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".progress_distance_threshold",
+    progress_distance_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".stuck_time_threshold",
+    stuck_time_threshold_);
 
   node->get_parameter<double>(
     plugin_name + ".linear_velocity_threshold", linear_velocity_threshold_);
@@ -184,5 +187,6 @@ void ControllerStuckEvaluator::update(NavState & nav_state)
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::ControllerStuckEvaluator,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::ControllerStuckEvaluator,
   easynav_diagnostic_recovery::RecoveryEvaluatorBase)
