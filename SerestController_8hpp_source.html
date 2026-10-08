@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  {</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordtype">size_t</span> seg_idx{0};   </div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="keywordtype">double</span> s_star{0.0};  </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    Vec2   closest{0.0, 0.0}; </div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    Vec2 closest{0.0, 0.0};   </div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="keywordtype">double</span> t{0.0};       </div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  };</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span></div>
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>  <span class="comment">// --- Parameters ---</span></div>
 <div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span></div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  <span class="keywordtype">bool</span>   allow_reverse_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  <span class="keywordtype">bool</span> allow_reverse_{<span class="keyword">false</span>};</div>
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>  <span class="keywordtype">double</span> v_progress_min_{0.05};</div>
 <div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>  <span class="keywordtype">double</span> k_s_share_max_{0.5};</div>
 <div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span></div>
@@ -295,7 +295,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>  <span class="keywordtype">double</span> final_align_k_{2.0};</div>
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>  <span class="keywordtype">double</span> final_align_wmax_{0.6};</div>
 <div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span></div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>  <span class="keywordtype">bool</span>  corner_guard_enable_{<span class="keyword">true</span>};</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>  <span class="keywordtype">bool</span> corner_guard_enable_{<span class="keyword">true</span>};</div>
 <div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>  <span class="keywordtype">double</span> corner_gain_ey_{1.5};</div>
 <div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>  <span class="keywordtype">double</span> corner_gain_eth_{0.7};</div>
 <div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>  <span class="keywordtype">double</span> corner_gain_kappa_{0.4};</div>
@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>}  <span class="comment">// namespace easynav</span></div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span> </div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span><span class="preprocessor">#endif  </span><span class="comment">// EASYNAV_SEREST_CONTROLLER__SERESTCONTROLLER_HPP_</span></div>
-<div class="ttc" id="aclasseasynav_1_1SerestController_html_a6ed380ba537bbe9a85710810db50a95c"><div class="ttname"><a href="classeasynav_1_1SerestController.html#a6ed380ba537bbe9a85710810db50a95c">easynav::SerestController::update_rt</a></div><div class="ttdeci">void update_rt(NavState &amp;nav_state) override</div><div class="ttdoc">Real-time control update (called ~20–30 Hz).</div><div class="ttdef"><b>Definition</b> SerestController.cpp:629</div></div>
+<div class="ttc" id="aclasseasynav_1_1SerestController_html_a6ed380ba537bbe9a85710810db50a95c"><div class="ttname"><a href="classeasynav_1_1SerestController.html#a6ed380ba537bbe9a85710810db50a95c">easynav::SerestController::update_rt</a></div><div class="ttdeci">void update_rt(NavState &amp;nav_state) override</div><div class="ttdoc">Real-time control update (called ~20–30 Hz).</div><div class="ttdef"><b>Definition</b> SerestController.cpp:634</div></div>
 <div class="ttc" id="aclasseasynav_1_1SerestController_html_a9c0e602094884b47abb95c257590f290"><div class="ttname"><a href="classeasynav_1_1SerestController.html#a9c0e602094884b47abb95c257590f290">easynav::SerestController::SerestController</a></div><div class="ttdeci">SerestController()</div><div class="ttdoc">Default constructor.</div></div>
 <div class="ttc" id="aclasseasynav_1_1SerestController_html_a9ce92be03951ffeb7464f90ba1e6e491"><div class="ttname"><a href="classeasynav_1_1SerestController.html#a9ce92be03951ffeb7464f90ba1e6e491">easynav::SerestController::~SerestController</a></div><div class="ttdeci">~SerestController() override</div><div class="ttdoc">Destructor.</div></div>
 <div class="ttc" id="aclasseasynav_1_1SerestController_html_ac9d1795b6cf8a4da7bf9b33f783db911"><div class="ttname"><a href="classeasynav_1_1SerestController.html#ac9d1795b6cf8a4da7bf9b33f783db911">easynav::SerestController::on_initialize</a></div><div class="ttdeci">void on_initialize() override</div><div class="ttdoc">Initialize parameters and internal state.</div><div class="ttdef"><b>Definition</b> SerestController.cpp:41</div></div>

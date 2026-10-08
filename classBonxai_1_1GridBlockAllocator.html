@@ -135,11 +135,11 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a1b9cf13d1af223859bc67211ae83c48e" id="r_a1b9cf13d1af223859bc67211ae83c48e"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a1b9cf13d1af223859bc67211ae83c48e">Deleter</a> = std::function&lt;void()&gt;</td></tr>
+<tr class="memitem:a4aa13a9a5ab6ff8ba7f61d1b9ab89d95" id="r_a4aa13a9a5ab6ff8ba7f61d1b9ab89d95"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a4aa13a9a5ab6ff8ba7f61d1b9ab89d95">Deleter</a> = std::function&lt;void ()&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a438f29511c88cc74e66387b80a3d42cc" id="r_a438f29511c88cc74e66387b80a3d42cc"><td class="memItemLeft">std::pair&lt; DataT *, <a class="el" href="#a1b9cf13d1af223859bc67211ae83c48e">Deleter</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a438f29511c88cc74e66387b80a3d42cc">allocateBlock</a> ()</td></tr>
+<tr class="memitem:a438f29511c88cc74e66387b80a3d42cc" id="r_a438f29511c88cc74e66387b80a3d42cc"><td class="memItemLeft">std::pair&lt; DataT *, <a class="el" href="#a4aa13a9a5ab6ff8ba7f61d1b9ab89d95">Deleter</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a438f29511c88cc74e66387b80a3d42cc">allocateBlock</a> ()</td></tr>
 <tr class="memitem:a7223528283cd4e5872e0cc716bf9bd9d" id="r_a7223528283cd4e5872e0cc716bf9bd9d"><td class="memItemLeft">size_t&#160;</td><td class="memItemRight"><a class="el" href="#a7223528283cd4e5872e0cc716bf9bd9d">capacity</a> () const</td></tr>
 <tr class="memitem:ac8bb3912a3ce86b15842e79d0b421204" id="r_ac8bb3912a3ce86b15842e79d0b421204"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac8bb3912a3ce86b15842e79d0b421204">clear</a> ()</td></tr>
 <tr class="memitem:af5e04be9ab3d4cde1dc64bc0589330a1" id="r_af5e04be9ab3d4cde1dc64bc0589330a1"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#af5e04be9ab3d4cde1dc64bc0589330a1">GridBlockAllocator</a> (const GridBlockAllocator &amp;)=delete</td></tr>
@@ -158,7 +158,7 @@ Static Public Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a28457293f4b91d2dc56d0ad370667ce5" id="r_a28457293f4b91d2dc56d0ad370667ce5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a28457293f4b91d2dc56d0ad370667ce5">addNewChunk</a> ()</td></tr>
-<tr class="memitem:ad09444dbd60ae12b00342a3b593858a6" id="r_ad09444dbd60ae12b00342a3b593858a6"><td class="memItemLeft"><a class="el" href="#a1b9cf13d1af223859bc67211ae83c48e">Deleter</a>&#160;</td><td class="memItemRight"><a class="el" href="#ad09444dbd60ae12b00342a3b593858a6">createDeleter</a> (std::shared_ptr&lt; <a class="el" href="structBonxai_1_1GridBlockAllocator_1_1Chunk.html">Chunk</a> &gt; chunk, uint32_t index)</td></tr>
+<tr class="memitem:ad09444dbd60ae12b00342a3b593858a6" id="r_ad09444dbd60ae12b00342a3b593858a6"><td class="memItemLeft"><a class="el" href="#a4aa13a9a5ab6ff8ba7f61d1b9ab89d95">Deleter</a>&#160;</td><td class="memItemRight"><a class="el" href="#ad09444dbd60ae12b00342a3b593858a6">createDeleter</a> (std::shared_ptr&lt; <a class="el" href="structBonxai_1_1GridBlockAllocator_1_1Chunk.html">Chunk</a> &gt; chunk, uint32_t index)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -175,8 +175,8 @@ class Bonxai::GridBlockAllocator&lt; DataT &gt;</div><p>The <a class="el" href="
 <p>It is a very simple memory pool.</p>
 <p>Each chunk allocates memory for 512 Grids </p>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="a1b9cf13d1af223859bc67211ae83c48e" name="a1b9cf13d1af223859bc67211ae83c48e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b9cf13d1af223859bc67211ae83c48e">&#9670;&#160;</a></span>Deleter</h2>
+<a id="a4aa13a9a5ab6ff8ba7f61d1b9ab89d95" name="a4aa13a9a5ab6ff8ba7f61d1b9ab89d95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4aa13a9a5ab6ff8ba7f61d1b9ab89d95">&#9670;&#160;</a></span>Deleter</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -184,7 +184,7 @@ class Bonxai::GridBlockAllocator&lt; DataT &gt;</div><p>The <a class="el" href="
 template&lt;typename DataT&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="#a1b9cf13d1af223859bc67211ae83c48e">Deleter</a> = std::function&lt;void()&gt;</td>
+          <td class="memname">using <a class="el" href="#a4aa13a9a5ab6ff8ba7f61d1b9ab89d95">Deleter</a> = std::function&lt;void ()&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -302,7 +302,7 @@ template&lt;typename DataT&gt; </div>
 template&lt;typename DataT&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt; DataT *, typename <a class="el" href="#ad32641d37fc7938655a9fdb3343ed463">GridBlockAllocator</a>&lt; DataT &gt;<a class="el" href="#a1b9cf13d1af223859bc67211ae83c48e">::Deleter</a> &gt; allocateBlock </td>
+          <td class="memname">std::pair&lt; DataT *, typename <a class="el" href="#ad32641d37fc7938655a9fdb3343ed463">GridBlockAllocator</a>&lt; DataT &gt;<a class="el" href="#a4aa13a9a5ab6ff8ba7f61d1b9ab89d95">::Deleter</a> &gt; allocateBlock </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -362,7 +362,7 @@ template&lt;typename DataT&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ad32641d37fc7938655a9fdb3343ed463">GridBlockAllocator</a>&lt; DataT &gt;<a class="el" href="#a1b9cf13d1af223859bc67211ae83c48e">::Deleter</a> createDeleter </td>
+          <td class="memname"><a class="el" href="#ad32641d37fc7938655a9fdb3343ed463">GridBlockAllocator</a>&lt; DataT &gt;<a class="el" href="#a4aa13a9a5ab6ff8ba7f61d1b9ab89d95">::Deleter</a> createDeleter </td>
           <td>(</td>
           <td class="paramtype">std::shared_ptr&lt; <a class="el" href="structBonxai_1_1GridBlockAllocator_1_1Chunk.html">Chunk</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>chunk</em></span>, </td>
         </tr>
