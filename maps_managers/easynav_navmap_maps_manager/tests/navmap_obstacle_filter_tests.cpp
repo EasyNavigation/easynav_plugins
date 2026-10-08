@@ -222,3 +222,177 @@ TEST_F(NavmapObstacleFilterLimitsTest, TheStaticMapIsKeptBeyondTheRange)
   EXPECT_EQ(cell_at(nm, 7.35f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
   EXPECT_EQ(cell_at(nm, 4.65f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
 }
+
+// ─── Height above the NavMap surface ────────────────────────────────────────────────────────
+
+TEST_F(NavmapObstacleFilterLimitsTest, A2DLaserSeesObstacles)
+{
+  // A laser 0.095 m above the floor: all its points at one height
+  node_->declare_parameter("navmap.obstacles.min_height", 0.05);
+  for (float y = 3.9f; y <= 4.2f; y += 0.05f) {
+    perception_.data.push_back(pcl::PointXYZ(4.70f, y, 0.095f));   // a bin ahead
+  }
+  perception_.data.push_back(pcl::PointXYZ(5.60f, 4.10f, 0.095f));  // a single hit
+  easynav::navmap::ObstacleFilter filter;
+  const auto & nm = run(filter);
+  EXPECT_EQ(cell_at(nm, 4.65f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
+  EXPECT_EQ(cell_at(nm, 5.55f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, PointsBelowMinHeightAboveTheSurfaceAreTheGround)
+{
+  // Default min_height: 0.1 m above the surface
+  for (float x = 4.4f; x <= 5.6f; x += 0.1f) {
+    perception_.data.push_back(pcl::PointXYZ(x, 4.1f, 0.03f));     // the floor, with noise
+    perception_.data.push_back(pcl::PointXYZ(x, 3.2f, 0.095f));    // below 0.1
+  }
+  perception_.data.push_back(pcl::PointXYZ(4.70f, 2.30f, 0.15f));  // above 0.1
+  easynav::navmap::ObstacleFilter filter;
+  const auto & nm = run(filter);
+  for (float x = 4.35f; x <= 5.6f; x += 0.3f) {
+    EXPECT_EQ(cell_at(nm, x, 4.05f), navmap_ros::FREE_SPACE) << x;
+    EXPECT_EQ(cell_at(nm, x, 3.15f), navmap_ros::FREE_SPACE) << x;
+  }
+  EXPECT_EQ(cell_at(nm, 4.65f, 2.25f), navmap_ros::LETHAL_OBSTACLE);
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, HeightIsMeasuredFromTheSurfaceNotFromZero)
+{
+  // A platform 0.5 m high: its floor is at z = 0.5
+  nav_msgs::msg::OccupancyGrid grid;
+  grid.header.frame_id = "map";
+  grid.info.resolution = 0.1;
+  grid.info.width = 80;
+  grid.info.height = 80;
+  grid.info.origin.position.z = 0.5;
+  grid.info.origin.orientation.w = 1.0;
+  grid.data.assign(80 * 80, 0);
+  nav_state_.set("map.navmap", navmap_ros::from_occupancy_grid(grid));
+  column(4.65f, 4.05f, 0.5f, 0.55f);   // its floor: not an obstacle, although above z = 0.1
+  column(5.55f, 4.05f, 0.5f, 0.9f);    // a box on it
+  easynav::navmap::ObstacleFilter filter;
+  const auto & nm = run(filter);
+  EXPECT_EQ(cell_at(nm, 4.65f, 4.05f), navmap_ros::FREE_SPACE);
+  EXPECT_EQ(cell_at(nm, 5.55f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, ARampIsNotAnObstacleButABoxOnItIs)
+{
+  // A ramp rising 0.25 m per meter along x, from z = 0 at x = 4 (under the robot)
+  auto slope = [](float x) {return 0.25f * (x - 4.0f);};
+  ::navmap::NavMap nm;
+  const auto surface = nm.create_surface("map");
+  const int n = 17;  // 0.5 m spacing over [0, 8] m
+  for (int j = 0; j < n; ++j) {
+    for (int i = 0; i < n; ++i) {
+      nm.add_vertex({0.5f * i, 0.5f * j, slope(0.5f * i)});
+    }
+  }
+  for (int j = 0; j + 1 < n; ++j) {
+    for (int i = 0; i + 1 < n; ++i) {
+      const uint32_t v = j * n + i;
+      nm.add_navcel_to_surface(surface, nm.add_navcel(v, v + 1, v + n + 1));
+      nm.add_navcel_to_surface(surface, nm.add_navcel(v, v + n + 1, v + n));
+    }
+  }
+  nm.rebuild_geometry_accels();
+  nav_state_.set("map.navmap", nm);
+
+  // The ramp itself, seen ahead up to 2 m, with a little noise
+  for (float x = 4.3f; x <= 6.0f; x += 0.1f) {
+    perception_.data.push_back(pcl::PointXYZ(x, 4.1f, slope(x) + 0.03f));
+  }
+  // A box 0.4 m high on it, at x = 5.55
+  for (float z = 0.0f; z <= 0.4f; z += 0.1f) {
+    perception_.data.push_back(pcl::PointXYZ(5.60f, 3.20f, slope(5.60f) + z));
+  }
+  easynav::navmap::ObstacleFilter filter;
+  filter.initialize(node_, "navmap.obstacles");
+  nav_state_.set("scan", perception_);
+  filter.update(nav_state_);
+  const auto & out = nav_state_.get<::navmap::NavMap>("map.navmap");
+
+  auto at = [&out](float x, float y) {
+      std::size_t sidx = 0;
+      ::navmap::NavCelId cid;
+      Eigen::Vector3f bary, hit;
+      EXPECT_TRUE(out.locate_navcel(Eigen::Vector3f(x, y, 0.25f * (x - 4.0f)), sidx, cid, bary,
+      &hit));
+      return out.layer_get<std::uint8_t>("obstacles", cid, 123);
+    };
+  for (float x = 4.35f; x <= 6.0f; x += 0.3f) {
+    EXPECT_EQ(at(x, 4.05f), navmap_ros::FREE_SPACE) << "the ramp at x = " << x;
+  }
+  EXPECT_EQ(at(5.55f, 3.15f), navmap_ros::LETHAL_OBSTACLE) << "the box";
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, TheDownsampleResolutionIsConfigurable)
+{
+  // Two columns 0.6 m apart, off the ground: a 2 m voxel keeps one point of them; 0 keeps all
+  for (const auto & [resolution, both] : std::vector<std::pair<double, bool>>{
+    {0.0, true}, {0.3, true}, {2.0, false}})
+  {
+    SetUp();
+    node_->declare_parameter("navmap.obstacles.downsample_resolution", resolution);
+    column(4.65f, 4.05f, 0.5f, 0.8f);
+    column(5.25f, 4.05f, 0.5f, 0.8f);
+    easynav::navmap::ObstacleFilter filter;
+    const auto & nm = run(filter);
+    const int marked = (cell_at(nm, 4.65f, 4.05f) == navmap_ros::LETHAL_OBSTACLE) +
+      (cell_at(nm, 5.25f, 4.05f) == navmap_ros::LETHAL_OBSTACLE);
+    EXPECT_EQ(marked, both ? 2 : 1) << resolution;
+  }
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, MinHeightGrowsWithTheDistanceToTheRobot)
+{
+  // Robot at (4, 4). Threshold 0.05 + 0.1 per meter: 0.12 m at 0.65 m, about 0.38 m at 3.3 m
+  node_->declare_parameter("navmap.obstacles.min_height", 0.05);
+  node_->declare_parameter("navmap.obstacles.min_height_per_meter", 0.1);
+  perception_.data.push_back(pcl::PointXYZ(4.70f, 4.10f, 0.2f));   // near, 0.2 m: obstacle
+  perception_.data.push_back(pcl::PointXYZ(7.40f, 4.10f, 0.2f));   // far, 0.2 m: the ground
+  perception_.data.push_back(pcl::PointXYZ(4.10f, 0.70f, 0.5f));   // far, 0.5 m: obstacle
+  easynav::navmap::ObstacleFilter filter;
+  const auto & nm = run(filter);
+  EXPECT_EQ(cell_at(nm, 4.65f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
+  EXPECT_EQ(cell_at(nm, 7.35f, 4.05f), navmap_ros::FREE_SPACE);
+  EXPECT_EQ(cell_at(nm, 4.05f, 0.75f), navmap_ros::LETHAL_OBSTACLE);  // Its column's center
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, ByDefaultMinHeightDoesNotGrow)
+{
+  node_->declare_parameter("navmap.obstacles.min_height", 0.05);
+  perception_.data.push_back(pcl::PointXYZ(7.40f, 4.10f, 0.095f));  // 3.35 m away, a laser hit
+  easynav::navmap::ObstacleFilter filter;
+  const auto & nm = run(filter);
+  EXPECT_EQ(cell_at(nm, 7.35f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, AnInvalidMinHeightPerMeterIsZero)
+{
+  for (const double bad : std::vector<double>{-0.1, std::nan("")}) {
+    SetUp();
+    node_->declare_parameter("navmap.obstacles.min_height", 0.05);
+    node_->declare_parameter("navmap.obstacles.min_height_per_meter", bad);
+    perception_.data.push_back(pcl::PointXYZ(7.40f, 4.10f, 0.095f));
+    easynav::navmap::ObstacleFilter filter;
+    const auto & nm = run(filter);
+    EXPECT_EQ(cell_at(nm, 7.35f, 4.05f), navmap_ros::LETHAL_OBSTACLE) << bad;
+  }
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, WithoutTheRobotPoseMinHeightDoesNotGrow)
+{
+  // No map -> robot transform at all: the growth cannot be applied, the base threshold is
+  auto tf_buffer = easynav::RTTFBuffer::getInstance();
+  tf_buffer->clear();
+  node_->declare_parameter("navmap.obstacles.min_height", 0.05);
+  node_->declare_parameter("navmap.obstacles.min_height_per_meter", 0.1);
+  node_->declare_parameter("navmap.obstacles.max_range", 100.0);
+  perception_.frame_id = easynav::RTTFBuffer::getInstance()->get_tf_info().robot_frame;
+  perception_.data.push_back(pcl::PointXYZ(3.40f, 0.10f, 0.2f));
+  easynav::navmap::ObstacleFilter filter;
+  filter.initialize(node_, "navmap.obstacles");
+  nav_state_.set("scan", perception_);
+  EXPECT_NO_THROW(filter.update(nav_state_));
+}

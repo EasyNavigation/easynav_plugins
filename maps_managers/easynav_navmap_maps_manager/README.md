@@ -50,18 +50,16 @@ All parameters are declared under the plugin namespace, i.e.
 - **Plugin Name:** `easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter`
 - **Type:** `easynav::navmap::ObstacleFilter`
 - **Description:**  
-  Detects occupied NavCels from input point clouds (`points` key in `NavState`) and marks them as `LETHAL_OBSTACLE` in the `"obstacles"` layer.  
-  The filter groups 3D points into voxels and marks cells as occupied if a sufficient vertical structure is detected (either multiple bins along the z-axis or a vertical span exceeding a threshold).
+  Detects occupied NavCels from the point perceptions in `NavState` and marks them as `LETHAL_OBSTACLE` in the `"obstacles"` layer, on top of the static map's `"occupancy"` layer (if any).  
+  The points are downsampled, those within `max_range` and below `max_height` (robot frame) are grouped in 0.3 m columns, and a column is an obstacle when its highest point is more than `min_height` (plus `min_height_per_meter` for each meter from the robot) above the NavMap surface under it (along the surface's normal). So a 2D laser detects obstacles too, and the ground or a ramp, being on the surface, is not one.
 
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.max_range` | `double` | `10.0` | Only points within this distance (x and y, robot frame) are used. |
-| `<plugin>.min_height` | `double` | `NaN` | Points below this height (robot frame) are ignored; `NaN` disables it. |
+| `<plugin>.min_height` | `double` | `0.1` | Height above the NavMap surface below which points are the ground. |
+| `<plugin>.min_height_per_meter` | `double` | `0.0` | `min_height` grows this much per meter of horizontal distance from the robot (`< 0` or not finite: `0`). On rough terrain, a small error in the robot's tilt lifts the ground more the farther it is; e.g. `0.05` adds 0.25 m at 5 m. |
 | `<plugin>.max_height` | `double` | `NaN` | Points above this height (robot frame) are ignored; `NaN` disables it. |
-| `<plugin>.vertical_bins_min` | `int` | `3` | Minimum number of vertical bins required to consider a column as an obstacle. |
-| `<plugin>.height_threshold` | `double` | `0.25` | Minimum vertical height (in meters) between max and min z to mark as an obstacle. |
-| `<plugin>.downsample` | `double` | `0.3` | Voxel size used to downsample point clouds before obstacle detection. |
-| `<plugin>.fuse_frame` | `string` | `"map"` | Frame in which points are fused before projection into NavMap. |
+| `<plugin>.downsample_resolution` | `double` | `0.3` | Voxel size (m) the points are reduced to first; `<= 0` disables it. |
 | **Input Key:** | | | Reads list of point clouds from `NavState` group `"points"`. |
 | **Output Layer:** | | | Updates or creates NavMap layer `"obstacles"`. |
 
