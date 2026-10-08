@@ -6,7 +6,9 @@
 **A\*** path planner operating over a `NavMap` triangular mesh.  
 The planner computes the **minimum-cost path** between the robot and the goal, taking into account both the geometric distance between triangles and the cost values stored in a selected NavMap layer (typically `"inflated_obstacles"`).
 
-Instead of simply avoiding non-free NavCels, the planner integrates their cost values (0–255) into the path evaluation. Cells marked as `LETHAL_OBSTACLE` or `NO_INFORMATION` are considered non-traversable, while inflated or inscribed cells are allowed but penalized proportionally to their cost.  
+Instead of simply avoiding non-free NavCels, the planner integrates their cost values (0–255) into the path evaluation. Cells marked as `LETHAL_OBSTACLE`, `NO_INFORMATION` or inscribed (`INSCRIBED_INFLATED_OBSTACLE`) are non-traversable (inscribed ones only near the start, so a robot inside that band can leave it), while inflated cells are allowed but penalized proportionally to their cost.  
+
+The search moves between NavCels that share a vertex, not only an edge, so no direction is favored by how the mesh is split; a move through a shared vertex is only taken when every NavCel around that vertex is traversable, so the path never slips between two obstacles that touch at a corner. Then the path is shortened by line of sight: from each waypoint it goes straight to the farthest one whose segment crosses only traversable NavCels no costlier than the waypoints it replaces, and the result is resampled at the NavCel spacing on the surface. The path ends exactly at the goal.  
 
 This enables smoother and safer trajectories that still respect proximity constraints imposed by obstacle inflation.
 

@@ -393,3 +393,148 @@ TEST_F(NavMapPlannerTest, GoalInAnotherFrameClearsThePath)
   planner_->update(nav_state_);
   EXPECT_FALSE(path().poses.empty());
 }
+
+// ─── Path shape ─────────────────────────────────────────────────────────────────────────────
+
+namespace
+{
+
+struct Shape
+{
+  double length {0.0};      // Path length
+  double deviation {0.0};   // Farthest point from the straight line
+};
+
+Shape shape_of(const nav_msgs::msg::Path & p, double sx, double sy, double gx, double gy)
+{
+  Shape s;
+  const double L = std::hypot(gx - sx, gy - sy);
+  for (std::size_t i = 0; i < p.poses.size(); ++i) {
+    const auto & b = p.poses[i].pose.position;
+    s.deviation = std::max(
+      s.deviation, std::abs((gx - sx) * (sy - b.y) - (sx - b.x) * (gy - sy)) / L);
+    if (i > 0) {
+      const auto & a = p.poses[i - 1].pose.position;
+      s.length += std::hypot(b.x - a.x, b.y - a.y);
+    }
+  }
+  return s;
+}
+
+}  // namespace
+
+TEST_F(NavMapPlannerTest, InFreeSpaceThePathIsStraightInEveryDirection)
+{
+  // Before, with only edge neighbors, one diagonal was an L: 39 % longer, 1.66 m off the line
+  struct Case {double sx, sy, gx, gy;};
+  for (const auto & c : std::vector<Case>{
+    {0.55, 0.55, 3.45, 0.55}, {3.45, 0.55, 0.55, 0.55}, {0.55, 0.55, 0.55, 3.45},
+    {0.55, 3.45, 0.55, 0.55}, {0.55, 0.55, 3.45, 3.45}, {3.45, 3.45, 0.55, 0.55},
+    {3.45, 0.55, 0.55, 3.45}, {0.55, 3.45, 3.45, 0.55}, {0.55, 0.55, 3.45, 1.55},
+    {3.45, 0.55, 0.55, 1.55}, {0.55, 0.55, 1.55, 3.45}, {1.55, 0.55, 0.55, 3.45}})
+  {
+    set_robot(c.sx, c.sy);
+    set_goal(c.gx, c.gy);
+    planner_->update(nav_state_);
+    const auto p = path();
+    ASSERT_FALSE(p.poses.empty());
+    const auto s = shape_of(p, c.sx, c.sy, c.gx, c.gy);
+    const double straight = std::hypot(c.gx - c.sx, c.gy - c.sy);
+    EXPECT_LT(s.length, straight + 0.1) <<
+      "(" << c.sx << ", " << c.sy << ") -> (" << c.gx << ", " << c.gy << ")";
+    EXPECT_LT(s.deviation, 0.1) <<
+      "(" << c.sx << ", " << c.sy << ") -> (" << c.gx << ", " << c.gy << ")";
+  }
+}
+
+TEST_F(NavMapPlannerTest, ThePathIsDenseAndEndsAtTheGoal)
+{
+  set_goal(3.45, 1.55);
+  planner_->update(nav_state_);
+  const auto p = path();
+  ASSERT_GE(p.poses.size(), 2u);
+  for (std::size_t i = 1; i < p.poses.size(); ++i) {
+    const auto & a = p.poses[i - 1].pose.position;
+    const auto & b = p.poses[i].pose.position;
+    EXPECT_LT(std::hypot(b.x - a.x, b.y - a.y), 2 * kResolution) << i;
+  }
+  EXPECT_DOUBLE_EQ(p.poses.back().pose.position.x, 3.45);
+  EXPECT_DOUBLE_EQ(p.poses.back().pose.position.y, 1.55);
+}
+
+TEST_F(NavMapPlannerTest, AroundAWallThePathOnlyBendsAtItsEnd)
+{
+  // Wall at x = 2 from y = 0 to 2.5: straight to near its end, then straight to the goal
+  for (int y = 0; y < 25; ++y) {
+    occupy_cell(20, y);
+  }
+  update_map();
+  set_robot(0.55, 0.55);
+  set_goal(3.45, 0.55);
+  planner_->update(nav_state_);
+  const auto p = path();
+  ASSERT_FALSE(p.poses.empty());
+  // Shortest around the end (2.0, 2.5): 2 * hypot(1.45, 1.95) = 4.86 m
+  EXPECT_LT(shape_of(p, 0.55, 0.55, 3.45, 0.55).length, 4.86 * 1.05);
+  for (const auto & ps : p.poses) {
+    const auto & q = ps.pose.position;
+    EXPECT_FALSE(q.x >= 2.0 && q.x < 2.1 && q.y < 2.5) << "through the wall at " << q.x <<
+      ", " << q.y;
+  }
+}
+
+TEST_F(NavMapPlannerTest, TheShortcutDoesNotCrossCostlierCells)
+{
+  // A costly (not inscribed) square between start and goal: the A* goes around it, and the
+  // straight shortcut must not cut through it
+  inflate([](float x, float y) -> std::uint8_t {
+      return (x > 1.5f && x < 2.5f && y > 0.0f && y < 1.6f) ? 200 : 0;
+    });
+  set_robot(0.55, 0.55);
+  set_goal(3.45, 0.55);
+  planner_->update(nav_state_);
+  ASSERT_FALSE(path().poses.empty());
+  EXPECT_NEAR(length_inside(1.55, 2.45, 0.0, 1.55), 0.0, 1e-9);
+}
+
+TEST_F(NavMapPlannerTest, CellsTouchingAtACornerAreAWall)
+{
+  // A diagonal line of occupied cells, each touching the next only at a corner, across the map:
+  // no gap to slip through
+  for (int i = 0; i < kCells; ++i) {
+    occupy_cell(i, i);
+  }
+  update_map();
+  set_robot(2.55, 0.55);
+  set_goal(0.55, 2.55);
+  planner_->update(nav_state_);
+  EXPECT_TRUE(path().poses.empty());
+
+  // The same wall the other way (against the mesh's split diagonal)
+  grid_.data.assign(kCells * kCells, 0);
+  for (int i = 0; i < kCells; ++i) {
+    occupy_cell(i, kCells - 1 - i);
+  }
+  update_map();
+  set_robot(0.55, 0.55);
+  set_goal(3.45, 3.45);
+  planner_->update(nav_state_);
+  EXPECT_TRUE(path().poses.empty());
+}
+
+TEST_F(NavMapPlannerTest, AChangedMapWithTheSameSizeIsNotPlannedOnTheOldGraph)
+{
+  set_goal(3.45, 0.55);
+  planner_->update(nav_state_);
+  ASSERT_FALSE(path().poses.empty());
+
+  // Same number of cells, shifted 10 m: the cached centroids must be rebuilt
+  grid_.info.origin.position.x = 10.0;
+  update_map();
+  set_robot(10.55, 0.55);
+  set_goal(13.45, 0.55);
+  planner_->update(nav_state_);
+  const auto p = path();
+  ASSERT_FALSE(p.poses.empty());
+  EXPECT_GT(p.poses.front().pose.position.x, 10.0);
+}
