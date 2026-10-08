@@ -23,6 +23,7 @@
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
@@ -43,66 +44,68 @@ SerestController::on_initialize()
   const auto & ns = get_plugin_name();
 
   // Maximums and basic limits
-  node->declare_parameter<bool>(ns + ".allow_reverse", allow_reverse_);
-  node->declare_parameter<double>(ns + ".v_progress_min", v_progress_min_);
-  node->declare_parameter<double>(ns + ".k_s_share_max", k_s_share_max_);
+  easynav::declare_parameter_if_absent<bool>(*node, ns + ".allow_reverse", allow_reverse_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".v_progress_min", v_progress_min_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".k_s_share_max", k_s_share_max_);
 
-  node->declare_parameter<double>(ns + ".max_linear_speed", max_linear_speed_);
-  node->declare_parameter<double>(ns + ".max_angular_speed", max_angular_speed_);
-  node->declare_parameter<double>(ns + ".max_linear_acc", max_linear_acc_);
-  node->declare_parameter<double>(ns + ".max_angular_acc", max_angular_acc_);
 
   // Tracking
-  node->declare_parameter<double>(ns + ".k_s", k_s_);
-  node->declare_parameter<double>(ns + ".k_theta", k_theta_);
-  node->declare_parameter<double>(ns + ".k_y", k_y_);
-  node->declare_parameter<double>(ns + ".ell", ell_);
-  node->declare_parameter<double>(ns + ".v_ref", v_ref_);
-  node->declare_parameter<double>(ns + ".eps", eps_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".k_s", k_s_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".k_theta", k_theta_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".k_y", k_y_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".ell", ell_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".v_ref", v_ref_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".eps", eps_);
 
   // Safety
-  node->declare_parameter<double>(ns + ".a_acc", a_acc_);
-  node->declare_parameter<double>(ns + ".a_brake", a_brake_);
-  node->declare_parameter<double>(ns + ".a_lat_max", a_lat_max_);
-  node->declare_parameter<double>(ns + ".d0_margin", d0_margin_);
-  node->declare_parameter<double>(ns + ".tau_latency", tau_latency_);
-  node->declare_parameter<double>(ns + ".d_hard", d_hard_);
-  node->declare_parameter<double>(ns + ".t_emerg", t_emerg_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".a_acc", a_acc_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".a_brake", a_brake_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".a_lat_max", a_lat_max_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".d0_margin", d0_margin_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".tau_latency", tau_latency_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".d_hard", d_hard_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".t_emerg", t_emerg_);
 
   // Blend at vertices
-  node->declare_parameter<double>(ns + ".blend_base", blend_base_);
-  node->declare_parameter<double>(ns + ".blend_k_per_v", blend_k_per_v_);
-  node->declare_parameter<double>(ns + ".kappa_max", kappa_max_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".blend_base", blend_base_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".blend_k_per_v", blend_k_per_v_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".kappa_max", kappa_max_);
 
   // For obstacle detection
-  node->declare_parameter<double>(ns + ".dist_search_radius", dist_search_radius_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".dist_search_radius",
+      dist_search_radius_);
 
-  node->declare_parameter<double>(ns + ".goal_pos_tol", goal_pos_tol_);
-  node->declare_parameter<double>(ns + ".goal_yaw_tol_deg", goal_yaw_tol_deg_);
-  node->declare_parameter<double>(ns + ".slow_radius", slow_radius_);
-  node->declare_parameter<double>(ns + ".slow_min_speed", slow_min_speed_);
-  node->declare_parameter<double>(ns + ".final_align_k", final_align_k_);
-  node->declare_parameter<double>(ns + ".final_align_wmax", final_align_wmax_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".goal_pos_tol", goal_pos_tol_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".goal_yaw_tol_deg", goal_yaw_tol_deg_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".slow_radius", slow_radius_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".slow_min_speed", slow_min_speed_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".final_align_k", final_align_k_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".final_align_wmax", final_align_wmax_);
 
-  node->declare_parameter<bool>(ns + ".corner_guard_enable", corner_guard_enable_);
-  node->declare_parameter<double>(ns + ".corner_gain_ey", corner_gain_ey_);
-  node->declare_parameter<double>(ns + ".corner_gain_eth", corner_gain_eth_);
-  node->declare_parameter<double>(ns + ".corner_gain_kappa", corner_gain_kappa_);
-  node->declare_parameter<double>(ns + ".corner_min_alpha", corner_min_alpha_);
-  node->declare_parameter<double>(ns + ".corner_boost_omega", corner_boost_omega_);
-  node->declare_parameter<double>(ns + ".apex_ey_des", apex_ey_des_);
-  node->declare_parameter<double>(ns + ".a_lat_soft", a_lat_soft_);
-
+  easynav::declare_parameter_if_absent<bool>(*node, ns + ".corner_guard_enable",
+      corner_guard_enable_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_gain_ey", corner_gain_ey_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_gain_eth", corner_gain_eth_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_gain_kappa",
+      corner_gain_kappa_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_min_alpha", corner_min_alpha_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".corner_boost_omega",
+      corner_boost_omega_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".apex_ey_des", apex_ey_des_);
+  easynav::declare_parameter_if_absent<double>(*node, ns + ".a_lat_soft", a_lat_soft_);
 
   // Get
   node->get_parameter<bool>(ns + ".allow_reverse", allow_reverse_);
   node->get_parameter<double>(ns + ".v_progress_min", v_progress_min_);
   node->get_parameter<double>(ns + ".k_s_share_max", k_s_share_max_);
 
-  node->get_parameter<double>(ns + ".max_linear_speed", max_linear_speed_);
-  node->get_parameter<double>(ns + ".max_angular_speed", max_angular_speed_);
-  node->get_parameter<double>(ns + ".max_linear_acc", max_linear_acc_);
-  node->get_parameter<double>(ns + ".max_angular_acc", max_angular_acc_);
+  // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_speed", "", "max_angular_speed", "max_linear_acc", "", "max_angular_acc", ""});
+  max_linear_speed_ = limits.max_linear_vel;
+  max_angular_speed_ = limits.max_angular_vel;
+  max_linear_acc_ = limits.max_linear_acc;
+  max_angular_acc_ = limits.max_angular_acc;
 
   node->get_parameter<double>(ns + ".k_s", k_s_);
   node->get_parameter<double>(ns + ".k_theta", k_theta_);
@@ -211,7 +214,7 @@ SerestController::ref_heading_and_curvature(
       if (i + 1 >= pd.pts.size()) {return v2(1, 0);}
       return normalize(pd.pts[i + 1] - pd.pts[i]);
     };
-  auto atan2dir = [](const Vec2 & t) {return std::atan2(t.y, t.x);};
+  auto atan2dir = [](const Vec2 & t){return std::atan2(t.y, t.x);};
 
   // Relevant segment indices: i-1, i, i + 1
   const size_t i = prj.seg_idx;
@@ -223,7 +226,7 @@ SerestController::ref_heading_and_curvature(
 
   // Determine if we are near the beginning or end of a segment
   double s_i = pd.s_acc[i];
-  double s_ip1 = pd.s_acc[i + 1];
+  double s_ip1 = (i + 1 < pd.s_acc.size()) ? pd.s_acc[i + 1] : s_i;  // single-point path
   double s = prj.s_star;
 
   // Default: constant segment heading, kappa = 0
@@ -288,7 +291,7 @@ SerestController::closest_obstacle_distance(
   // 1) Prefer direct measurement if it exists
   if (nav_state.has("closest_obstacle_distance")) {
     try {
-      return nav_state.get<double>("closest_obstacle_distance");
+      return nav_state.get_safe<double>("closest_obstacle_distance");
     } catch (...) {
       // fall through to estimation
     }
@@ -302,9 +305,8 @@ SerestController::closest_obstacle_distance(
 
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(0.3)
-  .fuse(tf_info.robot_frame)
-  .filter(
-    {-dist_search_radius_, -dist_search_radius_, NAN},
+  .fuse(tf_info.robot_footprint_frame)
+  .filter({-dist_search_radius_, -dist_search_radius_, NAN},
     {dist_search_radius_, dist_search_radius_, 2.0})
   .collapse({NAN, NAN, 0.1})
   .downsample(0.3);
@@ -381,8 +383,8 @@ SerestController::fetch_required_inputs(
     return false;
   }
 
-  path = nav_state.get<nav_msgs::msg::Path>("path");
-  odom = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  path = nav_state.get_safe<nav_msgs::msg::Path>("path");
+  odom = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
 
   if (rclcpp::Time(path.header.stamp, last_input_ts_.get_clock_type()) > last_input_ts_) {
     last_input_ts_ = rclcpp::Time(path.header.stamp, last_input_ts_.get_clock_type());
@@ -444,7 +446,7 @@ SerestController::safety_limits(
   double & d_closest, double & v_safe, double & v_curv)
 {
   d_closest = closest_obstacle_distance(nav_state);
-  v_safe = v_safe_from_distance(d_closest, /*slope_sin=*/ 0.0);
+  v_safe = v_safe_from_distance(d_closest, /*slope_sin=*/0.0);
 
   // Curvature-based limit ("soft" version of the original file)
   const double ak = std::fabs(rk.kappa_hat);
@@ -635,18 +637,26 @@ SerestController::update_rt(NavState & nav_state)
   if (!fetch_required_inputs(nav_state, path, odom)) {return;}
 
   // 1.5) Goal tolerances: prefer shared GoalManager values, fallback to local params
-  double goal_pos_tol = goal_pos_tol_;
-  double goal_yaw_tol = goal_yaw_tol_deg_ * (M_PI / 180.0);
+  //      Propagate the resolved tolerances to the members consumed by compute_goal_zone()
+  //      and maybe_final_align_and_publish(), so a GoalManager override actually takes effect.
   if (nav_state.has("goal_tolerance.position")) {
-    goal_pos_tol = nav_state.get<double>("goal_tolerance.position");
+    goal_pos_tol_ = nav_state.get_safe<double>("goal_tolerance.position");
   }
   if (nav_state.has("goal_tolerance.yaw")) {
-    goal_yaw_tol = nav_state.get<double>("goal_tolerance.yaw");
+    goal_yaw_tol_deg_ = nav_state.get_safe<double>("goal_tolerance.yaw") * (180.0 / M_PI);
   }
 
   // 2) Robot state (position + yaw)
   Vec2 robot_xy; double yaw = 0.0;
   robot_state_from_odom(odom, robot_xy, yaw);
+
+  // A single pose (goal in or next to the robot's cell): the segment goes from the robot to it.
+  if (path.poses.size() == 1) {
+    geometry_msgs::msg::PoseStamped from = path.poses.front();
+    from.pose.position.x = robot_xy.x;
+    from.pose.position.y = robot_xy.y;
+    path.poses.insert(path.poses.begin(), from);
+  }
 
   // 3) Path primitives, closest-point projection, and local reference kinematics
   PathData pd = build_path_data(path);
@@ -660,9 +670,8 @@ SerestController::update_rt(NavState & nav_state)
   // 5) Goal-related terms and slow/stop zone shaping
   double dist_xy_goal = 0.0, e_theta_goal = 0.0, stop_r = 0.0, slow_r = 0.0, gamma_slow = 1.0;
   Vec2 goal_xy; double yaw_goal = 0.0;
-  compute_goal_zone(
-    path, robot_xy, yaw, dist_xy_goal, e_theta_goal,
-    stop_r, slow_r, gamma_slow, goal_xy, yaw_goal);
+  compute_goal_zone(path, robot_xy, yaw, dist_xy_goal, e_theta_goal,
+                    stop_r, slow_r, gamma_slow, goal_xy, yaw_goal);
 
   // 6) Global safety limits derived from sensors and curvature
   double d_closest = 0.0, v_safe = 0.0, v_curv = 0.0;
@@ -679,8 +688,7 @@ SerestController::update_rt(NavState & nav_state)
     const double near_start_s = 0.30;  // treat the first 30 cm as the start region
 
     // Base request from the regular criterion (using the provided threshold)
-    bool tip_request = should_turn_in_place(
-      allow_reverse_, e_theta, e_theta_goal, dist_to_end,
+    bool tip_request = should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end,
       thr_enter);
 
     // Additional start-of-path gate: enforce TiP if still near s*=0 and yaw misalignment is large
@@ -766,7 +774,7 @@ SerestController::update_rt(NavState & nav_state)
 
   // 8) Final alignment inside stop zone (publishes and returns if active)
   if (maybe_final_align_and_publish(
-      nav_state, path, dist_xy_goal, stop_r, e_theta_goal, gamma_slow, dt))
+        nav_state, path, dist_xy_goal, stop_r, e_theta_goal, gamma_slow, dt))
   {
     return;
   }
@@ -794,9 +802,8 @@ SerestController::update_rt(NavState & nav_state)
     const double s_total = pd.s_acc.back();
     const double dist_to_end = s_total - prj.s_star;
 
-    if (should_turn_in_place(
-        allow_reverse_, e_theta, e_theta_goal, dist_to_end,
-        turn_in_place_thr))
+    if (should_turn_in_place(allow_reverse_, e_theta, e_theta_goal, dist_to_end,
+      turn_in_place_thr))
     {
       v_cmd_raw = 0.0;
       omega_nom = -k_theta_ * e_theta - k_y_ * std::atan(e_y / std::max(ell_, 1e-3));

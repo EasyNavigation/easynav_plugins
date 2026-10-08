@@ -20,6 +20,7 @@
 #define EASYNAV_CONTROLLER__VFFCONTROLLER_HPP_
 
 #include "pcl/point_cloud.h"
+#include "pcl/point_types.h"
 
 #include "easynav_core/ControllerMethodBase.hpp"
 

@@ -172,6 +172,12 @@ protected:
    */
   void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
 
+  /// @brief Starts from the last known pose after a reconfiguration ("initial_pose.use_last_known").
+  void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose) override;
+
+  /// @brief Whether to start from the last known pose after a reconfiguration.
+  bool use_last_known_pose_ {true};
+
 
   /**
    * @brief Update odom from TFs instead of a odom topic
@@ -202,6 +208,9 @@ protected:
 
   /// Minimum yaw noise threshold.
   double min_noise_yaw_ {0.05};
+
+  /// Points below this height (m, robot footprint frame) are ignored: floor hits
+  double min_height_ {0.1};
 
   /// Whether to use TFs to compute odom
   bool compute_odom_from_tf_ {false};

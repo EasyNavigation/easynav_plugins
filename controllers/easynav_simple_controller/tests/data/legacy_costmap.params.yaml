@@ -1,0 +1,77 @@
+controller_node:
+  ros__parameters:
+    use_sim_time: true
+    controller_types: [simple]
+    simple:
+      rt_freq: 30.0 
+      plugin: easynav_simple_controller/SimpleController
+      max_linear_speed: 1.2
+      max_angular_speed: 0.4
+      look_ahead_dist: 0.2
+      k_rot: 0.2
+
+localizer_node:
+  ros__parameters:
+    use_sim_time: true
+    localizer_types: [costmap]
+    costmap:
+      rt_freq: 50.0
+      freq: 5.0
+      reseed_freq: 1.0
+      plugin: easynav_costmap_localizer/AMCLLocalizer
+      num_particles: 100
+      noise_translation: 0.05
+      noise_rotation: 0.1
+      noise_translation_to_rotation: 0.1
+      initial_pose:
+        x: 0.0
+        y: 0.0
+        yaw: 0.0
+        std_dev_xy: 0.1
+        std_dev_yaw: 0.01
+
+maps_manager_node:
+  ros__parameters:
+    use_sim_time: true
+    map_types: [costmap]
+    costmap:
+      freq: 10.0 
+      plugin: easynav_costmap_maps_manager/CostmapMapsManager
+      package: easynav_indoor_testcase
+      map_path_file: maps/home2.yaml
+      filters: [obstacles, inflation]
+      obstacles:
+        plugin: easynav_costmap_maps_manager/CostmapMapsManager/ObstaclesFilter
+      inflation:
+        plugin: easynav_costmap_maps_manager/CostmapMapsManager/InflationFilter
+        inflation_radius: 1.3
+        cost_scaling_factor: 3.0
+
+planner_node:
+  ros__parameters:
+    use_sim_time: true
+    planner_types: [simple]
+    simple:
+      freq: 0.5
+      plugin: easynav_costmap_planner/CostmapPlanner
+      cost_factor: 10.0
+
+sensors_node:
+  ros__parameters:
+    use_sim_time: true
+    forget_time: 0.5
+    sensors: [laser1]
+    perception_default_frame: odom
+    laser1:
+      topic: scan_raw
+      type: sensor_msgs/msg/LaserScan
+    camera1:
+      topic: rgbd_camera/points
+      type: sensor_msgs/msg/PointCloud2
+      
+system_node:
+  ros__parameters:
+    use_sim_time: true
+    use_real_time: false
+    position_tolerance: 0.1
+    angle_tolerance: 0.05

@@ -44,6 +44,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.noise_translation_to_rotation` | `double` | `0.01` | Translation-to-rotation noise coupling. |
 | `<plugin>.min_noise_xy` | `double` | `0.05` | Minimum XY noise (m). |
 | `<plugin>.min_noise_yaw` | `double` | `0.05` | Minimum yaw noise (rad). |
+| `<plugin>.min_height` | `double` | `0.1` | Points lower than this (m, `base_footprint` frame) are the floor and do not correct the particles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high). |
 
 ## Interfaces (Topics and Services)
 

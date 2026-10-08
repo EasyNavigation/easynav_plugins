@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #ifndef EASYNAV_NAVMAP_LOCALIZER__PERCEPTIONMODEL_HPP_
 #define EASYNAV_NAVMAP_LOCALIZER__PERCEPTIONMODEL_HPP_
 

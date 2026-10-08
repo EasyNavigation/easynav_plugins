@@ -28,6 +28,7 @@
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_regulated_pp_controller/RegulatedPurePursuitController.hpp"
 #include "easynav_regulated_pp_controller/regulation_functions.hpp"
 #include "easynav_regulated_pp_controller/dynamic_window_pure_pursuit_functions.hpp"
@@ -59,7 +60,7 @@ RegulatedPurePursuitController::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   auto declare_and_get = [&node, &plugin_name](const std::string & name, auto & value) {
-      node->declare_parameter(plugin_name + "." + name, value);
+      easynav::declare_parameter_if_absent(*node, plugin_name + "." + name, value);
       node->get_parameter(plugin_name + "." + name, value);
     };
 
@@ -69,14 +70,22 @@ RegulatedPurePursuitController::on_initialize()
   declare_and_get("lookahead_time", lookahead_time_);
   declare_and_get("use_velocity_scaled_lookahead_dist", use_velocity_scaled_lookahead_dist_);
 
-  declare_and_get("max_linear_vel", max_linear_vel_);
-  declare_and_get("min_linear_vel", min_linear_vel_);
-  declare_and_get("max_angular_vel", max_angular_vel_);
-  declare_and_get("min_angular_vel", min_angular_vel_);
-  declare_and_get("max_linear_accel", max_linear_accel_);
-  declare_and_get("max_linear_decel", max_linear_decel_);
-  declare_and_get("max_angular_accel", max_angular_accel_);
-  declare_and_get("max_angular_decel", max_angular_decel_);
+  // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_vel", "min_linear_vel", "max_angular_vel", "max_linear_accel",
+      "max_linear_decel", "max_angular_accel", "max_angular_decel"});
+  max_linear_vel_ = limits.max_linear_vel;
+  min_linear_vel_ = limits.min_linear_vel;
+  max_angular_vel_ = limits.max_angular_vel;
+  max_linear_accel_ = limits.max_linear_acc;
+  max_linear_decel_ = limits.max_linear_decel;
+  max_angular_accel_ = limits.max_angular_acc;
+  max_angular_decel_ = limits.max_angular_decel;
+  // Symmetric by default; a deprecated "min_angular_vel" still applies.
+  min_angular_vel_ = -max_angular_vel_;
+  get_deprecated_parameter(
+    "min_angular_vel", "controller_node.robot_limits.max_angular_vel (symmetric)",
+    min_angular_vel_);
   declare_and_get("use_dynamic_window", use_dynamic_window_);
   declare_and_get("allow_reversing", allow_reversing_);
 
@@ -96,6 +105,10 @@ RegulatedPurePursuitController::on_initialize()
     use_obstacle_regulated_linear_velocity_scaling_);
   declare_and_get("obstacle_scaling_dist", obstacle_scaling_dist_);
   declare_and_get("obstacle_scaling_gain", obstacle_scaling_gain_);
+  declare_and_get("robot_radius", robot_radius_);
+  declare_and_get("safety_margin", safety_margin_);
+  declare_and_get("z_min_filter", z_min_filter_);
+  declare_and_get("robot_height", robot_height_);
 
   declare_and_get("min_approach_linear_velocity", min_approach_linear_velocity_);
   declare_and_get("approach_velocity_scaling_dist", approach_velocity_scaling_dist_);
@@ -277,9 +290,14 @@ RegulatedPurePursuitController::toRobotFrame(
 }
 
 bool
-RegulatedPurePursuitController::shouldRotateToPath(double angle_to_path) const
+RegulatedPurePursuitController::shouldRotateToPath(
+  double angle_to_path, bool currently_rotating) const
 {
-  return use_rotate_to_heading_ && std::fabs(angle_to_path) > rotate_to_heading_min_angle_;
+  if (!use_rotate_to_heading_) {return false;}
+  const double threshold = currently_rotating ?
+    0.5 * rotate_to_heading_min_angle_ :
+    rotate_to_heading_min_angle_;
+  return std::fabs(angle_to_path) > threshold;
 }
 
 void
@@ -403,7 +421,7 @@ void
 RegulatedPurePursuitController::update_rt(NavState & nav_state)
 {
   if (nav_state.has("navigation_state")) {
-    const auto goal_state = nav_state.get<easynav::GoalManager::State>("navigation_state");
+    const auto goal_state = nav_state.get_safe<easynav::GoalManager::State>("navigation_state");
     if (goal_state == easynav::GoalManager::State::IDLE) {
       std_msgs::msg::Header header;
       header.stamp = get_node()->now();
@@ -414,7 +432,7 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
 
   if (!nav_state.has("path") || !nav_state.has("robot_pose")) {return;}
 
-  const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
+  const auto & path = nav_state.get_safe<nav_msgs::msg::Path>("path");
 
   std_msgs::msg::Header header;
   header.frame_id = path.header.frame_id;
@@ -424,8 +442,22 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
     stop(nav_state, header);
     return;
   }
+  // A non-finite path cannot be followed: comparisons with NaN would give a finite, arbitrary
+  // command.
+  const bool finite = std::all_of(
+    path.poses.begin(), path.poses.end(), [](const geometry_msgs::msg::PoseStamped & p) {
+      return std::isfinite(p.pose.position.x) && std::isfinite(p.pose.position.y) &&
+             std::isfinite(p.pose.orientation.z) && std::isfinite(p.pose.orientation.w);
+    });
+  if (!finite) {
+    RCLCPP_WARN_THROTTLE(
+      get_node()->get_logger(), *get_node()->get_clock(), 1000,
+      "[%s] non-finite path: stopping", get_plugin_name().c_str());
+    stop(nav_state, header);
+    return;
+  }
 
-  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const double robot_yaw = tf2::getYaw(robot_pose.orientation);
 
   const auto & goal_pose = path.poses.back().pose;
@@ -433,10 +465,10 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
   double xy_tol = xy_goal_tolerance_;
   double yaw_tol = yaw_goal_tolerance_;
   if (nav_state.has("goal_tolerance.position")) {
-    xy_tol = nav_state.get<double>("goal_tolerance.position");
+    xy_tol = nav_state.get_safe<double>("goal_tolerance.position");
   }
   if (nav_state.has("goal_tolerance.yaw")) {
-    yaw_tol = nav_state.get<double>("goal_tolerance.yaw");
+    yaw_tol = nav_state.get_safe<double>("goal_tolerance.yaw");
   }
 
   const double dist_to_goal = std::hypot(
@@ -489,7 +521,7 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
     const double regulation_curvature = heuristics::calculateCurvature(
       curvature_local.x, curvature_local.y);
 
-    if (shouldRotateToPath(angle_to_path)) {
+    if (shouldRotateToPath(angle_to_path, is_rotating_to_heading_)) {
       is_rotating_to_heading_ = true;
       rotateToHeading(linear_vel, angular_vel, angle_to_path, dt);
     } else {

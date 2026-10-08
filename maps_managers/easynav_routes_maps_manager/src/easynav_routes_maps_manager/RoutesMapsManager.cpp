@@ -13,16 +13,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+#include "easynav_common/Parameters.hpp"
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
+#include "easynav_routes_maps_manager/route_io.hpp"
 
-#include <fstream>
-
-#include <yaml-cpp/yaml.h>
-
-#include <filesystem>
-
-#include "ament_index_cpp/get_package_share_directory.hpp"
+#include "easynav_common/PackageShare.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -37,12 +34,12 @@ RoutesMapsManager::RoutesMapsManager()
       out << "RoutesMap with " << routes.size() << " segments";
       for (std::size_t i = 0; i < routes.size(); ++i) {
         const auto & s = routes[i];
-        out << "\n  [" << i << "] from (" << s.start.position.x << ", "
-            << s.start.position.y << ") to (" << s.end.position.x << ", "
-            << s.end.position.y << ")";
+        out   << "\n  [" << i << "] from (" << s.start.position.x << ", "
+              << s.start.position.y << ") to (" << s.end.position.x << ", "
+              << s.end.position.y << ")";
       }
       return out.str();
-    });
+      });
 
   routes_filters_loader_ = std::make_unique<pluginlib::ClassLoader<RoutesFilter>>(
     "easynav_routes_maps_manager", "easynav::RoutesFilter");
@@ -56,21 +53,15 @@ void RoutesMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, map_path_file;
-  if (!node->has_parameter(plugin_name + ".package")) {
-    node->declare_parameter(plugin_name + ".package", package_name);
-  }
-  if (!node->has_parameter(plugin_name + ".map_path_file")) {
-    node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".map_path_file", map_path_file);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".map_path_file", map_path_file);
 
   // Load route filters plugins configuration
   std::vector<std::string> routes_filters_names;
-  if (!node->has_parameter(plugin_name + ".filters")) {
-    node->declare_parameter(plugin_name + ".filters", routes_filters_names);
-  }
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".filters", routes_filters_names);
   node->get_parameter(plugin_name + ".filters", routes_filters_names);
 
   map_path_.clear();
@@ -85,94 +76,36 @@ void RoutesMapsManager::on_initialize()
     // Absolute path: ignore package_name.
     map_path_ = map_path_file;
   } else if (!package_name.empty() && !map_path_file.empty()) {
-    const std::filesystem::path pkgpath(ament_index_cpp::get_package_share_directory(package_name));
-    map_path_ = (pkgpath / map_path_file).string();
+    const auto pkgpath = easynav::get_package_share_path(package_name);
+    map_path_ = pkgpath / map_path_file;
   } else {
     throw std::runtime_error(
-            "Parameters '" + plugin_name + ".package' and '" + plugin_name +
-            ".map_path_file' are not correctly set");
+      "Parameters '" + plugin_name + ".package' and '" + plugin_name +
+      ".map_path_file' are not correctly set");
   }
 
   routes_pub_ = node->create_publisher<visualization_msgs::msg::MarkerArray>(
-    node->get_name() + std::string("/") + plugin_name + "/routes",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/routes",
     rclcpp::QoS(10).transient_local().reliable());
 
   imarker_server_ = std::make_shared<interactive_markers::InteractiveMarkerServer>(
     plugin_name + std::string("_imarkers"), node, false);
 
   save_routes_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_name() + std::string("/") + plugin_name + "/save_routes",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/save_routes",
     [this](const std_srvs::srv::Trigger::Request::SharedPtr,
     std_srvs::srv::Trigger::Response::SharedPtr response) {
       try {
-        // Persist current routes_ back to YAML file using the
-        // structure:
-        // routes: [route1, route2]
-        // route1: { start: ..., end: ... }
-        YAML::Emitter out;
-        out << YAML::BeginMap;
-
-        // Collect route names from ids (or generate generic ones).
-        std::vector<std::string> names;
-        names.reserve(routes_.size());
-        for (std::size_t i = 0; i < routes_.size(); ++i) {
-          const auto & seg = routes_[i];
-          if (!seg.id.empty()) {
-            names.push_back(seg.id);
-          } else {
-            names.push_back("route" + std::to_string(i));
-          }
-        }
-
-        out << YAML::Key << "routes" << YAML::Value << YAML::Flow << YAML::BeginSeq;
-        for (const auto & n : names) {
-          out << n;
-        }
-        out << YAML::EndSeq;
-
-        // Now define each route as a separate key in the map.
-        for (std::size_t i = 0; i < routes_.size(); ++i) {
-          const auto & seg = routes_[i];
-          const auto & name = names[i];
-
-          out << YAML::Key << name << YAML::Value << YAML::BeginMap;
-
-          out << YAML::Key << "start" << YAML::Value << YAML::BeginMap;
-          out << YAML::Key << "x" << YAML::Value << seg.start.position.x;
-          out << YAML::Key << "y" << YAML::Value << seg.start.position.y;
-          out << YAML::Key << "z" << YAML::Value << seg.start.position.z;
-          out << YAML::Key << "qx" << YAML::Value << seg.start.orientation.x;
-          out << YAML::Key << "qy" << YAML::Value << seg.start.orientation.y;
-          out << YAML::Key << "qz" << YAML::Value << seg.start.orientation.z;
-          out << YAML::Key << "qw" << YAML::Value << seg.start.orientation.w;
-          out << YAML::EndMap;
-
-          out << YAML::Key << "end" << YAML::Value << YAML::BeginMap;
-          out << YAML::Key << "x" << YAML::Value << seg.end.position.x;
-          out << YAML::Key << "y" << YAML::Value << seg.end.position.y;
-          out << YAML::Key << "z" << YAML::Value << seg.end.position.z;
-          out << YAML::Key << "qx" << YAML::Value << seg.end.orientation.x;
-          out << YAML::Key << "qy" << YAML::Value << seg.end.orientation.y;
-          out << YAML::Key << "qz" << YAML::Value << seg.end.orientation.z;
-          out << YAML::Key << "qw" << YAML::Value << seg.end.orientation.w;
-          out << YAML::EndMap;
-
-          out << YAML::EndMap;
-        }
-
-        out << YAML::EndMap;
-
-        std::ofstream file(map_path_);
-        if (!file.is_open()) {
+        std::string error_message;
+        if (easynav::save_routes_to_yaml(map_path_, routes_, error_message)) {
+          response->success = true;
+          response->message = "Routes saved to " + map_path_;
+        } else {
           response->success = false;
-          response->message = "Could not open file for writing: " + map_path_;
-          return;
+          response->message = error_message;
         }
-        file << out.c_str();
-        file.close();
-
-        response->success = true;
-        response->message = "Routes saved to " + map_path_;
       } catch (const std::exception & e) {
         response->success = false;
         response->message = e.what();
@@ -187,24 +120,36 @@ void RoutesMapsManager::on_initialize()
     throw std::runtime_error(std::string{"Failed to load routes: "} + e.what());
   }
 
+  // A message received here replaces routes_ outright (last-writer-wins,
+  // same convention as easynav_costmap_maps_manager's own "incoming_map"
+  // topic) -- e.g. a fleet-wide navigation manager publishing on
+  // /global_routes, remapped to this topic.
+  incoming_routes_sub_ = node->create_subscription<easynav_routes_maps_manager::msg::RoutesMap>(
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/incoming_routes",
+    rclcpp::QoS(1).transient_local().reliable(),
+    [this](easynav_routes_maps_manager::msg::RoutesMap::UniquePtr msg) {
+      routes_ = from_msg(*msg);
+      recompute_next_route_id();
+      publish_routes_markers();
+      publish_interactive_markers();
+    });
+
   // Instantiate and initialize configured route filters
   for (const auto & filter_name : routes_filters_names) {
     std::string plugin;
-    if (!node->has_parameter(plugin_name + "." + filter_name + ".plugin")) {
-      node->declare_parameter(plugin_name + "." + filter_name + ".plugin", plugin);
-    }
+    easynav::declare_parameter_if_absent(*node, plugin_name + "." + filter_name + ".plugin",
+        plugin);
     node->get_parameter(plugin_name + "." + filter_name + ".plugin", plugin);
 
     if (plugin.empty()) {
-      RCLCPP_WARN(
-        node->get_logger(),
+      RCLCPP_WARN(node->get_logger(),
         "RoutesMapsManager: plugin parameter for filter '%s' is empty", filter_name.c_str());
       continue;
     }
 
     try {
-      RCLCPP_INFO(
-        node->get_logger(),
+      RCLCPP_INFO(node->get_logger(),
         "Loading RoutesFilter %s [%s]", filter_name.c_str(), plugin.c_str());
 
       std::shared_ptr<RoutesFilter> instance =
@@ -213,27 +158,22 @@ void RoutesMapsManager::on_initialize()
       try {
         instance->initialize(node, plugin_name + "." + filter_name);
       } catch (const std::exception & e) {
-        RCLCPP_ERROR(
-          node->get_logger(),
+        RCLCPP_ERROR(node->get_logger(),
           "Unable to initialize RoutesFilter %s [%s]. Error: %s",
           filter_name.c_str(), plugin.c_str(), e.what());
-        throw std::runtime_error(
-                "Unable to initialize RoutesFilter " + plugin +
-                " . Error: " + e.what());
+        throw std::runtime_error("Unable to initialize RoutesFilter " + plugin +
+          " . Error: " + e.what());
       }
 
       routes_filters_.push_back(instance);
 
-      RCLCPP_INFO(
-        node->get_logger(),
+      RCLCPP_INFO(node->get_logger(),
         "Loaded RoutesFilter %s [%s]", filter_name.c_str(), plugin.c_str());
     } catch (pluginlib::PluginlibException & ex) {
-      RCLCPP_ERROR(
-        node->get_logger(),
+      RCLCPP_ERROR(node->get_logger(),
         "Unable to load plugin easynav::RoutesFilter. Error: %s", ex.what());
-      throw std::runtime_error(
-              "Unable to load plugin easynav::RoutesFilter " +
-              filter_name + " . Error: " + ex.what());
+      throw std::runtime_error("Unable to load plugin easynav::RoutesFilter " +
+        filter_name + " . Error: " + ex.what());
     }
   }
 }
@@ -251,129 +191,18 @@ void RoutesMapsManager::update(NavState & nav_state)
 
 void RoutesMapsManager::load_routes_from_yaml()
 {
-  routes_.clear();
+  routes_ = easynav::load_routes_from_yaml(map_path_);
+  recompute_next_route_id();
+}
 
-  if (map_path_.empty()) {
-    // No map path configured: initialize a default single route segment.
-    RouteSegment segment;
-    segment.id = "route0";
-    segment.start.position.x = 0.0;
-    segment.start.position.y = 0.0;
-    segment.start.position.z = 0.0;
-    segment.start.orientation.x = 0.0;
-    segment.start.orientation.y = 0.0;
-    segment.start.orientation.z = 0.0;
-    segment.start.orientation.w = 1.0;
-
-    segment.end.position.x = 1.0;
-    segment.end.position.y = 0.0;
-    segment.end.position.z = 0.0;
-    segment.end.orientation.x = 0.0;
-    segment.end.orientation.y = 0.0;
-    segment.end.orientation.z = 0.0;
-    segment.end.orientation.w = 1.0;
-
-    routes_.push_back(segment);
-    next_route_id_ = 1;
-    return;
-  }
-
-  YAML::Node root;
-  try {
-    root = YAML::LoadFile(map_path_);
-  } catch (const std::exception &) {
-    // File missing or invalid: fall back to a default single route.
-    RouteSegment segment;
-    segment.id = "route0";
-    segment.start.position.x = 0.0;
-    segment.start.position.y = 0.0;
-    segment.start.position.z = 0.0;
-    segment.start.orientation.x = 0.0;
-    segment.start.orientation.y = 0.0;
-    segment.start.orientation.z = 0.0;
-    segment.start.orientation.w = 1.0;
-
-    segment.end.position.x = 1.0;
-    segment.end.position.y = 0.0;
-    segment.end.position.z = 0.0;
-    segment.end.orientation.x = 0.0;
-    segment.end.orientation.y = 0.0;
-    segment.end.orientation.z = 0.0;
-    segment.end.orientation.w = 1.0;
-
-    routes_.push_back(segment);
-    next_route_id_ = 1;
-    return;
-  }
-
-  if (!root["routes"]) {
-    // No explicit routes list: use a default single route.
-    RouteSegment segment;
-    segment.id = "route0";
-    segment.start.position.x = 0.0;
-    segment.start.position.y = 0.0;
-    segment.start.position.z = 0.0;
-    segment.start.orientation.x = 0.0;
-    segment.start.orientation.y = 0.0;
-    segment.start.orientation.z = 0.0;
-    segment.start.orientation.w = 1.0;
-
-    segment.end.position.x = 1.0;
-    segment.end.position.y = 0.0;
-    segment.end.position.z = 0.0;
-    segment.end.orientation.x = 0.0;
-    segment.end.orientation.y = 0.0;
-    segment.end.orientation.z = 0.0;
-    segment.end.orientation.w = 1.0;
-
-    routes_.push_back(segment);
-    next_route_id_ = 1;
-    return;
-  }
-
-  // routes: [route1, route2, ...]
-  const auto & names_node = root["routes"];
-  for (std::size_t i = 0; i < names_node.size(); ++i) {
-    const auto name = names_node[i].as<std::string>();
-
-    if (!root[name]) {
-      continue;
-    }
-
-    const auto & route_node = root[name];
-    if (!route_node["start"] || !route_node["end"]) {
-      continue;
-    }
-
-    RouteSegment segment;
-    segment.id = name;
-
-    const auto & start = route_node["start"];
-    const auto & end = route_node["end"];
-
-    segment.start.position.x = start["x"].as<double>();
-    segment.start.position.y = start["y"].as<double>();
-    segment.start.position.z = start["z"].as<double>(0.0);
-
-    segment.start.orientation.x = start["qx"].as<double>(0.0);
-    segment.start.orientation.y = start["qy"].as<double>(0.0);
-    segment.start.orientation.z = start["qz"].as<double>(0.0);
-    segment.start.orientation.w = start["qw"].as<double>(1.0);
-
-    segment.end.position.x = end["x"].as<double>();
-    segment.end.position.y = end["y"].as<double>();
-    segment.end.position.z = end["z"].as<double>(0.0);
-
-    segment.end.orientation.x = end["qx"].as<double>(0.0);
-    segment.end.orientation.y = end["qy"].as<double>(0.0);
-    segment.end.orientation.z = end["qz"].as<double>(0.0);
-    segment.end.orientation.w = end["qw"].as<double>(1.0);
-
-    routes_.push_back(segment);
-  }
-
-  // Initialize next_route_id_ so that newly created routes get
-  // unique IDs that don't clash with existing ones.
+void RoutesMapsManager::recompute_next_route_id()
+{
+  // (Re)initialize next_route_id_ from whatever is currently in routes_,
+  // so that newly created routes (the interactive marker's "add_segment"
+  // control) get unique IDs that don't clash with existing ones --
+  // called both after a fresh YAML load and after an incoming_routes
+  // message replaces routes_ wholesale, since either can introduce IDs
+  // (e.g. "route7") this manager itself never generated.
   next_route_id_ = 0;
   for (const auto & seg : routes_) {
     if (seg.id.rfind("route", 0) == 0 && seg.id.size() > 5) {
@@ -399,8 +228,8 @@ void RoutesMapsManager::publish_routes_markers()
 
   visualization_msgs::msg::MarkerArray array;
 
-  // First, delete all previous markers in our namespaces so that
-  // removed segments do not leave orphaned markers behind.
+   // First, delete all previous markers in our namespaces so that
+   // removed segments do not leave orphaned markers behind.
   {
     visualization_msgs::msg::Marker m;
     m.header.frame_id = tf_info.map_frame;
@@ -569,7 +398,7 @@ void RoutesMapsManager::publish_interactive_markers()
     auto add_controls = [](visualization_msgs::msg::InteractiveMarker & marker) {
         visualization_msgs::msg::InteractiveMarkerControl control;
 
-        // Move along X
+      // Move along X
         control.orientation.w = 1.0;
         control.orientation.x = 1.0;
         control.orientation.y = 0.0;
@@ -579,19 +408,19 @@ void RoutesMapsManager::publish_interactive_markers()
           visualization_msgs::msg::InteractiveMarkerControl::MOVE_AXIS;
         marker.controls.push_back(control);
 
-        // Move along Y
+      // Move along Y
         control.orientation.x = 0.0;
         control.orientation.y = 1.0;
         control.name = "move_y";
         marker.controls.push_back(control);
 
-        // Move along Z
+      // Move along Z
         control.orientation.y = 0.0;
         control.orientation.z = 1.0;
         control.name = "move_z";
         marker.controls.push_back(control);
 
-        // Rotate around Z (yaw), orientation as in interactive_markers examples
+      // Rotate around Z (yaw), orientation as in interactive_markers examples
         control.interaction_mode =
           visualization_msgs::msg::InteractiveMarkerControl::ROTATE_AXIS;
         control.orientation.w = 1.0;
@@ -601,7 +430,7 @@ void RoutesMapsManager::publish_interactive_markers()
         control.name = "rotate_z";
         marker.controls.push_back(control);
 
-        // Button control to add a new segment starting from this endpoint
+      // Button control to add a new segment starting from this endpoint
         visualization_msgs::msg::InteractiveMarkerControl add_ctrl;
         add_ctrl.name = "add_segment";
         add_ctrl.interaction_mode =
@@ -610,7 +439,7 @@ void RoutesMapsManager::publish_interactive_markers()
 
         visualization_msgs::msg::Marker add_marker;
         add_marker.type = visualization_msgs::msg::Marker::SPHERE;
-        // Visual sphere for the add control
+      // Visual sphere for the add control
         add_marker.scale.x = 0.2;
         add_marker.scale.y = 0.2;
         add_marker.scale.z = 0.2;
@@ -619,7 +448,7 @@ void RoutesMapsManager::publish_interactive_markers()
         add_marker.color.b = 0.0f;
         add_marker.color.a = 0.9f;
 
-        // Text label for the add control
+      // Text label for the add control
         visualization_msgs::msg::Marker add_text;
         add_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
         add_text.text = "add";
@@ -635,7 +464,7 @@ void RoutesMapsManager::publish_interactive_markers()
 
         marker.controls.push_back(add_ctrl);
 
-        // Button control to remove the segment this endpoint belongs to
+      // Button control to remove the segment this endpoint belongs to
         visualization_msgs::msg::InteractiveMarkerControl remove_ctrl;
         remove_ctrl.name = "remove_segment";
         remove_ctrl.interaction_mode =
@@ -644,8 +473,8 @@ void RoutesMapsManager::publish_interactive_markers()
 
         visualization_msgs::msg::Marker remove_marker;
         remove_marker.type = visualization_msgs::msg::Marker::SPHERE;
-        // Place the red sphere 1 m above the endpoint so that it
-        // does not overlap with the orange "add" sphere.
+      // Place the red sphere 1 m above the endpoint so that it
+      // does not overlap with the orange "add" sphere.
         remove_marker.pose.position.z = 1.0;
         remove_marker.scale.x = 0.15;
         remove_marker.scale.y = 0.15;
@@ -655,7 +484,7 @@ void RoutesMapsManager::publish_interactive_markers()
         remove_marker.color.b = 0.0f;
         remove_marker.color.a = 0.9f;
 
-        // Text label for the remove control
+      // Text label for the remove control
         visualization_msgs::msg::Marker remove_text;
         remove_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
         remove_text.text = "remove";

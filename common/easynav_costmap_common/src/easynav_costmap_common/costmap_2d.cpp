@@ -217,9 +217,8 @@ bool Costmap2D::copyWindow(
   {
     const auto source_stamp = source.getLastModifiedStamp();
     std::unique_lock<mutex_t> lock(*access_);
-    const int64_t new_stamp_ns = std::max(
-      last_modified_.nanoseconds(),
-      source_stamp.nanoseconds()) + 1;
+    const int64_t new_stamp_ns = std::max(last_modified_.nanoseconds(),
+        source_stamp.nanoseconds()) + 1;
     last_modified_ = rclcpp::Time(new_stamp_ns, last_modified_.get_clock_type());
   }
   return true;
@@ -247,10 +246,18 @@ Costmap2D::toOccupancyGridMsg(nav_msgs::msg::OccupancyGrid & msg) const
 
   msg.data.resize(size_x_ * size_y_);
   for (unsigned int i = 0; i < size_x_ * size_y_; ++i) {
-    if (costmap_[i] == NO_INFORMATION) {
+    const unsigned char cost = costmap_[i];
+    if (cost == NO_INFORMATION) {
       msg.data[i] = -1;
+    } else if (cost == LETHAL_OBSTACLE) {
+      msg.data[i] = OCC_GRID_OCCUPIED;
+    } else if (cost == INSCRIBED_INFLATED_OBSTACLE) {
+      msg.data[i] = OCC_GRID_OCCUPIED - 1;
+    } else if (cost == FREE_SPACE) {
+      msg.data[i] = OCC_GRID_FREE;
     } else {
-      msg.data[i] = static_cast<int8_t>(costmap_[i]);
+      msg.data[i] = static_cast<int8_t>(
+        1 + (97 * (static_cast<int>(cost) - 1)) / (MAX_NON_OBSTACLE - 1));
     }
   }
 }

@@ -61,18 +61,13 @@ protected:
 
 TEST_F(FusionLocalizerInitialPoseTest, SubscribesToInitialPoseWithDefaultCallbackGroup)
 {
-  const double x0 = 1.5;
-  const double y0 = -0.25;
-  const double yaw0 = 0.7;
-
   const double x1 = -0.8;
   const double y1 = 2.1;
   const double yaw1 = -1.2;
 
   // Provide at least one parameter override so FusionLocalizer considers a filter configured.
   rclcpp::NodeOptions options;
-  options.parameter_overrides(
-  {
+  options.parameter_overrides({
     rclcpp::Parameter("test.global_filter.frequency", 30.0),
   });
 

@@ -12,11 +12,11 @@ find_package(easynav_localizer REQUIRED)
 find_package(easynav_core REQUIRED)
 find_package(easynav_sensors REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(rclcpp REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(std_srvs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(Eigen3 REQUIRED NO_MODULE)
 
@@ -36,6 +36,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   tf2::tf2
   tf2_ros::tf2_ros
   pluginlib::pluginlib
+  rclcpp::rclcpp
   Eigen3::Eigen
   ${tf2_geometry_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
@@ -80,10 +81,11 @@ ament_export_dependencies(
   easynav_sensors
   tf2
   tf2_ros
+  tf2_geometry_msgs
   pluginlib
+  rclcpp
   geometry_msgs
-  std_srvs
   nav_msgs
-  eigen
+  Eigen3
 )
 ament_package()

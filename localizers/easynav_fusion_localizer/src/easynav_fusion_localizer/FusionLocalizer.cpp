@@ -1,3 +1,4 @@
+#include "easynav_common/Parameters.hpp"
 #include "easynav_fusion_localizer/FusionLocalizer.hpp"
 
 #include "easynav_localizer/LocalizerNode.hpp"
@@ -33,12 +34,15 @@ void FusionLocalizer::on_initialize()
     auto localizer_node = std::dynamic_pointer_cast<LocalizerNode>(node);
 
     const std::string & plugin_name = this->get_plugin_name();
+    easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".initial_pose.use_last_known",
+        use_last_known_pose_);
+    node->get_parameter(plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
+
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
     RCLCPP_INFO(localizer_node->get_logger(), "Using tf_prefix: '%s'", tf_info.tf_prefix.c_str());
-    RCLCPP_INFO(
-      localizer_node->get_logger(), "Using parameter namespace: '%s'",
-      plugin_name.c_str());
+    RCLCPP_INFO(localizer_node->get_logger(), "Using parameter namespace: '%s'",
+    plugin_name.c_str());
 
     // Detect which filters have parameters configured by checking
     // parameter overrides (loaded from YAML before declaration)
@@ -67,8 +71,8 @@ void FusionLocalizer::on_initialize()
         "At least one filter must be configured.",
         global_prefix.c_str(), local_prefix.c_str());
       throw std::runtime_error(
-              "FusionLocalizer: no global_filter or local_filter parameters detected. "
-              "At least one filter must be configured.");
+        "FusionLocalizer: no global_filter or local_filter parameters detected. "
+        "At least one filter must be configured.");
     }
 
     if (has_global_filter_) {
@@ -77,9 +81,8 @@ void FusionLocalizer::on_initialize()
       );
       ukf_global_->initialize();
     } else {
-      RCLCPP_WARN(
-        localizer_node->get_logger(),
-        "No global_filter parameters found. Global filter will NOT be created.");
+      RCLCPP_WARN(localizer_node->get_logger(),
+          "No global_filter parameters found. Global filter will NOT be created.");
     }
 
     if (has_local_filter_) {
@@ -88,24 +91,23 @@ void FusionLocalizer::on_initialize()
       );
       ukf_local_->initialize();
     } else {
-      RCLCPP_WARN(
-        localizer_node->get_logger(),
-        "No local_filter parameters found. Local filter will NOT be created.");
+      RCLCPP_WARN(localizer_node->get_logger(),
+          "No local_filter parameters found. Local filter will NOT be created.");
     }
 
     // GPS-related setup only needed when global filter is active
     if (has_global_filter_) {
-      localizer_node->declare_parameter(plugin_name + ".latitude_origin", double(0.0));
+      easynav::declare_parameter_if_absent(*localizer_node, plugin_name + ".latitude_origin",
+          double(0.0));
+      easynav::declare_parameter_if_absent(*localizer_node, plugin_name + ".longitude_origin",
+          double(0.0));
+      easynav::declare_parameter_if_absent(*localizer_node, plugin_name + ".altitude_origin",
+          double(0.0));
+      easynav::declare_parameter_if_absent(*localizer_node, plugin_name + ".navsatfix_topic",
+          std::string("gps/filtered"));
       localizer_node->get_parameter(plugin_name + ".latitude_origin", latitude_origin_);
-
-      localizer_node->declare_parameter(plugin_name + ".longitude_origin", double(0.0));
       localizer_node->get_parameter(plugin_name + ".longitude_origin", longitude_origin_);
-
-      localizer_node->declare_parameter(plugin_name + ".altitude_origin", double(0.0));
       localizer_node->get_parameter(plugin_name + ".altitude_origin", altitude_origin_);
-
-      localizer_node->declare_parameter(
-        plugin_name + ".navsatfix_topic", std::string("gps/filtered"));
       localizer_node->get_parameter(plugin_name + ".navsatfix_topic", navsatfix_topic_);
       navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
         navsatfix_topic_, rclcpp::QoS(10));
@@ -119,9 +121,8 @@ void FusionLocalizer::on_initialize()
   }
 
   if (has_global_filter_) {
-    GeographicLib::UTMUPS::Forward(
-      latitude_origin_, longitude_origin_, UTM_zone_number_,
-      UTM_zone_northp_, UTM_origin_x_, UTM_origin_y_);
+    GeographicLib::UTMUPS::Forward(latitude_origin_, longitude_origin_, UTM_zone_number_,
+        UTM_zone_northp_, UTM_origin_x_, UTM_origin_y_);
     UTM_zone_ = std::to_string(UTM_zone_number_) + (UTM_zone_northp_ ? "N" : "S");
     UTM_origin_z_ = altitude_origin_;
 
@@ -132,9 +133,19 @@ void FusionLocalizer::on_initialize()
   RCLCPP_INFO(get_node()->get_logger(), "FusionLocalizer (UKF) initialized successfully.");
 }
 
+void FusionLocalizer::on_last_known_pose(
+  const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  // Only the global filter estimates the pose in the map frame ("robot_pose").
+  if (use_last_known_pose_ && has_global_filter_) {
+    pending_last_pose_ = pose;
+  }
+}
+
 void FusionLocalizer::init_pose_callback(
   const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
 {
+  pending_last_pose_.reset();  // A newer pose supersedes the last known one.
   if (has_global_filter_) {
     nav_msgs::msg::Odometry global_odom;
     // Get current position to calculate the offset
@@ -146,8 +157,7 @@ void FusionLocalizer::init_pose_callback(
       UTM_origin_x_ += (current_x - msg->pose.pose.position.x);
       UTM_origin_y_ += (current_y - msg->pose.pose.position.y);
 
-      RCLCPP_INFO(
-        get_node()->get_logger(),
+      RCLCPP_INFO(get_node()->get_logger(),
         "Initial pose reset UTM origin. Shifted X by %.2f, Y by %.2f to match pose (%.2f, %.2f)",
         (current_x - msg->pose.pose.position.x), (current_y - msg->pose.pose.position.y),
         msg->pose.pose.position.x, msg->pose.pose.position.y);
@@ -180,13 +190,11 @@ void FusionLocalizer::update_rt(NavState & nav_state)
           EASYNAV_TRACE_NAMED_EVENT("fusion_localizer_process_gps");
           last_gps_stamp_[i] = gps_time;
           auto pose =
-            std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(
-            navsatfix_to_pose(
+            std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(navsatfix_to_pose(
               gps_data[i]->data));
           if (!first_pose_received_) {
-            RCLCPP_INFO(
-              get_node()->get_logger(),
-              "First valid GPS fix received. Initializing filter state.");
+            RCLCPP_INFO(get_node()->get_logger(),
+                "First valid GPS fix received. Initializing filter state.");
             if (nav_state.has("imu")) {
               auto imu_data = nav_state.get<IMUPerception>(std::string("imu"));
               pose->pose.pose.orientation = imu_data.data.orientation;
@@ -209,6 +217,11 @@ void FusionLocalizer::update_rt(NavState & nav_state)
     ukf_global_->periodicUpdate();
 
     nav_msgs::msg::Odometry global_odom;
+    if (pending_last_pose_ && ukf_global_->getFilteredOdometryMessage(&global_odom)) {
+      init_pose_callback(
+        std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(*pending_last_pose_));
+      pending_last_pose_.reset();
+    }
     if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
       nav_state.set("robot_pose", global_odom);
       navsat_pub_->publish(odom_to_navsatfix(global_odom));
@@ -277,7 +290,7 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
     pose_msg.pose.covariance[28] = default_var;
     pose_msg.pose.covariance[35] = default_var;
   } else {
-    // Fallback variances if GPS doesn't provide them
+      // Fallback variances if GPS doesn't provide them
     pose_msg.pose.covariance[0] = default_var;
     pose_msg.pose.covariance[7] = default_var;
     pose_msg.pose.covariance[14] = default_var;
@@ -286,9 +299,8 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
     pose_msg.pose.covariance[28] = default_var;
     pose_msg.pose.covariance[35] = default_var;
 
-    RCLCPP_WARN_THROTTLE(
-      get_node()->get_logger(), *get_node()->get_clock(), 5000,
-      "NavSatFix covariance type unknown or invalid. Using default covariance.");
+    RCLCPP_WARN_THROTTLE(get_node()->get_logger(), *get_node()->get_clock(), 5000,
+        "NavSatFix covariance type unknown or invalid. Using default covariance.");
   }
 
   return pose_msg;

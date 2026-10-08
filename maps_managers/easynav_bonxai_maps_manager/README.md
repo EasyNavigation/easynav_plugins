@@ -35,7 +35,7 @@ Maps Manager that maintains a [Bonxai](https://github.com/facontidavide/Bonxai) 
 | `<plugin>.package` | `string` | `""` | Package name to resolve relative map paths via ament index. |
 | `<plugin>.bonxai_path_file` | `string` | `""` | Relative path (inside the package) to a PCD file with 3D points to build the Bonxai map. |
 | `<plugin>.occmap_path_file` | `string` | `""` | Relative path (inside the package) to a ROS-style YAML occupancy map to import. |
-| `<plugin>.resolution` | `double` | `0.3` | Voxel resolution for the Bonxai map (meters). |
+| `<plugin>.resolution` | `double` | `0.3` | Voxel resolution for the Bonxai map (meters). Use the resolution the `.pcd` was built with: coarser, a low sensor (e.g. a laser 0.095 m high) shares the voxel layer with the floor, and the NavMap AMCL sees every ray blocked. |
 | `<plugin>.frame_id` | `string` | `"map"` | Frame ID stamped on published map messages. |
 
 ## Interfaces (Topics and Services)

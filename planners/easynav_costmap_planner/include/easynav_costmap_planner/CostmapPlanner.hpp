@@ -93,6 +93,9 @@ protected:
     const Costmap2D & map,
     const geometry_msgs::msg::Pose & start,
     const geometry_msgs::msg::Pose & goal);
+
+  /// @brief Empties the path (NavState and topic), so a failed plan never keeps the last one.
+  void clear_current_path(NavState & nav_state);
 };
 
 }  // namespace easynav

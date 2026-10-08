@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_navmap_maps_manager/NavMapMapsManager.hpp"
 
 #include "easynav_common/YTSession.hpp"
@@ -26,7 +27,7 @@
 #include "navmap_ros/navmap_io.hpp"
 #include "easynav_navmap_maps_manager/map_io.hpp"
 
-#include "ament_index_cpp/get_package_share_directory.hpp"
+#include "easynav_common/PackageShare.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
 
 namespace easynav
@@ -66,26 +67,26 @@ NavMapMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, occmap_path_file, navmap_path_file;
-  node->declare_parameter(plugin_name + ".package", package_name);
-  node->declare_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
-  node->declare_parameter(plugin_name + ".navmap_path_file", navmap_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".occmap_path_file", occmap_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".navmap_path_file", navmap_path_file);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".occmap_path_file", occmap_path_file);
   node->get_parameter(plugin_name + ".navmap_path_file", navmap_path_file);
 
   std::vector<std::string> navmap_filters;
-  node->declare_parameter(plugin_name + ".filters", navmap_filters);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".filters", navmap_filters);
   node->get_parameter(plugin_name + ".filters", navmap_filters);
 
   for (const auto & navmap_filter : navmap_filters) {
     std::string plugin;
-    node->declare_parameter(plugin_name + "." + navmap_filter + ".plugin", plugin);
+    easynav::declare_parameter_if_absent(*node, plugin_name + "." + navmap_filter + ".plugin",
+          plugin);
     node->get_parameter(plugin_name + "." + navmap_filter + ".plugin", plugin);
 
     try {
-      RCLCPP_INFO(
-        node->get_logger(),
+      RCLCPP_INFO(node->get_logger(),
         "Loading NavMapFilter %s [%s]", navmap_filter.c_str(), plugin.c_str());
       std::shared_ptr<NavMapFilter> instance;
       instance = navmap_filters_loader_->createSharedInstance(plugin);
@@ -93,33 +94,31 @@ NavMapMapsManager::on_initialize()
       try {
         instance->initialize(node, plugin_name + "." + navmap_filter);
       } catch (const std::runtime_error & ex) {
-        RCLCPP_ERROR(
-          node->get_logger(),
+        RCLCPP_ERROR(node->get_logger(),
           "Unable to initialize [%s]. Error: %s", plugin.c_str(), ex.what());
         throw;
       }
 
       navmap_filters_.push_back(instance);
 
-      RCLCPP_INFO(
-        node->get_logger(),
+      RCLCPP_INFO(node->get_logger(),
         "Loaded NavMapFilter %s [%s]", navmap_filter.c_str(), plugin.c_str());
     } catch (pluginlib::PluginlibException & ex) {
-      RCLCPP_ERROR(
-        node->get_logger(),
+      RCLCPP_ERROR(node->get_logger(),
         "Unable to load plugin easynav::navmap::NavMapFilter. Error: %s", ex.what());
-      throw std::runtime_error(
-              "Unable to load plugin easynav::navmap::NavMapFilter " +
-              navmap_filter + " . Error: " + ex.what());
+      throw std::runtime_error("Unable to load plugin easynav::navmap::NavMapFilter " +
+        navmap_filter + " . Error: " + ex.what());
     }
   }
 
   navmap_pub_ = node->create_publisher<navmap_ros_interfaces::msg::NavMap>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+        "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   layer_updates_pub_ = node->create_publisher<navmap_ros_interfaces::msg::NavMapLayer>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/map_updates",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+        "/map_updates",
     rclcpp::QoS(100));
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
@@ -127,7 +126,7 @@ NavMapMapsManager::on_initialize()
 
   if (!package_name.empty() && !occmap_path_file.empty()) {
     try {
-      const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
+      const std::string pkgpath = easynav::get_package_share_path(package_name);
       map_path_ = pkgpath + std::string("/") + occmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
@@ -150,7 +149,7 @@ NavMapMapsManager::on_initialize()
 
   if (!package_name.empty() && !navmap_path_file.empty()) {
     try {
-      const std::string pkgpath = ament_index_cpp::get_package_share_directory(package_name);
+      const std::string pkgpath = easynav::get_package_share_path(package_name);
       map_path_ = pkgpath + std::string("/") + navmap_path_file;
     } catch (ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
@@ -167,8 +166,8 @@ NavMapMapsManager::on_initialize()
   }
 
   incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_name() + std::string(
-      "/") + plugin_name + "/incoming_occ_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+        "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 
@@ -176,14 +175,14 @@ NavMapMapsManager::on_initialize()
       navmap_ = navmap_ros::from_occupancy_grid(*msg);
 
       navmap_msg_ = navmap_ros::to_msg(navmap_);
-      navmap_msg_.header.frame_id = tf_info.map_frame;
+      navmap_msg_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
       navmap_msg_.header.stamp = this->get_node()->now();
       navmap_pub_->publish(navmap_msg_);
     });
 
   incoming_pc2_map_sub_ = node->create_subscription<sensor_msgs::msg::PointCloud2>(
-    node->get_node_base_interface()->get_name() + std::string(
-      "/") + plugin_name + "/incoming_pc2_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+        "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
 
@@ -191,14 +190,15 @@ NavMapMapsManager::on_initialize()
       navmap_ = navmap_ros::from_pointcloud2(*msg, navmap_msg_, params);
 
 
-      navmap_msg_.header.frame_id = tf_info.map_frame;
+      navmap_msg_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
       navmap_msg_.header.stamp = this->get_node()->now();
       navmap_pub_->publish(navmap_msg_);
     });
 
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+        "/savemap",
     [this](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)

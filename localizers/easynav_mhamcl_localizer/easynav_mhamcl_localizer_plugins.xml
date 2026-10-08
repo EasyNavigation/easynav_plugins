@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_mhamcl_localizer">
+    <class name="easynav_mhamcl_localizer/MHAMCLLocalizer"  type="easynav::mhamcl::MHAMCLLocalizer" base_class_type="easynav::LocalizerMethodBase">
+      <description>
+      Multi-Hypothesis AMCL localizer: keeps several pose hypotheses over a Costmap2D map, so it can localize without an initial pose and recover from kidnapping.
+      </description>
+    </class>
+  </library>
+</class_libraries>

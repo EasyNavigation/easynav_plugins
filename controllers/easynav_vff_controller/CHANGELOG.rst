@@ -2,29 +2,27 @@
 Changelog for package easynav_vff_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.0 (2026-07-26)
+0.5.0 (2026-10-08)
 ------------------
-* Add missing easynav_sensors deps
-* Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
-* Update plugins to new sensors API
-* GPLv3 -> Apache 2.0
-* Sync to current EasyNavigation
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
+* Velocity smoother support and runtime reconfiguration
+* The collision checker is no longer part of the controller
+* Contributors: Francisco Martín Rico
 
-0.2.1 (2026-02-27)
+0.4.2 (2026-07-26)
 ------------------
-* 0.2.0
+* Complete deps
+* Update plugins to new sensors API
+* Merge branch 'rolling' of github.com:midemig/easynav_plugins into rolling
 * GPLv3 -> Apache 2.0
-* Documentation was corrected
 * Add a base_footprint frame in TFInfo
 * Remove C++20/C++23 features and update to new MethodBase interface
+* Merge branch 'set_robot_frame' into frames-fix-pr-40
 * TFInfo in RTTFBuffer
 * Refactor to use TFInfo
 * Referencing base class if ot void
 * Optimize execution
 * Cleanup unused headers
-* Update sheets
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely, Juan S. Cely G., Miguel, migueldm
 
 0.0.2 (2025-10-12)
 ------------------

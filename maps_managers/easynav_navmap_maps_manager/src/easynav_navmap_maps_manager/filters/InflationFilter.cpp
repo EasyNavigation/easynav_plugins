@@ -42,6 +42,8 @@
 #include <string>
 #include <queue>
 
+#include "easynav_common/Parameters.hpp"
+#include "easynav_common/RobotGeometry.hpp"
 #include "easynav_common/types/NavState.hpp"
 
 #include "navmap_core/NavMap.hpp"
@@ -84,17 +86,16 @@ bool InflationFilter::inflate_layer_u8(
   }
 
   // Destination layer (create if missing)
-  auto dst_view = nm.layers.add_or_get<std::uint8_t>(
-    dst_layer, nm.navcels.size(),
-    ::navmap::layer_type_tag<std::uint8_t>());
+  auto dst_view = nm.layers.add_or_get<std::uint8_t>(dst_layer, nm.navcels.size(),
+                                                     ::navmap::layer_type_tag<std::uint8_t>());
   if (!dst_view) {return false;}
   if (dst_view->data().size() != nm.navcels.size()) {
     const_cast<std::vector<std::uint8_t> &>(dst_view->data()).assign(nm.navcels.size(), FREE_SPACE);
   }
 
   const size_t N = nm.navcels.size();
-  const float R = inflation_radius;
-  const float r_ins = std::clamp(inscribed_radius, 0.0f, R);
+  const float  R = inflation_radius;
+  const float  r_ins = std::clamp(inscribed_radius, 0.0f, R);
 
   // Precompute XY centroids for each NavCel
   std::vector<Eigen::Vector2f> C(N);
@@ -179,10 +180,7 @@ bool InflationFilter::inflate_layer_u8(
       const size_t vidx = static_cast<size_t>(v);
       if (vidx >= N) {continue;}
 
-      if (src[v] == NO_INFORMATION) {
-        continue;
-      }
-
+      // Unknown cells carry the distance (as in costmap_2d) but keep their value.
       const float step = (C[u] - C[v]).norm();
       if (step <= 0.0f) {continue;}
       const float alt = du + step;
@@ -204,18 +202,19 @@ InflationFilter::on_initialize()
   // Defaults; may be overridden in parameters
   inflation_radius_ = 0.30f;
   cost_scaling_factor_ = 3.0f;
-  inscribed_radius_ = 0.30f;
 
-  node->declare_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
-  node->declare_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
-  node->declare_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".inflation_radius",
+        inflation_radius_);
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".cost_scaling_factor",
+        cost_scaling_factor_);
 
   node->get_parameter(plugin_name_ + ".inflation_radius", inflation_radius_);
   node->get_parameter(plugin_name_ + ".cost_scaling_factor", cost_scaling_factor_);
-  node->get_parameter(plugin_name_ + ".inscribed_radius", inscribed_radius_);
+  // The robot's: "system_node.robot_geometry" (the filter's own is deprecated).
+  inscribed_radius_ = easynav::get_robot_geometry(
+    *node, {"", plugin_name_ + ".inscribed_radius", ""}).inscribed_radius;
 
-  RCLCPP_INFO(
-    node->get_logger(),
+  RCLCPP_INFO(node->get_logger(),
     "InflationFilter (NavMap): radius=%.3f cost_scaling=%.3f inscribed=%.3f",
     inflation_radius_, cost_scaling_factor_, inscribed_radius_);
 }
@@ -237,7 +236,7 @@ void InflationFilter::update(::easynav::NavState & nav_state)
     inscribed_radius_);
 
   if (!ok) {
-    RCLCPP_ERROR(parent_node_->get_logger(), "InflationFilter: inflate_layer_u8() failed");
+    RCLCPP_ERROR(get_node()->get_logger(), "InflationFilter: inflate_layer_u8() failed");
     return;
   }
 

@@ -16,12 +16,14 @@
 /// \file
 /// \brief Implementation of the AStarPlanner class using A* on ::navmap::NavMap (triangle graph).
 
+#include <array>
 #include <queue>
 #include <cmath>
 #include <limits>
 #include <algorithm>
 #include <cstdint>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_navmap_planner/AStarPlanner.hpp"
 
@@ -64,14 +66,17 @@ void AStarPlanner::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".cost_factor", 2.0);
-  node->declare_parameter<bool>(plugin_name + ".continuous_replan", true);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".cost_factor", 2.0);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".cost_weight", 5.0);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".continuous_replan", true);
 
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
+  node->get_parameter(plugin_name + ".cost_weight", cost_weight_);
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
-    node->get_name() + std::string("/") + plugin_name + "/path", 10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+        "/path", 10);
 }
 
 void AStarPlanner::update(NavState & nav_state)
@@ -83,13 +88,13 @@ void AStarPlanner::update(NavState & nav_state)
 
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty() || !nav_state.has("map.navmap")) {
-    nav_state.set("path", current_path_);
+    clear_path(nav_state);
     return;
   }
 
   const auto & navmap = nav_state.get<::navmap::NavMap>("map.navmap");
 
-  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -97,6 +102,7 @@ void AStarPlanner::update(NavState & nav_state)
     RCLCPP_WARN(
       get_node()->get_logger(), "Goals frame is not 'map': %s",
       goals.header.frame_id.c_str());
+    clear_path(nav_state);
     return;
   }
 
@@ -126,8 +132,23 @@ void AStarPlanner::update(NavState & nav_state)
 
     if (path_pub_->get_subscription_count() > 0) {
       path_pub_->publish(current_path_);
+      path_published_ = true;
     }
+    nav_state.set("path", current_path_);
+  } else {
+    // No route to the goal.
+    clear_path(nav_state);
   }
+}
+
+void AStarPlanner::clear_path(NavState & nav_state)
+{
+  current_path_.poses.clear();
+  if (path_published_ && path_pub_->get_subscription_count() > 0) {
+    current_path_.header.stamp = get_node()->now();
+    path_pub_->publish(current_path_);
+  }
+  path_published_ = false;
   nav_state.set("path", current_path_);
 }
 
@@ -266,7 +287,7 @@ AStarPlanner::path_smoother(
   }
 
   // --- 3) Write back to Path (keeping header/frame) ---
-  for (size_t i = 0; i < N; ++i) {
+  for (size_t i = 1; i + 1 < N; ++i) {  // The endpoints stay exactly as they were
     out.poses[i].pose.position.x = curr[i].x();
     out.poses[i].pose.position.y = curr[i].y();
     out.poses[i].pose.position.z = curr[i].z();
@@ -284,23 +305,66 @@ static inline bool layer_exists(const ::navmap::NavMap & nm, const std::string &
 
 void AStarPlanner::ensure_graph_cache(const ::navmap::NavMap & map)
 {
+  using ::navmap::NavCelId;
   const std::size_t N = map.navcels.size();
+  const std::size_t V = map.positions.x.size();
 
-  // Cache centroids: only recompute when the number of NavCels changes.
-  if (centroids_.size() != N) {
+  // Same geometry as the cached one? (sizes, and the first and last centroids)
+  bool same = centroids_.size() == N && vertex_cels_.size() == V && neighbors_.size() == N;
+  if (same && N > 0) {
+    const auto c0 = map.navcel_centroid(0);
+    const auto cn = map.navcel_centroid(static_cast<NavCelId>(N - 1));
+    same = (Eigen::Vector3f{c0.x(), c0.y(), c0.z()} - centroids_.front()).norm() < 1e-6f &&
+      (Eigen::Vector3f{cn.x(), cn.y(), cn.z()} - centroids_.back()).norm() < 1e-6f;
+  }
+
+  if (!same) {
     centroids_.resize(N);
-    for (::navmap::NavCelId c = 0; c < static_cast<::navmap::NavCelId>(N); ++c) {
+    for (NavCelId c = 0; c < static_cast<NavCelId>(N); ++c) {
       const auto cc = map.navcel_centroid(c);
       centroids_[c] = Eigen::Vector3f{cc.x(), cc.y(), cc.z()};
     }
+
+    vertex_cels_.assign(V, {});
+    for (NavCelId c = 0; c < static_cast<NavCelId>(N); ++c) {
+      for (const auto v : map.navcels[c].v) {
+        if (v < V) {vertex_cels_[v].push_back(c);}
+      }
+    }
+
+    // Neighbors through a shared vertex; two shared vertices are a shared edge
+    neighbors_.assign(N, {});
+    double spacing_sum = 0.0;
+    std::size_t spacing_count = 0;
+    for (NavCelId c = 0; c < static_cast<NavCelId>(N); ++c) {
+      auto & out = neighbors_[c];
+      for (const auto v : map.navcels[c].v) {
+        if (v >= V) {continue;}
+        for (const auto n : vertex_cels_[v]) {
+          if (n == c) {continue;}
+          auto it = std::find_if(
+            out.begin(), out.end(), [n](const Neighbor & x) {return x.cid == n;});
+          if (it == out.end()) {
+            out.push_back({n, v});
+          } else {
+            it->shared_vertex = kNoVertex;
+          }
+        }
+      }
+      for (const auto & n : out) {
+        if (n.shared_vertex == kNoVertex) {
+          spacing_sum += (centroids_[n.cid] - centroids_[c]).norm();
+          ++spacing_count;
+        }
+      }
+    }
+    cel_spacing_ = spacing_count > 0 ? spacing_sum / static_cast<double>(spacing_count) : 0.1;
   }
 
-  // Ensure occupancy buffer has the right size (values are filled per-planning call).
   if (occ_.size() != N) {
     occ_.resize(N);
   }
 
-  // Resize and reset A* buffers.
   const double inf = std::numeric_limits<double>::infinity();
 
   if (g_.size() != N) {
@@ -316,6 +380,135 @@ void AStarPlanner::ensure_graph_cache(const ::navmap::NavMap & map)
       parent_.begin(), parent_.end(),
       std::numeric_limits<::navmap::NavCelId>::max());
   }
+}
+
+namespace
+{
+
+// Whether (x, y) is inside the XY projection of triangle (a, b, c), with a small tolerance.
+bool in_triangle_xy(
+  const Eigen::Vector3f & p, const Eigen::Vector3f & a, const Eigen::Vector3f & b,
+  const Eigen::Vector3f & c)
+{
+  const float d = (b.y() - c.y()) * (a.x() - c.x()) + (c.x() - b.x()) * (a.y() - c.y());
+  if (std::abs(d) < 1e-12f) {return false;}
+  const float l1 = ((b.y() - c.y()) * (p.x() - c.x()) + (c.x() - b.x()) * (p.y() - c.y())) / d;
+  const float l2 = ((c.y() - a.y()) * (p.x() - c.x()) + (a.x() - c.x()) * (p.y() - c.y())) / d;
+  const float eps = 1e-4f;
+  return l1 >= -eps && l2 >= -eps && (1.0f - l1 - l2) >= -eps;
+}
+
+// Height of the triangle's plane at (x, y).
+float height_at(
+  const Eigen::Vector3f & p, const Eigen::Vector3f & a, const Eigen::Vector3f & b,
+  const Eigen::Vector3f & c)
+{
+  const Eigen::Vector3f n = (b - a).cross(c - a);
+  if (std::abs(n.z()) < 1e-9f) {return a.z();}
+  return a.z() - (n.x() * (p.x() - a.x()) + n.y() * (p.y() - a.y())) / n.z();
+}
+
+}  // namespace
+
+std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
+  const ::navmap::NavMap & nm,
+  const std::vector<Eigen::Vector3f> & points,
+  const std::vector<::navmap::NavCelId> & cels)
+{
+  using ::navmap::NavCelId;
+  const std::size_t n = points.size();
+  if (n < 2) {return points;}
+
+  auto vertices = [&nm](NavCelId c) {
+      const auto & t = nm.navcels[c];
+      return std::array<Eigen::Vector3f, 3>{
+      nm.positions.at(t.v[0]), nm.positions.at(t.v[1]), nm.positions.at(t.v[2])};
+    };
+
+  // NavCel under p, searched from `from` and its neighbors first: consecutive samples of a
+  // segment are in the same NavCel or a neighbor one. NavMap's search only as a fallback.
+  auto locate_near = [&](const Eigen::Vector3f & p, NavCelId from, NavCelId & out) -> bool {
+      auto inside = [&](NavCelId c) {
+          const auto t = vertices(c);
+          return in_triangle_xy(p, t[0], t[1], t[2]) &&
+                 std::abs(height_at(p, t[0], t[1], t[2]) - p.z()) < 0.5f;
+        };
+      if (inside(from)) {out = from; return true;}
+      for (const auto & nb : neighbors_[from]) {
+        if (inside(nb.cid)) {out = nb.cid; return true;}
+      }
+      ::navmap::NavMap::LocateOpts opts;
+      opts.hint_cid = from;
+      std::size_t sidx = 0;
+      Eigen::Vector3f bary, hit;
+      return nm.locate_navcel(p, sidx, out, bary, &hit, opts);
+    };
+
+  // Straight segment i -> j: on traversable NavCels no costlier than the waypoints it replaces
+  auto visible = [&](std::size_t i, std::size_t j) -> bool {
+      std::uint8_t allowed = 0;
+      for (std::size_t k = i + 1; k < j; ++k) {
+        allowed = std::max(allowed, occ_[cels[k]]);
+      }
+      const Eigen::Vector3f a = points[i], b = points[j];
+      const double len = (b - a).head<2>().norm();
+      const int steps = std::max(1, static_cast<int>(std::ceil(len / (0.25 * cel_spacing_))));
+      NavCelId cur = cels[i];
+      for (int s = 1; s < steps; ++s) {
+        const Eigen::Vector3f p = a + (b - a) * (static_cast<float>(s) / steps);
+        NavCelId c;
+        if (!locate_near(p, cur, c)) {return false;}
+        const std::uint8_t v = occ_[c];
+        if (v >= navmap_ros::INSCRIBED_INFLATED_OBSTACLE || v > allowed) {return false;}
+        cur = c;
+      }
+      return true;
+    };
+
+  // Greedy: from each kept waypoint, the farthest visible one (exponential, then binary search)
+  std::vector<std::size_t> kept{0};
+  std::size_t i = 0;
+  while (i + 1 < n) {
+    std::size_t good = i + 1;  // A neighbor NavCel: always reachable
+    std::size_t bad = n;
+    for (std::size_t k = 2; ; k *= 2) {
+      const std::size_t j = std::min(i + k, n - 1);
+      if (j <= good) {break;}
+      if (visible(i, j)) {
+        good = j;
+        if (j == n - 1) {break;}
+      } else {
+        bad = j;
+        break;
+      }
+    }
+    while (bad < n && bad - good > 1) {
+      const std::size_t mid = (good + bad) / 2;
+      (visible(i, mid) ? good : bad) = mid;
+    }
+    kept.push_back(good);
+    i = good;
+  }
+
+  // Resampled at the NavCel spacing, on the surface
+  std::vector<Eigen::Vector3f> out{points.front()};
+  for (std::size_t k = 1; k < kept.size(); ++k) {
+    const Eigen::Vector3f a = points[kept[k - 1]], b = points[kept[k]];
+    const double len = (b - a).head<2>().norm();
+    const int steps = std::max(1, static_cast<int>(std::round(len / cel_spacing_)));
+    NavCelId cur = cels[kept[k - 1]];
+    for (int s = 1; s <= steps; ++s) {
+      Eigen::Vector3f p = a + (b - a) * (static_cast<float>(s) / steps);
+      NavCelId c;
+      if (s < steps && locate_near(p, cur, c)) {
+        const auto t = vertices(c);
+        p.z() = height_at(p, t[0], t[1], t[2]);
+        cur = c;
+      }
+      out.push_back(p);
+    }
+  }
+  return out;
 }
 
 std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
@@ -371,8 +564,17 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
     occ_[c] = nm.layer_get<std::uint8_t>(cost_layer, c, FREE_SPACE);
   }
 
-  // Traversability: block lethal and unknown.
+  // Traversability: block lethal, unknown and inscribed (the robot would touch an obstacle),
+  // as the costmap planner does.
   auto traversable = [&](NavCelId c) -> bool {
+      const std::uint8_t v = occ_[c];
+      return v < INSCRIBED_INFLATED_OBSTACLE;
+    };
+  // How far from the start inscribed cells are still traversable (m).
+  constexpr double kEscapeDistance = 1.0;
+  // The robot may already be within the inscribed band (e.g. stopped by a reflex): it can
+  // leave it, unless it is on an obstacle or an unknown cell.
+  auto can_start_at = [&](NavCelId c) -> bool {
       const std::uint8_t v = occ_[c];
       return (v != LETHAL_OBSTACLE) && (v != NO_INFORMATION);
     };
@@ -389,13 +591,13 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
       return static_cast<double>(v) / max_cost;  // FREE=0 → 0.0, INSCRIBED=253 → 1.0
     };
 
-  // If start or goal lands on non-traversable, do not plan.
-  if (!traversable(cid_start) || !traversable(cid_goal)) {
+  // If the start is on an obstacle/unknown cell, or the goal is not traversable, do not plan.
+  if (!can_start_at(cid_start) || !traversable(cid_goal)) {
     return {};
   }
 
   // Weighted step cost:
-  //   base geometric cost (edge length) scaled by (cost_factor_ + inflation_penalty_ * norm_cost(target)).
+  //   base geometric cost (edge length) scaled by (cost_factor_ + cost_weight_ * norm_cost(target)).
   // This preserves admissibility with heuristic h = Euclidean distance, since the minimal multiplier ≥ 1.
   auto step_cost = [&](NavCelId from, NavCelId to) -> double {
       const double base = euclid(from, to);
@@ -411,7 +613,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
       // Ensure the multiplier is at least 1.0 so h = euclid remains admissible.
       // If your cost_factor_ is already ≥ 1, this holds. Otherwise we clamp.
       const double cf = std::max(1.0, static_cast<double>(cost_factor_));
-      const double mult = cf + static_cast<double>(inflation_penalty_) * ncost;
+      const double mult = cf + static_cast<double>(cost_weight_) * ncost;
 
       return base * mult;
     };
@@ -429,9 +631,10 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
 
   std::priority_queue<Node, std::vector<Node>, Cmp> open;
 
+  // Every meter costs at least cost_factor: still admissible, and far fewer expansions
+  const double h_scale = std::max(1.0, static_cast<double>(cost_factor_));
   auto h = [&](NavCelId a, NavCelId b) -> double {
-      // Heuristic: pure Euclidean distance → admissible (never overestimates).
-      return euclid(a, b);
+      return h_scale * euclid(a, b);
     };
 
   g_[cid_start] = 0.0;
@@ -444,19 +647,24 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
 
     if (u == cid_goal) {break;}
 
-    const auto & tri = nm.navcels[u];
-    for (int e = 0; e < 3; ++e) {
-      NavCelId v = tri.neighbor[e];
-      if (v == std::numeric_limits<std::uint32_t>::max()) {
-        continue;
-      }
-      const std::size_t vidx = static_cast<std::size_t>(v);
-      if (vidx >= N) {
-        continue;
-      }
+    for (const auto & nb : neighbors_[u]) {
+      const NavCelId v = nb.cid;
 
-      // Skip non-traversable neighbors (lethal or unknown).
-      if (!traversable(v)) {continue;}
+      // Skip non-traversable neighbors (lethal, unknown or inscribed); inscribed ones only
+      // near the start, so a robot within the inscribed band can leave it.
+      const bool escaping = can_start_at(v) &&
+        (centroids_[v] - centroids_[cid_start]).norm() < kEscapeDistance;
+      if (!traversable(v) && !escaping) {continue;}
+
+      // Only a vertex in common: no cutting a corner, every NavCel around it must be passable
+      if (nb.shared_vertex != kNoVertex) {
+        const auto & around = vertex_cels_[nb.shared_vertex];
+        const bool clear = std::all_of(
+          around.begin(), around.end(), [&](NavCelId c) {
+            return traversable(c) || (escaping && can_start_at(c));
+          });
+        if (!clear) {continue;}
+      }
 
       const double sc = step_cost(u, v);
       if (!std::isfinite(sc)) {continue;}
@@ -476,22 +684,37 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   }
 
   // 5) Path reconstruction (centroid-based polyline).
-  std::vector<geometry_msgs::msg::Pose> path;
+  std::vector<NavCelId> cels;
   for (NavCelId c = cid_goal;
     c != std::numeric_limits<NavCelId>::max();
     c = parent_[c])
   {
-    geometry_msgs::msg::Pose p;
-    p.position.x = centroids_[c].x();
-    p.position.y = centroids_[c].y();
-    p.position.z = centroids_[c].z();
-    p.orientation = goal.orientation;
-    path.push_back(std::move(p));
+    cels.push_back(c);
     if (c == cid_start) {break;}
   }
-  std::reverse(path.begin(), path.end());
+  std::reverse(cels.begin(), cels.end());
 
-  if (path.empty()) {path.push_back(goal);}
+  std::vector<Eigen::Vector3f> points;
+  points.reserve(cels.size());
+  for (const auto c : cels) {
+    points.push_back(centroids_[c]);
+  }
+  // Ends exactly at the goal, not at its NavCel's centroid
+  points.back().x() = static_cast<float>(goal.position.x);
+  points.back().y() = static_cast<float>(goal.position.y);
+
+  std::vector<geometry_msgs::msg::Pose> path;
+  for (const auto & pt : shortcut_path(nm, points, cels)) {
+    geometry_msgs::msg::Pose p;
+    p.position.x = pt.x();
+    p.position.y = pt.y();
+    p.position.z = pt.z();
+    p.orientation = goal.orientation;
+    path.push_back(std::move(p));
+  }
+  // Exactly the goal (the waypoints are floats)
+  path.back().position.x = goal.position.x;
+  path.back().position.y = goal.position.y;
   return path;
 }
 

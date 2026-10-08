@@ -10,6 +10,8 @@ find_package(easynav_common REQUIRED)
 find_package(easynav_costmap_common REQUIRED)
 find_package(easynav_core REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 
 
@@ -25,6 +27,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_core::easynav_core
   easynav_costmap_common::easynav_costmap_common
   pluginlib::pluginlib
+  rclcpp::rclcpp
+  ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
 )
 
@@ -48,7 +52,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 
   find_package(ament_cmake_gtest REQUIRED)
-  # add_subdirectory(tests)
+  add_subdirectory(tests)
 endif()
 
 ament_export_include_directories("include/${PROJECT_NAME}")
@@ -63,6 +67,8 @@ ament_export_dependencies(
   easynav_core
   easynav_costmap_common
   pluginlib
+  rclcpp
+  geometry_msgs
   nav_msgs
 )
 ament_package()

@@ -2,27 +2,24 @@
 Changelog for package easynav_bonxai_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.0 (2026-07-26)
+0.5.0 (2026-10-08)
 ------------------
-* Add missing easynav_sensors deps
+* Runtime reconfiguration
+* Empty clouds are guarded
+* Builds on Humble, Jazzy, Kilted, Lyrical and Rolling
+* Contributors: Francisco Martín Rico
+
+0.4.2 (2026-07-26)
+------------------
+* Complete deps
 * Update calls to deprecated get_package_share_directory
 * GPLv3 -> Apache 2.0
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
-
-0.2.1 (2026-02-27)
-------------------
-* 0.2.0
-* GPLv3 -> Apache 2.0
-* Documentation was corrected
-* Add a base_footprint frame in TFInfo
 * Remove C++20/C++23 features and update to new MethodBase interface
+* Merge branch 'set_robot_frame' into frames-fix-pr-40
 * TFInfo in RTTFBuffer
 * Refactor to use TFInfo
-* Referencing base class if ot void
-* Optimize execution
 * Cleanup unused headers
-* Update sheets
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely, Miguel, migueldm
 
 0.0.2 (2025-10-12)
 ------------------

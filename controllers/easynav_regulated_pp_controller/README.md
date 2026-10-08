@@ -48,9 +48,9 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
   costmap cost (see `heuristics::obstacleConstraint` in
   [`regulation_functions.hpp`](include/easynav_regulated_pp_controller/regulation_functions.hpp)).
 - **No per-controller collision-arc checking.** Nav2's RPP throws a `NoValidControl` exception
-  when it predicts a collision along a forward-simulated arc. EasyNav already performs this kind
-  of safety stop uniformly for every controller in `ControllerMethodBase` (see the shared
-  `colision_checker.*` parameters), so this controller does not duplicate it.
+  when it predicts a collision along a forward-simulated arc. In EasyNav, braking before an
+  obstacle is the recovery system's job (`recovery_node`), the same for every controller, so this
+  controller does not duplicate it.
 - **No separate goal-checker plugin.** Nav2 relies on an independent `GoalChecker` plugin to
   decide when the robot has reached the goal. This controller checks the distance/angle to the
   last path pose directly, using `goal_tolerance.position` / `goal_tolerance.yaw` from the
@@ -79,18 +79,14 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
 
 | Parameter | Description |
 |-----|----|
-| `max_linear_vel` | Maximum linear velocity. |
-| `min_linear_vel` | Minimum linear velocity, used when `use_dynamic_window` is `true`. |
-| `max_angular_vel` / `min_angular_vel` | Angular velocity bounds, used when `use_dynamic_window` is `true`. |
-| `max_linear_accel` / `max_linear_decel` | Linear acceleration/deceleration bounds, used when `use_dynamic_window` is `true`. |
-| `max_angular_accel` / `max_angular_decel` | Angular acceleration/deceleration bounds; also used by `rotate_to_heading`. |
+| (velocity/acceleration limits) | Not this plugin's: the robot limits of `controller_node` (`robot_limits.*`, see `ControllerMethodBase::get_robot_limits()`). `min_linear_vel` and the angular bounds (`±max_angular_vel`) are used when `use_dynamic_window` is `true`; the angular acceleration/deceleration also by `rotate_to_heading`. |
 | `lookahead_dist` | Fixed lookahead distance to find the carrot point. |
 | `min_lookahead_dist` / `max_lookahead_dist` | Bounds for the velocity-scaled lookahead distance. |
 | `lookahead_time` | Gain used to scale the lookahead distance by the current speed. |
 | `use_velocity_scaled_lookahead_dist` | Use velocity-scaled lookahead distance instead of the fixed `lookahead_dist`. |
 | `rotate_to_heading_angular_vel` | Angular velocity used while rotating in place. |
 | `use_rotate_to_heading` | Enable rotate-in-place behaviors (rough path heading and final goal heading). |
-| `rotate_to_heading_min_angle` | Angle to the carrot beyond which the robot rotates in place first. |
+| `rotate_to_heading_min_angle` | Angle to the carrot beyond which the robot rotates in place first. Hysteretic: leaving rotate-in-place mode requires the angle to drop to *half* this value (well-aligned), not just back under it, to avoid chattering between rotate-in-place and curve-follow mode near sharp turns where the carrot itself is geometrically unstable tick to tick. |
 | `use_regulated_linear_velocity_scaling` | Enable curvature-based velocity regulation. |
 | `regulated_linear_scaling_min_radius` | Turning radius below which curvature regulation kicks in. |
 | `regulated_linear_scaling_min_speed` | Minimum velocity kept under regulation. |
@@ -100,11 +96,16 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
 | `use_obstacle_regulated_linear_velocity_scaling` | Enable obstacle-proximity velocity regulation (EasyNav adaptation of Nav2's cost-based term). |
 | `obstacle_scaling_dist` | Distance below which obstacle regulation is triggered. |
 | `obstacle_scaling_gain` | Gain (`<= 1.0`) applied when scaling down the velocity near obstacles. |
+| `robot_radius` | Robot radius used when measuring the distance to obstacles (m, default `0.35`). |
+| `safety_margin` | Margin added to `robot_radius` for the obstacle corridor (m, default `0.1`). |
+| `z_min_filter` / `robot_height` | Height range of the points considered obstacles (m, default `0.0` / `0.5`). |
 | `min_approach_linear_velocity` | Minimum velocity while approaching the goal. |
 | `approach_velocity_scaling_dist` | Remaining path distance at which approach-to-goal slow-down starts. |
 | `allow_reversing` | Allow driving backwards when the carrot point is behind the robot. |
 | `use_dynamic_window` | Enable the Dynamic Window Pure Pursuit (DWPP) extension. |
 | `xy_goal_tolerance` / `yaw_goal_tolerance` | Fallback goal tolerances used if `GoalManager` has not published `goal_tolerance.*` in the `NavState`. |
+
+> **Deprecated:** this plugin's former limit parameters (`max_linear_vel`, `min_linear_vel`, `max_angular_vel`, `min_angular_vel`, `max_linear_accel`, `max_linear_decel`, `max_angular_accel`, `max_angular_decel`, under the plugin's name) still apply, with a warning, where `controller_node.robot_limits.*` does not set that limit. They will stop working soon: move them to `robot_limits`.
 
 ## Topics
 
@@ -117,18 +118,19 @@ EasyNav's design differs from Nav2's `controller_server` in ways that require so
 ## Example configuration
 
 ```yaml
-controller:
+controller_node:
   ros__parameters:
-    controller_plugin: "easynav_regulated_pp_controller/RegulatedPurePursuitController"
-    RegulatedPurePursuitController:
+    robot_limits:
       max_linear_vel: 0.5
       min_linear_vel: -0.5
       max_angular_vel: 2.5
-      min_angular_vel: -2.5
-      max_linear_accel: 2.5
+      max_linear_acc: 2.5
       max_linear_decel: 2.5
-      max_angular_accel: 3.2
+      max_angular_acc: 3.2
       max_angular_decel: 3.2
+    controller_types: [rpp]
+    rpp:
+      plugin: easynav_regulated_pp_controller/RegulatedPurePursuitController
       lookahead_dist: 0.6
       min_lookahead_dist: 0.3
       max_lookahead_dist: 0.9

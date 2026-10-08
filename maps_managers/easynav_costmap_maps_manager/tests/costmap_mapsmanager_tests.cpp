@@ -167,7 +167,8 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
   rclcpp::executors::SingleThreadedExecutor executor;
   executor.add_node(node->get_node_base_interface());
 
-  const std::string topic = node->get_name() + std::string("/test/incoming_map");
+  const std::string topic = node->get_node_base_interface()->get_fully_qualified_name() +
+    std::string("/test/incoming_map");
   auto pub = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
     topic, rclcpp::QoS(1).transient_local().reliable());
   pub->on_activate();
@@ -191,8 +192,7 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
   const auto dyn_ptr = navstate.get_ptr<easynav::Costmap2D>("map");
   ASSERT_TRUE(dyn_ptr != nullptr);
   EXPECT_EQ(dyn_ptr->getCost(5, 5), easynav::LETHAL_OBSTACLE);
-  EXPECT_EQ(
-    dyn_ptr->getLastModifiedStamp().nanoseconds(),
+  EXPECT_EQ(dyn_ptr->getLastModifiedStamp().nanoseconds(),
     base_after.getLastModifiedStamp().nanoseconds());
 }
 

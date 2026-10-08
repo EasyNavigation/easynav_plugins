@@ -21,6 +21,7 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
@@ -189,22 +190,34 @@ AMCLLocalizer::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  int num_particles;
-  double x_init, y_init, yaw_init, std_dev_xy, std_dev_yaw;
+  int num_particles = 100;
+  double x_init = 0.0;
+  double y_init = 0.0;
+  double yaw_init = 0.0;
+  double std_dev_xy = 0.5;
+  double std_dev_yaw = 0.5;
+  double reseed_freq = 1.0;
 
-  node->declare_parameter<int>(plugin_name + ".num_particles", 100);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.x", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.y", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.yaw", 0.0);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", 0.5);
-  node->declare_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", 0.5);
-  node->declare_parameter<double>(plugin_name + ".reseed_freq", 1.0);
-  node->declare_parameter<double>(plugin_name + ".noise_translation", 0.01);
-  node->declare_parameter<double>(plugin_name + ".noise_rotation", 0.01);
-  node->declare_parameter<double>(plugin_name + ".noise_translation_to_rotation", 0.01);
-  node->declare_parameter<double>(plugin_name + ".min_noise_xy", 0.05);
-  node->declare_parameter<double>(plugin_name + ".min_noise_yaw", 0.05);
-  node->declare_parameter<bool>(plugin_name + ".compute_odom_from_tf", false);
+  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".num_particles", num_particles);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.x", x_init);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.y", y_init);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.yaw", yaw_init);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.std_dev_xy",
+      std_dev_xy);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".initial_pose.std_dev_yaw",
+      std_dev_yaw);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".reseed_freq", reseed_freq);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".noise_translation",
+      noise_translation_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".noise_rotation",
+      noise_rotation_);
+  easynav::declare_parameter_if_absent<double>(*node,
+      plugin_name + ".noise_translation_to_rotation", noise_translation_to_rotation_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_noise_xy", min_noise_xy_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_noise_yaw",
+      min_noise_yaw_);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".compute_odom_from_tf",
+      compute_odom_from_tf_);
 
   node->get_parameter<int>(plugin_name + ".num_particles", num_particles);
   node->get_parameter<double>(plugin_name + ".initial_pose.x", x_init);
@@ -212,16 +225,19 @@ AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".initial_pose.yaw", yaw_init);
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_xy", std_dev_xy);
   node->get_parameter<double>(plugin_name + ".initial_pose.std_dev_yaw", std_dev_yaw);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".initial_pose.use_last_known",
+      use_last_known_pose_);
+  node->get_parameter(plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
   node->get_parameter<double>(plugin_name + ".noise_translation", noise_translation_);
   node->get_parameter<double>(plugin_name + ".noise_rotation", noise_rotation_);
-  node->get_parameter<double>(
-    plugin_name + ".noise_translation_to_rotation",
+  node->get_parameter<double>(plugin_name + ".noise_translation_to_rotation",
     noise_translation_to_rotation_);
   node->get_parameter<double>(plugin_name + ".min_noise_xy", min_noise_xy_);
   node->get_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
+  node->get_parameter<double>(plugin_name + ".min_height", min_height_);
   node->get_parameter<bool>(plugin_name + ".compute_odom_from_tf", compute_odom_from_tf_);
 
-  double reseed_freq;
   node->get_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
   reseed_time_ = 1.0 / reseed_freq;
 
@@ -240,8 +256,7 @@ AMCLLocalizer::on_initialize()
   }
 
   RCLCPP_INFO(node->get_logger(), "Initialized AMCL pose with %d particles", num_particles);
-  RCLCPP_INFO(
-    node->get_logger(), "at position (%lf, %lf, %lf) std_dev [%lf, %lf]",
+  RCLCPP_INFO(node->get_logger(), "at position (%lf, %lf, %lf) std_dev [%lf, %lf]",
     x_init, y_init, yaw_init, std_dev_xy, std_dev_yaw);
 
   std::normal_distribution<double> noise_x(x_init, std::max(std_dev_xy, 1e-12));
@@ -260,7 +275,7 @@ AMCLLocalizer::on_initialize()
     p.weight = 1.0 / num_particles;
   }
 
-  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(get_node());
+  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*get_node());
 
   auto node_typed = std::dynamic_pointer_cast<LocalizerNode>(get_node());
   auto rt_cbg = node_typed->get_real_time_cbg();
@@ -274,10 +289,11 @@ AMCLLocalizer::on_initialize()
   }
 
   particles_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseArray>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/particles",
-    10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/particles", 10);
   estimate_pub_ = get_node()->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/pose", 10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/pose", 10);
 
   init_pose_sub_ = get_node()->create_subscription<geometry_msgs::msg::PoseWithCovarianceStamped>(
     "initialpose", 10, std::bind(&AMCLLocalizer::init_pose_callback, this, std::placeholders::_1));
@@ -305,12 +321,23 @@ void printTransform(const tf2::Transform & tf)
             << rot.w() << "]\n";
 }
 
+namespace
+{
+// Position + yaw dispersion (variances x, y, yaw), read by AmclConvergenceEvaluator.
+double covariance_trace(const nav_msgs::msg::Odometry & odom)
+{
+  return odom.pose.covariance[0] + odom.pose.covariance[7] + odom.pose.covariance[35];
+}
+}  // namespace
+
 void
 AMCLLocalizer::update_rt(NavState & nav_state)
 {
   predict(nav_state);
 
-  nav_state.set("robot_pose", get_pose());
+  const auto odom = get_pose();
+  nav_state.set("robot_pose", odom);
+  nav_state.set("localizer.amcl.covariance_trace", covariance_trace(odom));
 }
 
 void
@@ -323,7 +350,9 @@ AMCLLocalizer::update(NavState & nav_state)
     last_reseed_ = get_node()->now();
   }
 
-  nav_state.set("robot_pose", get_pose());
+  const auto odom = get_pose();
+  nav_state.set("robot_pose", odom);
+  nav_state.set("localizer.amcl.covariance_trace", covariance_trace(odom));
 
   publishParticles();
 }
@@ -340,6 +369,18 @@ AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
     last_odom_ = odom_;
     initialized_odom_ = true;
   }
+}
+
+void
+AMCLLocalizer::on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose)
+{
+  if (!use_last_known_pose_) {
+    return;
+  }
+  RCLCPP_INFO(
+    get_node()->get_logger(), "AMCLLocalizer: starting from the last known pose (%.3f, %.3f)",
+    pose.pose.pose.position.x, pose.pose.pose.position.y);
+  init_pose_callback(std::make_unique<geometry_msgs::msg::PoseWithCovarianceStamped>(pose));
 }
 
 void
@@ -503,8 +544,8 @@ AMCLLocalizer::update_odom_from_tf()
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = RTTFBuffer::getInstance()->lookupTransform(
-      tf_info.odom_frame, tf_info.robot_frame, tf2::TimePointZero,
-      tf2::durationFromSec(0.0));
+      tf_info.odom_frame, tf_info.robot_footprint_frame, tf2::TimePointZero,
+        tf2::durationFromSec(0.0));
   } catch (const tf2::TransformException & ex) {
     RCLCPP_WARN(get_node()->get_logger(), "AMCLLocalizer::update: TF failed: %s", ex.what());
     return;
@@ -603,7 +644,7 @@ AMCLLocalizer::correct(NavState & nav_state)
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(map_static.getResolution())
   .fuse(tf_info.robot_footprint_frame, last_input_time_)
-  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+  .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN})
   .collapse({NAN, NAN, 0.1})
   .downsample(map_static.getResolution());
   const auto & filtered = view.as_points();
@@ -666,8 +707,7 @@ AMCLLocalizer::reseed()
   const std::size_t N = particles_.size();
   const std::size_t N_top = N / 2;
 
-  std::sort(
-    particles_.begin(), particles_.end(),
+  std::sort(particles_.begin(), particles_.end(),
     [](const Particle & a, const Particle & b) {
       return a.weight > b.weight;
     });
@@ -704,9 +744,8 @@ AMCLLocalizer::reseed()
     double dx = l00 * z0;
     double dy = l10 * z0 + l11 * z1;
 
-    std::normal_distribution<double> xy_noise(0.0, std::max(
-        sqrt(dx * dx + dy * dy),
-        min_noise_xy_));
+    std::normal_distribution<double> xy_noise(0.0, std::max(sqrt(dx * dx + dy * dy),
+      min_noise_xy_));
 
     tf2::Vector3 new_origin(origin.x() + xy_noise(rng_), origin.y() + xy_noise(rng_), 0.0);
 
@@ -785,8 +824,7 @@ AMCLLocalizer::getEstimatedPose() const
   const std::size_t N_top = N / 2;
 
   std::vector<Particle> sorted_particles = particles_;
-  std::sort(
-    sorted_particles.begin(), sorted_particles.end(),
+  std::sort(sorted_particles.begin(), sorted_particles.end(),
     [](const Particle & a, const Particle & b) {
       return a.weight > b.weight;
     });
@@ -844,7 +882,7 @@ AMCLLocalizer::get_pose()
   odom_msg.header.stamp = last_input_time_;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   odom_msg.header.frame_id = tf_info.map_frame;
-  odom_msg.child_frame_id = tf_info.robot_frame;
+  odom_msg.child_frame_id = tf_info.robot_footprint_frame;
 
   tf2::Transform est_pose = getEstimatedPose();
 
@@ -858,8 +896,7 @@ AMCLLocalizer::get_pose()
     const std::size_t N_top = N / 2;
 
     std::vector<Particle> sorted_particles = particles_;
-    std::sort(
-      sorted_particles.begin(), sorted_particles.end(),
+    std::sort(sorted_particles.begin(), sorted_particles.end(),
       [](const Particle & a, const Particle & b) {
         return a.weight > b.weight;
       });

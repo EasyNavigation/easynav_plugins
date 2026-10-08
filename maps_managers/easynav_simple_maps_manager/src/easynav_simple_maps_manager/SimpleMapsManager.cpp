@@ -16,10 +16,11 @@
 /// \file
 /// \brief Implementation of the SimpleMapsManager class.
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 
-#include "ament_index_cpp/get_package_share_directory.hpp"
+#include "easynav_common/PackageShare.hpp"
 #include "ament_index_cpp/get_package_prefix.hpp"
 
 #include "easynav_common/YTSession.hpp"
@@ -52,19 +53,21 @@ SimpleMapsManager::on_initialize()
   const auto & plugin_name = get_plugin_name();
 
   std::string package_name, map_path_file;
-  node->declare_parameter(plugin_name + ".package", package_name);
-  node->declare_parameter(plugin_name + ".map_path_file", map_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".package", package_name);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".map_path_file", map_path_file);
 
   node->get_parameter(plugin_name + ".package", package_name);
   node->get_parameter(plugin_name + ".map_path_file", map_path_file);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".min_height", min_height_);
+  node->get_parameter(plugin_name + ".min_height", min_height_);
 
   map_path_ = "/tmp/default.map";
   if (package_name != "" && map_path_file != "") {
     std::string pkgpath;
     try {
-      pkgpath = ament_index_cpp::get_package_share_directory(package_name);
+      pkgpath = easynav::get_package_share_path(package_name);
       map_path_ = pkgpath + "/" + map_path_file;
-    } catch (ament_index_cpp::PackageNotFoundError & ex) {
+    } catch(ament_index_cpp::PackageNotFoundError & ex) {
       throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
     }
 
@@ -74,31 +77,34 @@ SimpleMapsManager::on_initialize()
   }
 
   static_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/map",
     rclcpp::QoS(1).transient_local().reliable());
 
   dynamic_occ_pub_ = node->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_name() + std::string(
-      "/") + plugin_name + "/dynamic_map", 100);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/dynamic_map", 100);
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   incoming_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    node->get_node_base_interface()->get_name() + std::string("/") + plugin_name + "/incoming_map",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/incoming_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
       static_map_.from_occupancy_grid(*msg);
       dynamic_map_.from_occupancy_grid(*msg);
 
       static_map_.to_occupancy_grid(static_grid_msg_);
-      static_grid_msg_.header.frame_id = tf_info.map_frame;
+      static_grid_msg_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
       static_grid_msg_.header.stamp = this->get_node()->now();
 
       static_occ_pub_->publish(static_grid_msg_);
     });
 
   savemap_srv_ = node->create_service<std_srvs::srv::Trigger>(
-    node->get_name() + std::string("/") + plugin_name + "/savemap",
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/savemap",
     [&](
       const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
       std::shared_ptr<std_srvs::srv::Trigger::Response> response)
@@ -156,7 +162,7 @@ SimpleMapsManager::update(NavState & nav_state)
   auto view = PointPerceptionsOpsView(perceptions);
   view.downsample(dynamic_map_.resolution())
   .fuse(tf_info.map_frame, stamp, false)
-  .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN});
+  .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN});
 
   const auto & fused = view.as_points();
 

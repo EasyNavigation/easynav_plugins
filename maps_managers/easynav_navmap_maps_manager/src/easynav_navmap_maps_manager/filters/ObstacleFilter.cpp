@@ -13,9 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <string>
-#include <cstdint>
 
+#include <cmath>
+#include <cstdint>
+#include <optional>
+#include <string>
+#include <unordered_map>
+
+#include "easynav_common/Parameters.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
@@ -38,7 +43,28 @@ ObstacleFilter::ObstacleFilter()
 
 void
 ObstacleFilter::on_initialize()
-{}
+{
+  auto node = get_node();
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".max_range", max_range_);
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".min_height", min_height_);
+  easynav::declare_parameter_if_absent(*node, plugin_name_ + ".max_height", max_height_);
+  easynav::declare_parameter_if_absent(
+    *node, plugin_name_ + ".downsample_resolution", downsample_resolution_);
+  node->get_parameter(plugin_name_ + ".max_range", max_range_);
+  node->get_parameter(plugin_name_ + ".min_height", min_height_);
+  node->get_parameter(plugin_name_ + ".max_height", max_height_);
+  node->get_parameter(plugin_name_ + ".downsample_resolution", downsample_resolution_);
+
+  easynav::declare_parameter_if_absent(
+    *node, plugin_name_ + ".min_height_per_meter", min_height_per_meter_);
+  node->get_parameter(plugin_name_ + ".min_height_per_meter", min_height_per_meter_);
+  if (!std::isfinite(min_height_per_meter_) || min_height_per_meter_ < 0.0) {
+    RCLCPP_WARN(
+      node->get_logger(), "[%s] min_height_per_meter = %f must be >= 0: using 0",
+      plugin_name_.c_str(), min_height_per_meter_);
+    min_height_per_meter_ = 0.0;
+  }
+}
 
 void ObstacleFilter::update(::easynav::NavState & nav_state)
 {
@@ -53,23 +79,29 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
+  // Start from the static map, if the NavMap has one (built from an occupancy grid): what the
+  // sensors do not see right now (behind something, far, too low) is still an obstacle.
   navmap_.layer_clear<uint8_t>(get_layer_name(), navmap_ros::FREE_SPACE);
+  if (navmap_.has_layer("occupancy")) {
+    for (std::size_t c = 0; c < navmap_.navcels.size(); ++c) {
+      const auto cid = static_cast<::navmap::NavCelId>(c);
+      const auto v = navmap_.layer_get<uint8_t>("occupancy", cid, navmap_ros::FREE_SPACE);
+      if (v != navmap_ros::FREE_SPACE) {
+        navmap_.layer_set<uint8_t>(get_layer_name(), cid, v);
+      }
+    }
+  }
 
+  // Only the points around the robot and below its height (robot frame), downsampled first
+  // (indices only) so that fewer points are transformed.
   const auto & points = PointPerceptionsOpsView(perceptions)
-    .filter({-10.0, -10.0, NAN}, {10.0, 10.0, NAN})
-    .downsample(0.3)
+    .downsample(downsample_resolution_)
+    .fuse(tf_info.robot_frame)
+    .filter({-max_range_, -max_range_, NAN}, {max_range_, max_range_, max_height_}, false)
     .fuse(tf_info.map_frame)
     .as_points();
 
   const float voxel_xy = 0.30f;
-  const float voxel_z = 0.20f;
-
-  struct Accum
-  {
-    std::unordered_set<int> z_bins;
-    float max_z = -std::numeric_limits<float>::infinity();
-    float min_z = std::numeric_limits<float>::infinity();
-  };
 
   struct Key
   {
@@ -86,45 +118,42 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     }
   };
 
-  std::unordered_map<Key, Accum, KeyHash> bins;
-  bins.reserve(points.size() / 4 + 1);
-
+  // Highest point of each column
+  std::unordered_map<Key, float, KeyHash> max_z;
+  max_z.reserve(points.size() / 4 + 1);
   for (const auto & p : points.points) {
-    const float x = p.x;
-    const float y = p.y;
-    const float z = p.z;
+    if (!std::isfinite(p.x) || !std::isfinite(p.y) || !std::isfinite(p.z)) {continue;}
+    const Key key{static_cast<int>(std::floor(p.x / voxel_xy)),
+      static_cast<int>(std::floor(p.y / voxel_xy))};
+    auto [it, inserted] = max_z.try_emplace(key, p.z);
+    if (!inserted && p.z > it->second) {it->second = p.z;}
+  }
 
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(z)) {continue;}
-
-    const int ix = static_cast<int>(std::floor(x / voxel_xy));
-    const int iy = static_cast<int>(std::floor(y / voxel_xy));
-    const int iz = static_cast<int>(std::floor(z / voxel_z));
-
-    auto & acc = bins[{ix, iy}];
-    acc.z_bins.insert(iz);
-    if (z > acc.max_z) {acc.max_z = z;}
-    if (z < acc.min_z) {acc.min_z = z;}
+  // The robot's position, for min_height_per_meter
+  Eigen::Vector2f robot_xy(0.0f, 0.0f);
+  bool robot_known = false;
+  if (min_height_per_meter_ > 0.0) {
+    try {
+      const auto tf = RTTFBuffer::getInstance()->lookupTransform(
+        tf_info.map_frame, tf_info.robot_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
+      robot_xy = {static_cast<float>(tf.transform.translation.x),
+        static_cast<float>(tf.transform.translation.y)};
+      robot_known = true;
+    } catch (const tf2::TransformException & ex) {
+      RCLCPP_WARN_THROTTLE(
+        get_node()->get_logger(), *get_node()->get_clock(), 5000,
+        "[%s] No robot pose (%s): min_height_per_meter not applied", plugin_name_.c_str(),
+        ex.what());
+    }
   }
 
   std::optional<size_t> last_surface;
   std::optional<::navmap::NavCelId> last_cid;
 
-  const float height_threshold = 0.25f;
-
-  for (const auto & kv : bins) {
-    const auto & key = kv.first;
-    const auto & acc = kv.second;
-
+  for (const auto & [key, top] : max_z) {
     const float cx = (static_cast<float>(key.ix) + 0.5f) * voxel_xy;
     const float cy = (static_cast<float>(key.iy) + 0.5f) * voxel_xy;
-    const float dz = acc.max_z - acc.min_z;
-
-    if (acc.z_bins.size() <= 2 && dz <= height_threshold) {
-      continue;
-    }
-
-    const float cz = acc.max_z;
-    Eigen::Vector3f query(cx, cy, cz);
+    const Eigen::Vector3f query(cx, cy, top);
 
     size_t surface_idx = 0;
     ::navmap::NavCelId cid;
@@ -147,13 +176,21 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
         ok = navmap_.locate_navcel(query, surface_idx, cid, bary, &hit);
       }
     }
+    if (!ok) {continue;}
+    last_surface = surface_idx;
+    last_cid = cid;
 
-    if (ok) {
-      navmap_.layer_set<uint8_t>(
-        get_layer_name(), cid, static_cast<uint8_t>(navmap_ros::LETHAL_OBSTACLE));
-      last_surface = surface_idx;
-      last_cid = cid;
-    }
+    // Height above the NavCel's plane (along its upward normal): on a ramp, the ramp is not one
+    const auto & cel = navmap_.navcels[cid];
+    Eigen::Vector3f normal = cel.normal;
+    if (normal.z() < 0.0f) {normal = -normal;}
+    const float height = normal.dot(query - navmap_.positions.at(cel.v[0]));
+    // Farther, a small attitude error lifts the ground more: a higher threshold
+    const double distance = robot_known ? (Eigen::Vector2f(cx, cy) - robot_xy).norm() : 0.0;
+    if (!(height > min_height_ + min_height_per_meter_ * distance)) {continue;}
+
+    navmap_.layer_set<uint8_t>(
+      get_layer_name(), cid, static_cast<uint8_t>(navmap_ros::LETHAL_OBSTACLE));
   }
 
   nav_state.set("map.navmap", navmap_);

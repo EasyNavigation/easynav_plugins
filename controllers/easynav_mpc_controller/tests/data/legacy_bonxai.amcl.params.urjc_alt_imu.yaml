@@ -1,0 +1,147 @@
+controller_node:
+  ros__parameters:
+    use_sim_time: true
+    colision_checker:
+      active: false
+      debug_markers: false
+      robot_radius: 0.70
+      robot_height: 1.0
+      z_min_filter: 0.3
+      brake_acc: 0.1
+      safety_margin: 0.30
+      downsample_leaf_size: 0.3
+    controller_types: [mpc]
+    mpc:
+      rt_freq: 30.0 
+      plugin: easynav_mpc_controller/MPCController
+    dummy:
+      rt_freq: 30.0 
+      plugin: easynav_controller/DummyController
+      cycle_time_nort: 0.01
+      cycle_time_rt: 0.001
+    mppi:
+      rt_freq: 30.0 
+      plugin: easynav_mppi_controller/MPPIController
+    serest:
+      rt_freq: 30.0 
+      plugin: easynav_serest_controller/SerestController
+      allow_reverse: true
+      max_linear_speed: 0.8
+      max_angular_speed: 1.2
+      v_progress_min: 0.08        # 8 cm/s de crucero mínimo cuando alineado
+      k_s_share_max: 0.5          # succión lateral no cancela >50% del avance
+      k_theta: 2.5                # sube un poco
+      k_y: 1.5
+      goal_pos_tol: 0.1          # 7 cm
+      goal_yaw_tol_deg: 6.0       # 6 grados
+      slow_radius: 0.60
+      slow_min_speed: 0.03
+      final_align_k: 2.0
+      final_align_wmax: 0.6
+      corner_guard_enable: true
+      corner_gain_ey: 1.8
+      corner_gain_eth: 0.7
+      corner_gain_kappa: 0.4
+      corner_min_alpha: 0.35
+      corner_boost_omega: 1.0
+      a_lat_soft: 0.9
+      apex_ey_des: 0.05
+    simple:
+      rt_freq: 30.0 
+      plugin: easynav_simple_controller/SimpleController
+      max_linear_speed: 1.0
+      max_angular_speed: 1.0
+      look_ahead_dist: 0.2
+      k_rot: 0.5
+
+localizer_node:
+  ros__parameters:
+    use_sim_time: true
+    localizer_types: [amcl]
+    amcl:
+      rt_freq: 50.0
+      freq: 5.0
+      reseed_freq: 0.1
+      plugin: easynav_navmap_localizer/AMCLLocalizer
+      downsampled_cloud_size: 10.0
+      num_particles: 100
+      noise_translation: 0.1
+      noise_rotation: 0.03
+      noise_translation_to_rotation: 0.02
+      min_noise_xy: 0.2
+      min_noise_yaw: 0.1
+      compute_odom_from_tf: true 
+      initial_pose:
+        x: 0.0
+        y: 0.0
+        yaw: 0.0
+        std_dev_xy: 0.05
+        std_dev_yaw: 0.01
+    dummy:
+      rt_freq: 50.0
+      freq: 5.0
+      reseed_freq: 0.1
+      plugin: easynav_localizer/DummyLocalizer
+      cycle_time_nort: 0.01
+      cycle_time_rt: 0.001
+
+maps_manager_node:
+  ros__parameters:
+    use_sim_time: true
+    map_types: [bonxai, navmap]
+    bonxai:
+      freq: 10.0 
+      plugin: easynav_bonxai_maps_manager/BonxaiMapsManager
+      package: easynav_indoor_testcase
+      bonxai_path_file: maps/excavation_urjc.pcd
+    navmap:
+      freq: 10.0 
+      plugin: easynav_navmap_maps_manager/NavMapMapsManager
+      package: easynav_indoor_testcase
+      navmap_path_file: maps/excavation_urjc.navmap
+      # filters: [obstacles, inflation]
+      obstacles:
+        plugin: easynav_navmap_maps_manager/NavMapMapsManager/ObstaclesFilter
+      inflation:
+        plugin: easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter
+        inflation_radius: 5.0
+        cost_scaling_factor: 1.0
+
+planner_node:
+  ros__parameters:
+    use_sim_time: true
+    planner_types: [astart]
+    astart:
+      freq: 1.0
+      plugin: easynav_navmap_planner/AStarPlanner
+      
+
+sensors_node:
+  ros__parameters:
+    use_sim_time: true
+    forget_time: 0.5
+    sensors: [laser, camera, imu, gps]
+    perception_default_frame: odom
+    laser:
+      topic: front_laser/points
+      type: sensor_msgs/msg/PointCloud2
+      plugin: easynav_sensors/PointPerceptionHandler
+    camera:
+      topic: front_camera/depth/color/points
+      type: sensor_msgs/msg/PointCloud2
+      plugin: easynav_sensors/PointPerceptionHandler
+    imu:
+      topic: imu/data
+      type: sensor_msgs/msg/Imu
+      plugin: easynav_alt_imu_sensor/AltIMUPerceptionHandler
+    gps:
+      topic: gps/fix
+      type: sensor_msgs/msg/NavSatFix
+      plugin: easynav_sensors/GNSSPerceptionHandler
+
+system_node:
+  ros__parameters:
+    use_sim_time: true
+    use_real_time: true
+    position_tolerance: 0.3
+    angle_tolerance: 0.15

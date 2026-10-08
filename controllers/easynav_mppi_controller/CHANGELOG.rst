@@ -2,26 +2,29 @@
 Changelog for package easynav_mppi_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.0 (2026-07-26)
+0.5.0 (2026-10-08)
 ------------------
-* Add missing easynav_sensors deps
-* Update plugins to new sensors API
-* GPLv3 -> Apache 2.0
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
+* Velocity smoother support and runtime reconfiguration
+* Obstacle points in the robot frame
+* Removed unused dependencies
+* Contributors: Francisco Martín Rico
 
-0.2.1 (2026-02-27)
+0.4.2 (2026-07-26)
 ------------------
-* 0.2.0
+* Complete deps
 * GPLv3 -> Apache 2.0
-* Documentation was corrected
 * Remove C++20/C++23 features and update to new MethodBase interface
-* Merge branch 'set_robot_frame' into frames-fix-pr-40
 * TFInfo in RTTFBuffer
 * Refactor to use TFInfo
 * Include package in cmake and package.xml
 * Fix link error when running MPPI in Realease
 * Stop controllers at IDLE
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, José Miguel Guerrero, Juan S. Cely G., Miguel, estherag
+* Merge branch 'rolling' into improve_astar_costmap
+* Referencing base class if ot void
+* Optimize execution
+* Cleanup unused headers
+* Adaptation to EasyNavigation`#71 <https://github.com/EasyNavigation/easynav_plugins/issues/71>`_
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, José Miguel Guerrero, Juan S. Cely, Juan S. Cely G., Miguel, migueldm
 
 0.0.2 (2025-10-12)
 ------------------

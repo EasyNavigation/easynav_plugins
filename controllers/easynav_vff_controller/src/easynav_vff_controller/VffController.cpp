@@ -16,6 +16,7 @@
 /// \file
 /// \brief Implementation of the VffController class.
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_vff_controller/VffController.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
@@ -34,34 +35,40 @@ void VffController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<float>(plugin_name + ".distance_obstacle_detection", 3.0);
-  node->declare_parameter<float>(plugin_name + ".distance_to_goal", 1.0);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_x_min", 0.5);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_x_max", 10.0);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_y_min", -10.0);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_y_max", 10.0);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_z_min", 0.10);
-  node->declare_parameter<float>(plugin_name + ".obstacle_detection_z_max", 1.00);
-  node->declare_parameter<double>(plugin_name + ".max_speed", 0.8);
-  node->declare_parameter<double>(plugin_name + ".max_angular_speed", 1.5);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".distance_obstacle_detection",
+      3.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".distance_to_goal", 1.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_x_min",
+      0.5);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_x_max",
+      10.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_y_min",
+      -10.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_y_max",
+      10.0);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_z_min",
+      0.10);
+  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_z_max",
+      1.00);
 
-  node->get_parameter<float>(
-    plugin_name + ".distance_obstacle_detection",
-    distance_obstacle_detection_);
+  node->get_parameter<float>(plugin_name + ".distance_obstacle_detection",
+      distance_obstacle_detection_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_x_min", obstacle_detection_x_min_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_x_max", obstacle_detection_x_max_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_y_min", obstacle_detection_y_min_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_y_max", obstacle_detection_y_max_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_z_min", obstacle_detection_z_min_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_z_max", obstacle_detection_z_max_);
-  node->get_parameter<double>(plugin_name + ".max_speed", max_speed_);
-  node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
+  // Velocity limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits({"max_speed", "", "max_angular_speed", "", "", "", ""});
+  max_speed_ = limits.max_linear_vel;
+  max_angular_speed_ = limits.max_angular_vel;
 
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   // Initialize the odometry message
   cmd_vel_.header.stamp = node->now();
-  cmd_vel_.header.frame_id = tf_info.robot_frame;
+  cmd_vel_.header.frame_id = tf_info.robot_footprint_frame;
   cmd_vel_.twist.linear.x = 0.0;
   cmd_vel_.twist.linear.y = 0.0;
   cmd_vel_.twist.linear.z = 0.0;
@@ -207,7 +214,7 @@ void VffController::update_rt(NavState & nav_state)
   if (!nav_state.has("goals")) {return;}
   if (!nav_state.has("robot_pose")) {return;}
 
-  const auto & all_goals = nav_state.get<nav_msgs::msg::Goals>("goals");
+  const auto & all_goals = nav_state.get_safe<nav_msgs::msg::Goals>("goals");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (all_goals.goals.empty()) {
@@ -219,7 +226,7 @@ void VffController::update_rt(NavState & nav_state)
     return;
   }
 
-  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
 
   // Current position
   double current_x_ = robot_pose.pose.pose.position.x;
@@ -259,15 +266,14 @@ void VffController::update_rt(NavState & nav_state)
     auto fused =
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
-      .fuse(tf_info.robot_frame)
-      .filter(
-      {obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
-      {obstacle_detection_x_max_, obstacle_detection_y_max_,
-        obstacle_detection_z_max_})
+      .fuse(tf_info.robot_footprint_frame)
+      .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
+        {obstacle_detection_x_max_, obstacle_detection_y_max_,
+          obstacle_detection_z_max_})
       .as_points();
 
     // Get VFF vectors
-    const VFFVectors & vff = get_vff(angle_error, fused, tf_info.robot_frame);
+    const VFFVectors & vff = get_vff(angle_error, fused, tf_info.robot_footprint_frame);
 
     // Use result vector to calculate output speed
     const auto & v = vff.result;
@@ -278,9 +284,8 @@ void VffController::update_rt(NavState & nav_state)
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = std::clamp(module, 0.0, max_speed_);
     cmd_vel_.twist.angular.z = std::clamp(angle, -max_angular_speed_, max_angular_speed_);
-    RCLCPP_INFO(
-      get_node()->get_logger(), "[distance: %.2f, yaw_error: %.2f]", distance,
-      angle_error);
+    RCLCPP_INFO(get_node()->get_logger(), "[distance: %.2f, yaw_error: %.2f]", distance,
+        angle_error);
 
     nav_state.set("cmd_vel", cmd_vel_);
   }
