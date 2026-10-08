@@ -62,5 +62,6 @@ easynav_diagnostic_recovery::RecoveryStatus CancelMissionRecovery::on_cycle(NavS
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::CancelMissionRecovery,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::CancelMissionRecovery,
   easynav_diagnostic_recovery::RecoveryMitigationBase)

@@ -30,11 +30,13 @@ void AmclRelocalizeMitigation::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".rotation_speed",
-      rotation_speed_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".rotation_speed",
+    rotation_speed_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".timeout", timeout_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".covariance_threshold",
-      covariance_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".covariance_threshold",
+    covariance_threshold_);
 
   node->get_parameter<double>(plugin_name + ".rotation_speed", rotation_speed_);
   node->get_parameter<double>(plugin_name + ".timeout", timeout_);
@@ -93,5 +95,6 @@ easynav_diagnostic_recovery::RecoveryStatus AmclRelocalizeMitigation::on_cycle(N
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::AmclRelocalizeMitigation,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::AmclRelocalizeMitigation,
   easynav_diagnostic_recovery::RecoveryMitigationBase)

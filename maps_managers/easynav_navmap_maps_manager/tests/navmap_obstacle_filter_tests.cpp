@@ -316,8 +316,10 @@ TEST_F(NavmapObstacleFilterLimitsTest, ARampIsNotAnObstacleButABoxOnItIs)
       std::size_t sidx = 0;
       ::navmap::NavCelId cid;
       Eigen::Vector3f bary, hit;
-      EXPECT_TRUE(out.locate_navcel(Eigen::Vector3f(x, y, 0.25f * (x - 4.0f)), sidx, cid, bary,
-      &hit));
+      EXPECT_TRUE(
+        out.locate_navcel(
+          Eigen::Vector3f(x, y, 0.25f * (x - 4.0f)), sidx, cid, bary,
+          &hit));
       return out.layer_get<std::uint8_t>("obstacles", cid, 123);
     };
   for (float x = 4.35f; x <= 6.0f; x += 0.3f) {

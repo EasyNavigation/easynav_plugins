@@ -54,7 +54,7 @@ std::shared_ptr<easynav_diagnostic_recovery::DiagnosticRecoveryManager> default_
   const std::shared_ptr<easynav::RecoveryManagerNode> & node)
 {
   return std::dynamic_pointer_cast<easynav_diagnostic_recovery::DiagnosticRecoveryManager>(
-      node->get_recovery_manager());
+    node->get_recovery_manager());
 }
 
 // Records what the recovery system asks of the navigation system.
@@ -99,11 +99,12 @@ TEST_F(DiagnosticRecoveryManagerReflexTest, ConfigureLoadsSafetyReflex)
 {
   auto node = make_node(
     rclcpp::NodeOptions()
-    .append_parameter_override("recovery_manager.safety_reflex_types",
-    std::vector<std::string>{"reflex"})
+    .append_parameter_override(
+      "recovery_manager.safety_reflex_types",
+      std::vector<std::string>{"reflex"})
     .append_parameter_override(
       "recovery_manager.reflex.plugin",
-    std::string("easynav_diagnostic_recovery/DummySafetyReflex")));
+      std::string("easynav_diagnostic_recovery/DummySafetyReflex")));
   node->trigger_transition(Transition::TRANSITION_CONFIGURE);
 
   EXPECT_EQ(node->get_current_state().id(), State::PRIMARY_STATE_INACTIVE);
@@ -118,10 +119,12 @@ TEST_F(DiagnosticRecoveryManagerReflexTest, ConfigureFailsWithUnknownReflexPlugi
 {
   auto node = make_node(
     rclcpp::NodeOptions()
-    .append_parameter_override("recovery_manager.safety_reflex_types",
-    std::vector<std::string>{"bogus"})
-    .append_parameter_override("recovery_manager.bogus.plugin",
-    std::string("no_such_pkg/NoSuchReflex")));
+    .append_parameter_override(
+      "recovery_manager.safety_reflex_types",
+      std::vector<std::string>{"bogus"})
+    .append_parameter_override(
+      "recovery_manager.bogus.plugin",
+      std::string("no_such_pkg/NoSuchReflex")));
   node->trigger_transition(Transition::TRANSITION_CONFIGURE);
 
   EXPECT_NE(node->get_current_state().id(), State::PRIMARY_STATE_INACTIVE);
@@ -131,11 +134,12 @@ TEST_F(DiagnosticRecoveryManagerReflexTest, ReflexesSurviveReconfiguration)
 {
   auto node = make_node(
     rclcpp::NodeOptions()
-    .append_parameter_override("recovery_manager.safety_reflex_types",
-    std::vector<std::string>{"reflex"})
+    .append_parameter_override(
+      "recovery_manager.safety_reflex_types",
+      std::vector<std::string>{"reflex"})
     .append_parameter_override(
       "recovery_manager.reflex.plugin",
-    std::string("easynav_diagnostic_recovery/DummySafetyReflex")));
+      std::string("easynav_diagnostic_recovery/DummySafetyReflex")));
 
   node->trigger_transition(Transition::TRANSITION_CONFIGURE);
   node->trigger_transition(Transition::TRANSITION_CLEANUP);
@@ -238,10 +242,12 @@ TEST_F(DiagnosticRecoveryManagerReflexTest, ReflexesRunEveryRtCycleWhoeverHasCon
 {
   auto node = make_node(
     rclcpp::NodeOptions()
-    .append_parameter_override("recovery_manager.safety_reflex_types",
-    std::vector<std::string>{"reflex"})
-    .append_parameter_override("recovery_manager.reflex.plugin",
-    std::string("easynav_diagnostic_recovery/DummySafetyReflex"))
+    .append_parameter_override(
+      "recovery_manager.safety_reflex_types",
+      std::vector<std::string>{"reflex"})
+    .append_parameter_override(
+      "recovery_manager.reflex.plugin",
+      std::string("easynav_diagnostic_recovery/DummySafetyReflex"))
     .append_parameter_override("recovery_manager.reflex.trigger", true));
   node->trigger_transition(Transition::TRANSITION_CONFIGURE);
   ASSERT_EQ(default_manager(node)->get_num_safety_reflexes(), 1u);
@@ -254,7 +260,8 @@ TEST_F(DiagnosticRecoveryManagerReflexTest, ReflexesRunEveryRtCycleWhoeverHasCon
   easynav::velocity_command::propose(*nav_state, easynav::VelocitySource::CONTROLLER, moving);
 
   EXPECT_TRUE(node->cycle_rt(nav_state));
-  const auto reflex = easynav::velocity_command::peek(*nav_state,
+  const auto reflex = easynav::velocity_command::peek(
+    *nav_state,
     easynav::VelocitySource::OVERRIDE);
   ASSERT_TRUE(reflex.has_value()) << "the reflex did not override the command";
   EXPECT_DOUBLE_EQ(reflex->twist.linear.x, 0.0);

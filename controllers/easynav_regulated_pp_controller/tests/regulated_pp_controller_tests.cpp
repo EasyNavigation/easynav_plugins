@@ -118,7 +118,7 @@ TEST(DynamicWindowPurePursuit, ComputeOptimalVelocityZeroCurvatureForward)
 
   const auto [lin, ang] =
     easynav::dynamic_window_pure_pursuit::computeOptimalVelocityWithinDynamicWindow(
-    window, /*curvature=*/0.0, /*sign=*/1.0);
+    window, /*curvature=*/ 0.0, /*sign=*/ 1.0);
 
   EXPECT_NEAR(lin, 1.0, 1e-9);
   EXPECT_NEAR(ang, 0.0, 1e-9);
@@ -155,7 +155,7 @@ TEST(RegulatedPurePursuitControllerHelpers, LookAheadPointInterpolatesOnSegment)
   robot.y = 0.0;
 
   const auto carrot = FriendRegulatedPurePursuitController::getLookAheadPoint(
-    path, robot, /*lookahead_dist=*/1.5);
+    path, robot, /*lookahead_dist=*/ 1.5);
 
   EXPECT_NEAR(carrot.x, 1.5, 1e-6);
   EXPECT_NEAR(carrot.y, 0.0, 1e-6);
@@ -179,7 +179,7 @@ TEST(RegulatedPurePursuitControllerHelpers, LookAheadPointIgnoresPathBehindRobot
   robot.y = 0.0;
 
   const auto carrot = FriendRegulatedPurePursuitController::getLookAheadPoint(
-    path, robot, /*lookahead_dist=*/0.5);
+    path, robot, /*lookahead_dist=*/ 0.5);
 
   // The carrot must be ahead of the robot (close to x=9.5), never back at the path's start (x=0).
   EXPECT_NEAR(carrot.x, 9.5, 1e-6);
@@ -216,7 +216,7 @@ TEST(RegulatedPurePursuitControllerHelpers, LookAheadPointClampsToPathEnd)
   robot.y = 0.0;
 
   const auto carrot = FriendRegulatedPurePursuitController::getLookAheadPoint(
-    path, robot, /*lookahead_dist=*/5.0);
+    path, robot, /*lookahead_dist=*/ 5.0);
 
   EXPECT_NEAR(carrot.x, 1.0, 1e-6);
 }
@@ -229,23 +229,23 @@ TEST(RegulatedPurePursuitControllerHelpers, ShouldRotateToPathHasHysteresis)
   // the (geometrically unstable, near a sharp corner) angle-to-path hovered near it. The fix
   // requires a *smaller* angle to leave rotate-in-place mode than the one that entered it.
   FriendRegulatedPurePursuitController controller;
-  controller.setRotateToHeadingParams(/*use_rotate_to_heading=*/true, /*min_angle=*/0.785);
+  controller.setRotateToHeadingParams(/*use_rotate_to_heading=*/ true, /*min_angle=*/ 0.785);
 
   // Below the entry threshold, and not currently rotating: stay in curve-follow mode.
-  EXPECT_FALSE(controller.shouldRotateToPath(0.5, /*currently_rotating=*/false));
+  EXPECT_FALSE(controller.shouldRotateToPath(0.5, /*currently_rotating=*/ false));
   // Above the entry threshold: start rotating in place.
-  EXPECT_TRUE(controller.shouldRotateToPath(0.9, /*currently_rotating=*/false));
+  EXPECT_TRUE(controller.shouldRotateToPath(0.9, /*currently_rotating=*/ false));
 
   // The crux of the fix: once rotating, an angle that would never have *started* a rotation
   // (0.5 < 0.785) must not end one already in progress -- the old single-threshold code would
   // have flipped back to curve-follow mode here, which is exactly the observed oscillation.
-  EXPECT_TRUE(controller.shouldRotateToPath(0.5, /*currently_rotating=*/true));
+  EXPECT_TRUE(controller.shouldRotateToPath(0.5, /*currently_rotating=*/ true));
   // Only once well-aligned (below half the entry threshold) does it stop rotating.
-  EXPECT_FALSE(controller.shouldRotateToPath(0.3, /*currently_rotating=*/true));
+  EXPECT_FALSE(controller.shouldRotateToPath(0.3, /*currently_rotating=*/ true));
 
   // Disabled outright regardless of angle or state.
-  controller.setRotateToHeadingParams(/*use_rotate_to_heading=*/false, /*min_angle=*/0.785);
-  EXPECT_FALSE(controller.shouldRotateToPath(3.0, /*currently_rotating=*/true));
+  controller.setRotateToHeadingParams(/*use_rotate_to_heading=*/ false, /*min_angle=*/ 0.785);
+  EXPECT_FALSE(controller.shouldRotateToPath(3.0, /*currently_rotating=*/ true));
 }
 
 TEST(RegulatedPurePursuitControllerHelpers, ToRobotFrameRotatesAndTranslates)

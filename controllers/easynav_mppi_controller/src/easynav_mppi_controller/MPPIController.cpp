@@ -43,8 +43,9 @@ MPPIController::on_initialize()
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".lambda", lambda_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fov", fov_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
-      safety_radius_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".safety_radius",
+    safety_radius_);
 
   node->get_parameter<int>(plugin_name + ".num_samples", num_samples_);
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
@@ -69,7 +70,8 @@ MPPIController::on_initialize()
   robot_radius_ = geometry.radius;
   robot_height_ = geometry.height;
 
-  optimizer_ = std::make_unique<MPPIOptimizer>(num_samples_, horizon_steps_, dt_, lambda_,
+  optimizer_ = std::make_unique<MPPIOptimizer>(
+    num_samples_, horizon_steps_, dt_, lambda_,
     max_lin_vel_, max_ang_vel_, fov_, safety_radius_);
 
   mppi_candidates_pub_ =
@@ -155,8 +157,9 @@ MPPIController::obstacle_points(const NavState & nav_state, bool backward) const
   return PointPerceptionsOpsView(perceptions)
          .downsample(0.1)
          .fuse(tf_info.robot_frame)
-         .filter({x_min, -obstacle_range_, z_min_filter_},
-           {x_max, obstacle_range_, robot_height_}, false)
+         .filter(
+    {x_min, -obstacle_range_, z_min_filter_},
+    {x_max, obstacle_range_, robot_height_}, false)
          .fuse(tf_info.map_frame)
          .collapse({NAN, NAN, 0.1})
          .downsample(0.1)

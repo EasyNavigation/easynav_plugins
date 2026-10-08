@@ -901,8 +901,9 @@ void UkfWrapper::loadParams()
   std::string debug_out_file = "robot_localization_debug.txt";
   if (debug) {
     try {
-      debug_out_file = declare_or_get(param_prefix + "debug_out_file",
-          debug_out_file);
+      debug_out_file = declare_or_get(
+        param_prefix + "debug_out_file",
+        debug_out_file);
       debug_stream_.open(debug_out_file.c_str());
 
       // Make sure we succeeded
@@ -929,7 +930,7 @@ void UkfWrapper::loadParams()
   odom_frame_id_ = tf_info.odom_frame;
   base_link_frame_id_ = tf_info.robot_footprint_frame;
   // World frame comes from Easynav TFInfo configuration
-  if(local_filter_) {
+  if (local_filter_) {
     world_frame_id_ = tf_info.odom_frame;
   } else {
     world_frame_id_ = tf_info.map_frame;
@@ -990,12 +991,14 @@ void UkfWrapper::loadParams()
   publish_transform_ = declare_or_get(param_prefix + "publish_tf", true);
 
   // Whether we're publishing the acceleration state transform
-  publish_acceleration_ = declare_or_get(param_prefix + "publish_acceleration",
-      false);
+  publish_acceleration_ = declare_or_get(
+    param_prefix + "publish_acceleration",
+    false);
 
   // Whether we'll allow old measurements to cause a re-publication of the updated state
-  permit_corrected_publication_ = declare_or_get(param_prefix +
-      "permit_corrected_publication", false);
+  permit_corrected_publication_ = declare_or_get(
+    param_prefix +
+    "permit_corrected_publication", false);
 
   // Transform future dating
   double offset_tmp = declare_or_get(param_prefix + "transform_time_offset", 0.0);
@@ -1008,11 +1011,14 @@ void UkfWrapper::loadParams()
   // Update frequency and sensor timeout
   frequency_ = declare_or_get(param_prefix + "frequency", 30.0);
 
-  predict_to_current_time_ = declare_or_get(param_prefix +
-      "predict_to_current_time", false);
+  predict_to_current_time_ = declare_or_get(
+    param_prefix +
+    "predict_to_current_time", false);
 
   sensor_timeout_ =
-    rclcpp::Duration::from_seconds(declare_or_get(param_prefix + "sensor_timeout",
+    rclcpp::Duration::from_seconds(
+    declare_or_get(
+      param_prefix + "sensor_timeout",
       1.0 / frequency_));
   filter_.setSensorTimeout(sensor_timeout_);
 
@@ -1021,8 +1027,9 @@ void UkfWrapper::loadParams()
 
   // Smoothing window size
   smooth_lagged_data_ = declare_or_get(param_prefix + "smooth_lagged_data", false);
-  double history_length_double = declare_or_get(param_prefix + "history_length",
-      0.0);
+  double history_length_double = declare_or_get(
+    param_prefix + "history_length",
+    0.0);
 
   if (!smooth_lagged_data_ && std::abs(history_length_double) > 0) {
     RCLCPP_ERROR_STREAM(
@@ -1056,8 +1063,9 @@ void UkfWrapper::loadParams()
   control_timeout = declare_or_get(param_prefix + "control_timeout", 0.0);
 
   if (use_control_) {
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "control_config",
-        rclcpp::PARAMETER_BOOL_ARRAY);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + "control_config",
+      rclcpp::PARAMETER_BOOL_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "control_config", control_update_vector)) {
       if (control_update_vector.size() != TWIST_SIZE) {
         RCLCPP_ERROR_STREAM(
@@ -1075,8 +1083,9 @@ void UkfWrapper::loadParams()
       use_control_ = false;
     }
 
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "acceleration_limits",
-        rclcpp::PARAMETER_DOUBLE_ARRAY);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + "acceleration_limits",
+      rclcpp::PARAMETER_DOUBLE_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "acceleration_limits", acceleration_limits)) {
       if (acceleration_limits.size() != TWIST_SIZE) {
         RCLCPP_ERROR_STREAM(
@@ -1094,8 +1103,9 @@ void UkfWrapper::loadParams()
       acceleration_limits.resize(TWIST_SIZE, 1.0);
     }
 
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "acceleration_gains",
-        rclcpp::PARAMETER_DOUBLE_ARRAY);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + "acceleration_gains",
+      rclcpp::PARAMETER_DOUBLE_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "acceleration_gains", acceleration_gains)) {
       const int size = acceleration_gains.size();
       if (size != TWIST_SIZE) {
@@ -1110,8 +1120,9 @@ void UkfWrapper::loadParams()
       }
     }
 
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "deceleration_limits",
-        rclcpp::PARAMETER_DOUBLE_ARRAY);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + "deceleration_limits",
+      rclcpp::PARAMETER_DOUBLE_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "deceleration_limits", deceleration_limits)) {
       if (deceleration_limits.size() != TWIST_SIZE) {
         RCLCPP_ERROR_STREAM(
@@ -1128,8 +1139,9 @@ void UkfWrapper::loadParams()
       deceleration_limits = acceleration_limits;
     }
 
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "deceleration_gains",
-        rclcpp::PARAMETER_DOUBLE_ARRAY);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + "deceleration_gains",
+      rclcpp::PARAMETER_DOUBLE_ARRAY);
     if (parent_node_->get_parameter(param_prefix + "deceleration_gains", deceleration_gains)) {
       const int size = deceleration_gains.size();
       if (size != TWIST_SIZE) {
@@ -1157,14 +1169,16 @@ void UkfWrapper::loadParams()
     deceleration_gains.resize(TWIST_SIZE, 1.0);
   }
 
-  bool dynamic_process_noise_covariance = declare_or_get(param_prefix +
+  bool dynamic_process_noise_covariance = declare_or_get(
+    param_prefix +
     "dynamic_process_noise_covariance", false);
   filter_.setUseDynamicProcessNoiseCovariance(
     dynamic_process_noise_covariance);
 
   std::vector<double> initial_state;
-  easynav::declare_parameter_if_absent(*parent_node_, param_prefix + "initial_state",
-      rclcpp::PARAMETER_DOUBLE_ARRAY);
+  easynav::declare_parameter_if_absent(
+    *parent_node_, param_prefix + "initial_state",
+    rclcpp::PARAMETER_DOUBLE_ARRAY);
   if (parent_node_->get_parameter(param_prefix + "initial_state", initial_state)) {
     if (initial_state.size() != STATE_SIZE) {
       RCLCPP_ERROR_STREAM(
@@ -1179,8 +1193,9 @@ void UkfWrapper::loadParams()
   }
 
   // Check if the filter should start or not
-  disabled_at_startup_ = declare_or_get(param_prefix + "disabled_at_startup",
-      false);
+  disabled_at_startup_ = declare_or_get(
+    param_prefix + "disabled_at_startup",
+    false);
   enabled_ = !disabled_at_startup_;
 
   // Debugging writes to file
@@ -1272,8 +1287,9 @@ void UkfWrapper::loadParams()
     ss << "odom" << topic_ind++;
     std::string odom_topic_name = ss.str();
     std::string odom_topic;
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + odom_topic_name,
-        rclcpp::PARAMETER_STRING);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + odom_topic_name,
+      rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + odom_topic_name, parameter)) {
@@ -1285,13 +1301,15 @@ void UkfWrapper::loadParams()
 
     if (more_params) {
       // Determine if we want to integrate this sensor differentially
-      bool differential = declare_or_get(param_prefix +
+      bool differential = declare_or_get(
+        param_prefix +
         odom_topic_name + std::string("_differential"),
         false);
 
       // Determine if we want to integrate this sensor relatively
-      bool relative = declare_or_get(param_prefix + odom_topic_name +
-          std::string("_relative"), false);
+      bool relative = declare_or_get(
+        param_prefix + odom_topic_name +
+        std::string("_relative"), false);
 
       if (relative && differential) {
         RCLCPP_ERROR_STREAM(
@@ -1303,23 +1321,27 @@ void UkfWrapper::loadParams()
       }
 
       // Consider odometry transformation from the child_frame_id instead of the base_link_frame_id
-      bool pose_use_child_frame = declare_or_get(param_prefix +
+      bool pose_use_child_frame = declare_or_get(
+        param_prefix +
         odom_topic_name + std::string("_pose_use_child_frame"), false);
 
       // Check for pose rejection threshold
-      double pose_mahalanobis_thresh = declare_or_get(param_prefix +
+      double pose_mahalanobis_thresh = declare_or_get(
+        param_prefix +
         odom_topic_name +
         std::string("_pose_rejection_threshold"),
         std::numeric_limits<double>::max());
 
       // Check for twist rejection threshold
-      double twist_mahalanobis_thresh = declare_or_get(param_prefix +
+      double twist_mahalanobis_thresh = declare_or_get(
+        param_prefix +
         odom_topic_name +
         std::string("_twist_rejection_threshold"),
         std::numeric_limits<double>::max());
 
       // Set optional custom queue size
-      int queue_size = declare_or_get(param_prefix +
+      int queue_size = declare_or_get(
+        param_prefix +
         odom_topic_name +
         std::string("_queue_size"), 10);
 
@@ -1429,8 +1451,9 @@ void UkfWrapper::loadParams()
     ss << "pose" << topic_ind++;
     std::string pose_topic_name = ss.str();
     std::string pose_topic;
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + pose_topic_name,
-        rclcpp::PARAMETER_STRING);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + pose_topic_name,
+      rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + pose_topic_name, parameter)) {
@@ -1441,12 +1464,14 @@ void UkfWrapper::loadParams()
     }
 
     if (more_params) {
-      bool differential = declare_or_get(param_prefix +
+      bool differential = declare_or_get(
+        param_prefix +
         pose_topic_name + std::string("_differential"),
         false);
 
       // Determine if we want to integrate this sensor relatively
-      bool relative = declare_or_get(param_prefix +
+      bool relative = declare_or_get(
+        param_prefix +
         pose_topic_name + std::string("_relative"),
         false);
 
@@ -1460,13 +1485,15 @@ void UkfWrapper::loadParams()
       }
 
       // Check for pose rejection threshold
-      double pose_mahalanobis_thresh = declare_or_get(param_prefix +
+      double pose_mahalanobis_thresh = declare_or_get(
+        param_prefix +
         pose_topic_name +
         std::string("_rejection_threshold"),
         std::numeric_limits<double>::max());
 
       // Set optional custom queue size
-      int queue_size = declare_or_get(param_prefix +
+      int queue_size = declare_or_get(
+        param_prefix +
         pose_topic_name +
         std::string("_queue_size"), 10);
 
@@ -1548,8 +1575,9 @@ void UkfWrapper::loadParams()
     ss << "gps" << topic_ind++;
     std::string gps_topic_name = ss.str();
     std::string gps_topic;
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + gps_topic_name,
-        rclcpp::PARAMETER_STRING);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + gps_topic_name,
+      rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + gps_topic_name, parameter)) {
@@ -1560,12 +1588,14 @@ void UkfWrapper::loadParams()
     }
 
     if (more_params) {
-      bool differential = declare_or_get(param_prefix +
+      bool differential = declare_or_get(
+        param_prefix +
         gps_topic_name + std::string("_differential"),
         false);
 
       // Determine if we want to integrate this sensor relatively
-      bool relative = declare_or_get(param_prefix +
+      bool relative = declare_or_get(
+        param_prefix +
         gps_topic_name + std::string("_relative"),
         false);
 
@@ -1579,7 +1609,8 @@ void UkfWrapper::loadParams()
       }
 
       // Check for gps rejection threshold
-      double gps_mahalanobis_thresh = declare_or_get(param_prefix +
+      double gps_mahalanobis_thresh = declare_or_get(
+        param_prefix +
         gps_topic_name +
         std::string("_rejection_threshold"),
         std::numeric_limits<double>::max());
@@ -1671,8 +1702,9 @@ void UkfWrapper::loadParams()
     ss << "twist" << topic_ind++;
     std::string twist_topic_name = ss.str();
     std::string twist_topic;
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + twist_topic_name,
-        rclcpp::PARAMETER_STRING);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + twist_topic_name,
+      rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + twist_topic_name, parameter)) {
@@ -1684,13 +1716,15 @@ void UkfWrapper::loadParams()
 
     if (more_params) {
       // Check for twist rejection threshold
-      double twist_mahalanobis_thresh = declare_or_get(param_prefix +
+      double twist_mahalanobis_thresh = declare_or_get(
+        param_prefix +
         twist_topic_name +
         std::string("_rejection_threshold"),
         std::numeric_limits<double>::max());
 
       // Set optional custom queue size
-      int queue_size = declare_or_get(param_prefix +
+      int queue_size = declare_or_get(
+        param_prefix +
         twist_topic_name +
         std::string("_queue_size"), 10);
 
@@ -1752,8 +1786,9 @@ void UkfWrapper::loadParams()
     ss << "imu" << topic_ind++;
     std::string imu_topic_name = ss.str();
     std::string imu_topic;
-    easynav::declare_parameter_if_absent(*parent_node_, param_prefix + imu_topic_name,
-        rclcpp::PARAMETER_STRING);
+    easynav::declare_parameter_if_absent(
+      *parent_node_, param_prefix + imu_topic_name,
+      rclcpp::PARAMETER_STRING);
 
     rclcpp::Parameter parameter;
     if (parent_node_->get_parameter(param_prefix + imu_topic_name, parameter)) {
@@ -1764,13 +1799,15 @@ void UkfWrapper::loadParams()
     }
 
     if (more_params) {
-      bool differential = declare_or_get(param_prefix +
+      bool differential = declare_or_get(
+        param_prefix +
         imu_topic_name + std::string("_differential"),
         false);
 
       // Determine if we want to integrate this sensor relatively
-      bool relative = declare_or_get(param_prefix + imu_topic_name +
-          std::string("_relative"), false);
+      bool relative = declare_or_get(
+        param_prefix + imu_topic_name +
+        std::string("_relative"), false);
 
       if (relative && differential) {
         RCLCPP_ERROR_STREAM(
@@ -1782,7 +1819,8 @@ void UkfWrapper::loadParams()
       }
 
       // Check for pose rejection threshold
-      double pose_mahalanobis_thresh = declare_or_get(param_prefix +
+      double pose_mahalanobis_thresh = declare_or_get(
+        param_prefix +
         imu_topic_name +
         std::string("_pose_rejection_threshold"),
         std::numeric_limits<double>::max());
@@ -1790,17 +1828,20 @@ void UkfWrapper::loadParams()
       // Check for angular velocity rejection threshold
       std::string imu_twist_rejection_name =
         imu_topic_name + std::string("_twist_rejection_threshold");
-      double twist_mahalanobis_thresh = declare_or_get(param_prefix +
+      double twist_mahalanobis_thresh = declare_or_get(
+        param_prefix +
         imu_twist_rejection_name,
         std::numeric_limits<double>::max());
 
       // Check for acceleration rejection threshold
-      double accel_mahalanobis_thresh = declare_or_get(param_prefix +
+      double accel_mahalanobis_thresh = declare_or_get(
+        param_prefix +
         imu_topic_name +
         std::string("_linear_acceleration_rejection_threshold"),
         std::numeric_limits<double>::max());
 
-      bool remove_grav_acc = declare_or_get(param_prefix +
+      bool remove_grav_acc = declare_or_get(
+        param_prefix +
         imu_topic_name +
         "_remove_gravitational_acceleration",
         false);
@@ -1808,7 +1849,8 @@ void UkfWrapper::loadParams()
         remove_grav_acc;
 
       // Set optional custom queue size
-      int queue_size = declare_or_get(param_prefix +
+      int queue_size = declare_or_get(
+        param_prefix +
         imu_topic_name +
         std::string("_queue_size"), 10);
 
@@ -2008,7 +2050,7 @@ void UkfWrapper::loadParams()
       deceleration_gains);
 
     // Select between TwistStamped or Twist control input
-    if(stamped_control_) {
+    if (stamped_control_) {
       stamped_control_sub_ = parent_node_->create_subscription<geometry_msgs::msg::TwistStamped>(
         "cmd_vel", rclcpp::QoS(1),
         std::bind(&UkfWrapper::controlStampedCallback, this, std::placeholders::_1), options);
@@ -2073,7 +2115,8 @@ void UkfWrapper::loadParams()
       covariance.setZero();
       std::vector<double> covar_flat;
 
-      easynav::declare_parameter_if_absent(*parent_node_, parameter,
+      easynav::declare_parameter_if_absent(
+        *parent_node_, parameter,
         rclcpp::PARAMETER_DOUBLE_ARRAY);
       if (parent_node_->get_parameter(parameter, covar_flat)) {
         if (covar_flat.size() == STATE_SIZE) {
@@ -2100,7 +2143,8 @@ void UkfWrapper::loadParams()
     filter_.setProcessNoiseCovariance(process_noise_covariance_);
   }
 
-  if (load_covariance(param_prefix + "initial_estimate_covariance",
+  if (load_covariance(
+      param_prefix + "initial_estimate_covariance",
       initial_estimate_error_covariance_))
   {
     RF_DEBUG("Initial estimate covariance is:\n" << initial_estimate_error_covariance_ << "\n");

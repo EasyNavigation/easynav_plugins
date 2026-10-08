@@ -89,10 +89,12 @@ void RosGraphEvaluator::on_initialize()
     node->declare_parameter<std::vector<std::string>>(
       plugin_name + ".ignored_consumers", ignored_consumers_);
   }
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".startup_grace",
-      startup_grace_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".error_debounce",
-      error_debounce_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".startup_grace",
+    startup_grace_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".error_debounce",
+    error_debounce_);
 
   node->get_parameter<std::vector<std::string>>(plugin_name + ".ignored_topics", ignored_topics_);
   node->get_parameter<std::vector<std::string>>(
@@ -121,8 +123,8 @@ bool RosGraphEvaluator::is_ignored(const std::string & topic) const
       if (topic == entry) {return true;}
       const std::string suffix = entry.front() == '/' ? entry : "/" + entry;
       // ">=": in the root namespace "/goal_pose" is exactly the suffix of "goal_pose".
-      return topic.size() >= suffix.size() &&
-             topic.compare(topic.size() - suffix.size(), suffix.size(), suffix) == 0;
+      if (topic.size() < suffix.size()) {return false;}
+      return topic.compare(topic.size() - suffix.size(), suffix.size(), suffix) == 0;
     });
 }
 
@@ -233,9 +235,10 @@ RosGraphEvaluator::GraphReport RosGraphEvaluator::check_topology(const Topology 
     const bool consumed = std::any_of(
       subscriptions.begin(), subscriptions.end(),
       [this, &topology, & type = type](const rclcpp::TopicEndpointInfo & info) {
-        return info.topic_type() == type &&
-               topology.easynav_nodes.count({info.node_name(), info.node_namespace()}) == 0 &&
-               !is_ignored_consumer(info.node_name());
+        if (info.topic_type() != type) {return false;}
+        const bool by_easynav = topology.easynav_nodes.count(
+          {info.node_name(), info.node_namespace()}) != 0;
+        return !by_easynav && !is_ignored_consumer(info.node_name());
       });
     if (consumed) {
       report.consumed_topic = topic;
@@ -367,5 +370,6 @@ void RosGraphEvaluator::update(NavState & nav_state)
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::RosGraphEvaluator,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::RosGraphEvaluator,
   easynav_diagnostic_recovery::RecoveryEvaluatorBase)

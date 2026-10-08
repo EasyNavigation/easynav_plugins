@@ -39,15 +39,18 @@ MPCController::on_initialize()
 
   easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".horizon_steps", horizon_steps_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
-      safety_radius_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".safety_radius",
+    safety_radius_);
   easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".verbose", verbose_);
   easynav::declare_parameter_if_absent<bool>(
     *node, plugin_name + ".use_collision_checker", use_collision_checker_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_pos_tol",
-      fallback_goal_pos_tol_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_yaw_tol",
-      fallback_goal_yaw_tol_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".fallback_goal_pos_tol",
+    fallback_goal_pos_tol_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".fallback_goal_yaw_tol",
+    fallback_goal_yaw_tol_);
 
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
@@ -76,10 +79,10 @@ MPCController::on_initialize()
 
 void
 MPCController::publish_mpc_path(
-  void *data, const std::vector<double> & best_vel,
+  void * data, const std::vector<double> & best_vel,
   nav_msgs::msg::Path path)
 {
-  MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
+  MPCParameters * params = reinterpret_cast<MPCParameters *>(data);
   nav_msgs::msg::Path mpc_path_;
 
   if (best_vel.size() > 0) {
@@ -102,30 +105,31 @@ MPCController::publish_mpc_path(
 }
 
 void
-MPCController::collision_checker(void *data, std::vector<double> & u)
+MPCController::collision_checker(void * data, std::vector<double> & u)
 {
-  MPCParameters *params = reinterpret_cast<MPCParameters *>(data);
+  MPCParameters * params = reinterpret_cast<MPCParameters *>(data);
   double x_m = 0.0, y_m = 0.0, dist = 0.0, angle = 0.0;
   size_t real_points = 0;
   for (const auto & point : params->points) {
-    if(!std::isnan(point.x) || !std::isnan(point.y)) {
+    if (!std::isnan(point.x) || !std::isnan(point.y)) {
       x_m += (point.x - params->x0[0]);
       y_m += (point.y - params->x0[1]);
       real_points++;
     }
   }
-  if(real_points != 0) {
+  if (real_points != 0) {
     x_m /= real_points;
     y_m /= real_points;
     dist = std::hypot(x_m, y_m);
     angle = std::atan2(y_m, x_m) - params->theta0[2];
-    if(dist < safety_radius_) {
-      if(!collision_state_) {
+    if (dist < safety_radius_) {
+      if (!collision_state_) {
         collision_state_ = true;
         last_v_ = u[0];
         last_w_ = u[1];
       }
-      RCLCPP_WARN(get_node()->get_logger(),
+      RCLCPP_WARN(
+        get_node()->get_logger(),
         "[COLLISION] Collision detected at: [%f] m and Theta: [%f] degrees", dist,
         (angle * 180.00 / M_PI) );
       last_v_ = collision_factor_ * last_v_ * safety_radius_ / dist;
@@ -156,7 +160,7 @@ MPCController::update_rt(NavState & nav_state)
   const auto & perceptions = nav_state.get_no_group<PointPerception>();
 
   if (!nav_state.has("path") || !nav_state.has("robot_pose") || perceptions.empty()) {
-    if(verbose_) {
+    if (verbose_) {
       std::cout << "No Path, No Points or No Robot Pose" << std::endl;
     }
     return;
@@ -271,7 +275,7 @@ MPCController::update_rt(NavState & nav_state)
 
   std::vector<double> lb(2 * horizon_steps_);
   std::vector<double> ub(2 * horizon_steps_);
-  for (int k = 0; k < horizon_steps_ ; k++) {
+  for (int k = 0; k < horizon_steps_; k++) {
     lb[2 * k] = -max_lin_vel_;
     lb[2 * k + 1] = -max_ang_vel_;
     ub[2 * k] = max_lin_vel_;
@@ -285,7 +289,7 @@ MPCController::update_rt(NavState & nav_state)
 
   try {
     nlopt::result result = opt.optimize(u, minf);
-    if(verbose_) {
+    if (verbose_) {
       if (result > 0) {
         std::cerr << "Optimization Successful " << std::endl;
         std::cout << "Result: " << result << std::endl;

@@ -33,10 +33,12 @@ void SafeRetreatRecovery::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".retreat_speed",
-      retreat_speed_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safe_distance",
-      safe_distance_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".retreat_speed",
+    retreat_speed_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".safe_distance",
+    safe_distance_);
 
   node->get_parameter<double>(plugin_name + ".retreat_speed", retreat_speed_);
   node->get_parameter<double>(plugin_name + ".safe_distance", safe_distance_);
@@ -132,5 +134,6 @@ easynav_diagnostic_recovery::RecoveryStatus SafeRetreatRecovery::on_cycle(NavSta
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::SafeRetreatRecovery,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::SafeRetreatRecovery,
   easynav_diagnostic_recovery::RecoveryMitigationBase)

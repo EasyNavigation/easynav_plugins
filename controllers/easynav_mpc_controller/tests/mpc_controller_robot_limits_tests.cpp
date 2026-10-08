@@ -49,7 +49,8 @@ protected:
 
 TEST_F(MpcRobotLimitsTest, DeprecatedParametersStillApply)
 {
-  const auto limits = limits_with({
+  const auto limits = limits_with(
+  {
     {"ctrl.max_linear_velocity", 0.7},
     {"ctrl.max_angular_velocity", 1.3}});
   EXPECT_DOUBLE_EQ(limits.max_linear_vel, 0.7) << "max_linear_velocity";
@@ -58,7 +59,8 @@ TEST_F(MpcRobotLimitsTest, DeprecatedParametersStillApply)
 
 TEST_F(MpcRobotLimitsTest, RobotLimitsTakePrecedence)
 {
-  const auto limits = limits_with({
+  const auto limits = limits_with(
+  {
     {"robot_limits.max_linear_vel", 0.25},
     {"ctrl.max_linear_velocity", 0.7}});
   EXPECT_DOUBLE_EQ(limits.max_linear_vel, 0.25);

@@ -127,5 +127,6 @@ easynav_diagnostic_recovery::RecoveryStatus HumanAssistanceRecovery::on_cycle(Na
 }  // namespace easynav
 
 #include <pluginlib/class_list_macros.hpp>
-PLUGINLIB_EXPORT_CLASS(easynav::HumanAssistanceRecovery,
+PLUGINLIB_EXPORT_CLASS(
+  easynav::HumanAssistanceRecovery,
   easynav_diagnostic_recovery::RecoveryMitigationBase)

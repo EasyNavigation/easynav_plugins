@@ -49,7 +49,8 @@ protected:
 
 TEST_F(SerestRobotLimitsTest, DeprecatedParametersStillApply)
 {
-  const auto limits = limits_with({
+  const auto limits = limits_with(
+  {
     {"ctrl.max_linear_speed", 0.7},
     {"ctrl.max_angular_speed", 1.3},
     {"ctrl.max_linear_acc", 0.9},
@@ -62,7 +63,8 @@ TEST_F(SerestRobotLimitsTest, DeprecatedParametersStillApply)
 
 TEST_F(SerestRobotLimitsTest, RobotLimitsTakePrecedence)
 {
-  const auto limits = limits_with({
+  const auto limits = limits_with(
+  {
     {"robot_limits.max_linear_vel", 0.25},
     {"ctrl.max_linear_speed", 0.7}});
   EXPECT_DOUBLE_EQ(limits.max_linear_vel, 0.25);

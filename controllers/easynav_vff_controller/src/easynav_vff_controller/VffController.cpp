@@ -35,24 +35,32 @@ void VffController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".distance_obstacle_detection",
-      3.0);
+  easynav::declare_parameter_if_absent<float>(
+    *node, plugin_name + ".distance_obstacle_detection",
+    3.0);
   easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".distance_to_goal", 1.0);
-  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_x_min",
-      0.5);
-  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_x_max",
-      10.0);
-  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_y_min",
-      -10.0);
-  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_y_max",
-      10.0);
-  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_z_min",
-      0.10);
-  easynav::declare_parameter_if_absent<float>(*node, plugin_name + ".obstacle_detection_z_max",
-      1.00);
+  easynav::declare_parameter_if_absent<float>(
+    *node, plugin_name + ".obstacle_detection_x_min",
+    0.5);
+  easynav::declare_parameter_if_absent<float>(
+    *node, plugin_name + ".obstacle_detection_x_max",
+    10.0);
+  easynav::declare_parameter_if_absent<float>(
+    *node, plugin_name + ".obstacle_detection_y_min",
+    -10.0);
+  easynav::declare_parameter_if_absent<float>(
+    *node, plugin_name + ".obstacle_detection_y_max",
+    10.0);
+  easynav::declare_parameter_if_absent<float>(
+    *node, plugin_name + ".obstacle_detection_z_min",
+    0.10);
+  easynav::declare_parameter_if_absent<float>(
+    *node, plugin_name + ".obstacle_detection_z_max",
+    1.00);
 
-  node->get_parameter<float>(plugin_name + ".distance_obstacle_detection",
-      distance_obstacle_detection_);
+  node->get_parameter<float>(
+    plugin_name + ".distance_obstacle_detection",
+    distance_obstacle_detection_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_x_min", obstacle_detection_x_min_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_x_max", obstacle_detection_x_max_);
   node->get_parameter<float>(plugin_name + ".obstacle_detection_y_min", obstacle_detection_y_min_);
@@ -267,9 +275,10 @@ void VffController::update_rt(NavState & nav_state)
       PointPerceptionsOpsView(perceptions)
       .filter({-10.0, -10.0, -10.0}, {10.0, 10.0, 10.0})
       .fuse(tf_info.robot_footprint_frame)
-      .filter({obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
-        {obstacle_detection_x_max_, obstacle_detection_y_max_,
-          obstacle_detection_z_max_})
+      .filter(
+      {obstacle_detection_x_min_, obstacle_detection_y_min_, obstacle_detection_z_min_},
+      {obstacle_detection_x_max_, obstacle_detection_y_max_,
+        obstacle_detection_z_max_})
       .as_points();
 
     // Get VFF vectors
@@ -284,8 +293,9 @@ void VffController::update_rt(NavState & nav_state)
     cmd_vel_.header.stamp = get_node()->now();
     cmd_vel_.twist.linear.x = std::clamp(module, 0.0, max_speed_);
     cmd_vel_.twist.angular.z = std::clamp(angle, -max_angular_speed_, max_angular_speed_);
-    RCLCPP_INFO(get_node()->get_logger(), "[distance: %.2f, yaw_error: %.2f]", distance,
-        angle_error);
+    RCLCPP_INFO(
+      get_node()->get_logger(), "[distance: %.2f, yaw_error: %.2f]", distance,
+      angle_error);
 
     nav_state.set("cmd_vel", cmd_vel_);
   }
