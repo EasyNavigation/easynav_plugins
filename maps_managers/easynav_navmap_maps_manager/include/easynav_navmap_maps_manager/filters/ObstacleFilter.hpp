@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #ifndef EASYNAV_NAVMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
 #define EASYNAV_NAVMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
 
@@ -21,6 +22,8 @@
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
 
+#include <limits>
+
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
 
 namespace easynav
@@ -28,6 +31,15 @@ namespace easynav
 namespace navmap
 {
 
+/**
+ * @class ObstacleFilter
+ * @brief Marks as obstacles the NavCels under the points that rise above the NavMap surface.
+ *
+ * Points within max_range of the robot and below max_height (robot frame) are grouped in
+ * 0.3 m columns; a column is an obstacle when its highest point is more than min_height (plus
+ * min_height_per_meter for each meter from the robot) above the NavMap surface under it. So a 2D
+ * laser sees obstacles too, and the ground or a ramp, being on the surface, is not one.
+ */
 class ObstacleFilter : public NavMapFilter
 {
 public:
@@ -41,6 +53,11 @@ public:
 
 private:
   ::navmap::NavMap navmap_;
+  double max_range_ {10.0};   ///< Points farther than this from the robot (x or y) are ignored.
+  double min_height_ {0.1};   ///< Above the NavMap surface: lower points are the ground.
+  double max_height_ {std::numeric_limits<double>::quiet_NaN()};  ///< Robot frame; NaN: no limit.
+  double downsample_resolution_ {0.3};  ///< Voxel (m) the points are reduced to first; <= 0: off.
+  double min_height_per_meter_ {0.0};   ///< min_height grows this much per meter from the robot.
 };
 
 }  // namespace navmap

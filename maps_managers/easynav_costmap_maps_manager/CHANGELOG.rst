@@ -2,16 +2,26 @@
 Changelog for package easynav_costmap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.0 (2026-07-26)
+0.5.0 (2026-10-08)
 ------------------
-* Add missing easynav_sensors deps
+* Runtime reconfiguration
+* Robot geometry from system_node
+* Configurable min_height in the ObstacleFilter (was a fixed 0.1 m)
+* Fixed std::bad_alloc
+* Builds on Humble, Jazzy, Kilted, Lyrical and Rolling
+* Contributors: Francisco Martín Rico
+
+0.4.2 (2026-07-26)
+------------------
+* Complete deps
 * Update dynamic_map\_ with map key at navstate
 * Avoid rewrite map with dynamic_map
 * Navstate key among filters are always map, not an arbitrary key
 * Update calls to deprecated get_package_share_directory
-* Update calls to deprecated get_package_share_directory
 * Update dynamic_map\_ with map key at navstate
+* Avoid rewrite map with dynamic_map
 * Navstate key among filters are always map, not an arbitrary key
+* Merge fix
 * Any change in the costmap set it as modified
 * Publish changes in base map and be ready to save updated map
 * Costamp base map sincronized with nav_state
@@ -19,22 +29,20 @@ Changelog for package easynav_costmap_maps_manager
 * Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
 * Update plugins to new sensors API
 * GPLv3 -> Apache 2.0
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
-
-0.2.1 (2026-02-27)
-------------------
-* 0.2.0
-* GPLv3 -> Apache 2.0
-* Documentation was corrected
-* Add a base_footprint frame in TFInfo
+* Get timestamp from perception for stamping
+* Improve navstate print including the time
+* Use last available TF for obstacle filter
+* Adjust output time in costamp stack
 * Remove C++20/C++23 features and update to new MethodBase interface
 * TFInfo in RTTFBuffer
 * Refactor to use TFInfo
-* Referencing base class if ot void
-* Optimize execution
+* linting docs
+* fix: Prevent A* planner from traversing through obstacles
+* Final optimization
+* First UpdateCosts optimization
+* Update perception bound
 * Cleanup unused headers
-* Update sheets
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Jose Miguel, Juan S. Cely G., Miguel
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Jose Miguel, Juan S. Cely, Juan S. Cely G., Miguel, migueldm
 
 0.0.2 (2025-10-12)
 ------------------

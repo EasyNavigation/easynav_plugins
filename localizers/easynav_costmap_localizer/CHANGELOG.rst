@@ -2,35 +2,39 @@
 Changelog for package easynav_costmap_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.0 (2026-07-26)
+0.5.0 (2026-10-08)
 ------------------
-* Add missing easynav_sensors deps
+* Runtime reconfiguration
+* AMCL convergence evaluator and relocalization mitigation for the diagnostic recovery manager
+* Configurable min_height (was a fixed 0.1 m)
+* num_particles initialized before use
+* Builds on Humble, Jazzy, Kilted, Lyrical and Rolling
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno
+
+0.4.2 (2026-07-26)
+------------------
+* Complete deps
 * Avoid creating objects every loop cycle
 * Fix std::normal_distribution when stdev is zero
 * Check if std is non-positive before creating std::normal_distribution
-  Dynamic base costmap
+* Check if std is non-positive before creating std::normal_distribution
 * Change map static to base
-* Reset pose from RViz2 for every localizer
 * Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
-* Merge branch 'EasyNavigation:rolling' into rolling
+* Update plugins to new sensors API
 * GPLv3 -> Apache 2.0
-* Sync to current EasyNavigation
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
-
-0.2.1 (2026-02-27)
-------------------
-* 0.2.0
-* GPLv3 -> Apache 2.0
-* Documentation was corrected
+* Improve navstate print including the time
 * Add a base_footprint frame in TFInfo
 * Remove C++20/C++23 features and update to new MethodBase interface
+* Correct publication stamp to input stamp
+* Merge branch 'set_robot_frame' into frames-fix-pr-40
 * TFInfo in RTTFBuffer
-* Refactor to use TFInfo
-* Referencing base class if ot void
+  Optimize execution
+* Optimize random genearator
 * Optimize execution
 * Cleanup unused headers
-* Update sheets
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel
+* Adaptation to EasyNavigation`#71 <https://github.com/EasyNavigation/easynav_plugins/issues/71>`_
+* Init pose for RViz2 compliant
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely, Juan S. Cely G., Miguel, migueldm
 
 0.0.2 (2025-10-12)
 ------------------

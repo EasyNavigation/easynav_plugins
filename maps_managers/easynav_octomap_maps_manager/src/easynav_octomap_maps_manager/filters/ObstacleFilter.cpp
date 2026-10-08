@@ -13,13 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #include <string>
 
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/Perceptions.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 
-#include "octomap_core/Octomap.hpp"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 
 #include "easynav_octomap_maps_manager/filters/ObstacleFilter.hpp"
 
@@ -55,7 +56,7 @@ ObstacleFilter::update(::easynav::NavState & nav_state)
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (!octomap_.layer_copy<uint8_t>("occupancy", "obstacles")) {
-    RCLCPP_ERROR(parent_node_->get_logger(), "Error copying layers at ObstacleFilter");
+    RCLCPP_ERROR(get_node()->get_logger(), "Error copying layers at ObstacleFilter");
     return;
   }
 

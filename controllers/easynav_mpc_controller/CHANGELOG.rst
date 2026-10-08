@@ -2,46 +2,29 @@
 Changelog for package easynav_mpc_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.0 (2026-07-26)
+0.5.0 (2026-10-08)
 ------------------
-* Add missing easynav_sensors deps
+* Velocity smoother support and runtime reconfiguration
+* NLopt: its own copy (NLopt 2.11.0, static and private) when the system has none; no NLopt rosdep keys (none exist for RHEL)
+* Configurable min_height (was a fixed 0.1 m)
+* No conversion of an empty cloud (undefined behavior)
+* The collision checker is no longer part of the controller
+* Removed unused dependencies
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno
+
+0.4.2 (2026-07-26)
+------------------
+* Complete deps
 * Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
 * Update plugins to new sensors API
 * GPLv3 -> Apache 2.0
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
-
-* Add missing easynav_sensors deps
-* Add missing easynav_sensors deps
-* Sync with Rolling branch
-* Sync with rolling branch
-* Merge pull request `#61 <https://github.com/EasyNavigation/easynav_plugins/issues/61>`_ from Butakus/rolling
-  Update plugins to new sensors API
-* Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
-* Update plugins to new sensors API
-* 0.3.1
-* update changelogs
-* Merge branch 'rolling' of github.com:midemig/easynav_plugins into rolling
-* Merge branch 'EasyNavigation:rolling' into rolling
-* Merge pull request `#51 <https://github.com/EasyNavigation/easynav_plugins/issues/51>`_ from EasyNavigation/license-kilted
-  GPLv3 -> Apache 2.0
-* GPLv3 -> Apache 2.0
-* Merge pull request `#50 <https://github.com/EasyNavigation/easynav_plugins/issues/50>`_ from EasyNavigation/license
-  GPLv3 -> Apache 2.0
-* Merge pull request `#49 <https://github.com/EasyNavigation/easynav_plugins/issues/49>`_ from juanscelyg/rolling
-  Latest Updates and Corrected CI
-* Merge pull request `#48 <https://github.com/EasyNavigation/easynav_plugins/issues/48>`_ from juanscelyg/kilted
-  Kilted
-* GPLv3 -> Apache 2.0
-* Latest changes were added
-* Dependencies were corrected
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
-
-0.3.1 (2026-02-27)
-------------------
-* GPLv3 -> Apache 2.0
+* Collision checker scope was changed
 * Remove C++20/C++23 features and update to new MethodBase interface
+* Merge branch 'set_robot_frame' into frames-fix-pr-40
 * TFInfo in RTTFBuffer
 * Refactor to use TFInfo
+* Collision avoidance was improved
+* Final alignements
 * Trim path for MPC
 * Stop controllers at IDLE
 * Obstacles are detected
@@ -51,10 +34,13 @@ Changelog for package easynav_mpc_controller
 * MPC with differential model is working
 * MPC Controller minimizes path following
 * Visualization Marker was added
-* CI updated
+* MPC was tunned
 * MPC controller is working
 * Optimizer was changed
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, José Miguel Guerrero, Juan S. Cely G., Miguel
+* Dependecies were added
+* MPC terminated
+* MPC was added
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, José Miguel Guerrero, Juan S. Cely, Juan S. Cely G., Miguel, migueldm
 
 0.0.2 (2025-10-12)
 ------------------

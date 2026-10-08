@@ -19,6 +19,7 @@
 #include "tf2/utils.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_simple_controller/SimpleController.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
@@ -39,26 +40,27 @@ SimpleController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<double>(plugin_name + ".max_linear_speed", max_linear_speed_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
-  node->declare_parameter<double>(plugin_name + ".max_linear_acc", max_linear_acc_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_acc", max_angular_acc_);
-  node->declare_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
-  node->declare_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
-  node->declare_parameter<double>(plugin_name + ".k_rot", k_rot_);
-  node->declare_parameter<double>(plugin_name + ".final_goal_angle_tolerance",
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".look_ahead_dist",
+      look_ahead_dist_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".tolerance_dist",
+      tolerance_dist_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".k_rot", k_rot_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".final_goal_angle_tolerance",
       final_goal_angle_tolerance_);
-  node->declare_parameter<double>(plugin_name + ".linear_kp", linear_kp_);
-  node->declare_parameter<double>(plugin_name + ".linear_ki", linear_ki_);
-  node->declare_parameter<double>(plugin_name + ".linear_kd", linear_kd_);
-  node->declare_parameter<double>(plugin_name + ".angular_kp", angular_kp_);
-  node->declare_parameter<double>(plugin_name + ".angular_ki", angular_ki_);
-  node->declare_parameter<double>(plugin_name + ".angular_kd", angular_kd_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".linear_kp", linear_kp_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".linear_ki", linear_ki_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".linear_kd", linear_kd_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".angular_kp", angular_kp_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".angular_ki", angular_ki_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".angular_kd", angular_kd_);
 
-  node->get_parameter<double>(plugin_name + ".max_linear_speed", max_linear_speed_);
-  node->get_parameter<double>(plugin_name + ".max_angular_speed", max_angular_speed_);
-  node->get_parameter<double>(plugin_name + ".max_linear_acc", max_linear_acc_);
-  node->get_parameter<double>(plugin_name + ".max_angular_acc", max_angular_acc_);
+  // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_speed", "", "max_angular_speed", "max_linear_acc", "", "max_angular_acc", ""});
+  max_linear_speed_ = limits.max_linear_vel;
+  max_angular_speed_ = limits.max_angular_vel;
+  max_linear_acc_ = limits.max_linear_acc;
+  max_angular_acc_ = limits.max_angular_acc;
   node->get_parameter<double>(plugin_name + ".look_ahead_dist", look_ahead_dist_);
   node->get_parameter<double>(plugin_name + ".tolerance_dist", tolerance_dist_);
   node->get_parameter<double>(plugin_name + ".k_rot", k_rot_);
@@ -93,7 +95,7 @@ SimpleController::update_rt(NavState & nav_state)
   if (!nav_state.has("path")) {return;}
   if (!nav_state.has("robot_pose")) {return;}
 
-  const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
+  const auto & path = nav_state.get_safe<nav_msgs::msg::Path>("path");
 
   if (path.poses.empty()) {
     twist_stamped_.header.frame_id = path.header.frame_id;
@@ -108,12 +110,12 @@ SimpleController::update_rt(NavState & nav_state)
   }
 
   // If we're very close to the final path pose, stop the robot.
-  const auto & pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   const auto & goal_pose = path.poses.back().pose;
 
   const auto clock_type = get_node()->get_clock()->get_clock_type();
   rclcpp::Time latest_stamp(
-    nav_state.get<nav_msgs::msg::Odometry>("robot_pose").header.stamp,
+    nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").header.stamp,
     clock_type);
   if (rclcpp::Time(path.poses.back().header.stamp,
       latest_stamp.get_clock_type()) > latest_stamp)

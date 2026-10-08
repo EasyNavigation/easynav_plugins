@@ -13,9 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #include <string>
 
-#include "octomap/octomap.h"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 
 #include "easynav_octomap_maps_manager/filters/OctomapFilter.hpp"
 
@@ -42,7 +43,7 @@ OctomapFilter::initialize(
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>
 OctomapFilter::get_node() const
 {
-  return parent_node_;
+  return parent_node_.lock();
 }
 
 const std::string &

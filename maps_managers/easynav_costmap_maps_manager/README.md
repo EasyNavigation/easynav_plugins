@@ -59,13 +59,15 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 - **Type:** `easynav::ObstacleFilter`
 - **Description:**  
   Detects occupied cells from input point clouds (`points` key in `NavState`) and marks them as `LETHAL_OBSTACLE` in the dynamic costmap.  
-  The filter fuses incoming 3D points into the map frame, downsamples them to the costmap resolution, filters out ground-level points (z < 0.1 m), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (`ObstacleBounds`) of updated obstacles to enable efficient incremental inflation.
+  The filter fuses incoming 3D points into the map frame, downsamples them to the costmap resolution, filters out ground-level points (z below `min_height`, in the map frame), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (`ObstacleBounds`) of updated obstacles to enable efficient incremental inflation.
 
 **Parameters:**
 
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
-| _(None)_ | — | — | This filter does not declare additional ROS parameters beyond `plugin`. Downsampling resolution and frame fusion use the costmap's own resolution and `map` frame. |
+| `<plugin>.<filter>.min_height` | `double` | `0.1` | Points lower than this (m, map frame) are the floor, not obstacles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high). |
+
+Downsampling resolution and frame fusion use the costmap's own resolution and `map` frame.
 
 **NavState Keys:**
 
@@ -88,7 +90,7 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.inflation_radius` | `double` | `0.3` | Maximum inflation distance (m) from obstacles. Cells farther than this receive no inflation cost. |
-| `<plugin>.inscribed_radius` | `double` | `0.25` | Radius of the inscribed zone (m). Cells within this distance of an obstacle are marked with high constant cost (`INSCRIBED_INFLATED_OBSTACLE`, value 253) before exponential decay begins. |
+| `<plugin>.inscribed_radius` | `double` | — | **Deprecated**: the robot's `system_node.robot_geometry.inscribed_radius`, used unless only this one is configured (with a warning). Radius of the inscribed zone (m). Cells within this distance of an obstacle are marked with high constant cost (`INSCRIBED_INFLATED_OBSTACLE`, value 253) before exponential decay begins. |
 | `<plugin>.cost_scaling_factor` | `double` | `3.0` | Exponential decay rate controlling how quickly cost decreases with distance beyond the inscribed radius. Higher values produce steeper cost gradients. |
 
 **NavState Keys:**

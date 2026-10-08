@@ -1,0 +1,36 @@
+# Example of the localizer node configuration for MH-AMCL.
+# It needs a Costmap2D maps manager (it reads the "map.base" map), a points sensor and,
+# optionally, an odometry sensor (otherwise odom -> base_footprint is read from TF):
+#
+# sensors_node:
+#   ros__parameters:
+#     sensors: [laser1, odom]
+#     odom:
+#       topic: odom
+#       type: nav_msgs/msg/Odometry
+#
+
+localizer_node:
+  ros__parameters:
+    use_sim_time: true
+    localizer_types: [mhamcl]
+    mhamcl:
+      rt_freq: 50.0            # Prediction
+      freq: 10.0               # Correction
+      plugin: easynav_mhamcl_localizer/MHAMCLLocalizer
+      initial_pose:            # Leave the pose unknown: hypotheses are created by map matching
+        x: 0.0
+        y: 0.0
+        yaw: 0.0
+        std_dev_xy: 0.1
+        std_dev_yaw: 0.05
+      max_particles: 200
+      min_particles: 30
+      noise_translation: 0.05
+      noise_rotation: 0.1
+      noise_translation_to_rotation: 0.1
+      distance_perception_error: 0.05
+      reseed_freq: 0.33
+      multihypothesis: true
+      max_hypotheses: 5
+      hypotheses_freq: 0.33

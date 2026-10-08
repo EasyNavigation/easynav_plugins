@@ -10,17 +10,18 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake_modules)
 find_package(ament_cmake REQUIRED)
 find_package(easynav_common REQUIRED)
 find_package(easynav_core REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(Eigen3 REQUIRED NO_MODULE)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(ament_index_cpp REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(nav_msgs REQUIRED)
 find_package(PCL REQUIRED COMPONENTS common io filters)
 find_package(pcl_conversions REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
 find_package(yaets REQUIRED)
 find_package(GRAPHICSMAGICKCPP REQUIRED)
@@ -38,6 +39,7 @@ target_include_directories(bonxai PUBLIC
 target_link_libraries(bonxai PUBLIC
   tf2::tf2
   tf2_ros::tf2_ros
+  Eigen3::Eigen
   ${sensor_msgs_TARGETS}
   ${tf2_geometry_msgs_TARGETS}
   ${PCL_LIBRARIES}
@@ -54,23 +56,27 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
   ${PCL_INCLUDE_DIRS}
 )
+# pcl_conversions exports a CMake target only since 2.8 (Kilted); older ones, variables
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${pcl_conversions_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PUBLIC
   easynav_common::easynav_common
   easynav_core::easynav_core
-  rclcpp::rclcpp
   tf2::tf2
   tf2_ros::tf2_ros
   pluginlib::pluginlib
   ament_index_cpp::ament_index_cpp
+  rclcpp::rclcpp
+  Eigen3::Eigen
   ${sensor_msgs_TARGETS}
   ${tf2_geometry_msgs_TARGETS}
-  ${bonxai_msgs_TARGETS}
   yaets::yaets
   ${nav_msgs_TARGETS}
   ${std_srvs_TARGETS}
   yaml-cpp
   ${GRAPHICSMAGICKCPP_LIBRARIES}
   ${PCL_LIBRARIES}
+  ${pcl_conversions_TARGETS}
+  ${pcl_conversions_LIBRARIES}
   bonxai
 )
 
@@ -92,7 +98,13 @@ if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
   set(ament_cmake_cpplint_FOUND TRUE)
+  # Vendored third-party library: excluded from uncrustify instead of
+  # reformatting upstream code (same rationale as copyright/cpplint above).
+  set(ament_cmake_uncrustify_ADDITIONAL_EXCLUDE include/bonxai/*)
   ament_lint_auto_find_test_dependencies()
+
+  find_package(ament_cmake_gtest REQUIRED)
+  add_subdirectory(tests)
 endif()
 
 ament_export_include_directories("include/${PROJECT_NAME}")
@@ -109,10 +121,13 @@ ament_export_dependencies(
   easynav_common
   easynav_core
   rclcpp
+  Eigen3
   tf2
   tf2_ros
+  tf2_geometry_msgs
   pluginlib
   nav_msgs
+  sensor_msgs
   ament_index_cpp
   std_srvs
   yaets

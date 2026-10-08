@@ -2,34 +2,35 @@
 Changelog for package easynav_serest_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.0 (2026-07-26)
+0.5.0 (2026-10-08)
 ------------------
-* Add missing easynav_sensors deps
+* Velocity smoother support and runtime reconfiguration
+* Fixed failures with short paths
+* Tolerance parameters take effect
+* Removed unused dependencies
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno
+
+0.4.2 (2026-07-26)
+------------------
+* Complete deps
+* Navstate key among filters are always map, not an arbitrary key
 * Navstate key among filters are always map, not an arbitrary key
 * Adaptations to `#94 <https://github.com/EasyNavigation/easynav_plugins/issues/94>`_
 * Update plugins to new sensors API
-* Fix segfault in some cases and reduce extrapolation to the future
 * GPLv3 -> Apache 2.0
-* Sync to current EasyNavigation
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, Juan S. Cely G., Miguel, migueldm
-
-0.2.1 (2026-02-27)
-------------------
-* 0.2.0
-* GPLv3 -> Apache 2.0
-* Documentation was corrected
+* Adjust output time in costmap stack
+* Add a base_footprint frame in TFInfo
 * Remove C++20/C++23 features and update to new MethodBase interface
 * Merge branch 'set_robot_frame' into frames-fix-pr-40
 * TFInfo in RTTFBuffer
 * Refactor to use TFInfo
-* Sync to current EasyNavigation
-* Translate comments
+* Final alignements
 * Referencing base class if ot void
-* Merge remote-tracking branch 'upstream/rolling' into rolling
 * Fix Link error in controller
 * Optimize execution
-* Cleanup unused headers
-* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, José Miguel Guerrero, Juan S. Cely G., Miguel, estherag
+* Adaptation to EasyNavigation`#71 <https://github.com/EasyNavigation/easynav_plugins/issues/71>`_
+* Fix CI with the correct branch
+* Contributors: Francisco Martín Rico, Francisco Miguel Moreno, José Miguel Guerrero, Juan S. Cely, Juan S. Cely G., Miguel, migueldm
 
 0.0.2 (2025-10-12)
 ------------------

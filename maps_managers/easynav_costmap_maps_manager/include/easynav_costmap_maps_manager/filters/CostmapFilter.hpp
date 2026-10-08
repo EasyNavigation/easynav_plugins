@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #ifndef EASYNAV_PLANNER__FILTERS__COSTMAPFILTER_HPP_
 #define EASYNAV_PLANNER__FILTERS__COSTMAPFILTER_HPP_
 
@@ -50,7 +51,7 @@ protected:
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> get_node() const;
 
 protected:
-  std::shared_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_ {nullptr};
+  std::weak_ptr<rclcpp_lifecycle::LifecycleNode> parent_node_;
   std::string plugin_name_;
 };
 }  // namespace easynav

@@ -18,9 +18,11 @@
 
 #include <queue>
 #include <unordered_map>
+#include <algorithm>
 #include <cmath>
 #include <tuple>
 
+#include "easynav_common/Parameters.hpp"
 #include "easynav_costmap_planner/CostmapPlanner.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
@@ -67,7 +69,26 @@ static double compute_path_length(const nav_msgs::msg::Path & path)
 
 // Simple path smoother: moving average over a sliding window in XY.
 // Keeps endpoints unchanged to preserve exact start and goal.
-static void smooth_path(std::vector<geometry_msgs::msg::Pose> & poses, int window_size = 5)
+// Whether the straight segment a-b crosses no cell in collision.
+static bool segment_free(
+  const Costmap2D & map, const geometry_msgs::msg::Point & a, const geometry_msgs::msg::Point & b)
+{
+  const double step = map.getResolution() / 10.0;  // Fine enough not to skip a cell corner.
+  const int n = std::max(1, static_cast<int>(std::ceil(std::hypot(b.x - a.x, b.y - a.y) / step)));
+  for (int k = 0; k <= n; ++k) {
+    const double t = static_cast<double>(k) / n;
+    unsigned int mx, my;
+    if (!map.worldToMap(a.x + t * (b.x - a.x), a.y + t * (b.y - a.y), mx, my) ||
+      map.getCost(mx, my) >= INSCRIBED_INFLATED_OBSTACLE)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+static void smooth_path(
+  std::vector<geometry_msgs::msg::Pose> & poses, const Costmap2D & map, int window_size = 5)
 {
   if (poses.size() < 3 || window_size <= 1) {
     return;
@@ -102,8 +123,15 @@ static void smooth_path(std::vector<geometry_msgs::msg::Pose> & poses, int windo
     }
 
     if (count > 0) {
-      poses[i].position.x = sum_x / static_cast<double>(count);
-      poses[i].position.y = sum_y / static_cast<double>(count);
+      geometry_msgs::msg::Point smoothed = poses[i].position;
+      smoothed.x = sum_x / static_cast<double>(count);
+      smoothed.y = sum_y / static_cast<double>(count);
+      // Keep the original pose if smoothing would take the path through an obstacle.
+      if (segment_free(map, poses[i - 1].position, smoothed) &&
+        segment_free(map, smoothed, original[i + 1].position))
+      {
+        poses[i].position = smoothed;
+      }
     }
   }
 }
@@ -124,10 +152,10 @@ void CostmapPlanner::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
-  node->declare_parameter<double>(plugin_name + ".cost_factor", 2.0);
-  node->declare_parameter<double>(plugin_name + ".inflation_penalty", 5.0);
-  node->declare_parameter<double>(plugin_name + ".heuristic_scale", 1.0);
-  node->declare_parameter<bool>(plugin_name + ".continuous_replan", true);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".cost_factor", 2.0);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".inflation_penalty", 5.0);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".heuristic_scale", 1.0);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".continuous_replan", true);
 
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
   node->get_parameter(plugin_name + ".inflation_penalty", inflation_penalty_);
@@ -135,7 +163,8 @@ void CostmapPlanner::on_initialize()
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
-    node->get_fully_qualified_name() + std::string("/") + plugin_name + "/path", 10);
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+      "/path", 10);
 }
 
 void CostmapPlanner::update(NavState & nav_state)
@@ -146,12 +175,12 @@ void CostmapPlanner::update(NavState & nav_state)
 
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
   if (goals.goals.empty()) {
-    nav_state.set("path", current_path_);
+    clear_current_path(nav_state);
     return;
   }
 
   const auto & map = nav_state.get<Costmap2D>("map");
-  const auto & robot_pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -169,6 +198,7 @@ void CostmapPlanner::update(NavState & nav_state)
   if (goals.header.frame_id != tf_info.map_frame) {
     RCLCPP_WARN(get_node()->get_logger(), "Goals frame is not 'map': %s",
         goals.header.frame_id.c_str());
+    clear_current_path(nav_state);
     return;
   }
 
@@ -176,6 +206,7 @@ void CostmapPlanner::update(NavState & nav_state)
   if (!map.worldToMap(goal.position.x, goal.position.y, gx, gy)) {
     RCLCPP_WARN(get_node()->get_logger(), "Goal (%.2f, %.2f) is outside the map", goal.position.x,
         goal.position.y);
+    clear_current_path(nav_state);
     return;
   }
 
@@ -225,7 +256,7 @@ void CostmapPlanner::update(NavState & nav_state)
   auto poses = a_star_path(map, robot_pose.pose.pose, goal);
   if (!poses.empty()) {
     // Apply a light smoothing to the raw grid path
-    smooth_path(poses);
+    smooth_path(poses, map);
 
     current_path_.poses.clear();
     current_path_.header.stamp = get_node()->now();
@@ -249,6 +280,21 @@ void CostmapPlanner::update(NavState & nav_state)
     }
     last_goal_pose = goal;
     last_plan_time = get_node()->now();
+    nav_state.set("path", current_path_);
+  } else {
+    // No route to the goal.
+    clear_current_path(nav_state);
+  }
+}
+
+void CostmapPlanner::clear_current_path(NavState & nav_state)
+{
+  if (!current_path_.poses.empty()) {
+    current_path_.poses.clear();
+    current_path_.header.stamp = get_node()->now();
+    if (path_pub_->get_subscription_count() > 0) {
+      path_pub_->publish(current_path_);
+    }
   }
   nav_state.set("path", current_path_);
 }
@@ -295,8 +341,10 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
       // Reject cells that would cause collision (>= INSCRIBED_INFLATED_OBSTACLE = 253)
       if (cell_cost >= INSCRIBED_INFLATED_OBSTACLE) {continue;}
 
-      // Calculate traversal cost: cost_factor_ acts as a direct multiplier on cell cost
-      double traversal_cost = 1.0 + cost_factor_ * static_cast<double>(cell_cost);
+      const double normalized_cost =
+        static_cast<double>(cell_cost) / INSCRIBED_INFLATED_OBSTACLE;
+      const double traversal_cost =
+        1.0 + (cost_factor_ + inflation_penalty_) * normalized_cost;
 
       double step_cost = (dx == 0 || dy == 0) ? axial_cost : diagonal_cost;
       double new_cost = cost_so_far[idx(current.x, current.y)] + traversal_cost * step_cost;
@@ -311,6 +359,11 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
         parent_y[nid] = current.y;
       }
     }
+  }
+
+  if (!std::isfinite(cost_so_far[idx(static_cast<int>(gx), static_cast<int>(gy))])) {
+    // Goal never reached: unreachable.
+    return {};
   }
 
   std::vector<geometry_msgs::msg::Pose> path;
@@ -330,6 +383,7 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
   }
   std::reverse(path.begin(), path.end());
 
+  // Zero hops: start and goal are the same cell.
   if (path.empty()) {path.push_back(goal);}
   return path;
 }

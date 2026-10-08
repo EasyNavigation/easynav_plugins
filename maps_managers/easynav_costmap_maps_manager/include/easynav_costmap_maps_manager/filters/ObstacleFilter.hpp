@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #ifndef EASYNAV_PLANNER__FILTERS__OBSTACLEFILTER_HPP_
 #define EASYNAV_PLANNER__FILTERS__OBSTACLEFILTER_HPP_
 
@@ -32,6 +33,10 @@ public:
 
   virtual void on_initialize();
   virtual void update(NavState & nav_state);
+
+protected:
+  /// Points below this height (m, map frame) are ignored: floor hits ("<plugin>.min_height")
+  double min_height_ {0.1};
 };
 
 }  // namespace easynav

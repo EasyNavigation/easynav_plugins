@@ -16,6 +16,9 @@
 /// \file
 /// \brief Implementation of the MPCController class.
 
+#include <nlopt.hpp>
+
+#include "easynav_common/Parameters.hpp"
 #include "easynav_mpc_controller/MPCController.hpp"
 #include "easynav_system/GoalManager.hpp"
 
@@ -34,25 +37,33 @@ MPCController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  node->declare_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
-  node->declare_parameter<double>(plugin_name + ".dt", dt_);
-  node->declare_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-  node->declare_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->declare_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
-  node->declare_parameter<bool>(plugin_name + ".verbose", verbose_);
-
-  node->declare_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
-  node->declare_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".horizon_steps", horizon_steps_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".safety_radius",
+      safety_radius_);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".verbose", verbose_);
+  easynav::declare_parameter_if_absent<bool>(
+    *node, plugin_name + ".use_collision_checker", use_collision_checker_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_pos_tol",
+      fallback_goal_pos_tol_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fallback_goal_yaw_tol",
+      fallback_goal_yaw_tol_);
 
   node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
   node->get_parameter<double>(plugin_name + ".dt", dt_);
   node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-  node->get_parameter<double>(plugin_name + ".max_linear_velocity", max_lin_vel_);
-  node->get_parameter<double>(plugin_name + ".max_angular_velocity", max_ang_vel_);
+  // Velocity limits: the robot's (controller_node "robot_limits.*").
+  const auto limits = get_robot_limits(
+    {"max_linear_velocity", "", "max_angular_velocity", "", "", "", ""});
+  max_lin_vel_ = limits.max_linear_vel;
+  max_ang_vel_ = limits.max_angular_vel;
   node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
+  node->get_parameter<bool>(plugin_name + ".use_collision_checker", use_collision_checker_);
 
   node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
   node->get_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
+  node->get_parameter<double>(plugin_name + ".min_height", min_height_);
 
   optimizer_ = std::make_unique<MPCOptimizer>();
 
@@ -132,7 +143,7 @@ MPCController::update_rt(NavState & nav_state)
 {
   // If navigation is IDLE, force zero velocity
   if (nav_state.has("navigation_state")) {
-    const auto nav_state_val = nav_state.get<easynav::GoalManager::State>("navigation_state");
+    const auto nav_state_val = nav_state.get_safe<easynav::GoalManager::State>("navigation_state");
     if (nav_state_val == easynav::GoalManager::State::IDLE) {
       cmd_vel_.header.stamp = get_node()->now();
       cmd_vel_.twist.linear.x = 0.0;
@@ -151,7 +162,7 @@ MPCController::update_rt(NavState & nav_state)
     return;
   }
 
-  nav_msgs::msg::Path path = nav_state.get<nav_msgs::msg::Path>("path");
+  nav_msgs::msg::Path path = nav_state.get_safe<nav_msgs::msg::Path>("path");
   if (path.poses.empty()) {
     // If the path is empty, stop the robot
     cmd_vel_.header.frame_id = path.header.frame_id;
@@ -165,7 +176,7 @@ MPCController::update_rt(NavState & nav_state)
   // Build a local path that:
   // 1) keeps only the segment that brings the robot closer to the goal, and
   // 2) prepends a short straight segment from the robot pose to that segment.
-  const auto & robot_pose_msg = nav_state.get<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & robot_pose_msg = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
   const auto & robot_p = robot_pose_msg.pose.pose.position;
 
   // Goal is the last point of the planner path
@@ -215,18 +226,23 @@ MPCController::update_rt(NavState & nav_state)
   const auto & filtered = PointPerceptionsOpsView(perceptions)
     .filter({-2.0, -0.35, -1.0}, {0.0, 0.35, 1.0})
     .fuse(tf_info.map_frame)
-    .filter({NAN, NAN, 0.1}, {NAN, NAN, NAN})
+    .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN})
     .collapse({NAN, NAN, 0.1})
     .downsample(0.1)
     .as_points();
 
   sensor_msgs::msg::PointCloud2 cloud_out;
-  pcl::toROSMsg(filtered, cloud_out);
+  // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
+  if (!filtered.empty()) {
+    pcl::toROSMsg(filtered, cloud_out);
+  } else {
+    cloud_out.height = 1;
+  }
   cloud_out.header.frame_id = path.header.frame_id;
   cloud_out.header.stamp = get_node()->now();
   detection_pub_->publish(cloud_out);
 
-  const auto pose = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  const auto pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
   double roll_, pitch_, yaw_;
   tf2::Quaternion q(
     pose.orientation.x,
@@ -282,7 +298,7 @@ MPCController::update_rt(NavState & nav_state)
     std::cerr << "Optimization Error: " << e.what() << std::endl;
   }
 
-  if (ControllerMethodBase::collision_checker_active_) {
+  if (use_collision_checker_) {
     collision_checker(&params, u);
   }
 
@@ -296,10 +312,10 @@ MPCController::update_rt(NavState & nav_state)
     double yaw_tol = fallback_goal_yaw_tol_;
 
     if (nav_state.has("goal_tolerance.position")) {
-      pos_tol = nav_state.get<double>("goal_tolerance.position");
+      pos_tol = nav_state.get_safe<double>("goal_tolerance.position");
     }
     if (nav_state.has("goal_tolerance.yaw")) {
-      yaw_tol = nav_state.get<double>("goal_tolerance.yaw");
+      yaw_tol = nav_state.get_safe<double>("goal_tolerance.yaw");
     }
 
     const double dx_g = goal_pose.position.x - pose.position.x;

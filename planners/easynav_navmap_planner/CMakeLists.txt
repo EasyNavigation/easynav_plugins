@@ -11,9 +11,11 @@ find_package(easynav_core REQUIRED)
 find_package(navmap_core REQUIRED)
 find_package(navmap_ros REQUIRED)
 find_package(navmap_ros_interfaces REQUIRED)
-find_package(easynav_core REQUIRED)
 find_package(pluginlib REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(Eigen3 REQUIRED NO_MODULE)
 
 
 add_library(${PROJECT_NAME} SHARED
@@ -30,6 +32,9 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   navmap_ros::navmap_ros
   ${navmap_ros_interfaces_TARGETS}
   pluginlib::pluginlib
+  rclcpp::rclcpp
+  Eigen3::Eigen
+  ${geometry_msgs_TARGETS}
   ${nav_msgs_TARGETS}
 )
 
@@ -53,7 +58,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 
   find_package(ament_cmake_gtest REQUIRED)
-  # add_subdirectory(tests)
+  add_subdirectory(tests)
 endif()
 
 ament_export_include_directories("include/${PROJECT_NAME}")
@@ -70,6 +75,9 @@ ament_export_dependencies(
   navmap_ros
   navmap_ros_interfaces
   pluginlib
+  rclcpp
+  geometry_msgs
   nav_msgs
+  Eigen3
 )
 ament_package()

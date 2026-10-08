@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #include <string>
 
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
@@ -41,7 +42,7 @@ NavMapFilter::initialize(
 std::shared_ptr<rclcpp_lifecycle::LifecycleNode>
 NavMapFilter::get_node() const
 {
-  return parent_node_;
+  return parent_node_.lock();
 }
 
 const std::string &

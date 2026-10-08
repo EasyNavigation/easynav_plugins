@@ -128,6 +128,9 @@ private:
    * @brief Cached occupancy grid message for the dynamic map.
    */
   nav_msgs::msg::OccupancyGrid dynamic_grid_msg_;
+
+  /// Points below this height (m, map frame) are ignored: floor hits ("<plugin>.min_height")
+  double min_height_ {0.1};
 };
 
 }  // namespace easynav

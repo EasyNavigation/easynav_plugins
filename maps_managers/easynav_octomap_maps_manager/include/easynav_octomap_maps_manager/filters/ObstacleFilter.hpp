@@ -13,6 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #ifndef EASYNAV_OCTOMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
 #define EASYNAV_OCTOMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
 
@@ -20,7 +21,7 @@
 
 #include "pluginlib/class_loader.hpp"
 
-#include "octomap_core/Octomap.hpp"
+#include "easynav_octomap_maps_manager/octomap.hpp"
 #include "easynav_common/types/NavState.hpp"
 
 #include "easynav_octomap_maps_manager/filters/OctomapFilter.hpp"

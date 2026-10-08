@@ -1,8 +1,7 @@
 # easynav_simple_controller
 
-[![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)](#) [![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)](#) [![ROS 2: jazzy](https://img.shields.io/badge/ROS%202-jazzy-blue)](#)
-
 ## Description
+
 Simple path-following controller that uses PID controllers and a look-ahead reference pose to follow a planned path. It produces velocity commands (`cmd_vel`) based on the reference pose sampled at a look-ahead distance and limits linear/angular speeds and accelerations.
 
 ## Authors and Maintainers
@@ -17,10 +16,10 @@ Simple path-following controller that uses PID controllers and a look-ahead refe
 | humble | ![kilted](https://img.shields.io/badge/humble-supported-brightgreen) |
 | jazzy | ![kilted](https://img.shields.io/badge/jazzy-supported-brightgreen) |
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
-| rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) | 
-| jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
+| rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
 
 ## Plugin (pluginlib)
+
 - **Plugin Name:** `easynav_simple_controller/SimpleController`
 - **Type:** `easynav::SimpleController`
 - **Base Class:** `easynav::ControllerMethodBase`
@@ -36,10 +35,7 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 
 | Name | Type | Default | Description |
 |---|---|---:|---|
-| `max_linear_speed` | `double` | `1.0` | Maximum linear speed (m/s). |
-| `max_angular_speed` | `double` | `1.0` | Maximum angular speed (rad/s). |
-| `max_linear_acc` | `double` | `0.3` | Maximum linear acceleration (m/s²). |
-| `max_angular_acc` | `double` | `0.3` | Maximum angular acceleration (rad/s²). |
+| — | — | — | Velocity and acceleration limits are not this plugin's: they are the robot limits of `controller_node` (`robot_limits.max_linear_vel`, `min_linear_vel`, `max_angular_vel`, `max_linear_acc`, `max_linear_decel`, `max_angular_acc`, `max_angular_decel`), queried with `ControllerMethodBase::get_robot_limits()` and also enforced by ControllerNode's velocity smoother. |
 | `look_ahead_dist` | `double` | `1.0` | Look-ahead distance to sample the reference pose on the path (m). |
 | `tolerance_dist` | `double` | `0.05` | Distance threshold to switch to pure orientation tracking (m). |
 | `final_goal_angle_tolerance` | `double` | `0.1` | Angular tolerance (rad) used to decide final-goal arrival. |
@@ -50,6 +46,8 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `angular_kp` | `double` | `1.5` | Proportional gain for the angular PID controller. |
 | `angular_ki` | `double` | `0.03` | Integral gain for the angular PID controller. |
 | `angular_kd` | `double` | `0.08` | Derivative gain for the angular PID controller. |
+
+> **Deprecated:** this plugin's former limit parameters (`max_linear_speed`, `max_angular_speed`, `max_linear_acc`, `max_angular_acc`, under the plugin's name) still apply, with a warning, where `controller_node.robot_limits.*` does not set that limit. They will stop working soon: move them to `robot_limits`.
 
 ## Interfaces (NavState, Topics and Services)
 

@@ -1,2 +1,13 @@
 ament_add_gtest(costmap_mapsmanager_tests costmap_mapsmanager_tests.cpp)
 target_link_libraries(costmap_mapsmanager_tests ${PROJECT_NAME})
+
+ament_add_gtest(costmap_mapsmanager_reconfigure_tests costmap_mapsmanager_reconfigure_tests.cpp)
+target_link_libraries(costmap_mapsmanager_reconfigure_tests ${PROJECT_NAME})
+
+ament_add_gtest(costmap_inflation_geometry_tests costmap_inflation_geometry_tests.cpp)
+target_link_libraries(costmap_inflation_geometry_tests ${PROJECT_NAME})
+target_compile_definitions(costmap_inflation_geometry_tests
+  PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
+
+ament_add_gtest(costmap_obstacle_filter_tests costmap_obstacle_filter_tests.cpp)
+target_link_libraries(costmap_obstacle_filter_tests ${PROJECT_NAME})

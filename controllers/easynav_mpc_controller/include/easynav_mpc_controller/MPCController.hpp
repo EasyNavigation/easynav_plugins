@@ -19,7 +19,6 @@
 
 #include <vector>
 #include <Eigen/Core>
-#include <nlopt.hpp>
 #include <cmath>
 
 #include <tf2/LinearMath/Quaternion.hpp>
@@ -85,10 +84,12 @@ protected:
   double last_w_{0.0};                  ///< Last value for angular velocity before than collision
   bool collision_state_{false};         ///< Collision state flag
   double collision_factor_{0.618033};   ///< Collision avoidance for recalculate velocities
+  bool use_collision_checker_{false};   ///< Enables the obstacle constraint above
 
   // Fallback goal tolerances if GoalManager does not publish them
   double fallback_goal_pos_tol_{0.05};   ///< Default positional tolerance (meters).
   double fallback_goal_yaw_tol_{0.05};   ///< Default angular tolerance (radians).
+  double min_height_{0.1};  ///< Points below this height (m) are ignored: floor hits.
 
   std::unique_ptr<MPCOptimizer> optimizer_;  ///< MPC optimizer
 

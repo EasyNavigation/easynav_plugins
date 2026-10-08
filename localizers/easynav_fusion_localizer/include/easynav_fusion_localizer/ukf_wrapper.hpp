@@ -506,7 +506,8 @@ protected:
     std::vector<bool> & updateVector, Eigen::VectorXd & measurement,
     Eigen::MatrixXd & measurementCovariance);
 
-  std::shared_ptr<easynav::LocalizerNode> parent_node_{nullptr};
+  // Not owned: the node owns the localizer (a shared_ptr here would leak the node).
+  easynav::LocalizerNode * parent_node_{nullptr};
 
   //! @brief Whether or not we print diagnostic messages to the /diagnostics
   //! topic
