@@ -19,6 +19,16 @@ A recovery system is a `RecoveryManagerBase` plugin hosted by `recovery_node`. E
 | Stuck (commanded but not moving for `stuck_time`) | back up for `backup_time`; after `max_backup_attempts`, slow down (`request_reconfigure()` of `controller_node.robot_limits.max_linear_vel` to `slow_down_max_linear_vel`); still stuck, `abort_mission()`. The speed is restored when the mission ends (`request_restore_parameters()`) |
 | Otherwise | nothing: the controller drives |
 
+## Supported ROS 2 Distributions
+
+| Distribution | Status |
+|---|---|
+| humble | ![humble](https://img.shields.io/badge/humble-supported-brightgreen) |
+| jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
+| kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
+| lyrical | ![lyrical](https://img.shields.io/badge/lyrical-supported-brightgreen) |
+| rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
+
 ## Usage
 
 The area checked ahead is the robot's: its radius and height come from
