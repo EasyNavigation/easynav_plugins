@@ -25,6 +25,16 @@ plugins too, at two levels:
 Topics: `diagnostics` (`diagnostic_msgs/DiagnosticArray`) and `mitigation` (`rcl_interfaces/Log`,
 what the active mitigation reports). The EasyNav TUI shows both.
 
+## Supported ROS 2 Distributions
+
+| Distribution | Status |
+|---|---|
+| humble | ![humble](https://img.shields.io/badge/humble-supported-brightgreen) |
+| jazzy | ![jazzy](https://img.shields.io/badge/jazzy-supported-brightgreen) |
+| kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
+| lyrical | ![lyrical](https://img.shields.io/badge/lyrical-supported-brightgreen) |
+| rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
+
 ## Package layout
 
 Everything is in the `easynav_diagnostic_recovery` package and library. Headers are under
