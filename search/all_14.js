@@ -15,7 +15,7 @@ var searchData=
   ['updatebounds_12',['updateBounds',['../classeasynav_1_1InflationFilter.html#a343f4f8e39c1727a6e029e8cb1b3891d',1,'easynav::InflationFilter']]],
   ['updatecosts_13',['updateCosts',['../classeasynav_1_1InflationFilter.html#a0a7f31ef9068aed7fb604dbaad977c0e',1,'easynav::InflationFilter']]],
   ['updateorigin_14',['updateOrigin',['../classeasynav_1_1Costmap2D.html#a77c9af44b5abc03309b56eea543b6e54',1,'easynav::Costmap2D::updateOrigin()'],['../classCostmap2D.html#a77c9af44b5abc03309b56eea543b6e54',1,'Costmap2D::updateOrigin()']]],
-  ['usage_15',['Usage',['../dir_eb6561881223f5d4348e8fc4dee0038a.html#autotoc_md294',1,'Usage'],['../dir_b914104ef47cb0d0151b35e35c90056a.html#autotoc_md297',1,'Usage']]],
+  ['usage_15',['Usage',['../dir_eb6561881223f5d4348e8fc4dee0038a.html#autotoc_md297',1,'Usage'],['../dir_b914104ef47cb0d0151b35e35c90056a.html#autotoc_md301',1,'Usage']]],
   ['use_5fcollision_5fchecker_5f_16',['use_collision_checker_',['../classeasynav_1_1MPCController.html#a9e939a9c4354aef8b0857a1cea33fe91',1,'easynav::MPCController']]],
   ['use_5fcontrol_5f_17',['use_control_',['../classrobot__localization_1_1UkfWrapper.html#a10eb6d99180451f78a29ab4608069fee',1,'robot_localization::UkfWrapper']]],
   ['use_5fdynamic_5fwindow_5f_18',['use_dynamic_window_',['../classeasynav_1_1RegulatedPurePursuitController.html#a571f3862c5435935976b5e6be4db2b79',1,'easynav::RegulatedPurePursuitController']]],

@@ -128,31 +128,35 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_8c27acda0f34915b240a1a8910c2f7c1.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md221"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md223"></a>
 easynav_routes_maps_manager</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md222"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md224"></a>
 Description</h1>
 <p>Maps Manager that maintains a set of navigation routes (in 2D or 3D), exposes them as visualization markers and interactive markers in RViz, and makes the current <span class="tt"><a class="el" href="routes__costmap__filter__tests_8cpp.html#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a></span> available through the NavState so that other managers and filters can consume it (for example, costmap filters that constrain navigation to a given corridor).</p>
 <p>Routes are represented as a list of straight-line segments between two poses. Nothing prevents you from using non-zero Z coordinates in the poses, so routes can be fully 3D if downstream consumers support it. They are typically loaded from a YAML file stored in a ROS package and can be edited at runtime using interactive markers. A default single route segment is created automatically when no routes file is configured.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md223"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md225"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab</li>
 <li><b>Maintainers:</b> Francisco Martín Rico <a href="mai'+'lto:+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md224"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md226"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Distribution  </th><th class="markdownTableHeadNone">Status  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">jazzy  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="jazzy" class="inline"/>  </td></tr>
+<td class="markdownTableBodyNone">humble  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/humble-supported-brightgreen" alt="humble" class="inline"/>  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">jazzy  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="jazzy" class="inline"/>  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">kilted  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/kilted-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">lyrical  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/lyrical-supported-brightgreen" alt="lyrical" class="inline"/>  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md225"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md227"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_routes_maps_manager/RoutesMapsManager</span></li>
@@ -162,9 +166,9 @@ Plugin (pluginlib)</h1>
 <li><b>Description:</b> Maintains an in-memory set of route segments (<a class="el" href="routes__costmap__filter__tests_8cpp.html#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a>), loads/saves them from/to YAML files, exposes them through ROS markers and interactive markers, and writes the current <span class="tt"><a class="el" href="routes__costmap__filter__tests_8cpp.html#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a></span> into the NavState.</li>
 </ul>
 <p>In addition, this package provides the <b><a class="el" href="classRoutesCostmapFilter.html" title="Costmap filter that raises costs outside navigation routes.">RoutesCostmapFilter</a></b> plugin, which can be used by the costmap Maps Manager to raise costs outside the defined routes, effectively constraining navigation to a configurable corridor around the segments. Other routes filters (for example, for NavMap or Octomap representations) can be implemented in the same way, each using its own NavState keys and outputs.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md226"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md228"></a>
 Parameters</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md227"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md229"></a>
 Plugin Parameters (namespace: <span class="tt">/&lt;node_fqn&gt;/easynav_routes_maps_manager/RoutesMapsManager/...</span>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -180,7 +184,7 @@ Plugin Parameters (namespace: <span class="tt">/&lt;node_fqn&gt;/easynav_routes_
 </table>
 <p>If both <span class="tt">&lt;plugin&gt;.package</span> and <span class="tt">&lt;plugin&gt;.map_path_file</span> are empty, the manager does not attempt to read a file and instead initializes a single default segment from <span class="tt">(0, 0, 0)</span> to <span class="tt">(1, 0, 0)</span>.</p>
 <p>If only one of the parameters is set (package without path or path without package for relative paths), initialization fails with an error.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md228"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md230"></a>
 Routes YAML Format</h2>
 <p>Routes are loaded from a YAML file with the following structure:</p>
 <div class="fragment"><div class="line">routes: [route0, route1]</div>
@@ -197,10 +201,10 @@ Routes YAML Format</h2>
 <li>Each entry under <span class="tt">routeX</span> defines the start and end poses of a segment.</li>
 </ul>
 <p>When saving routes (via the save service, see below), the manager writes back a file with the same structure.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md229"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md231"></a>
 Routes Filter Plugins</h2>
 <p>Each entry in <span class="tt">&lt;plugin&gt;.filters</span> defines a sub-namespace <span class="tt">&lt;plugin&gt;.&lt;filter&gt;</span> with at least the key <span class="tt">plugin</span>, plus any filter-specific parameters. Filters implement the <span class="tt">RoutesFilter</span> interface and are executed after the <span class="tt"><a class="el" href="routes__costmap__filter__tests_8cpp.html#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a></span> has been written to the NavState on each update cycle.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md230"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md232"></a>
 RoutesCostmapFilter</h3>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_routes_maps_manager/RoutesCostmapFilter</span></li>
@@ -226,9 +230,9 @@ RoutesCostmapFilter</h3>
 <td class="markdownTableBodyNone"><span class="tt">map</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span>  </td><td class="markdownTableBodyNone"><b>Read/Write</b>  </td><td class="markdownTableBodyNone">Dynamic costmap that is modified in place: cells outside the corridor are raised to at least <span class="tt">min_cost</span>.  </td></tr>
 </table>
 <p>In addition, the filter publishes a debug <span class="tt">nav_msgs/msg/OccupancyGrid</span> topic with the filtered costmap for visualization. Other routes filters may use different NavState keys or map representations; those should document their own usage in their respective fichas.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md231"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md233"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md232"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md234"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -240,7 +244,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/routes_map</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/OccupancyGrid</span>  </td><td class="markdownTableBodyNone">(via <span class="tt"><a class="el" href="classRoutesCostmapFilter.html" title="Costmap filter that raises costs outside navigation routes.">RoutesCostmapFilter</a></span>) Debug occupancy grid showing the costmap after applying the route-based corridor filter.  </td><td class="markdownTableBodyNone"><span class="tt">depth=1</span>  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md233"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md235"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -248,7 +252,7 @@ Services</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Service Server  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/save_routes</span>  </td><td class="markdownTableBodyNone"><span class="tt">std_srvs/srv/Trigger</span>  </td><td class="markdownTableBodyNone">Serializes the current set of routes to the configured YAML file on disk.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md234"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md236"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -256,10 +260,10 @@ NavState Keys</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">routes</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="routes__costmap__filter__tests_8cpp.html#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a></span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">In-memory set of route segments loaded from YAML or created interactively. Written by <span class="tt"><a class="el" href="classRoutesMapsManager.html" title="A plugin-based map manager using the RoutesMap data structure.">RoutesMapsManager</a></span> on each update.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md235"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md237"></a>
 TF Frames</h1>
 <p>Routes are expressed in the navigation <span class="tt">map</span> frame (or in the frame configured in other managers that consume the <span class="tt"><a class="el" href="routes__costmap__filter__tests_8cpp.html#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a></span>). This plugin does not broadcast TF transforms; it relies on the rest of the navigation stack to provide the necessary TF tree.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md236"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md238"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

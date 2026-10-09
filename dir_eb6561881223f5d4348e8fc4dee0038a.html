@@ -123,7 +123,7 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_60c9eb1abcdc16b0e1260a93544d2ced.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md291"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md293"></a>
 easynav_diagnostic_recovery</h1>
 <p>A diagnosis-driven recovery system for EasyNav: <span class="tt">easynav_diagnostic_recovery/DiagnosticRecoveryManager</span>. For the full design, see <span class="tt">docs/recoveries_easynav.md</span> in EasyNavigation.</p>
 <p>A recovery system is a <span class="tt"><a class="el" href="classRecoveryManagerBase.html">RecoveryManagerBase</a></span> plugin hosted by <span class="tt">recovery_node</span>. This one is made of plugins too, at two levels:</p>
@@ -144,7 +144,23 @@ easynav_diagnostic_recovery</h1>
 </li>
 </ul>
 <p>Topics: <span class="tt">diagnostics</span> (<span class="tt">diagnostic_msgs/DiagnosticArray</span>) and <span class="tt">mitigation</span> (<span class="tt">rcl_interfaces/Log</span>, what the active mitigation reports). The EasyNav TUI shows both.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md292"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md294"></a>
+Supported ROS 2 Distributions</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Distribution  </th><th class="markdownTableHeadNone">Status  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">humble  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/humble-supported-brightgreen" alt="humble" class="inline"/>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">jazzy  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="jazzy" class="inline"/>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">kilted  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/kilted-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">lyrical  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/lyrical-supported-brightgreen" alt="lyrical" class="inline"/>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
+</table>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md295"></a>
 Package layout</h1>
 <p>Everything is in the <span class="tt"><a class="el" href="namespaceeasynav__diagnostic__recovery.html">easynav_diagnostic_recovery</a></span> package and library. Headers are under <span class="tt">include/easynav_diagnostic_recovery/</span>, sources under <span class="tt">src/easynav_diagnostic_recovery/</span> and tests under <span class="tt">tests/</span>, with the same subfolders:</p>
 <table class="markdownTable">
@@ -160,7 +176,7 @@ Package layout</h1>
 <td class="markdownTableBodyNone"><span class="tt">mitigations/</span>  </td><td class="markdownTableBodyNone"><span class="tt">SafeRetreatRecovery</span>, <span class="tt">AdvanceRecovery</span>, <span class="tt">ShutdownRecovery</span>, <span class="tt">HumanAssistanceRecovery</span>, <span class="tt">CancelMissionRecovery</span>  </td></tr>
 </table>
 <p>A component can also ship recovery for its own failures. For example, <span class="tt">easynav_costmap_localizer</span> ships <span class="tt">AmclConvergenceEvaluator</span> and <span class="tt">AmclRelocalizeMitigation</span>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md293"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md296"></a>
 Plugins</h1>
 <p>Each plugin's parameters are under <span class="tt">recovery_manager.&lt;type&gt;.</span>. Every mitigation also takes <span class="tt">priority</span> (default <span class="tt">100</span>).</p>
 <table class="markdownTable">
@@ -193,7 +209,7 @@ Plugins</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">easynav_costmap_localizer/AmclRelocalizeMitigation</span>  </td><td class="markdownTableBodyNone">Handles <span class="tt">localizer.amcl</span>: rotates until AMCL converges, or fails after <span class="tt">timeout</span>.  </td><td class="markdownTableBodyNone"><span class="tt">covariance_threshold</span> (1.0), <span class="tt">rotation_speed</span> (0.3), <span class="tt">timeout</span> (5.0)  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md294"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md297"></a>
 Usage</h1>
 <div class="fragment"><div class="line">recovery_node:</div>
 <div class="line">  ros__parameters:</div>
@@ -235,7 +251,7 @@ Usage</h1>
 <div class="line">      cancel_mission:</div>
 <div class="line">        plugin: easynav_diagnostic_recovery/CancelMissionRecovery</div>
 <div class="line">        priority: 2000</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md295"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md298"></a>
 Writing a plugin</h1>
 <p>Derive from one of the interfaces, in any package:</p>
 <table class="markdownTable">

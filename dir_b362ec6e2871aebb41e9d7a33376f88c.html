@@ -130,9 +130,9 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_0804c55af7d1a6643902c6fb9c12f2c3.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md106"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md108"></a>
 easynav_mhamcl_localizer</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md107"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md109"></a>
 Description</h1>
 <p>Multi-Hypothesis AMCL (MH-AMCL) localizer over a <span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span> map. It is the EasyNav port of <a href="https://github.com/fmrico/mh_amcl">mh_amcl</a>, described in <em>Portable Multi-Hypothesis Monte Carlo Localization for Mobile Robots</em> (A. García, F. Martín, J. M. Guerrero, F. J. Rodríguez and V. Matellán, ICRA 2023).</p>
 <p>Instead of a single particle filter, it keeps a set of them (<em>hypotheses</em>) about the pose of the robot:</p>
@@ -159,7 +159,7 @@ Description</h1>
 <td class="markdownTableBodyNone">Hypotheses management / map matching  </td><td class="markdownTableBodyNone"><span class="tt">update</span> (matching runs in a background thread)  </td><td class="markdownTableBodyNone"><span class="tt">hypotheses_freq</span>  </td></tr>
 </table>
 <p>Reseed also adapts the number of particles of each hypothesis in <span class="tt">[min_particles, max_particles]</span>: it grows when the quality is low and shrinks when it is high.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md108"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md110"></a>
 Differences with the Nav2 version</h2>
 <ul>
 <li>The observation are the fused <span class="tt">PointPerception</span>s of NavState (like the other EasyNav localizers) instead of a <span class="tt">LaserScan</span>. Every point is seen along the ray from the robot to it.</li>
@@ -168,27 +168,29 @@ Differences with the Nav2 version</h2>
 <li>The map matching refines the candidates down to the original resolution and runs in a background thread. The candidates are moved with the odometry received meanwhile.</li>
 <li>Fixes with respect to the original implementation: parents in reseed are really selected among the winners, reseed noise is a standard deviation and not a variance, hypotheses are removed and merged safely, and new hypotheses start with the quality of their candidate.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md109"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md111"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab</li>
 <li><b>Maintainers:</b> Francisco Martín Rico <a href="mai'+'lto:+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md110"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md112"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Distribution  </th><th class="markdownTableHeadNone">Status  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">humble  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/humble-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
+<td class="markdownTableBodyNone">humble  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/humble-supported-brightgreen" alt="humble" class="inline"/>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">jazzy  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
+<td class="markdownTableBodyNone">jazzy  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="jazzy" class="inline"/>  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">kilted  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/kilted-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">lyrical  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/lyrical-supported-brightgreen" alt="lyrical" class="inline"/>  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md111"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md113"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_mhamcl_localizer/MHAMCLLocalizer</span></li>
@@ -204,10 +206,10 @@ Plugin (pluginlib)</h1>
 <div class="line">    odom:</div>
 <div class="line">      topic: odom</div>
 <div class="line">      type: nav_msgs/msg/Odometry</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md112"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md114"></a>
 Parameters</h1>
 <p>All parameters are declared under the plugin namespace, i.e., <span class="tt">/&lt;node_fqn&gt;/easynav_mhamcl_localizer/MHAMCLLocalizer/...</span>.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md113"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md115"></a>
 Initial pose</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -223,7 +225,7 @@ Initial pose</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.initial_pose.std_dev_yaw</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.5</span>  </td><td class="markdownTableBodyNone">Std dev used to sample initial yaw (rad).  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md114"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md116"></a>
 Particle filter of each hypothesis</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -251,7 +253,7 @@ Particle filter of each hypothesis</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Points lower than this (m, <span class="tt">base_footprint</span> frame) are the floor and do not correct the particles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high).  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md115"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md117"></a>
 Motion model</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -269,7 +271,7 @@ Motion model</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.odom_key</span>  </td><td class="markdownTableBodyNone"><span class="tt">string</span>  </td><td class="markdownTableBodyRight"><span class="tt">odom</span>  </td><td class="markdownTableBodyNone">NavState key of the odometry perception. If it is not available, odom-&gt;base_footprint is read from the <span class="tt">RTTFBuffer</span>.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md116"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md118"></a>
 Hypotheses</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -308,9 +310,9 @@ Hypotheses</h2>
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.matcher_angle_step</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3927</span>  </td><td class="markdownTableBodyNone">Angular resolution of the map matching (rad).  </td></tr>
 </table>
 <p>Note: the map matching cost grows with the size of the map and <span class="tt">1 / matcher_angle_step</span>. It runs in a background thread, but on very large maps consider lowering <span class="tt">hypotheses_freq</span> or increasing the step.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md117"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md119"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md118"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md120"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -324,10 +326,10 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/pose</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs/msg/PoseWithCovarianceStamped</span>  </td><td class="markdownTableBodyNone">Pose with covariance of the selected hypothesis.  </td><td class="markdownTableBodyNone">depth=10  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md119"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md121"></a>
 Services</h2>
 <p>This package does not create service servers or clients.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md120"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md122"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -341,7 +343,7 @@ NavState Keys</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">robot_pose</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Odometry</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Pose of the selected hypothesis.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md121"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md123"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -353,7 +355,7 @@ TF Frames</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Requires  </td><td class="markdownTableBodyNone"><span class="tt">base_footprint -&gt; &lt;sensor_frame&gt;</span>  </td><td class="markdownTableBodyNone">To bring the perceptions to the robot frame.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md122"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md124"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

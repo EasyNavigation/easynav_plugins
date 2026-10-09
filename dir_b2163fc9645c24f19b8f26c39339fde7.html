@@ -128,33 +128,35 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_117e48fd2a5c49233e7445dcc2949b01.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md237"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md239"></a>
 easynav_simple_maps_manager</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md238"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md240"></a>
 Description</h1>
 <p>Simple Maps Manager that demonstrates the Maps Manager API. It forwards/republishes a basic occupancy map flow and exposes standard topics and a save-map service.</p>
 <p>At the heart of this stack is the SimpleMap data structure. It represents the environment as a 2D occupancy grid where each cell can be either 0 (free), 1 (occupied), or -1 (unknown).</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md239"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md241"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab</li>
 <li><b>Maintainers:</b> Francisco Martín Rico <a href="mai'+'lto:+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md240"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md242"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Distribution  </th><th class="markdownTableHeadNone">Status  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">humble  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/humble-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
+<td class="markdownTableBodyNone">humble  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/humble-supported-brightgreen" alt="humble" class="inline"/>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">jazzy  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
+<td class="markdownTableBodyNone">jazzy  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="jazzy" class="inline"/>  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">kilted  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/kilted-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">lyrical  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/lyrical-supported-brightgreen" alt="lyrical" class="inline"/>  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md241"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md243"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_simple_maps_manager/SimpleMapsManager</span></li>
@@ -163,9 +165,9 @@ Plugin (pluginlib)</h1>
 <li><b>Library:</b> <span class="tt">easynav_simple_maps_manager</span></li>
 <li><b>Description:</b> Simple (no-op) Maps Manager that demonstrates the Maps Manager API. It forwards/republishes a basic occupancy map flow and exposes standard topics and a save-map service.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md242"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md244"></a>
 Parameters</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md243"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md245"></a>
 Plugin Parameters (namespace: <span class="tt">/&lt;node_fqn&gt;/easynav_simple_maps_manager/SimpleMapsManager/...</span>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -177,9 +179,9 @@ Plugin Parameters (namespace: <span class="tt">/&lt;node_fqn&gt;/easynav_simple_
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Perceived points lower than this (m, map frame) are the floor, not obstacles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high).  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md244"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md246"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md245"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md247"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -191,7 +193,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/dynamic_map</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/OccupancyGrid</span>  </td><td class="markdownTableBodyNone">Published dynamic (live) map.  </td><td class="markdownTableBodyNone">QoS depth=100  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md246"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md248"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -199,7 +201,7 @@ Services</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Service Server  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</span>  </td><td class="markdownTableBodyNone"><span class="tt">std_srvs/srv/Trigger</span>  </td><td class="markdownTableBodyNone">Saves current map(s) to disk.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md247"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md249"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -211,10 +213,10 @@ NavState Keys</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">map</span>  </td><td class="markdownTableBodyNone"><span class="tt">SimpleMap</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Dynamic map after applying incoming updates.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md248"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md250"></a>
 TF Frames</h1>
 <p>This manager does not broadcast TF; messages are stamped directly with their frame as provided.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md249"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md251"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

@@ -123,27 +123,35 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_57680e4bf2cf44305328c2b6ecb06f3f.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md94"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md96"></a>
 easynav_fusion_localizer</h1>
 <p>"" "![ROS 2: kilted](https://img.shields.io/badge/ROS%202-kilted-blue)" "" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md95"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md97"></a>
 Description</h1>
 <p>Odometry fusion localizer based on Robot Localization that fuses any n odometry sources.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md96"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md98"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab</li>
 <li><b>Maintainers:</b> Miguel Ángel de Miguel <a href="mai'+'lto:+'mid'+'em'+'ig@'+'gm'+'ail'+'.c'+'om'">midem<span class="obfuscator">.nosp@m.</span>ig@g<span class="obfuscator">.nosp@m.</span>mail.<span class="obfuscator">.nosp@m.</span>com</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md97"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md99"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Distribution  </th><th class="markdownTableHeadNone">Status  </th></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">humble  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/humble-supported-brightgreen" alt="humble" class="inline"/>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">jazzy  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/jazzy-supported-brightgreen" alt="jazzy" class="inline"/>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">kilted  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/kilted-supported-brightgreen" alt="kilted" class="inline"/>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">lyrical  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/lyrical-supported-brightgreen" alt="lyrical" class="inline"/>  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md98"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md100"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_fusion_localizer/FusionLocalizer</span></li>
@@ -152,7 +160,7 @@ Plugin (pluginlib)</h1>
 <li><b>Library:</b> <span class="tt">fusion_localizer</span></li>
 <li><b>Description:</b> Odometry fusion localizer based on Robot Localization that fuses any n odometry sources.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md99"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md101"></a>
 Parameters</h1>
 <p>All parameters are declared under the plugin namespace, i.e., <span class="tt">/&lt;node_fqn&gt;/easynav_fusion_localizer/FusionLocalizer/...</span>.</p>
 <table class="markdownTable">
@@ -166,9 +174,9 @@ Parameters</h1>
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.initial_pose.yaw</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">Initial yaw (rad).  </td></tr>
 </table>
 <p>For additional robot_localization-related configuration, see the upstream documentation: <a href="https://docs.ros.org/en/melodic/api/robot_localization/html/configuring_robot_localization.html">https://docs.ros.org/en/melodic/api/robot_localization/html/configuring_robot_localization.html</a></p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md100"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md102"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md101"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md103"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -178,10 +186,10 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">odometry/filtered</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/Odometry</span>  </td><td class="markdownTableBodyNone">Odometry fused from all sources.  </td><td class="markdownTableBodyNone">SensorDataQoS  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md102"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md104"></a>
 Services</h2>
 <p>This package does not create service servers or clients.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md103"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md105"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -189,7 +197,7 @@ NavState Keys</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">robot_pose</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Odometry</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Fused odometry estimate.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md104"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md106"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -197,7 +205,7 @@ TF Frames</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publishes  </td><td class="markdownTableBodyNone"><span class="tt">map -&gt; odom</span>  </td><td class="markdownTableBodyNone">Transform that aligns the odometry frame with the global frame.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md105"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md107"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->
