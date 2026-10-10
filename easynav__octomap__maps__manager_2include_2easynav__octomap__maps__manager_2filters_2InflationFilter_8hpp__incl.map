@@ -1,20 +1,22 @@
 <map id="maps_managers/easynav_octomap_maps_manager/include/easynav_octomap_maps_manager/filters/InflationFilter.hpp" name="maps_managers/easynav_octomap_maps_manager/include/easynav_octomap_maps_manager/filters/InflationFilter.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="214,5,415,91"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="242,5,443,91"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,235,59,261"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="243,94,170,141,59,227,56,223,166,137,240,89"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="502,146,671,172"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="417,87,543,138,541,143,415,92"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,94,189,141,62,228,59,223,187,137,266,89"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="530,146,699,172"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="445,87,571,138,569,143,443,92"/>
 <area shape="rect" id="Node000004" href="$octomap_8hpp.html" title="Includes octomap/octomap.h without its &lt;ciso646&gt; C++20 warning." alt="" coords="83,228,248,268"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="240,93,214,115,193,140,177,176,170,213,165,212,172,175,188,138,211,111,237,89"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="458,228,619,268"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="379,89,440,137,481,176,515,214,511,218,477,180,437,141,376,93"/>
-<area shape="rect" id="Node000007" href="$OctomapFilter_8hpp.html" title=" " alt="" coords="203,139,426,180"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="317,91,317,123,312,123,312,91"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,94,246,116,221,141,197,177,180,214,175,212,192,174,217,137,242,112,270,89"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="550,228,711,268"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="403,89,468,137,520,177,584,218,582,222,517,182,465,141,400,94"/>
+<area shape="rect" id="Node000007" href="$OctomapFilter_8hpp.html" title=" " alt="" coords="231,139,454,180"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="345,91,345,123,340,123,340,91"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="98,316,233,342"/>
 <area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="168,269,168,301,163,301,163,269"/>
-<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="229,183,152,204,72,230,69,231,67,226,70,225,150,198,227,178"/>
-<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="282,182,214,222,211,217,279,178"/>
-<area shape="poly" id="edge9_Node000007_Node000006" title=" " alt="" coords="366,178,474,219,472,224,365,183"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="273,228,434,268"/>
-<area shape="poly" id="edge10_Node000007_Node000008" title=" " alt="" coords="326,179,341,212,336,214,321,181"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="242,183,158,203,72,230,69,231,67,226,70,225,156,198,240,178"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="304,183,220,223,218,218,301,178"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="409,178,552,220,550,225,408,183"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="458,235,526,261"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="378,178,459,225,457,229,375,182"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="273,228,434,268"/>
+<area shape="poly" id="edge11_Node000007_Node000009" title=" " alt="" coords="348,180,352,212,346,212,342,181"/>
 </map>

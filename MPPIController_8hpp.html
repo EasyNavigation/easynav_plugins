@@ -104,6 +104,8 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="contents">
 <div class="textblock"><code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;geometry_msgs/msg/twist_stamped.hpp&quot;</code><br />
 <code>#include &quot;easynav_core/ControllerMethodBase.hpp&quot;</code><br />
 <code>#include &quot;easynav_common/types/NavState.hpp&quot;</code><br />
@@ -114,35 +116,37 @@ Include dependency graph for MPPIController.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="MPPIController_8hpp__incl.png" border="0" usemap="#acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hpp" loading="lazy" alt=""/></div>
 <map name="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hpp" id="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hpp">
-<area shape="rect" title=" " alt="" coords="390,5,558,76"/>
+<area shape="rect" title=" " alt="" coords="274,5,442,76"/>
 <area shape="rect" title=" " alt="" coords="5,132,73,157"/>
-<area shape="poly" title=" " alt="" coords="389,58,246,85,165,104,85,127,80,128,79,123,84,121,163,99,245,80,388,52"/>
+<area shape="poly" title=" " alt="" coords="274,67,183,94,85,127,81,128,80,123,83,121,181,89,272,62"/>
 <area shape="rect" title=" " alt="" coords="96,132,150,157"/>
-<area shape="poly" title=" " alt="" coords="390,62,281,89,163,127,160,127,158,122,161,121,279,84,389,57"/>
-<area shape="rect" title=" " alt="" coords="173,124,348,165"/>
-<area shape="poly" title=" " alt="" coords="402,79,317,119,314,114,400,74"/>
-<area shape="rect" title=" " alt="" coords="372,124,575,165"/>
-<area shape="poly" title=" " alt="" coords="476,76,476,108,471,108,471,76"/>
-<area shape="rect" title=" " alt="" coords="600,124,761,165"/>
-<area shape="poly" title=" " alt="" coords="545,74,628,114,625,119,543,79"/>
-<area shape="rect" href="MPPIOptimizer_8hpp.html" title=" " alt="" coords="785,124,949,165"/>
-<area shape="poly" title=" " alt="" coords="559,61,777,117,776,122,557,66"/>
-<area shape="rect" title=" " alt="" coords="973,124,1126,165"/>
-<area shape="poly" title=" " alt="" coords="559,52,738,82,958,121,957,126,737,87,558,58"/>
-<area shape="rect" title=" " alt="" coords="521,213,573,238"/>
-<area shape="poly" title=" " alt="" coords="785,167,589,215,587,210,784,162"/>
-<area shape="rect" title=" " alt="" coords="597,213,654,238"/>
-<area shape="poly" title=" " alt="" coords="808,168,670,213,668,208,806,163"/>
-<area shape="rect" title=" " alt="" coords="679,213,743,238"/>
-<area shape="poly" title=" " alt="" coords="829,168,750,208,747,203,827,163"/>
-<area shape="rect" title=" " alt="" coords="768,213,966,238"/>
-<area shape="poly" title=" " alt="" coords="870,165,870,197,864,197,864,165"/>
-<area shape="rect" title=" " alt="" coords="991,213,1154,238"/>
-<area shape="poly" title=" " alt="" coords="919,163,1028,204,1026,209,917,168"/>
-<area shape="rect" title=" " alt="" coords="1178,213,1297,238"/>
-<area shape="poly" title=" " alt="" coords="950,161,1166,206,1165,212,949,166"/>
-<area shape="rect" title=" " alt="" coords="1321,213,1440,238"/>
-<area shape="poly" title=" " alt="" coords="950,160,962,162,1132,187,1306,210,1306,215,1131,192,961,167,949,165"/>
+<area shape="poly" title=" " alt="" coords="279,79,165,128,163,123,277,74"/>
+<area shape="rect" title=" " alt="" coords="101,213,153,238"/>
+<area shape="poly" title=" " alt="" coords="301,79,233,126,188,166,150,203,147,199,184,162,229,122,298,74"/>
+<area shape="rect" title=" " alt="" coords="177,213,234,238"/>
+<area shape="poly" title=" " alt="" coords="314,78,265,126,239,163,220,200,215,197,235,161,261,122,310,74"/>
+<area shape="rect" title=" " alt="" coords="464,124,638,165"/>
+<area shape="poly" title=" " alt="" coords="425,74,502,114,499,119,422,79"/>
+<area shape="rect" title=" " alt="" coords="663,124,866,165"/>
+<area shape="poly" title=" " alt="" coords="443,60,671,117,670,122,442,66"/>
+<area shape="rect" title=" " alt="" coords="890,124,1052,165"/>
+<area shape="poly" title=" " alt="" coords="442,51,636,81,875,121,875,126,635,86,442,57"/>
+<area shape="rect" href="MPPIOptimizer_8hpp.html" title=" " alt="" coords="276,124,440,165"/>
+<area shape="poly" title=" " alt="" coords="360,76,360,108,355,108,355,76"/>
+<area shape="rect" title=" " alt="" coords="1076,124,1229,165"/>
+<area shape="poly" title=" " alt="" coords="443,46,714,74,885,95,1060,121,1060,126,884,100,713,79,442,52"/>
+<area shape="poly" title=" " alt="" coords="301,168,168,213,166,208,299,163"/>
+<area shape="poly" title=" " alt="" coords="321,168,244,207,241,203,318,163"/>
+<area shape="rect" title=" " alt="" coords="955,213,1019,238"/>
+<area shape="poly" title=" " alt="" coords="441,160,453,162,587,178,694,184,802,191,940,210,939,215,802,197,694,189,587,183,452,167,440,165"/>
+<area shape="rect" title=" " alt="" coords="258,213,457,238"/>
+<area shape="poly" title=" " alt="" coords="360,165,360,197,355,197,355,165"/>
+<area shape="rect" title=" " alt="" coords="481,213,645,238"/>
+<area shape="poly" title=" " alt="" coords="410,163,519,204,517,209,408,168"/>
+<area shape="rect" title=" " alt="" coords="669,213,788,238"/>
+<area shape="poly" title=" " alt="" coords="441,161,657,206,656,212,440,166"/>
+<area shape="rect" title=" " alt="" coords="812,213,930,238"/>
+<area shape="poly" title=" " alt="" coords="441,160,453,162,623,187,797,210,796,215,622,192,452,167,440,165"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">

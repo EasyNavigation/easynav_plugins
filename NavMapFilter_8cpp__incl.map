@@ -1,12 +1,14 @@
 <map id="maps_managers/easynav_navmap_maps_manager/src/easynav_navmap_maps_manager/filters/NavMapFilter.cpp" name="maps_managers/easynav_navmap_maps_manager/src/easynav_navmap_maps_manager/filters/NavMapFilter.cpp">
 <area shape="rect" id="Node000001" title=" " alt="" coords="5,5,225,76"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="22,220,75,246"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,78,69,125,58,167,53,206,48,205,53,166,65,123,89,75"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="15,220,68,246"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,78,69,125,56,167,48,206,43,205,51,166,65,123,89,75"/>
 <area shape="rect" id="Node000003" href="$NavMapFilter_8hpp.html" title=" " alt="" coords="79,124,298,165"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="142,75,167,110,163,113,138,78"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="158,167,82,214,79,210,155,163"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="104,213,265,253"/>
-<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="190,165,189,197,183,197,185,165"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="289,213,450,253"/>
-<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="231,163,316,203,314,208,228,168"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="156,167,77,214,74,210,154,163"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="92,220,159,246"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="176,167,145,209,141,206,172,164"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="184,213,345,253"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="208,163,239,199,235,203,204,167"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="369,213,530,253"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="248,163,376,205,375,210,247,168"/>
 </map>

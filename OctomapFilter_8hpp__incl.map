@@ -1,13 +1,15 @@
 <map id="maps_managers/easynav_octomap_maps_manager/include/easynav_octomap_maps_manager/filters/OctomapFilter.hpp" name="maps_managers/easynav_octomap_maps_manager/include/easynav_octomap_maps_manager/filters/OctomapFilter.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="128,5,390,76"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="125,5,387,76"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,132,59,157"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,79,72,126,71,127,69,122,70,122,176,74"/>
-<area shape="rect" id="Node000003" href="$octomap_8hpp.html" title="Includes octomap/octomap.h without its &lt;ciso646&gt; C++20 warning." alt="" coords="83,124,248,165"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,78,196,114,192,111,225,74"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="273,124,434,165"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="293,74,327,111,323,114,289,78"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="458,124,619,165"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="356,74,471,116,469,121,354,79"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="98,213,233,238"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="168,165,168,197,163,197,163,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,79,72,126,71,127,69,122,70,122,175,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="82,132,150,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,79,146,124,143,120,207,74"/>
+<area shape="rect" id="Node000004" href="$octomap_8hpp.html" title="Includes octomap/octomap.h without its &lt;ciso646&gt; C++20 warning." alt="" coords="173,124,339,165"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="259,76,259,108,253,108,253,76"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="363,124,525,165"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="321,74,395,114,393,119,319,79"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="549,124,710,165"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="385,74,544,117,542,122,383,79"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="188,213,324,238"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="259,165,259,197,253,197,253,165"/>
 </map>

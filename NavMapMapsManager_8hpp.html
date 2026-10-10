@@ -106,6 +106,8 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <p>Declaration of the NavMapMapsManager method.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
 <code>#include &quot;nav_msgs/msg/occupancy_grid.hpp&quot;</code><br />
 <code>#include &quot;navmap_ros_interfaces/msg/nav_map.hpp&quot;</code><br />
 <code>#include &quot;navmap_ros_interfaces/msg/nav_map_layer.hpp&quot;</code><br />
@@ -120,33 +122,37 @@ Include dependency graph for NavMapMapsManager.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="NavMapMapsManager_8hpp__incl.png" border="0" usemap="#amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2NavMapMapsManager_8hpp" loading="lazy" alt=""/></div>
 <map name="amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2NavMapMapsManager_8hpp" id="amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2NavMapMapsManager_8hpp">
-<area shape="rect" title="Declaration of the NavMapMapsManager method." alt="" coords="689,5,966,76"/>
+<area shape="rect" title="Declaration of the NavMapMapsManager method." alt="" coords="664,5,940,76"/>
 <area shape="rect" title=" " alt="" coords="5,132,63,157"/>
-<area shape="poly" title=" " alt="" coords="689,47,558,53,403,67,238,90,156,107,76,127,71,128,70,123,75,121,155,102,237,85,403,62,558,48,689,41"/>
-<area shape="rect" title=" " alt="" coords="87,124,264,165"/>
-<area shape="poly" title=" " alt="" coords="689,64,279,126,278,121,688,58"/>
-<area shape="rect" title=" " alt="" coords="288,124,444,165"/>
-<area shape="poly" title=" " alt="" coords="689,75,460,125,459,120,688,70"/>
-<area shape="rect" title=" " alt="" coords="469,124,634,165"/>
-<area shape="poly" title=" " alt="" coords="734,79,620,121,618,116,732,74"/>
-<area shape="rect" title=" " alt="" coords="658,132,815,157"/>
-<area shape="poly" title=" " alt="" coords="799,78,759,122,755,118,795,74"/>
-<area shape="rect" title=" " alt="" coords="839,124,1000,165"/>
-<area shape="poly" title=" " alt="" coords="860,74,893,111,889,114,857,78"/>
-<area shape="rect" title=" " alt="" coords="1023,124,1210,165"/>
-<area shape="poly" title=" " alt="" coords="927,74,1047,116,1045,121,926,79"/>
-<area shape="rect" title=" " alt="" coords="1234,132,1410,157"/>
-<area shape="poly" title=" " alt="" coords="966,68,1248,125,1247,130,965,73"/>
-<area shape="rect" href="NavMapFilter_8hpp.html" title=" " alt="" coords="1434,124,1653,165"/>
-<area shape="poly" title=" " alt="" coords="966,58,1419,121,1418,126,965,63"/>
-<area shape="rect" title=" " alt="" coords="1677,132,1847,157"/>
-<area shape="poly" title=" " alt="" coords="966,49,1286,76,1476,97,1665,121,1690,125,1689,131,1664,127,1475,102,1286,82,966,54"/>
-<area shape="rect" title=" " alt="" coords="1385,220,1438,246"/>
-<area shape="poly" title=" " alt="" coords="1515,167,1444,214,1441,209,1512,163"/>
-<area shape="rect" title=" " alt="" coords="1463,213,1624,253"/>
-<area shape="poly" title=" " alt="" coords="1546,165,1546,197,1541,197,1541,165"/>
-<area shape="rect" title=" " alt="" coords="1648,213,1809,253"/>
-<area shape="poly" title=" " alt="" coords="1587,163,1674,203,1672,208,1584,168"/>
+<area shape="poly" title=" " alt="" coords="664,50,539,58,392,72,236,95,83,127,76,128,75,123,81,121,235,89,392,67,538,53,663,44"/>
+<area shape="rect" title=" " alt="" coords="58,220,125,246"/>
+<area shape="poly" title=" " alt="" coords="663,48,527,56,379,70,248,93,196,108,158,126,139,143,123,164,102,207,97,204,118,161,135,139,155,122,194,103,246,88,378,65,526,51,663,43"/>
+<area shape="rect" title=" " alt="" coords="149,220,202,246"/>
+<area shape="poly" title=" " alt="" coords="664,53,518,65,367,81,242,102,201,114,179,126,169,143,165,164,169,205,164,205,160,163,164,141,175,122,199,109,241,97,366,76,518,60,663,48"/>
+<area shape="rect" title=" " alt="" coords="431,124,608,165"/>
+<area shape="poly" title=" " alt="" coords="706,79,589,121,587,116,704,74"/>
+<area shape="rect" title=" " alt="" coords="632,124,788,165"/>
+<area shape="poly" title=" " alt="" coords="773,78,740,114,736,111,769,74"/>
+<area shape="rect" title=" " alt="" coords="813,124,978,165"/>
+<area shape="poly" title=" " alt="" coords="836,74,869,111,865,114,832,78"/>
+<area shape="rect" title=" " alt="" coords="1002,132,1159,157"/>
+<area shape="poly" title=" " alt="" coords="898,74,1034,123,1032,128,897,79"/>
+<area shape="rect" title=" " alt="" coords="1183,124,1344,165"/>
+<area shape="poly" title=" " alt="" coords="941,70,1168,119,1167,125,940,75"/>
+<area shape="rect" title=" " alt="" coords="1367,124,1554,165"/>
+<area shape="poly" title=" " alt="" coords="941,59,1352,121,1351,126,940,64"/>
+<area shape="rect" title=" " alt="" coords="1578,132,1754,157"/>
+<area shape="poly" title=" " alt="" coords="941,51,1230,79,1566,121,1592,126,1591,131,1566,127,1229,84,941,56"/>
+<area shape="rect" href="NavMapFilter_8hpp.html" title=" " alt="" coords="188,124,408,165"/>
+<area shape="poly" title=" " alt="" coords="664,72,411,123,410,118,663,67"/>
+<area shape="rect" title=" " alt="" coords="1779,132,1948,157"/>
+<area shape="poly" title=" " alt="" coords="941,46,1314,73,1540,94,1766,121,1793,126,1792,131,1766,127,1540,99,1314,78,940,52"/>
+<area shape="poly" title=" " alt="" coords="252,168,138,215,135,216,133,211,136,210,250,163"/>
+<area shape="poly" title=" " alt="" coords="272,167,206,213,203,209,269,163"/>
+<area shape="rect" title=" " alt="" coords="227,213,388,253"/>
+<area shape="poly" title=" " alt="" coords="303,165,306,197,301,197,297,165"/>
+<area shape="rect" title=" " alt="" coords="412,213,573,253"/>
+<area shape="poly" title=" " alt="" coords="343,163,435,203,433,208,341,168"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">

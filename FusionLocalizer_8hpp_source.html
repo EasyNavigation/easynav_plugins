@@ -99,99 +99,112 @@ document.addEventListener('DOMContentLoaded', codefold.init);
   <div class="headertitle"><div class="title">FusionLocalizer.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="FusionLocalizer_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;optional&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;easynav_core/LocalizerMethodBase.hpp&quot;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="ukf__wrapper_8hpp.html">easynav_fusion_localizer/ukf_wrapper.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;sensor_msgs/msg/imu.hpp&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;sensor_msgs/msg/nav_sat_fix.hpp&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;geometry_msgs/msg/pose_with_covariance_stamped.hpp&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;nav_msgs/msg/odometry.hpp&quot;</span></div>
+<a href="FusionLocalizer_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2025 Intelligent Robotics Lab</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">//</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// This file is part of the project Easy Navigation (EasyNav in short)</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">// you may not use this file except in compliance with the License.</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">// You may obtain a copy of the License at</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">//</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">//     http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">//</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">// Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// See the License for the specific language governing permissions and</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">// limitations under the License.</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>{</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a1296b5d8f82cf65d273b29f09c38da0d">   19</a></span><span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceeasynav.html#a1296b5d8f82cf65d273b29f09c38da0d">kNoOrientationCovariance</a> = 1e5;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span></div>
-<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html">   26</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d">FusionLocalizer</a> : <span class="keyword">public</span> easynav::LocalizerMethodBase</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>{</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d">   29</a></span>  <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d">FusionLocalizer</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#a7979e785a243892f037a6f7a94ffb1cb">   30</a></span>  <span class="keyword">virtual</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a7979e785a243892f037a6f7a94ffb1cb">~FusionLocalizer</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#a73f46d41412aa74599db28b349e90221">   34</a></span>  rclcpp::Subscription&lt;geometry_msgs::msg::PoseWithCovarianceStamped&gt;::SharedPtr <a class="code hl_variable" href="classeasynav_1_1FusionLocalizer.html#a73f46d41412aa74599db28b349e90221">init_pose_sub_</a>;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#aa381d32b539a52c8f30eeee90c5dc80b">init_pose_callback</a>(<span class="keyword">const</span> geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a5720f6af39830d0f8c1150a9063705da">on_last_known_pose</a>(<span class="keyword">const</span> geometry_msgs::msg::PoseWithCovarianceStamped &amp; pose) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#af5b53fd8602f36ebbcb154e50d25436f">   43</a></span>  <span class="keywordtype">bool</span> <a class="code hl_variable" href="classeasynav_1_1FusionLocalizer.html#af5b53fd8602f36ebbcb154e50d25436f">use_last_known_pose_</a> {<span class="keyword">true</span>};</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#a4f6cc687f6ad2096da0fc8a531ce4704">   46</a></span>  std::optional&lt;geometry_msgs::msg::PoseWithCovarianceStamped&gt; <a class="code hl_variable" href="classeasynav_1_1FusionLocalizer.html#a4f6cc687f6ad2096da0fc8a531ce4704">pending_last_pose_</a>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a6ed380ba537bbe9a85710810db50a95c">update_rt</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a24ddfd2eba3d3d6a90d492e8d25ff0da">update</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  std::unique_ptr&lt;robot_localization::UkfWrapper&gt; ukf_local_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  std::unique_ptr&lt;robot_localization::UkfWrapper&gt; ukf_global_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  <span class="keywordtype">bool</span> has_global_filter_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <span class="keywordtype">bool</span> has_local_filter_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <span class="keywordtype">int</span> n_gps_sensors_{0};</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  geometry_msgs::msg::PoseWithCovarianceStamped</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  navsatfix_to_pose(<span class="keyword">const</span> sensor_msgs::msg::NavSatFix &amp; navsat_msg);</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  sensor_msgs::msg::NavSatFix</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  odom_to_navsatfix(<span class="keyword">const</span> nav_msgs::msg::Odometry &amp; odom_msg);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;optional&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &quot;easynav_core/LocalizerMethodBase.hpp&quot;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;<a class="code" href="ukf__wrapper_8hpp.html">easynav_fusion_localizer/ukf_wrapper.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &quot;sensor_msgs/msg/imu.hpp&quot;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &quot;sensor_msgs/msg/nav_sat_fix.hpp&quot;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &quot;geometry_msgs/msg/pose_with_covariance_stamped.hpp&quot;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &quot;nav_msgs/msg/odometry.hpp&quot;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceeasynav.html">easynav</a></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>{</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="namespaceeasynav.html#a1296b5d8f82cf65d273b29f09c38da0d">   33</a></span><span class="keyword">constexpr</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="namespaceeasynav.html#a1296b5d8f82cf65d273b29f09c38da0d">kNoOrientationCovariance</a> = 1e5;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span></div>
+<div class="foldopen" id="foldopen00040" data-start="{" data-end="};">
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html">   40</a></span><span class="keyword">class </span><a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d">FusionLocalizer</a> : <span class="keyword">public</span> easynav::LocalizerMethodBase</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>{</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d">   43</a></span>  <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d">FusionLocalizer</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#a7979e785a243892f037a6f7a94ffb1cb">   44</a></span>  <span class="keyword">virtual</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a7979e785a243892f037a6f7a94ffb1cb">~FusionLocalizer</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#a73f46d41412aa74599db28b349e90221">   48</a></span>  rclcpp::Subscription&lt;geometry_msgs::msg::PoseWithCovarianceStamped&gt;::SharedPtr <a class="code hl_variable" href="classeasynav_1_1FusionLocalizer.html#a73f46d41412aa74599db28b349e90221">init_pose_sub_</a>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#aa381d32b539a52c8f30eeee90c5dc80b">init_pose_callback</a>(<span class="keyword">const</span> geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a5720f6af39830d0f8c1150a9063705da">on_last_known_pose</a>(<span class="keyword">const</span> geometry_msgs::msg::PoseWithCovarianceStamped &amp; pose) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#af5b53fd8602f36ebbcb154e50d25436f">   58</a></span>  <span class="keywordtype">bool</span> <a class="code hl_variable" href="classeasynav_1_1FusionLocalizer.html#af5b53fd8602f36ebbcb154e50d25436f">use_last_known_pose_</a> {<span class="keyword">true</span>};</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classeasynav_1_1FusionLocalizer.html#a4f6cc687f6ad2096da0fc8a531ce4704">   61</a></span>  std::optional&lt;geometry_msgs::msg::PoseWithCovarianceStamped&gt; <a class="code hl_variable" href="classeasynav_1_1FusionLocalizer.html#a4f6cc687f6ad2096da0fc8a531ce4704">pending_last_pose_</a>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a6ed380ba537bbe9a85710810db50a95c">update_rt</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classeasynav_1_1FusionLocalizer.html#a24ddfd2eba3d3d6a90d492e8d25ff0da">update</a>(NavState &amp; nav_state) <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  <span class="keywordtype">double</span> latitude_origin_{0.0};</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  <span class="keywordtype">double</span> longitude_origin_{0.0};</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  <span class="keywordtype">double</span> altitude_origin_{0.0};</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  <span class="keywordtype">double</span> UTM_origin_x_{0.0};</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <span class="keywordtype">double</span> UTM_origin_y_{0.0};</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  <span class="keywordtype">double</span> UTM_origin_z_{0.0};</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  std::string UTM_zone_;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  <span class="keywordtype">int</span> UTM_zone_number_{0};</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>  <span class="keywordtype">bool</span> UTM_zone_northp_{<span class="keyword">true</span>};</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  std::vector&lt;rclcpp::Time&gt; last_gps_stamp_;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  std::unique_ptr&lt;robot_localization::UkfWrapper&gt; ukf_local_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  std::unique_ptr&lt;robot_localization::UkfWrapper&gt; ukf_global_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <span class="keywordtype">bool</span> has_global_filter_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  <span class="keywordtype">bool</span> has_local_filter_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>  <span class="keywordtype">int</span> n_gps_sensors_{0};</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>  geometry_msgs::msg::PoseWithCovarianceStamped</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  navsatfix_to_pose(<span class="keyword">const</span> sensor_msgs::msg::NavSatFix &amp; navsat_msg);</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  rclcpp::Publisher&lt;sensor_msgs::msg::NavSatFix&gt;::SharedPtr navsat_pub_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  std::string navsatfix_topic_;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  sensor_msgs::msg::NavSatFix</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  odom_to_navsatfix(<span class="keyword">const</span> nav_msgs::msg::Odometry &amp; odom_msg);</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <span class="keywordtype">bool</span> first_pose_received_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>};</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <span class="keywordtype">double</span> latitude_origin_{0.0};</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  <span class="keywordtype">double</span> longitude_origin_{0.0};</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  <span class="keywordtype">double</span> altitude_origin_{0.0};</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <span class="keywordtype">double</span> UTM_origin_x_{0.0};</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  <span class="keywordtype">double</span> UTM_origin_y_{0.0};</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  <span class="keywordtype">double</span> UTM_origin_z_{0.0};</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  std::string UTM_zone_;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  <span class="keywordtype">int</span> UTM_zone_number_{0};</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  <span class="keywordtype">bool</span> UTM_zone_northp_{<span class="keyword">true</span>};</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  std::vector&lt;rclcpp::Time&gt; last_gps_stamp_;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  rclcpp::Publisher&lt;sensor_msgs::msg::NavSatFix&gt;::SharedPtr navsat_pub_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  std::string navsatfix_topic_;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  <span class="keywordtype">bool</span> first_pose_received_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>};</div>
 </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>}  <span class="comment">// namespace easynav</span></div>
-<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a24ddfd2eba3d3d6a90d492e8d25ff0da"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a24ddfd2eba3d3d6a90d492e8d25ff0da">easynav::FusionLocalizer::update</a></div><div class="ttdeci">void update(NavState &amp;nav_state) override</div><div class="ttdoc">Hook de actualización no-RT (baja frecuencia).</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:253</div></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>}  <span class="comment">// namespace easynav</span></div>
+<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a24ddfd2eba3d3d6a90d492e8d25ff0da"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a24ddfd2eba3d3d6a90d492e8d25ff0da">easynav::FusionLocalizer::update</a></div><div class="ttdeci">void update(NavState &amp;nav_state) override</div><div class="ttdoc">Hook de actualización no-RT (baja frecuencia).</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:265</div></div>
 <div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a4ab82fdd319b5448ddb43d4e4564576d"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d">easynav::FusionLocalizer::FusionLocalizer</a></div><div class="ttdeci">FusionLocalizer()=default</div></div>
-<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a4f6cc687f6ad2096da0fc8a531ce4704"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a4f6cc687f6ad2096da0fc8a531ce4704">easynav::FusionLocalizer::pending_last_pose_</a></div><div class="ttdeci">std::optional&lt; geometry_msgs::msg::PoseWithCovarianceStamped &gt; pending_last_pose_</div><div class="ttdoc">Last known pose, applied once the global filter has an estimate.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.hpp:46</div></div>
-<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a5720f6af39830d0f8c1150a9063705da"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a5720f6af39830d0f8c1150a9063705da">easynav::FusionLocalizer::on_last_known_pose</a></div><div class="ttdeci">void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped &amp;pose) override</div><div class="ttdoc">Starts from the last known pose after a reconfiguration (&quot;initial_pose.use_last_known&quot;).</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:145</div></div>
-<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a6ed380ba537bbe9a85710810db50a95c"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a6ed380ba537bbe9a85710810db50a95c">easynav::FusionLocalizer::update_rt</a></div><div class="ttdeci">void update_rt(NavState &amp;nav_state) override</div><div class="ttdoc">Hook de actualización RT (alta frecuencia) de LocalizerMethodBase.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:186</div></div>
-<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a73f46d41412aa74599db28b349e90221"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a73f46d41412aa74599db28b349e90221">easynav::FusionLocalizer::init_pose_sub_</a></div><div class="ttdeci">rclcpp::Subscription&lt; geometry_msgs::msg::PoseWithCovarianceStamped &gt;::SharedPtr init_pose_sub_</div><div class="ttdoc">Subscriber for the initial pose.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.hpp:34</div></div>
+<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a4f6cc687f6ad2096da0fc8a531ce4704"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a4f6cc687f6ad2096da0fc8a531ce4704">easynav::FusionLocalizer::pending_last_pose_</a></div><div class="ttdeci">std::optional&lt; geometry_msgs::msg::PoseWithCovarianceStamped &gt; pending_last_pose_</div><div class="ttdoc">Last known pose, applied once the global filter has an estimate.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.hpp:61</div></div>
+<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a5720f6af39830d0f8c1150a9063705da"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a5720f6af39830d0f8c1150a9063705da">easynav::FusionLocalizer::on_last_known_pose</a></div><div class="ttdeci">void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped &amp;pose) override</div><div class="ttdoc">Starts from the last known pose after a reconfiguration (&quot;initial_pose.use_last_known&quot;).</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:157</div></div>
+<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a6ed380ba537bbe9a85710810db50a95c"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a6ed380ba537bbe9a85710810db50a95c">easynav::FusionLocalizer::update_rt</a></div><div class="ttdeci">void update_rt(NavState &amp;nav_state) override</div><div class="ttdoc">Hook de actualización RT (alta frecuencia) de LocalizerMethodBase.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:198</div></div>
+<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a73f46d41412aa74599db28b349e90221"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a73f46d41412aa74599db28b349e90221">easynav::FusionLocalizer::init_pose_sub_</a></div><div class="ttdeci">rclcpp::Subscription&lt; geometry_msgs::msg::PoseWithCovarianceStamped &gt;::SharedPtr init_pose_sub_</div><div class="ttdoc">Subscriber for the initial pose.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.hpp:48</div></div>
 <div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_a7979e785a243892f037a6f7a94ffb1cb"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#a7979e785a243892f037a6f7a94ffb1cb">easynav::FusionLocalizer::~FusionLocalizer</a></div><div class="ttdeci">virtual ~FusionLocalizer()=default</div></div>
-<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_aa381d32b539a52c8f30eeee90c5dc80b"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#aa381d32b539a52c8f30eeee90c5dc80b">easynav::FusionLocalizer::init_pose_callback</a></div><div class="ttdeci">void init_pose_callback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)</div><div class="ttdoc">Callback for /initialpose.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:154</div></div>
-<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_ac9d1795b6cf8a4da7bf9b33f783db911"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#ac9d1795b6cf8a4da7bf9b33f783db911">easynav::FusionLocalizer::on_initialize</a></div><div class="ttdeci">void on_initialize() override</div><div class="ttdoc">Hook de inicialización de MethodBase.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:22</div></div>
-<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_af5b53fd8602f36ebbcb154e50d25436f"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#af5b53fd8602f36ebbcb154e50d25436f">easynav::FusionLocalizer::use_last_known_pose_</a></div><div class="ttdeci">bool use_last_known_pose_</div><div class="ttdoc">Whether to start from the last known pose after a reconfiguration.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.hpp:43</div></div>
+<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_aa381d32b539a52c8f30eeee90c5dc80b"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#aa381d32b539a52c8f30eeee90c5dc80b">easynav::FusionLocalizer::init_pose_callback</a></div><div class="ttdeci">void init_pose_callback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)</div><div class="ttdoc">Callback for /initialpose.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:166</div></div>
+<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_ac9d1795b6cf8a4da7bf9b33f783db911"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#ac9d1795b6cf8a4da7bf9b33f783db911">easynav::FusionLocalizer::on_initialize</a></div><div class="ttdeci">void on_initialize() override</div><div class="ttdoc">Hook de inicialización de MethodBase.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.cpp:37</div></div>
+<div class="ttc" id="aclasseasynav_1_1FusionLocalizer_html_af5b53fd8602f36ebbcb154e50d25436f"><div class="ttname"><a href="classeasynav_1_1FusionLocalizer.html#af5b53fd8602f36ebbcb154e50d25436f">easynav::FusionLocalizer::use_last_known_pose_</a></div><div class="ttdeci">bool use_last_known_pose_</div><div class="ttdoc">Whether to start from the last known pose after a reconfiguration.</div><div class="ttdef"><b>Definition</b> FusionLocalizer.hpp:58</div></div>
 <div class="ttc" id="anamespaceeasynav_html"><div class="ttname"><a href="namespaceeasynav.html">easynav</a></div><div class="ttdoc">Provides a mapping for often used cost values.</div><div class="ttdef"><b>Definition</b> cost_values.hpp:41</div></div>
-<div class="ttc" id="anamespaceeasynav_html_a1296b5d8f82cf65d273b29f09c38da0d"><div class="ttname"><a href="namespaceeasynav.html#a1296b5d8f82cf65d273b29f09c38da0d">easynav::kNoOrientationCovariance</a></div><div class="ttdeci">constexpr double kNoOrientationCovariance</div><div class="ttdef"><b>Definition</b> FusionLocalizer.hpp:19</div></div>
+<div class="ttc" id="anamespaceeasynav_html_a1296b5d8f82cf65d273b29f09c38da0d"><div class="ttname"><a href="namespaceeasynav.html#a1296b5d8f82cf65d273b29f09c38da0d">easynav::kNoOrientationCovariance</a></div><div class="ttdeci">constexpr double kNoOrientationCovariance</div><div class="ttdef"><b>Definition</b> FusionLocalizer.hpp:33</div></div>
 <div class="ttc" id="aukf__wrapper_8hpp_html"><div class="ttname"><a href="ukf__wrapper_8hpp.html">ukf_wrapper.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
