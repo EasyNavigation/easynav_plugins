@@ -154,8 +154,8 @@ OctomapMapsManager::on_initialize()
 //   }
 
 //  incoming_occ_map_sub_ = node->create_subscription<nav_msgs::msg::OccupancyGrid>(
-//    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name + "/incoming_occ_map",
-//    rclcpp::QoS(1).transient_local().reliable(),
+//    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
+//    "/incoming_occ_map", rclcpp::QoS(1).transient_local().reliable(),
 //    [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
 //
 //      resolution_ = msg->info.resolution;
@@ -172,7 +172,6 @@ OctomapMapsManager::on_initialize()
     "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
-
       geometry_msgs::msg::TransformStamped tf_msg;
       try {
         tf_msg = RTTFBuffer::getInstance()->lookupTransform(

@@ -16,17 +16,17 @@
 /// \file
 /// \brief Declaration of the CostmapMapsManager method.
 
-#ifndef EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
-#define EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
+#ifndef EASYNAV_COSTMAP_MAPS_MANAGER__COSTMAPMAPSMANAGER_HPP_
+#define EASYNAV_COSTMAP_MAPS_MANAGER__COSTMAPMAPSMANAGER_HPP_
 
 #include <vector>
+#include <memory>
+#include <string>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "std_srvs/srv/trigger.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
 #include "easynav_costmap_common/costmap_2d.hpp"
-
 #include "easynav_costmap_maps_manager/filters/CostmapFilter.hpp"
 #include "pluginlib/class_loader.hpp"
 
@@ -61,7 +61,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -71,7 +71,7 @@ public:
    *
    * @param nav_state Current state of the navigation system.
    */
-  virtual void update(NavState & nav_state) override;
+  void update(NavState & nav_state) override;
 
   /**
    * @brief Replaces the current static map.
@@ -134,4 +134,4 @@ private:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_PLANNER__SIMPLEMAPMANAGER_HPP_
+#endif  // EASYNAV_COSTMAP_MAPS_MANAGER__COSTMAPMAPSMANAGER_HPP_

@@ -60,7 +60,8 @@ public:
    * @param num_levels Number of levels of the pyramid, including the original map.
    * @param angle_step Angular resolution of the search (rad).
    */
-  MapMatcher(const easynav::Costmap2D & map, int num_levels = 4, double angle_step = M_PI / 8.0);
+  explicit MapMatcher(
+    const easynav::Costmap2D & map, int num_levels = 4, double angle_step = M_PI / 8.0);
 
   /**
    * @brief Get the candidate poses.

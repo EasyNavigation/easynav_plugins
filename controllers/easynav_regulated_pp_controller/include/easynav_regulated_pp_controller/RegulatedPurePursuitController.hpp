@@ -73,15 +73,18 @@ protected:
 
   // --- Velocity / acceleration limits ---
   double max_linear_vel_{0.5};    ///< Maximum linear velocity (m/s).
-  double min_linear_vel_{-0.5};   ///< Minimum linear velocity, used when use_dynamic_window is true (m/s).
+  /// Minimum linear velocity, used when use_dynamic_window is true (m/s).
+  double min_linear_vel_{-0.5};
   double max_angular_vel_{2.5};   ///< Maximum angular velocity (rad/s).
-  double min_angular_vel_{-2.5};  ///< Minimum angular velocity, used when use_dynamic_window is true (rad/s).
+  /// Minimum angular velocity, used when use_dynamic_window is true (rad/s).
+  double min_angular_vel_{-2.5};
   double max_linear_accel_{2.5};  ///< Maximum linear acceleration (m/s^2).
   double max_linear_decel_{2.5};  ///< Maximum linear deceleration (m/s^2).
-  double max_angular_accel_{3.2}; ///< Maximum angular acceleration (rad/s^2).
-  double max_angular_decel_{3.2}; ///< Maximum angular deceleration (rad/s^2).
+  double max_angular_accel_{3.2};  ///< Maximum angular acceleration (rad/s^2).
+  double max_angular_decel_{3.2};  ///< Maximum angular deceleration (rad/s^2).
   bool use_dynamic_window_{false};  ///< Use the Dynamic Window Pure Pursuit (DWPP) extension.
-  bool allow_reversing_{false};     ///< Allow driving backwards when the carrot is behind the robot.
+  /// Allow driving backwards when the carrot is behind the robot.
+  bool allow_reversing_{false};
 
   // --- Rotate to heading ---
   bool use_rotate_to_heading_{true};             ///< Enable rotate-in-place behaviors.
@@ -93,12 +96,16 @@ protected:
   double regulated_linear_scaling_min_radius_{0.9};   ///< Turning radius that triggers regulation.
   double regulated_linear_scaling_min_speed_{0.25};   ///< Minimum speed kept under regulation.
   bool use_fixed_curvature_lookahead_{false};         ///< Use a separate lookahead for curvature.
-  double curvature_lookahead_dist_{1.0};              ///< Distance of the fixed curvature lookahead.
-  bool interpolate_curvature_after_goal_{false};      ///< Extrapolate curvature carrot past the goal.
+  /// Distance of the fixed curvature lookahead.
+  double curvature_lookahead_dist_{1.0};
+  /// Extrapolate curvature carrot past the goal.
+  bool interpolate_curvature_after_goal_{false};
 
   // --- Obstacle-proximity regulation (adapts the costmap-based term to EasyNav's perception) ---
-  bool use_obstacle_regulated_linear_velocity_scaling_{false};  ///< Enable obstacle-proximity regulation.
-  double obstacle_scaling_dist_{0.3};   ///< Distance below which obstacle regulation is triggered (m).
+  /// Enable obstacle-proximity regulation.
+  bool use_obstacle_regulated_linear_velocity_scaling_{false};
+  /// Distance below which obstacle regulation is triggered (m).
+  double obstacle_scaling_dist_{0.3};
   double obstacle_scaling_gain_{1.0};   ///< Gain (<=1.0) applied when scaling down the velocity.
   // Area where obstacles regulate the velocity (computeMinObstacleDistance()).
   double robot_radius_{0.35};   ///< Robot radius used when measuring obstacle distance (m).
@@ -108,7 +115,8 @@ protected:
 
   // --- Approach to goal ---
   double min_approach_linear_velocity_{0.05};  ///< Minimum linear velocity while approaching goal.
-  double approach_velocity_scaling_dist_{1.0}; ///< Remaining-path distance at which to start slowing.
+  /// Remaining-path distance at which to start slowing.
+  double approach_velocity_scaling_dist_{1.0};
 
   // --- Goal tolerances (fallback values if "goal_tolerance.*" is not present in NavState) ---
   double xy_goal_tolerance_{0.25};   ///< Fallback positional tolerance to the goal (m).
@@ -119,10 +127,13 @@ protected:
   rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr is_rotating_to_heading_pub_;
 
   rclcpp::Time last_update_ts_;              ///< Timestamp of the last control update.
-  double last_linear_vel_{0.0};              ///< Last commanded linear velocity (open-loop feedback).
-  double last_angular_vel_{0.0};             ///< Last commanded angular velocity (open-loop feedback).
-  bool is_rotating_to_heading_{false};       ///< Whether the controller is currently rotating in place.
-  geometry_msgs::msg::TwistStamped cmd_vel_; ///< Current velocity command.
+  /// Last commanded linear velocity (open-loop feedback).
+  double last_linear_vel_{0.0};
+  /// Last commanded angular velocity (open-loop feedback).
+  double last_angular_vel_{0.0};
+  /// Whether the controller is currently rotating in place.
+  bool is_rotating_to_heading_{false};
+  geometry_msgs::msg::TwistStamped cmd_vel_;  ///< Current velocity command.
 
   /// \brief Publishes a zero-velocity command and resets the open-loop velocity feedback.
   void stop(NavState & nav_state, const std_msgs::msg::Header & header);
@@ -156,8 +167,10 @@ protected:
     double lookahead_dist,
     bool interpolate_after_end = false);
 
-  /// \brief Intersection of the segment [p1, p2] with the circle of radius \p r centered at \p center.
-  /// \return The intersection point closer to \p p2, or \p p2 itself if there is no real intersection.
+  /// \brief Intersection of the segment [p1, p2] with the circle of radius \p r centered at
+  /// \p center.
+  /// \return The intersection point closer to \p p2, or \p p2 itself if there is no real
+  /// intersection.
   static geometry_msgs::msg::Point circleSegmentIntersection(
     const geometry_msgs::msg::Point & p1,
     const geometry_msgs::msg::Point & p2,

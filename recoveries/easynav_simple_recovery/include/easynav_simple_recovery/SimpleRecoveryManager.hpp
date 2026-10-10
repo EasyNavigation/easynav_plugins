@@ -112,7 +112,7 @@ private:
   double min_obstacle_z_ {0.05};       // Ignore points below (floor) [m]
   double max_obstacle_z_ {0.5};        // Ignore points above the robot [m] (geometry)
   double sensors_timeout_ {5.0};       // No sensor data for this long: sensors lost [s]
-  double max_position_variance_ {1.0}; // Above it (x or y): localization lost [m^2]
+  double max_position_variance_ {1.0};  // Above it (x or y): localization lost [m^2]
   double relocalize_timeout_ {20.0};   // Rotating longer than this: abort the mission [s]
   double rotate_speed_ {0.5};          // [rad/s]
   double stuck_time_ {10.0};           // Commanded but not moving for this long: stuck [s]

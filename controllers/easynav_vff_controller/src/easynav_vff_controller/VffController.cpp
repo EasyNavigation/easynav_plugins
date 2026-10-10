@@ -145,9 +145,9 @@ VffController::make_marker(
 
 double VffController::normalize_angle(double angle)
 {
-  angle = fmod(angle + M_PI, 2.0 * M_PI); // range [0, 2π)
+  angle = fmod(angle + M_PI, 2.0 * M_PI);  // range [0, 2π)
   if (angle < 0) {
-    angle += 2.0 * M_PI; // ensure positive
+    angle += 2.0 * M_PI;  // ensure positive
   }
   return angle - M_PI;
 }
@@ -242,7 +242,6 @@ void VffController::update_rt(NavState & nav_state)
 
   // If a goal is set
   if (!all_goals.goals.empty()) {
-
     goal_.x = all_goals.goals[0].pose.position.x;
     goal_.y = all_goals.goals[0].pose.position.y;
 

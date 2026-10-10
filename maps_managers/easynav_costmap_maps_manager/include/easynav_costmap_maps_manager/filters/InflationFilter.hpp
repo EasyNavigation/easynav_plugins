@@ -39,8 +39,8 @@
  *********************************************************************/
 
 
-#ifndef EASYNAV_PLANNER__FILTERS__IINFLATIONFILTER_HPP_
-#define EASYNAV_PLANNER__FILTERS__IINFLATIONFILTER_HPP_
+#ifndef EASYNAV_COSTMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
+#define EASYNAV_COSTMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 
 #include <cstdint>
 #include <string>
@@ -250,4 +250,4 @@ protected:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_PLANNER__FILTERS__IINFLATIONFILTER_HPP_
+#endif  // EASYNAV_COSTMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_

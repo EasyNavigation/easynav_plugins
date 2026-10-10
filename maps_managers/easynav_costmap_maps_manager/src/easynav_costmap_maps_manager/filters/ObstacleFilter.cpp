@@ -20,7 +20,6 @@
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 
-#include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_common/cost_values.hpp"
 
 #include "easynav_common/Parameters.hpp"
@@ -32,7 +31,6 @@ namespace easynav
 
 ObstacleFilter::ObstacleFilter()
 {
-
 }
 
 void

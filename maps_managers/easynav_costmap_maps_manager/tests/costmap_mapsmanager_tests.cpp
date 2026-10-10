@@ -198,7 +198,7 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
 }
 
 ///// \brief Dynamic map update test with point cloud
-//TEST_F(CostmapMapsManagerTest, BasicDynamicUpdate)
+// TEST_F(CostmapMapsManagerTest, BasicDynamicUpdate)
 //{
 //  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_node");
 //  auto manager = std::make_shared<easynav::CostmapMapsManager>();
@@ -238,7 +238,7 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
 //}
 //
 ///// \brief OccupancyGrid updates map via subscription
-//TEST_F(CostmapMapsManagerTest, IncomingOccupancyGridUpdatesMaps)
+// TEST_F(CostmapMapsManagerTest, IncomingOccupancyGridUpdatesMaps)
 //{
 //  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_node2");
 //  auto manager = std::make_shared<easynav::CostmapMapsManager>();
@@ -277,14 +277,14 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
 //}
 //
 ///// \brief Helper subclass to force map path for savemap
-//class FriendCostmapMapsManager : public easynav::CostmapMapsManager
+// class FriendCostmapMapsManager : public easynav::CostmapMapsManager
 //{
-//public:
+// public:
 //  void force_path(const std::string & path) {map_path_ = path;}
 //};
 //
 ///// \brief Test that the savemap service correctly stores YAML and PGM files
-//TEST_F(CostmapMapsManagerTest, SavemapServiceWorks)
+// TEST_F(CostmapMapsManagerTest, SavemapServiceWorks)
 //{
 //  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_savemap_node");
 //  auto manager = std::make_shared<FriendCostmapMapsManager>();
@@ -325,7 +325,8 @@ TEST_F(CostmapMapsManagerTest, IncomingMapTopicUpdatesInternalAndNavState)
 //
 //  // Reload the map from the generated YAML + PGM files
 //  nav_msgs::msg::OccupancyGrid loaded_grid;
-//  EXPECT_EQ(easynav::loadMapFromYaml(yaml_path + ".yaml", loaded_grid), easynav::LOAD_MAP_SUCCESS);
+//  EXPECT_EQ(easynav::loadMapFromYaml(yaml_path + ".yaml", loaded_grid),
+//  easynav::LOAD_MAP_SUCCESS);
 //
 //  easynav::Costmap2D loaded_map(loaded_grid);
 //

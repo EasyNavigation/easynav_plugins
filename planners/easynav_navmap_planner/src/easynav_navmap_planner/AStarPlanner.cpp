@@ -517,7 +517,10 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   const geometry_msgs::msg::Pose & goal)
 {
   using ::navmap::NavCelId;
-  using namespace navmap_ros;
+  using navmap_ros::FREE_SPACE;
+  using navmap_ros::INSCRIBED_INFLATED_OBSTACLE;
+  using navmap_ros::LETHAL_OBSTACLE;
+  using navmap_ros::NO_INFORMATION;
 
   if (nm.navcels.empty()) {return {};}
 
@@ -597,8 +600,9 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   }
 
   // Weighted step cost:
-  //   base geometric cost (edge length) scaled by (cost_factor_ + cost_weight_ * norm_cost(target)).
-  // This preserves admissibility with heuristic h = Euclidean distance, since the minimal multiplier ≥ 1.
+  //   base geometric cost (edge length) scaled by (cost_factor_ + cost_weight_ *
+  //   norm_cost(target)). This preserves admissibility with heuristic h = Euclidean distance, since
+  //   the minimal multiplier ≥ 1.
   auto step_cost = [&](NavCelId from, NavCelId to) -> double {
       const double base = euclid(from, to);
       if (!std::isfinite(base) || base <= 0.0) {

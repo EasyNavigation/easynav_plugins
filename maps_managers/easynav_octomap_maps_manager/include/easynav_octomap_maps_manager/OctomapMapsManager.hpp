@@ -16,19 +16,19 @@
 /// \file
 /// \brief Declaration of the OctomapMapsManager method.
 
-#ifndef EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAP_MAPS_MANAGER_HPP_
-#define EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAP_MAPS_MANAGER_HPP_
+#ifndef EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAPMAPSMANAGER_HPP_
+#define EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAPMAPSMANAGER_HPP_
 
 #include <vector>
+#include <memory>
+#include <string>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "octomap_msgs/msg/octomap.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
 #include "easynav_octomap_maps_manager/octomap.hpp"
-
 #include "easynav_octomap_maps_manager/filters/OctomapFilter.hpp"
 #include "pluginlib/class_loader.hpp"
 
@@ -65,7 +65,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -75,7 +75,7 @@ public:
    *
    * @param nav_state Current state of the navigation system.
    */
-  virtual void update(::easynav::NavState & nav_state) override;
+  void update(::easynav::NavState & nav_state) override;
 
 protected:
   /**
@@ -123,4 +123,4 @@ private:
 
 }  // namespace octomap
 }  // namespace easynav
-#endif  // EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAP_MAPS_MANAGER_HPP_
+#endif  // EASYNAV_OCTOMAP_MAPS_MANAGER__OCTOMAPMAPSMANAGER_HPP_

@@ -25,7 +25,6 @@ namespace navmap
 
 NavMapFilter::NavMapFilter()
 {
-
 }
 
 void

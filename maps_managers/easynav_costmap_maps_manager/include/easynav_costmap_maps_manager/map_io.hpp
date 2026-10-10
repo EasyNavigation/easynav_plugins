@@ -14,8 +14,8 @@
 
 /* OccupancyGrid map input-output library */
 
-#ifndef EASYNAV_COSTMAP_COMMON__MAP_IO_HPP_
-#define EASYNAV_COSTMAP_COMMON__MAP_IO_HPP_
+#ifndef EASYNAV_COSTMAP_MAPS_MANAGER__MAP_IO_HPP_
+#define EASYNAV_COSTMAP_MAPS_MANAGER__MAP_IO_HPP_
 
 #include <string>
 #include <vector>
@@ -158,4 +158,4 @@ std::string expand_user_home_dir_if_needed(
 
 }  // namespace easynav
 
-#endif  // EASYNAV_COSTMAP_COMMON__MAP_IO_HPP_
+#endif  // EASYNAV_COSTMAP_MAPS_MANAGER__MAP_IO_HPP_

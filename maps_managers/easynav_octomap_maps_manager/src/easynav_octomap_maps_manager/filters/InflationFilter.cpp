@@ -77,7 +77,6 @@ bool InflationFilter::inflate_layer_u8(
   float cost_scaling_factor,
   float inscribed_radius)
 {
-  using namespace ::octomap;
   if (nm.navcels.empty() || inflation_radius <= 0.0f || cost_scaling_factor <= 0.0f) {
     return false;
   }
@@ -114,7 +113,7 @@ bool InflationFilter::inflate_layer_u8(
   std::priority_queue<Node> pq;
 
   // Inicializar dst y semillas
-  auto & dst = dst_view->mutable_data(); // marca dirty
+  auto & dst = dst_view->mutable_data();  // marca dirty
   const auto & src = src_view->data();
 
   bool any_seed = false;
@@ -126,20 +125,20 @@ bool InflationFilter::inflate_layer_u8(
       dst[cid] = LETHAL_OBSTACLE;
       any_seed = true;
     } else if (s == NO_INFORMATION) {
-      dst[cid] = NO_INFORMATION; // mantener desconocido
+      dst[cid] = NO_INFORMATION;  // mantener desconocido
     } else {
       // si dst==src (in-place), preserva el valor actual; si no, escribe 0
       if (dst_layer != src_layer) {dst[cid] = FREE_SPACE;}
     }
   }
-  if (!any_seed) {return true;} // nada que inflar
+  if (!any_seed) {return true;}  // nada que inflar
 
   auto cost_from_dist = [&](float d) -> uint8_t {
       if (d <= 0.0f) {return LETHAL_OBSTACLE;}         // 254
-      if (d <= r_ins) {return INSCRIBED_INFLATED_OBSTACLE;} // 253
+      if (d <= r_ins) {return INSCRIBED_INFLATED_OBSTACLE;}  // 253
       if (d > R) {return FREE_SPACE;}                  // 0
 
-      const float x = d - r_ins; // >= 0
+      const float x = d - r_ins;  // >= 0
       const double factor = -1.0 * cost_scaling_factor * x;
       double c = std::exp(factor) * (static_cast<int>(INSCRIBED_INFLATED_OBSTACLE) - 1);
       if (c < 0.0) {c = 0.0;}
@@ -156,7 +155,7 @@ bool InflationFilter::inflate_layer_u8(
     // Escribir coste si no es desconocido ni letal
     if (dst[u] != NO_INFORMATION && dst[u] != LETHAL_OBSTACLE) {
       const uint8_t c = cost_from_dist(du);
-      if (c > dst[u]) {dst[u] = c;} // tomamos el máximo (monótono)
+      if (c > dst[u]) {dst[u] = c;}  // tomamos el máximo (monótono)
     }
 
     // Relajar vecinos

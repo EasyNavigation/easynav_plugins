@@ -13,18 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <gtest/gtest.h>
-
-#include "easynav_simple_common/SimpleMap.hpp"
-#include "easynav_simple_controller/SimpleController.hpp"
-
-#include "rclcpp/rclcpp.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
-
-#include "std_srvs/srv/trigger.hpp"
-
 #include <memory>
 #include <fstream>
+
+#include "gtest/gtest.h"
+#include "easynav_simple_common/SimpleMap.hpp"
+#include "easynav_simple_controller/SimpleController.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "std_srvs/srv/trigger.hpp"
 
 /// \brief Fixture for SimpleController tests (minimal)
 class AMCLLocalizerTest : public ::testing::Test

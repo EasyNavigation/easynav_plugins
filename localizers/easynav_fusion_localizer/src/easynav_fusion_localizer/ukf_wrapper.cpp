@@ -29,9 +29,6 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#include "easynav_common/Parameters.hpp"
-#include "easynav_fusion_localizer/ukf_wrapper.hpp"
-
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -45,6 +42,8 @@
 #include <utility>
 #include <vector>
 
+#include "easynav_common/Parameters.hpp"
+#include "easynav_fusion_localizer/ukf_wrapper.hpp"
 #include "angles/angles.h"
 #include "diagnostic_msgs/msg/diagnostic_status.hpp"
 #include "diagnostic_updater/diagnostic_status_wrapper.hpp"
@@ -74,9 +73,8 @@
 #include "tf2/LinearMath/Transform.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
-#include <tf2_ros/buffer.hpp>
-#include <tf2_ros/transform_broadcaster.hpp>
-
+#include "tf2_ros/buffer.hpp"
+#include "tf2_ros/transform_broadcaster.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 
 namespace robot_localization
@@ -2150,7 +2148,7 @@ void UkfWrapper::loadParams()
     RF_DEBUG("Initial estimate covariance is:\n" << initial_estimate_error_covariance_ << "\n");
     filter_.setEstimateErrorCovariance(initial_estimate_error_covariance_);
   }
-}
+}  // NOLINT(readability/fn_size)
 
 void UkfWrapper::odometryCallback(
   const nav_msgs::msg::Odometry::SharedPtr msg,
@@ -2384,8 +2382,9 @@ void UkfWrapper::initialize()
   // const std::chrono::duration<double> timespan{1.0 / frequency_};
   // timer_ = rclcpp::GenericTimer<rclcpp::VoidCallbackType>::make_shared(
   //   parent_node_->get_clock(), std::chrono::duration_cast<std::chrono::nanoseconds>(timespan),
-  //   std::bind(&UkfWrapper::periodicUpdate, this), parent_node_->get_node_base_interface()->get_context());
-  // parent_node_->get_node_timers_interface()->add_timer(timer_, nullptr);
+  //   std::bind(&UkfWrapper::periodicUpdate, this),
+  //   parent_node_->get_node_base_interface()->get_context());
+  //   parent_node_->get_node_timers_interface()->add_timer(timer_, nullptr);
 }
 
 void UkfWrapper::periodicUpdate()

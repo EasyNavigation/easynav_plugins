@@ -18,26 +18,22 @@
 #define EASYNAV_MPC_CONTROLLER__MPCCONTROLLER_HPP_
 
 #include <vector>
-#include <Eigen/Core>
 #include <cmath>
+#include <memory>
 
-#include <tf2/LinearMath/Quaternion.hpp>
-
+#include "Eigen/Core"
+#include "tf2/LinearMath/Quaternion.hpp"
 #include "geometry_msgs/msg/pose.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/path.hpp"
-
-#include <pcl/io/pcd_io.h>
-#include <pcl_conversions/pcl_conversions.h>
-
+#include "pcl/io/pcd_io.h"
+#include "pcl_conversions/pcl_conversions.h"
 #include "sensor_msgs/msg/point_cloud2.hpp"
-
 #include "easynav_core/ControllerMethodBase.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
-
 #include "easynav_mpc_controller/MPCOptimizer.hpp"
 
 namespace easynav
@@ -93,12 +89,13 @@ protected:
 
   std::unique_ptr<MPCOptimizer> optimizer_;  ///< MPC optimizer
 
-  rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr mpc_path_pub_;            ///< Publisher for MPC path.
-  rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr detection_pub_; ///< Publisher for MPC obstacles.
+  /// Publisher for MPC path.
+  rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr mpc_path_pub_;
+  /// Publisher for MPC obstacles.
+  rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr detection_pub_;
 
 private:
   geometry_msgs::msg::TwistStamped cmd_vel_;  ///< Current velocity command.
-
 };
 
 }  // namespace easynav

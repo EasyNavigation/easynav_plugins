@@ -176,7 +176,6 @@ NavMapMapsManager::on_initialize()
     "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [&](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
-
       resolution_ = msg->info.resolution;
       navmap_ = navmap_ros::from_occupancy_grid(*msg);
 
@@ -191,7 +190,6 @@ NavMapMapsManager::on_initialize()
     "/incoming_pc2_map",
     rclcpp::QoS(100),
     [&](sensor_msgs::msg::PointCloud2::UniquePtr msg) {
-
       navmap_ros::BuildParams params;
       navmap_ = navmap_ros::from_pointcloud2(*msg, navmap_msg_, params);
 

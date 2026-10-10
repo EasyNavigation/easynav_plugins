@@ -47,9 +47,20 @@ install(TARGETS
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  set(ament_cmake_copyright_FOUND TRUE)
-  set(ament_cmake_cpplint_FOUND TRUE)
+  # Files derived from ROS / Nav2 keep their original copyright and license
+  list(APPEND AMENT_LINT_AUTO_EXCLUDE ament_cmake_copyright)
   ament_lint_auto_find_test_dependencies()
+  # Humble's ament_copyright does not recognize the license with the EasyNav line in the header
+  if(NOT "$ENV{ROS_DISTRO}" STREQUAL "humble")
+    find_package(ament_cmake_copyright REQUIRED)
+    ament_copyright(EXCLUDE
+      include/easynav_costmap_common/cost_values.hpp
+      include/easynav_costmap_common/costmap_2d.hpp
+      include/easynav_costmap_common/occ_grid_values.hpp
+      src/easynav_costmap_common/costmap_2d.cpp
+      tests/costmap_bresenham_2d.cpp
+    )
+  endif()
 
   find_package(ament_cmake_gtest REQUIRED)
   add_subdirectory(tests)

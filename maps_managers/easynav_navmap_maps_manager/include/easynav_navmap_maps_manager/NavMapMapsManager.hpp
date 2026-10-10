@@ -16,20 +16,20 @@
 /// \file
 /// \brief Declaration of the NavMapMapsManager method.
 
-#ifndef EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_
-#define EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_
+#ifndef EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAPMAPSMANAGER_HPP_
+#define EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAPMAPSMANAGER_HPP_
 
 #include <vector>
+#include <memory>
+#include <string>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "navmap_ros_interfaces/msg/nav_map.hpp"
 #include "navmap_ros_interfaces/msg/nav_map_layer.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
 #include "navmap_core/NavMap.hpp"
-
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
 #include "pluginlib/class_loader.hpp"
 
@@ -66,7 +66,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -76,7 +76,7 @@ public:
    *
    * @param nav_state Current state of the navigation system.
    */
-  virtual void update(::easynav::NavState & nav_state) override;
+  void update(::easynav::NavState & nav_state) override;
 
   /**
    * @brief Replaces the current static map.
@@ -136,4 +136,4 @@ private:
 
 }  // namespace navmap
 }  // namespace easynav
-#endif  // EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_
+#endif  // EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAPMAPSMANAGER_HPP_

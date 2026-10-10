@@ -14,18 +14,19 @@
 // limitations under the License.
 
 /// \file
-/// \brief Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap.
+/// \brief Declaration of the AStarPlanner class implementing A* path planning using
+/// ::navmap::NavMap.
 
-#ifndef EASYNAV_NAVMAP_PLANNER__NAVMAPPLANNER_HPP_
-#define EASYNAV_NAVMAP_PLANNER__NAVMAPPLANNER_HPP_
+#ifndef EASYNAV_NAVMAP_PLANNER__ASTARPLANNER_HPP_
+#define EASYNAV_NAVMAP_PLANNER__ASTARPLANNER_HPP_
 
 #include <cstdint>
 #include <limits>
 #include <vector>
-#include <Eigen/Core>
+#include <string>
 
+#include "Eigen/Core"
 #include "nav_msgs/msg/path.hpp"
-
 #include "easynav_core/PlannerMethodBase.hpp"
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
@@ -50,7 +51,7 @@ public:
    *
    * Initializes internal parameters and configuration values.
    */
-  explicit AStarPlanner();
+  AStarPlanner();
 
   /**
    * @brief Initializes the planner.
@@ -60,7 +61,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Executes a planning cycle using the current navigation state.
@@ -194,4 +195,4 @@ protected:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_NAVMAP_PLANNER__NAVMAPPLANNER_HPP_
+#endif  // EASYNAV_NAVMAP_PLANNER__ASTARPLANNER_HPP_

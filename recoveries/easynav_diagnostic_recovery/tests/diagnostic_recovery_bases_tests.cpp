@@ -13,8 +13,8 @@
 // limitations under the License.
 
 /// \file
-/// \brief Tests for the plugin interfaces DiagnosticRecoveryManager is composed of: safety reflexes,
-/// evaluators and mitigations (exception safety, diagnostics, lifecycle forwarding).
+/// \brief Tests for the plugin interfaces DiagnosticRecoveryManager is composed of: safety
+/// reflexes, evaluators and mitigations (exception safety, diagnostics, lifecycle forwarding).
 
 #include <algorithm>
 #include <chrono>
