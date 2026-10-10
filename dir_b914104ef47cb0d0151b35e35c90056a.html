@@ -123,7 +123,7 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_6c80f91fd6f2968787702174fad27fae.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md299"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md304"></a>
 easynav_simple_recovery</h1>
 <p>A simple recovery system for EasyNav, written to be read: a starting point for your own. Read <span class="tt"><a class="el" href="SimpleRecoveryManager_8cpp.html" title="Implementation of the SimpleRecoveryManager class.">SimpleRecoveryManager.cpp</a></span> from top to bottom.</p>
 <p>A recovery system is a <span class="tt"><a class="el" href="classRecoveryManagerBase.html">RecoveryManagerBase</a></span> plugin hosted by <span class="tt">recovery_node</span>. EasyNav calls:</p>
@@ -147,7 +147,7 @@ easynav_simple_recovery</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Otherwise  </td><td class="markdownTableBodyNone">nothing: the controller drives  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md300"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md305"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -163,7 +163,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md301"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md306"></a>
 Usage</h1>
 <p>The area checked ahead is the robot's: its radius and height come from <span class="tt">system_node.robot_geometry</span> (<span class="tt">robot_radius</span> and <span class="tt">max_obstacle_z</span> here are deprecated).</p>
 <div class="fragment"><div class="line">recovery_node:</div>
@@ -182,7 +182,7 @@ Usage</h1>
 <div class="line">      backup_time: 2.0            # [s]</div>
 <div class="line">      max_backup_attempts: 3</div>
 <div class="line">      slow_down_max_linear_vel: 0.1  # [m/s], 0: never slow down</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md302"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md307"></a>
 Reconfiguring as a mitigation</h1>
 <p><span class="tt">request_reconfigure()</span> changes parameters of any EasyNav node and reconfigures EasyNav to apply them, between cycles: the mission goes on, and the robot only stops during the transitions. The recovery system is reloaded too, so a new instance starts with fresh members: keep in NavState what you need to remember. EasyNav lists the parameters changed so far in <span class="tt">reconfigured_parameters</span> (<span class="tt">"node/parameter"</span>), and <span class="tt">request_restore_parameters()</span> restores them. </p>
 </div></div><!-- contents -->

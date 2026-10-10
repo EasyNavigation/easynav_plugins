@@ -123,7 +123,7 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_efff33e3931f71a09d7d91323ae8a2f4.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md40"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md45"></a>
 easynav_regulated_pp_controller</h1>
 <p>Port of the <a href="https://docs.nav2.org/configuration/packages/configuring-regulated-pp.html">Nav2 Regulated Pure Pursuit Controller</a> to the EasyNav plugin architecture (<span class="tt">easynav::ControllerMethodBase</span>), including its optional Dynamic Window Pure Pursuit (DWPP) extension.</p>
 <ul>
@@ -136,7 +136,7 @@ easynav_regulated_pp_controller</h1>
 <div class="line">      year={2023},</div>
 <div class="line">      journal = {Autonomous Robots}</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md41"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md46"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -152,7 +152,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md42"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md47"></a>
 Algorithm</h1>
 <p>The controller finds a lookahead ("carrot") point on the path at a given distance from the robot and drives towards it, following the classic Pure Pursuit geometry: the curvature needed to reach the carrot point is <span class="tt">k = 2y / (x^2+y^2)</span> in the robot's local frame. On top of that, it adds the <em>regulation</em> terms from the paper above:</p>
 <ul>
@@ -163,7 +163,7 @@ Algorithm</h1>
 <li><b>Rotate to rough heading / rotate to goal heading</b>: the robot rotates in place first if the carrot (or the final goal) is at a large angle from the current heading.</li>
 <li><b>Dynamic Window Pure Pursuit (optional)</b>: instead of directly applying <span class="tt">angular_vel = linear_vel * curvature</span>, it searches the reachable (velocity, angular velocity) space under the configured acceleration/deceleration limits for the point that best matches the desired curvature.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md43"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md48"></a>
 Adaptations from the Nav2 version</h1>
 <p>EasyNav's design differs from Nav2's <span class="tt">controller_server</span> in ways that require some adaptations:</p>
 <ul>
@@ -174,7 +174,7 @@ Adaptations from the Nav2 version</h1>
 <li><b>No plan pruning upstream.</b> Nav2's <span class="tt">controller_server</span> prunes the global plan to a local window starting at (or near) the robot before handing it to the controller. EasyNav's <span class="tt">path</span> in <span class="tt">NavState</span> is the full, un-pruned plan, so the carrot search (<span class="tt">getLookAheadPoint</span>) explicitly starts from the path pose closest to the robot (<span class="tt">findClosestPoseIndex</span>) rather than from index 0 of the array. Skipping this step is a real trap, not just a style choice: once the robot has travelled more than a lookahead distance away from the path's start pose, that start pose itself would satisfy "farther than the lookahead distance", so a naive search from index 0 keeps returning it as the carrot for the rest of the path — freezing the carrot behind the robot, producing bogus large curvature/angle values, and making the controller rotate-in-place far more than it should.</li>
 <li><b>No <span class="tt">setSpeedLimit</span> API.</b> EasyNav has no equivalent to Nav2's dynamic speed-limiting interface, so it is not ported.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md44"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md49"></a>
 Parameters</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -233,7 +233,7 @@ Parameters</h1>
 <blockquote class="doxtable">
 <p><b>Deprecated:</b> this plugin's former limit parameters (<span class="tt">max_linear_vel</span>, <span class="tt">min_linear_vel</span>, <span class="tt">max_angular_vel</span>, <span class="tt">min_angular_vel</span>, <span class="tt">max_linear_accel</span>, <span class="tt">max_linear_decel</span>, <span class="tt">max_angular_accel</span>, <span class="tt">max_angular_decel</span>, under the plugin's name) still apply, with a warning, where <span class="tt">controller_node.robot_limits.*</span> does not set that limit. They will stop working soon: move them to <span class="tt">robot_limits</span>. </p>
 </blockquote>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md45"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md50"></a>
 Topics</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -245,7 +245,7 @@ Topics</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">is_rotating_to_heading</span>  </td><td class="markdownTableBodyNone"><span class="tt">std_msgs/Bool</span>  </td><td class="markdownTableBodyNone">Whether the controller is currently rotating in place.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md46"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md51"></a>
 Example configuration</h1>
 <div class="fragment"><div class="line">controller_node:</div>
 <div class="line">  ros__parameters:</div>
@@ -283,7 +283,7 @@ Example configuration</h1>
 <div class="line">      use_dynamic_window: false</div>
 <div class="line">      xy_goal_tolerance: 0.25</div>
 <div class="line">      yaw_goal_tolerance: 0.25</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md47"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md52"></a>
 Tuning notes</h1>
 <p>Same guidance as upstream Nav2 applies:</p>
 <ul>

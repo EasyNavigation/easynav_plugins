@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <h1 class="doxsection"><a class="anchor" id="autotoc_md3"></a>
 Description</h1>
 <p><b>EasyNav Plugins</b> provides the official collection of plugins for the <a href="https://github.com/EasyNavigation">Easy Navigation (EasyNav)</a> framework. <br  />
- These plugins extend the navigation core with planners, controllers, map managers, and localizers compatible with ROS 2.</p>
+ These plugins extend the navigation core with planners, controllers, maps managers, localizers and recovery systems compatible with ROS 2.</p>
 <p>Each plugin resides in its own ROS 2 package and is registered via <span class="tt">pluginlib</span>, allowing dynamic loading at runtime.</p>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
@@ -124,8 +124,13 @@ Supported ROS 2 Distributions</h1>
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
+Installation</h1>
+<p>With APT (Humble, Jazzy, Kilted and Lyrical), install the plugins your configuration uses:</p>
+<div class="fragment"><div class="line">sudo apt install ros-&lt;distro&gt;-easynav-costmap-maps-manager ros-&lt;distro&gt;-easynav-regulated-pp-controller</div>
+</div><!-- fragment --><p>They are also available with Pixi and from source (cloning this repository builds all of them). See the <a href="https://easynavigation.github.io/build_install/index.html">installation guide</a>.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
 Repository Structure</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
 🧭 Planners</h2>
 <p>Path planning plugins implementing A*, costmap, or NavMap–based methods.</p>
 <table class="markdownTable">
@@ -139,7 +144,7 @@ Repository Structure</h1>
 <td class="markdownTableBodyNone"><span class="tt">easynav_navmap_planner</span>  </td><td class="markdownTableBodyNone">A* planner over a NavMap mesh.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_db2f5015239ad27e3bfa6b159a1302c4.html" title="/github/workspace/planners/easynav_navmap_planner/README.md">README</a>  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 ⚙️ Controllers</h2>
 <p>Motion controllers for trajectory tracking and reactive behaviors.</p>
 <table class="markdownTable">
@@ -159,7 +164,7 @@ Repository Structure</h1>
 <td class="markdownTableBodyNone"><span class="tt">easynav_regulated_pp_controller</span>  </td><td class="markdownTableBodyNone">Regulated Pure Pursuit controller, with optional Dynamic Window (DWPP) extension.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_7ddc676eb27f46842c32f71c619789e5.html" title="/github/workspace/controllers/easynav_regulated_pp_controller/README.md">README</a>  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 🗺️ Maps Managers</h2>
 <p>Map management plugins that provide, update, and store different environment representations.</p>
 <table class="markdownTable">
@@ -175,29 +180,53 @@ Repository Structure</h1>
 <td class="markdownTableBodyNone"><span class="tt">easynav_costmap_maps_manager</span>  </td><td class="markdownTableBodyNone">Manages <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a> layers with filters.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_387f3d42e11fa51c666d550b507db418.html" title="/github/workspace/maps_managers/easynav_costmap_maps_manager/README.md">README</a>  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">easynav_simple_maps_manager</span>  </td><td class="markdownTableBodyNone">Minimal example map manager (SimpleMap).  </td><td class="markdownTableBodyNone"><a class="el" href="dir_b2163fc9645c24f19b8f26c39339fde7.html" title="/github/workspace/maps_managers/easynav_simple_maps_manager/README.md">README</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">easynav_routes_maps_manager</span>  </td><td class="markdownTableBodyNone">Manages navigation routes (2D or 3D), editable in RViz with interactive markers.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_7d49775df75e06e73d0caabaf8eab5c7.html" title="/github/workspace/maps_managers/easynav_routes_maps_manager/README.md">README</a>  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
 📍 Localizers</h2>
 <p>Localization plugins based on different map types and sensors.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Package  </th><th class="markdownTableHeadNone">Description  </th><th class="markdownTableHeadNone">Link  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">easynav_gps_localizer</span>  </td><td class="markdownTableBodyNone">GPS-based localizer for outdoor navigation.  </td><td class="markdownTableBodyNone">README  </td></tr>
-<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">easynav_simple_localizer</span>  </td><td class="markdownTableBodyNone">Basic localizer for SimpleMap–based setups.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_29d25e57e10360027499626a198f79bc.html" title="/github/workspace/localizers/easynav_simple_localizer/README.md">README</a>  </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">easynav_navmap_localizer</span>  </td><td class="markdownTableBodyNone">AMCL-like localizer operating on NavMap meshes.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_244f7d1e1d21c0deb2226ff0fb4701ca.html" title="/github/workspace/localizers/easynav_navmap_localizer/README.md">README</a>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">easynav_costmap_localizer</span>  </td><td class="markdownTableBodyNone">AMCL-like localizer using <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a>.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_ee2d308567363ee2af816b6391d7b503.html" title="/github/workspace/localizers/easynav_costmap_localizer/README.md">README</a>  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">easynav_mhamcl_localizer</span>  </td><td class="markdownTableBodyNone">Multi-Hypothesis AMCL localizer using <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a>: global localization and kidnapping recovery.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_b362ec6e2871aebb41e9d7a33376f88c.html" title="/github/workspace/localizers/easynav_mhamcl_localizer/README.md">README</a>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">easynav_costmap_localizer</span>  </td><td class="markdownTableBodyNone">AMCL-like localizer using <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a>.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_ee2d308567363ee2af816b6391d7b503.html" title="/github/workspace/localizers/easynav_costmap_localizer/README.md">README</a>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">easynav_fusion_localizer</span>  </td><td class="markdownTableBodyNone">Multi-sensor fusion localizer (e.g., GPS + odometry + map).  </td><td class="markdownTableBodyNone"><a class="el" href="dir_bc9e5d434255d9ce882e0b1ba8830f34.html" title="/github/workspace/localizers/easynav_fusion_localizer/README.md">README</a>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">easynav_mhamcl_localizer</span>  </td><td class="markdownTableBodyNone">Multi-Hypothesis AMCL localizer using <a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a>: global localization and kidnapping recovery.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_b362ec6e2871aebb41e9d7a33376f88c.html" title="/github/workspace/localizers/easynav_mhamcl_localizer/README.md">README</a>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">easynav_fusion_localizer</span>  </td><td class="markdownTableBodyNone">Fuses any number of odometry sources (wheels, IMU, GPS...) with <span class="tt"><a class="el" href="namespacerobot__localization.html">robot_localization</a></span>.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_bc9e5d434255d9ce882e0b1ba8830f34.html" title="/github/workspace/localizers/easynav_fusion_localizer/README.md">README</a>  </td></tr>
 </table>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+🩺 Recovery Systems</h2>
+<p>Recovery systems detect navigation problems (lost localization, a dead sensor, a stuck robot...) and react to them.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Package  </th><th class="markdownTableHeadNone">Description  </th><th class="markdownTableHeadNone">Link  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="namespaceeasynav__diagnostic__recovery.html">easynav_diagnostic_recovery</a></span>  </td><td class="markdownTableBodyNone">Diagnosis-driven recovery system: safety reflexes, evaluators and mitigations with priority-based arbitration.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_eb6561881223f5d4348e8fc4dee0038a.html" title="/github/workspace/recoveries/easynav_diagnostic_recovery/README.md">README</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">easynav_simple_recovery</span>  </td><td class="markdownTableBodyNone">A simple recovery system, written as a starting point for your own.  </td><td class="markdownTableBodyNone"><a class="el" href="dir_b914104ef47cb0d0151b35e35c90056a.html" title="/github/workspace/recoveries/easynav_simple_recovery/README.md">README</a>  </td></tr>
+</table>
+<hr  />
+<h2 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
+🧱 Common</h2>
+<p>Types shared by several plugins.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Package  </th><th class="markdownTableHeadNone">Description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">easynav_costmap_common</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classCostmap2D.html" title="A 2D costmap provides a mapping between points in the world and their associated &quot;costs&quot;.">Costmap2D</a></span> and the cost values used by the costmap plugins.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">easynav_simple_common</span>  </td><td class="markdownTableBodyNone"><span class="tt">SimpleMap</span>, used by the simple plugins.  </td></tr>
+</table>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md20"></a>
 License</h1>
 <p>All packages in this repository are released under <b>Apache-2.0</b> unless stated otherwise in the individual package. </p>
 </div></div><!-- PageDoc -->

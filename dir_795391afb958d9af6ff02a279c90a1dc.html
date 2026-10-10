@@ -123,19 +123,19 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_c056e15567c82acd548b16f78e713dcf.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
 easynav_mpc_controller</h1>
 <p>"" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
 Description</h1>
 <p>A Model Predictive Controller (MPC) implementation for Easy Navigation.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab</li>
 <li><b>Maintainers:</b> Juan S. Cely G. <a href="mai'+'lto:+'jua'+'ns'+'cel'+'yg'+'@gm'+'ai'+'l.c'+'om'">juans<span class="obfuscator">.nosp@m.</span>cely<span class="obfuscator">.nosp@m.</span>g@gma<span class="obfuscator">.nosp@m.</span>il.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md19"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -151,7 +151,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md20"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_mpc_controller/MPCController</span></li>
@@ -160,7 +160,7 @@ Plugin (pluginlib)</h1>
 <li><b>Library:</b> <span class="tt">easynav_mpc_controller</span></li>
 <li><b>Description:</b> A Model Predictive Controller (MPC) implementation for Easy Navigation.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
 Parameters</h1>
 <p>All parameters are declared under the plugin namespace, i.e., <span class="tt">/&lt;node_fqn&gt;/easynav_mpc_controller/MPCController/...</span>.</p>
 <table class="markdownTable">
@@ -184,9 +184,9 @@ Parameters</h1>
 <blockquote class="doxtable">
 <p><b>Deprecated:</b> this plugin's former limit parameters (<span class="tt">max_linear_velocity</span>, <span class="tt">max_angular_velocity</span>, under the plugin's name) still apply, with a warning, where <span class="tt">controller_node.robot_limits.*</span> does not set that limit. They will stop working soon: move them to <span class="tt">robot_limits</span>. </p>
 </blockquote>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -196,10 +196,10 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">/mpc/detection</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs::msg::PointCloud2</span>  </td><td class="markdownTableBodyNone">Detections used by collision checker.  </td><td class="markdownTableBodyNone">QoS depth=10  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
 Services</h2>
 <p>This package does not create service servers or clients.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md30"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -213,10 +213,10 @@ NavState Keys</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">points</span>  </td><td class="markdownTableBodyNone"><span class="tt">PointPerceptions</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Perception point cloud(s) used for costs.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
 TF Frames</h1>
 <p>This controller does not explicitly publish or require TF frames in code.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md32"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

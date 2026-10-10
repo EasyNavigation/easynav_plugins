@@ -5,7 +5,7 @@ var searchData=
   ['hash_3c_20bonxai_3a_3acoordt_20_3e_2',['hash&lt; Bonxai::CoordT &gt;',['../structstd_1_1hash_3_01Bonxai_1_1CoordT_01_4.html',1,'std']]],
   ['headerinfo_3',['HeaderInfo',['../structBonxai_1_1HeaderInfo.html',1,'Bonxai']]],
   ['height_4',['height',['../classeasynav_1_1SimpleMap.html#adc662cea5b05cd9852d5a4538586d662',1,'easynav::SimpleMap']]],
-  ['heuristic_5fscale_5',['Effect of &lt;span class=&quot;tt&quot;&gt;heuristic_scale&lt;/span&gt;',['../dir_940fda9e55c980df183eeb5f0adb62dc.html#autotoc_md260',1,'']]],
+  ['heuristic_5fscale_5',['Effect of &lt;span class=&quot;tt&quot;&gt;heuristic_scale&lt;/span&gt;',['../dir_940fda9e55c980df183eeb5f0adb62dc.html#autotoc_md265',1,'']]],
   ['heuristic_5fscale_5f_6',['heuristic_scale_',['../classeasynav_1_1CostmapPlanner.html#a4d32de66d943443ddb2dcb34fb16b718',1,'easynav::CostmapPlanner']]],
   ['history_5flength_5f_7',['history_length_',['../classrobot__localization_1_1UkfWrapper.html#a515a271cae5c27a3fbf19cd04536e950',1,'robot_localization::UkfWrapper']]],
   ['hit_8',['hit',['../classeasynav_1_1navmap_1_1PerceptionModel.html#a34e0569ddde55bdfaeedc7aded873f97',1,'easynav::navmap::PerceptionModel']]],
@@ -18,12 +18,12 @@ var searchData=
   ['humanassistancerecoverytestcase_15',['HumanAssistanceRecoveryTestCase',['../classHumanAssistanceRecoveryTestCase.html',1,'']]],
   ['hypo_5fmerge_5fangle_16',['hypo_merge_angle',['../structeasynav_1_1mhamcl_1_1MHAMCLLocalizer_1_1HypothesesParams.html#ae5258c337ac481c81566fcfac2f4f523',1,'easynav::mhamcl::MHAMCLLocalizer::HypothesesParams']]],
   ['hypo_5fmerge_5fdistance_17',['hypo_merge_distance',['../structeasynav_1_1mhamcl_1_1MHAMCLLocalizer_1_1HypothesesParams.html#a089def126b4d682c5a6dbdb808f66f00',1,'easynav::mhamcl::MHAMCLLocalizer::HypothesesParams']]],
-  ['hypotheses_18',['Hypotheses',['../dir_b362ec6e2871aebb41e9d7a33376f88c.html#autotoc_md118',1,'']]],
+  ['hypotheses_18',['Hypotheses',['../dir_b362ec6e2871aebb41e9d7a33376f88c.html#autotoc_md123',1,'']]],
   ['hypotheses_5f_19',['hypotheses_',['../classeasynav_1_1mhamcl_1_1MHAMCLLocalizer.html#a91b0281fa18a66bdced268d09daf8121',1,'easynav::mhamcl::MHAMCLLocalizer']]],
   ['hypotheses_5fparams_5f_20',['hypotheses_params_',['../classeasynav_1_1mhamcl_1_1MHAMCLLocalizer.html#a542da0ebf2b108418584bf20dadd7dd1',1,'easynav::mhamcl::MHAMCLLocalizer']]],
   ['hypotheses_5fpub_5f_21',['hypotheses_pub_',['../classeasynav_1_1mhamcl_1_1MHAMCLLocalizer.html#a65b5b4f20f0ee3fdab4991fb6a39651d',1,'easynav::mhamcl::MHAMCLLocalizer']]],
   ['hypotheses_5ftime_5f_22',['hypotheses_time_',['../classeasynav_1_1mhamcl_1_1MHAMCLLocalizer.html#a350c4c28031ebf9aba1782fc2c0703dd',1,'easynav::mhamcl::MHAMCLLocalizer']]],
   ['hypothesesparams_23',['HypothesesParams',['../structeasynav_1_1mhamcl_1_1MHAMCLLocalizer_1_1HypothesesParams.html',1,'easynav::mhamcl::MHAMCLLocalizer']]],
   ['hypothesis_24',['Hypothesis',['../classeasynav_1_1mhamcl_1_1MHAMCLLocalizer.html#a2d06696b425a5b66ba5e0e074c493c40',1,'easynav::mhamcl::MHAMCLLocalizer']]],
-  ['hypothesis_25',['Particle filter of each hypothesis',['../dir_b362ec6e2871aebb41e9d7a33376f88c.html#autotoc_md116',1,'']]]
+  ['hypothesis_25',['Particle filter of each hypothesis',['../dir_b362ec6e2871aebb41e9d7a33376f88c.html#autotoc_md121',1,'']]]
 ];
