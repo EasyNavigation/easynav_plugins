@@ -439,7 +439,7 @@ AMCLLocalizer::init_pose_callback(
   double var_y = cov[7];    // C(1,1)
 
   // Yaw variance
-  double var_yaw = cov[35]; // C(5,5)
+  double var_yaw = cov[35];  // C(5,5)
 
   // Ensure non-negative variances
   var_x = std::max(var_x, 0.0);
@@ -569,8 +569,6 @@ AMCLLocalizer::update_odom_from_tf()
   last_input_time_ = tf_msg.header.stamp;
 
   initialized_odom_ = true;
-
-
 }
 
 void

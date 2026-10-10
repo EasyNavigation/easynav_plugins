@@ -72,7 +72,10 @@ bool InflationFilter::inflate_layer_u8(
   float inscribed_radius)
 {
   using ::navmap::NavCelId;
-  using namespace navmap_ros;  // bring FREE_SPACE, LETHAL_OBSTACLE, etc.
+  using navmap_ros::FREE_SPACE;
+  using navmap_ros::INSCRIBED_INFLATED_OBSTACLE;
+  using navmap_ros::LETHAL_OBSTACLE;
+  using navmap_ros::NO_INFORMATION;
 
   if (nm.navcels.empty() || inflation_radius <= 0.0f || cost_scaling_factor <= 0.0f) {
     return false;
@@ -173,7 +176,7 @@ bool InflationFilter::inflate_layer_u8(
 
     if (dst[u] != NO_INFORMATION && dst[u] != LETHAL_OBSTACLE) {
       const std::uint8_t c = cost_from_dist(du);
-      if (c > dst[u]) {dst[u] = c;} // monotonic accumulation
+      if (c > dst[u]) {dst[u] = c;}  // monotonic accumulation
     }
 
     // Neighbor relaxation

@@ -38,7 +38,6 @@ namespace navmap
 
 ObstacleFilter::ObstacleFilter()
 {
-
 }
 
 void
@@ -112,8 +111,8 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
   {
     std::size_t operator()(const Key & k) const noexcept
     {
-      std::size_t h1 = std::hash<long long>{}(static_cast<long long>(k.ix));
-      std::size_t h2 = std::hash<long long>{}(static_cast<long long>(k.iy));
+      std::size_t h1 = std::hash<int64_t>{}(static_cast<int64_t>(k.ix));
+      std::size_t h2 = std::hash<int64_t>{}(static_cast<int64_t>(k.iy));
       return h1 ^ (h2 + 0x9e3779b97f4a7c15ULL + (h1 << 6) + (h1 >> 2));
     }
   };

@@ -1,3 +1,18 @@
+// Copyright 2025 Intelligent Robotics Lab
+//
+// This file is part of the project Easy Navigation (EasyNav in short)
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "easynav_common/Parameters.hpp"
 #include "easynav_fusion_localizer/FusionLocalizer.hpp"
 
@@ -21,9 +36,7 @@ namespace easynav
 
 void FusionLocalizer::on_initialize()
 {
-
   try {
-
     auto node = get_node();
 
     // Subscribe to initial pose
@@ -103,13 +116,13 @@ void FusionLocalizer::on_initialize()
     if (has_global_filter_) {
       easynav::declare_parameter_if_absent(
         *localizer_node, plugin_name + ".latitude_origin",
-        double(0.0));
+        0.0);
       easynav::declare_parameter_if_absent(
         *localizer_node, plugin_name + ".longitude_origin",
-        double(0.0));
+        0.0);
       easynav::declare_parameter_if_absent(
         *localizer_node, plugin_name + ".altitude_origin",
-        double(0.0));
+        0.0);
       easynav::declare_parameter_if_absent(
         *localizer_node, plugin_name + ".navsatfix_topic",
         std::string("gps/filtered"));
@@ -120,7 +133,6 @@ void FusionLocalizer::on_initialize()
       navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
         navsatfix_topic_, rclcpp::QoS(10));
     }
-
   } catch (const std::exception & e) {
     RCLCPP_FATAL(
       get_node()->get_logger(), "Critical failure initializing UkfWrapper: %s",
@@ -252,7 +264,6 @@ void FusionLocalizer::update_rt(NavState & nav_state)
 
 void FusionLocalizer::update([[maybe_unused]] NavState & nav_state)
 {
-
 }
 
 geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose(
@@ -289,7 +300,7 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
 
   pose_msg.pose.covariance.fill(0.0);
 
-  double default_var = 1.0; // 1 meter variance standard
+  double default_var = 1.0;  // 1 meter variance standard
 
   if (navsat_msg.position_covariance_type ==
     sensor_msgs::msg::NavSatFix::COVARIANCE_TYPE_DIAGONAL_KNOWN)

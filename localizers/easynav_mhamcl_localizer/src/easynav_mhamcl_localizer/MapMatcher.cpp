@@ -57,13 +57,13 @@ MapMatcher::half_scale(const easynav::Costmap2D & in)
 
       auto has = [&costs](unsigned char v) {return std::find(costs, costs + 4, v) != costs + 4;};
 
+      const bool unknown = std::all_of(
+        costs, costs + 4, [](unsigned char c) {return c == easynav::NO_INFORMATION;});
       if (has(easynav::LETHAL_OBSTACLE)) {
         out->setCost(i, j, easynav::LETHAL_OBSTACLE);
       } else if (has(easynav::FREE_SPACE)) {
         out->setCost(i, j, easynav::FREE_SPACE);
-      } else if (std::all_of(
-          costs, costs + 4, [](unsigned char c) {return c == easynav::NO_INFORMATION;}))
-      {
+      } else if (unknown) {
         out->setCost(i, j, easynav::NO_INFORMATION);
       } else {
         out->setCost(i, j, costs[0]);

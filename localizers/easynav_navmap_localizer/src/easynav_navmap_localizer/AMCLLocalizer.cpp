@@ -24,22 +24,17 @@
 #include <cmath>
 #include <iostream>
 
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-
+#include "pcl/point_cloud.h"
+#include "pcl/point_types.h"
 #include "bonxai/bonxai.hpp"
 #include "bonxai/probabilistic_map.hpp"
-
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
-
 #include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_sensors/types/IMUPerception.hpp"
-
 #include "navmap_core/NavMap.hpp"
-
 #include "easynav_navmap_localizer/AMCLLocalizer.hpp"
 #include "easynav_localizer/LocalizerNode.hpp"
 
@@ -171,7 +166,7 @@ using ProgressCallback = std::function<void (float)>;
 /// Expect the fixed comma value returned by logods()
 [[nodiscard]] static constexpr float prob(int32_t logods_fixed)
 {
-  float logods = float(logods_fixed) * 1e-6;
+  float logods = static_cast<float>(logods_fixed) * 1e-6;
   return 1.0 - 1.0 / (1.0 + std::exp(logods));
 }
 
@@ -180,7 +175,8 @@ inflate_map(
   const std::shared_ptr<Bonxai::ProbabilisticMap> & src,
   double sigma, double p_min, ProgressCallback progress = nullptr)
 {
-  using namespace Bonxai;
+  using Bonxai::CoordT;
+  using Bonxai::ProbabilisticMap;
   if (!src || sigma <= 0.0) {return nullptr;}
 
   const double res = src->grid().voxelSize();
@@ -217,7 +213,8 @@ inflate_map(
 
   struct KeyHash { size_t operator()(const CoordT & c) const noexcept
     {
-      return (size_t)c.x * 73856093u ^ (size_t)c.y * 19349663u ^ (size_t)c.z * 83492791u;
+      return static_cast<size_t>(c.x) * 73856093u ^ static_cast<size_t>(c.y) * 19349663u ^
+             static_cast<size_t>(c.z) * 83492791u;
     }
   };
   struct KeyEq { bool operator()(const CoordT & a, const CoordT & b) const noexcept
@@ -303,17 +300,17 @@ inline bool ray_occluded_dda(
       }
     }
     if (dx >= dy && dx >= dz) {
-      x += sx; ey += dy; ez += dz; if (ey >= dx) {y += sy; ey -= dx;} if (ez >= dx) {
-        z += sz; ez -= dx;
-      }
+      x += sx; ey += dy; ez += dz;
+      if (ey >= dx) {y += sy; ey -= dx;}
+      if (ez >= dx) {z += sz; ez -= dx;}
     } else if (dy >= dx && dy >= dz) {
-      y += sy; ex += dx; ez += dz; if (ex >= dy) {x += sx; ex -= dy;} if (ez >= dy) {
-        z += sz; ez -= dy;
-      }
+      y += sy; ex += dx; ez += dz;
+      if (ex >= dy) {x += sx; ex -= dy;}
+      if (ez >= dy) {z += sz; ez -= dy;}
     } else {
-      z += sz; ex += dx; ey += dy; if (ex >= dz) {x += sx; ex -= dz;} if (ey >= dz) {
-        y += sy; ey -= dz;
-      }
+      z += sz; ex += dx; ey += dy;
+      if (ex >= dz) {x += sx; ex -= dz;}
+      if (ey >= dz) {y += sy; ey -= dz;}
     }
   }
   return false;
@@ -331,7 +328,8 @@ struct CoordHash
 {
   size_t operator()(const Bonxai::CoordT & c) const noexcept
   {
-    return (size_t)c.x * 73856093u ^ (size_t)c.y * 19349663u ^ (size_t)c.z * 83492791u;
+    return static_cast<size_t>(c.x) * 73856093u ^ static_cast<size_t>(c.y) * 19349663u ^
+           static_cast<size_t>(c.z) * 83492791u;
   }
 };
 struct CoordEq
@@ -342,7 +340,7 @@ struct CoordEq
   }
 };
 
-} // namespace
+}  // namespace
 
 // ---------- AMCLLocalizer ----------
 AMCLLocalizer::AMCLLocalizer()
@@ -809,7 +807,7 @@ void AMCLLocalizer::predict(NavState & nav_state)
 struct SensorBundle
 {
   std::string frame_id;
-  pcl::PointCloud<pcl::PointXYZ> cloud; // in sensor frame
+  pcl::PointCloud<pcl::PointXYZ> cloud;  // in sensor frame
 };
 
 static inline std::string get_frame_id_from(const PointPerception & pp)
@@ -953,7 +951,6 @@ void AMCLLocalizer::correct(NavState & nav_state)
           b.frame_id);
 
         // const tf2::Transform & t = T_bf_sensor_cache[b.frame_id];
-
       } catch (const tf2::TransformException & ex) {
         RCLCPP_WARN(
           get_node()->get_logger(), "TF bf->%s failed: %s", b.frame_id.c_str(),

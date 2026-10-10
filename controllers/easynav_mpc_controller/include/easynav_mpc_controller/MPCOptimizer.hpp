@@ -17,6 +17,8 @@
 #ifndef EASYNAV_MPC_CONTROLLER__MPCOPTIMIZER_HPP_
 #define EASYNAV_MPC_CONTROLLER__MPCOPTIMIZER_HPP_
 
+#include <vector>
+
 #include "geometry_msgs/msg/pose.hpp"
 #include "nav_msgs/msg/path.hpp"
 #include "pcl/point_cloud.h"
@@ -76,7 +78,6 @@ private:
   Eigen::Matrix2d R_ {{0.1, 0.0}, {0.0, 0.1}};    ///< Effort Cost Matrix
   Eigen::Matrix2d Rd_ {{0.1, 0.0}, {0.0, 0.1}};   ///< Smooth Cost Matrix
   double qtheta_ {3.0};                           ///< Angular cost value.
-
 };
 
 /// \brief A MPC Optimizer class.
@@ -101,7 +102,8 @@ public:
 
   /// \brief Wrap for real cost function
   /// \param u std::vector<double> Velocity vector to be optimized
-  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this implementation.
+  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this
+  /// implementation.
   /// \param data MPCParameter pointer with parameters used by optimizer
   /// \return double cost value used by nlOpt in internal callback
   double cost_function(const std::vector<double> & u, [[maybe_unused]]
@@ -109,13 +111,13 @@ public:
 
   /// \brief Real cost function with static propierties
   /// \param u std::vector<double> Velocity vector to be optimized
-  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this implementation.
+  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this
+  /// implementation.
   /// \param data MPCParameter pointer with parameters used by optimizer
   /// \return double cost value used by nlOpt in internal callback
   static double nlopt_cost_callback(
     const std::vector<double> & x,
     std::vector<double> & grad, void * data);
-
 };
 
 /// \brief Struct used as element in callback.

@@ -1,10 +1,26 @@
+// Copyright 2025 Intelligent Robotics Lab
+//
+// This file is part of the project Easy Navigation (EasyNav in short)
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include "easynav_mppi_controller/MPPIOptimizer.hpp"
-#include "tf2/utils.hpp"
-#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 #include <cmath>
 #include <limits>
 #include <algorithm>
+
+#include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 namespace easynav
 {
@@ -260,7 +276,7 @@ MPPIResult MPPIOptimizer::compute_control(
   }
 
   if (min_v_sample < 0.05) {
-    lambda_ = std::min(5.0, lambda_ * 1.2); // increase lambda if tends to zero (stop)
+    lambda_ = std::min(5.0, lambda_ * 1.2);  // increase lambda if tends to zero (stop)
   }
 
   // Softmin weighting of samples

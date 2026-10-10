@@ -14,16 +14,14 @@
 // limitations under the License.
 
 
-#ifndef EASYNAV_NAVMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
-#define EASYNAV_NAVMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
+#ifndef EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__OBSTACLEFILTER_HPP_
+#define EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__OBSTACLEFILTER_HPP_
 
 #include <string>
+#include <limits>
 
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
-
-#include <limits>
-
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
 
 namespace easynav
@@ -45,11 +43,11 @@ class ObstacleFilter : public NavMapFilter
 public:
   ObstacleFilter();
 
-  virtual void on_initialize() override;
-  virtual void update(::easynav::NavState & nav_state) override;
+  void on_initialize() override;
+  void update(::easynav::NavState & nav_state) override;
 
-  virtual bool is_adding_layer() override {return true;}
-  virtual std::string get_layer_name() override {return "obstacles";}
+  bool is_adding_layer() override {return true;}
+  std::string get_layer_name() override {return "obstacles";}
 
 private:
   ::navmap::NavMap navmap_;
@@ -62,4 +60,4 @@ private:
 
 }  // namespace navmap
 }  // namespace easynav
-#endif  // EASYNAV_NAVMAP_MAPS_MANAGER__OBSTACLEFILTER_HPP_
+#endif  // EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__OBSTACLEFILTER_HPP_

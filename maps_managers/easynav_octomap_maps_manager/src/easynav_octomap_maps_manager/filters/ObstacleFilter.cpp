@@ -32,7 +32,6 @@ namespace octomap
 
 ObstacleFilter::ObstacleFilter()
 {
-
 }
 
 void

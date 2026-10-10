@@ -143,7 +143,8 @@ protected:
     return nav_state_.get<::navmap::NavMap>("map.navmap");
   }
 
-  // Highest value of the two triangles of the cell at (x, y): a voxel center lies on their diagonal.
+  // Highest value of the two triangles of the cell at (x, y): a voxel center lies on their
+  // diagonal.
   static std::uint8_t cell_at(const ::navmap::NavMap & nm, float x, float y)
   {
     return std::max(obstacles_at(nm, x + 0.02f, y - 0.02f), obstacles_at(nm, x - 0.02f, y + 0.02f));

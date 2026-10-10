@@ -145,7 +145,6 @@ BonxaiMapsManager::on_initialize()
     "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
-
       update_from_occ(*msg);
       publish_map();
     });
@@ -309,7 +308,6 @@ BonxaiMapsManager::publish_map()
   bonxai_msg_.header.frame_id = tf_info.map_frame;
   bonxai_msg_.header.stamp = this->get_node()->now();
   bonxai_pub_->publish(bonxai_msg_);
-
 }
 
 }  // namespace easynav_bonxai

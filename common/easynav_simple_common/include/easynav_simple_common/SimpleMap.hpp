@@ -16,11 +16,13 @@
 /// \file
 /// \brief Declaration of the SimpleMap type.
 
-#ifndef EASYNAV_PLANNER__SIMPLEMAP_HPP_
-#define EASYNAV_PLANNER__SIMPLEMAP_HPP_
+#ifndef EASYNAV_SIMPLE_COMMON__SIMPLEMAP_HPP_
+#define EASYNAV_SIMPLE_COMMON__SIMPLEMAP_HPP_
 
 #include <vector>
 #include <utility>
+#include <memory>
+#include <string>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 
@@ -213,4 +215,4 @@ private:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_PLANNER__SIMPLEMAP_HPP_
+#endif  // EASYNAV_SIMPLE_COMMON__SIMPLEMAP_HPP_

@@ -14,10 +14,11 @@
 // limitations under the License.
 
 
-#ifndef EASYNAV_PLANNER__FILTERS__OCTOMAPFILTER_HPP_
-#define EASYNAV_PLANNER__FILTERS__OCTOMAPFILTER_HPP_
+#ifndef EASYNAV_OCTOMAP_MAPS_MANAGER__FILTERS__OCTOMAPFILTER_HPP_
+#define EASYNAV_OCTOMAP_MAPS_MANAGER__FILTERS__OCTOMAPFILTER_HPP_
 
 #include <string>
+#include <memory>
 
 #include "easynav_octomap_maps_manager/octomap.hpp"
 #include "easynav_common/types/NavState.hpp"
@@ -57,4 +58,4 @@ protected:
 };
 }  // namespace octomap
 }  // namespace easynav
-#endif  // EASYNAV_PLANNER__FILTERS__OCTOMAPFILTER_HPP_
+#endif  // EASYNAV_OCTOMAP_MAPS_MANAGER__FILTERS__OCTOMAPFILTER_HPP_

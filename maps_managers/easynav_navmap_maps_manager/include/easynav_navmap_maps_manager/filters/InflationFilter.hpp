@@ -35,8 +35,8 @@ class InflationFilter : public NavMapFilter
 public:
   InflationFilter();
 
-  virtual void on_initialize() override;
-  virtual void update(::easynav::NavState & nav_state) override;
+  void on_initialize() override;
+  void update(::easynav::NavState & nav_state) override;
 
   bool inflate_layer_u8(
     ::navmap::NavMap & nm,
@@ -59,4 +59,4 @@ protected:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__IINFLATIONFILTER_HPP_
+#endif  // EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_

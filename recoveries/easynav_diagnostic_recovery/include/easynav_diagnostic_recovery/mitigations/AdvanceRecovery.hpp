@@ -19,9 +19,9 @@
 #define EASYNAV_DIAGNOSTIC_RECOVERY__MITIGATIONS__ADVANCERECOVERY_HPP_
 
 #include <optional>
+#include <utility>
 
 #include "rclcpp/time.hpp"
-
 #include "easynav_diagnostic_recovery/RecoveryMitigationBase.hpp"
 
 namespace easynav

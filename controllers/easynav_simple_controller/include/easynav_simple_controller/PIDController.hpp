@@ -76,7 +76,7 @@ private:
 
   double prev_error_;       ///< Previous error value (for derivative term).
   double int_error_;        ///< Accumulated integral error.
-  double integral_limit_ {0.0}; ///< If >0, clamps the integral term to ±integral_limit_.
+  double integral_limit_ {0.0};  ///< If >0, clamps the integral term to ±integral_limit_.
 };
 
 }  // namespace easynav

@@ -241,7 +241,7 @@ SerestController::ref_heading_and_curvature(
   if (i > 0 && (s - s_i) < b) {
     Vec2 Tim1 = seg_dir(i - 1);
     double psi_im1 = atan2dir(Tim1);
-    double w = 1.0 / (1.0 + std::exp(-( (s - s_i) / b ))); // sigmoid in [s_i, s_i+b]
+    double w = 1.0 / (1.0 + std::exp(-( (s - s_i) / b )));  // sigmoid in [s_i, s_i+b]
     // Circular interpolation of headings
     double sx = (1.0 - w) * std::cos(psi_im1) + w * std::cos(psi_i);
     double sy = (1.0 - w) * std::sin(psi_im1) + w * std::sin(psi_i);
@@ -249,7 +249,7 @@ SerestController::ref_heading_and_curvature(
 
     // kappa surrogate ~ dpsi/ds ≈ (Δψ/b) σ'(·)
     double dpsi = std::atan2(std::sin(psi_i - psi_im1), std::cos(psi_i - psi_im1));
-    double sigma_prime = (w * (1 - w)) / b; // derivada de logística escalada
+    double sigma_prime = (w * (1 - w)) / b;  // derivada de logística escalada
     rk.kappa_hat = std::clamp(dpsi * sigma_prime, -kappa_max_, kappa_max_);
   }
 
@@ -257,7 +257,7 @@ SerestController::ref_heading_and_curvature(
   if (i + 1 < pd.pts.size() - 1 && (s_ip1 - s) < b) {
     Vec2 Tip1 = seg_dir(i + 1);
     double psi_ip1 = atan2dir(Tip1);
-    double w = 1.0 / (1.0 + std::exp(-( (s_ip1 - s) / b ))); // symmetric
+    double w = 1.0 / (1.0 + std::exp(-( (s_ip1 - s) / b )));  // symmetric
     // Blend between i and i + 1
     double sx = (1.0 - w) * std::cos(psi_i) + w * std::cos(psi_ip1);
     double sy = (1.0 - w) * std::sin(psi_i) + w * std::sin(psi_ip1);
@@ -281,10 +281,10 @@ SerestController::frenet_errors(
 {
   // Normal vector to the right of the tangent
   Vec2 T = v2(std::cos(psi_ref), std::sin(psi_ref));
-  Vec2 N = v2(-T.y, T.x); // 90º to the left (convention)
+  Vec2 N = v2(-T.y, T.x);  // 90º to the left (convention)
   Vec2 err = robot_xy - prj.closest;
 
-  e_y = dot(err, N); // signed lateral distance
+  e_y = dot(err, N);  // signed lateral distance
   e_theta = std::atan2(std::sin(robot_yaw - psi_ref), std::cos(robot_yaw - psi_ref));
 }
 
@@ -505,7 +505,7 @@ SerestController::should_turn_in_place(
 {
   // Keep compatibility with the signature, but ignore turn_in_place_thr
   // and use two internal thresholds without exposing parameters.
-  const double thr_enter = 60.0 * M_PI / 180.0; // enter TiP if |e_theta| > 60°
+  const double thr_enter = 60.0 * M_PI / 180.0;  // enter TiP if |e_theta| > 60°
   // const double thr_exit = 35.0 * PI / 180.0; // exit TiP if |e_theta| < 35°
 
   // Do not allow reverse "shortcut" in this decision: if reverse is not allowed,
@@ -704,11 +704,10 @@ SerestController::update_rt(NavState & nav_state)
     }
 
     // Hysteresis on the TiP state
+    const bool tip_exit = std::fabs(e_theta) < thr_exit || prj.s_star > (near_start_s - 0.10);
     if (!tip_active_ && tip_request && std::fabs(e_theta) > thr_enter) {
       tip_active_ = true;
-    } else if (tip_active_ &&
-      (std::fabs(e_theta) < thr_exit || prj.s_star > (near_start_s - 0.10)))
-    {
+    } else if (tip_active_ && tip_exit) {
       tip_active_ = false;
     }
 
@@ -854,5 +853,4 @@ SerestController::update_rt(NavState & nav_state)
 
 }  // namespace easynav
 
-#include <pluginlib/class_list_macros.hpp>
 PLUGINLIB_EXPORT_CLASS(easynav::SerestController, easynav::ControllerMethodBase)

@@ -14,19 +14,15 @@
 // limitations under the License.
 
 
-#include "easynav_common/Parameters.hpp"
-#include "easynav_routes_maps_manager/filters/RoutesCostmapFilter.hpp"
-
 #include <algorithm>
 #include <limits>
 #include <vector>
 
+#include "easynav_common/Parameters.hpp"
+#include "easynav_routes_maps_manager/filters/RoutesCostmapFilter.hpp"
 #include "easynav_common/types/NavState.hpp"
-
 #include "easynav_costmap_common/costmap_2d.hpp"
-
 #include "easynav_routes_maps_manager/RoutesMapsManager.hpp"
-
 #include "easynav_common/RTTFBuffer.hpp"
 
 namespace easynav

@@ -868,9 +868,8 @@ protected:
   std::string tf_prefix_;
   std::vector<CallbackData> gps_callbackData_arr_;
   bool local_filter_;
-
 };
 
 }  // namespace robot_localization
 
-#endif  // ROBOT_LOCALIZATION__ROS_FILTER_HPP_
+#endif  // EASYNAV_FUSION_LOCALIZER__UKF_WRAPPER_HPP_
