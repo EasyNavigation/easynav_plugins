@@ -41,3 +41,8 @@ target_link_libraries(regulated_pp_faulty_planner_tests
   easynav_controller::easynav_controller
   easynav_planner::faulty_planner
 )
+
+ament_add_gtest(regulated_pp_goal_approach_tests regulated_pp_goal_approach_tests.cpp)
+target_link_libraries(regulated_pp_goal_approach_tests
+  ${PROJECT_NAME}
+)

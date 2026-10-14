@@ -118,9 +118,9 @@ protected:
   /// Remaining-path distance at which to start slowing.
   double approach_velocity_scaling_dist_{1.0};
 
-  // --- Goal tolerances (fallback values if "goal_tolerance.*" is not present in NavState) ---
-  double xy_goal_tolerance_{0.25};   ///< Fallback positional tolerance to the goal (m).
-  double yaw_goal_tolerance_{0.25};  ///< Fallback angular tolerance to the goal (rad).
+  // --- Goal tolerances: the strictest of these and the system's "goal_tolerance.*" applies ---
+  double xy_goal_tolerance_{0.25};   ///< Positional tolerance to the goal (m).
+  double yaw_goal_tolerance_{0.25};  ///< Angular tolerance to the goal (rad).
 
   rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr lookahead_point_pub_;
   rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr curvature_lookahead_point_pub_;
@@ -133,6 +133,8 @@ protected:
   double last_angular_vel_{0.0};
   /// Whether the controller is currently rotating in place.
   bool is_rotating_to_heading_{false};
+  bool aligning_to_goal_{false};             ///< Turning to the goal heading (with hysteresis).
+  geometry_msgs::msg::Pose aligning_goal_;   ///< Goal that aligning_to_goal_ refers to.
   geometry_msgs::msg::TwistStamped cmd_vel_;  ///< Current velocity command.
 
   /// \brief Publishes a zero-velocity command and resets the open-loop velocity feedback.
