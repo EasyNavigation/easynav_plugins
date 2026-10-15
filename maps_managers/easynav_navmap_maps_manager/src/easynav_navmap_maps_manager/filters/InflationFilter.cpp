@@ -167,6 +167,7 @@ void InflationFilter::update(::easynav::NavState & nav_state)
   }
 
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
+  if (navmap_.navcels.empty()) {return;}  // no map yet (e.g. a local map before its first build)
 
   const bool ok = inflate_layer_u8(
     navmap_,

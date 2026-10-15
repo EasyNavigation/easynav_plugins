@@ -76,6 +76,9 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
 
   navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  // The NavMap's own frame (a local NavMap is in the robot frame), the map frame by default
+  const std::string map_frame = !navmap_.surfaces.empty() && !navmap_.surfaces[0].frame_id.empty() ?
+    navmap_.surfaces[0].frame_id : tf_info.map_frame;
 
   // Start from the static map, if the NavMap has one (built from an occupancy grid): what the
   // sensors do not see right now (behind something, far, too low) is still an obstacle.
@@ -96,7 +99,7 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     .downsample(downsample_resolution_)
     .fuse(tf_info.robot_frame)
     .filter({-max_range_, -max_range_, NAN}, {max_range_, max_range_, max_height_}, false)
-    .fuse(tf_info.map_frame)
+    .fuse(map_frame)
     .as_points();
 
   // The robot's position, for min_height_per_meter
@@ -105,7 +108,7 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
   if (min_height_per_meter_ > 0.0) {
     try {
       const auto tf = RTTFBuffer::getInstance()->lookupTransform(
-        tf_info.map_frame, tf_info.robot_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
+        map_frame, tf_info.robot_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
       robot_xy = {static_cast<float>(tf.transform.translation.x),
         static_cast<float>(tf.transform.translation.y)};
       robot_known = true;

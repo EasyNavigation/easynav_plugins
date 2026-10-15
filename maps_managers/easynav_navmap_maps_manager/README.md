@@ -44,6 +44,21 @@ All parameters are declared under the plugin namespace, i.e.
 | `<plugin>.pcd_path_file` | `string` | `""` | Relative path (inside the package) to a point cloud (PCD/PLY) used to build a NavMap surface. |
 | `<plugin>.filters` | `list<string>` | `[]` | Ordered list of filter plugin names to be applied after map loading (e.g. `["obstacles", "inflation"]`). |
 
+### Local mode
+
+With `<plugin>.local.enabled`, the maps manager keeps a NavMap around the robot, in its frame, rebuilt continuously from the point perceptions in NavState (scans accumulated in `odom` over `accumulate_time`, cropped to the window and meshed with `navmap_ros::from_points`). Each rebuild is published on `<plugin>/map` and replaces the map in NavState; the filters run on it as usual (the ObstacleFilter works in the NavMap's own frame). A map loaded from a file is replaced at the first rebuild.
+
+| Name | Type | Default | Description |
+|---|---|---:|---|
+| `<plugin>.local.enabled` | `bool` | `false` | Enable the local mode. |
+| `<plugin>.local.frame` | `string` | robot frame | Frame of the NavMap (e.g. `base_footprint`, ground at z = 0). |
+| `<plugin>.local.range` | `double` | `10.0` | Half side (m) of the square window around the robot. |
+| `<plugin>.local.min_z`, `<plugin>.local.max_z` | `double` | `-3.0`, `3.0` | Height band (m, in `frame`) of the points used. |
+| `<plugin>.local.accumulate_time` | `double` | `1.0` | Scans put together before meshing (s): a single 3D scan is sparse rings. |
+| `<plugin>.local.freq` | `double` | `2.0` | Rebuilds per second (`<= 0`: every update). |
+| `<plugin>.local.downsample` | `double` | `0.1` | Voxel (m) the accumulated points are reduced to. |
+| `<plugin>.local.resolution`, `max_dz`, `max_slope_deg`, `min_clearance`, `min_surface_area`, `max_hole_area` | `double` | `0.3`, `0.25`, `30`, `1.0`, `1.0`, `1.0` | Mesher parameters (`navmap_ros::BuildParams`). |
+
 ### Filter Plugins
 
 #### **ObstacleFilter**
