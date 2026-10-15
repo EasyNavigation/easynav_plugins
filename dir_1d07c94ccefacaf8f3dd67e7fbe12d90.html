@@ -110,7 +110,7 @@ Directory dependency graph for easynav_navmap_maps_manager:</div>
 <area shape="rect" href="dir_000136_000102.html" title="6" alt="" coords="267,124,274,139"/>
 <area shape="rect" href="dir_191014c8ae5067e82ee00eb3abad1220.html" title="tests" alt="" coords="287,70,337,96"/>
 <area shape="poly" href="dir_000160_000102.html" alt="" coords="309,98,289,139,284,136,304,95"/>
-<area shape="rect" href="dir_000160_000102.html" title="5" alt="" coords="292,131,299,146"/>
+<area shape="rect" href="dir_000160_000102.html" title="8" alt="" coords="292,131,299,146"/>
 <area shape="rect" href="dir_1d07c94ccefacaf8f3dd67e7fbe12d90.html" alt="" coords="27,52,348,188"/>
 <area shape="rect" href="dir_0085665aa3dcf1c11f094757a0c11b94.html" title="maps_managers" alt="" coords="16,16,359,199"/>
 </map>
@@ -210,11 +210,12 @@ Filter Plugins</h2>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md198"></a>
 <b>ObstacleFilter</b></h3>
 <ul>
-<li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter</span></li>
+<li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager/ObstaclesFilter</span></li>
 <li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1navmap_1_1ObstacleFilter.html" title="Marks as obstacles the NavCels under the points that rise above the NavMap surface.">easynav::navmap::ObstacleFilter</a></span></li>
 <li><b>Description:</b> <br  />
  Detects occupied NavCels from the point perceptions in <span class="tt">NavState</span> and marks them as <span class="tt">LETHAL_OBSTACLE</span> in the <span class="tt">"obstacles"</span> layer, on top of the static map's <span class="tt">"occupancy"</span> layer (if any). <br  />
- The points are downsampled, those within <span class="tt">max_range</span> and below <span class="tt">max_height</span> (robot frame) are grouped in 0.3 m columns, and a column is an obstacle when its highest point is more than <span class="tt">min_height</span> (plus <span class="tt">min_height_per_meter</span> for each meter from the robot) above the NavMap surface under it (along the surface's normal). So a 2D laser detects obstacles too, and the ground or a ramp, being on the surface, is not one.</li>
+ The points are downsampled, those within <span class="tt">max_range</span> and below <span class="tt">max_height</span> (robot frame) are grouped in 0.3 m columns, and a column is an obstacle when its highest point is more than <span class="tt">min_height</span> (plus <span class="tt">min_height_per_meter</span> for each meter from the robot) above the NavMap surface under it (along the surface's normal). So a 2D laser detects obstacles too, and the ground or a ramp, being on the surface, is not one. <br  />
+ The layer is rebuilt from the static map only when the map changes; each cycle writes just the cells that become obstacles or stop being one.</li>
 </ul>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -238,10 +239,10 @@ Filter Plugins</h2>
 <b>InflationFilter</b></h3>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</span></li>
-<li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1navmap_1_1InflationFilter.html">easynav::navmap::InflationFilter</a></span></li>
+<li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1navmap_1_1InflationFilter.html" title="&quot;inflated_obstacles&quot;: cost by distance (along the surface) to the obstacles of the &quot;obstacles&quot; layer ...">easynav::navmap::InflationFilter</a></span></li>
 <li><b>Description:</b> <br  />
  Expands obstacle information from the <span class="tt">"obstacles"</span> layer into an <span class="tt">"inflated_obstacles"</span> layer, assigning graded costs depending on distance to obstacles and map boundaries (NavCels with missing neighbors). <br  />
- This filter mimics the behavior of <span class="tt">costmap_2d::InflationLayer</span> but operates on the NavMap triangular mesh.</li>
+ This filter mimics the behavior of <span class="tt">costmap_2d::InflationLayer</span> but operates on the NavMap triangular mesh. Distances are exact and measured along the surface (<span class="tt">navmap::DistanceField</span>), and they are updated incrementally: only the obstacle cells that appear or disappear move the field, and only the cells whose cost changes are rewritten.</li>
 </ul>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -257,6 +258,7 @@ Filter Plugins</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Output Layer:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Writes to <span class="tt">"inflated_obstacles"</span>.  </td></tr>
 </table>
+<p>The filters update the map in <span class="tt">NavState</span> in place and record which cells they change; the maps manager publishes those changes and clears them at the end of each cycle.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md200"></a>
 Interfaces (Topics and Services)</h1>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md201"></a>
@@ -267,7 +269,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/map</span>  </td><td class="markdownTableBodyNone"><span class="tt">navmap_ros_interfaces/msg/NavMap</span>  </td><td class="markdownTableBodyNone">Publishes the full NavMap.  </td><td class="markdownTableBodyNone">depth=1  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/map_updates</span>  </td><td class="markdownTableBodyNone"><span class="tt">navmap_ros_interfaces/msg/NavMapLayer</span>  </td><td class="markdownTableBodyNone">Publishes incremental layer updates.  </td><td class="markdownTableBodyNone">depth=100  </td></tr>
+<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/map_updates</span>  </td><td class="markdownTableBodyNone"><span class="tt">navmap_ros_interfaces/msg/NavMapLayer</span>  </td><td class="markdownTableBodyNone">Layer updates of the filters: only the cells that changed (sparse <span class="tt">NavMapLayer</span>, or the whole layer if many changed), only when someone subscribes; a new subscriber gets the whole layers.  </td><td class="markdownTableBodyNone">depth=100  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_occ_map</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/OccupancyGrid</span>  </td><td class="markdownTableBodyNone">Input occupancy grid to import into NavMap.  </td><td class="markdownTableBodyNone">depth=1, transient_local, reliable  </td></tr>
 <tr class="markdownTableRowEven">

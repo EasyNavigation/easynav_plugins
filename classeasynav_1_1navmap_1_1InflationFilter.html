@@ -104,13 +104,16 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 </div><!--header-->
 <div class="contents">
 
+<p>"inflated_obstacles": cost by distance (along the surface) to the obstacles of the "obstacles" layer and, optionally, to the open edges of the NavMap.  
+ <a href="#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hpp_source.html">InflationFilter.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for InflationFilter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1navmap_1_1InflationFilter__inherit__graph.png" border="0" usemap="#aInflationFilter_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="aInflationFilter_inherit__map" id="aInflationFilter_inherit__map">
-<area shape="rect" title=" " alt="" coords="7,79,103,105"/>
+<area shape="rect" title="&quot;inflated_obstacles&quot;: cost by distance (along the surface) to the obstacles of the &quot;obstacles&quot; layer ..." alt="" coords="7,79,103,105"/>
 <area shape="rect" href="classeasynav_1_1navmap_1_1NavMapFilter.html" title=" " alt="" coords="5,5,105,31"/>
 <area shape="poly" title=" " alt="" coords="58,46,58,79,52,79,52,46"/>
 </map>
@@ -120,21 +123,29 @@ Collaboration diagram for InflationFilter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1navmap_1_1InflationFilter__coll__graph.png" border="0" usemap="#aInflationFilter_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aInflationFilter_coll__map" id="aInflationFilter_coll__map">
-<area shape="rect" title=" " alt="" coords="337,295,432,321"/>
-<area shape="rect" href="classeasynav_1_1navmap_1_1NavMapFilter.html" title=" " alt="" coords="180,117,280,143"/>
-<area shape="poly" title=" " alt="" coords="244,155,277,211,299,241,325,269,359,292,356,297,321,273,295,245,273,214,240,158"/>
+<area shape="rect" title="&quot;inflated_obstacles&quot;: cost by distance (along the surface) to the obstacles of the &quot;obstacles&quot; layer ..." alt="" coords="641,328,736,353"/>
+<area shape="rect" href="classeasynav_1_1navmap_1_1NavMapFilter.html" title=" " alt="" coords="352,70,451,96"/>
+<area shape="poly" title=" " alt="" coords="467,69,504,67,544,70,584,81,619,101,642,126,660,155,673,188,682,221,690,282,691,327,685,327,685,283,677,222,668,189,656,158,638,129,615,105,582,86,543,75,504,72,467,74"/>
 <area shape="rect" title=" " alt="" coords="5,5,180,46"/>
-<area shape="poly" title=" " alt="" coords="112,57,124,75,140,91,161,104,184,114,182,119,159,109,137,95,120,79,107,61"/>
-<area shape="rect" title=" " alt="" coords="203,13,256,38"/>
-<area shape="poly" title=" " alt="" coords="232,54,232,116,227,116,227,54"/>
-<area shape="rect" title=" " alt="" coords="326,13,371,38"/>
-<area shape="poly" title=" " alt="" coords="344,55,335,76,321,95,302,109,281,119,279,114,299,104,317,91,331,73,339,52"/>
-<area shape="rect" title=" " alt="" coords="304,117,374,143"/>
-<area shape="poly" title=" " alt="" coords="336,158,331,212,334,242,343,270,352,282,364,292,361,297,348,286,338,272,329,243,326,212,330,158"/>
-<area shape="rect" title=" " alt="" coords="402,117,461,143"/>
-<area shape="poly" title=" " alt="" coords="430,158,421,211,404,272,394,295,389,293,399,270,415,210,425,157"/>
-<area shape="rect" title=" " alt="" coords="560,117,606,143"/>
-<area shape="poly" title=" " alt="" coords="588,159,587,185,583,216,573,247,554,273,534,285,503,294,433,305,432,299,502,288,532,280,551,269,568,244,578,215,582,185,583,158"/>
+<area shape="poly" title=" " alt="" coords="196,34,307,52,361,67,360,72,306,58,195,39"/>
+<area shape="rect" title=" " alt="" coords="66,70,119,96"/>
+<area shape="poly" title=" " alt="" coords="135,80,351,80,351,86,135,86"/>
+<area shape="rect" title=" " alt="" coords="70,124,115,149"/>
+<area shape="poly" title=" " alt="" coords="130,131,211,124,306,109,361,94,362,99,307,114,212,129,131,137"/>
+<area shape="rect" title=" " alt="" coords="372,194,431,220"/>
+<area shape="poly" title=" " alt="" coords="447,206,542,215,587,223,618,234,643,255,662,280,685,326,680,328,657,283,639,258,616,239,586,228,542,220,447,211"/>
+<area shape="rect" title=" " alt="" coords="379,244,424,269"/>
+<area shape="poly" title=" " alt="" coords="440,256,523,267,571,277,618,293,648,308,673,325,670,329,645,312,616,297,570,282,522,272,439,261"/>
+<area shape="rect" title=" " alt="" coords="331,293,472,334"/>
+<area shape="poly" title=" " alt="" coords="488,319,641,333,640,339,487,324"/>
+<area shape="rect" title=" " alt="" coords="362,358,440,384"/>
+<area shape="poly" title=" " alt="" coords="456,370,532,368,617,359,650,351,651,356,617,365,533,374,456,375"/>
+<area shape="rect" title=" " alt="" coords="368,408,435,433"/>
+<area shape="poly" title=" " alt="" coords="450,421,530,419,574,412,616,398,650,377,675,352,678,355,653,381,618,403,575,417,530,424,450,427"/>
+<area shape="rect" title=" " alt="" coords="341,482,462,508"/>
+<area shape="poly" title=" " alt="" coords="477,501,512,501,548,497,583,487,615,471,643,444,662,412,675,379,682,353,687,354,680,381,667,414,647,448,619,475,585,492,549,502,512,506,477,507"/>
+<area shape="rect" title=" " alt="" coords="349,536,454,561"/>
+<area shape="poly" title=" " alt="" coords="469,558,506,560,544,558,582,549,615,531,635,512,650,490,671,439,681,390,684,353,690,354,686,391,676,440,655,492,639,515,619,535,584,554,545,563,506,566,469,564"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -146,20 +157,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a244597589897a47f538a879dcb3287e8" id="r_a244597589897a47f538a879dcb3287e8"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a244597589897a47f538a879dcb3287e8">is_adding_layer</a> () override</td></tr>
 <tr class="memitem:ac9d1795b6cf8a4da7bf9b33f783db911" id="r_ac9d1795b6cf8a4da7bf9b33f783db911"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a> () override</td></tr>
 <tr class="memitem:adf7e4756c0a96f191d0978a0b10a9d5a" id="r_adf7e4756c0a96f191d0978a0b10a9d5a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#adf7e4756c0a96f191d0978a0b10a9d5a">update</a> (::easynav::NavState &amp;nav_state) override</td></tr>
+<tr class="memitem:a00b5c5e2fb403890c6728bd79bd31c82" id="r_a00b5c5e2fb403890c6728bd79bd31c82"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a00b5c5e2fb403890c6728bd79bd31c82">~InflationFilter</a> () override</td></tr>
 <tr class="inherit_header pub_methods_classeasynav_1_1navmap_1_1NavMapFilter"><td colspan="2">Public Member Functions inherited from <a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html">NavMapFilter</a></td></tr>
 <tr class="memitem:a5e5326fd311de885268a740c3b40abbc pub_methods_classeasynav_1_1navmap_1_1NavMapFilter" id="r_a5e5326fd311de885268a740c3b40abbc"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#a5e5326fd311de885268a740c3b40abbc">get_map_resolution</a> ()</td></tr>
 <tr class="memitem:a8ca6e8531c0fc1535502893305881a3e pub_methods_classeasynav_1_1navmap_1_1NavMapFilter" id="r_a8ca6e8531c0fc1535502893305881a3e"><td class="memItemLeft">const std::string &amp;&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#a8ca6e8531c0fc1535502893305881a3e">get_plugin_name</a> () const</td></tr>
 <tr class="memitem:a0b077b5711726202f8d6faaba7563592 pub_methods_classeasynav_1_1navmap_1_1NavMapFilter" id="r_a0b077b5711726202f8d6faaba7563592"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#a0b077b5711726202f8d6faaba7563592">initialize</a> (const std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt; parent_node, const std::string &amp;plugin_name)</td></tr>
 <tr class="memitem:a225602ee95bfbf08d63951860087b115 pub_methods_classeasynav_1_1navmap_1_1NavMapFilter" id="r_a225602ee95bfbf08d63951860087b115"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#a225602ee95bfbf08d63951860087b115">NavMapFilter</a> ()</td></tr>
 <tr class="memitem:a6a809ce980ee5a7d86857225136a1999 pub_methods_classeasynav_1_1navmap_1_1NavMapFilter" id="r_a6a809ce980ee5a7d86857225136a1999"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#a6a809ce980ee5a7d86857225136a1999">set_map_resolution</a> (float resolution)</td></tr>
+<tr class="memitem:a21810f084e07015927269e9ca13aa743 pub_methods_classeasynav_1_1navmap_1_1NavMapFilter" id="r_a21810f084e07015927269e9ca13aa743"><td class="memItemLeft">virtual&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#a21810f084e07015927269e9ca13aa743">~NavMapFilter</a> ()=default</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a0fbe2927ae8f7e2facab0c5a0d11c192" id="r_a0fbe2927ae8f7e2facab0c5a0d11c192"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a0fbe2927ae8f7e2facab0c5a0d11c192">cost_scaling_factor_</a></td></tr>
+<tr class="memitem:a2eefb11cf408a0a6f980ebfb34bfe527" id="r_a2eefb11cf408a0a6f980ebfb34bfe527"><td class="memItemLeft">std::unique_ptr&lt;::navmap::DistanceField &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a2eefb11cf408a0a6f980ebfb34bfe527">df_</a></td></tr>
+<tr class="memitem:a6163205fca70735217681747064a1d92" id="r_a6163205fca70735217681747064a1d92"><td class="memItemLeft">std::uint64_t&#160;</td><td class="memItemRight"><a class="el" href="#a6163205fca70735217681747064a1d92">df_geometry_</a> {0}</td></tr>
+<tr class="memitem:a8e0d19daf6e342fd1428610a07e9a637" id="r_a8e0d19daf6e342fd1428610a07e9a637"><td class="memItemLeft">const ::navmap::NavMap *&#160;</td><td class="memItemRight"><a class="el" href="#a8e0d19daf6e342fd1428610a07e9a637">df_map_</a> {nullptr}</td></tr>
 <tr class="memitem:a46714f4301c20c9deaaf61f2462646a3" id="r_a46714f4301c20c9deaaf61f2462646a3"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a46714f4301c20c9deaaf61f2462646a3">inflate_borders_</a> {true}</td></tr>
 <tr class="memitem:abb226ade01d11926d1a8e3bc8bd7a19f" id="r_abb226ade01d11926d1a8e3bc8bd7a19f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#abb226ade01d11926d1a8e3bc8bd7a19f">inflation_radius_</a></td></tr>
 <tr class="memitem:a7d423a336de1d4450dafe6f6218464f8" id="r_a7d423a336de1d4450dafe6f6218464f8"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a7d423a336de1d4450dafe6f6218464f8">inscribed_radius_</a></td></tr>
-<tr class="memitem:a40442ab5847be13ff773c62689375d3d" id="r_a40442ab5847be13ff773c62689375d3d"><td class="memItemLeft">::navmap::NavMap&#160;</td><td class="memItemRight"><a class="el" href="#a40442ab5847be13ff773c62689375d3d">navmap_</a></td></tr>
+<tr class="memitem:ae323fb079cfe91ffbcfb7abaccd8bb2d" id="r_ae323fb079cfe91ffbcfb7abaccd8bb2d"><td class="memItemLeft">const ::navmap::LayerViewBase *&#160;</td><td class="memItemRight"><a class="el" href="#ae323fb079cfe91ffbcfb7abaccd8bb2d">last_dst_</a> {nullptr}</td></tr>
+<tr class="memitem:a9121bdf03c7ad292f525b6b78f91f6cc" id="r_a9121bdf03c7ad292f525b6b78f91f6cc"><td class="memItemLeft">const ::navmap::LayerViewBase *&#160;</td><td class="memItemRight"><a class="el" href="#a9121bdf03c7ad292f525b6b78f91f6cc">last_src_</a> {nullptr}</td></tr>
+<tr class="memitem:af1e55d72c03354f3e74c85e97f91f522" id="r_af1e55d72c03354f3e74c85e97f91f522"><td class="memItemLeft">std::vector&lt; char &gt;&#160;</td><td class="memItemRight"><a class="el" href="#af1e55d72c03354f3e74c85e97f91f522">lethal_</a></td></tr>
 <tr class="inherit_header pro_attribs_classeasynav_1_1navmap_1_1NavMapFilter"><td colspan="2">Protected Attributes inherited from <a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html">NavMapFilter</a></td></tr>
 <tr class="memitem:a1ed8975dad0ab30f40b5c954cef8ce5b pro_attribs_classeasynav_1_1navmap_1_1NavMapFilter" id="r_a1ed8975dad0ab30f40b5c954cef8ce5b"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#a1ed8975dad0ab30f40b5c954cef8ce5b">map_resolution_</a> {0.1}</td></tr>
 <tr class="memitem:a9cb6c9609aa533aa43446fdd36ebbcf0 pro_attribs_classeasynav_1_1navmap_1_1NavMapFilter" id="r_a9cb6c9609aa533aa43446fdd36ebbcf0"><td class="memItemLeft">std::weak_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt;&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#a9cb6c9609aa533aa43446fdd36ebbcf0">parent_node_</a></td></tr>
@@ -170,7 +188,10 @@ Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_classeasynav_1_1navmap_1_1NavMapFilter"><td colspan="2">Protected Member Functions inherited from <a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html">NavMapFilter</a></td></tr>
 <tr class="memitem:abfb20156702d89bea674892ec784e9a2 pro_methods_classeasynav_1_1navmap_1_1NavMapFilter" id="r_abfb20156702d89bea674892ec784e9a2"><td class="memItemLeft">std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt;&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1NavMapFilter.html#abfb20156702d89bea674892ec784e9a2">get_node</a> () const</td></tr>
 </table>
-<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>"inflated_obstacles": cost by distance (along the surface) to the obstacles of the "obstacles" layer and, optionally, to the open edges of the NavMap. </p>
+<p>Incremental: an exact distance field (navmap::DistanceField) is updated with the obstacle cells that appear or disappear, and only the cells whose distance or obstacle value changed are rewritten (and recorded as changed). A new map or obstacle layer starts it over. </p>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="add1ae543706191617117881559f58a63" name="add1ae543706191617117881559f58a63"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#add1ae543706191617117881559f58a63">&#9670;&#160;</a></span>InflationFilter()</h2>
 
@@ -184,6 +205,31 @@ Additional Inherited Members</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a00b5c5e2fb403890c6728bd79bd31c82" name="a00b5c5e2fb403890c6728bd79bd31c82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00b5c5e2fb403890c6728bd79bd31c82">&#9670;&#160;</a></span>~InflationFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">~<a class="el" href="#add1ae543706191617117881559f58a63">InflationFilter</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -366,6 +412,72 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a2eefb11cf408a0a6f980ebfb34bfe527" name="a2eefb11cf408a0a6f980ebfb34bfe527"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eefb11cf408a0a6f980ebfb34bfe527">&#9670;&#160;</a></span>df_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;::navmap::DistanceField&gt; df_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6163205fca70735217681747064a1d92" name="a6163205fca70735217681747064a1d92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6163205fca70735217681747064a1d92">&#9670;&#160;</a></span>df_geometry_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::uint64_t df_geometry_ {0}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8e0d19daf6e342fd1428610a07e9a637" name="a8e0d19daf6e342fd1428610a07e9a637"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e0d19daf6e342fd1428610a07e9a637">&#9670;&#160;</a></span>df_map_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const ::navmap::NavMap* df_map_ {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a46714f4301c20c9deaaf61f2462646a3" name="a46714f4301c20c9deaaf61f2462646a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a46714f4301c20c9deaaf61f2462646a3">&#9670;&#160;</a></span>inflate_borders_</h2>
 
@@ -432,8 +544,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a40442ab5847be13ff773c62689375d3d" name="a40442ab5847be13ff773c62689375d3d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40442ab5847be13ff773c62689375d3d">&#9670;&#160;</a></span>navmap_</h2>
+<a id="ae323fb079cfe91ffbcfb7abaccd8bb2d" name="ae323fb079cfe91ffbcfb7abaccd8bb2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae323fb079cfe91ffbcfb7abaccd8bb2d">&#9670;&#160;</a></span>last_dst_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -442,7 +554,51 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">::navmap::NavMap navmap_</td>
+          <td class="memname">const ::navmap::LayerViewBase* last_dst_ {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9121bdf03c7ad292f525b6b78f91f6cc" name="a9121bdf03c7ad292f525b6b78f91f6cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9121bdf03c7ad292f525b6b78f91f6cc">&#9670;&#160;</a></span>last_src_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const ::navmap::LayerViewBase* last_src_ {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af1e55d72c03354f3e74c85e97f91f522" name="af1e55d72c03354f3e74c85e97f91f522"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1e55d72c03354f3e74c85e97f91f522">&#9670;&#160;</a></span>lethal_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;char&gt; lethal_</td>
         </tr>
       </table>
   </td>

@@ -102,7 +102,11 @@ document.addEventListener('DOMContentLoaded', codefold.init);
   <div class="headertitle"><div class="title">InflationFilter.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;string&gt;</code><br />
+<div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &quot;navmap_core/DistanceField.hpp&quot;</code><br />
 <code>#include &quot;navmap_core/NavMap.hpp&quot;</code><br />
 <code>#include &quot;easynav_common/types/NavState.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="NavMapFilter_8hpp_source.html">easynav_navmap_maps_manager/filters/NavMapFilter.hpp</a>&quot;</code><br />
@@ -111,21 +115,28 @@ Include dependency graph for InflationFilter.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hpp__incl.png" border="0" usemap="#amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hpp" loading="lazy" alt=""/></div>
 <map name="amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hpp" id="amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hpp">
-<area shape="rect" title=" " alt="" coords="110,5,311,91"/>
-<area shape="rect" title=" " alt="" coords="5,235,59,261"/>
-<area shape="poly" title=" " alt="" coords="175,93,55,225,51,222,171,90"/>
-<area shape="rect" title=" " alt="" coords="417,146,594,172"/>
-<area shape="poly" title=" " alt="" coords="313,84,459,138,458,143,311,89"/>
-<area shape="rect" title=" " alt="" coords="83,228,245,268"/>
-<area shape="poly" title=" " alt="" coords="185,92,165,140,161,177,162,212,156,212,155,177,160,138,180,90"/>
-<area shape="rect" href="NavMapFilter_8hpp.html" title=" " alt="" coords="174,139,394,180"/>
-<area shape="poly" title=" " alt="" coords="241,90,265,124,260,127,237,93"/>
-<area shape="poly" title=" " alt="" coords="213,183,144,204,72,230,70,231,68,226,70,225,142,199,211,178"/>
-<area shape="poly" title=" " alt="" coords="258,182,205,221,202,216,255,178"/>
-<area shape="rect" title=" " alt="" coords="269,235,336,261"/>
-<area shape="poly" title=" " alt="" coords="291,180,300,220,294,221,286,181"/>
-<area shape="rect" title=" " alt="" coords="361,228,522,268"/>
-<area shape="poly" title=" " alt="" coords="321,178,394,218,391,222,318,183"/>
+<area shape="rect" title=" " alt="" coords="274,5,475,91"/>
+<area shape="rect" title=" " alt="" coords="5,146,66,172"/>
+<area shape="poly" title=" " alt="" coords="274,82,86,142,80,143,79,138,84,136,272,76"/>
+<area shape="rect" title=" " alt="" coords="51,235,118,261"/>
+<area shape="poly" title=" " alt="" coords="274,81,216,106,161,141,142,160,125,181,99,222,95,220,120,178,138,156,158,137,213,101,272,76"/>
+<area shape="rect" title=" " alt="" coords="142,235,196,261"/>
+<area shape="poly" title=" " alt="" coords="274,76,223,102,200,119,182,140,172,159,168,180,167,220,162,220,162,179,167,157,177,138,197,115,220,97,272,71"/>
+<area shape="rect" title=" " alt="" coords="486,146,543,172"/>
+<area shape="poly" title=" " alt="" coords="430,89,488,134,485,139,427,94"/>
+<area shape="rect" title=" " alt="" coords="567,146,773,172"/>
+<area shape="poly" title=" " alt="" coords="476,84,624,138,622,143,474,89"/>
+<area shape="rect" title=" " alt="" coords="798,146,974,172"/>
+<area shape="poly" title=" " alt="" coords="476,68,815,140,814,145,475,74"/>
+<area shape="rect" title=" " alt="" coords="406,228,567,268"/>
+<area shape="poly" title=" " alt="" coords="400,90,470,213,465,215,396,93"/>
+<area shape="rect" href="NavMapFilter_8hpp.html" title=" " alt="" coords="191,139,410,180"/>
+<area shape="poly" title=" " alt="" coords="348,93,325,127,320,124,344,90"/>
+<area shape="poly" title=" " alt="" coords="251,183,131,230,129,231,127,226,129,225,249,178"/>
+<area shape="poly" title=" " alt="" coords="272,182,201,229,198,224,269,178"/>
+<area shape="poly" title=" " alt="" coords="344,178,432,218,429,223,342,183"/>
+<area shape="rect" title=" " alt="" coords="220,228,382,268"/>
+<area shape="poly" title=" " alt="" coords="304,180,304,212,298,212,298,180"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -133,13 +144,15 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hpp__dep__incl.png" border="0" usemap="#amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hppdep" loading="lazy" alt=""/></div>
 <map name="amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hppdep" id="amaps__managers_2easynav__navmap__maps__manager_2include_2easynav__navmap__maps__manager_2filters_2InflationFilter_8hppdep">
-<area shape="rect" title=" " alt="" coords="230,5,431,91"/>
+<area shape="rect" title=" " alt="" coords="332,5,534,91"/>
 <area shape="rect" href="easynav__navmap__maps__manager_2src_2easynav__navmap__maps__manager_2filters_2InflationFilter_8cpp.html" title=" " alt="" coords="5,139,221,210"/>
-<area shape="poly" title=" " alt="" coords="245,101,175,141,173,136,242,97"/>
-<area shape="rect" href="navmap__inflation__filter__tests_8cpp.html" title=" " alt="" coords="245,139,416,210"/>
-<area shape="poly" title=" " alt="" coords="333,107,333,138,328,138,328,107"/>
-<area shape="rect" href="navmap__inflation__geometry__tests_8cpp.html" title="The inflation filter&#39;s inscribed radius is the robot&#39;s (&quot;robot_geometry&quot;); its own &quot;inscribed_radius&quot;..." alt="" coords="440,139,610,210"/>
-<area shape="poly" title=" " alt="" coords="411,97,472,136,469,141,408,102"/>
+<area shape="poly" title=" " alt="" coords="318,97,204,141,202,136,317,92"/>
+<area shape="rect" href="navmap__incremental__filters__tests_8cpp.html" title=" " alt="" coords="245,139,424,210"/>
+<area shape="poly" title=" " alt="" coords="392,105,364,140,360,137,388,102"/>
+<area shape="rect" href="navmap__inflation__filter__tests_8cpp.html" title=" " alt="" coords="448,139,618,210"/>
+<area shape="poly" title=" " alt="" coords="479,102,507,137,503,140,475,105"/>
+<area shape="rect" href="navmap__inflation__geometry__tests_8cpp.html" title="The inflation filter&#39;s inscribed radius is the robot&#39;s (&quot;robot_geometry&quot;); its own &quot;inscribed_radius&quot;..." alt="" coords="642,139,813,210"/>
+<area shape="poly" title=" " alt="" coords="548,95,646,136,644,141,546,100"/>
 </map>
 </div>
 </div>
@@ -148,6 +161,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:InflationFilter" id="r_InflationFilter"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1navmap_1_1InflationFilter.html">InflationFilter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">"inflated_obstacles": cost by distance (along the surface) to the obstacles of the "obstacles" layer and, optionally, to the open edges of the NavMap.  <a href="classeasynav_1_1navmap_1_1InflationFilter.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
