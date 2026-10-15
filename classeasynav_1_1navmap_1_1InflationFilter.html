@@ -120,9 +120,9 @@ Collaboration diagram for InflationFilter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1navmap_1_1InflationFilter__coll__graph.png" border="0" usemap="#aInflationFilter_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aInflationFilter_coll__map" id="aInflationFilter_coll__map">
-<area shape="rect" title=" " alt="" coords="292,295,387,321"/>
+<area shape="rect" title=" " alt="" coords="337,295,432,321"/>
 <area shape="rect" href="classeasynav_1_1navmap_1_1NavMapFilter.html" title=" " alt="" coords="180,117,280,143"/>
-<area shape="poly" title=" " alt="" coords="248,155,334,293,329,296,243,157"/>
+<area shape="poly" title=" " alt="" coords="244,155,277,211,299,241,325,269,359,292,356,297,321,273,295,245,273,214,240,158"/>
 <area shape="rect" title=" " alt="" coords="5,5,180,46"/>
 <area shape="poly" title=" " alt="" coords="112,57,124,75,140,91,161,104,184,114,182,119,159,109,137,95,120,79,107,61"/>
 <area shape="rect" title=" " alt="" coords="203,13,256,38"/>
@@ -130,16 +130,18 @@ Collaboration diagram for InflationFilter:</div>
 <area shape="rect" title=" " alt="" coords="326,13,371,38"/>
 <area shape="poly" title=" " alt="" coords="344,55,335,76,321,95,302,109,281,119,279,114,299,104,317,91,331,73,339,52"/>
 <area shape="rect" title=" " alt="" coords="304,117,374,143"/>
-<area shape="poly" title=" " alt="" coords="342,158,342,294,336,294,336,158"/>
+<area shape="poly" title=" " alt="" coords="336,158,331,212,334,242,343,270,352,282,364,292,361,297,348,286,338,272,329,243,326,212,330,158"/>
 <area shape="rect" title=" " alt="" coords="402,117,461,143"/>
-<area shape="poly" title=" " alt="" coords="435,158,428,214,419,244,404,273,390,287,373,297,370,292,386,282,400,269,414,242,423,213,429,158"/>
+<area shape="poly" title=" " alt="" coords="430,158,421,211,404,272,394,295,389,293,399,270,415,210,425,157"/>
+<area shape="rect" title=" " alt="" coords="560,117,606,143"/>
+<area shape="poly" title=" " alt="" coords="588,159,587,185,583,216,573,247,554,273,534,285,503,294,433,305,432,299,502,288,532,280,551,269,568,244,578,215,582,185,583,158"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a867ca38c1e4eb19610f668ec833100d5" id="r_a867ca38c1e4eb19610f668ec833100d5"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a867ca38c1e4eb19610f668ec833100d5">get_layer_name</a> () override</td></tr>
-<tr class="memitem:a5a489e6ef2193826871ef9f133b59701" id="r_a5a489e6ef2193826871ef9f133b59701"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a5a489e6ef2193826871ef9f133b59701">inflate_layer_u8</a> (::navmap::NavMap &amp;nm, const std::string &amp;src_layer, const std::string &amp;dst_layer, float inflation_radius, float cost_scaling_factor, float inscribed_radius=0.0f)</td></tr>
+<tr class="memitem:ab0704976c067a2562d4096311510b645" id="r_ab0704976c067a2562d4096311510b645"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ab0704976c067a2562d4096311510b645">inflate_layer_u8</a> (::navmap::NavMap &amp;nm, const std::string &amp;src_layer, const std::string &amp;dst_layer, float inflation_radius, float cost_scaling_factor, float inscribed_radius=0.0f, bool inflate_borders=true)</td></tr>
 <tr class="memitem:add1ae543706191617117881559f58a63" id="r_add1ae543706191617117881559f58a63"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#add1ae543706191617117881559f58a63">InflationFilter</a> ()</td></tr>
 <tr class="memitem:a244597589897a47f538a879dcb3287e8" id="r_a244597589897a47f538a879dcb3287e8"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a244597589897a47f538a879dcb3287e8">is_adding_layer</a> () override</td></tr>
 <tr class="memitem:ac9d1795b6cf8a4da7bf9b33f783db911" id="r_ac9d1795b6cf8a4da7bf9b33f783db911"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac9d1795b6cf8a4da7bf9b33f783db911">on_initialize</a> () override</td></tr>
@@ -154,6 +156,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a0fbe2927ae8f7e2facab0c5a0d11c192" id="r_a0fbe2927ae8f7e2facab0c5a0d11c192"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a0fbe2927ae8f7e2facab0c5a0d11c192">cost_scaling_factor_</a></td></tr>
+<tr class="memitem:a46714f4301c20c9deaaf61f2462646a3" id="r_a46714f4301c20c9deaaf61f2462646a3"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a46714f4301c20c9deaaf61f2462646a3">inflate_borders_</a> {true}</td></tr>
 <tr class="memitem:abb226ade01d11926d1a8e3bc8bd7a19f" id="r_abb226ade01d11926d1a8e3bc8bd7a19f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#abb226ade01d11926d1a8e3bc8bd7a19f">inflation_radius_</a></td></tr>
 <tr class="memitem:a7d423a336de1d4450dafe6f6218464f8" id="r_a7d423a336de1d4450dafe6f6218464f8"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a7d423a336de1d4450dafe6f6218464f8">inscribed_radius_</a></td></tr>
 <tr class="memitem:a40442ab5847be13ff773c62689375d3d" id="r_a40442ab5847be13ff773c62689375d3d"><td class="memItemLeft">::navmap::NavMap&#160;</td><td class="memItemRight"><a class="el" href="#a40442ab5847be13ff773c62689375d3d">navmap_</a></td></tr>
@@ -213,8 +216,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a5a489e6ef2193826871ef9f133b59701" name="a5a489e6ef2193826871ef9f133b59701"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a489e6ef2193826871ef9f133b59701">&#9670;&#160;</a></span>inflate_layer_u8()</h2>
+<a id="ab0704976c067a2562d4096311510b645" name="ab0704976c067a2562d4096311510b645"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0704976c067a2562d4096311510b645">&#9670;&#160;</a></span>inflate_layer_u8()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -247,7 +250,12 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>inscribed_radius</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.0f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>inscribed_radius</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>inflate_borders</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -347,6 +355,28 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">double cost_scaling_factor_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a46714f4301c20c9deaaf61f2462646a3" name="a46714f4301c20c9deaaf61f2462646a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46714f4301c20c9deaaf61f2462646a3">&#9670;&#160;</a></span>inflate_borders_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool inflate_borders_ {true}</td>
         </tr>
       </table>
   </td>

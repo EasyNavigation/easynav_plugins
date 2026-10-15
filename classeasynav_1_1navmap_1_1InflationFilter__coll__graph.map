@@ -1,7 +1,7 @@
 <map id="InflationFilter" name="InflationFilter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="292,295,387,321"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="337,295,432,321"/>
 <area shape="rect" id="Node000002" href="$classeasynav_1_1navmap_1_1NavMapFilter.html" title=" " alt="" coords="180,117,280,143"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,155,334,293,329,296,243,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="244,155,277,211,299,241,325,269,359,292,356,297,321,273,295,245,273,214,240,158"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,5,180,46"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,57,124,75,140,91,161,104,184,114,182,119,159,109,137,95,120,79,107,61"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="203,13,256,38"/>
@@ -9,7 +9,9 @@
 <area shape="rect" id="Node000005" title=" " alt="" coords="326,13,371,38"/>
 <area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="344,55,335,76,321,95,302,109,281,119,279,114,299,104,317,91,331,73,339,52"/>
 <area shape="rect" id="Node000006" title=" " alt="" coords="304,117,374,143"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="342,158,342,294,336,294,336,158"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="336,158,331,212,334,242,343,270,352,282,364,292,361,297,348,286,338,272,329,243,326,212,330,158"/>
 <area shape="rect" id="Node000007" title=" " alt="" coords="402,117,461,143"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="435,158,428,214,419,244,404,273,390,287,373,297,370,292,386,282,400,269,414,242,423,213,429,158"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="430,158,421,211,404,272,394,295,389,293,399,270,415,210,425,157"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="560,117,606,143"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="588,159,587,185,583,216,573,247,554,273,534,285,503,294,433,305,432,299,502,288,532,280,551,269,568,244,578,215,582,185,583,158"/>
 </map>
