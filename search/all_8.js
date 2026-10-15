@@ -5,7 +5,7 @@ var searchData=
   ['hash_3c_20bonxai_3a_3acoordt_20_3e_2',['hash&lt; Bonxai::CoordT &gt;',['../structstd_1_1hash_3_01Bonxai_1_1CoordT_01_4.html',1,'std']]],
   ['headerinfo_3',['HeaderInfo',['../structBonxai_1_1HeaderInfo.html',1,'Bonxai']]],
   ['height_4',['height',['../classeasynav_1_1SimpleMap.html#adc662cea5b05cd9852d5a4538586d662',1,'easynav::SimpleMap']]],
-  ['heuristic_5fscale_5',['Effect of &lt;span class=&quot;tt&quot;&gt;heuristic_scale&lt;/span&gt;',['../dir_940fda9e55c980df183eeb5f0adb62dc.html#autotoc_md265',1,'']]],
+  ['heuristic_5fscale_5',['Effect of &lt;span class=&quot;tt&quot;&gt;heuristic_scale&lt;/span&gt;',['../dir_940fda9e55c980df183eeb5f0adb62dc.html#autotoc_md266',1,'']]],
   ['heuristic_5fscale_5f_6',['heuristic_scale_',['../classeasynav_1_1CostmapPlanner.html#a4d32de66d943443ddb2dcb34fb16b718',1,'easynav::CostmapPlanner']]],
   ['history_5flength_5f_7',['history_length_',['../classrobot__localization_1_1UkfWrapper.html#a515a271cae5c27a3fbf19cd04536e950',1,'robot_localization::UkfWrapper']]],
   ['hit_8',['hit',['../classeasynav_1_1navmap_1_1PerceptionModel.html#a34e0569ddde55bdfaeedc7aded873f97',1,'easynav::navmap::PerceptionModel']]],

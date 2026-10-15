@@ -19,5 +19,5 @@ var searchData=
   ['write_16',['Write',['../namespaceBonxai.html#a1fb1a7af8fbc87130bd34ea20e306e87',1,'Bonxai']]],
   ['writepointsfrompcd_17',['WritePointsFromPCD',['../namespaceBonxai.html#a24eb84c1a6453f032bf18aa5f075c147',1,'Bonxai::WritePointsFromPCD(const std::string &amp;filepath, const std::vector&lt; Eigen::Vector3d &gt; &amp;points)'],['../namespaceBonxai.html#a7c0ff90958a727ca8eb253751991e6f3',1,'Bonxai::WritePointsFromPCD(const std::string &amp;filepath, const std::vector&lt; Bonxai::Point3D &gt; &amp;points)'],['../namespaceBonxai.html#ae33527153049c386d8bae1d70921db11',1,'Bonxai::WritePointsFromPCD(const std::string &amp;filepath, const std::vector&lt; Bonxai::CoordT &gt; &amp;points)']]],
   ['writepointsfrompcd_5fimpl_18',['WritePointsFromPCD_Impl',['../pcl__utils_8cpp.html#afedf3bdf4f2297333894d4d0b9f0ca2c',1,'pcl_utils.cpp']]],
-  ['writing_20a_20plugin_19',['Writing a plugin',['../dir_eb6561881223f5d4348e8fc4dee0038a.html#autotoc_md303',1,'']]]
+  ['writing_20a_20plugin_19',['Writing a plugin',['../dir_eb6561881223f5d4348e8fc4dee0038a.html#autotoc_md304',1,'']]]
 ];

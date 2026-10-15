@@ -110,7 +110,7 @@ Directory dependency graph for easynav_navmap_maps_manager:</div>
 <area shape="rect" href="dir_000136_000102.html" title="6" alt="" coords="267,124,274,139"/>
 <area shape="rect" href="dir_191014c8ae5067e82ee00eb3abad1220.html" title="tests" alt="" coords="287,70,337,96"/>
 <area shape="poly" href="dir_000160_000102.html" alt="" coords="309,98,289,139,284,136,304,95"/>
-<area shape="rect" href="dir_000160_000102.html" title="4" alt="" coords="292,131,299,146"/>
+<area shape="rect" href="dir_000160_000102.html" title="5" alt="" coords="292,131,299,146"/>
 <area shape="rect" href="dir_1d07c94ccefacaf8f3dd67e7fbe12d90.html" alt="" coords="27,52,348,188"/>
 <area shape="rect" href="dir_0085665aa3dcf1c11f094757a0c11b94.html" title="maps_managers" alt="" coords="16,16,359,199"/>
 </map>
@@ -183,8 +183,31 @@ Parameters</h1>
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.filters</span>  </td><td class="markdownTableBodyNone"><span class="tt">list&lt;string&gt;</span>  </td><td class="markdownTableBodyRight"><span class="tt">[]</span>  </td><td class="markdownTableBodyNone">Ordered list of filter plugin names to be applied after map loading (e.g. <span class="tt">["obstacles", "inflation"]</span>).  </td></tr>
 </table>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md196"></a>
+Local mode</h2>
+<p>With <span class="tt">&lt;plugin&gt;.local.enabled</span>, the maps manager keeps a NavMap around the robot, in its frame, rebuilt continuously from the point perceptions in NavState (scans accumulated in <span class="tt">odom</span> over <span class="tt">accumulate_time</span>, cropped to the window and meshed with <span class="tt">navmap_ros::from_points</span>). Each rebuild is published on <span class="tt">&lt;plugin&gt;/map</span> and replaces the map in NavState; the filters run on it as usual (the ObstacleFilter works in the NavMap's own frame). A map loaded from a file is replaced at the first rebuild.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Name  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadRight">Default  </th><th class="markdownTableHeadNone">Description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.enabled</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">false</span>  </td><td class="markdownTableBodyNone">Enable the local mode.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.frame</span>  </td><td class="markdownTableBodyNone"><span class="tt">string</span>  </td><td class="markdownTableBodyRight">robot frame  </td><td class="markdownTableBodyNone">Frame of the NavMap (e.g. <span class="tt">base_footprint</span>, ground at z = 0).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.range</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">10.0</span>  </td><td class="markdownTableBodyNone">Half side (m) of the square window around the robot.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.min_z</span>, <span class="tt">&lt;plugin&gt;.local.max_z</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">-3.0</span>, <span class="tt">3.0</span>  </td><td class="markdownTableBodyNone">Height band (m, in <span class="tt">frame</span>) of the points used.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.accumulate_time</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Scans put together before meshing (s): a single 3D scan is sparse rings.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.freq</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">2.0</span>  </td><td class="markdownTableBodyNone">Rebuilds per second (<span class="tt">&lt;= 0</span>: every update).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.downsample</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Voxel (m) the accumulated points are reduced to.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.resolution</span>, <span class="tt">max_dz</span>, <span class="tt">max_slope_deg</span>, <span class="tt">min_clearance</span>, <span class="tt">min_surface_area</span>, <span class="tt">max_hole_area</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3</span>, <span class="tt">0.25</span>, <span class="tt">30</span>, <span class="tt">1.0</span>, <span class="tt">1.0</span>, <span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Mesher parameters (<span class="tt">navmap_ros::BuildParams</span>).  </td></tr>
+</table>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md197"></a>
 Filter Plugins</h2>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md197"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md198"></a>
 <b>ObstacleFilter</b></h3>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter</span></li>
@@ -211,7 +234,7 @@ Filter Plugins</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Output Layer:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Updates or creates NavMap layer <span class="tt">"obstacles"</span>.  </td></tr>
 </table>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md198"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md199"></a>
 <b>InflationFilter</b></h3>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</span></li>
@@ -234,9 +257,9 @@ Filter Plugins</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Output Layer:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Writes to <span class="tt">"inflated_obstacles"</span>.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md199"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md200"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md200"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md201"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -250,7 +273,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_pc2_map</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs/msg/PointCloud2</span>  </td><td class="markdownTableBodyNone">Input point cloud to build/update NavMap.  </td><td class="markdownTableBodyNone">depth=100  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md201"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md202"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -258,7 +281,7 @@ Services</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Service Server  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</span>  </td><td class="markdownTableBodyNone"><span class="tt">std_srvs/srv/Trigger</span>  </td><td class="markdownTableBodyNone">Saves the current NavMap and layers to disk.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md202"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md203"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -268,7 +291,7 @@ NavState Keys</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">map.navmap</span>  </td><td class="markdownTableBodyNone"><span class="tt">::navmap::NavMap</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Stores the maintained NavMap, including generated layers <span class="tt">"obstacles"</span> and <span class="tt">"inflated_obstacles"</span>.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md203"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md204"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -276,7 +299,7 @@ TF Frames</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publishes  </td><td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyNone">No TF broadcasting in this manager; outputs are stamped in their configured frame.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md204"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md205"></a>
 Example Configuration</h1>
 <div class="fragment"><div class="line">maps_manager_node:</div>
 <div class="line">  ros__parameters:</div>
@@ -295,7 +318,7 @@ Example Configuration</h1>
 <div class="line">        plugin: easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</div>
 <div class="line">        inflation_radius: 1.0</div>
 <div class="line">        cost_scaling_factor: 2.0</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md205"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md206"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->
