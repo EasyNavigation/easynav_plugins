@@ -16,8 +16,10 @@
 
 #include <cmath>
 #include <cstdint>
+#include <memory>
 #include <optional>
 #include <string>
+#include <vector>
 
 #include "easynav_common/Parameters.hpp"
 #include "easynav_common/types/NavState.hpp"
@@ -74,24 +76,44 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     return;
   }
 
-  navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
+  // In place: the map in NavState is updated, not copied
+  const auto map = nav_state.get_ptr<::navmap::NavMap>("map.navmap");
+  auto & nm = *map;
+  const std::size_t N = nm.navcels.size();
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
   // The NavMap's own frame (a local NavMap is in the robot frame), the map frame by default
-  const std::string map_frame = !navmap_.surfaces.empty() && !navmap_.surfaces[0].frame_id.empty() ?
-    navmap_.surfaces[0].frame_id : tf_info.map_frame;
+  const std::string map_frame = !nm.surfaces.empty() && !nm.surfaces[0].frame_id.empty() ?
+    nm.surfaces[0].frame_id : tf_info.map_frame;
 
-  // Start from the static map, if the NavMap has one (built from an occupancy grid): what the
-  // sensors do not see right now (behind something, far, too low) is still an obstacle.
-  navmap_.layer_clear<uint8_t>(get_layer_name(), navmap_ros::FREE_SPACE);
-  if (navmap_.has_layer("occupancy")) {
-    for (std::size_t c = 0; c < navmap_.navcels.size(); ++c) {
-      const auto cid = static_cast<::navmap::NavCelId>(c);
-      const auto v = navmap_.layer_get<uint8_t>("occupancy", cid, navmap_ros::FREE_SPACE);
-      if (v != navmap_ros::FREE_SPACE) {
-        navmap_.layer_set<uint8_t>(get_layer_name(), cid, v);
+  // The layer starts from the static map, if the NavMap has one (built from an occupancy grid):
+  // what the sensors do not see right now (behind something, far, too low) is still an obstacle.
+  // It is rebuilt only for a new map (or static layer); then, each cycle, only the cells seen as
+  // obstacles now or in the last cycle are written.
+  const auto occ = nm.layers.get("occupancy");
+  const std::uint64_t occ_hash = occ && occ->size() == N ? occ->content_hash() : 0;
+  auto layer = nm.layers.get(get_layer_name());
+  if (!layer || layer.get() != last_layer_ || layer->size() != N || occ_hash != last_occ_hash_ ||
+    layer->all_changed())
+  {
+    nm.layers.remove(get_layer_name());
+    base_.assign(N, navmap_ros::FREE_SPACE);
+    if (occ_hash != 0) {
+      for (std::size_t c = 0; c < N; ++c) {
+        const auto cid = static_cast<::navmap::NavCelId>(c);
+        base_[c] = nm.layer_get<uint8_t>("occupancy", cid, navmap_ros::FREE_SPACE);
       }
     }
+    nm.add_layer<uint8_t>(
+      get_layer_name(), "obstacles: static map plus what the sensors see", "",
+      navmap_ros::FREE_SPACE)->set_data(base_);
+    layer = nm.layers.get(get_layer_name());
+    last_layer_ = layer.get();
+    last_occ_hash_ = occ_hash;
+    marked_.clear();
+    seen_.assign(N, 0);
   }
+  auto & values = std::dynamic_pointer_cast<::navmap::LayerView<uint8_t>>(layer)->data();
+  std::vector<::navmap::NavCelId> marked;
 
   // Only the points around the robot and below its height (robot frame), downsampled first
   // (indices only) so that fewer points are transformed.
@@ -138,15 +160,15 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     if (last_surface) {opts.hint_surface = *last_surface;}
     if (last_cid) {opts.hint_cid = *last_cid;}
 
-    bool ok = navmap_.locate_navcel(query, surface_idx, cid, bary, &hit, opts);
+    bool ok = nm.locate_navcel(query, surface_idx, cid, bary, &hit, opts);
 
     if (!ok) {
       ::navmap::NavMap::LocateOpts nohint;
       nohint.use_downward_ray = true;
       nohint.height_eps = 0.50f;
-      ok = navmap_.locate_navcel(query, surface_idx, cid, bary, &hit, nohint);
+      ok = nm.locate_navcel(query, surface_idx, cid, bary, &hit, nohint);
       if (!ok) {
-        ok = navmap_.locate_navcel(query, surface_idx, cid, bary, &hit);
+        ok = nm.locate_navcel(query, surface_idx, cid, bary, &hit);
       }
     }
     if (!ok) {continue;}
@@ -154,19 +176,36 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
     last_cid = cid;
 
     // Height above the NavCel's plane (along its upward normal): on a ramp, the ramp is not one
-    const auto & cel = navmap_.navcels[cid];
+    const auto & cel = nm.navcels[cid];
     Eigen::Vector3f normal = cel.normal;
     if (normal.z() < 0.0f) {normal = -normal;}
-    const float height = normal.dot(query - navmap_.positions.at(cel.v[0]));
+    const float height = normal.dot(query - nm.positions.at(cel.v[0]));
     // Farther, a small attitude error lifts the ground more: a higher threshold
     const double distance = robot_known ? (query.head<2>() - robot_xy).norm() : 0.0;
     if (!(height > min_height_ + min_height_per_meter_ * distance)) {continue;}
 
-    navmap_.layer_set<uint8_t>(
-      get_layer_name(), cid, static_cast<uint8_t>(navmap_ros::LETHAL_OBSTACLE));
+    if (seen_[cid] != 2) {
+      seen_[cid] = 2;
+      marked.push_back(cid);
+    }
   }
 
-  nav_state.set("map.navmap", navmap_);
+  // Obstacles now; cells that were obstacles in the last cycle and are not now go back to the
+  // static map. Only cells whose value changes are written (and recorded as changed).
+  for (const auto cid : marked) {
+    if (values[cid] != navmap_ros::LETHAL_OBSTACLE) {
+      nm.layer_set<uint8_t>(get_layer_name(), cid, navmap_ros::LETHAL_OBSTACLE);
+    }
+  }
+  for (const auto cid : marked_) {
+    if (seen_[cid] == 2) {continue;}
+    seen_[cid] = 0;
+    if (values[cid] != base_[cid]) {nm.layer_set<uint8_t>(get_layer_name(), cid, base_[cid]);}
+  }
+  for (const auto cid : marked) {
+    seen_[cid] = 1;
+  }
+  marked_.swap(marked);
 }
 
 

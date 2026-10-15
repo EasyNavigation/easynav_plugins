@@ -287,15 +287,32 @@ NavMapMapsManager::update(::easynav::NavState & nav_state)
     map_changed_ = false;
   }
 
+  // Filters update the map in NavState in place, and record which cells they change
+  const std::size_t subscribers = layer_updates_pub_->get_subscription_count();
+  const bool new_subscriber = subscribers > last_subscribers_;
+  last_subscribers_ = subscribers;
+  std_msgs::msg::Header header;
+  header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
+  header.stamp = get_node()->now();
   for (const auto & filter : navmap_filters_) {
     filter->set_map_resolution(resolution_);
     filter->update(nav_state);
 
+    if (subscribers == 0 || !filter->is_adding_layer()) {continue;}
     const auto & navmap = nav_state.get<::navmap::NavMap>("map.navmap");
+    const auto layer = navmap.layers.get(filter->get_layer_name());
+    if (!layer || (!layer->has_changes() && !new_subscriber)) {continue;}
+    // Only the changed cells (or the whole layer if many changed, or for a new subscriber)
+    layer_updates_pub_->publish(
+      navmap_ros::to_layer_update_msg(
+        navmap, filter->get_layer_name(), header, new_subscriber ? 0.0f : 0.25f));
+  }
 
-    if (filter->is_adding_layer() && navmap.has_layer(filter->get_layer_name())) {
-      auto update_msg = navmap_ros::to_msg(navmap, filter->get_layer_name());
-      layer_updates_pub_->publish(update_msg);
+  // Every filter and the publisher have seen this cycle's changes
+  if (nav_state.has("map.navmap")) {
+    const auto & navmap = nav_state.get<::navmap::NavMap>("map.navmap");
+    for (const auto & name : navmap.list_layers()) {
+      navmap.layers.get(name)->clear_changes();
     }
   }
 }

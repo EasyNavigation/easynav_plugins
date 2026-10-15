@@ -41,6 +41,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -48,6 +49,7 @@
 #include "easynav_common/RobotGeometry.hpp"
 #include "easynav_common/types/NavState.hpp"
 
+#include "navmap_core/DistanceField.hpp"
 #include "navmap_core/NavMap.hpp"
 #include "navmap_ros/conversions.hpp"
 
@@ -59,11 +61,37 @@ namespace easynav
 namespace navmap
 {
 
+namespace
+{
+
+// Cost of a free cell at distance d (m) from the nearest obstacle (or border)
+std::uint8_t cost_at(float d, float R, float r_ins, float k)
+{
+  using navmap_ros::FREE_SPACE;
+  using navmap_ros::INSCRIBED_INFLATED_OBSTACLE;
+  if (d <= r_ins) {return INSCRIBED_INFLATED_OBSTACLE;}
+  if (d > R) {return FREE_SPACE;}
+  const double base = static_cast<int>(INSCRIBED_INFLATED_OBSTACLE) - 1;
+  const double c = std::exp(-k * static_cast<double>(d - r_ins)) * base;
+  return static_cast<std::uint8_t>(std::lround(std::clamp(c, 0.0, base)));
+}
+
+// Obstacles and unknown keep their value (unknown still carries distance); the rest, by distance
+std::uint8_t inflated(std::uint8_t src, float d, float R, float r_ins, float k)
+{
+  if (src == navmap_ros::LETHAL_OBSTACLE || src == navmap_ros::NO_INFORMATION) {return src;}
+  return cost_at(d, R, r_ins, k);
+}
+
+}  // namespace
+
 InflationFilter::InflationFilter()
 : inflation_radius_(0.0f),
   cost_scaling_factor_(0.0f),
   inscribed_radius_(0.0f)
 {}
+
+InflationFilter::~InflationFilter() = default;
 
 bool InflationFilter::inflate_layer_u8(
   ::navmap::NavMap & nm,
@@ -75,10 +103,6 @@ bool InflationFilter::inflate_layer_u8(
   bool inflate_borders)
 {
   using ::navmap::NavCelId;
-  using navmap_ros::FREE_SPACE;
-  using navmap_ros::INSCRIBED_INFLATED_OBSTACLE;
-  using navmap_ros::LETHAL_OBSTACLE;
-  using navmap_ros::NO_INFORMATION;
 
   if (nm.navcels.empty() || inflation_radius <= 0.0f || cost_scaling_factor <= 0.0f) {
     return false;
@@ -95,7 +119,7 @@ bool InflationFilter::inflate_layer_u8(
     dst_layer, nm.navcels.size(), ::navmap::layer_type_tag<std::uint8_t>());
   if (!dst_view) {return false;}
   auto & dst = dst_view->mutable_data();
-  dst.resize(nm.navcels.size(), FREE_SPACE);
+  dst.resize(nm.navcels.size(), navmap_ros::FREE_SPACE);
 
   const std::size_t N = nm.navcels.size();
   const float R = inflation_radius;
@@ -105,26 +129,16 @@ bool InflationFilter::inflate_layer_u8(
   // map border: an open edge is a wall, a drop or unmapped space.
   std::vector<NavCelId> lethal;
   for (NavCelId cid = 0; cid < N; ++cid) {
-    if (src[cid] == LETHAL_OBSTACLE) {lethal.push_back(cid);}
+    if (src[cid] == navmap_ros::LETHAL_OBSTACLE) {lethal.push_back(cid);}
   }
-  const std::vector<float> dist = nm.distance_field(lethal, inflate_borders, R);
-
-  auto cost_from_dist = [&](float d) -> std::uint8_t {
-      if (d <= r_ins) {return INSCRIBED_INFLATED_OBSTACLE;}
-      if (d > R) {return FREE_SPACE;}
-      const double base = static_cast<int>(INSCRIBED_INFLATED_OBSTACLE) - 1;
-      const double c = std::exp(-cost_scaling_factor * static_cast<double>(d - r_ins)) * base;
-      return static_cast<std::uint8_t>(std::lround(std::clamp(c, 0.0, base)));
-    };
+  ::navmap::DistanceField df(nm, inflate_borders, R);
+  df.compute(lethal);
 
   for (NavCelId cid = 0; cid < N; ++cid) {
-    if (src[cid] == LETHAL_OBSTACLE || src[cid] == NO_INFORMATION) {
-      dst[cid] = src[cid];  // obstacles and unknown keep their value (unknown carries distance)
-      continue;
-    }
-    const std::uint8_t c = cost_from_dist(dist[cid]);
+    const std::uint8_t c = inflated(src[cid], df[cid], R, r_ins, cost_scaling_factor);
     dst[cid] = (dst_layer == src_layer) ? std::max(src[cid], c) : c;
   }
+  dst_view->mark_all_changed();
   return true;
 }
 
@@ -162,28 +176,90 @@ InflationFilter::on_initialize()
 
 void InflationFilter::update(::easynav::NavState & nav_state)
 {
-  if (!nav_state.has("map.navmap")) {
+  using ::navmap::NavCelId;
+  using LayerU8 = ::navmap::LayerView<std::uint8_t>;
+
+  if (!nav_state.has("map.navmap")) {return;}
+  // In place: the map in NavState is updated, not copied
+  const auto map = nav_state.get_ptr<::navmap::NavMap>("map.navmap");
+  auto & nm = *map;
+  const std::size_t N = nm.navcels.size();
+  if (N == 0) {return;}  // no map yet (e.g. a local map before its first build)
+  if (inflation_radius_ <= 0.0 || cost_scaling_factor_ <= 0.0) {return;}
+
+  const auto src = std::dynamic_pointer_cast<LayerU8>(nm.layers.get("obstacles"));
+  if (!src || src->size() != N) {return;}  // the obstacle filter has not run yet
+
+  const float R = static_cast<float>(inflation_radius_);
+  const float r_ins = std::clamp(static_cast<float>(inscribed_radius_), 0.0f, R);
+  const float k = static_cast<float>(cost_scaling_factor_);
+  auto dst = std::dynamic_pointer_cast<LayerU8>(nm.layers.get(get_layer_name()));
+
+  // A new map, a new obstacle layer, or our layer gone or replaced (a new layer is all changed):
+  // start over
+  const bool rebuild = !df_ || df_map_ != &nm || df_geometry_ != nm.geometry_id() ||
+    last_src_ != src.get() || !dst || dst.get() != last_dst_ || dst->size() != N ||
+    dst->all_changed();
+  if (rebuild) {
+    if (!dst || dst->size() != N) {
+      nm.layers.remove(get_layer_name());
+      dst = nm.add_layer<std::uint8_t>(
+        get_layer_name(), "cost by distance to obstacles and borders", "", 0);
+    }
+    lethal_.assign(N, 0);
+    std::vector<NavCelId> seeds;
+    for (NavCelId c = 0; c < N; ++c) {
+      if ((*src)[c] == navmap_ros::LETHAL_OBSTACLE) {lethal_[c] = 1; seeds.push_back(c);}
+    }
+    df_ = std::make_unique<::navmap::DistanceField>(nm, inflate_borders_, R);
+    df_->compute(seeds);
+    auto & d = dst->data();
+    for (NavCelId c = 0; c < N; ++c) {
+      d[c] = inflated((*src)[c], (*df_)[c], R, r_ins, k);
+    }
+    dst->mark_all_changed();
+    df_map_ = &nm;
+    df_geometry_ = nm.geometry_id();
+    last_src_ = src.get();
+    last_dst_ = dst.get();
     return;
   }
 
-  navmap_ = nav_state.get<::navmap::NavMap>("map.navmap");
-  if (navmap_.navcels.empty()) {return;}  // no map yet (e.g. a local map before its first build)
-
-  const bool ok = inflate_layer_u8(
-    navmap_,
-    "obstacles",
-    "inflated_obstacles",
-    inflation_radius_,
-    cost_scaling_factor_,
-    inscribed_radius_,
-    inflate_borders_);
-
-  if (!ok) {
-    RCLCPP_ERROR(get_node()->get_logger(), "InflationFilter: inflate_layer_u8() failed");
-    return;
+  // Only what changed: the obstacle cells that came or went move the distance field, and the
+  // cells whose distance or source value changed get a new cost
+  std::vector<NavCelId> touched;
+  if (src->all_changed()) {
+    touched.resize(N);
+    for (NavCelId c = 0; c < N; ++c) {
+      touched[c] = c;
+    }
+  } else {
+    touched = src->changed();
   }
+  std::vector<NavCelId> added, removed;
+  for (const NavCelId c : touched) {
+    const char now = (*src)[c] == navmap_ros::LETHAL_OBSTACLE;
+    if (now == lethal_[c]) {continue;}
+    lethal_[c] = now;
+    (now ? added : removed).push_back(c);
+  }
+  if (!added.empty() || !removed.empty()) {df_->update(added, removed);}
 
-  nav_state.set("map.navmap", navmap_);
+  auto refresh = [&](NavCelId c) {
+      const std::uint8_t v = inflated((*src)[c], (*df_)[c], R, r_ins, k);
+      if ((*dst)[c] != v) {
+        (*dst)[c] = v;
+        dst->mark_changed(c);
+      }
+    };
+  if (!added.empty() || !removed.empty()) {
+    for (const NavCelId c : df_->changed()) {
+      refresh(c);
+    }
+  }
+  for (const NavCelId c : touched) {
+    refresh(c);
+  }
 }
 
 }  // namespace navmap

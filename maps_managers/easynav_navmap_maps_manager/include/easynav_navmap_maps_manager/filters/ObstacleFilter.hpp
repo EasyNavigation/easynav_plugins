@@ -17,8 +17,10 @@
 #ifndef EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__OBSTACLEFILTER_HPP_
 #define EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__OBSTACLEFILTER_HPP_
 
-#include <string>
+#include <cstdint>
 #include <limits>
+#include <string>
+#include <vector>
 
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
@@ -37,6 +39,9 @@ namespace navmap
  * 0.3 m columns; a column is an obstacle when its highest point is more than min_height (plus
  * min_height_per_meter for each meter from the robot) above the NavMap surface under it. So a 2D
  * laser sees obstacles too, and the ground or a ramp, being on the surface, is not one.
+ *
+ * Incremental: the layer is rebuilt from the static map only when the map changes; each cycle
+ * writes just the cells that become obstacles or stop being one (recorded as changed).
  */
 class ObstacleFilter : public NavMapFilter
 {
@@ -50,7 +55,12 @@ public:
   std::string get_layer_name() override {return "obstacles";}
 
 private:
-  ::navmap::NavMap navmap_;
+  // Incremental state, bound to the layer it was built on
+  const ::navmap::LayerViewBase * last_layer_{nullptr};
+  std::uint64_t last_occ_hash_{0};
+  std::vector<uint8_t> base_;                 // static value of each cell
+  std::vector<::navmap::NavCelId> marked_;    // obstacle cells of the last cycle
+  std::vector<uint8_t> seen_;                 // 1: in marked_, 2: marked this cycle
   double max_range_ {10.0};   ///< Points farther than this from the robot (x or y) are ignored.
   double min_height_ {0.1};   ///< Above the NavMap surface: lower points are the ground.
   double max_height_ {std::numeric_limits<double>::quiet_NaN()};  ///< Robot frame; NaN: no limit.

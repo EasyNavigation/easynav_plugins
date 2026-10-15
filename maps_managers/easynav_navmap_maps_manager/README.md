@@ -63,11 +63,12 @@ With `<plugin>.local.enabled`, the maps manager keeps a NavMap around the robot,
 
 #### **ObstacleFilter**
 
-- **Plugin Name:** `easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter`
+- **Plugin Name:** `easynav_navmap_maps_manager/NavMapMapsManager/ObstaclesFilter`
 - **Type:** `easynav::navmap::ObstacleFilter`
 - **Description:**  
   Detects occupied NavCels from the point perceptions in `NavState` and marks them as `LETHAL_OBSTACLE` in the `"obstacles"` layer, on top of the static map's `"occupancy"` layer (if any).  
-  The points are downsampled, those within `max_range` and below `max_height` (robot frame) are grouped in 0.3 m columns, and a column is an obstacle when its highest point is more than `min_height` (plus `min_height_per_meter` for each meter from the robot) above the NavMap surface under it (along the surface's normal). So a 2D laser detects obstacles too, and the ground or a ramp, being on the surface, is not one.
+  The points are downsampled, those within `max_range` and below `max_height` (robot frame) are grouped in 0.3 m columns, and a column is an obstacle when its highest point is more than `min_height` (plus `min_height_per_meter` for each meter from the robot) above the NavMap surface under it (along the surface's normal). So a 2D laser detects obstacles too, and the ground or a ramp, being on the surface, is not one.  
+  The layer is rebuilt from the static map only when the map changes; each cycle writes just the cells that become obstacles or stop being one.
 
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
@@ -85,7 +86,7 @@ With `<plugin>.local.enabled`, the maps manager keeps a NavMap around the robot,
 - **Type:** `easynav::navmap::InflationFilter`
 - **Description:**  
   Expands obstacle information from the `"obstacles"` layer into an `"inflated_obstacles"` layer, assigning graded costs depending on distance to obstacles and map boundaries (NavCels with missing neighbors).  
-  This filter mimics the behavior of `costmap_2d::InflationLayer` but operates on the NavMap triangular mesh.
+  This filter mimics the behavior of `costmap_2d::InflationLayer` but operates on the NavMap triangular mesh. Distances are exact and measured along the surface (`navmap::DistanceField`), and they are updated incrementally: only the obstacle cells that appear or disappear move the field, and only the cells whose cost changes are rewritten.
 
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
@@ -95,6 +96,8 @@ With `<plugin>.local.enabled`, the maps manager keeps a NavMap around the robot,
 | **Input Layer:** | | | Reads from `"obstacles"`. |
 | **Output Layer:** | | | Writes to `"inflated_obstacles"`. |
 
+The filters update the map in `NavState` in place and record which cells they change; the maps manager publishes those changes and clears them at the end of each cycle.
+
 ## Interfaces (Topics and Services)
 
 ### Subscriptions and Publications
@@ -102,7 +105,7 @@ With `<plugin>.local.enabled`, the maps manager keeps a NavMap around the robot,
 | Direction | Topic | Type | Purpose | QoS |
 |---|---|---|---|---|
 | Publisher | `<node_fqn>/<plugin>/map` | `navmap_ros_interfaces/msg/NavMap` | Publishes the full NavMap. | depth=1 |
-| Publisher | `<node_fqn>/<plugin>/map_updates` | `navmap_ros_interfaces/msg/NavMapLayer` | Publishes incremental layer updates. | depth=100 |
+| Publisher | `<node_fqn>/<plugin>/map_updates` | `navmap_ros_interfaces/msg/NavMapLayer` | Layer updates of the filters: only the cells that changed (sparse `NavMapLayer`, or the whole layer if many changed), only when someone subscribes; a new subscriber gets the whole layers. | depth=100 |
 | Subscription | `<node_fqn>/<plugin>/incoming_occ_map` | `nav_msgs/msg/OccupancyGrid` | Input occupancy grid to import into NavMap. | depth=1, transient_local, reliable |
 | Subscription | `<node_fqn>/<plugin>/incoming_pc2_map` | `sensor_msgs/msg/PointCloud2` | Input point cloud to build/update NavMap. | depth=100 |
 
