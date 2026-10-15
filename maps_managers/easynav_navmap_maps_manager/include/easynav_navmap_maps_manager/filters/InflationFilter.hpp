@@ -17,7 +17,6 @@
 #ifndef EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 #define EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 
-#include <queue>
 #include <string>
 
 #include "navmap_core/NavMap.hpp"
@@ -44,7 +43,8 @@ public:
     const std::string & dst_layer,
     float inflation_radius,
     float cost_scaling_factor,
-    float inscribed_radius = 0.0f);
+    float inscribed_radius = 0.0f,
+    bool inflate_borders = true);
 
   bool is_adding_layer() override {return true;}
   std::string get_layer_name() override {return "inflated_obstacles";}
@@ -53,6 +53,7 @@ protected:
   ::navmap::NavMap navmap_;
 
   double inflation_radius_, cost_scaling_factor_, inscribed_radius_;
+  bool inflate_borders_{true};  // open edges of the NavMap (walls, drops) inflate like obstacles
 };
 
 }  // namespace navmap
