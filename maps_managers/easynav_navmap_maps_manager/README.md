@@ -68,7 +68,8 @@ With `<plugin>.local.enabled`, the maps manager keeps a NavMap around the robot,
 - **Description:**  
   Detects occupied NavCels from the point perceptions in `NavState` and marks them as `LETHAL_OBSTACLE` in the `"obstacles"` layer, on top of the static map's `"occupancy"` layer (if any).  
   The points are downsampled, those within `max_range` and below `max_height` (robot frame) are grouped in 0.3 m columns, and a column is an obstacle when its highest point is more than `min_height` (plus `min_height_per_meter` for each meter from the robot) above the NavMap surface under it (along the surface's normal). So a 2D laser detects obstacles too, and the ground or a ramp, being on the surface, is not one.  
-  The layer is rebuilt from the static map only when the map changes; each cycle writes just the cells that become obstacles or stop being one.
+  The layer is rebuilt from the static map only when the map changes; each cycle writes just the cells that become obstacles or stop being one.  
+  With `memory.enabled`, the evidence is accumulated per NavCel in log-odds (`"obstacles_logodds"`, int16, clamped as OctoMap): a point above the surface is a hit, the cells a ray from the robot crosses (and where a ground point lies) are misses, and unobserved cells can decay. `"obstacles_sensor"` says what the sensors know (obstacle, free or unknown), and `"obstacles"` is the static map with the sensors on top (`navmap::combine_layer`, max): the sensors fill in cells the static map does not know, and never erase a static obstacle. `NO_INFORMATION` is the declared unknown value of these layers.
 
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
@@ -77,6 +78,10 @@ With `<plugin>.local.enabled`, the maps manager keeps a NavMap around the robot,
 | `<plugin>.min_height_per_meter` | `double` | `0.0` | `min_height` grows this much per meter of horizontal distance from the robot (`< 0` or not finite: `0`). On rough terrain, a small error in the robot's tilt lifts the ground more the farther it is; e.g. `0.05` adds 0.25 m at 5 m. |
 | `<plugin>.max_height` | `double` | `NaN` | Points above this height (robot frame) are ignored; `NaN` disables it. |
 | `<plugin>.downsample_resolution` | `double` | `0.3` | Voxel size (m) the points are reduced to first; `<= 0` disables it. |
+| `<plugin>.memory.enabled` | `bool` | `false` | Remember obstacles that are out of sight (see below). Off: only what is seen in the current cycle, on top of the static map. |
+| `<plugin>.memory.clearing` | `bool` | `true` | Memory: rays from the robot to each point, along the surface, are evidence of free space in the cells they cross. |
+| `<plugin>.memory.decay_time` | `double` | `0.0` | Memory: seconds for a cell no longer observed to fade back to unknown (from the most certain occupied); `0` never. |
+| `<plugin>.memory.p_hit`, `memory.p_miss` | `double` | `0.7`, `0.4` | Memory: occupancy probability of a hit and of a cell a ray crosses (as OctoMap). |
 | **Input Key:** | | | Reads list of point clouds from `NavState` group `"points"`. |
 | **Output Layer:** | | | Updates or creates NavMap layer `"obstacles"`. |
 

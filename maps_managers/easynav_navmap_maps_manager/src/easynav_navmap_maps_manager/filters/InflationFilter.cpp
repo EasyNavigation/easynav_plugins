@@ -195,11 +195,9 @@ void InflationFilter::update(::easynav::NavState & nav_state)
   const float k = static_cast<float>(cost_scaling_factor_);
   auto dst = std::dynamic_pointer_cast<LayerU8>(nm.layers.get(get_layer_name()));
 
-  // A new map, a new obstacle layer, or our layer gone or replaced (a new layer is all changed):
-  // start over
+  // A new map, a new obstacle layer, or our layer gone or replaced: start over
   const bool rebuild = !df_ || df_map_ != &nm || df_geometry_ != nm.geometry_id() ||
-    last_src_ != src.get() || !dst || dst.get() != last_dst_ || dst->size() != N ||
-    dst->all_changed();
+    src != last_src_.lock() || !dst || dst != last_dst_.lock() || dst->size() != N;
   if (rebuild) {
     if (!dst || dst->size() != N) {
       nm.layers.remove(get_layer_name());
@@ -220,8 +218,8 @@ void InflationFilter::update(::easynav::NavState & nav_state)
     dst->mark_all_changed();
     df_map_ = &nm;
     df_geometry_ = nm.geometry_id();
-    last_src_ = src.get();
-    last_dst_ = dst.get();
+    last_src_ = src;
+    last_dst_ = dst;
     return;
   }
 

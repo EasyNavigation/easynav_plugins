@@ -18,3 +18,6 @@ target_link_libraries(navmap_local_mode_tests ${PROJECT_NAME})
 
 ament_add_gtest(navmap_incremental_filters_tests navmap_incremental_filters_tests.cpp)
 target_link_libraries(navmap_incremental_filters_tests ${PROJECT_NAME})
+
+ament_add_gtest(navmap_obstacle_memory_tests navmap_obstacle_memory_tests.cpp)
+target_link_libraries(navmap_obstacle_memory_tests ${PROJECT_NAME})

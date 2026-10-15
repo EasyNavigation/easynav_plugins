@@ -19,7 +19,9 @@
 
 #include <cstdint>
 #include <limits>
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "navmap_core/NavMap.hpp"
@@ -55,8 +57,25 @@ public:
   std::string get_layer_name() override {return "obstacles";}
 
 private:
+  // Memory mode: evidence accumulated in log-odds, cleared by rays, faded by decay
+  void update_memory(
+    ::navmap::NavMap & nm, const Eigen::Vector3f & robot, bool robot_known,
+    const std::vector<::navmap::NavCelId> & hits,
+    const std::vector<std::pair<::navmap::NavCelId, Eigen::Vector3f>> & ends);
+
+  bool memory_ {false};        ///< Remember obstacles (log-odds) instead of this cycle only
+  bool clearing_ {true};       ///< Memory: rays from the robot clear the cells they cross
+  double decay_time_ {0.0};    ///< Memory: s for a certain cell to fade to unknown; 0: never
+  double p_hit_ {0.7};         ///< Memory: occupancy probability of a hit
+  double p_miss_ {0.4};        ///< Memory: occupancy probability of a cell a ray crosses
+  std::vector<::navmap::NavCelId> active_;  // cells with evidence (non-zero log-odds)
+  std::vector<uint8_t> in_active_, flag_;
+  std::vector<std::uint32_t> stamp_;
+  std::uint32_t cycle_ {0};
+  double last_time_ {-1.0}, decay_acc_ {0.0};
+
   // Incremental state, bound to the layer it was built on
-  const ::navmap::LayerViewBase * last_layer_{nullptr};
+  std::weak_ptr<::navmap::LayerViewBase> last_layer_;  // replaced or gone: rebuild
   std::uint64_t last_occ_hash_{0};
   std::vector<uint8_t> base_;                 // static value of each cell
   std::vector<::navmap::NavCelId> marked_;    // obstacle cells of the last cycle
