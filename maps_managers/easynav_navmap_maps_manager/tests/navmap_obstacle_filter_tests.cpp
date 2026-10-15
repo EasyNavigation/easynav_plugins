@@ -251,7 +251,7 @@ TEST_F(NavmapObstacleFilterLimitsTest, PointsBelowMinHeightAboveTheSurfaceAreThe
     perception_.data.push_back(pcl::PointXYZ(x, 4.1f, 0.03f));     // the floor, with noise
     perception_.data.push_back(pcl::PointXYZ(x, 3.2f, 0.095f));    // below 0.1
   }
-  perception_.data.push_back(pcl::PointXYZ(4.70f, 2.30f, 0.15f));  // above 0.1
+  perception_.data.push_back(pcl::PointXYZ(4.66f, 2.26f, 0.15f));  // above 0.1, inside a cell
   easynav::navmap::ObstacleFilter filter;
   const auto & nm = run(filter);
   for (float x = 4.35f; x <= 5.6f; x += 0.3f) {
