@@ -12,3 +12,6 @@ target_link_libraries(navmap_obstacle_filter_tests ${PROJECT_NAME})
 
 ament_add_gtest(navmap_inflation_filter_tests navmap_inflation_filter_tests.cpp)
 target_link_libraries(navmap_inflation_filter_tests ${PROJECT_NAME})
+
+ament_add_gtest(navmap_local_mode_tests navmap_local_mode_tests.cpp)
+target_link_libraries(navmap_local_mode_tests ${PROJECT_NAME})
