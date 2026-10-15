@@ -17,8 +17,12 @@
 #ifndef EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 #define EASYNAV_NAVMAP_MAPS_MANAGER__FILTERS__INFLATIONFILTER_HPP_
 
+#include <cstdint>
+#include <memory>
 #include <string>
+#include <vector>
 
+#include "navmap_core/DistanceField.hpp"
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
 
@@ -29,10 +33,20 @@ namespace easynav
 namespace navmap
 {
 
+/**
+ * @class InflationFilter
+ * @brief "inflated_obstacles": cost by distance (along the surface) to the obstacles of the
+ *        "obstacles" layer and, optionally, to the open edges of the NavMap.
+ *
+ * Incremental: an exact distance field (navmap::DistanceField) is updated with the obstacle cells
+ * that appear or disappear, and only the cells whose distance or obstacle value changed are
+ * rewritten (and recorded as changed). A new map or obstacle layer starts it over.
+ */
 class InflationFilter : public NavMapFilter
 {
 public:
   InflationFilter();
+  ~InflationFilter() override;
 
   void on_initialize() override;
   void update(::easynav::NavState & nav_state) override;
@@ -50,10 +64,16 @@ public:
   std::string get_layer_name() override {return "inflated_obstacles";}
 
 protected:
-  ::navmap::NavMap navmap_;
-
   double inflation_radius_, cost_scaling_factor_, inscribed_radius_;
   bool inflate_borders_{true};  // open edges of the NavMap (walls, drops) inflate like obstacles
+
+  // Incremental state, bound to the map (and layers) it was built on
+  std::unique_ptr<::navmap::DistanceField> df_;
+  const ::navmap::NavMap * df_map_{nullptr};
+  std::uint64_t df_geometry_{0};
+  const ::navmap::LayerViewBase * last_src_{nullptr};
+  const ::navmap::LayerViewBase * last_dst_{nullptr};
+  std::vector<char> lethal_;  // obstacle cells the distance field is seeded with
 };
 
 }  // namespace navmap

@@ -32,6 +32,7 @@ class NavMapFilter
 {
 public:
   NavMapFilter();
+  virtual ~NavMapFilter() = default;  // plugins are deleted through this base
 
   void
   initialize(

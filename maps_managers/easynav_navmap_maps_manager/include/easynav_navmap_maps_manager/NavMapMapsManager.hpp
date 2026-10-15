@@ -27,6 +27,7 @@
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "navmap_ros_interfaces/msg/nav_map.hpp"
 #include "navmap_ros_interfaces/msg/nav_map_layer.hpp"
+#include "std_msgs/msg/header.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
 #include "pcl/point_types.h"
@@ -110,6 +111,7 @@ private:
    * @brief Publisher for ::navmap::NavMap updates.
    */
   rclcpp::Publisher<navmap_ros_interfaces::msg::NavMapLayer>::SharedPtr layer_updates_pub_;
+  std::size_t last_subscribers_{0};  ///< Of layer_updates_pub_: a new one gets full layers
 
   /**
    * @brief Subscriber for external incoming static map updates.
