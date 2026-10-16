@@ -33,6 +33,7 @@ add_library(${PROJECT_NAME} SHARED
   src/easynav_diagnostic_recovery/evaluators/RosGraphEvaluator.cpp
   src/easynav_diagnostic_recovery/evaluators/SafetyChannelEvaluator.cpp
   src/easynav_diagnostic_recovery/mitigations/AdvanceRecovery.cpp
+  src/easynav_diagnostic_recovery/mitigations/RotateRecovery.cpp
   src/easynav_diagnostic_recovery/mitigations/CancelMissionRecovery.cpp
   src/easynav_diagnostic_recovery/mitigations/HumanAssistanceRecovery.cpp
   src/easynav_diagnostic_recovery/mitigations/SafeRetreatRecovery.cpp

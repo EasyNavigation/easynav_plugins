@@ -41,6 +41,14 @@
       in total, it gives up and escalates instead of retrying forever.
       </description>
     </class>
+    <class name="easynav_diagnostic_recovery/RotateRecovery" type="easynav::RotateRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
+      <description>
+      Turns in place (a full turn by default) for ERROR diagnostics of the "planner" (no path),
+      so the sensors look all around (and clear remembered obstacles) before anyone is asked for
+      help; then stands still for the planner. Once per episode: if there is still no path, it
+      fails so the next mitigation (e.g. HumanAssistanceRecovery) takes over.
+      </description>
+    </class>
     <class name="easynav_diagnostic_recovery/CancelMissionRecovery" type="easynav::CancelMissionRecovery" base_class_type="easynav_diagnostic_recovery::RecoveryMitigationBase">
       <description>
       Mission-level last resort: accepts any ERROR diagnostic no other mitigation resolved (or

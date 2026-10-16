@@ -35,6 +35,7 @@ foreach(test
     advance_recovery_tests
     cancel_mission_recovery_tests
     human_assistance_recovery_tests
+    rotate_recovery_tests
     safe_retreat_recovery_tests
     shutdown_recovery_tests)
   ament_add_gtest(${test} mitigations/${test}.cpp)
