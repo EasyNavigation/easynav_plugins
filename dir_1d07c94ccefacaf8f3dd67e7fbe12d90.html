@@ -110,7 +110,7 @@ Directory dependency graph for easynav_navmap_maps_manager:</div>
 <area shape="rect" href="dir_000136_000102.html" title="6" alt="" coords="267,124,274,139"/>
 <area shape="rect" href="dir_191014c8ae5067e82ee00eb3abad1220.html" title="tests" alt="" coords="287,70,337,96"/>
 <area shape="poly" href="dir_000160_000102.html" alt="" coords="309,98,289,139,284,136,304,95"/>
-<area shape="rect" href="dir_000160_000102.html" title="8" alt="" coords="292,131,299,146"/>
+<area shape="rect" href="dir_000160_000102.html" title="9" alt="" coords="292,131,299,146"/>
 <area shape="rect" href="dir_1d07c94ccefacaf8f3dd67e7fbe12d90.html" alt="" coords="27,52,348,188"/>
 <area shape="rect" href="dir_0085665aa3dcf1c11f094757a0c11b94.html" title="maps_managers" alt="" coords="16,16,359,199"/>
 </map>
@@ -215,7 +215,8 @@ Filter Plugins</h2>
 <li><b>Description:</b> <br  />
  Detects occupied NavCels from the point perceptions in <span class="tt">NavState</span> and marks them as <span class="tt">LETHAL_OBSTACLE</span> in the <span class="tt">"obstacles"</span> layer, on top of the static map's <span class="tt">"occupancy"</span> layer (if any). <br  />
  The points are downsampled, those within <span class="tt">max_range</span> and below <span class="tt">max_height</span> (robot frame) are grouped in 0.3 m columns, and a column is an obstacle when its highest point is more than <span class="tt">min_height</span> (plus <span class="tt">min_height_per_meter</span> for each meter from the robot) above the NavMap surface under it (along the surface's normal). So a 2D laser detects obstacles too, and the ground or a ramp, being on the surface, is not one. <br  />
- The layer is rebuilt from the static map only when the map changes; each cycle writes just the cells that become obstacles or stop being one.</li>
+ The layer is rebuilt from the static map only when the map changes; each cycle writes just the cells that become obstacles or stop being one. <br  />
+ With <span class="tt">memory.enabled</span>, the evidence is accumulated per NavCel in log-odds (<span class="tt">"obstacles_logodds"</span>, int16, clamped as OctoMap): a point above the surface is a hit, the cells a ray from the robot crosses (and where a ground point lies) are misses, and unobserved cells can decay. <span class="tt">"obstacles_sensor"</span> says what the sensors know (obstacle, free or unknown), and <span class="tt">"obstacles"</span> is the static map with the sensors on top (<span class="tt">navmap::combine_layer</span>, max): the sensors fill in cells the static map does not know, and never erase a static obstacle. <span class="tt">NO_INFORMATION</span> is the declared unknown value of these layers.</li>
 </ul>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -230,6 +231,14 @@ Filter Plugins</h2>
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.max_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">NaN</span>  </td><td class="markdownTableBodyNone">Points above this height (robot frame) are ignored; <span class="tt">NaN</span> disables it.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.downsample_resolution</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3</span>  </td><td class="markdownTableBodyNone">Voxel size (m) the points are reduced to first; <span class="tt">&lt;= 0</span> disables it.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.memory.enabled</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">false</span>  </td><td class="markdownTableBodyNone">Remember obstacles that are out of sight (see below). Off: only what is seen in the current cycle, on top of the static map.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.memory.clearing</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">true</span>  </td><td class="markdownTableBodyNone">Memory: rays from the robot to each point, along the surface, are evidence of free space in the cells they cross.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.memory.decay_time</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">Memory: seconds for a cell no longer observed to fade back to unknown (from the most certain occupied); <span class="tt">0</span> never.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.memory.p_hit</span>, <span class="tt">memory.p_miss</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.7</span>, <span class="tt">0.4</span>  </td><td class="markdownTableBodyNone">Memory: occupancy probability of a hit and of a cell a ray crosses (as OctoMap).  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Input Key:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Reads list of point clouds from <span class="tt">NavState</span> group <span class="tt">"points"</span>.  </td></tr>
 <tr class="markdownTableRowOdd">
