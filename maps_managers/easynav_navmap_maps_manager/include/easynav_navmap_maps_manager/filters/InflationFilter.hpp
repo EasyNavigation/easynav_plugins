@@ -71,8 +71,7 @@ protected:
   std::unique_ptr<::navmap::DistanceField> df_;
   const ::navmap::NavMap * df_map_{nullptr};
   std::uint64_t df_geometry_{0};
-  const ::navmap::LayerViewBase * last_src_{nullptr};
-  const ::navmap::LayerViewBase * last_dst_{nullptr};
+  std::weak_ptr<::navmap::LayerViewBase> last_src_, last_dst_;  // replaced or gone: rebuild
   std::vector<char> lethal_;  // obstacle cells the distance field is seeded with
 };
 
