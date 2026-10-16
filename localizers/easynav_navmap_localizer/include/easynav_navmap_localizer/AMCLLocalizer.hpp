@@ -23,6 +23,7 @@
 #include <random>
 #include <limits>
 #include <memory>
+#include <optional>
 
 #include "Eigen/Geometry"
 #include "bonxai/probabilistic_map.hpp"
@@ -233,6 +234,8 @@ protected:
 
   /// Previous odometry transform (used to compute deltas).
   tf2::Transform last_odom_{tf2::Transform::getIdentity()};
+  /// IMU yaw at the last prediction: only its change is used.
+  std::optional<double> last_imu_yaw_;
 
   /// Flag indicating if the odometry has been initialized.
   bool initialized_odom_ = false;

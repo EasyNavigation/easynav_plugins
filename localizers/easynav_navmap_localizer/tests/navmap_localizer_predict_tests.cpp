@@ -27,6 +27,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "tf2/utils.hpp"
 #include "easynav_common/types/NavState.hpp"
+#include "easynav_sensors/types/IMUPerception.hpp"
 #include "easynav_localizer/LocalizerNode.hpp"
 #include "easynav_navmap_localizer/AMCLLocalizer.hpp"
 
@@ -115,6 +116,34 @@ protected:
     return {x / n, y / n, std::atan2(s, c)};
   }
 
+  // Spread of the particles' yaw (circular standard deviation)
+  double yaw_spread() const
+  {
+    double s = 0.0, c = 0.0;
+    for (const auto & p : amcl_->particles_) {
+      const double yaw = tf2::getYaw(p.pose.getRotation());
+      s += std::sin(yaw);
+      c += std::cos(yaw);
+    }
+    const double n = static_cast<double>(amcl_->particles_.size());
+    const double r = std::hypot(s, c) / n;
+    return std::sqrt(std::max(0.0, -2.0 * std::log(std::max(r, 1e-12))));
+  }
+
+  // An IMU reading with this orientation
+  void imu(double roll, double pitch, double yaw)
+  {
+    easynav::IMUPerception p;
+    tf2::Quaternion q;
+    q.setRPY(roll, pitch, yaw);
+    p.data.orientation.x = q.x();
+    p.data.orientation.y = q.y();
+    p.data.orientation.z = q.z();
+    p.data.orientation.w = q.w();
+    p.valid = true;
+    nav_state_.set("imu", p);
+  }
+
   std::shared_ptr<easynav::LocalizerNode> node_;
   std::shared_ptr<TestAmcl> amcl_;
   easynav::NavState nav_state_;
@@ -169,4 +198,60 @@ TEST_F(NavmapAmclPredictTest, AMixOfStillAndMovingCyclesStaysFinite)
     }
   }
   EXPECT_TRUE(particles_finite());
+}
+
+TEST_F(NavmapAmclPredictTest, EachParticleGetsItsOwnHeadingNoise)
+{
+  // Odometry turning: the particles must spread in yaw, so the correction can choose among them
+  node_->set_parameter(rclcpp::Parameter("loc.noise_rotation", 0.3));
+  amcl_->initialize(node_, "loc");
+  const double before = yaw_spread();
+  for (int i = 0; i < 20; ++i) {
+    predict(0.0, 0.0, 0.1);
+  }
+  EXPECT_GT(yaw_spread(), 2.0 * before + 0.01);
+}
+
+TEST_F(NavmapAmclPredictTest, TheImuGivesRollPitchAndTurnsButNotItsAbsoluteYaw)
+{
+  // An IMU whose yaw is 1.2 rad off the map (no magnetometer) and tilted on a slope
+  imu(0.1, -0.2, 1.2);
+  const double yaw0 = mean()[2];
+  predict(0.0, 0.0, 0.0);
+  EXPECT_NEAR(std::remainder(mean()[2] - yaw0, 2.0 * M_PI), 0.0, 0.05);  // not snapped to 1.2
+  for (const auto & p : amcl_->particles_) {
+    double r, pi, y;
+    tf2::Matrix3x3(p.pose.getRotation()).getRPY(r, pi, y);
+    ASSERT_NEAR(r, 0.1, 1e-6);
+    ASSERT_NEAR(pi, -0.2, 1e-6);
+  }
+  // The IMU turns 0.5 rad while the (slipping) odometry says 0.1: the particles follow the IMU
+  for (int i = 1; i <= 5; ++i) {
+    imu(0.1, -0.2, 1.2 + 0.1 * i);
+    predict(0.0, 0.0, 0.02);
+  }
+  EXPECT_NEAR(std::remainder(mean()[2] - yaw0 - 0.5, 2.0 * M_PI), 0.0, 0.1);
+  // Across the IMU's +-pi wrap too
+  imu(0.0, 0.0, M_PI - 0.05);
+  predict(0.0, 0.0, 0.0);
+  const double y1 = mean()[2];
+  imu(0.0, 0.0, -M_PI + 0.05);
+  predict(0.0, 0.0, 0.0);
+  EXPECT_NEAR(std::remainder(mean()[2] - y1 - 0.1, 2.0 * M_PI), 0.0, 0.05);
+}
+
+TEST_F(NavmapAmclPredictTest, MovingOnATiltedRobotStaysOnTheSurface)
+{
+  imu(0.0, -0.3, 0.0);  // pitched up 0.3 rad (an incline the flat map does not have)
+  const auto before = mean();
+  for (int i = 0; i < 5; ++i) {
+    predict(0.1, 0.0, 0.0);
+  }
+  ASSERT_TRUE(particles_finite());
+  const auto after = mean();
+  // Along the tilted heading: about cos(0.3) of the distance in XY, z back on the map surface
+  EXPECT_NEAR(after[0] - before[0], 0.5 * std::cos(0.3), 0.1);
+  for (const auto & p : amcl_->particles_) {
+    ASSERT_NEAR(p.pose.getOrigin().z(), 0.0, 1e-3);
+  }
 }

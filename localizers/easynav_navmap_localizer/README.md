@@ -72,7 +72,7 @@ This package does not create service servers or clients.
 
 | Key | Type | Access | Notes |
 |---|---|---|---|
-| `imu` | `IMUPerceptions` | **Read** | Used to get the latest IMU orientation when available. |
+| `imu` | `IMUPerceptions` | **Read** | When available, the particles take its roll and pitch, and turn by the change of its yaw (not by the odometry's); its absolute yaw is never used (without a magnetometer it is arbitrary and drifts). Without it, the orientation follows the NavMap surface and the odometry's turns. |
 | `points` | `PointPerceptions` | **Read** | 3D point cloud bundles used in the correction step. |
 | `map.navmap` | `::navmap::NavMap` | **Read** | Triangle mesh map providing surface geometry and elevation. |
 | `map.bonxai` | `Bonxai::ProbabilisticMap` | **Read** | Probabilistic occupancy map used for scoring. |
