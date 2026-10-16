@@ -736,6 +736,18 @@ void AMCLLocalizer::predict(NavState & nav_state)
   double trans_len = std::sqrt(dx * dx + dy * dy + dz * dz);
 
   double r, p, yaw; tf2::Matrix3x3(delta.getRotation()).getRPY(r, p, yaw);
+  // The IMU: roll and pitch (gravity) are absolute; of its yaw only the change is used (a gyro
+  // turns far better than skid-steer odometry, and without a magnetometer its absolute yaw is
+  // arbitrary and drifts)
+  double imu_roll = 0.0, imu_pitch = 0.0;
+  if (imu_q_opt.has_value()) {
+    double imu_yaw;
+    tf2::Matrix3x3(*imu_q_opt).getRPY(imu_roll, imu_pitch, imu_yaw);
+    if (last_imu_yaw_.has_value()) {
+      yaw = std::remainder(imu_yaw - *last_imu_yaw_, 2.0 * M_PI);
+    }
+    last_imu_yaw_ = imu_yaw;
+  }
   double rot_len = std::abs(yaw);
 
   // Zero-mean noise; a zero deviation (e.g. the robot still) is no noise: std::normal_distribution
@@ -748,12 +760,15 @@ void AMCLLocalizer::predict(NavState & nav_state)
   const double sd_dz = std::abs(dz) * noise_translation_;
   const double sd_yaw = rot_len * noise_rotation_ + trans_len * noise_translation_to_rotation_;
 
-  double noisy_y = yaw + noise(sd_yaw);
-
   for (auto & p : particles_) {
-    tf2::Vector3 noisy_t(dx + noise(sd_dx), dy + noise(sd_dy), dz + noise(sd_dz));
-    tf2::Quaternion noisy_q; noisy_q.setRPY(0.0, 0.0, noisy_y);
-    p.pose = p.pose * tf2::Transform(noisy_q, noisy_t);
+    // Each particle its own noise: they must spread in heading too for the correction to fix it
+    double pr, pp, py; tf2::Matrix3x3(p.pose.getRotation()).getRPY(pr, pp, py);
+    const tf2::Vector3 noisy_t(dx + noise(sd_dx), dy + noise(sd_dy), dz + noise(sd_dz));
+    tf2::Vector3 Pw = p.pose * noisy_t;  // along the robot's current (tilted) heading
+    const double new_yaw = py + yaw + noise(sd_yaw);
+    tf2::Quaternion flat_q; flat_q.setRPY(0.0, 0.0, new_yaw);
+    p.pose.setOrigin(Pw);
+    p.pose.setRotation(flat_q);
 
     if (have_navmap) {
       ::navmap::NavMap::LocateOpts opts;
@@ -762,7 +777,6 @@ void AMCLLocalizer::predict(NavState & nav_state)
       }
       opts.planar_eps = 1e-4f; opts.height_eps = 0.50f; opts.use_downward_ray = true;
 
-      tf2::Vector3 Pw = p.pose.getOrigin();
       std::size_t sidx = 0; ::navmap::NavCelId cid = std::numeric_limits<uint32_t>::max();
       Eigen::Vector3f bary, hit_eig;
 
@@ -776,21 +790,22 @@ void AMCLLocalizer::predict(NavState & nav_state)
         tf2::Vector3 hit = to_tf(hit_eig);
         p.pose.setOrigin(tf2::Vector3(Pw.x(), Pw.y(), hit.z()));
         if (imu_q_opt.has_value()) {
-          p.pose.setRotation(*imu_q_opt);
+          tf2::Quaternion q; q.setRPY(imu_roll, imu_pitch, new_yaw);
+          p.pose.setRotation(q);
         } else {
           const auto & cel = navmap.navcels[cid];
           tf2::Vector3 n_world = to_tf(cel.normal);
           double nlen = n_world.length();
           if (nlen > 1e-9) {
             n_world /= nlen;
-            double rr, pp, yy; tf2::Matrix3x3(p.pose.getRotation()).getRPY(rr, pp, yy);
-            p.pose.setRotation(frame_from_normal_and_yaw(n_world, yy));
+            if (n_world.z() < 0.0) {n_world = -n_world;}
+            p.pose.setRotation(frame_from_normal_and_yaw(n_world, new_yaw));
           }
         }
         p.last_cid = cid; p.last_surface = sidx;
-      } else {
-        p.pose.setOrigin(tf2::Vector3(Pw.x(), Pw.y(), Pw.z()));
-        if (imu_q_opt.has_value()) {p.pose.setRotation(*imu_q_opt);}
+      } else if (imu_q_opt.has_value()) {
+        tf2::Quaternion q; q.setRPY(imu_roll, imu_pitch, new_yaw);
+        p.pose.setRotation(q);
       }
     }
   }
