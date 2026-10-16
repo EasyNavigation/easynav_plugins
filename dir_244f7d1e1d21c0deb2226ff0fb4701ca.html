@@ -234,7 +234,7 @@ NavState Keys</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Key  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Access  </th><th class="markdownTableHeadNone">Notes  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">imu</span>  </td><td class="markdownTableBodyNone"><span class="tt">IMUPerceptions</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Used to get the latest IMU orientation when available.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">imu</span>  </td><td class="markdownTableBodyNone"><span class="tt">IMUPerceptions</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">When available, the particles take its roll and pitch, and turn by the change of its yaw (not by the odometry's); its absolute yaw is never used (without a magnetometer it is arbitrary and drifts). Without it, the orientation follows the NavMap surface and the odometry's turns.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">points</span>  </td><td class="markdownTableBodyNone"><span class="tt">PointPerceptions</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">3D point cloud bundles used in the correction step.  </td></tr>
 <tr class="markdownTableRowOdd">

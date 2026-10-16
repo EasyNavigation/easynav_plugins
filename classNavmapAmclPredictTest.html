@@ -128,10 +128,12 @@ Collaboration diagram for NavmapAmclPredictTest:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
+<tr class="memitem:a732bb9b37496c1b2f836bbea243c3bde" id="r_a732bb9b37496c1b2f836bbea243c3bde"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a732bb9b37496c1b2f836bbea243c3bde">imu</a> (double roll, double pitch, double yaw)</td></tr>
 <tr class="memitem:a7516e48573c4d6f3226ff006542efb34" id="r_a7516e48573c4d6f3226ff006542efb34"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a7516e48573c4d6f3226ff006542efb34">mean</a> () const</td></tr>
 <tr class="memitem:ad08070bcfbfa39f6f13c02cb36cb72de" id="r_ad08070bcfbfa39f6f13c02cb36cb72de"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ad08070bcfbfa39f6f13c02cb36cb72de">particles_finite</a> () const</td></tr>
 <tr class="memitem:a4f60e116fc8af41cf0d5bc0d63b8c68f" id="r_a4f60e116fc8af41cf0d5bc0d63b8c68f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4f60e116fc8af41cf0d5bc0d63b8c68f">predict</a> (double dx, double dy, double dyaw)</td></tr>
 <tr class="memitem:a3a1707f6479611fdc609a3eb8a0cef1b" id="r_a3a1707f6479611fdc609a3eb8a0cef1b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a3a1707f6479611fdc609a3eb8a0cef1b">SetUp</a> () override</td></tr>
+<tr class="memitem:a332b9506719959515ebf2e6ae700f9de" id="r_a332b9506719959515ebf2e6ae700f9de"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a332b9506719959515ebf2e6ae700f9de">yaw_spread</a> () const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -140,6 +142,40 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a4db7f8390d92a13520fbb46463c606bf" id="r_a4db7f8390d92a13520fbb46463c606bf"><td class="memItemLeft">std::shared_ptr&lt; easynav::LocalizerNode &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4db7f8390d92a13520fbb46463c606bf">node_</a></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a732bb9b37496c1b2f836bbea243c3bde" name="a732bb9b37496c1b2f836bbea243c3bde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a732bb9b37496c1b2f836bbea243c3bde">&#9670;&#160;</a></span>imu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void imu </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>roll</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>pitch</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>yaw</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7516e48573c4d6f3226ff006542efb34" name="a7516e48573c4d6f3226ff006542efb34"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7516e48573c4d6f3226ff006542efb34">&#9670;&#160;</a></span>mean()</h2>
 
@@ -243,6 +279,31 @@ Protected Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel override">override</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a332b9506719959515ebf2e6ae700f9de" name="a332b9506719959515ebf2e6ae700f9de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a332b9506719959515ebf2e6ae700f9de">&#9670;&#160;</a></span>yaw_spread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double yaw_spread </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
