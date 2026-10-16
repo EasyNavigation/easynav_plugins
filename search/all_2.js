@@ -25,5 +25,6 @@ var searchData=
   ['bonxaimapsmanager_2ecpp_22',['BonxaiMapsManager.cpp',['../BonxaiMapsManager_8cpp.html',1,'']]],
   ['bonxaimapsmanager_2ehpp_23',['BonxaiMapsManager.hpp',['../BonxaiMapsManager_8hpp.html',1,'']]],
   ['bonxaimapsmanagerreconfiguretest_24',['BonxaiMapsManagerReconfigureTest',['../classBonxaiMapsManagerReconfigureTest.html',1,'']]],
-  ['brakes_25',['brakes',['../classCollisionSafetyReflexCheckTest.html#aa94186b82f66dc167e4d7dbaf42431c0',1,'CollisionSafetyReflexCheckTest']]]
+  ['brakes_25',['brakes',['../classCollisionSafetyReflexCheckTest.html#aa94186b82f66dc167e4d7dbaf42431c0',1,'CollisionSafetyReflexCheckTest']]],
+  ['build_5fterrain_26',['build_terrain',['../classeasynav_1_1navmap_1_1AStarPlanner.html#a45e17f92ebac35e41baaa4a621eea7a8',1,'easynav::navmap::AStarPlanner']]]
 ];

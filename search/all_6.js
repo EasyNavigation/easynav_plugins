@@ -32,12 +32,13 @@ var searchData=
   ['from_20the_20nav2_20version_29',['Adaptations from the Nav2 version',['../dir_7ddc676eb27f46842c32f71c619789e5.html#autotoc_md48',1,'']]],
   ['from_5fmsg_30',['from_msg',['../namespaceeasynav.html#aa3942576f265f4ad4b6d408f52423620',1,'easynav']]],
   ['from_5foccupancy_5fgrid_31',['from_occupancy_grid',['../classeasynav_1_1SimpleMap.html#a14359bb8f06ad0b19ff1a01e41c23992',1,'easynav::SimpleMap']]],
-  ['fusion_5flocalizer_5flocal_5ffilter_5ftests_2ecpp_32',['fusion_localizer_local_filter_tests.cpp',['../fusion__localizer__local__filter__tests_8cpp.html',1,'']]],
-  ['fusion_5flocalizer_5freconfigure_5ftests_2ecpp_33',['fusion_localizer_reconfigure_tests.cpp',['../fusion__localizer__reconfigure__tests_8cpp.html',1,'']]],
-  ['fusion_5flocalizer_5ftests_2ecpp_34',['fusion_localizer_tests.cpp',['../fusion__localizer__tests_8cpp.html',1,'']]],
-  ['fusionlocalfiltertest_35',['FusionLocalFilterTest',['../classFusionLocalFilterTest.html',1,'']]],
-  ['fusionlocalizer_36',['FusionLocalizer',['../classeasynav_1_1FusionLocalizer.html',1,'FusionLocalizer'],['../classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d',1,'easynav::FusionLocalizer::FusionLocalizer()']]],
-  ['fusionlocalizer_2ecpp_37',['FusionLocalizer.cpp',['../FusionLocalizer_8cpp.html',1,'']]],
-  ['fusionlocalizer_2ehpp_38',['FusionLocalizer.hpp',['../FusionLocalizer_8hpp.html',1,'']]],
-  ['fusionlocalizerreconfiguretest_39',['FusionLocalizerReconfigureTest',['../classFusionLocalizerReconfigureTest.html',1,'']]]
+  ['full_5fturn_32',['full_turn',['../classRotateRecoveryTest.html#a7085cf783a4166bb504b8b895cdefe50',1,'RotateRecoveryTest']]],
+  ['fusion_5flocalizer_5flocal_5ffilter_5ftests_2ecpp_33',['fusion_localizer_local_filter_tests.cpp',['../fusion__localizer__local__filter__tests_8cpp.html',1,'']]],
+  ['fusion_5flocalizer_5freconfigure_5ftests_2ecpp_34',['fusion_localizer_reconfigure_tests.cpp',['../fusion__localizer__reconfigure__tests_8cpp.html',1,'']]],
+  ['fusion_5flocalizer_5ftests_2ecpp_35',['fusion_localizer_tests.cpp',['../fusion__localizer__tests_8cpp.html',1,'']]],
+  ['fusionlocalfiltertest_36',['FusionLocalFilterTest',['../classFusionLocalFilterTest.html',1,'']]],
+  ['fusionlocalizer_37',['FusionLocalizer',['../classeasynav_1_1FusionLocalizer.html',1,'FusionLocalizer'],['../classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d',1,'easynav::FusionLocalizer::FusionLocalizer()']]],
+  ['fusionlocalizer_2ecpp_38',['FusionLocalizer.cpp',['../FusionLocalizer_8cpp.html',1,'']]],
+  ['fusionlocalizer_2ehpp_39',['FusionLocalizer.hpp',['../FusionLocalizer_8hpp.html',1,'']]],
+  ['fusionlocalizerreconfiguretest_40',['FusionLocalizerReconfigureTest',['../classFusionLocalizerReconfigureTest.html',1,'']]]
 ];

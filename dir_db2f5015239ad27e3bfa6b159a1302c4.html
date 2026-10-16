@@ -110,7 +110,7 @@ Directory dependency graph for easynav_navmap_planner:</div>
 <area shape="rect" href="dir_000141_000107.html" title="1" alt="" coords="275,109,282,124"/>
 <area shape="rect" href="dir_cdaeafa7fb936fdaf3fce92d5cea0dea.html" title="tests" alt="" coords="296,63,346,89"/>
 <area shape="poly" href="dir_000164_000107.html" alt="" coords="318,90,300,124,295,122,313,88"/>
-<area shape="rect" href="dir_000164_000107.html" title="2" alt="" coords="303,117,310,132"/>
+<area shape="rect" href="dir_000164_000107.html" title="3" alt="" coords="303,117,310,132"/>
 <area shape="rect" href="dir_db2f5015239ad27e3bfa6b159a1302c4.html" alt="" coords="27,52,357,173"/>
 <area shape="rect" href="dir_e5c1b1d8bab0718c16d961f31ff6f438.html" title="planners" alt="" coords="16,16,368,184"/>
 </map>
@@ -189,7 +189,22 @@ Parameters</h1>
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.cost_weight</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">5.0</span>  </td><td class="markdownTableBodyNone">Weight of the cell cost (inflation) against the path length; higher values keep paths farther from obstacles.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.continuous_replan</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">true</span>  </td><td class="markdownTableBodyNone">If true, recomputes the path whenever <span class="tt">NavState</span> updates; if false, plans once per goal.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.terrain.slope_weight</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">Extra cost per meter on a sloped NavCel: <span class="tt">slope_weight * tan²(slope)</span>, up, down or across. Gentle slopes cost little and steep ones a lot: with <span class="tt">20</span>, 5° adds 0.15 per meter, 10° 0.6, 20° 2.6 and 30° 6.7 (the flat costs <span class="tt">cost_factor</span>, 2). <span class="tt">0</span> ignores the slope.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.terrain.max_slope_deg</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">90.0</span>  </td><td class="markdownTableBodyNone">NavCels steeper than this are not traversable.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.terrain.max_step</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone"><span class="tt">&gt; 0</span>: NavCels with a larger height step around them (m) are not traversable.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.terrain.max_roughness</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone"><span class="tt">&gt; 0</span>: NavCels rougher than this (RMS distance to the local plane, m) are not traversable.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.terrain.min_clearance</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone"><span class="tt">&gt; 0</span>: NavCels with less free height above (to the next surface of the map, m) are not traversable; e.g. the robot's height.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.links.enabled</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">true</span>  </td><td class="markdownTableBodyNone">Take the links between surfaces of the map (<span class="tt">navmap::SurfaceLink</span>).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.links.types</span>  </td><td class="markdownTableBodyNone"><span class="tt">list&lt;string&gt;</span>  </td><td class="markdownTableBodyRight"><span class="tt">[generic, ramp, door]</span>  </td><td class="markdownTableBodyNone">Kinds of link the robot can take: <span class="tt">generic</span>, <span class="tt">ramp</span>, <span class="tt">stairs</span>, <span class="tt">elevator</span>, <span class="tt">door</span>.  </td></tr>
 </table>
+<p>The terrain limits use the NavMap descriptors (<span class="tt">navmap::compute_descriptors</span>), computed once per map geometry: a few tens of ms on maps of tens of thousands of NavCels (more if the map is rebuilt continuously, as in the maps manager's local mode). The line-of-sight shortcut never replaces part of the path by a steeper or costlier straight segment, and never cuts across a link.</p>
 <p><b>Note:</b> The planner internally uses hardcoded values for <span class="tt">layer_name</span> (prefers <span class="tt">"inflated_obstacles"</span>, fallback to <span class="tt">"obstacles"</span>), <span class="tt">cost_axial</span>, and <span class="tt">cost_diagonal</span>. These are not runtime-configurable parameters.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md283"></a>
 Interfaces (Topics and Services)</h1>

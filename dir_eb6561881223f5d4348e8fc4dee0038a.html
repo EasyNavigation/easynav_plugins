@@ -107,10 +107,10 @@ Directory dependency graph for easynav_diagnostic_recovery:</div>
 <area shape="rect" href="dir_cd0ba9e8d5d57e9c028d9eedf5f544c2.html" title="include" alt="" coords="218,152,280,177"/>
 <area shape="rect" href="dir_b003e4af212a5d6fc51adc7ea1a56e68.html" title="src" alt="" coords="198,70,237,96"/>
 <area shape="poly" href="dir_000143_000109.html" alt="" coords="225,96,241,136,236,138,220,98"/>
-<area shape="rect" href="dir_000143_000109.html" title="21" alt="" coords="238,124,252,139"/>
+<area shape="rect" href="dir_000143_000109.html" title="22" alt="" coords="238,124,252,139"/>
 <area shape="rect" href="dir_60c9eb1abcdc16b0e1260a93544d2ced.html" title="tests" alt="" coords="262,70,312,96"/>
 <area shape="poly" href="dir_000166_000109.html" alt="" coords="283,98,264,139,259,136,279,95"/>
-<area shape="rect" href="dir_000166_000109.html" title="18" alt="" coords="263,131,277,146"/>
+<area shape="rect" href="dir_000166_000109.html" title="19" alt="" coords="263,131,277,146"/>
 <area shape="rect" href="dir_eb6561881223f5d4348e8fc4dee0038a.html" alt="" coords="27,52,323,188"/>
 <area shape="rect" href="dir_34513097b5279703c3801692cef77787.html" title="recoveries" alt="" coords="16,16,333,199"/>
 </map>
@@ -173,7 +173,7 @@ Package layout</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">evaluators/</span>  </td><td class="markdownTableBodyNone"><span class="tt">NoPathEvaluator</span>, <span class="tt">ObstacleTooCloseEvaluator</span>, <span class="tt">ControllerStuckEvaluator</span>, <span class="tt">RosGraphEvaluator</span>, <span class="tt">SafetyChannelEvaluator</span>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">mitigations/</span>  </td><td class="markdownTableBodyNone"><span class="tt">SafeRetreatRecovery</span>, <span class="tt">AdvanceRecovery</span>, <span class="tt">ShutdownRecovery</span>, <span class="tt">HumanAssistanceRecovery</span>, <span class="tt">CancelMissionRecovery</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">mitigations/</span>  </td><td class="markdownTableBodyNone"><span class="tt">SafeRetreatRecovery</span>, <span class="tt">AdvanceRecovery</span>, <span class="tt">RotateRecovery</span>, <span class="tt">ShutdownRecovery</span>, <span class="tt">HumanAssistanceRecovery</span>, <span class="tt">CancelMissionRecovery</span>  </td></tr>
 </table>
 <p>A component can also ship recovery for its own failures. For example, <span class="tt">easynav_costmap_localizer</span> ships <span class="tt">AmclConvergenceEvaluator</span> and <span class="tt">AmclRelocalizeMitigation</span>.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md302"></a>
@@ -199,14 +199,16 @@ Plugins</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">easynav_diagnostic_recovery/AdvanceRecovery</span>  </td><td class="markdownTableBodyNone">Handles <span class="tt">controller_stuck</span>: moves forward a little. Gives up after <span class="tt">escalate_after</span> s of repeated attempts.  </td><td class="markdownTableBodyNone"><span class="tt">advance_distance</span> (0.3), <span class="tt">advance_speed</span> (0.1), <span class="tt">escalate_after</span> (15.0), <span class="tt">episode_gap</span> (10.0)  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">easynav_diagnostic_recovery/RotateRecovery</span>  </td><td class="markdownTableBodyNone">Handles <span class="tt">planner</span> (no path): turns in place <span class="tt">angle</span> so the sensors look all around (with a map that remembers obstacles, e.g. the NavMap <span class="tt">ObstacleFilter</span> with <span class="tt">memory.enabled</span>, this clears those that have gone), then stands still <span class="tt">settle_time</span> s for the planner. Once per episode: if there is still no path within <span class="tt">episode_gap</span> s, it fails so the next mitigation (e.g. <span class="tt">HumanAssistanceRecovery</span>) takes over; also if the turn takes longer than <span class="tt">timeout</span> (<span class="tt">0</span>: twice the expected plus 5 s). Give it a lower priority number than <span class="tt">HumanAssistanceRecovery</span>.  </td><td class="markdownTableBodyNone"><span class="tt">angle</span> (2π; negative turns clockwise), <span class="tt">angular_speed</span> (0.5), <span class="tt">settle_time</span> (2.0), <span class="tt">timeout</span> (0.0), <span class="tt">episode_gap</span> (30.0), <span class="tt">hardware_ids</span> ([<span class="tt">planner</span>])  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">easynav_diagnostic_recovery/ShutdownRecovery</span>  </td><td class="markdownTableBodyNone">Handles the listed diagnostics by terminating EasyNav.  </td><td class="markdownTableBodyNone"><span class="tt">handled_hardware_ids</span> ([<span class="tt">ros_graph</span>])  </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">easynav_diagnostic_recovery/HumanAssistanceRecovery</span>  </td><td class="markdownTableBodyNone">Handles any <span class="tt">ERROR</span> not in <span class="tt">ignored_hardware_ids</span>: stops and waits until those clear. <span class="tt">timeout</span> 0 waits forever.  </td><td class="markdownTableBodyNone"><span class="tt">timeout</span> (0.0), <span class="tt">ignored_hardware_ids</span> ([<span class="tt">ros_graph</span>])  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">easynav_diagnostic_recovery/CancelMissionRecovery</span>  </td><td class="markdownTableBodyNone">Handles any <span class="tt">ERROR</span>: aborts the mission. The last resort.  </td><td class="markdownTableBodyNone">—  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">easynav_costmap_localizer/AmclConvergenceEvaluator</span>  </td><td class="markdownTableBodyNone"><span class="tt">ERROR</span> (<span class="tt">localizer.amcl</span>) if AMCL's covariance trace exceeds the threshold.  </td><td class="markdownTableBodyNone"><span class="tt">covariance_threshold</span> (1.0)  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">easynav_diagnostic_recovery/CancelMissionRecovery</span>  </td><td class="markdownTableBodyNone">Handles any <span class="tt">ERROR</span>: aborts the mission. The last resort.  </td><td class="markdownTableBodyNone">—  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">easynav_costmap_localizer/AmclConvergenceEvaluator</span>  </td><td class="markdownTableBodyNone"><span class="tt">ERROR</span> (<span class="tt">localizer.amcl</span>) if AMCL's covariance trace exceeds the threshold.  </td><td class="markdownTableBodyNone"><span class="tt">covariance_threshold</span> (1.0)  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">easynav_costmap_localizer/AmclRelocalizeMitigation</span>  </td><td class="markdownTableBodyNone">Handles <span class="tt">localizer.amcl</span>: rotates until AMCL converges, or fails after <span class="tt">timeout</span>.  </td><td class="markdownTableBodyNone"><span class="tt">covariance_threshold</span> (1.0), <span class="tt">rotation_speed</span> (0.3), <span class="tt">timeout</span> (5.0)  </td></tr>
 </table>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md303"></a>

@@ -11,5 +11,6 @@ var searchData=
   ['free_5fdistance_5falong_5fx_8',['free_distance_along_x',['../namespaceeasynav__diagnostic__recovery.html#ada38df5e7cf3dbfcca98ff9e9c92c428',1,'easynav_diagnostic_recovery::free_distance_along_x()'],['../obstacle__proximity__tests_8cpp.html#ada38df5e7cf3dbfcca98ff9e9c92c428',1,'free_distance_along_x():&#160;ObstacleProximity.cpp']]],
   ['from_5fmsg_9',['from_msg',['../namespaceeasynav.html#aa3942576f265f4ad4b6d408f52423620',1,'easynav']]],
   ['from_5foccupancy_5fgrid_10',['from_occupancy_grid',['../classeasynav_1_1SimpleMap.html#a14359bb8f06ad0b19ff1a01e41c23992',1,'easynav::SimpleMap']]],
-  ['fusionlocalizer_11',['FusionLocalizer',['../classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d',1,'easynav::FusionLocalizer']]]
+  ['full_5fturn_11',['full_turn',['../classRotateRecoveryTest.html#a7085cf783a4166bb504b8b895cdefe50',1,'RotateRecoveryTest']]],
+  ['fusionlocalizer_12',['FusionLocalizer',['../classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d',1,'easynav::FusionLocalizer']]]
 ];

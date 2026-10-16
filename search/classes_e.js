@@ -11,12 +11,14 @@ var searchData=
   ['regulatedpurepursuitcontrollerreconfiguretest_8',['RegulatedPurePursuitControllerReconfigureTest',['../classRegulatedPurePursuitControllerReconfigureTest.html',1,'']]],
   ['rosgraphevaluator_9',['RosGraphEvaluator',['../classeasynav_1_1RosGraphEvaluator.html',1,'easynav']]],
   ['rosgraphevaluatortestcase_10',['RosGraphEvaluatorTestCase',['../classRosGraphEvaluatorTestCase.html',1,'']]],
-  ['routescostmapfilter_11',['RoutesCostmapFilter',['../classeasynav_1_1RoutesCostmapFilter.html',1,'RoutesCostmapFilter'],['../classRoutesCostmapFilter.html',1,'RoutesCostmapFilter']]],
-  ['routescostmapfiltertest_12',['RoutesCostmapFilterTest',['../classRoutesCostmapFilterTest.html',1,'']]],
-  ['routesegment_13',['RouteSegment',['../structeasynav_1_1RouteSegment.html',1,'RouteSegment'],['../structRouteSegment.html',1,'RouteSegment']]],
-  ['routesfilter_14',['RoutesFilter',['../classeasynav_1_1RoutesFilter.html',1,'easynav']]],
-  ['routesmapsmanager_15',['RoutesMapsManager',['../classeasynav_1_1RoutesMapsManager.html',1,'RoutesMapsManager'],['../classRoutesMapsManager.html',1,'RoutesMapsManager']]],
-  ['routesmapsmanagerreconfiguretest_16',['RoutesMapsManagerReconfigureTest',['../classRoutesMapsManagerReconfigureTest.html',1,'']]],
-  ['routesmapsmanagertest_17',['RoutesMapsManagerTest',['../classRoutesMapsManagerTest.html',1,'']]],
-  ['rppobstacleareatest_18',['RppObstacleAreaTest',['../classRppObstacleAreaTest.html',1,'']]]
+  ['rotaterecovery_11',['RotateRecovery',['../classeasynav_1_1RotateRecovery.html',1,'easynav']]],
+  ['rotaterecoverytest_12',['RotateRecoveryTest',['../classRotateRecoveryTest.html',1,'']]],
+  ['routescostmapfilter_13',['RoutesCostmapFilter',['../classeasynav_1_1RoutesCostmapFilter.html',1,'RoutesCostmapFilter'],['../classRoutesCostmapFilter.html',1,'RoutesCostmapFilter']]],
+  ['routescostmapfiltertest_14',['RoutesCostmapFilterTest',['../classRoutesCostmapFilterTest.html',1,'']]],
+  ['routesegment_15',['RouteSegment',['../structeasynav_1_1RouteSegment.html',1,'RouteSegment'],['../structRouteSegment.html',1,'RouteSegment']]],
+  ['routesfilter_16',['RoutesFilter',['../classeasynav_1_1RoutesFilter.html',1,'easynav']]],
+  ['routesmapsmanager_17',['RoutesMapsManager',['../classeasynav_1_1RoutesMapsManager.html',1,'RoutesMapsManager'],['../classRoutesMapsManager.html',1,'RoutesMapsManager']]],
+  ['routesmapsmanagerreconfiguretest_18',['RoutesMapsManagerReconfigureTest',['../classRoutesMapsManagerReconfigureTest.html',1,'']]],
+  ['routesmapsmanagertest_19',['RoutesMapsManagerTest',['../classRoutesMapsManagerTest.html',1,'']]],
+  ['rppobstacleareatest_20',['RppObstacleAreaTest',['../classRppObstacleAreaTest.html',1,'']]]
 ];
