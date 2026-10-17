@@ -36,5 +36,6 @@ var searchData=
   ['orientationaroundzaxis_33',['orientationAroundZAxis',['../namespaceeasynav.html#a6a442a5fec850c953734564959a562ba',1,'easynav::orientationAroundZAxis()'],['../namespaceeasynav__bonxai.html#a6a442a5fec850c953734564959a562ba',1,'easynav_bonxai::orientationAroundZAxis()'],['../namespaceeasynav_1_1navmap.html#a6a442a5fec850c953734564959a562ba',1,'easynav::navmap::orientationAroundZAxis()'],['../namespaceeasynav_1_1octomap.html#a6a442a5fec850c953734564959a562ba',1,'easynav::octomap::orientationAroundZAxis()']]],
   ['origin_5fx_34',['origin_x',['../classeasynav_1_1SimpleMap.html#a8a1286b338d47e15e442ffbff7296120',1,'easynav::SimpleMap']]],
   ['origin_5fy_35',['origin_y',['../classeasynav_1_1SimpleMap.html#a052913e7e9c1d5c1ab7bdb1496319f42',1,'easynav::SimpleMap']]],
-  ['override_5fvelocity_36',['override_velocity',['../classeasynav__diagnostic__recovery_1_1SafetyReflexBase.html#a0bc0351b4d9f1bedcce16e1e2d793c6a',1,'easynav_diagnostic_recovery::SafetyReflexBase']]]
+  ['origins_36',['origins',['../classNavmapAmclRecoveryTest.html#ae90e0ad282423172b4ea6e355c059043',1,'NavmapAmclRecoveryTest']]],
+  ['override_5fvelocity_37',['override_velocity',['../classeasynav__diagnostic__recovery_1_1SafetyReflexBase.html#a0bc0351b4d9f1bedcce16e1e2d793c6a',1,'easynav_diagnostic_recovery::SafetyReflexBase']]]
 ];

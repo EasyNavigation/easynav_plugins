@@ -1,37 +1,39 @@
 <map id="maps_managers/easynav_bonxai_maps_manager/include/bonxai/bonxai.hpp" name="maps_managers/easynav_bonxai_maps_manager/include/bonxai/bonxai.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1365,5,1538,61"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1572,5,1744,61"/>
 <area shape="rect" id="Node000002" href="$easynav__navmap__localizer_2src_2easynav__navmap__localizer_2AMCLLocalizer_8cpp.html" title="AMCLLocalizer implementation (Bonxai + probabilistic inflation + ray casting)." alt="" coords="5,346,186,417"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1350,38,1202,43,1013,55,804,77,699,93,596,112,493,132,412,151,336,179,245,230,209,257,175,288,123,348,119,344,171,284,205,253,242,225,334,174,410,145,491,127,595,106,698,87,804,72,1012,50,1201,38,1350,33"/>
-<area shape="rect" id="Node000003" href="$pcl__utils_8hpp.html" title=" " alt="" coords="1489,116,1672,172"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1497,69,1550,114,1547,118,1493,73"/>
-<area shape="rect" id="Node000005" href="$BonxaiMapsManager_8cpp.html" title=" " alt="" coords="1434,346,1661,417"/>
-<area shape="poly" id="edge19_Node000001_Node000005" title=" " alt="" coords="1460,76,1479,179,1508,269,1536,345,1531,347,1502,271,1474,180,1454,77"/>
-<area shape="rect" id="Node000006" href="$probabilistic__map_8hpp.html" title=" " alt="" coords="608,109,788,180"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1350,52,789,133,788,127,1350,46"/>
-<area shape="rect" id="Node000016" href="$serialization_8hpp.html" title=" " alt="" coords="1696,116,1900,172"/>
-<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="1553,64,1712,113,1711,118,1552,69"/>
-<area shape="rect" id="Node000004" href="$pcl__utils_8cpp.html" title=" " alt="" coords="1586,235,1755,291"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1613,183,1651,233,1647,236,1609,186"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="1578,188,1555,346,1550,345,1572,187"/>
-<area shape="poly" id="edge13_Node000006_Node000002" title=" " alt="" coords="593,172,500,198,403,230,270,289,157,348,155,343,268,284,401,225,498,193,592,167"/>
-<area shape="rect" id="Node000007" href="$easynav__navmap__localizer_2include_2easynav__navmap__localizer_2AMCLLocalizer_8hpp.html" title="Declaration of the AMCLLocalizer method." alt="" coords="608,228,788,298"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="701,195,701,227,696,227,696,195"/>
-<area shape="rect" id="Node000013" href="$BonxaiMapsManager_8hpp.html" title="Declaration of the BonxaiMapsManager method." alt="" coords="1148,228,1414,298"/>
-<area shape="poly" id="edge14_Node000006_Node000013" title=" " alt="" coords="804,164,1148,232,1147,238,803,169"/>
-<area shape="rect" id="Node000015" href="$probabilistic__map_8cpp.html" title=" " alt="" coords="415,228,584,298"/>
-<area shape="poly" id="edge17_Node000006_Node000015" title=" " alt="" coords="628,190,560,229,557,225,625,185"/>
-<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="593,301,481,319,393,325,306,331,197,349,186,352,185,346,196,344,305,325,393,319,481,314,592,296"/>
-<area shape="rect" id="Node000008" href="$navmap__localizer__last__known__pose__tests_8cpp.html" title="After a reconfiguration, the localizer starts from the pose the previous one left in NavState (&quot;robot..." alt="" coords="618,346,779,417"/>
-<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="701,314,701,346,696,346,696,314"/>
-<area shape="rect" id="Node000009" href="$navmap__localizer__predict__tests_8cpp.html" title="The motion model of the NavMap AMCL with odometry deltas that are zero in some or all components (rob..." alt="" coords="803,346,974,417"/>
-<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="769,304,833,343,831,348,766,309"/>
-<area shape="rect" id="Node000010" href="$navmap__localizer__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="999,346,1194,417"/>
-<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="804,291,987,344,999,347,998,353,985,349,802,296"/>
-<area shape="rect" id="Node000011" href="$navmap__localizer__tests_8cpp.html" title=" " alt="" coords="210,354,395,410"/>
-<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="594,301,499,326,407,349,384,356,382,351,405,344,497,320,592,296"/>
-<area shape="rect" id="Node000012" href="$navmap__localizer__threads__tests_8cpp.html" title="The RT thread (predict(), the pose estimate) and the other one (weights, reseed()) share the particle..." alt="" coords="418,346,594,417"/>
-<area shape="poly" id="edge12_Node000007_Node000012" title=" " alt="" coords="629,309,565,348,562,343,627,304"/>
-<area shape="poly" id="edge15_Node000013_Node000005" title=" " alt="" coords="1375,303,1469,343,1467,348,1373,307"/>
-<area shape="rect" id="Node000014" href="$bonxai__maps__manager__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="1218,346,1410,417"/>
-<area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="1297,312,1307,345,1302,347,1292,314"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1556,38,1392,43,1180,55,944,76,824,92,707,112,592,133,504,153,418,182,313,230,263,257,216,288,137,348,134,344,213,284,261,253,310,225,416,178,502,148,591,128,706,106,823,87,943,71,1180,49,1392,37,1556,33"/>
+<area shape="rect" id="Node000003" href="$pcl__utils_8hpp.html" title=" " alt="" coords="1696,116,1879,172"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1704,69,1757,114,1754,118,1700,73"/>
+<area shape="rect" id="Node000005" href="$BonxaiMapsManager_8cpp.html" title=" " alt="" coords="1640,346,1868,417"/>
+<area shape="poly" id="edge20_Node000001_Node000005" title=" " alt="" coords="1666,76,1686,179,1714,269,1742,345,1737,347,1709,271,1681,180,1661,77"/>
+<area shape="rect" id="Node000006" href="$probabilistic__map_8hpp.html" title=" " alt="" coords="719,109,899,180"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1557,50,900,134,899,129,1556,45"/>
+<area shape="rect" id="Node000017" href="$serialization_8hpp.html" title=" " alt="" coords="1903,116,2106,172"/>
+<area shape="poly" id="edge19_Node000001_Node000017" title=" " alt="" coords="1760,64,1919,113,1917,118,1759,69"/>
+<area shape="rect" id="Node000004" href="$pcl__utils_8cpp.html" title=" " alt="" coords="1792,235,1962,291"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="1820,183,1858,233,1854,236,1815,186"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="1784,188,1762,346,1756,345,1779,187"/>
+<area shape="poly" id="edge14_Node000006_Node000002" title=" " alt="" coords="704,175,514,230,337,291,184,348,183,343,336,286,512,225,703,170"/>
+<area shape="rect" id="Node000007" href="$easynav__navmap__localizer_2include_2easynav__navmap__localizer_2AMCLLocalizer_8hpp.html" title="Declaration of the AMCLLocalizer method." alt="" coords="719,228,899,298"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="812,195,812,227,806,227,806,195"/>
+<area shape="rect" id="Node000014" href="$BonxaiMapsManager_8hpp.html" title="Declaration of the BonxaiMapsManager method." alt="" coords="1354,228,1621,298"/>
+<area shape="poly" id="edge15_Node000006_Node000014" title=" " alt="" coords="915,161,1354,236,1354,241,914,166"/>
+<area shape="rect" id="Node000016" href="$probabilistic__map_8cpp.html" title=" " alt="" coords="526,228,695,298"/>
+<area shape="poly" id="edge18_Node000006_Node000016" title=" " alt="" coords="738,190,671,229,668,225,736,185"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="704,301,627,314,562,321,449,325,338,329,274,336,199,349,186,352,185,347,198,344,273,330,337,323,449,319,561,316,627,309,703,296"/>
+<area shape="rect" id="Node000008" href="$navmap__localizer__last__known__pose__tests_8cpp.html" title="After a reconfiguration, the localizer starts from the pose the previous one left in NavState (&quot;robot..." alt="" coords="824,346,986,417"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="849,308,878,344,874,348,845,312"/>
+<area shape="rect" id="Node000009" href="$navmap__localizer__predict__tests_8cpp.html" title="The motion model of the NavMap AMCL with odometry deltas that are zero in some or all components (rob..." alt="" coords="1010,346,1181,417"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="909,302,1011,343,1009,348,907,307"/>
+<area shape="rect" id="Node000010" href="$navmap__localizer__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="1206,346,1401,417"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="914,282,1048,309,1193,344,1206,347,1205,352,1192,349,1047,314,913,287"/>
+<area shape="rect" id="Node000011" href="$navmap__localizer__recovery__tests_8cpp.html" title="Recovery (augmented MCL): when the scan likelihood drops below its trend, reseed() spreads the worst ..." alt="" coords="210,346,392,417"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="704,301,619,317,552,325,486,333,404,349,393,352,391,347,403,344,485,327,551,320,618,312,703,296"/>
+<area shape="rect" id="Node000012" href="$navmap__localizer__tests_8cpp.html" title=" " alt="" coords="416,354,602,410"/>
+<area shape="poly" id="edge12_Node000007_Node000012" title=" " alt="" coords="706,307,580,356,578,351,704,302"/>
+<area shape="rect" id="Node000013" href="$navmap__localizer__threads__tests_8cpp.html" title="The RT thread (predict(), the pose estimate) and the other one (weights, reseed()) share the particle..." alt="" coords="625,346,800,417"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="773,312,743,348,739,344,769,308"/>
+<area shape="poly" id="edge16_Node000014_Node000005" title=" " alt="" coords="1582,303,1676,343,1674,348,1580,307"/>
+<area shape="rect" id="Node000015" href="$bonxai__maps__manager__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="1425,346,1616,417"/>
+<area shape="poly" id="edge17_Node000014_Node000015" title=" " alt="" coords="1504,312,1514,345,1508,347,1499,314"/>
 </map>

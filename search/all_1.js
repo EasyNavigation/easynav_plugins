@@ -27,7 +27,7 @@ var searchData=
   ['allocateblock_24',['allocateBlock',['../classBonxai_1_1GridBlockAllocator.html#a438f29511c88cc74e66387b80a3d42cc',1,'Bonxai::GridBlockAllocator']]],
   ['allocateleafgrid_25',['allocateLeafGrid',['../classBonxai_1_1VoxelGrid.html#ab89ed26d435db829dd1d0aa154002497',1,'Bonxai::VoxelGrid']]],
   ['allow_5freversing_5f_26',['allow_reversing_',['../classeasynav_1_1RegulatedPurePursuitController.html#a720aa4608f1224d4ead4f252c6746aea',1,'easynav::RegulatedPurePursuitController']]],
-  ['amcl_5f_27',['amcl_',['../classNavmapAmclPredictTest.html#a381e435e8b8fe7b6c63d74bfb8184118',1,'NavmapAmclPredictTest::amcl_'],['../classNavmapAmclThreadsTest.html#a381e435e8b8fe7b6c63d74bfb8184118',1,'NavmapAmclThreadsTest::amcl_']]],
+  ['amcl_5f_27',['amcl_',['../classNavmapAmclPredictTest.html#a381e435e8b8fe7b6c63d74bfb8184118',1,'NavmapAmclPredictTest::amcl_'],['../classNavmapAmclRecoveryTest.html#a381e435e8b8fe7b6c63d74bfb8184118',1,'NavmapAmclRecoveryTest::amcl_'],['../classNavmapAmclThreadsTest.html#a381e435e8b8fe7b6c63d74bfb8184118',1,'NavmapAmclThreadsTest::amcl_']]],
   ['amcl_5fconvergence_5fevaluator_5ftests_2ecpp_28',['amcl_convergence_evaluator_tests.cpp',['../amcl__convergence__evaluator__tests_8cpp.html',1,'']]],
   ['amcl_5frelocalize_5fmitigation_5ftests_2ecpp_29',['amcl_relocalize_mitigation_tests.cpp',['../amcl__relocalize__mitigation__tests_8cpp.html',1,'']]],
   ['amclconvergenceevaluator_30',['AmclConvergenceEvaluator',['../classeasynav_1_1AmclConvergenceEvaluator.html',1,'AmclConvergenceEvaluator'],['../classeasynav_1_1AmclConvergenceEvaluator.html#ad16ea77cd19b2b0e9971ec3ae1e18ade',1,'easynav::AmclConvergenceEvaluator::AmclConvergenceEvaluator()']]],

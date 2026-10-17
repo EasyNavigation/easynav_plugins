@@ -74,6 +74,7 @@ var searchData=
   ['origin_5fx_5f_71',['origin_x_',['../classeasynav_1_1Costmap2D.html#af570b8473f988bc0e62afd4cefd93d4b',1,'easynav::Costmap2D::origin_x_'],['../classCostmap2D.html#af570b8473f988bc0e62afd4cefd93d4b',1,'Costmap2D::origin_x_']]],
   ['origin_5fy_72',['origin_y',['../structeasynav_1_1InflationFilter_1_1BaseGeomSignature.html#a25c758bb7fe9269d5e6912d8c657682b',1,'easynav::InflationFilter::BaseGeomSignature::origin_y'],['../classeasynav_1_1SimpleMap.html#a052913e7e9c1d5c1ab7bdb1496319f42',1,'easynav::SimpleMap::origin_y()']]],
   ['origin_5fy_5f_73',['origin_y_',['../classeasynav_1_1Costmap2D.html#ad03b4d496631fbf4955adc7471b13820',1,'easynav::Costmap2D::origin_y_'],['../classCostmap2D.html#ad03b4d496631fbf4955adc7471b13820',1,'Costmap2D::origin_y_']]],
-  ['override_5fvelocity_74',['override_velocity',['../classeasynav__diagnostic__recovery_1_1SafetyReflexBase.html#a0bc0351b4d9f1bedcce16e1e2d793c6a',1,'easynav_diagnostic_recovery::SafetyReflexBase']]],
-  ['overwrite_75',['Overwrite',['../namespaceeasynav.html#a7a97a116707da5eb8ba2e97825d41814ada364eb37e143f6b2b5559aa03f5913a',1,'easynav']]]
+  ['origins_74',['origins',['../classNavmapAmclRecoveryTest.html#ae90e0ad282423172b4ea6e355c059043',1,'NavmapAmclRecoveryTest']]],
+  ['override_5fvelocity_75',['override_velocity',['../classeasynav__diagnostic__recovery_1_1SafetyReflexBase.html#a0bc0351b4d9f1bedcce16e1e2d793c6a',1,'easynav_diagnostic_recovery::SafetyReflexBase']]],
+  ['overwrite_76',['Overwrite',['../namespaceeasynav.html#a7a97a116707da5eb8ba2e97825d41814ada364eb37e143f6b2b5559aa03f5913a',1,'easynav']]]
 ];

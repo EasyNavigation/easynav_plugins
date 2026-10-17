@@ -1,0 +1,9 @@
+<map id="NavmapAmclRecoveryTest" name="NavmapAmclRecoveryTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="58,117,238,143"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,53,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="56,47,135,114,132,119,53,51"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="77,5,218,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="150,62,150,117,145,117,145,62"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="242,13,402,38"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="290,49,170,119,167,114,287,44"/>
+</map>
