@@ -16,7 +16,10 @@
 /// \file
 /// \brief AMCLLocalizer implementation (Bonxai + probabilistic inflation + ray casting).
 
+#include <algorithm>
+#include <chrono>
 #include <random>
+#include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -344,7 +347,7 @@ struct CoordEq
 
 // ---------- AMCLLocalizer ----------
 AMCLLocalizer::AMCLLocalizer()
-: rng_(std::random_device{}())
+: rng_(std::random_device{}()), rng_rt_(std::random_device{}())
 {
   NavState::register_printer<nav_msgs::msg::Odometry>(
     [](const nav_msgs::msg::Odometry & odom) {
@@ -470,6 +473,7 @@ void AMCLLocalizer::on_initialize()
   std::normal_distribution<double> noise_yaw(yaw_init, std_dev_yaw);
 
   particles_.resize(num_particles);
+  pending_poses_.reserve(num_particles);
   for (auto & p : particles_) {
     tf2::Quaternion q; q.setRPY(0.0, 0.0, noise_yaw(rng_));
     p.pose.setRotation(q);
@@ -522,16 +526,26 @@ AMCLLocalizer::on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceSt
   RCLCPP_INFO(
     get_node()->get_logger(), "AMCLLocalizer: starting from the last known pose (%.3f, %.3f)",
     pose.pose.pose.position.x, pose.pose.pose.position.y);
-  init_pose_callback(std::make_unique<geometry_msgs::msg::PoseWithCovarianceStamped>(pose));
+  // Called inside the base's call_once, which both threads go through before update() and
+  // update_rt(): neither is touching the particles, so they are written right here
+  reinitialize_(pose, false);
 }
 
 void
 AMCLLocalizer::init_pose_callback(
   geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg)
 {
+  reinitialize_(*msg, true);
+}
+
+void
+AMCLLocalizer::reinitialize_(
+  const geometry_msgs::msg::PoseWithCovarianceStamped & in, bool handover)
+{
   if (particles_.empty()) {
     return;
   }
+  const auto * msg = &in;
 
   auto logger = get_node()->get_logger();
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
@@ -618,6 +632,8 @@ AMCLLocalizer::init_pose_callback(
   std::normal_distribution<double> yaw_noise(0.0, yaw_stddev);
 
   const std::size_t N = particles_.size();
+  std::vector<std::pair<std::size_t, tf2::Transform>> poses;
+  poses.reserve(N);
   for (std::size_t i = 0; i < N; ++i) {
     const double z0 = standard_normal(rng_);
     const double z1 = standard_normal(rng_);
@@ -632,8 +648,7 @@ AMCLLocalizer::init_pose_callback(
     tf2::Quaternion q_particle;
     q_particle.setRPY(0.0, 0.0, new_yaw);
 
-    particles_[i].pose.setOrigin(tf2::Vector3(new_x, new_y, 0.0));
-    particles_[i].pose.setRotation(q_particle);
+    poses.emplace_back(i, tf2::Transform(q_particle, tf2::Vector3(new_x, new_y, 0.0)));
 
     particles_[i].hits = 0;
     particles_[i].possible_hits = 0;
@@ -651,11 +666,26 @@ AMCLLocalizer::init_pose_callback(
     }
   }
 
+  if (handover) {
+    // The RT thread applies the poses in its next cycle (it empties the slot within a cycle)
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(1);
+    while (!post_poses_(poses) && std::chrono::steady_clock::now() < deadline) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+  } else {
+    for (const auto & [i, pose] : poses) {
+      particles_[i].pose = pose;
+      particles_[i].last_cid = std::numeric_limits<uint32_t>::max();
+    }
+  }
+
   // Prevent immediate reseed after initialization
   last_reseed_ = get_node()->now();
 
-  // Compute map->basefootprint estimate
-  tf2::Transform map2bf = getEstimatedPose();
+  // map->basefootprint: the requested pose (the particles take it in the RT thread)
+  tf2::Quaternion q_mean;
+  q_mean.setRPY(0.0, 0.0, mean_yaw);
+  tf2::Transform map2bf(q_mean, tf2::Vector3(mean_x, mean_y, 0.0));
 
   // Publish TF if odom transform is already known
   if (initialized_odom_) {
@@ -720,6 +750,7 @@ void AMCLLocalizer::update(NavState & nav_state)
 
 void AMCLLocalizer::predict(NavState & nav_state)
 {
+  apply_pending_poses_();
   if (!initialized_odom_) {if (compute_odom_from_tf_) {update_odom_from_tf();} return;}
   if (compute_odom_from_tf_) {update_odom_from_tf();}
 
@@ -753,7 +784,7 @@ void AMCLLocalizer::predict(NavState & nav_state)
   // Zero-mean noise; a zero deviation (e.g. the robot still) is no noise: std::normal_distribution
   // is undefined for it.
   auto noise = [this](double stddev) {
-      return stddev > 0.0 ? std::normal_distribution<double>(0.0, stddev)(rng_) : 0.0;
+      return stddev > 0.0 ? std::normal_distribution<double>(0.0, stddev)(rng_rt_) : 0.0;
     };
   const double sd_dx = std::abs(dx) * noise_translation_;
   const double sd_dy = std::abs(dy) * noise_translation_;
@@ -1021,6 +1052,8 @@ AMCLLocalizer::reseed()
 {
   if (particles_.empty()) {return;}
   if (particles_[0].possible_hits == 0) {return;}
+  // The RT thread has not taken the last ones yet: next time
+  if (pending_.load(std::memory_order_acquire)) {return;}
 
   const std::size_t N = particles_.size();
   auto top_count = [&](std::size_t n) -> std::size_t {
@@ -1030,12 +1063,15 @@ AMCLLocalizer::reseed()
     };
   const std::size_t N_top = top_count(N);
 
-  std::sort(
-    particles_.begin(), particles_.end(),
-    [](const Particle & a, const Particle & b) {return a.weight > b.weight;});
+  // By weight on indices, not by moving the particles: the RT thread is moving their poses
+  const auto order = by_weight_(N, true);
+  std::vector<Particle> top(N_top);
+  for (std::size_t k = 0; k < N_top; ++k) {
+    top[k] = particles_[order[k]];
+  }
 
-  tf2::Vector3 mean = computeMean(particles_, 0, N_top);
-  tf2::Matrix3x3 cov = computeCovariance(particles_, 0, N_top, mean);
+  tf2::Vector3 mean = computeMean(top, 0, N_top);
+  tf2::Matrix3x3 cov = computeCovariance(top, 0, N_top, mean);
 
   double a = cov[0][0], b = cov[0][1], c = cov[1][1];
 
@@ -1062,7 +1098,7 @@ AMCLLocalizer::reseed()
   double t = c2 - l10 * l10; if (t < 0.0) {t = 0.0;}
   double l11 = std::sqrt(t);
 
-  double yaw_variance = computeYawVariance(particles_, 0, N_top);
+  double yaw_variance = computeYawVariance(top, 0, N_top);
   if (!std::isfinite(yaw_variance) || yaw_variance < 0.0) {yaw_variance = 0.0;}
   double yaw_stddev = std::sqrt(yaw_variance);
   if (!std::isfinite(yaw_stddev) || yaw_stddev < min_noise_yaw_) {yaw_stddev = min_noise_yaw_;}
@@ -1094,6 +1130,8 @@ AMCLLocalizer::reseed()
       return {dx, dy};
     };
 
+  std::vector<std::pair<std::size_t, tf2::Transform>> poses;
+  poses.reserve(N - N_top);
   for (std::size_t i = N_top; i < N; ++i) {
     int selected_idx;
     int guard = 0;
@@ -1106,7 +1144,7 @@ AMCLLocalizer::reseed()
       if (++guard > 16) {selected_idx = 0; break;}
     } while (selected_idx < 0 || static_cast<std::size_t>(selected_idx) >= N_top);
 
-    const auto & ref = particles_[static_cast<std::size_t>(selected_idx)];
+    const auto & ref = top[static_cast<std::size_t>(selected_idx)];
     tf2::Vector3 origin = ref.pose.getOrigin();
     auto [dx_off, dy_off] = sample_xy_offset();
 
@@ -1129,10 +1167,10 @@ AMCLLocalizer::reseed()
       new_origin = tf2::Vector3(origin.x(), origin.y(), origin.z());
     }
 
-    particles_[i].pose.setOrigin(new_origin);
-    particles_[i].pose.setRotation(q);
-    particles_[i].weight = ref.weight;
+    poses.emplace_back(order[i], tf2::Transform(q, new_origin));
+    particles_[order[i]].weight = ref.weight;
   }
+  post_poses_(poses);
 
   for (auto & p : particles_) {
     p.hits = 0; p.possible_hits = 0;
@@ -1156,6 +1194,51 @@ AMCLLocalizer::reseed()
       p.weight = w;
     }
   }
+}
+
+bool
+AMCLLocalizer::post_poses_(const std::vector<std::pair<std::size_t, tf2::Transform>> & poses)
+{
+  if (pending_.load(std::memory_order_acquire)) {return false;}
+  pending_poses_.assign(poses.begin(), poses.end());  // capacity reserved: no allocation
+  pending_.store(true, std::memory_order_release);
+  return true;
+}
+
+void
+AMCLLocalizer::apply_pending_poses_()
+{
+  if (!pending_.load(std::memory_order_acquire)) {return;}
+  for (const auto & [i, pose] : pending_poses_) {
+    if (i >= particles_.size()) {continue;}
+    particles_[i].pose = pose;
+    // It jumped: its NavCel hint no longer applies
+    particles_[i].last_cid = std::numeric_limits<uint32_t>::max();
+  }
+  pending_.store(false, std::memory_order_release);
+}
+
+std::vector<std::size_t>
+AMCLLocalizer::by_weight_(std::size_t n_first, bool sorted) const
+{
+  // Per thread, reused: no allocation once warm
+  thread_local std::vector<double> w;
+  thread_local std::vector<std::size_t> idx;
+  const std::size_t N = particles_.size();
+  w.resize(N);
+  idx.resize(N);
+  for (std::size_t i = 0; i < N; ++i) {
+    w[i] = particles_[i].weight;
+    idx[i] = i;
+  }
+  n_first = std::min(n_first, N);
+  auto heavier = [](std::size_t a, std::size_t b) {return w[a] > w[b] || (w[a] == w[b] && a < b);};
+  if (sorted) {
+    std::sort(idx.begin(), idx.end(), heavier);
+  } else if (n_first < N) {
+    std::nth_element(idx.begin(), idx.begin() + n_first, idx.end(), heavier);
+  }
+  return std::vector<std::size_t>(idx.begin(), idx.begin() + (sorted ? N : n_first));
 }
 
 static inline bool is_finite_tf(const tf2::Transform & T)
@@ -1212,16 +1295,7 @@ AMCLLocalizer::getEstimatedPose() const
     N_top = 1;
   }
 
-  std::vector<std::size_t> idx(N);
-  std::iota(idx.begin(), idx.end(), 0);
-
-  std::nth_element(
-    idx.begin(),
-    idx.begin() + N_top,
-    idx.end(),
-    [this](std::size_t a, std::size_t b) {
-      return particles_[a].weight > particles_[b].weight;
-    });
+  const auto idx = by_weight_(N_top, false);
 
   std::vector<Particle> top_particles;
   top_particles.reserve(N_top);
@@ -1258,16 +1332,7 @@ AMCLLocalizer::publishEstimatedPose(const tf2::Transform & est_pose)
     N_top = 1;
   }
 
-  std::vector<std::size_t> idx(N);
-  std::iota(idx.begin(), idx.end(), 0);
-
-  std::nth_element(
-    idx.begin(),
-    idx.begin() + N_top,
-    idx.end(),
-    [this](std::size_t a, std::size_t b) {
-      return particles_[a].weight > particles_[b].weight;
-    });
+  const auto idx = by_weight_(N_top, false);
 
   std::vector<Particle> top_particles;
   top_particles.reserve(N_top);
@@ -1326,16 +1391,7 @@ AMCLLocalizer::get_pose()
       N_top = 1;
     }
 
-    std::vector<std::size_t> idx(N);
-    std::iota(idx.begin(), idx.end(), 0);
-
-    std::nth_element(
-      idx.begin(),
-      idx.begin() + N_top,
-      idx.end(),
-      [this](std::size_t a, std::size_t b) {
-        return particles_[a].weight > particles_[b].weight;
-      });
+    const auto idx = by_weight_(N_top, false);
 
     std::vector<Particle> top_particles;
     top_particles.reserve(N_top);

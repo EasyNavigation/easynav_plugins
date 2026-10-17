@@ -19,9 +19,11 @@
 #ifndef EASYNAV_NAVMAP_LOCALIZER__AMCLLOCALIZER_HPP_
 #define EASYNAV_NAVMAP_LOCALIZER__AMCLLOCALIZER_HPP_
 
+#include <utility>
 #include <vector>
 #include <random>
 #include <limits>
+#include <atomic>
 #include <memory>
 #include <optional>
 
@@ -181,6 +183,10 @@ protected:
    */
   void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
 
+  /// Spreads the particles around @p msg. With @p handover, their poses go to the RT thread
+  /// (see pending_); without it they are written here, only valid while neither thread runs.
+  void reinitialize_(const geometry_msgs::msg::PoseWithCovarianceStamped & msg, bool handover);
+
   /// @brief Starts from the last known pose after a reconfiguration
   /// ("initial_pose.use_last_known").
   void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose) override;
@@ -197,8 +203,29 @@ protected:
   /// List of particles representing the belief distribution.
   std::vector<Particle> particles_;
 
-  /// Random number generator used for sampling noise.
+  /// Random number generator used for sampling noise (update() and the pose callbacks).
   std::mt19937 rng_;
+
+  /// Random number generator of the RT thread (predict()).
+  std::mt19937 rng_rt_;
+
+  // The two threads share the particles without locks: the RT thread (predict()) is the only one
+  // that writes their poses, and the other (correct(), reseed(), the pose callbacks) the only one
+  // that writes their weights and hits. Poses computed outside the RT thread are handed over in a
+  // single slot: pending_poses_ is filled while pending_ is false, then pending_ is set; predict()
+  // applies them and clears it. The vector never changes size, so indices are always valid.
+  std::vector<std::pair<std::size_t, tf2::Transform>> pending_poses_;
+  std::atomic<bool> pending_ {false};
+
+  /// Hands poses over to the RT thread. False if the slot is still busy.
+  bool post_poses_(const std::vector<std::pair<std::size_t, tf2::Transform>> & poses);
+
+  /// Applies the poses handed over (RT thread).
+  void apply_pending_poses_();
+
+  /// Particle indices by decreasing weight, sorted on a copy of the weights: the other thread may
+  /// be writing them, and a sort whose keys change underneath runs out of bounds.
+  std::vector<std::size_t> by_weight_(std::size_t n_first, bool sorted) const;
 
   /// Current estimated odometry-based pose.
   tf2::Transform pose_;

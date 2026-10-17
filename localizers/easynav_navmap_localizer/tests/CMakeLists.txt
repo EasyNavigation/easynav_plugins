@@ -28,3 +28,9 @@ target_link_libraries(navmap_localizer_predict_tests
   ${PROJECT_NAME}
   rclcpp::rclcpp
 )
+
+ament_add_gtest(navmap_localizer_threads_tests navmap_localizer_threads_tests.cpp)
+target_link_libraries(navmap_localizer_threads_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+)
