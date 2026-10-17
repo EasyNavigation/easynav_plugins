@@ -107,7 +107,7 @@ Directory dependency graph for tests:</div>
 <area shape="rect" href="dir_18e7138748083644ed1c2b3308202a3d.html" title="include" alt="" coords="73,126,135,152"/>
 <area shape="rect" href="dir_b3e8952ff4f5e9567737ce244fed2263.html" title="tests" alt="" coords="79,52,129,78"/>
 <area shape="poly" href="dir_000156_000098.html" alt="" coords="107,78,107,110,101,110,101,78"/>
-<area shape="rect" href="dir_000156_000098.html" title="4" alt="" coords="109,100,116,115"/>
+<area shape="rect" href="dir_000156_000098.html" title="5" alt="" coords="109,100,116,115"/>
 <area shape="rect" href="dir_244f7d1e1d21c0deb2226ff0fb4701ca.html" title="easynav_navmap_localizer" alt="" coords="16,16,192,162"/>
 </map>
 </div>
@@ -121,6 +121,8 @@ Files</h2></td></tr>
 <tr class="memitem:navmap_5Flocalizer_5Freconfigure_5Ftests_2Ecpp" id="r_navmap_5Flocalizer_5Freconfigure_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="navmap__localizer__reconfigure__tests_8cpp.html">navmap_localizer_reconfigure_tests.cpp</a></td></tr>
 <tr class="memdesc:navmap__localizer__reconfigure__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens across a cleanup/reconfigure cycle) without throwing. <br /></td></tr>
 <tr class="memitem:navmap_5Flocalizer_5Ftests_2Ecpp" id="r_navmap_5Flocalizer_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="navmap__localizer__tests_8cpp.html">navmap_localizer_tests.cpp</a></td></tr>
+<tr class="memitem:navmap_5Flocalizer_5Fthreads_5Ftests_2Ecpp" id="r_navmap_5Flocalizer_5Fthreads_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="navmap__localizer__threads__tests_8cpp.html">navmap_localizer_threads_tests.cpp</a></td></tr>
+<tr class="memdesc:navmap__localizer__threads__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">The RT thread (predict(), the pose estimate) and the other one (weights, reseed()) share the particles without locks: each writes its own fields, and poses reach the RT thread through a handover slot. <br /></td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
