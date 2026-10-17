@@ -256,6 +256,26 @@ protected:
   double top_keep_fraction_{0.2};
   double downsampled_cloud_size_{0.05};
 
+  // Recovery (augmented MCL): slow and fast averages of the scan likelihood; when the fast one
+  // drops below the slow one, reseed() spreads part of the particles widely around the estimate.
+  // Both written by the non-RT thread only.
+  double recovery_alpha_slow_ {0.001};
+  double recovery_alpha_fast_ {0.1};
+  double recovery_spread_xy_ {1.0};   // m
+  double recovery_spread_yaw_ {0.5};  // rad
+  double w_slow_ {0.0};
+  double w_fast_ {0.0};
+
+  /// Feeds the averages with the likelihood of a correction.
+  void update_recovery_(double mean_likelihood);
+
+  /// Mean of the best fraction (top_keep_fraction, the ones reseed() keeps) of the particles'
+  /// likelihoods: spread particles must not lower it. Reorders the vector.
+  double best_mean_(std::vector<double> & likelihood) const;
+
+  /// Fraction of the reseeded particles to spread widely, 0 when the likelihood holds.
+  double recovery_probability_() const;
+
   /// Last odometry transform received.
   tf2::Transform odom_{tf2::Transform::getIdentity()};
 

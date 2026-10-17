@@ -18,6 +18,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <functional>
 #include <random>
 #include <thread>
 #include <unordered_map>
@@ -401,6 +402,14 @@ void AMCLLocalizer::on_initialize()
   easynav::declare_parameter_if_absent<double>(
     *node, plugin_name + ".downsampled_cloud_size",
     0.05);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".recovery_alpha_slow", recovery_alpha_slow_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".recovery_alpha_fast", recovery_alpha_fast_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".recovery_spread_xy", recovery_spread_xy_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".recovery_spread_yaw", recovery_spread_yaw_);
 
   node->get_parameter<int>(plugin_name + ".num_particles", num_particles);
   node->get_parameter<double>(plugin_name + ".initial_pose.x", x_init);
@@ -430,6 +439,10 @@ void AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".weights_tau", weights_tau_);
   node->get_parameter<double>(plugin_name + ".top_keep_fraction", top_keep_fraction_);
   node->get_parameter<double>(plugin_name + ".downsampled_cloud_size", downsampled_cloud_size_);
+  node->get_parameter<double>(plugin_name + ".recovery_alpha_slow", recovery_alpha_slow_);
+  node->get_parameter<double>(plugin_name + ".recovery_alpha_fast", recovery_alpha_fast_);
+  node->get_parameter<double>(plugin_name + ".recovery_spread_xy", recovery_spread_xy_);
+  node->get_parameter<double>(plugin_name + ".recovery_spread_yaw", recovery_spread_yaw_);
 
 
   // Check if any of the standard deviations are non-positive
@@ -454,6 +467,23 @@ void AMCLLocalizer::on_initialize()
   if (!std::isfinite(weights_tau_) || weights_tau_ <= 0.0) {weights_tau_ = 0.7;}
   if (!std::isfinite(top_keep_fraction_) || top_keep_fraction_ <= 0.0) {top_keep_fraction_ = 0.2;}
   if (top_keep_fraction_ > 1.0) {top_keep_fraction_ = 1.0;}
+  // Recovery off unless 0 <= slow < fast <= 1
+  if (!(recovery_alpha_slow_ >= 0.0 && recovery_alpha_slow_ < recovery_alpha_fast_ &&
+    recovery_alpha_fast_ <= 1.0))
+  {
+    if (recovery_alpha_slow_ != 0.0 || recovery_alpha_fast_ != 0.0) {
+      RCLCPP_WARN(
+        node->get_logger(), "recovery_alpha_slow (%.4f) must be below recovery_alpha_fast "
+        "(%.4f), both in [0, 1]: recovery off", recovery_alpha_slow_, recovery_alpha_fast_);
+    }
+    recovery_alpha_slow_ = recovery_alpha_fast_ = 0.0;
+  }
+  if (!std::isfinite(recovery_spread_xy_) || recovery_spread_xy_ <= 0.0) {
+    recovery_spread_xy_ = 1.0;
+  }
+  if (!std::isfinite(recovery_spread_yaw_) || recovery_spread_yaw_ <= 0.0) {
+    recovery_spread_yaw_ = 0.5;
+  }
 
   double reseed_freq;
   node->get_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
@@ -562,6 +592,7 @@ AMCLLocalizer::reinitialize_(
   }
 
   last_input_time_ = msg->header.stamp;
+  w_slow_ = w_fast_ = 0.0;  // a new belief: the likelihood averages start again
 
   // Extract pose mean (x, y, yaw) expressed in map frame
   const auto & pose = msg->pose.pose;
@@ -1008,6 +1039,8 @@ void AMCLLocalizer::correct(NavState & nav_state)
 
   // Score all particles against all sensors
   bool debug = false;
+  std::vector<double> likelihood;
+  likelihood.reserve(particles_.size());
   for (auto & particle : particles_) {
     float hits = 0.0f, possible = 0.0f;
     for (const auto & b : bundles) {
@@ -1022,7 +1055,9 @@ void AMCLLocalizer::correct(NavState & nav_state)
 
     particle.hits += hits;
     particle.possible_hits += possible;
+    if (possible > 0.0f) {likelihood.push_back(hits / possible);}
   }
+  if (!likelihood.empty()) {update_recovery_(best_mean_(likelihood));}
 
   // Weights update with power tau
   for (auto & particle : particles_) {
@@ -1130,9 +1165,26 @@ AMCLLocalizer::reseed()
       return {dx, dy};
     };
 
+  // Likelihood dropping: the worst ones spread widely around the estimate
+  const std::size_t n_spread = static_cast<std::size_t>(
+    std::round(recovery_probability_() * static_cast<double>(N - N_top)));
+  std::normal_distribution<double> wide_xy(0.0, recovery_spread_xy_);
+  std::normal_distribution<double> wide_yaw(0.0, recovery_spread_yaw_);
+  double best_r, best_p, best_yaw;
+  tf2::Matrix3x3(top[0].pose.getRotation()).getRPY(best_r, best_p, best_yaw);
+
   std::vector<std::pair<std::size_t, tf2::Transform>> poses;
   poses.reserve(N - N_top);
   for (std::size_t i = N_top; i < N; ++i) {
+    if (i >= N - n_spread) {
+      tf2::Quaternion q; q.setRPY(0.0, 0.0, best_yaw + wide_yaw(rng_));
+      const tf2::Vector3 o(mean.x() + wide_xy(rng_), mean.y() + wide_xy(rng_),
+        top[0].pose.getOrigin().z());
+      poses.emplace_back(order[i], tf2::Transform(q, o));
+      particles_[order[i]].weight = top[N_top - 1].weight;
+      continue;
+    }
+
     int selected_idx;
     int guard = 0;
     do {
@@ -1171,6 +1223,11 @@ AMCLLocalizer::reseed()
     particles_[order[i]].weight = ref.weight;
   }
   post_poses_(poses);
+  if (n_spread > 0) {
+    RCLCPP_DEBUG(
+      get_node()->get_logger(), "Recovery: %zu particles spread (likelihood %.3f, trend %.3f)",
+      n_spread, w_fast_, w_slow_);
+  }
 
   for (auto & p : particles_) {
     p.hits = 0; p.possible_hits = 0;
@@ -1194,6 +1251,39 @@ AMCLLocalizer::reseed()
       p.weight = w;
     }
   }
+}
+
+void
+AMCLLocalizer::update_recovery_(double mean_likelihood)
+{
+  if (recovery_alpha_fast_ <= 0.0 || !std::isfinite(mean_likelihood)) {return;}
+  w_slow_ = w_slow_ == 0.0 ? mean_likelihood :
+    w_slow_ + recovery_alpha_slow_ * (mean_likelihood - w_slow_);
+  w_fast_ = w_fast_ == 0.0 ? mean_likelihood :
+    w_fast_ + recovery_alpha_fast_ * (mean_likelihood - w_fast_);
+}
+
+double
+AMCLLocalizer::best_mean_(std::vector<double> & likelihood) const
+{
+  if (likelihood.empty()) {return 0.0;}
+  const auto k = std::clamp<std::size_t>(
+    static_cast<std::size_t>(top_keep_fraction_ * static_cast<double>(likelihood.size())),
+    1, likelihood.size());
+  std::nth_element(
+    likelihood.begin(), likelihood.begin() + (k - 1), likelihood.end(), std::greater<>());
+  double sum = 0.0;
+  for (std::size_t i = 0; i < k; ++i) {
+    sum += likelihood[i];
+  }
+  return sum / static_cast<double>(k);
+}
+
+double
+AMCLLocalizer::recovery_probability_() const
+{
+  if (recovery_alpha_fast_ <= 0.0 || w_slow_ <= 0.0) {return 0.0;}
+  return std::clamp(1.0 - w_fast_ / w_slow_, 0.0, 1.0);
 }
 
 bool

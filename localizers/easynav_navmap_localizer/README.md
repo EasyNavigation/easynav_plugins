@@ -52,6 +52,10 @@ All parameters are declared under the plugin name namespace, i.e., `/<node_fqn>/
 | `<plugin>.weights_tau` | `double` | `0.7` | Exponential decay factor for particle weight smoothing. |
 | `<plugin>.top_keep_fraction` | `double` | `0.2` | Fraction of top particles to keep before reseeding. |
 | `<plugin>.downsampled_cloud_size` | `double` | `0.05` | Voxel size for point cloud downsampling (m). |
+| `<plugin>.recovery_alpha_slow` | `double` | `0.001` | Rate of the slow average of the scan likelihood (of the best particles), per correction. |
+| `<plugin>.recovery_alpha_fast` | `double` | `0.1` | Rate of the fast average. When it falls below the slow one, each reseed spreads the worst particles widely around the estimate, a fraction `1 - fast/slow` of those it replaces. `0` for both turns recovery off; it needs `0 <= slow < fast <= 1`. |
+| `<plugin>.recovery_spread_xy` | `double` | `1.0` | Standard deviation of the spread particles' position around the estimate (m). |
+| `<plugin>.recovery_spread_yaw` | `double` | `0.5` | Standard deviation of their heading around the best particle's (rad). |
 
 ## Interfaces (Topics and Services)
 
