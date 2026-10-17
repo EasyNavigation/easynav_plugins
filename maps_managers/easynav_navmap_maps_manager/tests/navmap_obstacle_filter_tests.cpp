@@ -333,6 +333,78 @@ TEST_F(NavmapObstacleFilterLimitsTest, ARampIsNotAnObstacleButABoxOnItIs)
   EXPECT_EQ(at(5.55f, 3.15f), navmap_ros::LETHAL_OBSTACLE) << "the box";
 }
 
+namespace
+{
+
+// A floor at z = 0 over [0, 8] m and, over its x >= 5 half, a deck at z = deck_z: two surfaces
+// on top of each other, as a ramp passing over a floor
+::navmap::NavMap floor_and_deck(float deck_z)
+{
+  ::navmap::NavMap nm;
+  const auto surface = nm.create_surface("map");
+  auto grid = [&nm, surface](float x0, int nx, float z) {
+      const int n = 17;
+      const uint32_t base = static_cast<uint32_t>(nm.positions.size());
+      for (int j = 0; j < n; ++j) {
+        for (int i = 0; i < nx; ++i) {
+          nm.add_vertex({x0 + 0.5f * i, 0.5f * j, z});
+        }
+      }
+      for (int j = 0; j + 1 < n; ++j) {
+        for (int i = 0; i + 1 < nx; ++i) {
+          const uint32_t v = base + j * nx + i;
+          nm.add_navcel_to_surface(surface, nm.add_navcel(v, v + 1, v + nx + 1));
+          nm.add_navcel_to_surface(surface, nm.add_navcel(v, v + nx + 1, v + nx));
+        }
+      }
+    };
+  grid(0.0f, 17, 0.0f);
+  grid(5.0f, 7, deck_z);
+  nm.rebuild_geometry_accels();
+  return nm;
+}
+
+std::uint8_t obstacles_on(const ::navmap::NavMap & nm, float x, float y, float z)
+{
+  std::size_t sidx = 0;
+  ::navmap::NavCelId cid;
+  Eigen::Vector3f bary, hit;
+  EXPECT_TRUE(nm.locate_navcel(Eigen::Vector3f(x, y, z), sidx, cid, bary, &hit));
+  EXPECT_NEAR(hit.z(), z, 1e-3f);
+  return nm.layer_get<std::uint8_t>("obstacles", cid, 123);
+}
+
+}  // namespace
+
+TEST_F(NavmapObstacleFilterLimitsTest, APointIsOnTheSurfaceClosestToItNotOnTheLastOnesSurface)
+{
+  // Regression: the previous point's NavCel (the hint) took any point within 0.5 m of its plane,
+  // so the deck seen just after the floor was a 0.4 m obstacle on the floor under it
+  node_->declare_parameter("navmap.obstacles.downsample_resolution", 0.0);
+  for (float deck_z : {0.3f, 0.4f, 0.45f}) {
+    nav_state_.set("map.navmap", floor_and_deck(deck_z));
+    perception_.data.clear();
+    for (float x = 4.25f; x <= 6.5f; x += 0.1f) {  // the floor, then the deck, along y = 4.1
+      perception_.data.push_back(pcl::PointXYZ(x, 4.1f, (x < 5.0f ? 0.0f : deck_z) + 0.02f));
+    }
+    for (float z = 0.1f; z <= 0.4f; z += 0.1f) {  // a box on the deck, at (6.0, 3.0)
+      perception_.data.push_back(pcl::PointXYZ(6.0f, 3.0f, deck_z + z));
+    }
+    easynav::navmap::ObstacleFilter filter;
+    const auto & nm = run(filter);
+    for (float x = 5.2f; x <= 6.4f; x += 0.3f) {
+      EXPECT_EQ(obstacles_on(nm, x, 4.1f, deck_z), navmap_ros::FREE_SPACE) << "deck " << x;
+      EXPECT_EQ(obstacles_on(nm, x, 4.1f, 0.0f), navmap_ros::FREE_SPACE) << "under it " << x;
+    }
+    for (float x = 4.3f; x <= 4.9f; x += 0.3f) {
+      EXPECT_EQ(obstacles_on(nm, x, 4.1f, 0.0f), navmap_ros::FREE_SPACE) << "floor " << x;
+    }
+    // A real obstacle on the deck is still one, on the deck and not on the floor under it
+    EXPECT_EQ(obstacles_on(nm, 6.0f, 3.0f, deck_z), navmap_ros::LETHAL_OBSTACLE) << deck_z;
+    EXPECT_EQ(obstacles_on(nm, 6.0f, 3.0f, 0.0f), navmap_ros::FREE_SPACE) << deck_z;
+  }
+}
+
 TEST_F(NavmapObstacleFilterLimitsTest, TheDownsampleResolutionIsConfigurable)
 {
   // Two columns 0.6 m apart, off the ground: a 2 m voxel keeps one point of them; 0 keeps all
