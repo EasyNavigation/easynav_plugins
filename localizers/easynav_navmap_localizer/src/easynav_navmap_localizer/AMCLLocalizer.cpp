@@ -297,7 +297,9 @@ inline bool ray_occluded_dda(
   int ey = ex, ez = ex;
 
   for (int step = 0; step < nsteps; ++step) {
-    if (step < nsteps - std::max(0, tail_skip_voxels) - 1) {
+    // Not the sensor's own voxel (a sensor is not inside an obstacle: a wall or slab within a
+    // voxel of it would block every ray), nor the last ones (the endpoint's inflation)
+    if (step > 0 && step < nsteps - std::max(0, tail_skip_voxels) - 1) {
       const CellT * cell = acc.value(CoordT{x, y, z});
       if (cell && cell->probability_log > occ_map.options().occupancy_threshold_log) {
         return true;
@@ -439,6 +441,27 @@ void AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".weights_tau", weights_tau_);
   node->get_parameter<double>(plugin_name + ".top_keep_fraction", top_keep_fraction_);
   node->get_parameter<double>(plugin_name + ".downsampled_cloud_size", downsampled_cloud_size_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".min_point_height", min_point_height_);
+  node->get_parameter<double>(plugin_name + ".min_point_height", min_point_height_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".max_point_height", max_point_height_);
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".ray_occlusion", ray_occlusion_);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".reseed_min_d", reseed_min_d_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".odom_slip_fraction", odom_slip_fraction_);
+  node->get_parameter<double>(plugin_name + ".odom_slip_fraction", odom_slip_fraction_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".odom_scale_noise", odom_scale_noise_);
+  node->get_parameter<double>(plugin_name + ".odom_scale_noise", odom_scale_noise_);
+  if (!std::isfinite(odom_scale_noise_) || odom_scale_noise_ < 0.0) {odom_scale_noise_ = 0.0;}
+  odom_slip_fraction_ = std::clamp(
+    std::isfinite(odom_slip_fraction_) ? odom_slip_fraction_ : 0.0, 0.0, 1.0);
+  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".reseed_min_a", reseed_min_a_);
+  node->get_parameter<double>(plugin_name + ".reseed_min_d", reseed_min_d_);
+  node->get_parameter<double>(plugin_name + ".reseed_min_a", reseed_min_a_);
+  node->get_parameter<bool>(plugin_name + ".ray_occlusion", ray_occlusion_);
+  node->get_parameter<double>(plugin_name + ".max_point_height", max_point_height_);
   node->get_parameter<double>(plugin_name + ".recovery_alpha_slow", recovery_alpha_slow_);
   node->get_parameter<double>(plugin_name + ".recovery_alpha_fast", recovery_alpha_fast_);
   node->get_parameter<double>(plugin_name + ".recovery_spread_xy", recovery_spread_xy_);
@@ -504,6 +527,7 @@ void AMCLLocalizer::on_initialize()
 
   particles_.resize(num_particles);
   pending_poses_.reserve(num_particles);
+  pending_scales_.reserve(num_particles);
   for (auto & p : particles_) {
     tf2::Quaternion q; q.setRPY(0.0, 0.0, noise_yaw(rng_));
     p.pose.setRotation(q);
@@ -706,6 +730,7 @@ AMCLLocalizer::reinitialize_(
   } else {
     for (const auto & [i, pose] : poses) {
       particles_[i].pose = pose;
+      particles_[i].odom_scale = 1.0;
       particles_[i].last_cid = std::numeric_limits<uint32_t>::max();
     }
   }
@@ -811,6 +836,10 @@ void AMCLLocalizer::predict(NavState & nav_state)
     last_imu_yaw_ = imu_yaw;
   }
   double rot_len = std::abs(yaw);
+  // How far the robot has gone, for reseed() (single writer: this thread)
+  travelled_.store(travelled_.load(std::memory_order_relaxed) + trans_len,
+        std::memory_order_relaxed);
+  turned_.store(turned_.load(std::memory_order_relaxed) + rot_len, std::memory_order_relaxed);
 
   // Zero-mean noise; a zero deviation (e.g. the robot still) is no noise: std::normal_distribution
   // is undefined for it.
@@ -825,7 +854,10 @@ void AMCLLocalizer::predict(NavState & nav_state)
   for (auto & p : particles_) {
     // Each particle its own noise: they must spread in heading too for the correction to fix it
     double pr, pp, py; tf2::Matrix3x3(p.pose.getRotation()).getRPY(pr, pp, py);
-    const tf2::Vector3 noisy_t(dx + noise(sd_dx), dy + noise(sd_dy), dz + noise(sd_dz));
+    // Its own odometry scale: on a slipping robot the particles that hardly move survive
+    const double k = p.odom_scale;
+    const tf2::Vector3 noisy_t(
+      k * dx + noise(sd_dx), k * dy + noise(sd_dy), k * dz + noise(sd_dz));
     tf2::Vector3 Pw = p.pose * noisy_t;  // along the robot's current (tilted) heading
     const double new_yaw = py + yaw + noise(sd_yaw);
     tf2::Quaternion flat_q; flat_q.setRPY(0.0, 0.0, new_yaw);
@@ -884,6 +916,8 @@ void AMCLLocalizer::predict(NavState & nav_state)
 struct SensorBundle
 {
   std::string frame_id;
+  rclcpp::Time stamp;
+  tf2::Transform T_bf_sensor;            // the sensor when it saw the cloud, in today's footprint
   pcl::PointCloud<pcl::PointXYZ> cloud;  // in sensor frame
 };
 
@@ -957,6 +991,7 @@ static ScoreAgg score_particle_sensor_cloud(
     const float p_ray_min = 0.4f;
     if (p_end < p_ray_min) {s.hits += p_end; continue;}
 
+    if (tail_skip < 0) {s.hits += p_end; continue;}  // no occlusion check
     const bool blocked = ray_occluded_dda(occ_map, acc_occ, key_origin, key_end, tail_skip);
     s.hits += blocked ? 0.0f : p_end;
   }
@@ -1001,14 +1036,16 @@ void AMCLLocalizer::correct(NavState & nav_state)
   const auto & inflated_map = nav_state.get_ptr<Bonxai::ProbabilisticMap>("map.bonxai.inflated");
 
   // Compute tail-skip coherent with inflation kernel
-  const int TAIL_SKIP = compute_tail_skip(*original_map, inflation_stddev_, inflation_prob_min_);
+  const int TAIL_SKIP = ray_occlusion_ ?
+    compute_tail_skip(*original_map, inflation_stddev_, inflation_prob_min_) : -1;
 
   // Prepare per-sensor bundles (downsample/cap per sensor)
   std::vector<SensorBundle> bundles; bundles.reserve(perceptions.size());
   for (const auto & h : perceptions) {
-    if (!h) {continue;}
+    if (!h || !h->valid) {continue;}  // an old cloud (forget_time) is not scored
     SensorBundle sb;
     sb.frame_id = h->frame_id;
+    sb.stamp = h->stamp;
     sb.cloud = PointPerceptionsOpsView(*h)
       .downsample(downsampled_cloud_size_)
       .as_points();
@@ -1016,25 +1053,57 @@ void AMCLLocalizer::correct(NavState & nav_state)
     bundles.emplace_back(sb);
   }
 
-  // Resolve base_footprint -> sensor transforms (cache per frame_id)
-  std::unordered_map<std::string, tf2::Transform> T_bf_sensor_cache;
-  T_bf_sensor_cache.reserve(bundles.size());
-  for (const auto & b : bundles) {
-    if (!T_bf_sensor_cache.count(b.frame_id)) {
-      const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
-      try {
-        T_bf_sensor_cache[b.frame_id] = lookup_bf_to_sensor(
-          tf_info.robot_footprint_frame,
-          b.frame_id);
-
-        // const tf2::Transform & t = T_bf_sensor_cache[b.frame_id];
+  // Each cloud where the sensor was when it took it, in the footprint the particles have now
+  // (the odometry in between): a cloud a few hundred ms old, with the robot turning, would
+  // otherwise be scored rotated
+  const auto tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  for (auto & b : bundles) {
+    try {
+      const auto msg = RTTFBuffer::getInstance()->lookupTransform(
+        tf_info.robot_footprint_frame, tf2::TimePointZero, b.frame_id,
+        tf2_ros::fromRclcpp(b.stamp), tf_info.odom_frame, tf2::durationFromSec(0.0));
+      tf2::fromMsg(msg.transform, b.T_bf_sensor);
+    } catch (const tf2::TransformException &) {
+      try {  // no odometry at the cloud's time: as if it were now
+        b.T_bf_sensor = lookup_bf_to_sensor(tf_info.robot_footprint_frame, b.frame_id);
       } catch (const tf2::TransformException & ex) {
         RCLCPP_WARN(
-          get_node()->get_logger(), "TF bf->%s failed: %s", b.frame_id.c_str(),
-          ex.what());
-        T_bf_sensor_cache[b.frame_id] = tf2::Transform::getIdentity();
+          get_node()->get_logger(), "TF bf->%s failed: %s", b.frame_id.c_str(), ex.what());
+        b.T_bf_sensor = tf2::Transform::getIdentity();
       }
     }
+  }
+
+  // Only points between min_point_height and max_point_height over the robot's footprint: the
+  // floor and the ceiling a 3D sensor sees fit any particle under them (and their grazing rays
+  // look occluded), they only dilute the walls. Then at most correct_max_points per sensor,
+  // evenly spread. The points stay in the sensor frame: the rays start there.
+  for (auto & b : bundles) {
+    const tf2::Transform & T = b.T_bf_sensor;
+    const tf2::Matrix3x3 R = T.getBasis();
+    const tf2::Vector3 O = T.getOrigin();
+    {
+      auto & pts = b.cloud.points;
+      pts.erase(
+        std::remove_if(
+          pts.begin(), pts.end(), [&](const pcl::PointXYZ & p) {
+            if (!std::isfinite(p.x) || !std::isfinite(p.y) || !std::isfinite(p.z)) {return true;}
+            const double z = R[2].x() * p.x + R[2].y() * p.y + R[2].z() * p.z + O.z();
+            return !(z >= min_point_height_ && z <= max_point_height_);
+          }), pts.end());
+    }
+    if (b.cloud.points.size() > correct_max_points_) {
+      const double step = static_cast<double>(b.cloud.points.size()) /
+        static_cast<double>(correct_max_points_);
+      pcl::PointCloud<pcl::PointXYZ> kept;
+      kept.points.reserve(correct_max_points_);
+      for (std::size_t k = 0; k < correct_max_points_; ++k) {
+        kept.points.push_back(b.cloud.points[static_cast<std::size_t>(k * step)]);
+      }
+      b.cloud.points.swap(kept.points);
+    }
+    b.cloud.width = static_cast<uint32_t>(b.cloud.points.size());
+    b.cloud.height = 1;
   }
 
   // Score all particles against all sensors
@@ -1045,7 +1114,7 @@ void AMCLLocalizer::correct(NavState & nav_state)
     float hits = 0.0f, possible = 0.0f;
     for (const auto & b : bundles) {
       if (b.cloud.empty()) {continue;}
-      const tf2::Transform & T_bf_sensor = T_bf_sensor_cache[b.frame_id];
+      const tf2::Transform & T_bf_sensor = b.T_bf_sensor;
       ScoreAgg s = score_particle_sensor_cloud(
         particle.pose, b.cloud, T_bf_sensor,
         *original_map, *inflated_map, TAIL_SKIP, debug);
@@ -1089,6 +1158,17 @@ AMCLLocalizer::reseed()
   if (particles_[0].possible_hits == 0) {return;}
   // The RT thread has not taken the last ones yet: next time
   if (pending_.load(std::memory_order_acquire)) {return;}
+  // Only after the robot has moved: standing still, each reseed would move the particles at
+  // random around the best ones, and over time they would wander off
+  const double travelled = travelled_.load(std::memory_order_relaxed);
+  const double turned = turned_.load(std::memory_order_relaxed);
+  if (travelled - travelled_at_reseed_ < reseed_min_d_ &&
+    turned - turned_at_reseed_ < reseed_min_a_)
+  {
+    return;
+  }
+  travelled_at_reseed_ = travelled;
+  turned_at_reseed_ = turned;
 
   const std::size_t N = particles_.size();
   auto top_count = [&](std::size_t n) -> std::size_t {
@@ -1174,13 +1254,24 @@ AMCLLocalizer::reseed()
   tf2::Matrix3x3(top[0].pose.getRotation()).getRPY(best_r, best_p, best_yaw);
 
   std::vector<std::pair<std::size_t, tf2::Transform>> poses;
+  std::vector<double> scales;
   poses.reserve(N - N_top);
+  scales.reserve(N - N_top);
+  // The odometry scale: the reference's, a little noisy (odom_scale_noise: the population learns
+  // the odometry's scale), or (odom_slip_fraction of them) any between 0 and 1, a sudden slip
+  std::uniform_real_distribution<double> u01(0.0, 1.0);
+  std::normal_distribution<double> scale_noise(0.0, std::max(odom_scale_noise_, 1e-12));
+  auto scale_from = [&](double ref) {
+      if (u01(rng_) < odom_slip_fraction_) {return u01(rng_);}
+      return odom_scale_noise_ > 0.0 ? std::clamp(ref + scale_noise(rng_), 0.0, 1.2) : ref;
+    };
   for (std::size_t i = N_top; i < N; ++i) {
     if (i >= N - n_spread) {
       tf2::Quaternion q; q.setRPY(0.0, 0.0, best_yaw + wide_yaw(rng_));
       const tf2::Vector3 o(mean.x() + wide_xy(rng_), mean.y() + wide_xy(rng_),
         top[0].pose.getOrigin().z());
       poses.emplace_back(order[i], tf2::Transform(q, o));
+      scales.push_back(scale_from(top[0].odom_scale));
       particles_[order[i]].weight = top[N_top - 1].weight;
       continue;
     }
@@ -1220,9 +1311,10 @@ AMCLLocalizer::reseed()
     }
 
     poses.emplace_back(order[i], tf2::Transform(q, new_origin));
+    scales.push_back(scale_from(ref.odom_scale));
     particles_[order[i]].weight = ref.weight;
   }
-  post_poses_(poses);
+  post_poses_(poses, scales);
   if (n_spread > 0) {
     RCLCPP_DEBUG(
       get_node()->get_logger(), "Recovery: %zu particles spread (likelihood %.3f, trend %.3f)",
@@ -1287,10 +1379,13 @@ AMCLLocalizer::recovery_probability_() const
 }
 
 bool
-AMCLLocalizer::post_poses_(const std::vector<std::pair<std::size_t, tf2::Transform>> & poses)
+AMCLLocalizer::post_poses_(
+  const std::vector<std::pair<std::size_t, tf2::Transform>> & poses,
+  const std::vector<double> & scales)
 {
   if (pending_.load(std::memory_order_acquire)) {return false;}
   pending_poses_.assign(poses.begin(), poses.end());  // capacity reserved: no allocation
+  pending_scales_.assign(scales.begin(), scales.end());
   pending_.store(true, std::memory_order_release);
   return true;
 }
@@ -1299,9 +1394,11 @@ void
 AMCLLocalizer::apply_pending_poses_()
 {
   if (!pending_.load(std::memory_order_acquire)) {return;}
-  for (const auto & [i, pose] : pending_poses_) {
+  for (std::size_t k = 0; k < pending_poses_.size(); ++k) {
+    const auto & [i, pose] = pending_poses_[k];
     if (i >= particles_.size()) {continue;}
     particles_[i].pose = pose;
+    particles_[i].odom_scale = k < pending_scales_.size() ? pending_scales_[k] : 1.0;
     // It jumped: its NavCel hint no longer applies
     particles_[i].last_cid = std::numeric_limits<uint32_t>::max();
   }
@@ -1398,11 +1495,13 @@ AMCLLocalizer::getEstimatedPose() const
     mean = tf2::Vector3(0, 0, 0);
   }
 
-  const Particle & best = top_particles[0];
-  double r, p, y;
-  tf2::Matrix3x3(best.pose.getRotation()).getRPY(r, p, y);
-  tf2::Quaternion q;
-  q.setRPY(0.0, 0.0, y);
+  // The best particle's attitude, roll and pitch included (the IMU's, or the surface's): with a
+  // flat estimate, a robot tilted on a ramp places the points it sees off the map
+  tf2::Quaternion q = top_particles[0].pose.getRotation();
+  if (!std::isfinite(q.length2()) || q.length2() < 1e-12) {
+    q = tf2::Quaternion::getIdentity();
+  }
+  q.normalize();
 
   tf2::Transform est;
   est.setOrigin(mean);

@@ -52,6 +52,7 @@ struct Particle
 
   ::navmap::NavCelId last_cid = std::numeric_limits<uint32_t>::max();
   std::size_t last_surface = 0;
+  double odom_scale = 1.0;    ///< Scale of the odometry's translation for it (< 1: slipping)
 };
 
 /// \brief A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization)
@@ -215,10 +216,26 @@ protected:
   // single slot: pending_poses_ is filled while pending_ is false, then pending_ is set; predict()
   // applies them and clears it. The vector never changes size, so indices are always valid.
   std::vector<std::pair<std::size_t, tf2::Transform>> pending_poses_;
+  std::vector<double> pending_scales_;  // their odometry scales (none: 1)
   std::atomic<bool> pending_ {false};
 
+  // Odometry travelled and turned so far (written by the RT thread only), and where the last
+  // reseed was (non-RT): reseed() needs the robot to have moved reseed_min_d or reseed_min_a
+  std::atomic<double> travelled_ {0.0};
+  std::atomic<double> turned_ {0.0};
+  double travelled_at_reseed_ {0.0};
+  double turned_at_reseed_ {0.0};
+  double reseed_min_d_ {0.1};  // m
+  double reseed_min_a_ {0.1};  // rad
+  // Fraction of the reseeded particles given any odometry scale in [0, 1] (wheels slipping)
+  double odom_slip_fraction_ {0.05};
+  // Noise of the scale a reseeded particle takes from its reference
+  double odom_scale_noise_ {0.02};
+
   /// Hands poses over to the RT thread. False if the slot is still busy.
-  bool post_poses_(const std::vector<std::pair<std::size_t, tf2::Transform>> & poses);
+  bool post_poses_(
+    const std::vector<std::pair<std::size_t, tf2::Transform>> & poses,
+    const std::vector<double> & scales = {});
 
   /// Applies the poses handed over (RT thread).
   void apply_pending_poses_();
@@ -255,6 +272,13 @@ protected:
   // Fraction of particles (0,1] used as "top" set for stats and reseed
   double top_keep_fraction_{0.2};
   double downsampled_cloud_size_{0.05};
+  // Only points between these heights over the robot's footprint are scored (default: all)
+  double min_point_height_ {-std::numeric_limits<double>::infinity()};
+  double max_point_height_ {std::numeric_limits<double>::infinity()};
+  // A point whose ray from the sensor crosses an occupied voxel scores nothing. Off by default:
+  // with voxels a few decimetres wide, rays along a floor or a ceiling (a 3D lidar's, a camera
+  // near the floor) look occluded, and the true pose scores worse than wrong ones
+  bool ray_occlusion_ {false};
 
   // Recovery (augmented MCL): slow and fast averages of the scan likelihood; when the fast one
   // drops below the slow one, reseed() spreads part of the particles widely around the estimate.

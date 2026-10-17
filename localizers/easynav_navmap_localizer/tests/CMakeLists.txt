@@ -40,3 +40,15 @@ target_link_libraries(navmap_localizer_recovery_tests
   ${PROJECT_NAME}
   rclcpp::rclcpp
 )
+
+ament_add_gtest(navmap_localizer_correct_tests navmap_localizer_correct_tests.cpp)
+target_link_libraries(navmap_localizer_correct_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+)
+
+ament_add_gtest(navmap_localizer_slip_tests navmap_localizer_slip_tests.cpp)
+target_link_libraries(navmap_localizer_slip_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+)
