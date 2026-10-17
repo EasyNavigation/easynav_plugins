@@ -215,7 +215,9 @@ RegulatedPurePursuitController::findClosestPoseIndex(
   double closest_dist = std::numeric_limits<double>::max();
   for (std::size_t i = 0; i < path.poses.size(); ++i) {
     const auto & p = path.poses[i].pose.position;
-    const double d = std::hypot(p.x - robot_position.x, p.y - robot_position.y);
+    // In 3D: a path that comes back under (or over) the robot on another floor is not near it
+    const double d = std::hypot(
+      p.x - robot_position.x, p.y - robot_position.y, p.z - robot_position.z);
     if (d < closest_dist) {
       closest_dist = d;
       closest_idx = i;

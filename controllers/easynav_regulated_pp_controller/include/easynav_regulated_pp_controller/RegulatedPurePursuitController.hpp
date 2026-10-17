@@ -151,6 +151,9 @@ protected:
   /// path: otherwise, once the robot has advanced more than a lookahead distance away from the
   /// path's start pose, that start pose itself would (incorrectly) be picked up as "farther than
   /// the lookahead distance" and returned as the carrot, even though it lies behind the robot.
+  ///
+  /// The distance is 3D: on several floors, the part of the path on another floor right above or
+  /// below the robot is not the closest one.
   static std::size_t findClosestPoseIndex(
     const nav_msgs::msg::Path & path,
     const geometry_msgs::msg::Point & robot_position);
