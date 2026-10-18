@@ -26,6 +26,7 @@
 #include "navmap_ros/conversions.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "easynav_common/types/NavState.hpp"
 #include "easynav_sensors/types/IMUPerception.hpp"
 #include "easynav_localizer/LocalizerNode.hpp"
@@ -238,6 +239,76 @@ TEST_F(NavmapAmclPredictTest, TheImuGivesRollPitchAndTurnsButNotItsAbsoluteYaw)
   imu(0.0, 0.0, -M_PI + 0.05);
   predict(0.0, 0.0, 0.0);
   EXPECT_NEAR(std::remainder(mean()[2] - y1 - 0.1, 2.0 * M_PI), 0.0, 0.05);
+}
+
+TEST_F(NavmapAmclPredictTest, TheEstimateCarriesTheImuRollAndPitch)
+{
+  // Tilted on a slope: the estimate (and so the TF) keeps the IMU's roll and pitch, with the
+  // particles' yaw
+  imu(0.1, -0.2, 1.2);
+  predict(0.0, 0.0, 0.0);
+  double r, p, y;
+  tf2::Matrix3x3(amcl_->getEstimatedPose().getRotation()).getRPY(r, p, y);
+  EXPECT_NEAR(r, 0.1, 1e-6);
+  EXPECT_NEAR(p, -0.2, 1e-6);
+  EXPECT_NEAR(std::remainder(y - mean()[2], 2.0 * M_PI), 0.0, 0.05);
+  EXPECT_NEAR(amcl_->getEstimatedPose().getRotation().length(), 1.0, 1e-9);
+  // The same in the pose the other components read
+  const auto pose = amcl_->get_pose().pose.pose;
+  tf2::Quaternion q;
+  tf2::fromMsg(pose.orientation, q);
+  tf2::Matrix3x3(q).getRPY(r, p, y);
+  EXPECT_NEAR(r, 0.1, 1e-6);
+  EXPECT_NEAR(p, -0.2, 1e-6);
+  // Level again: level estimate
+  imu(0.0, 0.0, 1.2);
+  predict(0.0, 0.0, 0.0);
+  tf2::Matrix3x3(amcl_->getEstimatedPose().getRotation()).getRPY(r, p, y);
+  EXPECT_NEAR(r, 0.0, 1e-6);
+  EXPECT_NEAR(p, 0.0, 1e-6);
+}
+
+TEST_F(NavmapAmclPredictTest, WithoutImuOnFlatGroundTheEstimateIsLevel)
+{
+  for (int i = 0; i < 5; ++i) {
+    predict(0.1, 0.0, 0.05);
+  }
+  double r, p, y;
+  tf2::Matrix3x3(amcl_->getEstimatedPose().getRotation()).getRPY(r, p, y);
+  EXPECT_NEAR(r, 0.0, 1e-6);
+  EXPECT_NEAR(p, 0.0, 1e-6);
+  EXPECT_NEAR(std::remainder(y - mean()[2], 2.0 * M_PI), 0.0, 0.05);
+}
+
+TEST_F(NavmapAmclPredictTest, WithoutImuOnARampTheEstimateFollowsTheSurface)
+{
+  // A ramp rising 0.25 m per meter along x: without an IMU the attitude is the surface's
+  ::navmap::NavMap nm;
+  const auto surface = nm.create_surface("map");
+  const int n = 9;  // 0.5 m spacing over [0, 4] m
+  for (int j = 0; j < n; ++j) {
+    for (int i = 0; i < n; ++i) {
+      nm.add_vertex({0.5f * i, 0.5f * j, 0.25f * 0.5f * i});
+    }
+  }
+  for (int j = 0; j + 1 < n; ++j) {
+    for (int i = 0; i + 1 < n; ++i) {
+      const uint32_t v = j * n + i;
+      nm.add_navcel_to_surface(surface, nm.add_navcel(v, v + 1, v + n + 1));
+      nm.add_navcel_to_surface(surface, nm.add_navcel(v, v + n + 1, v + n));
+    }
+  }
+  nm.rebuild_geometry_accels();
+  nav_state_.set("map.navmap", nm);
+  for (int i = 0; i < 3; ++i) {
+    predict(0.05, 0.0, 0.0);
+  }
+  double r, p, y;
+  tf2::Matrix3x3(amcl_->getEstimatedPose().getRotation()).getRPY(r, p, y);
+  EXPECT_NEAR(std::abs(p), std::atan(0.25), 0.02);  // facing up the ramp
+  EXPECT_NEAR(r, 0.0, 0.02);
+  EXPECT_NEAR(amcl_->getEstimatedPose().getOrigin().z(),
+    0.25 * amcl_->getEstimatedPose().getOrigin().x(), 0.02);
 }
 
 TEST_F(NavmapAmclPredictTest, MovingOnATiltedRobotStaysOnTheSurface)

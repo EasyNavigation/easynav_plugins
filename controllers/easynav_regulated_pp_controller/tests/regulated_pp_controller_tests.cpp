@@ -267,6 +267,99 @@ TEST(RegulatedPurePursuitControllerHelpers, ToRobotFrameRotatesAndTranslates)
   EXPECT_NEAR(local.y, 0.0, 1e-6);
 }
 
+namespace
+{
+
+// Along the upper floor (z = 2.4) from x = 0 to 5, down a ramp to x = 10 (z = 0), and back
+// along the lower floor, right under the first part, to x = 0
+nav_msgs::msg::Path two_floor_path()
+{
+  nav_msgs::msg::Path path;
+  auto add = [&path](double x, double z) {
+      geometry_msgs::msg::PoseStamped p;
+      p.pose.position.x = x;
+      p.pose.position.z = z;
+      path.poses.push_back(p);
+    };
+  for (int i = 0; i <= 50; ++i) {
+    add(0.1 * i, 2.4);
+  }
+  for (int i = 1; i <= 50; ++i) {
+    add(5.0 + 0.1 * i, 2.4 - 0.048 * i);
+  }
+  for (int i = 1; i <= 100; ++i) {
+    add(10.0 - 0.1 * i, 0.0);
+  }
+  return path;
+}
+
+}  // namespace
+
+TEST(RegulatedPurePursuitControllerHelpers, FindClosestPoseIndexKeepsToTheRobotsFloor)
+{
+  const auto path = two_floor_path();
+  geometry_msgs::msg::Point robot;
+  robot.x = 2.0;
+  robot.z = 2.4;
+  // On the upper floor: its own part, not the lower floor's pose right under it
+  EXPECT_EQ(FriendRegulatedPurePursuitController::findClosestPoseIndex(path, robot), 20u);
+  // On the lower floor, under the same point: the lower floor's pose
+  robot.z = 0.0;
+  EXPECT_EQ(FriendRegulatedPurePursuitController::findClosestPoseIndex(path, robot), 180u);
+  // Halfway down the ramp
+  robot.x = 7.5;
+  robot.z = 1.2;
+  EXPECT_EQ(FriendRegulatedPurePursuitController::findClosestPoseIndex(path, robot), 75u);
+}
+
+TEST(RegulatedPurePursuitControllerHelpers, FindClosestPoseIndexOnFlatGroundIgnoresTheHeight)
+{
+  // A flat path at z = 0 and a robot whose pose is a bit higher (its localizer's height): the
+  // same pose as in 2D
+  nav_msgs::msg::Path path;
+  for (double x = 0.0; x <= 10.0; x += 1.0) {
+    geometry_msgs::msg::PoseStamped p;
+    p.pose.position.x = x;
+    path.poses.push_back(p);
+  }
+  geometry_msgs::msg::Point robot;
+  robot.x = 7.1;
+  robot.y = 0.4;
+  for (double z : {0.0, 0.3, -0.2, 5.0}) {
+    robot.z = z;
+    EXPECT_EQ(FriendRegulatedPurePursuitController::findClosestPoseIndex(path, robot), 7u) << z;
+  }
+}
+
+TEST(RegulatedPurePursuitControllerHelpers, LookAheadPointOnTheUpperFloorFollowsItsOwnPart)
+{
+  // Regression: with the closest pose taken in 2D, a robot on the upper floor picked the lower
+  // floor's part right under it, skipped the ramp and stayed over the goal
+  const auto path = two_floor_path();
+  geometry_msgs::msg::Point robot;
+  robot.x = 2.0;
+  robot.z = 2.4;
+  const auto carrot = FriendRegulatedPurePursuitController::getLookAheadPoint(path, robot, 1.0);
+  EXPECT_NEAR(carrot.x, 3.0, 1e-6);  // the carrot is 2D: its x tells the part
+  // Near the end of the upper floor it goes on down the ramp (x > 5), not back along the lower
+  // floor (x < 4.8)
+  robot.x = 4.8;
+  const auto down = FriendRegulatedPurePursuitController::getLookAheadPoint(path, robot, 1.0);
+  EXPECT_GT(down.x, 5.0);
+}
+
+TEST(RegulatedPurePursuitControllerHelpers, RemainingPathDistanceOnTheUpperFloorCountsTheDescent)
+{
+  const auto path = two_floor_path();
+  geometry_msgs::msg::Point robot;
+  robot.x = 2.0;
+  robot.z = 2.4;
+  // 3 m to the ramp, 5 m along it (in XY) and 10 m back on the lower floor
+  EXPECT_NEAR(FriendRegulatedPurePursuitController::remainingPathDistance(path, robot), 18.0, 1e-6);
+  robot.z = 0.0;  // under it, on the lower floor: 2 m left
+  EXPECT_NEAR(FriendRegulatedPurePursuitController::remainingPathDistance(path, robot), 2.0, 1e-6);
+}
+
 TEST(RegulatedPurePursuitControllerHelpers, RemainingPathDistanceFromClosestPoint)
 {
   nav_msgs::msg::Path path;

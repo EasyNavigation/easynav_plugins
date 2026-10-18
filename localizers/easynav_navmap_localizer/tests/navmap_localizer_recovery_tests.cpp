@@ -70,6 +70,10 @@ protected:
       rclcpp::Parameter("loc.initial_pose.std_dev_xy", 0.05),
       rclcpp::Parameter("loc.initial_pose.std_dev_yaw", 0.05),
       rclcpp::Parameter("loc.num_particles", N),
+      // reseed() is called here without moving the robot
+      rclcpp::Parameter("loc.reseed_min_d", 0.0),
+      rclcpp::Parameter("loc.reseed_min_a", 0.0),
+      rclcpp::Parameter("loc.odom_slip_fraction", 0.0),
     };
     params.insert(params.end(), extra.begin(), extra.end());
     node_ = std::make_shared<easynav::LocalizerNode>(

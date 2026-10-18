@@ -212,14 +212,29 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
       }
     }
     if (!ok) {continue;}
-    last_surface = surface_idx;
-    last_cid = cid;
 
     // Height above the NavCel's plane (along its upward normal): on a ramp, the ramp is not one
-    const auto & cel = nm.navcels[cid];
-    Eigen::Vector3f normal = cel.normal;
-    if (normal.z() < 0.0f) {normal = -normal;}
-    const float height = normal.dot(query - nm.positions.at(cel.v[0]));
+    auto height_over = [&nm, &query](::navmap::NavCelId c) {
+        const auto & cel = nm.navcels[c];
+        Eigen::Vector3f normal = cel.normal;
+        if (normal.z() < 0.0f) {normal = -normal;}
+        return normal.dot(query - nm.positions.at(cel.v[0]));
+      };
+    float height = height_over(cid);
+    // The hint takes any NavCel within height_eps: off it, the closest surface in z is the one
+    // under the point (a ramp, not the floor 0.4 m below it)
+    if (std::fabs(height) > min_height_) {
+      ::navmap::NavCelId nearest;
+      if (nm.locate_navcel(query, surface_idx, nearest, bary, &hit) && nearest != cid) {
+        const float h = height_over(nearest);
+        if (std::fabs(h) < std::fabs(height)) {
+          cid = nearest;
+          height = h;
+        }
+      }
+    }
+    last_surface = surface_idx;
+    last_cid = cid;
     // Farther, a small attitude error lifts the ground more: a higher threshold
     const double distance = robot_known ? (query.head<2>() - robot_xy).norm() : 0.0;
     if (memory_) {ends.emplace_back(cid, query);}

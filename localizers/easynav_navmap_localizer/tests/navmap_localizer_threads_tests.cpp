@@ -70,6 +70,8 @@ protected:
       rclcpp::Parameter("loc.initial_pose.std_dev_xy", 0.3),
       rclcpp::Parameter("loc.initial_pose.std_dev_yaw", 0.3),
       rclcpp::Parameter("loc.num_particles", 500),
+      rclcpp::Parameter("loc.reseed_min_d", 0.0),  // it barely moves between reseeds
+      rclcpp::Parameter("loc.reseed_min_a", 0.0),
     }));
     amcl_ = std::make_shared<TestAmcl>();
     amcl_->initialize(node_, "loc");
