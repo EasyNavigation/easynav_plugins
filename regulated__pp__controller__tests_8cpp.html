@@ -186,11 +186,15 @@ Functions</h2></td></tr>
 <tr class="memdesc:a60bad7c958cb7f7f9d4b903b24cc22b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply obstacle-proximity regulation on the linear velocity.  <br /></td></tr>
 <tr class="memitem:afd1dc713883ae18bdf94ee47e5ccf56d" id="r_afd1dc713883ae18bdf94ee47e5ccf56d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#afd1dc713883ae18bdf94ee47e5ccf56d">TEST</a> (DynamicWindowPurePursuit, ComputeDynamicWindowClampsToAccelLimits)</td></tr>
 <tr class="memitem:ac544f19f25965ffaf7a803a3c25ae167" id="r_ac544f19f25965ffaf7a803a3c25ae167"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac544f19f25965ffaf7a803a3c25ae167">TEST</a> (DynamicWindowPurePursuit, ComputeOptimalVelocityZeroCurvatureForward)</td></tr>
+<tr class="memitem:a3494e12ef966d6d16992bfb84ef0b088" id="r_a3494e12ef966d6d16992bfb84ef0b088"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a3494e12ef966d6d16992bfb84ef0b088">TEST</a> (RegulatedPurePursuitControllerHelpers, FindClosestPoseIndexKeepsToTheRobotsFloor)</td></tr>
+<tr class="memitem:a18214ba0a0c19dac0ee7eaf489b66451" id="r_a18214ba0a0c19dac0ee7eaf489b66451"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a18214ba0a0c19dac0ee7eaf489b66451">TEST</a> (RegulatedPurePursuitControllerHelpers, FindClosestPoseIndexOnFlatGroundIgnoresTheHeight)</td></tr>
 <tr class="memitem:ae956790b1336870a9bf68a48b12fc7af" id="r_ae956790b1336870a9bf68a48b12fc7af"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae956790b1336870a9bf68a48b12fc7af">TEST</a> (RegulatedPurePursuitControllerHelpers, FindClosestPoseIndexPicksNearestNotFirst)</td></tr>
 <tr class="memitem:a7d7a74f44751d785c58c2ce49ffa413b" id="r_a7d7a74f44751d785c58c2ce49ffa413b"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a7d7a74f44751d785c58c2ce49ffa413b">TEST</a> (RegulatedPurePursuitControllerHelpers, LookAheadPointClampsToPathEnd)</td></tr>
 <tr class="memitem:ab469622b5078a82a03c5c3b5f68dbfcb" id="r_ab469622b5078a82a03c5c3b5f68dbfcb"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ab469622b5078a82a03c5c3b5f68dbfcb">TEST</a> (RegulatedPurePursuitControllerHelpers, LookAheadPointIgnoresPathBehindRobot)</td></tr>
 <tr class="memitem:a4a3531d361966d08473c8784adec8167" id="r_a4a3531d361966d08473c8784adec8167"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4a3531d361966d08473c8784adec8167">TEST</a> (RegulatedPurePursuitControllerHelpers, LookAheadPointInterpolatesOnSegment)</td></tr>
+<tr class="memitem:a4d116dcbc935b72ffb83557e06359c4d" id="r_a4d116dcbc935b72ffb83557e06359c4d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4d116dcbc935b72ffb83557e06359c4d">TEST</a> (RegulatedPurePursuitControllerHelpers, LookAheadPointOnTheUpperFloorFollowsItsOwnPart)</td></tr>
 <tr class="memitem:a2e7bbccd4e7611537144e487939f830f" id="r_a2e7bbccd4e7611537144e487939f830f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a2e7bbccd4e7611537144e487939f830f">TEST</a> (RegulatedPurePursuitControllerHelpers, RemainingPathDistanceFromClosestPoint)</td></tr>
+<tr class="memitem:a6f138d2ed99d98d0a5fac052800c342d" id="r_a6f138d2ed99d98d0a5fac052800c342d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a6f138d2ed99d98d0a5fac052800c342d">TEST</a> (RegulatedPurePursuitControllerHelpers, RemainingPathDistanceOnTheUpperFloorCountsTheDescent)</td></tr>
 <tr class="memitem:a95c272846a97e24325c6c7ae6256b5f2" id="r_a95c272846a97e24325c6c7ae6256b5f2"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a95c272846a97e24325c6c7ae6256b5f2">TEST</a> (RegulatedPurePursuitControllerHelpers, ShouldRotateToPathHasHysteresis)</td></tr>
 <tr class="memitem:abff46768ff38bf64c92e2953d533a7f8" id="r_abff46768ff38bf64c92e2953d533a7f8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#abff46768ff38bf64c92e2953d533a7f8">TEST</a> (RegulatedPurePursuitControllerHelpers, ToRobotFrameRotatesAndTranslates)</td></tr>
 <tr class="memitem:aa9dbdd7639139a16791c55e291852c72" id="r_aa9dbdd7639139a16791c55e291852c72"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa9dbdd7639139a16791c55e291852c72">TEST</a> (RegulationFunctions, ApproachVelocityConstraintFarFromGoal)</td></tr>
@@ -387,7 +391,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="afd1dc713883ae18bdf94ee47e5ccf56d" name="afd1dc713883ae18bdf94ee47e5ccf56d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd1dc713883ae18bdf94ee47e5ccf56d">&#9670;&#160;</a></span>TEST() <span class="overload">[1/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afd1dc713883ae18bdf94ee47e5ccf56d">&#9670;&#160;</a></span>TEST() <span class="overload">[1/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -408,7 +412,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ac544f19f25965ffaf7a803a3c25ae167" name="ac544f19f25965ffaf7a803a3c25ae167"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac544f19f25965ffaf7a803a3c25ae167">&#9670;&#160;</a></span>TEST() <span class="overload">[2/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac544f19f25965ffaf7a803a3c25ae167">&#9670;&#160;</a></span>TEST() <span class="overload">[2/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -428,8 +432,50 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a3494e12ef966d6d16992bfb84ef0b088" name="a3494e12ef966d6d16992bfb84ef0b088"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3494e12ef966d6d16992bfb84ef0b088">&#9670;&#160;</a></span>TEST() <span class="overload">[3/23]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST </td>
+          <td>(</td>
+          <td class="paramtype">RegulatedPurePursuitControllerHelpers</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FindClosestPoseIndexKeepsToTheRobotsFloor</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a18214ba0a0c19dac0ee7eaf489b66451" name="a18214ba0a0c19dac0ee7eaf489b66451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18214ba0a0c19dac0ee7eaf489b66451">&#9670;&#160;</a></span>TEST() <span class="overload">[4/23]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST </td>
+          <td>(</td>
+          <td class="paramtype">RegulatedPurePursuitControllerHelpers</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FindClosestPoseIndexOnFlatGroundIgnoresTheHeight</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae956790b1336870a9bf68a48b12fc7af" name="ae956790b1336870a9bf68a48b12fc7af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae956790b1336870a9bf68a48b12fc7af">&#9670;&#160;</a></span>TEST() <span class="overload">[3/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae956790b1336870a9bf68a48b12fc7af">&#9670;&#160;</a></span>TEST() <span class="overload">[5/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -450,7 +496,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a7d7a74f44751d785c58c2ce49ffa413b" name="a7d7a74f44751d785c58c2ce49ffa413b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d7a74f44751d785c58c2ce49ffa413b">&#9670;&#160;</a></span>TEST() <span class="overload">[4/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d7a74f44751d785c58c2ce49ffa413b">&#9670;&#160;</a></span>TEST() <span class="overload">[6/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -471,7 +517,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ab469622b5078a82a03c5c3b5f68dbfcb" name="ab469622b5078a82a03c5c3b5f68dbfcb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab469622b5078a82a03c5c3b5f68dbfcb">&#9670;&#160;</a></span>TEST() <span class="overload">[5/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab469622b5078a82a03c5c3b5f68dbfcb">&#9670;&#160;</a></span>TEST() <span class="overload">[7/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -492,7 +538,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a4a3531d361966d08473c8784adec8167" name="a4a3531d361966d08473c8784adec8167"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a3531d361966d08473c8784adec8167">&#9670;&#160;</a></span>TEST() <span class="overload">[6/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a3531d361966d08473c8784adec8167">&#9670;&#160;</a></span>TEST() <span class="overload">[8/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -512,8 +558,29 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a4d116dcbc935b72ffb83557e06359c4d" name="a4d116dcbc935b72ffb83557e06359c4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d116dcbc935b72ffb83557e06359c4d">&#9670;&#160;</a></span>TEST() <span class="overload">[9/23]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST </td>
+          <td>(</td>
+          <td class="paramtype">RegulatedPurePursuitControllerHelpers</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LookAheadPointOnTheUpperFloorFollowsItsOwnPart</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a2e7bbccd4e7611537144e487939f830f" name="a2e7bbccd4e7611537144e487939f830f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e7bbccd4e7611537144e487939f830f">&#9670;&#160;</a></span>TEST() <span class="overload">[7/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e7bbccd4e7611537144e487939f830f">&#9670;&#160;</a></span>TEST() <span class="overload">[10/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -533,8 +600,29 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a6f138d2ed99d98d0a5fac052800c342d" name="a6f138d2ed99d98d0a5fac052800c342d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f138d2ed99d98d0a5fac052800c342d">&#9670;&#160;</a></span>TEST() <span class="overload">[11/23]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST </td>
+          <td>(</td>
+          <td class="paramtype">RegulatedPurePursuitControllerHelpers</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">RemainingPathDistanceOnTheUpperFloorCountsTheDescent</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a95c272846a97e24325c6c7ae6256b5f2" name="a95c272846a97e24325c6c7ae6256b5f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95c272846a97e24325c6c7ae6256b5f2">&#9670;&#160;</a></span>TEST() <span class="overload">[8/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a95c272846a97e24325c6c7ae6256b5f2">&#9670;&#160;</a></span>TEST() <span class="overload">[12/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -555,7 +643,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="abff46768ff38bf64c92e2953d533a7f8" name="abff46768ff38bf64c92e2953d533a7f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abff46768ff38bf64c92e2953d533a7f8">&#9670;&#160;</a></span>TEST() <span class="overload">[9/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abff46768ff38bf64c92e2953d533a7f8">&#9670;&#160;</a></span>TEST() <span class="overload">[13/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -576,7 +664,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="aa9dbdd7639139a16791c55e291852c72" name="aa9dbdd7639139a16791c55e291852c72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9dbdd7639139a16791c55e291852c72">&#9670;&#160;</a></span>TEST() <span class="overload">[10/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9dbdd7639139a16791c55e291852c72">&#9670;&#160;</a></span>TEST() <span class="overload">[14/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -597,7 +685,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a34fcc9635506b35e621aee38ab6587be" name="a34fcc9635506b35e621aee38ab6587be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34fcc9635506b35e621aee38ab6587be">&#9670;&#160;</a></span>TEST() <span class="overload">[11/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a34fcc9635506b35e621aee38ab6587be">&#9670;&#160;</a></span>TEST() <span class="overload">[15/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -618,7 +706,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="aa19dc21c92020e6b9ecbfe8745608f5b" name="aa19dc21c92020e6b9ecbfe8745608f5b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa19dc21c92020e6b9ecbfe8745608f5b">&#9670;&#160;</a></span>TEST() <span class="overload">[12/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa19dc21c92020e6b9ecbfe8745608f5b">&#9670;&#160;</a></span>TEST() <span class="overload">[16/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -639,7 +727,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="ab1d5167f5ff2793c8a98fce182cebc99" name="ab1d5167f5ff2793c8a98fce182cebc99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1d5167f5ff2793c8a98fce182cebc99">&#9670;&#160;</a></span>TEST() <span class="overload">[13/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1d5167f5ff2793c8a98fce182cebc99">&#9670;&#160;</a></span>TEST() <span class="overload">[17/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -660,7 +748,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="acbdcc931ae686d20df1ed07481fc10f9" name="acbdcc931ae686d20df1ed07481fc10f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acbdcc931ae686d20df1ed07481fc10f9">&#9670;&#160;</a></span>TEST() <span class="overload">[14/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#acbdcc931ae686d20df1ed07481fc10f9">&#9670;&#160;</a></span>TEST() <span class="overload">[18/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -681,7 +769,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a8679a0b1c7b5b9c10a38712d4547b923" name="a8679a0b1c7b5b9c10a38712d4547b923"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8679a0b1c7b5b9c10a38712d4547b923">&#9670;&#160;</a></span>TEST() <span class="overload">[15/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8679a0b1c7b5b9c10a38712d4547b923">&#9670;&#160;</a></span>TEST() <span class="overload">[19/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -702,7 +790,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a06f41203e96ff6c0efe8adfd08a6f8ad" name="a06f41203e96ff6c0efe8adfd08a6f8ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a06f41203e96ff6c0efe8adfd08a6f8ad">&#9670;&#160;</a></span>TEST() <span class="overload">[16/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a06f41203e96ff6c0efe8adfd08a6f8ad">&#9670;&#160;</a></span>TEST() <span class="overload">[20/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -723,7 +811,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a337bd96924513b6ecc995bf555862100" name="a337bd96924513b6ecc995bf555862100"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a337bd96924513b6ecc995bf555862100">&#9670;&#160;</a></span>TEST() <span class="overload">[17/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a337bd96924513b6ecc995bf555862100">&#9670;&#160;</a></span>TEST() <span class="overload">[21/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -744,7 +832,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a6864e0775802faf849939c489acd650e" name="a6864e0775802faf849939c489acd650e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6864e0775802faf849939c489acd650e">&#9670;&#160;</a></span>TEST() <span class="overload">[18/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6864e0775802faf849939c489acd650e">&#9670;&#160;</a></span>TEST() <span class="overload">[22/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -765,7 +853,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a4c27bf0f36b7425ca769622ddb7fcb2c" name="a4c27bf0f36b7425ca769622ddb7fcb2c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4c27bf0f36b7425ca769622ddb7fcb2c">&#9670;&#160;</a></span>TEST() <span class="overload">[19/19]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c27bf0f36b7425ca769622ddb7fcb2c">&#9670;&#160;</a></span>TEST() <span class="overload">[23/23]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

@@ -107,11 +107,15 @@ Collaboration diagram for SensorBundle:</div>
 <div class="dyncontent">
 <div class="center"><img src="structeasynav_1_1navmap_1_1SensorBundle__coll__graph.png" border="0" usemap="#aSensorBundle_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aSensorBundle_coll__map" id="aSensorBundle_coll__map">
-<area shape="rect" title=" " alt="" coords="53,102,155,128"/>
+<area shape="rect" title=" " alt="" coords="112,102,214,128"/>
 <area shape="rect" title=" " alt="" coords="5,5,59,31"/>
-<area shape="poly" title=" " alt="" coords="53,42,97,100,93,103,48,45"/>
-<area shape="rect" title=" " alt="" coords="83,5,269,31"/>
-<area shape="poly" title=" " alt="" coords="165,46,142,80,120,103,116,100,138,76,160,43"/>
+<area shape="poly" title=" " alt="" coords="41,45,49,62,60,76,84,92,112,102,110,107,82,97,56,80,44,64,36,47"/>
+<area shape="rect" title=" " alt="" coords="90,5,140,31"/>
+<area shape="poly" title=" " alt="" coords="121,46,132,77,151,100,146,103,127,79,116,47"/>
+<area shape="rect" title=" " alt="" coords="164,5,244,31"/>
+<area shape="poly" title=" " alt="" coords="195,46,170,102,166,100,190,44"/>
+<area shape="rect" title=" " alt="" coords="269,5,454,31"/>
+<area shape="poly" title=" " alt="" coords="336,43,275,80,211,104,209,99,272,76,333,38"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -119,6 +123,8 @@ Collaboration diagram for SensorBundle:</div>
 Public Attributes</h2></td></tr>
 <tr class="memitem:adb4add18344f6e293fa2e36abc52f451" id="r_adb4add18344f6e293fa2e36abc52f451"><td class="memItemLeft">pcl::PointCloud&lt; pcl::PointXYZ &gt;&#160;</td><td class="memItemRight"><a class="el" href="#adb4add18344f6e293fa2e36abc52f451">cloud</a></td></tr>
 <tr class="memitem:aee63db9a1c81df1506964242aacdac88" id="r_aee63db9a1c81df1506964242aacdac88"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#aee63db9a1c81df1506964242aacdac88">frame_id</a></td></tr>
+<tr class="memitem:a3ace6024cedb403facddccc6842dce24" id="r_a3ace6024cedb403facddccc6842dce24"><td class="memItemLeft">rclcpp::Time&#160;</td><td class="memItemRight"><a class="el" href="#a3ace6024cedb403facddccc6842dce24">stamp</a></td></tr>
+<tr class="memitem:a3c5cc53c8e11b4f6688a75786d018433" id="r_a3c5cc53c8e11b4f6688a75786d018433"><td class="memItemLeft">tf2::Transform&#160;</td><td class="memItemRight"><a class="el" href="#a3c5cc53c8e11b4f6688a75786d018433">T_bf_sensor</a></td></tr>
 </table>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="adb4add18344f6e293fa2e36abc52f451" name="adb4add18344f6e293fa2e36abc52f451"></a>
@@ -143,6 +149,34 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::string frame_id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3ace6024cedb403facddccc6842dce24" name="a3ace6024cedb403facddccc6842dce24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ace6024cedb403facddccc6842dce24">&#9670;&#160;</a></span>stamp</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">rclcpp::Time stamp</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3c5cc53c8e11b4f6688a75786d018433" name="a3c5cc53c8e11b4f6688a75786d018433"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c5cc53c8e11b4f6688a75786d018433">&#9670;&#160;</a></span>T_bf_sensor</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tf2::Transform T_bf_sensor</td>
         </tr>
       </table>
 </div><div class="memdoc">

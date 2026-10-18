@@ -104,18 +104,20 @@ Directory dependency graph for easynav_navmap_localizer:</div>
 <div class="dyncontent">
 <div class="center"><img src="dir_244f7d1e1d21c0deb2226ff0fb4701ca_dep.png" border="0" usemap="#adir__244f7d1e1d21c0deb2226ff0fb4701ca__dep" loading="lazy" alt="localizers/easynav_navmap_localizer"/></div>
 <map name="adir__244f7d1e1d21c0deb2226ff0fb4701ca__dep" id="adir__244f7d1e1d21c0deb2226ff0fb4701ca__dep">
-<area shape="rect" href="dir_18e7138748083644ed1c2b3308202a3d.html" title="include" alt="" coords="233,137,295,162"/>
-<area shape="rect" href="dir_0085665aa3dcf1c11f094757a0c11b94.html" title="maps_managers" alt="" coords="239,210,356,236"/>
-<area shape="poly" href="dir_000098_000112.html" alt="" coords="272,161,288,195,283,197,267,164"/>
-<area shape="rect" href="dir_000098_000112.html" title="1" alt="" coords="288,182,295,197"/>
-<area shape="rect" href="dir_ff5df066c983b41cb8b772d88df0dc3a.html" title="src" alt="" coords="312,63,352,89"/>
-<area shape="poly" href="dir_000132_000098.html" alt="" coords="323,91,288,127,284,124,319,87"/>
-<area shape="rect" href="dir_000132_000098.html" title="1" alt="" coords="291,121,298,136"/>
-<area shape="poly" href="dir_000132_000112.html" alt="" coords="332,90,309,184,306,196,301,194,304,183,327,88"/>
-<area shape="rect" href="dir_000132_000112.html" title="2" alt="" coords="309,187,316,202"/>
-<area shape="rect" href="dir_b3e8952ff4f5e9567737ce244fed2263.html" title="tests" alt="" coords="238,63,288,89"/>
-<area shape="poly" href="dir_000156_000098.html" alt="" coords="266,89,266,121,261,121,260,89"/>
-<area shape="rect" href="dir_000156_000098.html" title="6" alt="" coords="268,110,275,125"/>
+<area shape="rect" href="dir_18e7138748083644ed1c2b3308202a3d.html" title="include" alt="" coords="201,137,263,162"/>
+<area shape="rect" href="dir_0085665aa3dcf1c11f094757a0c11b94.html" title="maps_managers" alt="" coords="241,210,359,236"/>
+<area shape="poly" href="dir_000098_000112.html" alt="" coords="245,161,280,197,276,201,241,164"/>
+<area shape="rect" href="dir_000098_000112.html" title="1" alt="" coords="279,183,286,198"/>
+<area shape="rect" href="dir_ff5df066c983b41cb8b772d88df0dc3a.html" title="src" alt="" coords="238,63,277,89"/>
+<area shape="poly" href="dir_000132_000098.html" alt="" coords="256,90,244,123,239,121,251,88"/>
+<area shape="rect" href="dir_000132_000098.html" title="1" alt="" coords="247,114,254,129"/>
+<area shape="poly" href="dir_000132_000112.html" alt="" coords="263,88,295,195,290,196,258,90"/>
+<area shape="rect" href="dir_000132_000112.html" title="2" alt="" coords="296,183,303,198"/>
+<area shape="rect" href="dir_b3e8952ff4f5e9567737ce244fed2263.html" title="tests" alt="" coords="302,63,352,89"/>
+<area shape="poly" href="dir_000156_000098.html" alt="" coords="312,91,262,129,258,125,309,87"/>
+<area shape="rect" href="dir_000156_000098.html" title="8" alt="" coords="264,125,271,140"/>
+<area shape="poly" href="dir_000156_000112.html" alt="" coords="330,89,329,132,321,184,316,198,311,196,316,183,324,131,325,89"/>
+<area shape="rect" href="dir_000156_000112.html" title="2" alt="" coords="319,190,326,205"/>
 <area shape="rect" href="dir_244f7d1e1d21c0deb2226ff0fb4701ca.html" alt="" coords="27,52,363,173"/>
 <area shape="rect" href="dir_eaf1c103843d5a42241179bcdc1dcd04.html" title="localizers" alt="" coords="16,16,373,184"/>
 </map>
@@ -201,20 +203,34 @@ Parameters</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.inflation_prob_min</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.01</span>  </td><td class="markdownTableBodyNone">Minimum occupancy probability after inflation.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.correct_max_points</span>  </td><td class="markdownTableBodyNone"><span class="tt">int</span>  </td><td class="markdownTableBodyRight"><span class="tt">1500</span>  </td><td class="markdownTableBodyNone">Maximum points used per correction step (after downsampling).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.correct_max_points</span>  </td><td class="markdownTableBodyNone"><span class="tt">int</span>  </td><td class="markdownTableBodyRight"><span class="tt">1500</span>  </td><td class="markdownTableBodyNone">Maximum points of each sensor's cloud scored per correction (after downsampling and the height band), evenly spread over it.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.weights_tau</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.7</span>  </td><td class="markdownTableBodyNone">Exponential decay factor for particle weight smoothing.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.top_keep_fraction</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.2</span>  </td><td class="markdownTableBodyNone">Fraction of top particles to keep before reseeding.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.downsampled_cloud_size</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.05</span>  </td><td class="markdownTableBodyNone">Voxel size for point cloud downsampling (m).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.downsampled_cloud_size</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.05</span>  </td><td class="markdownTableBodyNone">Voxel size for point cloud downsampling (m). Of the order of the <a class="el" href="namespaceBonxai.html">Bonxai</a> map's voxels: much larger leaves too few points to tell poses apart.  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_point_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">-inf</span>  </td><td class="markdownTableBodyNone">Only points at least this high over the robot's footprint are scored (m). For 3D sensors: the floor fits any particle standing on it.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.max_point_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">inf</span>  </td><td class="markdownTableBodyNone">Only points at most this high over the robot's footprint are scored (m), e.g. below a ceiling.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.ray_occlusion</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">false</span>  </td><td class="markdownTableBodyNone">A point whose ray from the sensor crosses an occupied voxel scores nothing. With voxels a few decimetres wide, rays along a floor or a ceiling look occluded, and the true pose scores worse than wrong ones.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.reseed_min_d</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Reseed only after the odometry has moved this much since the last reseed (m), or turned <span class="tt">reseed_min_a</span>: standing still, reseeding makes the particles wander.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.reseed_min_a</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">See <span class="tt">reseed_min_d</span> (rad).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.odom_slip_fraction</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.05</span>  </td><td class="markdownTableBodyNone">Each particle moves with its own scale of the odometry's translation. This fraction of the reseeded ones take any scale in [0, 1]: when the wheels slip, those that hardly move fit the sensors and survive. Rough terrain: higher (0.2).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.odom_scale_noise</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.02</span>  </td><td class="markdownTableBodyNone">Noise of the scale a reseeded particle takes from its reference: the particles learn the odometry's scale.  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.recovery_alpha_slow</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.001</span>  </td><td class="markdownTableBodyNone">Rate of the slow average of the scan likelihood (of the best particles), per correction.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.recovery_alpha_fast</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Rate of the fast average. When it falls below the slow one, each reseed spreads the worst particles widely around the estimate, a fraction <span class="tt">1 - fast/slow</span> of those it replaces. <span class="tt">0</span> for both turns recovery off; it needs <span class="tt">0 &lt;= slow &lt; fast &lt;= 1</span>.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.recovery_spread_xy</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Standard deviation of the spread particles' position around the estimate (m).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.recovery_alpha_fast</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Rate of the fast average. When it falls below the slow one, each reseed spreads the worst particles widely around the estimate, a fraction <span class="tt">1 - fast/slow</span> of those it replaces. <span class="tt">0</span> for both turns recovery off; it needs <span class="tt">0 &lt;= slow &lt; fast &lt;= 1</span>.  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.recovery_spread_xy</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Standard deviation of the spread particles' position around the estimate (m).  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.recovery_spread_yaw</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.5</span>  </td><td class="markdownTableBodyNone">Standard deviation of their heading around the best particle's (rad).  </td></tr>
 </table>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md136"></a>
@@ -244,7 +260,7 @@ NavState Keys</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">imu</span>  </td><td class="markdownTableBodyNone"><span class="tt">IMUPerceptions</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">When available, the particles take its roll and pitch, and turn by the change of its yaw (not by the odometry's); its absolute yaw is never used (without a magnetometer it is arbitrary and drifts). Without it, the orientation follows the NavMap surface and the odometry's turns.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">points</span>  </td><td class="markdownTableBodyNone"><span class="tt">PointPerceptions</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">3D point cloud bundles used in the correction step.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">points</span>  </td><td class="markdownTableBodyNone"><span class="tt">PointPerceptions</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Point clouds used in the correction step: only the valid ones (newer than the sensors' <span class="tt">forget_time</span>), each where the sensor was when it took it (the odometry since then, through <span class="tt">odom</span>).  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">map.navmap</span>  </td><td class="markdownTableBodyNone"><span class="tt">::navmap::NavMap</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Triangle mesh map providing surface geometry and elevation.  </td></tr>
 <tr class="markdownTableRowEven">
@@ -252,7 +268,7 @@ NavState Keys</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">map.bonxai.inflated</span>  </td><td class="markdownTableBodyNone"><span class="tt"><a class="el" href="classBonxai_1_1ProbabilisticMap.html" title="The ProbabilisticMap class is meant to behave as much as possible as octomap::Octree,...">Bonxai::ProbabilisticMap</a></span>  </td><td class="markdownTableBodyNone"><b>Write/Read</b>  </td><td class="markdownTableBodyNone">Inflated map cached on first access for faster scoring.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">robot_pose</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Odometry</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Estimated robot pose stored at the end of update/predict.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">robot_pose</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Odometry</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Estimated robot pose stored at the end of update/predict, with its roll and pitch (the IMU's, or the surface's).  </td></tr>
 </table>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md140"></a>
 TF Frames</h1>
@@ -260,11 +276,11 @@ TF Frames</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Role  </th><th class="markdownTableHeadNone">Transform  </th><th class="markdownTableHeadNone">Notes  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Publishes  </td><td class="markdownTableBodyNone"><span class="tt">map -&gt; odom</span>  </td><td class="markdownTableBodyNone">Broadcasts the global transform that aligns the odometry frame with the map frame.  </td></tr>
+<td class="markdownTableBodyNone">Publishes  </td><td class="markdownTableBodyNone"><span class="tt">map -&gt; odom</span>  </td><td class="markdownTableBodyNone">Broadcasts the global transform that aligns the odometry frame with the map frame. It carries the robot's roll and pitch (the IMU's, or the surface's) when the odometry is planar: on a slope, the points the sensors see are placed where they are.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Requires  </td><td class="markdownTableBodyNone"><span class="tt">odom -&gt; base_footprint</span>  </td><td class="markdownTableBodyNone">Required only when <span class="tt">&lt;plugin&gt;.compute_odom_from_tf = true</span> (read from TF).  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Requires  </td><td class="markdownTableBodyNone"><span class="tt">base_footprint -&gt; &lt;sensor_frame&gt;</span>  </td><td class="markdownTableBodyNone">Required to transform perception point clouds into the robot base frame during correction.  </td></tr>
+<td class="markdownTableBodyNone">Requires  </td><td class="markdownTableBodyNone"><span class="tt">base_footprint -&gt; &lt;sensor_frame&gt;</span>  </td><td class="markdownTableBodyNone">Required to transform perception point clouds into the robot base frame during correction, at the cloud's time through <span class="tt">odom</span> (falls back to the latest one).  </td></tr>
 </table>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md141"></a>
 License</h1>

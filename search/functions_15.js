@@ -2,7 +2,7 @@ var searchData=
 [
   ['wait_5ffor_5flevel_0',['wait_for_level',['../classRosGraphEvaluatorTestCase.html#aa918a191d9c6555192efd92f157e5d79',1,'RosGraphEvaluatorTestCase']]],
   ['wall_5foff_1',['wall_off',['../classCostmapPlannerTest.html#a1d1624d93d5be7251b3113e5509a73d0',1,'CostmapPlannerTest::wall_off()'],['../classNavMapPlannerTest.html#a68d1031163c63c232bc92cbb9e088865',1,'NavMapPlannerTest::wall_off()'],['../classSimplePlannerTest.html#abb82581bffc10f0c65c6002543279994',1,'SimplePlannerTest::wall_off()']]],
-  ['weigh_2',['weigh',['../classNavmapAmclRecoveryTest.html#a5ca95e3554ed962028f7d61928abca39',1,'NavmapAmclRecoveryTest::weigh()'],['../classNavmapAmclThreadsTest.html#a3216f29e6bdd54ea7dfdcea74ef19d3f',1,'NavmapAmclThreadsTest::weigh()']]],
+  ['weigh_2',['weigh',['../classNavmapAmclRecoveryTest.html#a5ca95e3554ed962028f7d61928abca39',1,'NavmapAmclRecoveryTest::weigh()'],['../classNavmapAmclSlipTest.html#a54f8ff551a43902cf1daf5e89119fcf3',1,'NavmapAmclSlipTest::weigh()'],['../classNavmapAmclThreadsTest.html#a3216f29e6bdd54ea7dfdcea74ef19d3f',1,'NavmapAmclThreadsTest::weigh()']]],
   ['width_3',['width',['../classeasynav_1_1SimpleMap.html#a9ce99f5dfa1514cb108665e3810b2c4c',1,'easynav::SimpleMap']]],
   ['with_5fimu_5fyaw_5frate_4',['with_imu_yaw_rate',['../classFusionLocalFilterTest.html#a11af0a7ff198c28efa60b5b2f3a7b5cb',1,'FusionLocalFilterTest']]],
   ['wordcount_5',['wordCount',['../classBonxai_1_1Mask.html#adbf8044eaf4a8d48bb0bd0b4cf0867e5',1,'Bonxai::Mask']]],

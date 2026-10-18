@@ -114,15 +114,15 @@ Collaboration diagram for Particle:</div>
 <map name="aParticle_coll__map" id="aParticle_coll__map">
 <area shape="rect" title="Structure representing a single particle in the AMCL algorithm." alt="" coords="214,122,280,148"/>
 <area shape="rect" title=" " alt="" coords="5,5,86,31"/>
-<area shape="poly" title=" " alt="" coords="57,44,72,72,95,96,124,112,155,122,214,131,214,136,154,127,122,117,92,100,68,75,52,46"/>
+<area shape="poly" title=" " alt="" coords="58,44,74,72,98,96,126,111,157,122,214,130,214,136,155,127,124,116,95,100,70,75,53,46"/>
 <area shape="rect" title=" " alt="" coords="110,5,155,31"/>
-<area shape="poly" title=" " alt="" coords="135,46,141,72,154,97,182,116,214,127,213,132,180,121,150,100,136,74,130,47"/>
-<area shape="rect" title=" " alt="" coords="209,5,268,31"/>
-<area shape="poly" title=" " alt="" coords="243,46,249,122,243,122,238,47"/>
-<area shape="rect" title=" " alt="" coords="293,5,368,31"/>
-<area shape="poly" title=" " alt="" coords="326,47,315,74,298,100,270,124,267,120,294,97,310,71,321,45"/>
-<area shape="rect" title=" " alt="" coords="392,5,448,31"/>
-<area shape="poly" title=" " alt="" coords="414,47,401,75,379,100,356,115,330,125,281,135,280,129,328,120,353,110,376,96,396,72,410,45"/>
+<area shape="poly" title=" " alt="" coords="137,45,145,72,159,97,185,115,214,125,213,130,183,120,156,100,140,74,132,47"/>
+<area shape="rect" title=" " alt="" coords="217,5,276,31"/>
+<area shape="poly" title=" " alt="" coords="250,47,250,122,244,122,244,47"/>
+<area shape="rect" title=" " alt="" coords="318,5,394,31"/>
+<area shape="poly" title=" " alt="" coords="354,47,345,74,329,100,306,117,281,128,279,123,303,113,325,97,340,72,349,45"/>
+<area shape="rect" title=" " alt="" coords="418,5,473,31"/>
+<area shape="poly" title=" " alt="" coords="442,47,429,75,409,100,378,118,343,130,280,137,279,132,342,124,375,114,405,96,425,72,437,44"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -132,6 +132,8 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a1d72d0cbc7314503f28e14041b31ab89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of sensor matches (hits) for this particle.  <br /></td></tr>
 <tr class="memitem:a0c110b411b90cf43e6479051112b3843" id="r_a0c110b411b90cf43e6479051112b3843"><td class="memItemLeft">::navmap::NavCelId&#160;</td><td class="memItemRight"><a class="el" href="#a0c110b411b90cf43e6479051112b3843">last_cid</a> = std::numeric_limits&lt;uint32_t&gt;::max()</td></tr>
 <tr class="memitem:aec3d841fa12d01f8dd264fe149d4b84f" id="r_aec3d841fa12d01f8dd264fe149d4b84f"><td class="memItemLeft">std::size_t&#160;</td><td class="memItemRight"><a class="el" href="#aec3d841fa12d01f8dd264fe149d4b84f">last_surface</a> = 0</td></tr>
+<tr class="memitem:a65b000ea4984c9ae0e04efdccdcb2536" id="r_a65b000ea4984c9ae0e04efdccdcb2536"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a65b000ea4984c9ae0e04efdccdcb2536">odom_scale</a> = 1.0</td></tr>
+<tr class="memdesc:a65b000ea4984c9ae0e04efdccdcb2536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale of the odometry's translation for it (&lt; 1: slipping).  <br /></td></tr>
 <tr class="memitem:aac0b9ed6a6d5a515d7407afb59da8a7f" id="r_aac0b9ed6a6d5a515d7407afb59da8a7f"><td class="memItemLeft">tf2::Transform&#160;</td><td class="memItemRight"><a class="el" href="#aac0b9ed6a6d5a515d7407afb59da8a7f">pose</a></td></tr>
 <tr class="memdesc:aac0b9ed6a6d5a515d7407afb59da8a7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estimated pose of the particle.  <br /></td></tr>
 <tr class="memitem:aa7ec44db45a5347450ece91c92a0f4f9" id="r_aa7ec44db45a5347450ece91c92a0f4f9"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#aa7ec44db45a5347450ece91c92a0f4f9">possible_hits</a></td></tr>
@@ -183,6 +185,22 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a65b000ea4984c9ae0e04efdccdcb2536" name="a65b000ea4984c9ae0e04efdccdcb2536"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65b000ea4984c9ae0e04efdccdcb2536">&#9670;&#160;</a></span>odom_scale</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double odom_scale = 1.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Scale of the odometry's translation for it (&lt; 1: slipping). </p>
 
 </div>
 </div>

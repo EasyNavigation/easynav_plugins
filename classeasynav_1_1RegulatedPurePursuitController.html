@@ -473,7 +473,8 @@ Protected Attributes</h2></td></tr>
 
 <p>Index of the path pose closest to <code class="param">robot_position</code>. </p>
 <p>Since EasyNav controllers receive the full, un-pruned global path (see the README), the search for the carrot pose must start from this index instead of from the beginning of the path: otherwise, once the robot has advanced more than a lookahead distance away from the path's start pose, that start pose itself would (incorrectly) be picked up as "farther than
-the lookahead distance" and returned as the carrot, even though it lies behind the robot. </p>
+the lookahead distance" and returned as the carrot, even though it lies behind the robot.</p>
+<p>The distance is 3D: on several floors, the part of the path on another floor right above or below the robot is not the closest one. </p>
 
 </div>
 </div>
