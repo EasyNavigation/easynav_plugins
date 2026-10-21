@@ -560,7 +560,6 @@ void AMCLLocalizer::on_initialize()
     std::bind(&AMCLLocalizer::init_pose_callback, this, std::placeholders::_1));
 
   last_reseed_ = get_node()->now();
-  get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
 }
 
 void AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
