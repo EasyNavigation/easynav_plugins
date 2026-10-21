@@ -2,6 +2,13 @@
 Changelog for package easynav_navmap_planner
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* A*: terrain costs and limits, and links between surfaces
+* Enable cpplint and copyright linters
+* READMEs: supported on Humble, Jazzy, Kilted, Lyrical and Rolling
+* Contributors: Francisco Martín Rico
+
 0.5.0 (2026-10-08)
 ------------------
 * Runtime reconfiguration
