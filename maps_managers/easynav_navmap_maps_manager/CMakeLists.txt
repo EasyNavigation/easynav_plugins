@@ -80,9 +80,17 @@ install(TARGETS
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  set(ament_cmake_copyright_FOUND TRUE)
-  set(ament_cmake_cpplint_FOUND TRUE)
+  # Files derived from ROS / Nav2 keep their original copyright and license
+  list(APPEND AMENT_LINT_AUTO_EXCLUDE ament_cmake_copyright)
   ament_lint_auto_find_test_dependencies()
+  # Humble's ament_copyright does not recognize the license with the EasyNav line in the header
+  if(NOT "$ENV{ROS_DISTRO}" STREQUAL "humble")
+    find_package(ament_cmake_copyright REQUIRED)
+    ament_copyright(EXCLUDE
+      src/easynav_navmap_maps_manager/filters/InflationFilter.cpp
+      src/easynav_navmap_maps_manager/map_io.cpp
+    )
+  endif()
 
   find_package(ament_cmake_gtest REQUIRED)
   add_subdirectory(tests)

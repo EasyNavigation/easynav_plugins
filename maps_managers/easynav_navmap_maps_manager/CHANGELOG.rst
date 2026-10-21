@@ -2,6 +2,16 @@
 Changelog for package easynav_navmap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.5.1 (2026-10-21)
+------------------
+* Local NavMap around the robot
+* ObstacleFilter: each point on the nearest surface, the cell under it, optional obstacle memory
+* InflationFilter: inflation from 3D distances to the real border
+* Incremental, in-place filters with sparse layer updates
+* Enable cpplint and copyright linters
+* READMEs: supported on Humble, Jazzy, Kilted, Lyrical and Rolling
+* Contributors: Francisco Martín Rico
+
 0.5.0 (2026-10-08)
 ------------------
 * Runtime reconfiguration (rejected ones are reported)

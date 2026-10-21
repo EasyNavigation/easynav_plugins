@@ -16,25 +16,21 @@
 /// \file
 /// \brief Declaration of the RoutesMapsManager class and related types.
 
-#ifndef EASYNAV_PLANNER__ROUTESMAPMANAGER_HPP_
-#define EASYNAV_PLANNER__ROUTESMAPMANAGER_HPP_
+#ifndef EASYNAV_ROUTES_MAPS_MANAGER__ROUTESMAPSMANAGER_HPP_
+#define EASYNAV_ROUTES_MAPS_MANAGER__ROUTESMAPSMANAGER_HPP_
+
+#include <memory>
+#include <vector>
+#include <string>
 
 #include "geometry_msgs/msg/pose.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
 #include "visualization_msgs/msg/interactive_marker.hpp"
 #include "visualization_msgs/msg/interactive_marker_feedback.hpp"
-
 #include "interactive_markers/interactive_marker_server.hpp"
-
 #include "std_srvs/srv/trigger.hpp"
-
-#include <memory>
-#include <vector>
-
 #include "pluginlib/class_loader.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
-
 #include "easynav_routes_maps_manager/RoutesFilter.hpp"
 #include "easynav_routes_maps_manager/routes_map.hpp"
 #include "easynav_routes_maps_manager/msg/routes_map.hpp"
@@ -71,7 +67,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -81,7 +77,7 @@ public:
    *
    * @param nav_state Current state of the navigation system.
    */
-  virtual void update(NavState & nav_state) override;
+  void update(NavState & nav_state) override;
 
   /// @brief Access to the loaded routes (for testing and tools).
   const RoutesMap & get_routes() const {return routes_;}
@@ -144,4 +140,4 @@ private:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_PLANNER__ROUTESMAPMANAGER_HPP_
+#endif  // EASYNAV_ROUTES_MAPS_MANAGER__ROUTESMAPSMANAGER_HPP_

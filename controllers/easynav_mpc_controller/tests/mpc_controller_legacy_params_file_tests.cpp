@@ -14,7 +14,8 @@
 
 /// \file
 /// \brief A real parameter file from before robot_limits (easynav_indoor_testcase,
-/// bonxai.amcl.params.urjc_alt_imu.yaml) keeps working: no limits of its own, and those of inactive controllers are ignored.
+/// bonxai.amcl.params.urjc_alt_imu.yaml) keeps working: no limits of its own, and those of inactive
+/// controllers are ignored.
 
 #include <memory>
 #include <string>

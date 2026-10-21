@@ -15,22 +15,19 @@
 
 #include <unistd.h>
 
-#include <gtest/gtest.h>
+#include <memory>
+#include <fstream>
 
+#include "gtest/gtest.h"
 #include "easynav_simple_common/SimpleMap.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_common/TransformListener.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 #include "easynav_simple_maps_manager/SimpleMapsManager.hpp"
-
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "tf2_ros/transform_listener.hpp"
-
 #include "std_srvs/srv/trigger.hpp"
-
-#include <memory>
-#include <fstream>
 
 /// \brief Fixture for SimpleMapsManager tests (minimal)
 class SimpleMapsManagerTest : public ::testing::Test

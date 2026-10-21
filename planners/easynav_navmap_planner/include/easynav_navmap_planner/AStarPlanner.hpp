@@ -14,18 +14,19 @@
 // limitations under the License.
 
 /// \file
-/// \brief Declaration of the AStarPlanner class implementing A* path planning using ::navmap::NavMap.
+/// \brief Declaration of the AStarPlanner class implementing A* path planning using
+/// ::navmap::NavMap.
 
-#ifndef EASYNAV_NAVMAP_PLANNER__NAVMAPPLANNER_HPP_
-#define EASYNAV_NAVMAP_PLANNER__NAVMAPPLANNER_HPP_
+#ifndef EASYNAV_NAVMAP_PLANNER__ASTARPLANNER_HPP_
+#define EASYNAV_NAVMAP_PLANNER__ASTARPLANNER_HPP_
 
 #include <cstdint>
 #include <limits>
 #include <vector>
-#include <Eigen/Core>
+#include <string>
 
+#include "Eigen/Core"
 #include "nav_msgs/msg/path.hpp"
-
 #include "easynav_core/PlannerMethodBase.hpp"
 #include "navmap_core/NavMap.hpp"
 #include "easynav_common/types/NavState.hpp"
@@ -42,6 +43,11 @@ namespace navmap
 /// favored by how the mesh is split. Then the path is shortened by line of sight: waypoints are
 /// skipped while the straight segment stays on traversable NavCels no costlier than the ones
 /// it replaces.
+///
+/// Terrain (off by default): a step costs more the steeper the NavCel (`terrain.slope_weight`), and
+/// NavCels beyond the robot's limits of slope, step, roughness or free height are not
+/// traversable (navmap::compute_descriptors, once per map). Links between surfaces
+/// (navmap::SurfaceLink) of the allowed types are taken as edges of the search.
 class AStarPlanner : public PlannerMethodBase
 {
 public:
@@ -50,7 +56,7 @@ public:
    *
    * Initializes internal parameters and configuration values.
    */
-  explicit AStarPlanner();
+  AStarPlanner();
 
   /**
    * @brief Initializes the planner.
@@ -60,7 +66,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Executes a planning cycle using the current navigation state.
@@ -78,6 +84,15 @@ protected:
   double cost_diagonal_ {1.0};      ///< Cost multiplier for diagonal moves.
   std::string layer_name_;
   bool continuous_replan_ {true};     ///< Whether to replan the path at control frequency.
+
+  // Terrain: all off by default
+  double slope_weight_ {0.0};    ///< Extra cost per meter: weight * tan^2 of the NavCel's slope
+  double max_slope_deg_ {90.0};  ///< NavCels steeper than this are not traversable
+  double max_step_ {0.0};        ///< > 0: NavCels with a larger height step are not traversable
+  double max_roughness_ {0.0};   ///< > 0: NavCels rougher than this (RMS, m) are not traversable
+  double min_clearance_ {0.0};   ///< > 0: NavCels with less free height above are not traversable
+  bool use_links_ {true};        ///< Take the links between surfaces of the allowed types
+  std::vector<char> link_type_ok_;  ///< By navmap::LinkType value
   nav_msgs::msg::Path current_path_;  ///< Most recently computed path.
   geometry_msgs::msg::Pose current_goal_;  ///< Current goal.
 
@@ -92,6 +107,15 @@ protected:
 
   /// Cached centroids for each NavCel (same indexing as ::navmap::NavMap::navcels).
   std::vector<Eigen::Vector3f> centroids_;
+
+  /// Geometry the caches were built for (navmap::NavMap::geometry_id()).
+  std::uint64_t geometry_id_ {0};
+
+  /// Per NavCel: within the terrain limits.
+  std::vector<char> terrain_ok_;
+
+  /// Per NavCel: tan^2 of its slope (the slope cost before slope_weight).
+  std::vector<float> slope_cost_;
 
   /// A NavCel reachable from another: across an edge, or only through a shared vertex.
   struct Neighbor
@@ -114,6 +138,9 @@ protected:
   /// Reusable buffers for A* search cost and parent links.
   std::vector<double> g_;
   std::vector<::navmap::NavCelId> parent_;
+
+  /// Which NavCels are within the terrain limits (terrain_ok_), for a new geometry.
+  void build_terrain(const ::navmap::NavMap & map);
 
   /**
    * @brief Ensure internal caches (centroids and A* buffers) are sized for the given map.
@@ -194,4 +221,4 @@ protected:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_NAVMAP_PLANNER__NAVMAPPLANNER_HPP_
+#endif  // EASYNAV_NAVMAP_PLANNER__ASTARPLANNER_HPP_

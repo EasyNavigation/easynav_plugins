@@ -85,8 +85,8 @@ public:
    */
   struct Vec2
   {
-    double x; ///< X component.
-    double y; ///< Y component.
+    double x;  ///< X component.
+    double y;  ///< Y component.
 
     /// @brief Vector addition.
     inline Vec2 operator+(const Vec2 & b) const {return {x + b.x, y + b.y};}

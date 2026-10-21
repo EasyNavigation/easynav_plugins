@@ -1,13 +1,27 @@
+// Copyright 2025 Intelligent Robotics Lab
+//
+// This file is part of the project Easy Navigation (EasyNav in short)
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #pragma once
 
 #include <optional>
-
 #include <memory>
 #include <vector>
+#include <string>
 
 #include "easynav_core/LocalizerMethodBase.hpp"
 #include "easynav_fusion_localizer/ukf_wrapper.hpp"
-
 #include "sensor_msgs/msg/imu.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
@@ -36,7 +50,8 @@ protected:
   /// Callback for /initialpose.
   void init_pose_callback(const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg);
 
-  /// @brief Starts from the last known pose after a reconfiguration ("initial_pose.use_last_known").
+  /// @brief Starts from the last known pose after a reconfiguration
+  /// ("initial_pose.use_last_known").
   void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose) override;
 
   /// @brief Whether to start from the last known pose after a reconfiguration.
@@ -103,7 +118,6 @@ private:
   std::string navsatfix_topic_;
 
   bool first_pose_received_{false};
-
 };
 
 }  // namespace easynav

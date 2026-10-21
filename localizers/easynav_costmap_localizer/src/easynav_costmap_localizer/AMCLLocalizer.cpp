@@ -310,8 +310,6 @@ AMCLLocalizer::on_initialize()
 
   last_reseed_ = get_node()->now();
   last_input_time_ = get_node()->now();
-
-  get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
 }
 
 void printTransform(const tf2::Transform & tf)
@@ -439,7 +437,7 @@ AMCLLocalizer::init_pose_callback(
   double var_y = cov[7];    // C(1,1)
 
   // Yaw variance
-  double var_yaw = cov[35]; // C(5,5)
+  double var_yaw = cov[35];  // C(5,5)
 
   // Ensure non-negative variances
   var_x = std::max(var_x, 0.0);
@@ -569,8 +567,6 @@ AMCLLocalizer::update_odom_from_tf()
   last_input_time_ = tf_msg.header.stamp;
 
   initialized_odom_ = true;
-
-
 }
 
 void

@@ -23,7 +23,6 @@ namespace easynav
 
 CostmapFilter::CostmapFilter()
 {
-
 }
 
 void

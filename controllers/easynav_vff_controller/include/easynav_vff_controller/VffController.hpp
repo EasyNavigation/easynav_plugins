@@ -16,14 +16,15 @@
 /// \file
 /// \brief Declaration of the VffController method.
 
-#ifndef EASYNAV_CONTROLLER__VFFCONTROLLER_HPP_
-#define EASYNAV_CONTROLLER__VFFCONTROLLER_HPP_
+#ifndef EASYNAV_VFF_CONTROLLER__VFFCONTROLLER_HPP_
+#define EASYNAV_VFF_CONTROLLER__VFFCONTROLLER_HPP_
+
+#include <string>
+#include <vector>
 
 #include "pcl/point_cloud.h"
 #include "pcl/point_types.h"
-
 #include "easynav_core/ControllerMethodBase.hpp"
-
 #include "geometry_msgs/msg/twist_stamped.hpp"
 #include "visualization_msgs/msg/marker.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
@@ -80,7 +81,7 @@ public:
    *
    * @throws std::runtime_error on initialization error.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Updates the localization estimate based on the current navigation state.
@@ -90,7 +91,7 @@ public:
    *
    * @param nav_state The current navigation state of the system.
    */
-  virtual void update_rt(NavState & nav_state) override;
+  void update_rt(NavState & nav_state) override;
 
 private:
   /**
@@ -192,4 +193,4 @@ private:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_CONTROLLER__VFFCONTROLLER_HPP_
+#endif  // EASYNAV_VFF_CONTROLLER__VFFCONTROLLER_HPP_

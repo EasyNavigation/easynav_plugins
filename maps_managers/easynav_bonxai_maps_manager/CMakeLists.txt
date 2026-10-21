@@ -96,12 +96,24 @@ install(TARGETS
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-  set(ament_cmake_copyright_FOUND TRUE)
-  set(ament_cmake_cpplint_FOUND TRUE)
-  # Vendored third-party library: excluded from uncrustify instead of
-  # reformatting upstream code (same rationale as copyright/cpplint above).
+  # The vendored Bonxai library keeps its upstream code, copyright and license:
+  # the linters skip it instead of modifying it
   set(ament_cmake_uncrustify_ADDITIONAL_EXCLUDE include/bonxai/*)
+  list(APPEND AMENT_LINT_AUTO_EXCLUDE ament_cmake_copyright ament_cmake_cpplint)
   ament_lint_auto_find_test_dependencies()
+  # Humble's ament_copyright does not recognize the license with the EasyNav line in the header
+  if(NOT "$ENV{ROS_DISTRO}" STREQUAL "humble")
+    find_package(ament_cmake_copyright REQUIRED)
+    # map_io.cpp and FindLZ4.cmake also keep their original copyright and license
+    ament_copyright(EXCLUDE
+      include/bonxai/*
+      src/bonxai/*
+      src/easynav_bonxai_maps_manager/map_io.cpp
+      cmake_modules/FindLZ4.cmake
+    )
+  endif()
+  find_package(ament_cmake_cpplint REQUIRED)
+  ament_cpplint(EXCLUDE include/bonxai/* src/bonxai/*)
 
   find_package(ament_cmake_gtest REQUIRED)
   add_subdirectory(tests)
