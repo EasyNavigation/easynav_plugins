@@ -2,8 +2,8 @@
 Changelog for package easynav_vff_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.1 (2026-10-21)
+------------------
 * Enable cpplint and copyright linters
 * READMEs: supported on Humble, Jazzy, Kilted, Lyrical and Rolling
 * Contributors: Francisco Martín Rico

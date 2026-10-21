@@ -2,8 +2,8 @@
 Changelog for package easynav_navmap_localizer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.1 (2026-10-21)
+------------------
 * Robust in 3D: estimate with roll and pitch, height band of scored points, motion-compensated clouds, per-particle odometry scale for wheel slip
 * Recovery from a wrong convergence (augmented MCL)
 * Lock-free split between the RT and non-RT threads

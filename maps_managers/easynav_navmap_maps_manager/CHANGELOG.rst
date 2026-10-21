@@ -2,8 +2,8 @@
 Changelog for package easynav_navmap_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.1 (2026-10-21)
+------------------
 * Local NavMap around the robot
 * ObstacleFilter: each point on the nearest surface, the cell under it, optional obstacle memory
 * InflationFilter: inflation from 3D distances to the real border

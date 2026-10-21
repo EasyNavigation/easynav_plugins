@@ -2,8 +2,8 @@
 Changelog for package easynav_regulated_pp_controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.1 (2026-10-21)
+------------------
 * Closest path pose in 3D
 * Approach the goal inside its tolerance (`#115 <https://github.com/EasyNavigation/easynav_plugins/issues/115>`_)
 * Enable cpplint and copyright linters

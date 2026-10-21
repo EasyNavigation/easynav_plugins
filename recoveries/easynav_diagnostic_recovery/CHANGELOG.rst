@@ -2,8 +2,8 @@
 Changelog for package easynav_diagnostic_recovery
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.1 (2026-10-21)
+------------------
 * RotateRecovery turns in place when there is no path
 * Enable cpplint and copyright linters
 * READMEs: supported on Humble, Jazzy, Kilted, Lyrical and Rolling
