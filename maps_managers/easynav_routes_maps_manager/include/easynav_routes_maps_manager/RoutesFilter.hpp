@@ -13,8 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EASYNAV_ROUTES_MAPS_MANAGER_ROUTES_FILTER_HPP_
-#define EASYNAV_ROUTES_MAPS_MANAGER_ROUTES_FILTER_HPP_
+#ifndef EASYNAV_ROUTES_MAPS_MANAGER__ROUTESFILTER_HPP_
+#define EASYNAV_ROUTES_MAPS_MANAGER__ROUTESFILTER_HPP_
 
 #include <memory>
 #include <string>
@@ -71,4 +71,4 @@ public:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_ROUTES_MAPS_MANAGER_ROUTES_FILTER_HPP_
+#endif  // EASYNAV_ROUTES_MAPS_MANAGER__ROUTESFILTER_HPP_

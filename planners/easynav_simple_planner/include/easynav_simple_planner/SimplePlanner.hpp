@@ -16,8 +16,8 @@
 /// \file
 /// \brief Declaration of the SimplePlanner class implementing A* path planning.
 
-#ifndef EASYNAV_PLANNER__SIMPLEPLANNER_HPP_
-#define EASYNAV_PLANNER__SIMPLEPLANNER_HPP_
+#ifndef EASYNAV_SIMPLE_PLANNER__SIMPLEPLANNER_HPP_
+#define EASYNAV_SIMPLE_PLANNER__SIMPLEPLANNER_HPP_
 
 #include <vector>
 
@@ -39,7 +39,7 @@ public:
    *
    * Initializes the internal variables and parameters of the planner.
    */
-  explicit SimplePlanner();
+  SimplePlanner();
 
   /**
    * @brief Initializes the planner.
@@ -49,7 +49,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Updates the planner by computing a new path.
@@ -111,4 +111,4 @@ protected:
 
 }  // namespace easynav
 
-#endif  // EASYNAV_PLANNER__SIMPLEPLANNER_HPP_
+#endif  // EASYNAV_SIMPLE_PLANNER__SIMPLEPLANNER_HPP_

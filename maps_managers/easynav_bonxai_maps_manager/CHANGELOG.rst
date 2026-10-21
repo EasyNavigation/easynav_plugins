@@ -2,6 +2,13 @@
 Changelog for package easynav_bonxai_maps_manager
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.5.1 (2026-10-21)
+------------------
+* Right label in the TF warning, and throttled
+* Enable cpplint and copyright linters
+* READMEs: supported on Humble, Jazzy, Kilted, Lyrical and Rolling
+* Contributors: Francisco Martín Rico
+
 0.5.0 (2026-10-08)
 ------------------
 * Runtime reconfiguration

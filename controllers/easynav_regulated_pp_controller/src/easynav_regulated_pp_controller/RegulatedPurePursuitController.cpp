@@ -215,7 +215,9 @@ RegulatedPurePursuitController::findClosestPoseIndex(
   double closest_dist = std::numeric_limits<double>::max();
   for (std::size_t i = 0; i < path.poses.size(); ++i) {
     const auto & p = path.poses[i].pose.position;
-    const double d = std::hypot(p.x - robot_position.x, p.y - robot_position.y);
+    // In 3D: a path that comes back under (or over) the robot on another floor is not near it
+    const double d = std::hypot(
+      p.x - robot_position.x, p.y - robot_position.y, p.z - robot_position.z);
     if (d < closest_dist) {
       closest_dist = d;
       closest_idx = i;
@@ -465,13 +467,14 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
 
   const auto & goal_pose = path.poses.back().pose;
 
+  // The strictest of the controller's and the system's tolerances (the system decides success).
   double xy_tol = xy_goal_tolerance_;
   double yaw_tol = yaw_goal_tolerance_;
   if (nav_state.has("goal_tolerance.position")) {
-    xy_tol = nav_state.get_safe<double>("goal_tolerance.position");
+    xy_tol = std::min(xy_tol, nav_state.get_safe<double>("goal_tolerance.position"));
   }
   if (nav_state.has("goal_tolerance.yaw")) {
-    yaw_tol = nav_state.get_safe<double>("goal_tolerance.yaw");
+    yaw_tol = std::min(yaw_tol, nav_state.get_safe<double>("goal_tolerance.yaw"));
   }
 
   const double dist_to_goal = std::hypot(
@@ -481,6 +484,23 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
   const double e_theta_goal = normalizeAngle(yaw_goal - robot_yaw);
 
   const bool at_goal_xy = dist_to_goal <= xy_tol;
+
+  // Drive to half the tolerance before turning to the goal heading, and keep turning until
+  // the robot leaves the whole tolerance: localization noise at the border must not make it
+  // switch between both behaviors.
+  const bool new_goal = goal_pose.position.x != aligning_goal_.position.x ||
+    goal_pose.position.y != aligning_goal_.position.y ||
+    goal_pose.orientation.z != aligning_goal_.orientation.z ||
+    goal_pose.orientation.w != aligning_goal_.orientation.w;
+  if (new_goal) {
+    aligning_to_goal_ = false;
+    aligning_goal_ = goal_pose;
+  }
+  if (dist_to_goal <= 0.5 * xy_tol) {
+    aligning_to_goal_ = true;
+  } else if (!at_goal_xy) {
+    aligning_to_goal_ = false;
+  }
 
   if (at_goal_xy && std::fabs(e_theta_goal) <= yaw_tol) {
     stop(nav_state, header);
@@ -494,7 +514,7 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
   double linear_vel = max_linear_vel_;
   double angular_vel = 0.0;
 
-  if (use_rotate_to_heading_ && at_goal_xy) {
+  if (use_rotate_to_heading_ && aligning_to_goal_) {
     is_rotating_to_heading_ = true;
     rotateToHeading(linear_vel, angular_vel, e_theta_goal, dt);
   } else {

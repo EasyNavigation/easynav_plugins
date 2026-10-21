@@ -26,7 +26,8 @@
 /// Autonomous Robots, 2023 (https://arxiv.org/abs/2305.20026), ported from
 /// nav2_regulated_pure_pursuit_controller. Since EasyNav controllers have no costmap available,
 /// the cost-based regulation term is replaced by an equivalent one driven by the distance to the
-/// nearest point in the fused point-cloud perception (see \ref easynav::RegulatedPurePursuitController).
+/// nearest point in the fused point-cloud perception (see
+/// \ref easynav::RegulatedPurePursuitController).
 
 #ifndef EASYNAV_REGULATED_PP_CONTROLLER__REGULATION_FUNCTIONS_HPP_
 #define EASYNAV_REGULATED_PP_CONTROLLER__REGULATION_FUNCTIONS_HPP_
@@ -41,7 +42,8 @@ namespace easynav
 namespace heuristics
 {
 
-/// \brief Curvature of the arc from the robot (at the local origin, facing +x) to a lookahead point.
+/// \brief Curvature of the arc from the robot (at the local origin, facing +x) to a lookahead
+/// point.
 /// \param lookahead_x X coordinate of the lookahead point in the robot frame.
 /// \param lookahead_y Y coordinate of the lookahead point in the robot frame.
 /// \return Signed curvature (1 / turning radius) of the arc.

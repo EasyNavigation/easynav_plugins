@@ -134,7 +134,6 @@ MPCOptimizer::cost_function(
   }
 
   return cost;
-
 }
 
 double

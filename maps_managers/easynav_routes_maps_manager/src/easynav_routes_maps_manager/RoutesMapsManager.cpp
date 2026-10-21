@@ -460,12 +460,12 @@ void RoutesMapsManager::publish_interactive_markers()
         visualization_msgs::msg::Marker add_text;
         add_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
         add_text.text = "add";
-        add_text.scale.z = 0.1; // font height (half)
+        add_text.scale.z = 0.1;  // font height (half)
         add_text.color.r = 1.0f;
         add_text.color.g = 1.0f;
         add_text.color.b = 1.0f;
         add_text.color.a = 1.0f;
-        add_text.pose.position.z = 0.4; // slightly above the sphere
+        add_text.pose.position.z = 0.4;  // slightly above the sphere
 
         add_ctrl.markers.push_back(add_marker);
         add_ctrl.markers.push_back(add_text);
@@ -496,12 +496,12 @@ void RoutesMapsManager::publish_interactive_markers()
         visualization_msgs::msg::Marker remove_text;
         remove_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
         remove_text.text = "remove";
-        remove_text.scale.z = 0.1; // font height (half)
+        remove_text.scale.z = 0.1;  // font height (half)
         remove_text.color.r = 1.0f;
         remove_text.color.g = 1.0f;
         remove_text.color.b = 1.0f;
         remove_text.color.a = 1.0f;
-        remove_text.pose.position.z = 1.3; // slightly above the red sphere
+        remove_text.pose.position.z = 1.3;  // slightly above the red sphere
 
         remove_ctrl.markers.push_back(remove_marker);
         remove_ctrl.markers.push_back(remove_text);

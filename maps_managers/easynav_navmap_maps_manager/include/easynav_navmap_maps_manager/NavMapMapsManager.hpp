@@ -16,20 +16,25 @@
 /// \file
 /// \brief Declaration of the NavMapMapsManager method.
 
-#ifndef EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_
-#define EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_
+#ifndef EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAPMAPSMANAGER_HPP_
+#define EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAPMAPSMANAGER_HPP_
 
+#include <deque>
 #include <vector>
+#include <memory>
+#include <string>
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "navmap_ros_interfaces/msg/nav_map.hpp"
 #include "navmap_ros_interfaces/msg/nav_map_layer.hpp"
+#include "std_msgs/msg/header.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
-
+#include "pcl/point_types.h"
+#include "pcl/point_cloud.h"
+#include "navmap_ros/conversions.hpp"
 #include "easynav_core/MapsManagerBase.hpp"
 #include "navmap_core/NavMap.hpp"
-
 #include "easynav_navmap_maps_manager/filters/NavMapFilter.hpp"
 #include "pluginlib/class_loader.hpp"
 
@@ -66,7 +71,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -76,7 +81,7 @@ public:
    *
    * @param nav_state Current state of the navigation system.
    */
-  virtual void update(::easynav::NavState & nav_state) override;
+  void update(::easynav::NavState & nav_state) override;
 
   /**
    * @brief Replaces the current static map.
@@ -106,6 +111,7 @@ private:
    * @brief Publisher for ::navmap::NavMap updates.
    */
   rclcpp::Publisher<navmap_ros_interfaces::msg::NavMapLayer>::SharedPtr layer_updates_pub_;
+  std::size_t last_subscribers_{0};  ///< Of layer_updates_pub_: a new one gets full layers
 
   /**
    * @brief Subscriber for external incoming static map updates.
@@ -132,8 +138,35 @@ private:
   std::vector<std::shared_ptr<NavMapFilter>> navmap_filters_;
 
   double resolution_ {1.0};
+
+  /// Map replaced since it was last put in NavState (loaded, received or regenerated).
+  bool map_changed_ {true};
+
+  // ---- Local mode: a NavMap around the robot, in its frame, rebuilt from the sensors ----
+  struct LocalParams
+  {
+    bool enabled {false};
+    std::string frame;               ///< NavMap frame (default: the robot frame)
+    double range {10.0};             ///< Half side of the square window (m)
+    double min_z {-3.0};             ///< Points kept in [min_z, max_z] (m, in frame)
+    double max_z {3.0};
+    double accumulate_time {1.0};    ///< Scans put together before meshing (s)
+    double freq {2.0};               ///< Rebuilds per second
+    double downsample {0.1};         ///< Voxel of the accumulated points (m)
+    navmap_ros::BuildParams build;   ///< Mesher parameters
+  } local_;
+  struct TimedCloud
+  {
+    double stamp;  ///< s (time sources of stamps and clock may differ: compared as seconds)
+    pcl::PointCloud<pcl::PointXYZ> cloud;  ///< In the odom frame
+  };
+  std::deque<TimedCloud> local_scans_;
+  double last_local_build_ {-1e18};  ///< s
+
+  /// Accumulates the perceptions and, at local.freq, rebuilds navmap_ around the robot.
+  void update_local(::easynav::NavState & nav_state);
 };
 
 }  // namespace navmap
 }  // namespace easynav
-#endif  // EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAP_MAPS_MANAGER_HPP_
+#endif  // EASYNAV_NAVMAP_MAPS_MANAGER__NAVMAPMAPSMANAGER_HPP_

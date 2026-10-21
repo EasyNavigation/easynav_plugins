@@ -32,10 +32,12 @@ namespace easynav
 /// \brief Result structure for MPPI optimization containing control commands and trajectories.
 struct MPPIResult
 {
-  double v; ///< Linear velocity command.
-  double w; ///< Angular velocity command.
-  std::vector<std::vector<std::pair<double, double>>> all_trajectories; ///< All sampled trajectories.
-  std::vector<std::pair<double, double>> best_trajectory; ///< Best trajectory found during optimization.
+  double v;  ///< Linear velocity command.
+  double w;  ///< Angular velocity command.
+  /// All sampled trajectories.
+  std::vector<std::vector<std::pair<double, double>>> all_trajectories;
+  /// Best trajectory found during optimization.
+  std::vector<std::pair<double, double>> best_trajectory;
 };
 
 struct TrajectorySample
@@ -88,10 +90,13 @@ private:
   double last_v_ = 0.0;   ///< Last linear velocity command for smoothing.
   double last_w_ = 0.0;   ///< Last angular velocity command for smoothing.
 
-  std::default_random_engine rng_; ///< Random number generator for sampling.
-  std::normal_distribution<double> normal_ = std::normal_distribution<double>(0.0, 0.5);    ///< Normal distribution for noise in sampling.
-  std::normal_distribution<double> v_noise_ = std::normal_distribution<double>(0.0, 0.05);  ///< Normal distribution for noise in linear velocity.
-  std::normal_distribution<double> w_noise_ = std::normal_distribution<double>(0.0, 0.02);  ///< Normal distribution for noise in angular velocity.
+  std::default_random_engine rng_;  ///< Random number generator for sampling.
+  /// Normal distribution for noise in sampling.
+  std::normal_distribution<double> normal_ = std::normal_distribution<double>(0.0, 0.5);
+  /// Normal distribution for noise in linear velocity.
+  std::normal_distribution<double> v_noise_ = std::normal_distribution<double>(0.0, 0.05);
+  /// Normal distribution for noise in angular velocity.
+  std::normal_distribution<double> w_noise_ = std::normal_distribution<double>(0.0, 0.02);
 
   /// \brief Computes the cost of a trajectory based on its distance to the path and heading error.
   /// \param trajectory The trajectory to evaluate.
@@ -120,7 +125,8 @@ private:
     double x, double y, double yaw,
     double v, double w, const nav_msgs::msg::Path & path, int steps);
 
-  /// \brief Computes the heading error between the robot's current orientation and the target point.
+  /// \brief Computes the heading error between the robot's current orientation and the target
+  /// point.
   /// \param robot_yaw Current yaw orientation of the robot.
   /// \param target_x X coordinate of the target point.
   /// \param target_y Y coordinate of the target point.
@@ -137,7 +143,6 @@ private:
   /// \param to Ending angle in radians.
   /// \return The shortest angular distance in radians.
   double shortest_angular_distance(double from, double to);
-
 };
 
 }  // namespace easynav

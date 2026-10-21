@@ -24,17 +24,15 @@
 #include <mutex>
 #include <random>
 #include <vector>
+#include <string>
 
 #include "geometry_msgs/msg/pose_array.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
-
 #include "tf2/LinearMath/Transform.hpp"
 #include "tf2_ros/transform_broadcaster.hpp"
-
 #include "easynav_core/LocalizerMethodBase.hpp"
-
 #include "easynav_mhamcl_localizer/MapMatcher.hpp"
 #include "easynav_mhamcl_localizer/ParticlesDistribution.hpp"
 
@@ -133,7 +131,8 @@ protected:
   /// \brief Callback for the initial pose. Discards all the hypotheses and starts a new one.
   void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
 
-  /// @brief Starts from the last known pose after a reconfiguration ("initial_pose.use_last_known").
+  /// @brief Starts from the last known pose after a reconfiguration
+  /// ("initial_pose.use_last_known").
   void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose) override;
 
   /// @brief Whether to start from the last known pose after a reconfiguration.
