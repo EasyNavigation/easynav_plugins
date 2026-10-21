@@ -27,7 +27,6 @@ namespace octomap
 
 OctomapFilter::OctomapFilter()
 {
-
 }
 
 void

@@ -16,15 +16,16 @@
 /// \file
 /// \brief Declaration of the BonxaiMapsManager method.
 
-#ifndef EASYNAV_BONXAI_MAPS_MANAGER__BONXAI_MAPS_MANAGER_HPP_
-#define EASYNAV_BONXAI_MAPS_MANAGER__BONXAI_MAPS_MANAGER_HPP_
+#ifndef EASYNAV_BONXAI_MAPS_MANAGER__BONXAIMAPSMANAGER_HPP_
+#define EASYNAV_BONXAI_MAPS_MANAGER__BONXAIMAPSMANAGER_HPP_
+
+#include <memory>
+#include <string>
 
 #include "bonxai/probabilistic_map.hpp"
-
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "std_srvs/srv/trigger.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
-
 #include "easynav_core/MapsManagerBase.hpp"
 
 namespace easynav_bonxai
@@ -59,7 +60,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Updates the internal maps using the current navigation state.
@@ -69,7 +70,7 @@ public:
    *
    * @param nav_state Current state of the navigation system.
    */
-  virtual void update(::easynav::NavState & nav_state) override;
+  void update(::easynav::NavState & nav_state) override;
 
 protected:
   /**
@@ -117,4 +118,4 @@ private:
 };
 
 }  // namespace easynav_bonxai
-#endif  // EASYNAV_BONXAI_MAPS_MANAGER__BONXAI_MAPS_MANAGER_HPP_
+#endif  // EASYNAV_BONXAI_MAPS_MANAGER__BONXAIMAPSMANAGER_HPP_

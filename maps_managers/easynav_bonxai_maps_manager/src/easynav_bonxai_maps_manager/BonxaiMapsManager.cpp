@@ -145,7 +145,6 @@ BonxaiMapsManager::on_initialize()
     "/incoming_occ_map",
     rclcpp::QoS(1).transient_local().reliable(),
     [this](nav_msgs::msg::OccupancyGrid::UniquePtr msg) {
-
       update_from_occ(*msg);
       publish_map();
     });
@@ -188,7 +187,10 @@ BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
       tf_info.map_frame, pc2.header.frame_id, pc2.header.stamp,
       rclcpp::Duration::from_seconds(0.05));
   } catch (const tf2::TransformException & ex) {
-    RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
+    // Throttled: if TF is always late, every point cloud would warn
+    RCLCPP_WARN_THROTTLE(
+      get_node()->get_logger(), *get_node()->get_clock(), 1000,
+      "BonxaiMapsManager: TF failed, point cloud skipped: %s", ex.what());
     return;
   }
 
@@ -309,7 +311,6 @@ BonxaiMapsManager::publish_map()
   bonxai_msg_.header.frame_id = tf_info.map_frame;
   bonxai_msg_.header.stamp = this->get_node()->now();
   bonxai_pub_->publish(bonxai_msg_);
-
 }
 
 }  // namespace easynav_bonxai

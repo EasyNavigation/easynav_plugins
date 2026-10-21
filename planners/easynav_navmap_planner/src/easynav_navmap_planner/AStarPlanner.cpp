@@ -30,6 +30,7 @@
 #include "nav_msgs/msg/goals.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/path.hpp"
+#include "navmap_core/Descriptors.hpp"
 #include "navmap_core/NavMap.hpp"
 #include "navmap_ros/conversions.hpp"
 
@@ -73,6 +74,46 @@ void AStarPlanner::on_initialize()
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
   node->get_parameter(plugin_name + ".cost_weight", cost_weight_);
   node->get_parameter(plugin_name + ".continuous_replan", continuous_replan_);
+
+  // Terrain (off by default)
+  const std::string t = plugin_name + ".terrain.";
+  easynav::declare_parameter_if_absent<double>(*node, t + "slope_weight", slope_weight_);
+  easynav::declare_parameter_if_absent<double>(*node, t + "max_slope_deg", max_slope_deg_);
+  easynav::declare_parameter_if_absent<double>(*node, t + "max_step", max_step_);
+  easynav::declare_parameter_if_absent<double>(*node, t + "max_roughness", max_roughness_);
+  easynav::declare_parameter_if_absent<double>(*node, t + "min_clearance", min_clearance_);
+  node->get_parameter(t + "slope_weight", slope_weight_);
+  node->get_parameter(t + "max_slope_deg", max_slope_deg_);
+  node->get_parameter(t + "max_step", max_step_);
+  node->get_parameter(t + "max_roughness", max_roughness_);
+  node->get_parameter(t + "min_clearance", min_clearance_);
+  if (!(slope_weight_ >= 0.0)) {slope_weight_ = 0.0;}
+  if (!(max_slope_deg_ > 0.0)) {max_slope_deg_ = 90.0;}
+
+  // Links between surfaces: which kinds the robot can take
+  std::vector<std::string> link_types{"generic", "ramp", "door"};
+  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".links.enabled", use_links_);
+  easynav::declare_parameter_if_absent(*node, plugin_name + ".links.types", link_types);
+  node->get_parameter(plugin_name + ".links.enabled", use_links_);
+  node->get_parameter(plugin_name + ".links.types", link_types);
+  const std::vector<std::pair<std::string, ::navmap::LinkType>> kinds{
+    {"generic", ::navmap::LinkType::GENERIC}, {"ramp", ::navmap::LinkType::RAMP},
+    {"stairs", ::navmap::LinkType::STAIRS}, {"elevator", ::navmap::LinkType::ELEVATOR},
+    {"door", ::navmap::LinkType::DOOR}};
+  link_type_ok_.assign(kinds.size(), 0);
+  for (const auto & name : link_types) {
+    const auto it = std::find_if(
+      kinds.begin(), kinds.end(), [&](const auto & k) {return k.first == name;});
+    if (it == kinds.end()) {
+      RCLCPP_WARN(
+        node->get_logger(), "[%s] unknown link type '%s' (generic, ramp, stairs, elevator, door)",
+        plugin_name.c_str(), name.c_str());
+      continue;
+    }
+    link_type_ok_[static_cast<std::size_t>(it->second)] = 1;
+  }
+  geometry_id_ = 0;  // new limits: the terrain cache is rebuilt on the next plan
+  centroids_.clear();
 
   path_pub_ = node->create_publisher<nav_msgs::msg::Path>(
     node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name +
@@ -303,22 +344,51 @@ static inline bool layer_exists(const ::navmap::NavMap & nm, const std::string &
   return static_cast<bool>(nm.layers.get(name));
 }
 
+void AStarPlanner::build_terrain(const ::navmap::NavMap & map)
+{
+  using ::navmap::NavCelId;
+  const std::size_t N = map.navcels.size();
+  terrain_ok_.assign(N, 1);
+  slope_cost_.assign(N, 0.0f);
+  const float cos_max = static_cast<float>(std::cos(max_slope_deg_ * M_PI / 180.0));
+  for (NavCelId c = 0; c < N; ++c) {
+    const float nz = std::clamp(std::abs(map.navcels[c].normal.z()), 1e-3f, 1.0f);
+    if (max_slope_deg_ < 90.0 && nz < cos_max) {terrain_ok_[c] = 0;}
+    slope_cost_[c] = (1.0f - nz * nz) / (nz * nz);  // tan^2 of the slope
+  }
+  if (max_step_ <= 0.0 && max_roughness_ <= 0.0 && min_clearance_ <= 0.0) {return;}
+  // Descriptors on a copy: the map in NavState is not written by the planner
+  ::navmap::NavMap tmp = map;
+  ::navmap::DescriptorParams dp;
+  dp.slope = false;
+  dp.step = max_step_ > 0.0;
+  dp.roughness = max_roughness_ > 0.0;
+  dp.clearance = min_clearance_ > 0.0;
+  ::navmap::compute_descriptors(tmp, dp);
+  for (NavCelId c = 0; c < N; ++c) {
+    if (dp.step && tmp.layer_get<float>("step", c) > max_step_) {terrain_ok_[c] = 0;}
+    if (dp.roughness && tmp.layer_get<float>("roughness", c) > max_roughness_) {
+      terrain_ok_[c] = 0;
+    }
+    if (dp.clearance && tmp.layer_get<float>("clearance", c) < min_clearance_) {
+      terrain_ok_[c] = 0;
+    }
+  }
+}
+
 void AStarPlanner::ensure_graph_cache(const ::navmap::NavMap & map)
 {
   using ::navmap::NavCelId;
   const std::size_t N = map.navcels.size();
   const std::size_t V = map.positions.x.size();
 
-  // Same geometry as the cached one? (sizes, and the first and last centroids)
-  bool same = centroids_.size() == N && vertex_cels_.size() == V && neighbors_.size() == N;
-  if (same && N > 0) {
-    const auto c0 = map.navcel_centroid(0);
-    const auto cn = map.navcel_centroid(static_cast<NavCelId>(N - 1));
-    same = (Eigen::Vector3f{c0.x(), c0.y(), c0.z()} - centroids_.front()).norm() < 1e-6f &&
-      (Eigen::Vector3f{cn.x(), cn.y(), cn.z()} - centroids_.back()).norm() < 1e-6f;
-  }
+  // Same geometry as the cached one?
+  const bool same = centroids_.size() == N && vertex_cels_.size() == V &&
+    neighbors_.size() == N && geometry_id_ == map.geometry_id();
 
   if (!same) {
+    geometry_id_ = map.geometry_id();
+    build_terrain(map);
     centroids_.resize(N);
     for (NavCelId c = 0; c < static_cast<NavCelId>(N); ++c) {
       const auto cc = map.navcel_centroid(c);
@@ -444,12 +514,29 @@ std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
       return nm.locate_navcel(p, sidx, out, bary, &hit, opts);
     };
 
-  // Straight segment i -> j: on traversable NavCels no costlier than the waypoints it replaces
+  // A step through a link (not neighbors in the mesh) is kept as is: no shortcut across it
+  std::vector<char> jump(n, 0);
+  for (std::size_t k = 1; k < n; ++k) {
+    const auto & nb = neighbors_[cels[k - 1]];
+    jump[k] = cels[k] != cels[k - 1] && std::none_of(
+      nb.begin(), nb.end(), [&](const Neighbor & x) {return x.cid == cels[k];});
+  }
+
+  // Straight segment i -> j: on traversable NavCels no costlier, and no steeper, than the
+  // waypoints it replaces
   auto visible = [&](std::size_t i, std::size_t j) -> bool {
+      for (std::size_t k = i + 1; k <= j; ++k) {
+        if (jump[k]) {return false;}
+      }
       std::uint8_t allowed = 0;
       for (std::size_t k = i + 1; k < j; ++k) {
         allowed = std::max(allowed, occ_[cels[k]]);
       }
+      float allowed_slope = 0.0f;
+      for (std::size_t k = i; k <= j; ++k) {
+        allowed_slope = std::max(allowed_slope, slope_cost_[cels[k]]);
+      }
+      allowed_slope = allowed_slope * 1.05f + 1e-3f;
       const Eigen::Vector3f a = points[i], b = points[j];
       const double len = (b - a).head<2>().norm();
       const int steps = std::max(1, static_cast<int>(std::ceil(len / (0.25 * cel_spacing_))));
@@ -458,8 +545,11 @@ std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
         const Eigen::Vector3f p = a + (b - a) * (static_cast<float>(s) / steps);
         NavCelId c;
         if (!locate_near(p, cur, c)) {return false;}
+        if (slope_weight_ > 0.0 && slope_cost_[c] > allowed_slope) {return false;}
         const std::uint8_t v = occ_[c];
-        if (v >= navmap_ros::INSCRIBED_INFLATED_OBSTACLE || v > allowed) {return false;}
+        if (v >= navmap_ros::INSCRIBED_INFLATED_OBSTACLE || v > allowed || !terrain_ok_[c]) {
+          return false;
+        }
         cur = c;
       }
       return true;
@@ -494,6 +584,10 @@ std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
   std::vector<Eigen::Vector3f> out{points.front()};
   for (std::size_t k = 1; k < kept.size(); ++k) {
     const Eigen::Vector3f a = points[kept[k - 1]], b = points[kept[k]];
+    if (kept[k] == kept[k - 1] + 1 && jump[kept[k]]) {  // through a link: its two ends
+      out.push_back(b);
+      continue;
+    }
     const double len = (b - a).head<2>().norm();
     const int steps = std::max(1, static_cast<int>(std::round(len / cel_spacing_)));
     NavCelId cur = cels[kept[k - 1]];
@@ -517,7 +611,10 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   const geometry_msgs::msg::Pose & goal)
 {
   using ::navmap::NavCelId;
-  using namespace navmap_ros;
+  using navmap_ros::FREE_SPACE;
+  using navmap_ros::INSCRIBED_INFLATED_OBSTACLE;
+  using navmap_ros::LETHAL_OBSTACLE;
+  using navmap_ros::NO_INFORMATION;
 
   if (nm.navcels.empty()) {return {};}
 
@@ -568,7 +665,7 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   // as the costmap planner does.
   auto traversable = [&](NavCelId c) -> bool {
       const std::uint8_t v = occ_[c];
-      return v < INSCRIBED_INFLATED_OBSTACLE;
+      return v < INSCRIBED_INFLATED_OBSTACLE && terrain_ok_[c];
     };
   // How far from the start inscribed cells are still traversable (m).
   constexpr double kEscapeDistance = 1.0;
@@ -597,8 +694,9 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   }
 
   // Weighted step cost:
-  //   base geometric cost (edge length) scaled by (cost_factor_ + cost_weight_ * norm_cost(target)).
-  // This preserves admissibility with heuristic h = Euclidean distance, since the minimal multiplier ≥ 1.
+  //   base geometric cost (edge length) scaled by (cost_factor_ + cost_weight_ *
+  //   norm_cost(target)). This preserves admissibility with heuristic h = Euclidean distance, since
+  //   the minimal multiplier ≥ 1.
   auto step_cost = [&](NavCelId from, NavCelId to) -> double {
       const double base = euclid(from, to);
       if (!std::isfinite(base) || base <= 0.0) {
@@ -613,7 +711,12 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
       // Ensure the multiplier is at least 1.0 so h = euclid remains admissible.
       // If your cost_factor_ is already ≥ 1, this holds. Otherwise we clamp.
       const double cf = std::max(1.0, static_cast<double>(cost_factor_));
-      const double mult = cf + static_cast<double>(cost_weight_) * ncost;
+      double mult = cf + static_cast<double>(cost_weight_) * ncost;
+      if (slope_weight_ > 0.0) {
+        // tan^2 of the slope of the NavCel: gentle slopes cost little, steep ones a lot, and
+        // across a slope as much as up or down it
+        mult += slope_weight_ * static_cast<double>(slope_cost_[to]);
+      }
 
       return base * mult;
     };
@@ -675,6 +778,27 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
         parent_[v] = u;
         const double f = tentative + h(v, cid_goal);
         open.push(Node{v, f});
+      }
+    }
+
+    // Links to other surfaces (stairs, ramps, doors...) of the allowed kinds
+    if (!use_links_) {continue;}
+    for (const auto li : nm.links_from(u)) {
+      const auto & l = nm.links()[li];
+      const auto kind = static_cast<std::size_t>(l.type);
+      if (kind >= link_type_ok_.size() || !link_type_ok_[kind]) {continue;}
+      const NavCelId v = l.from == u ? l.to : l.from;
+      if (v >= N || !traversable(v)) {continue;}
+      const double ncost = normalized_cost(v);
+      if (!std::isfinite(ncost)) {continue;}
+      // Never shorter than the straight line, so the heuristic stays admissible
+      const double len = std::max(static_cast<double>(l.length), euclid(u, v));
+      const double cf = std::max(1.0, static_cast<double>(cost_factor_));
+      const double tentative = g_[u] + len * (cf + static_cast<double>(cost_weight_) * ncost);
+      if (tentative < g_[v]) {
+        g_[v] = tentative;
+        parent_[v] = u;
+        open.push(Node{v, tentative + h(v, cid_goal)});
       }
     }
   }

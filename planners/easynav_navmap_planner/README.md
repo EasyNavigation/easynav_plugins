@@ -57,6 +57,15 @@ All parameters are declared under the plugin namespace, i.e.
 | `<plugin>.cost_factor` | `double` | `2.0` | Multiplicative weight for geometric distance; values > 1 increase the relative importance of distance. |
 | `<plugin>.cost_weight` | `double` | `5.0` | Weight of the cell cost (inflation) against the path length; higher values keep paths farther from obstacles. |
 | `<plugin>.continuous_replan` | `bool` | `true` | If true, recomputes the path whenever `NavState` updates; if false, plans once per goal. |
+| `<plugin>.terrain.slope_weight` | `double` | `0.0` | Extra cost per meter on a sloped NavCel: `slope_weight * tan²(slope)`, up, down or across. Gentle slopes cost little and steep ones a lot: with `20`, 5° adds 0.15 per meter, 10° 0.6, 20° 2.6 and 30° 6.7 (the flat costs `cost_factor`, 2). `0` ignores the slope. |
+| `<plugin>.terrain.max_slope_deg` | `double` | `90.0` | NavCels steeper than this are not traversable. |
+| `<plugin>.terrain.max_step` | `double` | `0.0` | `> 0`: NavCels with a larger height step around them (m) are not traversable. |
+| `<plugin>.terrain.max_roughness` | `double` | `0.0` | `> 0`: NavCels rougher than this (RMS distance to the local plane, m) are not traversable. |
+| `<plugin>.terrain.min_clearance` | `double` | `0.0` | `> 0`: NavCels with less free height above (to the next surface of the map, m) are not traversable; e.g. the robot's height. |
+| `<plugin>.links.enabled` | `bool` | `true` | Take the links between surfaces of the map (`navmap::SurfaceLink`). |
+| `<plugin>.links.types` | `list<string>` | `[generic, ramp, door]` | Kinds of link the robot can take: `generic`, `ramp`, `stairs`, `elevator`, `door`. |
+
+The terrain limits use the NavMap descriptors (`navmap::compute_descriptors`), computed once per map geometry: a few tens of ms on maps of tens of thousands of NavCels (more if the map is rebuilt continuously, as in the maps manager's local mode). The line-of-sight shortcut never replaces part of the path by a steeper or costlier straight segment, and never cuts across a link.
 
 **Note:** The planner internally uses hardcoded values for `layer_name` (prefers `"inflated_obstacles"`, fallback to `"obstacles"`), `cost_axial`, and `cost_diagonal`. These are not runtime-configurable parameters.
 

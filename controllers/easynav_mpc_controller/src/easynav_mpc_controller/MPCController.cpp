@@ -100,7 +100,6 @@ MPCController::publish_mpc_path(
       mpc_path_.poses.push_back(pose_stamped);
     }
     mpc_path_pub_->publish(mpc_path_);
-
   }
 }
 
@@ -297,7 +296,6 @@ MPCController::update_rt(NavState & nav_state)
         std::cerr << "Optimization Unsuccessful " << std::endl;
       }
     }
-
   } catch (std::exception & e) {
     std::cerr << "Optimization Error: " << e.what() << std::endl;
   }

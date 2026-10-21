@@ -305,8 +305,6 @@ AMCLLocalizer::on_initialize()
 
   last_reseed_ = get_node()->now();
   last_input_time_ = get_node()->now();
-
-  get_node()->get_logger().set_level(rclcpp::Logger::Level::Debug);
 }
 
 void printTransform(const tf2::Transform & tf)

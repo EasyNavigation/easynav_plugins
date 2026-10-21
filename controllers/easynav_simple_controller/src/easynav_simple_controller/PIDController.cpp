@@ -28,9 +28,9 @@ PIDController::PIDController(double min_ref, double max_ref, double min_output, 
   prev_error_ = int_error_ = 0.0;
 
   KP_ = 0.7;
-  KI_ = 0.0; // start with no integral to avoid windup
+  KI_ = 0.0;  // start with no integral to avoid windup
   KD_ = 0.0;
-  integral_limit_ = max_output_ * 2.0; // default integral clamp
+  integral_limit_ = max_output_ * 2.0;  // default integral clamp
 }
 
 void

@@ -19,20 +19,22 @@
 #ifndef EASYNAV_NAVMAP_LOCALIZER__AMCLLOCALIZER_HPP_
 #define EASYNAV_NAVMAP_LOCALIZER__AMCLLOCALIZER_HPP_
 
+#include <utility>
 #include <vector>
 #include <random>
-#include <Eigen/Geometry>
-#include <bonxai/probabilistic_map.hpp>
+#include <limits>
+#include <atomic>
+#include <memory>
+#include <optional>
 
+#include "Eigen/Geometry"
+#include "bonxai/probabilistic_map.hpp"
 #include "geometry_msgs/msg/pose_array.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
-
 #include "tf2/LinearMath/Transform.hpp"
 #include "tf2_ros/transform_broadcaster.hpp"
-
 #include "navmap_core/NavMap.hpp"
-
 #include "easynav_core/LocalizerMethodBase.hpp"
 
 namespace easynav
@@ -50,9 +52,11 @@ struct Particle
 
   ::navmap::NavCelId last_cid = std::numeric_limits<uint32_t>::max();
   std::size_t last_surface = 0;
+  double odom_scale = 1.0;    ///< Scale of the odometry's translation for it (< 1: slipping)
 };
 
-/// \brief A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization) approach.
+/// \brief A localization method implementing a simplified AMCL (Adaptive Monte Carlo Localization)
+/// approach.
 class AMCLLocalizer : public LocalizerMethodBase
 {
 public:
@@ -73,7 +77,7 @@ public:
    *
    * @throws std::runtime_error if initialization fails.
    */
-  virtual void on_initialize() override;
+  void on_initialize() override;
 
   /**
    * @brief Real-time update of the localization state.
@@ -180,7 +184,12 @@ protected:
    */
   void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
 
-  /// @brief Starts from the last known pose after a reconfiguration ("initial_pose.use_last_known").
+  /// Spreads the particles around @p msg. With @p handover, their poses go to the RT thread
+  /// (see pending_); without it they are written here, only valid while neither thread runs.
+  void reinitialize_(const geometry_msgs::msg::PoseWithCovarianceStamped & msg, bool handover);
+
+  /// @brief Starts from the last known pose after a reconfiguration
+  /// ("initial_pose.use_last_known").
   void on_last_known_pose(const geometry_msgs::msg::PoseWithCovarianceStamped & pose) override;
 
   /// @brief Whether to start from the last known pose after a reconfiguration.
@@ -195,8 +204,45 @@ protected:
   /// List of particles representing the belief distribution.
   std::vector<Particle> particles_;
 
-  /// Random number generator used for sampling noise.
+  /// Random number generator used for sampling noise (update() and the pose callbacks).
   std::mt19937 rng_;
+
+  /// Random number generator of the RT thread (predict()).
+  std::mt19937 rng_rt_;
+
+  // The two threads share the particles without locks: the RT thread (predict()) is the only one
+  // that writes their poses, and the other (correct(), reseed(), the pose callbacks) the only one
+  // that writes their weights and hits. Poses computed outside the RT thread are handed over in a
+  // single slot: pending_poses_ is filled while pending_ is false, then pending_ is set; predict()
+  // applies them and clears it. The vector never changes size, so indices are always valid.
+  std::vector<std::pair<std::size_t, tf2::Transform>> pending_poses_;
+  std::vector<double> pending_scales_;  // their odometry scales (none: 1)
+  std::atomic<bool> pending_ {false};
+
+  // Odometry travelled and turned so far (written by the RT thread only), and where the last
+  // reseed was (non-RT): reseed() needs the robot to have moved reseed_min_d or reseed_min_a
+  std::atomic<double> travelled_ {0.0};
+  std::atomic<double> turned_ {0.0};
+  double travelled_at_reseed_ {0.0};
+  double turned_at_reseed_ {0.0};
+  double reseed_min_d_ {0.1};  // m
+  double reseed_min_a_ {0.1};  // rad
+  // Fraction of the reseeded particles given any odometry scale in [0, 1] (wheels slipping)
+  double odom_slip_fraction_ {0.05};
+  // Noise of the scale a reseeded particle takes from its reference
+  double odom_scale_noise_ {0.02};
+
+  /// Hands poses over to the RT thread. False if the slot is still busy.
+  bool post_poses_(
+    const std::vector<std::pair<std::size_t, tf2::Transform>> & poses,
+    const std::vector<double> & scales = {});
+
+  /// Applies the poses handed over (RT thread).
+  void apply_pending_poses_();
+
+  /// Particle indices by decreasing weight, sorted on a copy of the weights: the other thread may
+  /// be writing them, and a sort whose keys change underneath runs out of bounds.
+  std::vector<std::size_t> by_weight_(std::size_t n_first, bool sorted) const;
 
   /// Current estimated odometry-based pose.
   tf2::Transform pose_;
@@ -221,17 +267,46 @@ protected:
 
   double inflation_stddev_   {1.5};     // meters
   double inflation_prob_min_ {0.01};    // [0..1] min prob kept in inflated map
-  std::size_t correct_max_points_ {1500}; // hard cap of points per sensor cloud
+  std::size_t correct_max_points_ {1500};  // hard cap of points per sensor cloud
   double weights_tau_ {0.7};            // <1 sharpens, >1 flattens
   // Fraction of particles (0,1] used as "top" set for stats and reseed
   double top_keep_fraction_{0.2};
   double downsampled_cloud_size_{0.05};
+  // Only points between these heights over the robot's footprint are scored (default: all)
+  double min_point_height_ {-std::numeric_limits<double>::infinity()};
+  double max_point_height_ {std::numeric_limits<double>::infinity()};
+  // A point whose ray from the sensor crosses an occupied voxel scores nothing. Off by default:
+  // with voxels a few decimetres wide, rays along a floor or a ceiling (a 3D lidar's, a camera
+  // near the floor) look occluded, and the true pose scores worse than wrong ones
+  bool ray_occlusion_ {false};
+
+  // Recovery (augmented MCL): slow and fast averages of the scan likelihood; when the fast one
+  // drops below the slow one, reseed() spreads part of the particles widely around the estimate.
+  // Both written by the non-RT thread only.
+  double recovery_alpha_slow_ {0.001};
+  double recovery_alpha_fast_ {0.1};
+  double recovery_spread_xy_ {1.0};   // m
+  double recovery_spread_yaw_ {0.5};  // rad
+  double w_slow_ {0.0};
+  double w_fast_ {0.0};
+
+  /// Feeds the averages with the likelihood of a correction.
+  void update_recovery_(double mean_likelihood);
+
+  /// Mean of the best fraction (top_keep_fraction, the ones reseed() keeps) of the particles'
+  /// likelihoods: spread particles must not lower it. Reorders the vector.
+  double best_mean_(std::vector<double> & likelihood) const;
+
+  /// Fraction of the reseeded particles to spread widely, 0 when the likelihood holds.
+  double recovery_probability_() const;
 
   /// Last odometry transform received.
   tf2::Transform odom_{tf2::Transform::getIdentity()};
 
   /// Previous odometry transform (used to compute deltas).
   tf2::Transform last_odom_{tf2::Transform::getIdentity()};
+  /// IMU yaw at the last prediction: only its change is used.
+  std::optional<double> last_imu_yaw_;
 
   /// Flag indicating if the odometry has been initialized.
   bool initialized_odom_ = false;

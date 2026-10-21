@@ -46,7 +46,6 @@
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_common/types/NavState.hpp"
 
-#include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_costmap_common/cost_values.hpp"
 
 #include "easynav_costmap_maps_manager/filters/InflationFilter.hpp"
@@ -94,7 +93,8 @@ InflationFilter::on_initialize()
 
   RCLCPP_INFO(
     node->get_logger(),
-    "InflationFilter with inflation_radius = %lf  inscribed_radius = %lf  cost_scaling_factor = %lf",
+    "InflationFilter with inflation_radius = %lf  inscribed_radius = %lf  "
+    "cost_scaling_factor = %lf",
     inflation_radius_, inscribed_radius_, cost_scaling_factor_);
 
   seen_.clear();

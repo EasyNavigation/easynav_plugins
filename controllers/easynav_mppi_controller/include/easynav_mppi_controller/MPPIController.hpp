@@ -18,14 +18,13 @@
 
 #include <memory>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "geometry_msgs/msg/twist_stamped.hpp"
-
 #include "easynav_core/ControllerMethodBase.hpp"
 #include "easynav_common/types/NavState.hpp"
-
 #include "easynav_mppi_controller/MPPIOptimizer.hpp"
-
 #include "visualization_msgs/msg/marker_array.hpp"
 
 namespace easynav
@@ -58,7 +57,7 @@ protected:
   double max_lin_acc_{0.5};   ///< Maximum linear acceleration for MPPI.
   double max_ang_acc_{1.0};   ///< Maximum angular acceleration for MPPI.
   double fov_{M_PI / 2.0};    ///< Field of view for MPPI.
-  double safety_radius_{0.6}; ///< Safety radius for obstacle avoidance.
+  double safety_radius_{0.6};  ///< Safety radius for obstacle avoidance.
   double obstacle_range_{2.0};  ///< Obstacles farther than this from the robot are ignored (m).
   double z_min_filter_{0.0};    ///< Points below this height (robot frame) are the ground (m).
   double robot_radius_{0.3};    ///< From robot_geometry.
@@ -67,8 +66,10 @@ protected:
   geometry_msgs::msg::TwistStamped twist_stamped_;  ///< Current velocity command.
 
   std::unique_ptr<MPPIOptimizer> optimizer_;  ///< MPPI optimizer
-  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr mppi_candidates_pub_; ///< Publisher for MPPI candidates markers.
-  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr mppi_optimal_pub_;    ///< Publisher for MPPI optimal path markers.
+  /// Publisher for MPPI candidates markers.
+  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr mppi_candidates_pub_;
+  /// Publisher for MPPI optimal path markers.
+  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr mppi_optimal_pub_;
 
   /// \brief Obstacle points (map frame) within the robot's height, around it and towards where
   /// it moves (behind it when \p backward).
@@ -80,7 +81,6 @@ protected:
   void publish_mppi_markers(
     const std::vector<std::vector<std::pair<double, double>>> & all_trajs,
     const std::vector<std::pair<double, double>> & best_traj);
-
 };
 
 }  // namespace easynav

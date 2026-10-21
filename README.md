@@ -20,7 +20,7 @@ Funded by the European Union through the Horizon Europe programme under Grant Ag
 ## Description
 
 **EasyNav Plugins** provides the official collection of plugins for the [Easy Navigation (EasyNav)](https://github.com/EasyNavigation) framework.  
-These plugins extend the navigation core with planners, controllers, map managers, and localizers compatible with ROS 2.
+These plugins extend the navigation core with planners, controllers, maps managers, localizers and recovery systems compatible with ROS 2.
 
 Each plugin resides in its own ROS 2 package and is registered via `pluginlib`, allowing dynamic loading at runtime.
 
@@ -35,6 +35,17 @@ Each plugin resides in its own ROS 2 package and is registered via `pluginlib`, 
 | kilted | ![kilted](https://img.shields.io/badge/kilted-supported-brightgreen) |
 | lyrical | ![lyrical](https://img.shields.io/badge/lyrical-supported-brightgreen) |
 | rolling | ![rolling](https://img.shields.io/badge/rolling-supported-brightgreen) |
+
+## Installation
+
+With APT (Humble, Jazzy, Kilted and Lyrical), install the plugins your configuration uses:
+
+```bash
+sudo apt install ros-<distro>-easynav-costmap-maps-manager ros-<distro>-easynav-regulated-pp-controller
+```
+
+They are also available with Pixi and from source (cloning this repository builds all of them).
+See the [installation guide](https://easynavigation.github.io/build_install/index.html).
 
 ## Repository Structure
 
@@ -76,6 +87,7 @@ Map management plugins that provide, update, and store different environment rep
 | `easynav_octomap_maps_manager` | Manages OctoMap 3D occupancy trees. | [README](./maps_managers/easynav_octomap_maps_manager/README.md) |
 | `easynav_costmap_maps_manager` | Manages Costmap2D layers with filters. | [README](./maps_managers/easynav_costmap_maps_manager/README.md) |
 | `easynav_simple_maps_manager` | Minimal example map manager (SimpleMap). | [README](./maps_managers/easynav_simple_maps_manager/README.md) |
+| `easynav_routes_maps_manager` | Manages navigation routes (2D or 3D), editable in RViz with interactive markers. | [README](./maps_managers/easynav_routes_maps_manager/README.md) |
 
 ---
 
@@ -85,12 +97,33 @@ Localization plugins based on different map types and sensors.
 
 | Package | Description | Link |
 |---|---|---|
-| `easynav_gps_localizer` | GPS-based localizer for outdoor navigation. | [README](./localizers/easynav_gps_localizer/README.md) |
 | `easynav_simple_localizer` | Basic localizer for SimpleMap–based setups. | [README](./localizers/easynav_simple_localizer/README.md) |
 | `easynav_navmap_localizer` | AMCL-like localizer operating on NavMap meshes. | [README](./localizers/easynav_navmap_localizer/README.md) |
 | `easynav_costmap_localizer` | AMCL-like localizer using Costmap2D. | [README](./localizers/easynav_costmap_localizer/README.md) |
 | `easynav_mhamcl_localizer` | Multi-Hypothesis AMCL localizer using Costmap2D: global localization and kidnapping recovery. | [README](./localizers/easynav_mhamcl_localizer/README.md) |
-| `easynav_fusion_localizer` | Multi-sensor fusion localizer (e.g., GPS + odometry + map). | [README](./localizers/easynav_fusion_localizer/README.md) |
+| `easynav_fusion_localizer` | Fuses any number of odometry sources (wheels, IMU, GPS...) with `robot_localization`. | [README](./localizers/easynav_fusion_localizer/README.md) |
+
+---
+
+### 🩺 Recovery Systems
+
+Recovery systems detect navigation problems (lost localization, a dead sensor, a stuck robot...) and react to them.
+
+| Package | Description | Link |
+|---|---|---|
+| `easynav_diagnostic_recovery` | Diagnosis-driven recovery system: safety reflexes, evaluators and mitigations with priority-based arbitration. | [README](./recoveries/easynav_diagnostic_recovery/README.md) |
+| `easynav_simple_recovery` | A simple recovery system, written as a starting point for your own. | [README](./recoveries/easynav_simple_recovery/README.md) |
+
+---
+
+### 🧱 Common
+
+Types shared by several plugins.
+
+| Package | Description |
+|---|---|
+| `easynav_costmap_common` | `Costmap2D` and the cost values used by the costmap plugins. |
+| `easynav_simple_common` | `SimpleMap`, used by the simple plugins. |
 
 ---
 

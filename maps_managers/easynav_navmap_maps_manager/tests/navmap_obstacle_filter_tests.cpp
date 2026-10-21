@@ -126,12 +126,11 @@ protected:
   }
 
   // Vertical column of points at (x, y) in the map, from z0 to z1. The filter marks the NavCel
-  // at the center of each 0.3 m voxel, so (x, y) are voxel centers; the points are put a bit
-  // off them, away from the voxel borders.
+  // under each point, so (x, y) are the centers of the 0.1 m grid cells checked.
   void column(float x, float y, float z0, float z1)
   {
     for (float z = z0; z <= z1 + 1e-3f; z += 0.1f) {
-      perception_.data.push_back(pcl::PointXYZ(x + 0.05f, y + 0.05f, z));
+      perception_.data.push_back(pcl::PointXYZ(x, y, z));
     }
   }
 
@@ -143,7 +142,8 @@ protected:
     return nav_state_.get<::navmap::NavMap>("map.navmap");
   }
 
-  // Highest value of the two triangles of the cell at (x, y): a voxel center lies on their diagonal.
+  // Highest value of the two triangles of the cell at (x, y): a cell center lies on their
+  // diagonal.
   static std::uint8_t cell_at(const ::navmap::NavMap & nm, float x, float y)
   {
     return std::max(obstacles_at(nm, x + 0.02f, y - 0.02f), obstacles_at(nm, x - 0.02f, y + 0.02f));
@@ -230,12 +230,17 @@ TEST_F(NavmapObstacleFilterLimitsTest, A2DLaserSeesObstacles)
   // A laser 0.095 m above the floor: all its points at one height
   node_->declare_parameter("navmap.obstacles.min_height", 0.05);
   for (float y = 3.9f; y <= 4.2f; y += 0.05f) {
-    perception_.data.push_back(pcl::PointXYZ(4.70f, y, 0.095f));   // a bin ahead
+    perception_.data.push_back(pcl::PointXYZ(4.65f, y, 0.095f));   // a bin ahead
   }
-  perception_.data.push_back(pcl::PointXYZ(5.60f, 4.10f, 0.095f));  // a single hit
+  perception_.data.push_back(pcl::PointXYZ(5.55f, 4.05f, 0.095f));  // a single hit
   easynav::navmap::ObstacleFilter filter;
   const auto & nm = run(filter);
-  EXPECT_EQ(cell_at(nm, 4.65f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
+  // The bin: the cells under the points the 0.3 m downsampling keeps (one per voxel).
+  int bin_cells = 0;
+  for (float y = 3.85f; y <= 4.26f; y += 0.1f) {
+    bin_cells += cell_at(nm, 4.65f, y) == navmap_ros::LETHAL_OBSTACLE;
+  }
+  EXPECT_GE(bin_cells, 1);
   EXPECT_EQ(cell_at(nm, 5.55f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
 }
 
@@ -246,7 +251,7 @@ TEST_F(NavmapObstacleFilterLimitsTest, PointsBelowMinHeightAboveTheSurfaceAreThe
     perception_.data.push_back(pcl::PointXYZ(x, 4.1f, 0.03f));     // the floor, with noise
     perception_.data.push_back(pcl::PointXYZ(x, 3.2f, 0.095f));    // below 0.1
   }
-  perception_.data.push_back(pcl::PointXYZ(4.70f, 2.30f, 0.15f));  // above 0.1
+  perception_.data.push_back(pcl::PointXYZ(4.66f, 2.26f, 0.15f));  // above 0.1, inside a cell
   easynav::navmap::ObstacleFilter filter;
   const auto & nm = run(filter);
   for (float x = 4.35f; x <= 5.6f; x += 0.3f) {
@@ -328,6 +333,78 @@ TEST_F(NavmapObstacleFilterLimitsTest, ARampIsNotAnObstacleButABoxOnItIs)
   EXPECT_EQ(at(5.55f, 3.15f), navmap_ros::LETHAL_OBSTACLE) << "the box";
 }
 
+namespace
+{
+
+// A floor at z = 0 over [0, 8] m and, over its x >= 5 half, a deck at z = deck_z: two surfaces
+// on top of each other, as a ramp passing over a floor
+::navmap::NavMap floor_and_deck(float deck_z)
+{
+  ::navmap::NavMap nm;
+  const auto surface = nm.create_surface("map");
+  auto grid = [&nm, surface](float x0, int nx, float z) {
+      const int n = 17;
+      const uint32_t base = static_cast<uint32_t>(nm.positions.size());
+      for (int j = 0; j < n; ++j) {
+        for (int i = 0; i < nx; ++i) {
+          nm.add_vertex({x0 + 0.5f * i, 0.5f * j, z});
+        }
+      }
+      for (int j = 0; j + 1 < n; ++j) {
+        for (int i = 0; i + 1 < nx; ++i) {
+          const uint32_t v = base + j * nx + i;
+          nm.add_navcel_to_surface(surface, nm.add_navcel(v, v + 1, v + nx + 1));
+          nm.add_navcel_to_surface(surface, nm.add_navcel(v, v + nx + 1, v + nx));
+        }
+      }
+    };
+  grid(0.0f, 17, 0.0f);
+  grid(5.0f, 7, deck_z);
+  nm.rebuild_geometry_accels();
+  return nm;
+}
+
+std::uint8_t obstacles_on(const ::navmap::NavMap & nm, float x, float y, float z)
+{
+  std::size_t sidx = 0;
+  ::navmap::NavCelId cid;
+  Eigen::Vector3f bary, hit;
+  EXPECT_TRUE(nm.locate_navcel(Eigen::Vector3f(x, y, z), sidx, cid, bary, &hit));
+  EXPECT_NEAR(hit.z(), z, 1e-3f);
+  return nm.layer_get<std::uint8_t>("obstacles", cid, 123);
+}
+
+}  // namespace
+
+TEST_F(NavmapObstacleFilterLimitsTest, APointIsOnTheSurfaceClosestToItNotOnTheLastOnesSurface)
+{
+  // Regression: the previous point's NavCel (the hint) took any point within 0.5 m of its plane,
+  // so the deck seen just after the floor was a 0.4 m obstacle on the floor under it
+  node_->declare_parameter("navmap.obstacles.downsample_resolution", 0.0);
+  for (float deck_z : {0.3f, 0.4f, 0.45f}) {
+    nav_state_.set("map.navmap", floor_and_deck(deck_z));
+    perception_.data.clear();
+    for (float x = 4.25f; x <= 6.5f; x += 0.1f) {  // the floor, then the deck, along y = 4.1
+      perception_.data.push_back(pcl::PointXYZ(x, 4.1f, (x < 5.0f ? 0.0f : deck_z) + 0.02f));
+    }
+    for (float z = 0.1f; z <= 0.4f; z += 0.1f) {  // a box on the deck, at (6.0, 3.0)
+      perception_.data.push_back(pcl::PointXYZ(6.0f, 3.0f, deck_z + z));
+    }
+    easynav::navmap::ObstacleFilter filter;
+    const auto & nm = run(filter);
+    for (float x = 5.2f; x <= 6.4f; x += 0.3f) {
+      EXPECT_EQ(obstacles_on(nm, x, 4.1f, deck_z), navmap_ros::FREE_SPACE) << "deck " << x;
+      EXPECT_EQ(obstacles_on(nm, x, 4.1f, 0.0f), navmap_ros::FREE_SPACE) << "under it " << x;
+    }
+    for (float x = 4.3f; x <= 4.9f; x += 0.3f) {
+      EXPECT_EQ(obstacles_on(nm, x, 4.1f, 0.0f), navmap_ros::FREE_SPACE) << "floor " << x;
+    }
+    // A real obstacle on the deck is still one, on the deck and not on the floor under it
+    EXPECT_EQ(obstacles_on(nm, 6.0f, 3.0f, deck_z), navmap_ros::LETHAL_OBSTACLE) << deck_z;
+    EXPECT_EQ(obstacles_on(nm, 6.0f, 3.0f, 0.0f), navmap_ros::FREE_SPACE) << deck_z;
+  }
+}
+
 TEST_F(NavmapObstacleFilterLimitsTest, TheDownsampleResolutionIsConfigurable)
 {
   // Two columns 0.6 m apart, off the ground: a 2 m voxel keeps one point of them; 0 keeps all
@@ -351,20 +428,20 @@ TEST_F(NavmapObstacleFilterLimitsTest, MinHeightGrowsWithTheDistanceToTheRobot)
   // Robot at (4, 4). Threshold 0.05 + 0.1 per meter: 0.12 m at 0.65 m, about 0.38 m at 3.3 m
   node_->declare_parameter("navmap.obstacles.min_height", 0.05);
   node_->declare_parameter("navmap.obstacles.min_height_per_meter", 0.1);
-  perception_.data.push_back(pcl::PointXYZ(4.70f, 4.10f, 0.2f));   // near, 0.2 m: obstacle
-  perception_.data.push_back(pcl::PointXYZ(7.40f, 4.10f, 0.2f));   // far, 0.2 m: the ground
-  perception_.data.push_back(pcl::PointXYZ(4.10f, 0.70f, 0.5f));   // far, 0.5 m: obstacle
+  perception_.data.push_back(pcl::PointXYZ(4.65f, 4.05f, 0.2f));   // near, 0.2 m: obstacle
+  perception_.data.push_back(pcl::PointXYZ(7.35f, 4.05f, 0.2f));   // far, 0.2 m: the ground
+  perception_.data.push_back(pcl::PointXYZ(4.05f, 0.75f, 0.5f));   // far, 0.5 m: obstacle
   easynav::navmap::ObstacleFilter filter;
   const auto & nm = run(filter);
   EXPECT_EQ(cell_at(nm, 4.65f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
   EXPECT_EQ(cell_at(nm, 7.35f, 4.05f), navmap_ros::FREE_SPACE);
-  EXPECT_EQ(cell_at(nm, 4.05f, 0.75f), navmap_ros::LETHAL_OBSTACLE);  // Its column's center
+  EXPECT_EQ(cell_at(nm, 4.05f, 0.75f), navmap_ros::LETHAL_OBSTACLE);
 }
 
 TEST_F(NavmapObstacleFilterLimitsTest, ByDefaultMinHeightDoesNotGrow)
 {
   node_->declare_parameter("navmap.obstacles.min_height", 0.05);
-  perception_.data.push_back(pcl::PointXYZ(7.40f, 4.10f, 0.095f));  // 3.35 m away, a laser hit
+  perception_.data.push_back(pcl::PointXYZ(7.35f, 4.05f, 0.095f));  // 3.35 m away, a laser hit
   easynav::navmap::ObstacleFilter filter;
   const auto & nm = run(filter);
   EXPECT_EQ(cell_at(nm, 7.35f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
@@ -376,7 +453,7 @@ TEST_F(NavmapObstacleFilterLimitsTest, AnInvalidMinHeightPerMeterIsZero)
     SetUp();
     node_->declare_parameter("navmap.obstacles.min_height", 0.05);
     node_->declare_parameter("navmap.obstacles.min_height_per_meter", bad);
-    perception_.data.push_back(pcl::PointXYZ(7.40f, 4.10f, 0.095f));
+    perception_.data.push_back(pcl::PointXYZ(7.35f, 4.05f, 0.095f));
     easynav::navmap::ObstacleFilter filter;
     const auto & nm = run(filter);
     EXPECT_EQ(cell_at(nm, 7.35f, 4.05f), navmap_ros::LETHAL_OBSTACLE) << bad;
@@ -397,4 +474,22 @@ TEST_F(NavmapObstacleFilterLimitsTest, WithoutTheRobotPoseMinHeightDoesNotGrow)
   filter.initialize(node_, "navmap.obstacles");
   nav_state_.set("scan", perception_);
   EXPECT_NO_THROW(filter.update(nav_state_));
+}
+
+TEST_F(NavmapObstacleFilterLimitsTest, TheCellUnderThePointIsMarkedNotANeighbour)
+{
+  // A thin post at x = 4.71: only the 0.1 m cells it stands on are obstacles, not the ones
+  // around it (a 0.3 m column centre would fall at x = 4.65). No downsampling: both posts stay.
+  node_->declare_parameter("navmap.obstacles.downsample_resolution", 0.0);
+  easynav::navmap::ObstacleFilter filter;
+  for (float z = 0.3f; z <= 0.9f; z += 0.1f) {
+    perception_.data.push_back(pcl::PointXYZ(4.71f, 4.05f, z));
+    perception_.data.push_back(pcl::PointXYZ(4.79f, 4.15f, z));
+  }
+  const auto & nm = run(filter);
+  EXPECT_EQ(cell_at(nm, 4.75f, 4.05f), navmap_ros::LETHAL_OBSTACLE);
+  EXPECT_EQ(cell_at(nm, 4.75f, 4.15f), navmap_ros::LETHAL_OBSTACLE);
+  EXPECT_EQ(cell_at(nm, 4.65f, 4.05f), navmap_ros::FREE_SPACE);
+  EXPECT_EQ(cell_at(nm, 4.65f, 4.15f), navmap_ros::FREE_SPACE);
+  EXPECT_EQ(cell_at(nm, 4.85f, 4.05f), navmap_ros::FREE_SPACE);
 }

@@ -163,7 +163,8 @@ TEST_F(AdvanceRecoveryTestCase, AccumulatesTotalTimeAcrossQuickReactivations)
 
   rec->internal_start(nav_state);
   auto first_status = rec->internal_cycle(nav_state);
-  ASSERT_EQ(first_status, easynav_diagnostic_recovery::RecoveryStatus::RUNNING);  // too soon to escalate yet
+  // too soon to escalate yet
+  ASSERT_EQ(first_status, easynav_diagnostic_recovery::RecoveryStatus::RUNNING);
   rec->internal_stop(nav_state);
 
   std::this_thread::sleep_for(std::chrono::milliseconds(60));  // << episode_gap, same episode

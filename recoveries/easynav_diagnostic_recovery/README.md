@@ -46,7 +46,7 @@ under `tests/`, with the same subfolders:
 | (top level) | The manager, the three plugin interfaces, `ObstacleProximity`, and dummy plugins (`easynav_diagnostic_recovery` namespace) |
 | `reflexes/` | `CollisionSafetyReflex` |
 | `evaluators/` | `NoPathEvaluator`, `ObstacleTooCloseEvaluator`, `ControllerStuckEvaluator`, `RosGraphEvaluator`, `SafetyChannelEvaluator` |
-| `mitigations/` | `SafeRetreatRecovery`, `AdvanceRecovery`, `ShutdownRecovery`, `HumanAssistanceRecovery`, `CancelMissionRecovery` |
+| `mitigations/` | `SafeRetreatRecovery`, `AdvanceRecovery`, `RotateRecovery`, `ShutdownRecovery`, `HumanAssistanceRecovery`, `CancelMissionRecovery` |
 
 A component can also ship recovery for its own failures. For example, `easynav_costmap_localizer`
 ships `AmclConvergenceEvaluator` and `AmclRelocalizeMitigation`.
@@ -66,6 +66,7 @@ Each plugin's parameters are under `recovery_manager.<type>.`. Every mitigation 
 | `easynav_diagnostic_recovery/SafetyChannelEvaluator` | `WARN` (`safety_channel`) during a protective stop of the safety channel, or with its status lost (`safety_status`, see `system_node`'s `safety.status.timeout`); `ERROR` once it lasts `max_stop_time` s. | `max_stop_time` (0: never `ERROR`) |
 | `easynav_diagnostic_recovery/SafeRetreatRecovery` | Handles `obstacle_proximity`: moves straight away until `safe_distance` (from the robot center): backward from an obstacle ahead, forward from one behind or beside (the other way if that one is blocked and the obstacle is beside). Fails, stopped, without perception or a clear way (`min_clearance` along its corridor). | `safe_distance` (0.6), `retreat_speed` (0.15), `min_clearance` (0.05), `z_min_filter` (0.0) |
 | `easynav_diagnostic_recovery/AdvanceRecovery` | Handles `controller_stuck`: moves forward a little. Gives up after `escalate_after` s of repeated attempts. | `advance_distance` (0.3), `advance_speed` (0.1), `escalate_after` (15.0), `episode_gap` (10.0) |
+| `easynav_diagnostic_recovery/RotateRecovery` | Handles `planner` (no path): turns in place `angle` so the sensors look all around (with a map that remembers obstacles, e.g. the NavMap `ObstacleFilter` with `memory.enabled`, this clears those that have gone), then stands still `settle_time` s for the planner. Once per episode: if there is still no path within `episode_gap` s, it fails so the next mitigation (e.g. `HumanAssistanceRecovery`) takes over; also if the turn takes longer than `timeout` (`0`: twice the expected plus 5 s). Give it a lower priority number than `HumanAssistanceRecovery`. | `angle` (2π; negative turns clockwise), `angular_speed` (0.5), `settle_time` (2.0), `timeout` (0.0), `episode_gap` (30.0), `hardware_ids` ([`planner`]) |
 | `easynav_diagnostic_recovery/ShutdownRecovery` | Handles the listed diagnostics by terminating EasyNav. | `handled_hardware_ids` ([`ros_graph`]) |
 | `easynav_diagnostic_recovery/HumanAssistanceRecovery` | Handles any `ERROR` not in `ignored_hardware_ids`: stops and waits until those clear. `timeout` 0 waits forever. | `timeout` (0.0), `ignored_hardware_ids` ([`ros_graph`]) |
 | `easynav_diagnostic_recovery/CancelMissionRecovery` | Handles any `ERROR`: aborts the mission. The last resort. | — |
