@@ -44,12 +44,13 @@ var searchData=
   ['link_5ftype_5fok_5f_41',['link_type_ok_',['../classeasynav_1_1navmap_1_1AStarPlanner.html#a9379a3269b36f9880a7746081c5a6f27',1,'easynav::navmap::AStarPlanner']]],
   ['listener_5f_42',['listener_',['../classRegulatedPpFaultyPlannerTest.html#aca406e9a7ce3a65d6092decdb6e9ab91',1,'RegulatedPpFaultyPlannerTest']]],
   ['local_5ffilter_5f_43',['local_filter_',['../classrobot__localization_1_1UkfWrapper.html#a9be0d2b6e97457bc993c83035f29ab6a',1,'robot_localization::UkfWrapper']]],
-  ['log_44',['log',['../structeasynav__diagnostic__recovery_1_1MitigationReport.html#ac81e864adfdd61a7c3ed8164f732527b',1,'easynav_diagnostic_recovery::MitigationReport']]],
-  ['log2dim_5f_45',['log2dim_',['../classBonxai_1_1GridBlockAllocator.html#a5765eef43f314366e8a7f8743ff772b3',1,'Bonxai::GridBlockAllocator']]],
-  ['look_5fahead_5fdist_5f_46',['look_ahead_dist_',['../classeasynav_1_1SimpleController.html#aafe39db8fdd7f0300e7696422f6247f1',1,'easynav::SimpleController']]],
-  ['lookahead_5fdist_5f_47',['lookahead_dist_',['../classeasynav_1_1RegulatedPurePursuitController.html#a2032d2cfcd54ebd0bcb287da1e4edf4e',1,'easynav::RegulatedPurePursuitController']]],
-  ['lookahead_5fpoint_5fpub_5f_48',['lookahead_point_pub_',['../classeasynav_1_1RegulatedPurePursuitController.html#a1df9eb6d44b2d926495e12d28744efea',1,'easynav::RegulatedPurePursuitController']]],
-  ['lookahead_5ftime_5f_49',['lookahead_time_',['../classeasynav_1_1RegulatedPurePursuitController.html#a4b0e443c9b7c10d08af6e0375af0154e',1,'easynav::RegulatedPurePursuitController']]],
-  ['low_5fq_5fhypo_5fthreshold_50',['low_q_hypo_threshold',['../structeasynav_1_1mhamcl_1_1MHAMCLLocalizer_1_1HypothesesParams.html#a4c5e6312f375bd341992bc301ad4a69e',1,'easynav::mhamcl::MHAMCLLocalizer::HypothesesParams']]],
-  ['low_5fquality_5fthreshold_51',['low_quality_threshold',['../structeasynav_1_1mhamcl_1_1ParticlesParams.html#a2944add5d3f28e9588c977a093fa202f',1,'easynav::mhamcl::ParticlesParams::low_quality_threshold'],['../structParticlesParams.html#a2944add5d3f28e9588c977a093fa202f',1,'ParticlesParams::low_quality_threshold']]]
+  ['localizer_5f_44',['localizer_',['../classFusionClockWaitTest.html#a2c404241ee28ed56b94859f7b5139570',1,'FusionClockWaitTest']]],
+  ['log_45',['log',['../structeasynav__diagnostic__recovery_1_1MitigationReport.html#ac81e864adfdd61a7c3ed8164f732527b',1,'easynav_diagnostic_recovery::MitigationReport']]],
+  ['log2dim_5f_46',['log2dim_',['../classBonxai_1_1GridBlockAllocator.html#a5765eef43f314366e8a7f8743ff772b3',1,'Bonxai::GridBlockAllocator']]],
+  ['look_5fahead_5fdist_5f_47',['look_ahead_dist_',['../classeasynav_1_1SimpleController.html#aafe39db8fdd7f0300e7696422f6247f1',1,'easynav::SimpleController']]],
+  ['lookahead_5fdist_5f_48',['lookahead_dist_',['../classeasynav_1_1RegulatedPurePursuitController.html#a2032d2cfcd54ebd0bcb287da1e4edf4e',1,'easynav::RegulatedPurePursuitController']]],
+  ['lookahead_5fpoint_5fpub_5f_49',['lookahead_point_pub_',['../classeasynav_1_1RegulatedPurePursuitController.html#a1df9eb6d44b2d926495e12d28744efea',1,'easynav::RegulatedPurePursuitController']]],
+  ['lookahead_5ftime_5f_50',['lookahead_time_',['../classeasynav_1_1RegulatedPurePursuitController.html#a4b0e443c9b7c10d08af6e0375af0154e',1,'easynav::RegulatedPurePursuitController']]],
+  ['low_5fq_5fhypo_5fthreshold_51',['low_q_hypo_threshold',['../structeasynav_1_1mhamcl_1_1MHAMCLLocalizer_1_1HypothesesParams.html#a4c5e6312f375bd341992bc301ad4a69e',1,'easynav::mhamcl::MHAMCLLocalizer::HypothesesParams']]],
+  ['low_5fquality_5fthreshold_52',['low_quality_threshold',['../structeasynav_1_1mhamcl_1_1ParticlesParams.html#a2944add5d3f28e9588c977a093fa202f',1,'easynav::mhamcl::ParticlesParams::low_quality_threshold'],['../structParticlesParams.html#a2944add5d3f28e9588c977a093fa202f',1,'ParticlesParams::low_quality_threshold']]]
 ];

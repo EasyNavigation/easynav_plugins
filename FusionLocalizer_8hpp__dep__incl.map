@@ -1,11 +1,13 @@
 <map id="localizers/easynav_fusion_localizer/include/easynav_fusion_localizer/FusionLocalizer.hpp" name="localizers/easynav_fusion_localizer/include/easynav_fusion_localizer/FusionLocalizer.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="285,5,455,76"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="367,5,536,76"/>
 <area shape="rect" id="Node000002" href="$FusionLocalizer_8cpp.html" title=" " alt="" coords="5,124,175,195"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="273,85,174,126,172,121,271,80"/>
-<area shape="rect" id="Node000003" href="$fusion__localizer__local__filter__tests_8cpp.html" title="A local filter fusing only velocities (no absolute orientation) stays finite." alt="" coords="199,124,349,195"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="334,90,304,125,300,122,330,86"/>
-<area shape="rect" id="Node000004" href="$fusion__localizer__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="374,124,558,195"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="410,86,440,122,436,125,406,90"/>
-<area shape="rect" id="Node000005" href="$fusion__localizer__tests_8cpp.html" title=" " alt="" coords="583,132,757,187"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="470,78,601,128,599,133,468,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="353,75,188,127,176,131,174,126,187,121,351,69"/>
+<area shape="rect" id="Node000003" href="$fusion__localizer__clock__wait__tests_8cpp.html" title="With use_sim_time, the filters wait for /clock while configuring, but a shutdown (a second signal to ..." alt="" coords="199,124,352,195"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="388,87,329,126,326,121,385,82"/>
+<area shape="rect" id="Node000004" href="$fusion__localizer__local__filter__tests_8cpp.html" title="A local filter fusing only velocities (no absolute orientation) stays finite." alt="" coords="376,124,526,195"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="454,91,454,124,449,124,449,91"/>
+<area shape="rect" id="Node000005" href="$fusion__localizer__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="551,124,736,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="523,82,588,121,585,126,520,87"/>
+<area shape="rect" id="Node000006" href="$fusion__localizer__tests_8cpp.html" title=" " alt="" coords="760,132,934,187"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="552,66,748,121,770,128,768,133,747,127,550,71"/>
 </map>
