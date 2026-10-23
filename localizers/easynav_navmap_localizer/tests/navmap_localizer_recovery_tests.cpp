@@ -175,7 +175,7 @@ TEST_F(NavmapAmclRecoveryTest, ADropSpreadsInProportionAndFadesWhenItComesBack)
   make();
   for (int i = 0; i < 100; ++i) {
     amcl_->update_recovery_(0.8);
-                                                              }
+  }
   double last = 0.0;
   for (int i = 0; i < 10; ++i) {
     amcl_->update_recovery_(0.2);
@@ -188,7 +188,7 @@ TEST_F(NavmapAmclRecoveryTest, ADropSpreadsInProportionAndFadesWhenItComesBack)
   EXPECT_GT(last, 0.4);
   for (int i = 0; i < 60; ++i) {
     amcl_->update_recovery_(0.8);
-                                                             }
+  }
   EXPECT_LT(amcl_->recovery_probability_(), 0.01);
 }
 
@@ -218,14 +218,15 @@ TEST_F(NavmapAmclRecoveryTest, TheLikelihoodIsThatOfTheBestOnes)
 
 TEST_F(NavmapAmclRecoveryTest, ZeroAlphasTurnItOff)
 {
-  make({rclcpp::Parameter("loc.recovery_alpha_slow", 0.0),
+  make(
+    {rclcpp::Parameter("loc.recovery_alpha_slow", 0.0),
       rclcpp::Parameter("loc.recovery_alpha_fast", 0.0)});
   for (int i = 0; i < 100; ++i) {
     amcl_->update_recovery_(0.8);
-                                                              }
+  }
   for (int i = 0; i < 20; ++i) {
     amcl_->update_recovery_(0.01);
-                                                              }
+  }
   EXPECT_DOUBLE_EQ(amcl_->recovery_probability_(), 0.0);
 }
 
@@ -234,7 +235,8 @@ TEST_F(NavmapAmclRecoveryTest, InvalidAlphasTurnItOff)
   for (auto [slow, fast] : std::vector<std::pair<double, double>>{
     {0.1, 0.1}, {0.2, 0.1}, {-0.1, 0.1}, {0.001, 1.5}})
   {
-    make({rclcpp::Parameter("loc.recovery_alpha_slow", slow),
+    make(
+      {rclcpp::Parameter("loc.recovery_alpha_slow", slow),
         rclcpp::Parameter("loc.recovery_alpha_fast", fast)});
     for (int i = 0; i < 100; ++i) {
       amcl_->update_recovery_(0.8);
@@ -252,7 +254,7 @@ TEST_F(NavmapAmclRecoveryTest, WithoutADropReseedKeepsToTheBest)
   cluster();
   for (int i = 0; i < 50; ++i) {
     amcl_->update_recovery_(0.8);
-                                                             }
+  }
   const auto before = origins();
   amcl_->reseed();
   amcl_->apply_pending_poses_();
@@ -267,10 +269,10 @@ TEST_F(NavmapAmclRecoveryTest, ADropReplacesExactlyTheWorstOnes)
   cluster();
   for (int i = 0; i < 100; ++i) {
     amcl_->update_recovery_(0.8);
-                                                              }
+  }
   for (int i = 0; i < 5; ++i) {
     amcl_->update_recovery_(0.2);
-                                                            }
+  }
   const double p = amcl_->recovery_probability_();
   ASSERT_GT(p, 0.0);
   const auto k = static_cast<std::size_t>(std::round(p * static_cast<double>(N - N_TOP)));
@@ -306,7 +308,8 @@ TEST_F(NavmapAmclRecoveryTest, ConvergedOneMetreOffItComesBack)
   // Localized at (2, 2), then the robot is really 1 m away: the cluster only crawls without
   // recovery, and jumps back with it
   for (bool recovery : {false, true}) {
-    make({rclcpp::Parameter("loc.recovery_alpha_fast", recovery ? 0.1 : 0.0),
+    make(
+      {rclcpp::Parameter("loc.recovery_alpha_fast", recovery ? 0.1 : 0.0),
         rclcpp::Parameter("loc.recovery_alpha_slow", recovery ? 0.001 : 0.0)});
     const tf2::Vector3 start(2.0, 2.0, 0.0), truth(3.0, 2.0, 0.0);
     for (int i = 0; i < 30; ++i) {

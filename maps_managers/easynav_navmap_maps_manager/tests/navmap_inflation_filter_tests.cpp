@@ -238,7 +238,8 @@ TEST(NavmapInflationBorders, BorderCellsAreNotLethalAndCostByTheirDistance)
   // Cell centroid ~0.5 m from the x = 0 border: between inscribed and free.
   const auto cid = cell_in(nm, 0.53f, 2.03f, 0.0f);
   const float d = nm.navcel_centroid(cid).x();
-  EXPECT_NEAR(nm.layer_get<std::uint8_t>("inflated_obstacles", cid),
+  EXPECT_NEAR(
+    nm.layer_get<std::uint8_t>("inflated_obstacles", cid),
     expected_cost(d, 0.3f, 1.0f, 3.0f), 1);
   EXPECT_EQ(cost_in(nm, 2.0f, 2.0f, 0.0f), FREE_SPACE);  // 2 m from every border
 }
@@ -277,7 +278,8 @@ TEST(NavmapInflationBorders, SlopeDistanceIsMeasuredAlongTheSurface)
     ::navmap::NavMap nm;
     add_grid(nm, 60, 60, 0.1f, 0.0f, 0.0f, [slope](float x, float) {return slope * x;});
     finish(nm);
-    nm.layer_set<std::uint8_t>("obstacles", cell_in(nm, 3.03f, 3.03f, slope * 3.03f),
+    nm.layer_set<std::uint8_t>(
+      "obstacles", cell_in(nm, 3.03f, 3.03f, slope * 3.03f),
       LETHAL_OBSTACLE);
     easynav::navmap::InflationFilter f;
     ASSERT_TRUE(
