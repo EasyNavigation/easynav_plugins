@@ -90,7 +90,8 @@ protected:
   void move(double dx)
   {
     amcl_->last_odom_ = amcl_->odom_;
-    amcl_->odom_ = amcl_->odom_ * tf2::Transform(tf2::Quaternion::getIdentity(),
+    amcl_->odom_ = amcl_->odom_ * tf2::Transform(
+      tf2::Quaternion::getIdentity(),
       tf2::Vector3(dx, 0.0, 0.0));
     amcl_->predict(nav_state_);
   }
@@ -175,7 +176,8 @@ TEST_F(NavmapAmclSlipTest, ReseededParticlesTakeTheirOdometryScaleAlong)
     x0.push_back(p.pose.getOrigin().x());
     k.push_back(p.odom_scale);
   }
-  make({rclcpp::Parameter("loc.odom_slip_fraction", 1.0),
+  make(
+    {rclcpp::Parameter("loc.odom_slip_fraction", 1.0),
       rclcpp::Parameter("loc.noise_translation", 1e-9)});
   // (a new filter: its particles at the same places and scales)
   amcl_->particles_.resize(x0.size());
@@ -196,7 +198,8 @@ TEST_F(NavmapAmclSlipTest, ARobotWhoseWheelsSlipIsStillFollowed)
   // the slip hypothesis the estimate stays with it; without it, it goes on with the odometry.
   for (double slip : {0.0, 0.1}) {
     // (without the slip hypothesis the scale stays fixed: no noise either)
-    make({rclcpp::Parameter("loc.odom_slip_fraction", slip),
+    make(
+      {rclcpp::Parameter("loc.odom_slip_fraction", slip),
         rclcpp::Parameter("loc.odom_scale_noise", slip > 0.0 ? 0.02 : 0.0)});
     double x = 2.0;
     for (int i = 0; i < 20; ++i) {  // 0.1 m a cycle, really moving
