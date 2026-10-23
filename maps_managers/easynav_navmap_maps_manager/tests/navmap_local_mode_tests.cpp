@@ -54,10 +54,11 @@ protected:
 
   // What the robot sees, in its own frame: flat ground 10 x 10 m around it, a 0.6 m box 2 m
   // ahead, and a far wall 20 m away (out of the window). Stamped dt s from now.
-  void see(double dt)
+  void see(double dt, const std::string & frame = "")
   {
     easynav::PointPerception p;
-    p.frame_id = easynav::RTTFBuffer::getInstance()->get_tf_info().robot_frame;
+    p.frame_id = frame.empty() ? easynav::RTTFBuffer::getInstance()->get_tf_info().robot_frame :
+      frame;
     p.stamp = node_->now() + rclcpp::Duration::from_seconds(dt);
     p.valid = true;
     for (float x = -5.0f; x <= 5.0f; x += 0.05f) {
@@ -165,8 +166,11 @@ TEST_F(NavMapLocalModeTest, DisabledByDefault)
 
 TEST_F(NavMapLocalModeTest, SafeWithoutOdometry)
 {
-  auto on = make(true);  // no odom -> robot transform at all
-  see(0.0);
+  // A frame with no transform at all: before Rolling, tf2's clear() keeps the static
+  // odom -> robot transforms of the previous tests
+  node_->declare_parameter("navmap.local.frame", "robot_without_odom");
+  auto on = make(true);
+  see(0.0, "robot_without_odom");
   EXPECT_NO_THROW(on->update(nav_state_));
   EXPECT_TRUE(nav_state_.get<::navmap::NavMap>("map.navmap").navcels.empty());
 }
