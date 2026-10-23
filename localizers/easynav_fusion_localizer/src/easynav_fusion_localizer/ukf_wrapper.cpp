@@ -2313,9 +2313,23 @@ void UkfWrapper::poseCallback(
 
 void UkfWrapper::initialize()
 {
-  if (!parent_node_->get_clock()->started()) {
-    RCLCPP_INFO(parent_node_->get_logger(), "Waiting for clock to start...");
-    parent_node_->get_clock()->wait_until_started();
+  // With use_sim_time and no /clock this blocks the configuration of every EasyNav node: say
+  // so until it starts, and stop waiting if rclcpp is shut down (a second signal)
+  const auto context = parent_node_->get_node_base_interface()->get_context();
+  const rclcpp::Duration step = rclcpp::Duration::from_seconds(5.0);
+  auto started = [&]() {
+      try {
+        return parent_node_->get_clock()->wait_until_started(step, context);
+      } catch (const std::runtime_error &) {
+        return false;  // the context was shut down
+      }
+    };
+  double waited = 0.0;
+  while (rclcpp::ok(context) && !started() && rclcpp::ok(context)) {
+    waited += step.seconds();
+    RCLCPP_WARN(
+      parent_node_->get_logger(), "Waiting for the ROS clock to start (%.0f s): use_sim_time is "
+      "true and no /clock reaches this node. EasyNav does not configure until it does", waited);
   }
 
   angular_acceleration_.setZero();
