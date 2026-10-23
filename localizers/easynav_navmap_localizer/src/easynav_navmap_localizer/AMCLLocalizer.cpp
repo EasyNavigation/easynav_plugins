@@ -836,8 +836,9 @@ void AMCLLocalizer::predict(NavState & nav_state)
   }
   double rot_len = std::abs(yaw);
   // How far the robot has gone, for reseed() (single writer: this thread)
-  travelled_.store(travelled_.load(std::memory_order_relaxed) + trans_len,
-        std::memory_order_relaxed);
+  travelled_.store(
+    travelled_.load(std::memory_order_relaxed) + trans_len,
+    std::memory_order_relaxed);
   turned_.store(turned_.load(std::memory_order_relaxed) + rot_len, std::memory_order_relaxed);
 
   // Zero-mean noise; a zero deviation (e.g. the robot still) is no noise: std::normal_distribution
