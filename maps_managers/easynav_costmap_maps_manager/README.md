@@ -60,13 +60,14 @@ Each entry in `<plugin>.filters` defines a sub-namespace `<plugin>.<filter>` wit
 - **Type:** `easynav::ObstacleFilter`
 - **Description:**  
   Detects occupied cells from input point clouds (`points` key in `NavState`) and marks them as `LETHAL_OBSTACLE` in the dynamic costmap.  
-  The filter fuses incoming 3D points into the map frame, downsamples them to the costmap resolution, filters out ground-level points (z below `min_height`, in the map frame), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (`ObstacleBounds`) of updated obstacles to enable efficient incremental inflation.
+  The filter fuses incoming 3D points into the map frame, keeps those in the square around the robot (`update_distance`), downsamples them to the costmap resolution, filters out ground-level points (z below `min_height`, in the map frame), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (`ObstacleBounds`) of updated obstacles to enable efficient incremental inflation.
 
 **Parameters:**
 
 | Parameter | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.<filter>.min_height` | `double` | `0.1` | Points lower than this (m, map frame) are the floor, not obstacles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high). |
+| `<plugin>.<filter>.update_distance` | `double` | `5.0` | Only points within this distance (m) of the robot, along x and along y of the map frame, update the map: a long-range sensor still marks just the robot's surroundings, and fewer points go through the pipeline. 0 or less: every point does. |
 
 Downsampling resolution and frame fusion use the costmap's own resolution and `map` frame.
 

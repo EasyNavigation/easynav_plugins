@@ -18,6 +18,7 @@
 
 #include "easynav_costmap_common/costmap_2d.hpp"
 #include "easynav_common/types/NavState.hpp"
+#include "nav_msgs/msg/odometry.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
 
 #include "easynav_costmap_common/cost_values.hpp"
@@ -39,6 +40,9 @@ ObstacleFilter::on_initialize()
   auto node = get_node();
   easynav::declare_parameter_if_absent(*node, plugin_name_ + ".min_height", min_height_);
   node->get_parameter(plugin_name_ + ".min_height", min_height_);
+  easynav::declare_parameter_if_absent(
+    *node, plugin_name_ + ".update_distance", update_distance_);
+  node->get_parameter(plugin_name_ + ".update_distance", update_distance_);
 }
 
 void
@@ -61,9 +65,20 @@ ObstacleFilter::update(NavState & nav_state)
   rclcpp::Time stamp;
 
   auto view = PointPerceptionsOpsView(perceptions);
-  view.downsample(dynamic_map.getResolution())
-  .fuse(tf_info.map_frame, stamp, false)
-  .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN});
+  if (update_distance_ > 0.0 && nav_state.has("robot_pose")) {
+    // Only the square around the robot updates the map. Cropped first, eagerly in the map
+    // frame, so that the voxel downsampling (the costly step) only sees the points kept.
+    const auto & robot = nav_state.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose.position;
+    view.fuse(tf_info.map_frame, stamp, false)
+    .filter(
+      {robot.x - update_distance_, robot.y - update_distance_, min_height_},
+      {robot.x + update_distance_, robot.y + update_distance_, NAN}, false)
+    .downsample(dynamic_map.getResolution());
+  } else {
+    view.downsample(dynamic_map.getResolution())
+    .fuse(tf_info.map_frame, stamp, false)
+    .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN});
+  }
 
   const auto & fused = view.as_points();
 
