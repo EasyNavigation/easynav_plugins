@@ -16,6 +16,8 @@
 /// \file
 /// \brief Implementation of the AMCLLocalizer class using Costmap2D.
 
+#include <algorithm>
+#include <cmath>
 #include <random>
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
@@ -341,6 +343,7 @@ double covariance_trace(const nav_msgs::msg::Odometry & odom)
 void
 AMCLLocalizer::update_rt(NavState & nav_state)
 {
+  std::lock_guard<std::mutex> lock(particles_mutex_);
   predict(nav_state);
 
   const auto odom = get_pose();
@@ -351,6 +354,7 @@ AMCLLocalizer::update_rt(NavState & nav_state)
 void
 AMCLLocalizer::update(NavState & nav_state)
 {
+  std::lock_guard<std::mutex> lock(particles_mutex_);
   correct(nav_state);
 
   if ((get_node()->now() - last_reseed_).seconds() > reseed_time_) {
@@ -369,6 +373,7 @@ void
 AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
 {
   if (compute_odom_from_tf_) {return;}
+  std::lock_guard<std::mutex> lock(particles_mutex_);
 
   tf2::fromMsg(msg->pose.pose, odom_);
   last_input_time_ = msg->header.stamp;
@@ -395,6 +400,7 @@ void
 AMCLLocalizer::init_pose_callback(
   geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg)
 {
+  std::lock_guard<std::mutex> lock(particles_mutex_);
   if (particles_.empty()) {
     return;
   }
@@ -719,22 +725,11 @@ AMCLLocalizer::reseed()
       return a.weight > b.weight;
     });
 
-  tf2::Vector3 mean = computeMean(particles_, 0, N_top);
-  tf2::Matrix3x3 cov = computeCovariance(particles_, 0, N_top, mean);
-
-  double a = cov[0][0];
-  double b = cov[0][1];
-  double c = cov[1][1];
-
-  double l00 = std::sqrt(a);
-  double l10 = b / l00;
-  double l11 = std::sqrt(c - l10 * l10);
-
-  double yaw_variance = computeYawVariance(particles_, 0, N_top);
-  double yaw_stddev = std::sqrt(yaw_variance);
-  std::normal_distribution<double> yaw_noise(0.0, std::max(yaw_stddev, min_noise_yaw_));
+  // Fixed noise around the parent: noise from the spread of the best ones made the cloud grow
+  // without bound at every reseed when the weights do not tell the particles apart.
+  std::normal_distribution<double> xy_noise(0.0, min_noise_xy_);
+  std::normal_distribution<double> yaw_noise(0.0, min_noise_yaw_);
   std::normal_distribution<double> index_dist(0.0, std::max(0.05 * static_cast<double>(N), 1e-12));
-  std::normal_distribution<double> standard_normal(0.0, 1.0);
 
   for (std::size_t i = N_top; i < N; ++i) {
     int selected_idx;
@@ -745,15 +740,6 @@ AMCLLocalizer::reseed()
     const auto & ref_particle = particles_[selected_idx];
 
     tf2::Vector3 origin = ref_particle.pose.getOrigin();
-
-    double z0 = standard_normal(rng_);
-    double z1 = standard_normal(rng_);
-    double dx = l00 * z0;
-    double dy = l10 * z0 + l11 * z1;
-
-    std::normal_distribution<double> xy_noise(0.0, std::max(
-        sqrt(dx * dx + dy * dy),
-        min_noise_xy_));
 
     tf2::Vector3 new_origin(origin.x() + xy_noise(rng_), origin.y() + xy_noise(rng_), 0.0);
 
