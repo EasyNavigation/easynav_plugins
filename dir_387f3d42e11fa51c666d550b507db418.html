@@ -203,7 +203,7 @@ Filter Plugins</h2>
 <li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1ObstacleFilter.html">easynav::ObstacleFilter</a></span></li>
 <li><b>Description:</b> <br  />
  Detects occupied cells from input point clouds (<span class="tt">points</span> key in <span class="tt">NavState</span>) and marks them as <span class="tt">LETHAL_OBSTACLE</span> in the dynamic costmap. <br  />
- The filter fuses incoming 3D points into the map frame, downsamples them to the costmap resolution, filters out ground-level points (z below <span class="tt">min_height</span>, in the map frame), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (<span class="tt">ObstacleBounds</span>) of updated obstacles to enable efficient incremental inflation.</li>
+ The filter fuses incoming 3D points into the map frame, keeps those in the square around the robot (<span class="tt">update_distance</span>), downsamples them to the costmap resolution, filters out ground-level points (z below <span class="tt">min_height</span>, in the map frame), and sets corresponding cells to lethal cost. Additionally, it computes and stores bounding box (<span class="tt">ObstacleBounds</span>) of updated obstacles to enable efficient incremental inflation.</li>
 </ul>
 <p><b>Parameters:</b></p>
 <table class="markdownTable">
@@ -211,6 +211,8 @@ Filter Plugins</h2>
 <th class="markdownTableHeadNone">Parameter  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadRight">Default  </th><th class="markdownTableHeadNone">Description  </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.&lt;filter&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Points lower than this (m, map frame) are the floor, not obstacles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.&lt;filter&gt;.update_distance</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">5.0</span>  </td><td class="markdownTableBodyNone">Only points within this distance (m) of the robot, along x and along y of the map frame, update the map: a long-range sensor still marks just the robot's surroundings, and fewer points go through the pipeline. 0 or less: every point does.  </td></tr>
 </table>
 <p>Downsampling resolution and frame fusion use the costmap's own resolution and <span class="tt">map</span> frame.</p>
 <p><b>NavState Keys:</b></p>

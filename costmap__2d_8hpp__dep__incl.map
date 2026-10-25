@@ -36,7 +36,7 @@
 <area shape="poly" id="edge33_Node000001_Node000024" title=" " alt="" coords="2198,47,2340,71,2401,88,2444,107,2463,128,2472,151,2480,173,2498,193,2540,216,2578,228,2614,234,2649,234,2724,231,2768,232,2817,240,2829,243,2828,248,2816,245,2767,238,2724,236,2649,239,2614,239,2577,234,2538,220,2495,197,2475,176,2467,153,2459,131,2440,111,2399,93,2339,76,2197,52"/>
 <area shape="rect" id="Node000026" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2ObstacleFilter_8cpp.html" title=" " alt="" coords="2734,116,2956,187"/>
 <area shape="poly" id="edge34_Node000001_Node000026" title=" " alt="" coords="2198,39,2443,61,2584,80,2723,106,2749,113,2748,118,2721,112,2583,85,2442,66,2197,44"/>
-<area shape="rect" id="Node000027" href="$costmap__obstacle__filter__tests_8cpp.html" title="ObstacleFilter &quot;min_height&quot;: points below it are floor hits and are not marked." alt="" coords="2980,116,3154,187"/>
+<area shape="rect" id="Node000027" href="$costmap__obstacle__filter__tests_8cpp.html" title="ObstacleFilter: &quot;min_height&quot; (points below it are floor hits and are not marked) and &quot;update_distance..." alt="" coords="2980,116,3154,187"/>
 <area shape="poly" id="edge36_Node000001_Node000027" title=" " alt="" coords="2198,38,2610,63,2817,83,2903,94,2968,106,2991,113,2990,118,2967,112,2902,99,2817,88,2609,68,2197,43"/>
 <area shape="rect" id="Node000028" href="$RoutesCostmapFilter_8cpp.html" title=" " alt="" coords="3178,116,3442,187"/>
 <area shape="poly" id="edge37_Node000001_Node000028" title=" " alt="" coords="2197,32,2388,36,2630,47,2898,69,3034,86,3166,106,3199,113,3198,118,3166,112,3033,91,2898,75,2630,52,2388,41,2197,37"/>

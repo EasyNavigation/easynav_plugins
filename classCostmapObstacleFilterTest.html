@@ -127,6 +127,7 @@ Protected Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:ab458b207913a9d34a760bb61c1613eb4" id="r_ab458b207913a9d34a760bb61c1613eb4"><td class="memItemLeft">static std::vector&lt; bool &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ab458b207913a9d34a760bb61c1613eb4">marked</a> (const std::vector&lt; float &gt; &amp;heights, const std::vector&lt; rclcpp::Parameter &gt; &amp;overrides={}, double *min_height=nullptr)</td></tr>
+<tr class="memitem:a0fd7fb82b0e8996e681537fcaca3c346" id="r_a0fd7fb82b0e8996e681537fcaca3c346"><td class="memItemLeft">static std::vector&lt; bool &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a0fd7fb82b0e8996e681537fcaca3c346">marked_around</a> (const std::vector&lt; pcl::PointXYZ &gt; &amp;points, std::optional&lt; std::pair&lt; double, double &gt; &gt; robot, const std::vector&lt; rclcpp::Parameter &gt; &amp;overrides={}, double *update_distance=nullptr)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="ab458b207913a9d34a760bb61c1613eb4" name="ab458b207913a9d34a760bb61c1613eb4"></a>
@@ -152,6 +153,45 @@ Static Protected Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double *</td>          <td class="paramname"><span class="paramname"><em>min_height</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0fd7fb82b0e8996e681537fcaca3c346" name="a0fd7fb82b0e8996e681537fcaca3c346"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fd7fb82b0e8996e681537fcaca3c346">&#9670;&#160;</a></span>marked_around()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; bool &gt; marked_around </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; pcl::PointXYZ &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>points</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::optional&lt; std::pair&lt; double, double &gt; &gt;</td>          <td class="paramname"><span class="paramname"><em>robot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; rclcpp::Parameter &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>overrides</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *</td>          <td class="paramname"><span class="paramname"><em>update_distance</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
         </tr>
       </table>
   </td>

@@ -120,15 +120,15 @@ Collaboration diagram for ObstacleFilter:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1ObstacleFilter__coll__graph.png" border="0" usemap="#aObstacleFilter_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aObstacleFilter_coll__map" id="aObstacleFilter_coll__map">
-<area shape="rect" title=" " alt="" coords="161,214,264,239"/>
+<area shape="rect" title=" " alt="" coords="161,234,264,260"/>
 <area shape="rect" href="classeasynav_1_1CostmapFilter.html" title=" " alt="" coords="109,117,212,143"/>
-<area shape="poly" title=" " alt="" coords="177,155,208,212,203,214,172,158"/>
+<area shape="poly" title=" " alt="" coords="175,156,210,232,205,235,170,158"/>
 <area shape="rect" title=" " alt="" coords="5,5,180,46"/>
 <area shape="poly" title=" " alt="" coords="102,60,117,91,142,115,138,118,112,95,97,62"/>
 <area shape="rect" title=" " alt="" coords="203,13,256,38"/>
 <area shape="poly" title=" " alt="" coords="223,55,203,95,179,118,175,115,198,91,219,52"/>
 <area shape="rect" title=" " alt="" coords="236,117,296,143"/>
-<area shape="poly" title=" " alt="" coords="254,158,222,214,217,212,249,155"/>
+<area shape="poly" title=" " alt="" coords="256,158,220,235,216,232,252,155"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -146,6 +146,8 @@ Public Member Functions</h2></td></tr>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:af1e2f36252144f016f961d68d3ce9c3f" id="r_af1e2f36252144f016f961d68d3ce9c3f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#af1e2f36252144f016f961d68d3ce9c3f">min_height_</a> {0.1}</td></tr>
 <tr class="memdesc:af1e2f36252144f016f961d68d3ce9c3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points below this height (m, map frame) are ignored: floor hits ("&lt;plugin&gt;.min_height").  <br /></td></tr>
+<tr class="memitem:a5b2a860e1c636772fd6d56e3022318cf" id="r_a5b2a860e1c636772fd6d56e3022318cf"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a5b2a860e1c636772fd6d56e3022318cf">update_distance_</a> {5.0}</td></tr>
+<tr class="memdesc:a5b2a860e1c636772fd6d56e3022318cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Only points within this distance (m) of the robot, along x and along y of the map frame, update the map ("&lt;plugin&gt;.update_distance"); 0 or less: every point does.  <br /></td></tr>
 <tr class="inherit_header pro_attribs_classeasynav_1_1CostmapFilter"><td colspan="2">Protected Attributes inherited from <a class="el" href="classeasynav_1_1CostmapFilter.html">CostmapFilter</a></td></tr>
 <tr class="memitem:a9cb6c9609aa533aa43446fdd36ebbcf0 pro_attribs_classeasynav_1_1CostmapFilter" id="r_a9cb6c9609aa533aa43446fdd36ebbcf0"><td class="memItemLeft">std::weak_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt;&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1CostmapFilter.html#a9cb6c9609aa533aa43446fdd36ebbcf0">parent_node_</a></td></tr>
 <tr class="memitem:a02240f238d46123ab1e8570e39beae0c pro_attribs_classeasynav_1_1CostmapFilter" id="r_a02240f238d46123ab1e8570e39beae0c"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1CostmapFilter.html#a02240f238d46123ab1e8570e39beae0c">plugin_name_</a></td></tr>
@@ -250,6 +252,30 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Points below this height (m, map frame) are ignored: floor hits ("&lt;plugin&gt;.min_height"). </p>
+
+</div>
+</div>
+<a id="a5b2a860e1c636772fd6d56e3022318cf" name="a5b2a860e1c636772fd6d56e3022318cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b2a860e1c636772fd6d56e3022318cf">&#9670;&#160;</a></span>update_distance_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double update_distance_ {5.0}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Only points within this distance (m) of the robot, along x and along y of the map frame, update the map ("&lt;plugin&gt;.update_distance"); 0 or less: every point does. </p>
 
 </div>
 </div>
