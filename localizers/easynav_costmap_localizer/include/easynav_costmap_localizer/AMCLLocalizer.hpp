@@ -22,6 +22,7 @@
 #include <vector>
 #include <random>
 #include <memory>
+#include <mutex>
 
 #include "Eigen/Geometry"
 #include "geometry_msgs/msg/pose_array.hpp"
@@ -188,6 +189,10 @@ protected:
 
   /// List of particles representing the belief distribution.
   std::vector<Particle> particles_;
+
+  /// Guards particles_ and the odometry: update_rt() (predict) and odom_callback() run on the
+  /// real-time thread, update() (correct, reseed) and init_pose_callback() on the other one.
+  std::mutex particles_mutex_;
 
   /// Random number generator used for sampling noise.
   std::mt19937 rng_;
