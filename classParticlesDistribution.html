@@ -110,18 +110,18 @@ Collaboration diagram for ParticlesDistribution:</div>
 <div class="dyncontent">
 <div class="center"><img src="classParticlesDistribution__coll__graph.png" border="0" usemap="#aParticlesDistribution_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aParticlesDistribution_coll__map" id="aParticlesDistribution_coll__map">
-<area shape="rect" title="A set of particles representing one hypothesis about the robot pose." alt="" coords="306,498,443,524"/>
-<area shape="rect" href="structeasynav_1_1mhamcl_1_1ParticlesParams.html" title="Parameters of a hypothesis (a particle set)." alt="" coords="100,394,217,420"/>
-<area shape="poly" title=" " alt="" coords="183,428,211,451,243,472,275,485,309,495,307,500,274,490,241,477,207,456,179,433"/>
-<area shape="rect" title=" " alt="" coords="19,5,58,31"/>
-<area shape="poly" title=" " alt="" coords="33,47,18,108,9,191,9,236,15,280,28,322,49,361,72,382,101,394,99,399,69,386,45,364,23,324,10,281,4,236,3,191,13,108,28,46"/>
-<area shape="rect" title=" " alt="" coords="209,5,268,31"/>
-<area shape="poly" title=" " alt="" coords="284,35,302,53,327,104,338,150,339,193,334,234,321,322,322,371,333,427,350,466,368,496,364,499,345,468,328,428,317,372,316,322,328,234,334,192,333,150,322,106,298,57,280,39"/>
-<area shape="poly" title=" " alt="" coords="195,32,177,42,162,56,151,84,145,125,144,225,152,325,160,393,154,394,146,326,139,225,140,124,146,83,158,54,173,38,193,27"/>
-<area shape="rect" title=" " alt="" coords="395,394,466,420"/>
-<area shape="poly" title=" " alt="" coords="419,435,384,499,379,497,414,432"/>
-<area shape="rect" title=" " alt="" coords="490,387,659,427"/>
-<area shape="poly" title=" " alt="" coords="524,437,399,500,397,496,521,432"/>
+<area shape="rect" title="A set of particles representing one hypothesis about the robot pose." alt="" coords="335,481,473,506"/>
+<area shape="rect" href="structeasynav_1_1mhamcl_1_1ParticlesParams.html" title="Parameters of a hypothesis (a particle set)." alt="" coords="97,375,215,401"/>
+<area shape="poly" title=" " alt="" coords="180,410,207,434,241,454,288,471,335,482,334,487,286,477,238,459,204,438,176,414"/>
+<area shape="rect" title=" " alt="" coords="17,5,55,31"/>
+<area shape="poly" title=" " alt="" coords="30,47,17,105,8,182,9,224,15,265,27,305,46,341,69,362,98,375,96,379,66,366,42,344,22,307,10,266,4,224,3,182,12,104,25,46"/>
+<area shape="rect" title=" " alt="" coords="206,5,266,31"/>
+<area shape="poly" title=" " alt="" coords="281,35,300,53,323,102,332,146,330,188,323,229,315,269,311,312,314,358,330,409,343,430,358,449,390,478,386,482,354,453,338,433,326,411,309,359,306,312,310,269,318,228,325,187,326,147,318,103,295,57,277,39"/>
+<area shape="poly" title=" " alt="" coords="193,32,174,42,160,56,149,83,144,120,143,215,150,310,157,374,152,375,144,310,137,215,138,120,144,81,155,54,171,38,190,27"/>
+<area shape="rect" title=" " alt="" coords="456,375,528,401"/>
+<area shape="poly" title=" " alt="" coords="474,414,416,482,412,479,470,411"/>
+<area shape="rect" title=" " alt="" coords="552,368,720,408"/>
+<area shape="poly" title=" " alt="" coords="583,418,493,459,436,483,434,478,491,454,581,413"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -137,6 +137,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a4a9d6366938e74a0ff9f6829605a91c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weighted mean pose of the particles.  <br /></td></tr>
 <tr class="memitem:a9b22122dcf0279f12a506663e5c29868" id="r_a9b22122dcf0279f12a506663e5c29868"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a9b22122dcf0279f12a506663e5c29868">get_quality</a> () const</td></tr>
 <tr class="memdesc:a9b22122dcf0279f12a506663e5c29868"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quality of the hypothesis, in [0, 1].  <br /></td></tr>
+<tr class="memitem:a56e79372faf4eb81199ea3f2b6ac0233" id="r_a56e79372faf4eb81199ea3f2b6ac0233"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a56e79372faf4eb81199ea3f2b6ac0233">get_smoothed_quality</a> () const</td></tr>
+<tr class="memdesc:a56e79372faf4eb81199ea3f2b6ac0233"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quality averaged over the last corrections (quality_smoothing): what the selection of the hypothesis compares, so a single bad perception (people around) does not count.  <br /></td></tr>
 <tr class="memitem:a432f5bf228b5b22d952e8ef5b0a1d499" id="r_a432f5bf228b5b22d952e8ef5b0a1d499"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a432f5bf228b5b22d952e8ef5b0a1d499">init</a> (const tf2::Transform &amp;pose, double l00, double l10, double l11, double std_yaw, double quality)</td></tr>
 <tr class="memdesc:a432f5bf228b5b22d952e8ef5b0a1d499"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample the particles around a pose.  <br /></td></tr>
 <tr class="memitem:a05e4d6f1b24c4f7e2515ae073b647041" id="r_a05e4d6f1b24c4f7e2515ae073b647041"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a05e4d6f1b24c4f7e2515ae073b647041">init</a> (const tf2::Transform &amp;pose, double std_xy, double std_yaw, double quality)</td></tr>
@@ -165,6 +167,7 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a48306c3daf20ee261fad0a02549ab4ee" id="r_a48306c3daf20ee261fad0a02549ab4ee"><td class="memItemLeft">std::vector&lt; Particle &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a48306c3daf20ee261fad0a02549ab4ee">particles_</a></td></tr>
 <tr class="memitem:a328fc473949bd08cfe060a21128dcb91" id="r_a328fc473949bd08cfe060a21128dcb91"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a328fc473949bd08cfe060a21128dcb91">quality_</a> {0.0}</td></tr>
 <tr class="memitem:ab6c034a34a000f885fb3e423f1efb16e" id="r_ab6c034a34a000f885fb3e423f1efb16e"><td class="memItemLeft">std::mt19937&#160;</td><td class="memItemRight"><a class="el" href="#ab6c034a34a000f885fb3e423f1efb16e">rng_</a></td></tr>
+<tr class="memitem:ace823487e1c39ecc9dfc20c2f3f2d956" id="r_ace823487e1c39ecc9dfc20c2f3f2d956"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ace823487e1c39ecc9dfc20c2f3f2d956">smoothed_quality_</a> {0.0}</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A set of particles representing one hypothesis about the robot pose. </p>
@@ -352,6 +355,25 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Quality of the hypothesis, in [0, 1]. </p>
+
+</div>
+</div>
+<a id="a56e79372faf4eb81199ea3f2b6ac0233" name="a56e79372faf4eb81199ea3f2b6ac0233"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56e79372faf4eb81199ea3f2b6ac0233">&#9670;&#160;</a></span>get_smoothed_quality()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double get_smoothed_quality </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Quality averaged over the last corrections (quality_smoothing): what the selection of the hypothesis compares, so a single bad perception (people around) does not count. </p>
 
 </div>
 </div>
@@ -623,6 +645,28 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::mt19937 rng_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ace823487e1c39ecc9dfc20c2f3f2d956" name="ace823487e1c39ecc9dfc20c2f3f2d956"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace823487e1c39ecc9dfc20c2f3f2d956">&#9670;&#160;</a></span>smoothed_quality_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double smoothed_quality_ {0.0}</td>
         </tr>
       </table>
   </td>

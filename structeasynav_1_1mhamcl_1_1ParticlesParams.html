@@ -112,11 +112,11 @@ Collaboration diagram for ParticlesParams:</div>
 <div class="dyncontent">
 <div class="center"><img src="structeasynav_1_1mhamcl_1_1ParticlesParams__coll__graph.png" border="0" usemap="#aParticlesParams_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aParticlesParams_coll__map" id="aParticlesParams_coll__map">
-<area shape="rect" title="Parameters of a hypothesis (a particle set)." alt="" coords="39,387,156,412"/>
-<area shape="rect" title=" " alt="" coords="18,5,57,31"/>
-<area shape="poly" title=" " alt="" coords="32,46,19,107,9,188,9,232,13,277,24,321,42,361,53,374,67,384,64,388,49,378,37,364,19,322,8,278,3,233,4,188,13,106,27,45"/>
-<area shape="rect" title=" " alt="" coords="128,5,187,31"/>
-<area shape="poly" title=" " alt="" coords="163,46,167,105,167,186,156,276,146,321,131,364,113,388,109,385,126,361,141,319,151,275,161,186,162,106,158,47"/>
+<area shape="rect" title="Parameters of a hypothesis (a particle set)." alt="" coords="37,366,154,392"/>
+<area shape="rect" title=" " alt="" coords="16,5,55,31"/>
+<area shape="poly" title=" " alt="" coords="30,46,18,103,9,179,9,221,13,263,23,303,40,341,51,354,65,364,62,368,47,358,35,344,18,305,8,264,3,221,3,179,12,102,25,45"/>
+<area shape="rect" title=" " alt="" coords="126,5,185,31"/>
+<area shape="poly" title=" " alt="" coords="161,46,164,102,163,178,153,261,143,303,129,344,111,368,107,364,124,341,138,302,148,260,158,177,159,102,156,46"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -140,6 +140,8 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a6fafea3ae99d153018054d4014098bf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotation noise induced by the translation.  <br /></td></tr>
 <tr class="memitem:a1ab054d6bae39bb24a236c93f7e91e6c" id="r_a1ab054d6bae39bb24a236c93f7e91e6c"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a1ab054d6bae39bb24a236c93f7e91e6c">particles_step</a> {30}</td></tr>
 <tr class="memdesc:a1ab054d6bae39bb24a236c93f7e91e6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Particles added/removed per reseed when adapting.  <br /></td></tr>
+<tr class="memitem:a94979539f056d53fcf2d0c368874b974" id="r_a94979539f056d53fcf2d0c368874b974"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a94979539f056d53fcf2d0c368874b974">quality_smoothing</a> {0.2}</td></tr>
+<tr class="memdesc:a94979539f056d53fcf2d0c368874b974"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weight of a new correction in the smoothed quality.  <br /></td></tr>
 <tr class="memitem:ad86fd08ae5bdef610d92ccf778e0d879" id="r_ad86fd08ae5bdef610d92ccf778e0d879"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ad86fd08ae5bdef610d92ccf778e0d879">reseed_noise_xy</a> {0.05}</td></tr>
 <tr class="memdesc:ad86fd08ae5bdef610d92ccf778e0d879"><td class="mdescLeft">&#160;</td><td class="mdescRight">Std dev of the xy noise of a reseeded particle (m).  <br /></td></tr>
 <tr class="memitem:a4a9ff41e041e48c7c9de3928f9ae987a" id="r_a4a9ff41e041e48c7c9de3928f9ae987a"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a4a9ff41e041e48c7c9de3928f9ae987a">reseed_noise_yaw</a> {0.05}</td></tr>
@@ -293,6 +295,22 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Particles added/removed per reseed when adapting. </p>
+
+</div>
+</div>
+<a id="a94979539f056d53fcf2d0c368874b974" name="a94979539f056d53fcf2d0c368874b974"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94979539f056d53fcf2d0c368874b974">&#9670;&#160;</a></span>quality_smoothing</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double quality_smoothing {0.2}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Weight of a new correction in the smoothed quality. </p>
 
 </div>
 </div>

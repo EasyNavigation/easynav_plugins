@@ -9,12 +9,13 @@ var searchData=
   ['diagnosticrecoverymanager_6',['DiagnosticRecoveryManager',['../classeasynav__diagnostic__recovery_1_1DiagnosticRecoveryManager.html#ac03487ab7e08530b06eefdafebf2981b',1,'easynav_diagnostic_recovery::DiagnosticRecoveryManager']]],
   ['differentiatemeasurements_7',['differentiateMeasurements',['../classrobot__localization_1_1UkfWrapper.html#a7432a041997a0b73cd0ad0b6e611768e',1,'robot_localization::UkfWrapper']]],
   ['distance_8',['distance',['../classRppObstacleAreaTest.html#a1b2cccc52cf6a1a12597fa9ba0a20d7b',1,'RppObstacleAreaTest']]],
-  ['distancelookup_9',['distanceLookup',['../classeasynav_1_1InflationFilter.html#a0fde2f26bec05814c7b326aaff70ef66',1,'easynav::InflationFilter']]],
-  ['dot_10',['dot',['../namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c',1,'easynav']]],
-  ['downsample_11',['downsample',['../classeasynav_1_1SimpleMap.html#a8003818b926704676807e09627104419',1,'easynav::SimpleMap']]],
-  ['downsample_5ffactor_12',['downsample_factor',['../classeasynav_1_1SimpleMap.html#a1a0cf16c76126608b5e664df7b5cb3bd',1,'easynav::SimpleMap']]],
-  ['drive_13',['drive',['../classFusionTerrainTest.html#aa74e460668b1ee65acb74a09fd9b5af0',1,'FusionTerrainTest']]],
-  ['dummyevaluator_14',['DummyEvaluator',['../classeasynav__diagnostic__recovery_1_1DummyEvaluator.html#a9ae85b1a2ea5906c3a16584c286e1ea2',1,'easynav_diagnostic_recovery::DummyEvaluator']]],
-  ['dummymitigation_15',['DummyMitigation',['../classeasynav__diagnostic__recovery_1_1DummyMitigation.html#a26ac8830cfe0b5a4d9a30e2bae2ecb44',1,'easynav_diagnostic_recovery::DummyMitigation']]],
-  ['dummysafetyreflex_16',['DummySafetyReflex',['../classeasynav__diagnostic__recovery_1_1DummySafetyReflex.html#ae66a28b70ec5710470c74ed433c5d697',1,'easynav_diagnostic_recovery::DummySafetyReflex']]]
+  ['distance_5fto_5fobstacle_9',['distance_to_obstacle',['../classeasynav_1_1mhamcl_1_1MapMatcher.html#a9a205ba5b40dc196318e6d207135ef03',1,'easynav::mhamcl::MapMatcher::distance_to_obstacle()'],['../classMapMatcher.html#a9a205ba5b40dc196318e6d207135ef03',1,'MapMatcher::distance_to_obstacle()']]],
+  ['distancelookup_10',['distanceLookup',['../classeasynav_1_1InflationFilter.html#a0fde2f26bec05814c7b326aaff70ef66',1,'easynav::InflationFilter']]],
+  ['dot_11',['dot',['../namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c',1,'easynav']]],
+  ['downsample_12',['downsample',['../classeasynav_1_1SimpleMap.html#a8003818b926704676807e09627104419',1,'easynav::SimpleMap']]],
+  ['downsample_5ffactor_13',['downsample_factor',['../classeasynav_1_1SimpleMap.html#a1a0cf16c76126608b5e664df7b5cb3bd',1,'easynav::SimpleMap']]],
+  ['drive_14',['drive',['../classFusionTerrainTest.html#aa74e460668b1ee65acb74a09fd9b5af0',1,'FusionTerrainTest']]],
+  ['dummyevaluator_15',['DummyEvaluator',['../classeasynav__diagnostic__recovery_1_1DummyEvaluator.html#a9ae85b1a2ea5906c3a16584c286e1ea2',1,'easynav_diagnostic_recovery::DummyEvaluator']]],
+  ['dummymitigation_16',['DummyMitigation',['../classeasynav__diagnostic__recovery_1_1DummyMitigation.html#a26ac8830cfe0b5a4d9a30e2bae2ecb44',1,'easynav_diagnostic_recovery::DummyMitigation']]],
+  ['dummysafetyreflex_17',['DummySafetyReflex',['../classeasynav__diagnostic__recovery_1_1DummySafetyReflex.html#ae66a28b70ec5710470c74ed433c5d697',1,'easynav_diagnostic_recovery::DummySafetyReflex']]]
 ];

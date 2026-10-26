@@ -1,14 +1,14 @@
 <map id="ParticlesDistribution" name="ParticlesDistribution">
-<area shape="rect" id="Node000001" title="A set of particles representing one hypothesis about the robot pose." alt="" coords="306,498,443,524"/>
-<area shape="rect" id="Node000002" href="$structeasynav_1_1mhamcl_1_1ParticlesParams.html" title="Parameters of a hypothesis (a particle set)." alt="" coords="100,394,217,420"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,428,211,451,243,472,275,485,309,495,307,500,274,490,241,477,207,456,179,433"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,58,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="33,47,18,108,9,191,9,236,15,280,28,322,49,361,72,382,101,394,99,399,69,386,45,364,23,324,10,281,4,236,3,191,13,108,28,46"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="209,5,268,31"/>
-<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="284,35,302,53,327,104,338,150,339,193,334,234,321,322,322,371,333,427,350,466,368,496,364,499,345,468,328,428,317,372,316,322,328,234,334,192,333,150,322,106,298,57,280,39"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="195,32,177,42,162,56,151,84,145,125,144,225,152,325,160,393,154,394,146,326,139,225,140,124,146,83,158,54,173,38,193,27"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="395,394,466,420"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="419,435,384,499,379,497,414,432"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="490,387,659,427"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="524,437,399,500,397,496,521,432"/>
+<area shape="rect" id="Node000001" title="A set of particles representing one hypothesis about the robot pose." alt="" coords="335,481,473,506"/>
+<area shape="rect" id="Node000002" href="$structeasynav_1_1mhamcl_1_1ParticlesParams.html" title="Parameters of a hypothesis (a particle set)." alt="" coords="97,375,215,401"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,410,207,434,241,454,288,471,335,482,334,487,286,477,238,459,204,438,176,414"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="17,5,55,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="30,47,17,105,8,182,9,224,15,265,27,305,46,341,69,362,98,375,96,379,66,366,42,344,22,307,10,266,4,224,3,182,12,104,25,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="206,5,266,31"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="281,35,300,53,323,102,332,146,330,188,323,229,315,269,311,312,314,358,330,409,343,430,358,449,390,478,386,482,354,453,338,433,326,411,309,359,306,312,310,269,318,228,325,187,326,147,318,103,295,57,277,39"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="193,32,174,42,160,56,149,83,144,120,143,215,150,310,157,374,152,375,144,310,137,215,138,120,144,81,155,54,171,38,190,27"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="456,375,528,401"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="474,414,416,482,412,479,470,411"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="552,368,720,408"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="583,418,493,459,436,483,434,478,491,454,581,413"/>
 </map>
