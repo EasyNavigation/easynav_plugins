@@ -155,8 +155,12 @@ protected:
   /// @brief How well the particles explain the sensors (see LocalizationQuality).
   LocalizationQuality quality_;
 
-  /// @brief At most this share of the particles is placed at random in a reseed.
-  double random_particles_max_fraction_ {0.25};
+  /// @brief At most this share of the particles is placed at random in a reseed (0: never).
+  double random_particles_max_fraction_ {0.0};
+
+  /// @brief The estimate is the weighted mean of the particles within this distance (m) of the
+  /// densest one: far particles (e.g. random ones) never drag it to a point in between.
+  double estimate_cluster_radius_ {1.0};
 
   /// TF broadcaster to publish map to base_footprint transform.
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;

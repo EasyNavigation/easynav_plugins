@@ -18,7 +18,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numeric>
 #include <random>
+#include <vector>
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
@@ -258,6 +260,9 @@ AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".recovery_alpha_fast", alpha_fast);
   node->get_parameter<double>(
     plugin_name + ".random_particles_max_fraction", random_particles_max_fraction_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".estimate_cluster_radius", estimate_cluster_radius_);
+  node->get_parameter<double>(plugin_name + ".estimate_cluster_radius", estimate_cluster_radius_);
   random_particles_max_fraction_ = std::clamp(random_particles_max_fraction_, 0.0, 0.5);
   quality_ = LocalizationQuality(alpha_slow, alpha_fast);
   node->get_parameter<bool>(plugin_name + ".compute_odom_from_tf", compute_odom_from_tf_);
@@ -697,12 +702,14 @@ AMCLLocalizer::correct(NavState & nav_state)
     for (const auto & pt : filtered) {
       tf2::Vector3 pt_world = particle.pose * tf2::Vector3(pt.x, pt.y, pt.z);
 
+      // A point out of the map is a miss: otherwise a particle near the border, with few
+      // points on the map, could match them all.
+      ++possible_hits;
       unsigned int cx, cy;
       if (!map_static.worldToMap(pt_world.x(), pt_world.y(), cx, cy)) {
         continue;
       }
 
-      ++possible_hits;
       uint8_t cost = map_static.getCost(cx, cy);
       if (cost == easynav::LETHAL_OBSTACLE) {
         ++hits;
@@ -804,7 +811,6 @@ AMCLLocalizer::reseed(const Costmap2D * map, std::size_t n_random)
     std::uniform_int_distribution<unsigned int> cell_x(0, map->getSizeInCellsX() - 1);
     std::uniform_int_distribution<unsigned int> cell_y(0, map->getSizeInCellsY() - 1);
     std::uniform_real_distribution<double> any_yaw(-M_PI, M_PI);
-    const double min_weight = particles_[N_top - 1].weight;
     std::size_t placed = 0;
     for (std::size_t tries = 0; placed < n_random && tries < 100 * n_random; ++tries) {
       const unsigned int cx = cell_x(rng_), cy = cell_y(rng_);
@@ -817,7 +823,7 @@ AMCLLocalizer::reseed(const Costmap2D * map, std::size_t n_random)
       auto & p = particles_[N - 1 - placed];
       p.pose.setOrigin(tf2::Vector3(wx, wy, 0.0));
       p.pose.setRotation(q);
-      p.weight = min_weight;
+      p.weight = 0.0;  // no say in the estimate until the scans confirm it
       ++placed;
     }
   }
@@ -881,20 +887,49 @@ AMCLLocalizer::getEstimatedPose() const
     return tf2::Transform::getIdentity();
   }
 
-  const std::size_t N = particles_.size();
-  const std::size_t N_top = N / 2;
+  // The densest place: the particle with the most weight within estimate_cluster_radius
+  const double r2 = estimate_cluster_radius_ * estimate_cluster_radius_;
+  auto near = [r2](const Particle & a, const Particle & b) {
+      return (a.pose.getOrigin() - b.pose.getOrigin()).length2() <= r2;
+    };
+  // Candidates to center: the heaviest particles (linear cost in the number of particles)
+  std::vector<std::size_t> order(particles_.size());
+  std::iota(order.begin(), order.end(), 0);
+  const std::size_t n_centers = std::min<std::size_t>(order.size(), 20);
+  std::partial_sort(
+    order.begin(), order.begin() + static_cast<std::ptrdiff_t>(n_centers), order.end(),
+    [this](std::size_t a, std::size_t b) {return particles_[a].weight > particles_[b].weight;});
+  std::size_t center = order[0];
+  double best_mass = -1.0;
+  for (std::size_t k = 0; k < n_centers; ++k) {
+    const std::size_t i = order[k];
+    double mass = 0.0;
+    for (const auto & other : particles_) {
+      if (near(particles_[i], other)) {mass += other.weight;}
+    }
+    // Ties (e.g. all weights equal) go to the heavier particle
+    if (mass > best_mass ||
+      (mass == best_mass && particles_[i].weight > particles_[center].weight))
+    {
+      best_mass = mass;
+      center = i;
+    }
+  }
 
-  std::vector<Particle> sorted_particles = particles_;
-  std::sort(
-    sorted_particles.begin(), sorted_particles.end(),
-    [](const Particle & a, const Particle & b) {
-      return a.weight > b.weight;
-    });
-
-  tf2::Vector3 mean = computeMean(sorted_particles, 0, N_top);
+  // Its weighted mean position, and the heading of its best particle
+  tf2::Vector3 sum(0.0, 0.0, 0.0);
+  double total = 0.0;
+  std::size_t best = center;
+  for (std::size_t i = 0; i < particles_.size(); ++i) {
+    if (!near(particles_[center], particles_[i])) {continue;}
+    sum += particles_[i].pose.getOrigin() * particles_[i].weight;
+    total += particles_[i].weight;
+    if (particles_[i].weight > particles_[best].weight) {best = i;}
+  }
+  const tf2::Vector3 mean = total > 0.0 ? sum / total : particles_[center].pose.getOrigin();
 
   double roll, pitch, yaw;
-  tf2::Matrix3x3(sorted_particles[0].pose.getRotation()).getRPY(roll, pitch, yaw);
+  tf2::Matrix3x3(particles_[best].pose.getRotation()).getRPY(roll, pitch, yaw);
   tf2::Quaternion q;
   q.setRPY(0.0, 0.0, yaw);
 
