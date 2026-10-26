@@ -1,0 +1,9 @@
+<map id="NavMapTerrain::Result" name="NavMapTerrain::Result">
+<area shape="rect" id="Node000001" title="The pose placed on the surface." alt="" coords="54,102,208,128"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,65,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,40,121,99,117,103,56,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="89,5,173,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="134,46,134,101,128,101,128,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="207,5,252,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="223,47,214,64,202,80,185,94,166,104,164,99,182,89,198,76,210,61,218,45"/>
+</map>

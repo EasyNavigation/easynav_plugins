@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div id="doc-content">
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
@@ -111,72 +112,79 @@ Collaboration diagram for UkfWrapper:</div>
 <div class="dyncontent">
 <div class="center"><img src="classrobot__localization_1_1UkfWrapper__coll__graph.png" border="0" usemap="#aUkfWrapper_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aUkfWrapper_coll__map" id="aUkfWrapper_coll__map">
-<area shape="rect" title=" " alt="" coords="484,1842,574,1868"/>
+<area shape="rect" title=" " alt="" coords="484,1850,574,1876"/>
 <area shape="rect" title=" " alt="" coords="73,41,185,67"/>
-<area shape="poly" title=" " alt="" coords="198,35,262,27,333,28,369,34,403,44,434,61,462,84,474,114,484,174,500,366,512,630,520,930,528,1510,530,1842,525,1842,523,1510,515,930,507,630,495,367,478,175,468,116,457,87,431,65,401,49,367,39,332,33,262,32,199,40"/>
-<area shape="rect" title=" " alt="" coords="106,461,152,487"/>
-<area shape="poly" title=" " alt="" coords="168,472,337,481,418,490,446,496,462,504,471,527,479,572,493,717,505,915,514,1142,525,1583,530,1842,525,1842,520,1583,508,1142,499,915,488,717,474,573,466,529,458,508,444,501,417,495,337,486,167,477"/>
-<area shape="rect" title=" " alt="" coords="110,576,148,601"/>
-<area shape="poly" title=" " alt="" coords="164,587,334,595,417,604,445,611,462,619,470,640,478,681,491,812,512,1200,525,1603,530,1842,525,1842,519,1603,507,1200,486,813,473,681,465,641,458,622,444,616,416,610,334,601,163,592"/>
-<area shape="rect" title=" " alt="" coords="99,732,159,757"/>
-<area shape="poly" title=" " alt="" coords="174,743,342,751,419,760,446,766,461,773,476,798,488,839,506,959,519,1117,526,1294,531,1637,530,1842,525,1842,526,1637,521,1294,513,1117,501,959,482,840,471,800,458,777,444,771,418,765,341,756,174,748"/>
-<area shape="rect" title=" " alt="" coords="94,846,164,872"/>
-<area shape="poly" title=" " alt="" coords="180,858,345,866,420,875,447,881,461,888,474,910,485,946,502,1053,515,1193,523,1351,530,1656,530,1842,525,1842,524,1656,517,1351,509,1193,497,1053,480,947,469,912,458,892,445,886,420,880,345,871,179,863"/>
-<area shape="rect" title=" " alt="" coords="102,1062,156,1088"/>
-<area shape="poly" title=" " alt="" coords="171,1073,339,1082,418,1090,446,1096,461,1104,472,1121,481,1149,496,1230,507,1337,516,1458,526,1694,530,1842,525,1842,521,1694,511,1459,502,1338,490,1231,475,1150,467,1123,458,1108,444,1101,417,1096,339,1087,171,1079"/>
-<area shape="rect" title=" " alt="" coords="93,1116,165,1141"/>
-<area shape="poly" title=" " alt="" coords="181,1127,346,1136,421,1144,447,1150,461,1157,471,1173,480,1198,494,1274,505,1373,514,1484,525,1703,530,1842,525,1842,520,1703,509,1485,500,1373,489,1274,474,1200,466,1175,458,1161,445,1155,420,1149,345,1141,180,1132"/>
-<area shape="rect" title=" " alt="" coords="91,1169,167,1195"/>
-<area shape="poly" title=" " alt="" coords="182,1181,347,1190,421,1199,447,1205,461,1212,470,1226,478,1250,492,1319,512,1512,524,1713,530,1842,524,1842,519,1713,507,1512,487,1319,473,1251,466,1229,458,1216,445,1210,420,1204,346,1195,182,1186"/>
-<area shape="rect" title=" " alt="" coords="93,1264,165,1289"/>
-<area shape="poly" title=" " alt="" coords="181,1275,346,1284,421,1292,446,1298,462,1305,476,1337,489,1395,509,1559,523,1730,530,1842,524,1842,518,1731,504,1560,484,1396,471,1339,458,1309,445,1303,420,1298,345,1289,180,1280"/>
-<area shape="rect" title=" " alt="" coords="63,1317,195,1343"/>
-<area shape="poly" title=" " alt="" coords="211,1329,363,1338,427,1346,461,1357,475,1374,486,1396,503,1453,516,1523,524,1599,531,1746,530,1842,525,1842,525,1746,519,1600,511,1524,498,1454,481,1398,470,1377,458,1361,426,1351,363,1343,210,1335"/>
-<area shape="rect" title=" " alt="" coords="104,1481,154,1507"/>
-<area shape="poly" title=" " alt="" coords="170,1494,338,1509,418,1520,445,1527,461,1535,478,1558,492,1594,512,1684,524,1776,529,1841,524,1842,518,1777,506,1685,486,1595,473,1561,458,1539,444,1532,417,1526,338,1514,170,1499"/>
-<area shape="rect" title=" " alt="" coords="23,1531,235,1587"/>
-<area shape="poly" title=" " alt="" coords="251,1561,382,1570,433,1577,461,1586,476,1606,489,1635,508,1709,522,1786,529,1842,523,1842,516,1787,503,1710,484,1636,471,1608,458,1591,432,1582,382,1575,251,1566"/>
-<area shape="rect" title=" " alt="" coords="61,1612,197,1637"/>
-<area shape="poly" title=" " alt="" coords="212,1616,281,1614,354,1616,418,1624,443,1631,461,1641,483,1663,500,1689,512,1717,521,1746,529,1802,531,1842,525,1842,524,1802,515,1747,507,1719,495,1691,479,1666,458,1645,441,1636,417,1629,353,1621,281,1620,212,1622"/>
-<area shape="rect" title=" " alt="" coords="60,1680,198,1721"/>
-<area shape="poly" title=" " alt="" coords="214,1704,364,1718,426,1727,461,1737,487,1760,506,1789,527,1841,522,1843,501,1792,483,1764,458,1742,425,1732,363,1723,214,1709"/>
-<area shape="rect" title=" " alt="" coords="51,1746,207,1786"/>
-<area shape="poly" title=" " alt="" coords="222,1763,357,1769,417,1776,461,1787,479,1798,496,1812,520,1840,516,1844,492,1816,476,1803,459,1792,416,1781,356,1774,222,1768"/>
-<area shape="rect" title=" " alt="" coords="96,1842,162,1868"/>
-<area shape="poly" title=" " alt="" coords="178,1853,483,1853,483,1858,178,1858"/>
-<area shape="rect" title=" " alt="" coords="94,1896,164,1921"/>
-<area shape="poly" title=" " alt="" coords="179,1907,307,1903,384,1895,459,1881,500,1866,502,1871,460,1886,384,1900,308,1908,180,1912"/>
-<area shape="rect" title=" " alt="" coords="61,1983,197,2024"/>
-<area shape="poly" title=" " alt="" coords="212,2014,270,2017,334,2014,399,2001,430,1989,458,1974,483,1951,502,1921,522,1868,527,1870,507,1924,487,1954,461,1978,432,1994,401,2006,335,2020,270,2023,212,2019"/>
-<area shape="rect" title=" " alt="" coords="51,2065,207,2091"/>
-<area shape="poly" title=" " alt="" coords="222,2084,290,2088,359,2088,419,2082,442,2076,458,2067,479,2046,496,2021,508,1993,516,1964,524,1909,525,1869,531,1869,530,1910,521,1966,513,1995,500,2024,483,2050,461,2071,443,2081,420,2087,359,2093,289,2093,222,2090"/>
-<area shape="rect" title=" " alt="" coords="51,2118,207,2144"/>
-<area shape="poly" title=" " alt="" coords="222,2137,290,2140,359,2140,419,2133,442,2126,458,2118,472,2100,484,2073,503,2000,517,1923,524,1868,529,1869,522,1924,509,2001,489,2074,476,2103,461,2122,444,2131,420,2138,359,2145,290,2146,222,2142"/>
-<area shape="rect" title=" " alt="" coords="42,2169,216,2195"/>
-<area shape="poly" title=" " alt="" coords="231,2189,298,2192,364,2192,421,2185,443,2178,458,2170,474,2148,487,2114,507,2025,519,1933,524,1868,529,1869,524,1933,513,2026,492,2116,478,2151,461,2174,445,2183,422,2190,365,2197,298,2198,231,2195"/>
-<area shape="rect" title=" " alt="" coords="38,2219,220,2260"/>
-<area shape="poly" title=" " alt="" coords="235,2245,301,2247,366,2245,422,2237,443,2230,458,2222,476,2196,491,2155,502,2105,511,2050,521,1942,525,1868,530,1869,526,1943,516,2051,507,2106,496,2157,481,2198,461,2225,445,2235,423,2243,367,2251,301,2253,235,2251"/>
-<area shape="rect" title=" " alt="" coords="53,2292,205,2333"/>
-<area shape="poly" title=" " alt="" coords="221,2318,289,2322,359,2321,419,2313,442,2306,458,2297,469,2283,479,2265,496,2215,508,2154,516,2086,524,1955,525,1868,530,1868,529,1956,521,2087,513,2155,501,2216,484,2267,474,2286,461,2301,444,2311,421,2318,360,2326,289,2327,221,2324"/>
-<area shape="rect" title=" " alt="" coords="89,2618,169,2644"/>
-<area shape="poly" title=" " alt="" coords="184,2634,257,2640,339,2641,412,2634,439,2626,458,2615,467,2600,476,2573,491,2491,503,2382,512,2259,522,2019,525,1869,530,1869,527,2019,517,2259,508,2383,497,2492,481,2574,472,2602,462,2619,441,2631,413,2639,339,2646,257,2645,184,2640"/>
-<area shape="rect" title=" " alt="" coords="97,2668,161,2693"/>
-<area shape="poly" title=" " alt="" coords="176,2684,249,2691,333,2695,409,2690,438,2682,458,2671,468,2654,478,2625,493,2537,505,2419,514,2287,523,2028,525,1868,530,1868,528,2028,519,2287,510,2420,499,2537,483,2627,473,2657,462,2675,440,2687,410,2695,333,2700,248,2696,176,2689"/>
-<area shape="rect" title=" " alt="" coords="45,2718,213,2758"/>
-<area shape="poly" title=" " alt="" coords="213,2760,274,2770,340,2771,373,2766,404,2758,432,2744,458,2724,469,2706,479,2675,495,2580,507,2455,515,2313,523,2038,525,1868,530,1869,529,2038,520,2314,512,2455,500,2581,484,2676,474,2709,462,2728,435,2748,405,2763,374,2772,340,2776,274,2775,213,2765"/>
-<area shape="rect" title=" " alt="" coords="53,2783,205,2824"/>
-<area shape="poly" title=" " alt="" coords="220,2813,289,2820,359,2822,420,2816,442,2810,458,2800,470,2781,481,2747,498,2643,510,2506,518,2352,525,2052,525,1869,530,1869,530,2052,523,2352,515,2507,503,2644,486,2748,475,2783,462,2804,444,2815,421,2822,360,2827,289,2825,220,2819"/>
-<area shape="rect" title=" " alt="" coords="108,2848,150,2873"/>
-<area shape="poly" title=" " alt="" coords="166,2863,238,2870,326,2875,407,2870,437,2863,458,2851,470,2830,481,2794,499,2685,512,2540,519,2377,525,2060,525,1869,530,1869,531,2060,525,2377,517,2540,505,2685,487,2795,475,2832,462,2855,439,2868,407,2875,326,2880,238,2876,165,2868"/>
-<area shape="rect" title=" " alt="" coords="89,2897,169,2923"/>
-<area shape="poly" title=" " alt="" coords="184,2915,257,2923,339,2927,412,2922,439,2915,458,2904,464,2889,471,2855,484,2745,504,2418,518,2075,524,1868,530,1868,524,2075,510,2418,489,2745,476,2856,469,2890,462,2908,441,2920,413,2927,339,2932,256,2928,184,2920"/>
-<area shape="rect" title=" " alt="" coords="5,2947,253,2988"/>
-<area shape="poly" title=" " alt="" coords="268,2979,327,2981,383,2979,429,2971,446,2965,458,2957,465,2940,472,2905,485,2788,505,2444,519,2085,525,1869,530,1869,524,2085,510,2445,490,2789,477,2905,470,2942,462,2960,448,2969,430,2976,383,2984,327,2986,268,2984"/>
-<area shape="rect" title=" " alt="" coords="45,3012,213,3053"/>
-<area shape="poly" title=" " alt="" coords="224,3054,283,3061,347,3059,377,3053,407,3043,434,3029,458,3010,465,2992,472,2955,485,2832,506,2471,519,2094,525,1868,530,1869,524,2094,511,2471,490,2833,477,2956,470,2994,462,3013,437,3034,409,3048,379,3058,347,3064,283,3066,223,3059"/>
+<area shape="poly" title=" " alt="" coords="198,35,262,27,333,28,369,34,403,44,434,61,462,84,474,114,484,174,500,368,512,632,520,934,529,1517,530,1850,525,1850,523,1517,515,934,507,632,495,368,478,175,468,116,457,87,431,65,401,49,367,39,332,33,262,32,199,40"/>
+<area shape="rect" title=" " alt="" coords="106,460,152,485"/>
+<area shape="poly" title=" " alt="" coords="168,471,337,481,418,491,446,497,462,505,471,529,479,574,493,719,505,918,514,1146,525,1589,530,1850,525,1850,520,1589,508,1146,499,919,488,720,474,574,466,530,458,509,444,502,417,496,337,486,167,476"/>
+<area shape="rect" title=" " alt="" coords="40,510,218,550"/>
+<area shape="poly" title=" " alt="" coords="233,530,375,539,431,547,462,559,471,581,479,624,492,764,504,955,513,1173,525,1599,530,1850,525,1850,520,1599,508,1174,499,955,487,764,473,625,466,582,458,562,430,552,374,545,233,535"/>
+<area shape="rect" title=" " alt="" coords="110,630,148,656"/>
+<area shape="poly" title=" " alt="" coords="164,641,334,650,416,659,445,665,462,673,470,694,477,733,491,860,511,1232,524,1619,530,1850,525,1850,519,1619,506,1232,485,860,472,734,465,695,458,677,444,670,416,664,334,655,163,647"/>
+<area shape="rect" title=" " alt="" coords="99,786,159,812"/>
+<area shape="poly" title=" " alt="" coords="174,798,342,806,419,814,446,820,461,828,475,852,487,890,505,1005,517,1156,525,1325,531,1652,530,1850,525,1850,525,1652,519,1325,512,1156,499,1006,481,892,470,854,458,832,444,825,418,820,341,811,174,803"/>
+<area shape="rect" title=" " alt="" coords="94,901,164,927"/>
+<area shape="poly" title=" " alt="" coords="180,912,345,921,420,929,447,935,461,943,474,964,484,998,501,1099,513,1232,521,1382,529,1672,530,1850,525,1850,524,1672,516,1382,508,1232,496,1100,479,999,469,966,458,946,445,940,420,935,345,926,179,918"/>
+<area shape="rect" title=" " alt="" coords="102,1117,156,1143"/>
+<area shape="poly" title=" " alt="" coords="171,1128,339,1136,418,1145,446,1151,461,1159,471,1175,480,1200,494,1276,506,1377,514,1490,526,1711,530,1850,525,1850,520,1711,509,1490,500,1377,489,1277,475,1202,466,1177,458,1163,444,1156,417,1150,339,1142,171,1133"/>
+<area shape="rect" title=" " alt="" coords="93,1170,165,1196"/>
+<area shape="poly" title=" " alt="" coords="181,1182,346,1190,421,1199,447,1205,461,1212,471,1227,479,1250,492,1320,513,1516,525,1720,530,1850,524,1850,519,1720,507,1517,487,1321,473,1252,466,1229,458,1216,445,1210,420,1204,345,1196,180,1187"/>
+<area shape="rect" title=" " alt="" coords="91,1224,167,1249"/>
+<area shape="poly" title=" " alt="" coords="182,1235,347,1245,421,1254,447,1259,461,1267,470,1280,477,1302,490,1365,511,1544,524,1730,530,1850,524,1850,518,1730,506,1544,485,1366,472,1303,465,1282,458,1271,445,1264,420,1259,346,1250,182,1241"/>
+<area shape="rect" title=" " alt="" coords="93,1318,165,1344"/>
+<area shape="poly" title=" " alt="" coords="181,1330,346,1338,420,1347,446,1353,461,1360,475,1377,486,1399,504,1457,516,1527,524,1605,531,1753,530,1850,525,1850,525,1753,519,1605,511,1528,499,1458,481,1401,470,1379,458,1364,445,1358,420,1352,345,1344,180,1335"/>
+<area shape="rect" title=" " alt="" coords="63,1372,195,1397"/>
+<area shape="poly" title=" " alt="" coords="211,1384,363,1392,427,1400,461,1412,473,1427,484,1446,500,1498,513,1561,521,1629,529,1762,530,1850,525,1850,524,1762,516,1630,507,1561,495,1499,479,1449,469,1430,458,1416,426,1406,362,1398,210,1389"/>
+<area shape="rect" title=" " alt="" coords="104,1536,154,1561"/>
+<area shape="poly" title=" " alt="" coords="170,1549,338,1564,417,1575,445,1582,461,1589,476,1609,489,1639,508,1715,522,1793,529,1850,524,1850,516,1794,503,1716,484,1640,471,1612,458,1593,444,1587,416,1580,337,1569,170,1554"/>
+<area shape="rect" title=" " alt="" coords="23,1586,235,1642"/>
+<area shape="poly" title=" " alt="" coords="251,1615,382,1625,433,1632,461,1641,484,1664,500,1691,513,1721,521,1751,530,1809,531,1850,525,1850,524,1809,516,1753,508,1723,496,1694,479,1667,458,1645,432,1637,381,1630,250,1621"/>
+<area shape="rect" title=" " alt="" coords="61,1666,197,1692"/>
+<area shape="poly" title=" " alt="" coords="212,1671,281,1669,354,1671,417,1678,442,1685,461,1694,479,1711,494,1730,514,1774,525,1817,529,1850,524,1850,520,1818,509,1776,489,1733,475,1714,458,1699,441,1690,416,1684,353,1676,281,1675,213,1676"/>
+<area shape="rect" title=" " alt="" coords="60,1735,198,1776"/>
+<area shape="poly" title=" " alt="" coords="214,1757,352,1770,416,1780,461,1794,496,1820,520,1848,516,1852,492,1824,458,1799,415,1786,352,1775,213,1762"/>
+<area shape="rect" title=" " alt="" coords="51,1800,207,1841"/>
+<area shape="poly" title=" " alt="" coords="222,1820,336,1827,460,1842,484,1847,483,1852,459,1847,335,1832,222,1825"/>
+<area shape="rect" title=" " alt="" coords="96,1897,162,1923"/>
+<area shape="poly" title=" " alt="" coords="178,1917,236,1926,307,1930,384,1927,422,1921,459,1911,489,1895,513,1874,517,1879,492,1899,461,1916,423,1926,385,1932,307,1936,236,1931,177,1922"/>
+<area shape="rect" title=" " alt="" coords="94,1950,164,1976"/>
+<area shape="poly" title=" " alt="" coords="180,1973,239,1984,311,1989,387,1983,424,1973,458,1959,481,1941,499,1919,521,1875,525,1878,503,1922,485,1945,461,1963,426,1978,388,1988,311,1995,239,1989,179,1979"/>
+<area shape="rect" title=" " alt="" coords="61,2038,197,2078"/>
+<area shape="poly" title=" " alt="" coords="212,2066,281,2073,353,2076,416,2072,441,2066,458,2058,478,2039,494,2017,514,1965,523,1914,525,1876,530,1876,528,1915,519,1966,499,2019,482,2043,461,2062,442,2071,417,2077,353,2081,281,2078,212,2072"/>
+<area shape="rect" title=" " alt="" coords="51,2120,207,2145"/>
+<area shape="poly" title=" " alt="" coords="222,2140,290,2145,359,2145,419,2139,442,2133,458,2124,472,2107,484,2080,504,2007,517,1931,524,1876,529,1877,522,1932,509,2008,489,2082,476,2110,461,2129,444,2138,420,2145,359,2151,290,2150,222,2145"/>
+<area shape="rect" title=" " alt="" coords="51,2173,207,2199"/>
+<area shape="poly" title=" " alt="" coords="222,2193,290,2197,359,2197,419,2190,442,2184,458,2175,474,2154,487,2120,507,2032,519,1941,524,1876,529,1877,524,1941,512,2033,492,2122,478,2156,461,2179,444,2189,420,2196,360,2202,290,2202,222,2198"/>
+<area shape="rect" title=" " alt="" coords="42,2224,216,2249"/>
+<area shape="poly" title=" " alt="" coords="232,2245,298,2249,364,2249,421,2242,443,2236,458,2227,476,2201,491,2162,502,2112,511,2057,521,1950,525,1876,530,1876,526,1950,516,2058,507,2113,496,2163,481,2204,461,2231,445,2241,422,2247,365,2254,298,2254,231,2250"/>
+<area shape="rect" title=" " alt="" coords="38,2274,220,2314"/>
+<area shape="poly" title=" " alt="" coords="235,2301,301,2304,366,2302,422,2295,443,2288,458,2279,478,2249,494,2203,506,2145,514,2082,523,1959,525,1876,530,1876,528,1959,519,2083,511,2146,499,2204,483,2252,462,2283,445,2293,423,2300,367,2308,301,2309,235,2306"/>
+<area shape="rect" title=" " alt="" coords="53,2347,205,2388"/>
+<area shape="poly" title=" " alt="" coords="221,2374,289,2377,359,2377,419,2369,442,2362,458,2353,470,2338,481,2317,499,2261,511,2193,519,2117,525,1972,525,1876,531,1876,531,1972,524,2117,516,2193,504,2263,486,2319,475,2341,461,2357,444,2367,421,2374,360,2382,289,2382,221,2379"/>
+<area shape="rect" title=" " alt="" coords="89,2673,169,2699"/>
+<area shape="poly" title=" " alt="" coords="184,2689,257,2695,339,2697,412,2690,439,2682,458,2671,468,2655,477,2626,493,2538,505,2422,513,2290,522,2035,525,1876,530,1876,528,2035,519,2291,510,2422,498,2539,482,2627,473,2657,462,2675,441,2687,413,2695,339,2702,257,2700,184,2695"/>
+<area shape="rect" title=" " alt="" coords="97,2722,161,2748"/>
+<area shape="poly" title=" " alt="" coords="176,2739,249,2746,333,2749,410,2744,438,2737,458,2726,469,2708,479,2677,495,2583,507,2459,515,2318,523,2045,525,1876,530,1876,529,2045,520,2318,512,2459,500,2584,484,2678,474,2710,462,2729,440,2742,410,2749,333,2755,248,2751,176,2744"/>
+<area shape="rect" title=" " alt="" coords="45,2772,213,2813"/>
+<area shape="poly" title=" " alt="" coords="213,2814,274,2824,340,2826,372,2821,403,2812,432,2799,458,2779,469,2760,480,2727,496,2627,509,2494,517,2345,524,2054,525,1877,530,1877,529,2054,522,2345,514,2495,502,2627,485,2728,474,2762,462,2783,435,2803,405,2817,373,2826,340,2831,273,2830,212,2820"/>
+<area shape="rect" title=" " alt="" coords="53,2838,205,2878"/>
+<area shape="poly" title=" " alt="" coords="220,2868,289,2875,359,2878,420,2872,442,2866,458,2856,470,2836,482,2800,500,2691,512,2546,520,2383,525,2068,525,1877,530,1877,531,2068,525,2384,517,2547,505,2691,487,2801,475,2838,462,2860,444,2871,421,2877,360,2883,289,2881,220,2874"/>
+<area shape="rect" title=" " alt="" coords="108,2902,150,2928"/>
+<area shape="poly" title=" " alt="" coords="166,2918,238,2926,326,2930,407,2926,437,2919,458,2907,471,2885,483,2847,501,2732,513,2580,521,2408,526,2076,525,1877,530,1877,531,2076,526,2408,519,2580,506,2733,488,2848,476,2887,462,2911,439,2924,407,2931,326,2936,238,2931,165,2923"/>
+<area shape="rect" title=" " alt="" coords="89,2952,169,2977"/>
+<area shape="poly" title=" " alt="" coords="184,2970,257,2978,339,2982,412,2977,439,2970,458,2959,465,2943,472,2908,485,2792,505,2450,519,2092,525,1876,530,1877,524,2092,511,2450,490,2792,477,2908,470,2944,462,2963,441,2975,413,2982,339,2987,257,2983,184,2975"/>
+<area shape="rect" title=" " alt="" coords="5,3002,253,3042"/>
+<area shape="poly" title=" " alt="" coords="268,3033,327,3035,383,3033,429,3026,446,3019,458,3011,465,2994,472,2957,485,2835,506,2476,519,2101,525,1876,530,1876,524,2101,511,2476,491,2836,477,2958,470,2995,462,3015,448,3024,430,3031,383,3039,327,3041,268,3039"/>
+<area shape="rect" title=" " alt="" coords="45,3067,213,3108"/>
+<area shape="poly" title=" " alt="" coords="223,3108,283,3115,346,3114,377,3108,407,3098,434,3084,458,3065,465,3046,473,3007,486,2879,506,2503,519,2110,525,1877,530,1877,525,2111,512,2503,491,2880,478,3008,470,3048,462,3068,437,3088,409,3103,379,3113,347,3119,283,3121,223,3114"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a1eeffe0dcffa93cd6461537070626a63" id="r_a1eeffe0dcffa93cd6461537070626a63"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#a1eeffe0dcffa93cd6461537070626a63">OutputAdjuster</a> = std::function&lt;void (nav_msgs::msg::Odometry &amp;)&gt;</td></tr>
+<tr class="memdesc:a1eeffe0dcffa93cd6461537070626a63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adjusts the filter's output before it is published (topic and TF).  <br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9ea4a8aec2bebed91048c06f837ecad5" id="r_a9ea4a8aec2bebed91048c06f837ecad5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9ea4a8aec2bebed91048c06f837ecad5">accelerationCallback</a> (const sensor_msgs::msg::Imu::SharedPtr msg, const <a class="el" href="structrobot__localization_1_1CallbackData.html">CallbackData</a> &amp;callback_data, const std::string &amp;target_frame)</td></tr>
@@ -218,6 +226,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad20897c5c8bd47f5d4005989bead0e55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets the filter to its initial state.  <br /></td></tr>
 <tr class="memitem:a22c0ae937938653377f7ad7b24eb2a8a" id="r_a22c0ae937938653377f7ad7b24eb2a8a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a22c0ae937938653377f7ad7b24eb2a8a">resetSrvCallback</a> (const std::shared_ptr&lt; rmw_request_id_t &gt;, const std::shared_ptr&lt; std_srvs::srv::Empty::Request &gt;, const std::shared_ptr&lt; std_srvs::srv::Empty::Response &gt;)</td></tr>
 <tr class="memdesc:a22c0ae937938653377f7ad7b24eb2a8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Service callback for resetting the filter to its initial state. Parameters are unused.  <br /></td></tr>
+<tr class="memitem:a4cce86afcafe31315c48d3b64485fb06" id="r_a4cce86afcafe31315c48d3b64485fb06"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4cce86afcafe31315c48d3b64485fb06">setOutputAdjuster</a> (<a class="el" href="#a1eeffe0dcffa93cd6461537070626a63">OutputAdjuster</a> adjuster)</td></tr>
+<tr class="memdesc:a4cce86afcafe31315c48d3b64485fb06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the output adjuster (nullptr: none), e.g. to place a planar estimate on a terrain.  <br /></td></tr>
 <tr class="memitem:a5d9b1802fd79ba46c017dbcef418bb7d" id="r_a5d9b1802fd79ba46c017dbcef418bb7d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a5d9b1802fd79ba46c017dbcef418bb7d">setPoseCallback</a> (const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)</td></tr>
 <tr class="memdesc:a5d9b1802fd79ba46c017dbcef418bb7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback method for manually setting/resetting the internal pose estimate.  <br /></td></tr>
 <tr class="memitem:a6ef6ad2285a6c254b73c919c8707abf5" id="r_a6ef6ad2285a6c254b73c919c8707abf5"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a6ef6ad2285a6c254b73c919c8707abf5">setPoseSrvCallback</a> (const std::shared_ptr&lt; rmw_request_id_t &gt; request_header, const std::shared_ptr&lt; robot_localization::srv::SetPose::Request &gt; request, std::shared_ptr&lt; robot_localization::srv::SetPose::Response &gt; response)</td></tr>
@@ -333,6 +343,8 @@ Protected Attributes</h2></td></tr>
 <tr class="memdesc:a9de66f061635dd5ff5e5f30cf8700b2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">minimum frequency threshold for frequency diagnostic Must be on heap since pointer is passed to diagnostic_updater::FrequencyStatusParam  <br /></td></tr>
 <tr class="memitem:a98b118e4b7f6ab6aa79c0565da372700" id="r_a98b118e4b7f6ab6aa79c0565da372700"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a98b118e4b7f6ab6aa79c0565da372700">odom_frame_id_</a></td></tr>
 <tr class="memdesc:a98b118e4b7f6ab6aa79c0565da372700"><td class="mdescLeft">&#160;</td><td class="mdescRight">tf frame name for the robot's odometry (world-fixed) frame  <br /></td></tr>
+<tr class="memitem:af5c426fc0609a381083fac09193d84d0" id="r_af5c426fc0609a381083fac09193d84d0"><td class="memItemLeft"><a class="el" href="#a1eeffe0dcffa93cd6461537070626a63">OutputAdjuster</a>&#160;</td><td class="memItemRight"><a class="el" href="#af5c426fc0609a381083fac09193d84d0">output_adjuster_</a></td></tr>
+<tr class="memdesc:af5c426fc0609a381083fac09193d84d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applied to each output before it is published.  <br /></td></tr>
 <tr class="memitem:a2ecc9bc2d2b3aec4e09dc2d0080e07eb" id="r_a2ecc9bc2d2b3aec4e09dc2d0080e07eb"><td class="memItemLeft">easynav::LocalizerNode *&#160;</td><td class="memItemRight"><a class="el" href="#a2ecc9bc2d2b3aec4e09dc2d0080e07eb">parent_node_</a> {nullptr}</td></tr>
 <tr class="memitem:a0b7029fd19492b573e8c6292746808ea" id="r_a0b7029fd19492b573e8c6292746808ea"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a0b7029fd19492b573e8c6292746808ea">permit_corrected_publication_</a></td></tr>
 <tr class="memdesc:a0b7029fd19492b573e8c6292746808ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether we'll allow old measurements to cause a re-publication of the updated state.  <br /></td></tr>
@@ -403,6 +415,23 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ad7c829c5bb00b716151034a20b0ae356" id="r_ad7c829c5bb00b716151034a20b0ae356"><td class="memItemLeft">std::shared_ptr&lt; tf2_ros::TransformBroadcaster &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ad7c829c5bb00b716151034a20b0ae356">world_transform_broadcaster_</a></td></tr>
 <tr class="memdesc:ad7c829c5bb00b716151034a20b0ae356"><td class="mdescLeft">&#160;</td><td class="mdescRight">broadcaster of worldTransform tfs  <br /></td></tr>
 </table>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a id="a1eeffe0dcffa93cd6461537070626a63" name="a1eeffe0dcffa93cd6461537070626a63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eeffe0dcffa93cd6461537070626a63">&#9670;&#160;</a></span>OutputAdjuster</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#a1eeffe0dcffa93cd6461537070626a63">OutputAdjuster</a> = std::function&lt;void (nav_msgs::msg::Odometry &amp;)&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Adjusts the filter's output before it is published (topic and TF). </p>
+
+</div>
+</div>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a82e623354016bede80fc42b864c50480" name="a82e623354016bede80fc42b864c50480"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a82e623354016bede80fc42b864c50480">&#9670;&#160;</a></span>UkfWrapper()</h2>
@@ -1639,6 +1668,31 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4cce86afcafe31315c48d3b64485fb06" name="a4cce86afcafe31315c48d3b64485fb06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cce86afcafe31315c48d3b64485fb06">&#9670;&#160;</a></span>setOutputAdjuster()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void setOutputAdjuster </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a1eeffe0dcffa93cd6461537070626a63">OutputAdjuster</a></td>          <td class="paramname"><span class="paramname"><em>adjuster</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the output adjuster (nullptr: none), e.g. to place a planar estimate on a terrain. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">adjuster</td><td>- Called with each output to publish. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a5d9b1802fd79ba46c017dbcef418bb7d" name="a5d9b1802fd79ba46c017dbcef418bb7d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5d9b1802fd79ba46c017dbcef418bb7d">&#9670;&#160;</a></span>setPoseCallback()</h2>
 
@@ -2685,6 +2739,30 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>tf frame name for the robot's odometry (world-fixed) frame </p>
+
+</div>
+</div>
+<a id="af5c426fc0609a381083fac09193d84d0" name="af5c426fc0609a381083fac09193d84d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5c426fc0609a381083fac09193d84d0">&#9670;&#160;</a></span>output_adjuster_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a1eeffe0dcffa93cd6461537070626a63">OutputAdjuster</a> output_adjuster_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applied to each output before it is published. </p>
 
 </div>
 </div>
