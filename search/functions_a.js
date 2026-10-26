@@ -13,5 +13,6 @@ var searchData=
   ['loadmapyaml_10',['loadMapYaml',['../namespaceeasynav__bonxai.html#a76f80287c77094e196f4937297e064ac',1,'easynav_bonxai::loadMapYaml()'],['../namespaceeasynav.html#a76f80287c77094e196f4937297e064ac',1,'easynav::loadMapYaml()'],['../namespaceeasynav_1_1navmap.html#a76f80287c77094e196f4937297e064ac',1,'easynav::navmap::loadMapYaml()'],['../namespaceeasynav_1_1octomap.html#a76f80287c77094e196f4937297e064ac',1,'easynav::octomap::loadMapYaml()']]],
   ['loadparams_11',['loadParams',['../classrobot__localization_1_1UkfWrapper.html#a4e090d6c0894938cdc71e5927ae4bf0d',1,'robot_localization::UkfWrapper']]],
   ['loadupdateconfig_12',['loadUpdateConfig',['../classrobot__localization_1_1UkfWrapper.html#af211b925b81e22fcd5cda1b61ef0dc86',1,'robot_localization::UkfWrapper']]],
-  ['logods_13',['logods',['../classBonxai_1_1ProbabilisticMap.html#a05ff2d55c19b6c496c103e84a6d5d331',1,'Bonxai::ProbabilisticMap']]]
+  ['localizationquality_13',['LocalizationQuality',['../classeasynav_1_1LocalizationQuality.html#ad36e9677fec133f73dcb82dd19756ded',1,'easynav::LocalizationQuality']]],
+  ['logods_14',['logods',['../classBonxai_1_1ProbabilisticMap.html#a05ff2d55c19b6c496c103e84a6d5d331',1,'Bonxai::ProbabilisticMap']]]
 ];

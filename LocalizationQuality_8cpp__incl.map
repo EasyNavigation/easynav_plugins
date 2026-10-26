@@ -1,0 +1,11 @@
+<map id="localizers/easynav_costmap_localizer/src/easynav_costmap_localizer/LocalizationQuality.cpp" name="localizers/easynav_costmap_localizer/src/easynav_costmap_localizer/LocalizationQuality.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="155,5,340,76"/>
+<area shape="rect" id="Node000002" href="$LocalizationQuality_8hpp.html" title=" " alt="" coords="5,124,186,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,79,139,117,136,113,194,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="210,132,285,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="250,76,250,116,245,116,245,76"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="308,132,366,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="280,74,318,118,314,122,276,78"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="63,213,128,238"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,165,98,197,93,197,93,165"/>
+</map>

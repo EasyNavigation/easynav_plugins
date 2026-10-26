@@ -60,7 +60,8 @@ var searchData=
   ['simpleplanner_57',['SimplePlanner',['../classeasynav_1_1SimplePlanner.html#a8c77ed734722472d4c7b6e0a96625b25',1,'easynav::SimplePlanner']]],
   ['simplerecoverymanager_58',['SimpleRecoveryManager',['../classeasynav_1_1SimpleRecoveryManager.html#ae1772d7959045bdc0b7a8803f7a127ef',1,'easynav::SimpleRecoveryManager']]],
   ['size_59',['size',['../classBonxai_1_1Grid.html#a259cb5a711406a8c3e5d937eb9350cca',1,'Bonxai::Grid::size()'],['../classBonxai_1_1GridBlockAllocator.html#a259cb5a711406a8c3e5d937eb9350cca',1,'Bonxai::GridBlockAllocator::size()'],['../classBonxai_1_1Mask.html#a5475d03aac0f961ffd41dace177230fa',1,'Bonxai::Mask::size()']]],
-  ['start_60',['start',['../classRegulatedPpFaultyPlannerTest.html#a37dd9b085dfb507683bb4b2e6780090c',1,'RegulatedPpFaultyPlannerTest']]],
-  ['stop_61',['stop',['../classeasynav_1_1RegulatedPurePursuitController.html#a43af25feed41a7e82ead81696759093d',1,'easynav::RegulatedPurePursuitController']]],
-  ['stop_5frobot_62',['stop_robot',['../classeasynav__diagnostic__recovery_1_1RecoveryMitigationBase.html#a686d279813c36ced41d202e86befaefb',1,'easynav_diagnostic_recovery::RecoveryMitigationBase::stop_robot()'],['../classeasynav__diagnostic__recovery_1_1SafetyReflexBase.html#a686d279813c36ced41d202e86befaefb',1,'easynav_diagnostic_recovery::SafetyReflexBase::stop_robot()']]]
+  ['slow_60',['slow',['../classeasynav_1_1LocalizationQuality.html#ae86b97cecccbbc47c9c3f879bd09f297',1,'easynav::LocalizationQuality']]],
+  ['start_61',['start',['../classRegulatedPpFaultyPlannerTest.html#a37dd9b085dfb507683bb4b2e6780090c',1,'RegulatedPpFaultyPlannerTest']]],
+  ['stop_62',['stop',['../classeasynav_1_1RegulatedPurePursuitController.html#a43af25feed41a7e82ead81696759093d',1,'easynav::RegulatedPurePursuitController']]],
+  ['stop_5frobot_63',['stop_robot',['../classeasynav__diagnostic__recovery_1_1RecoveryMitigationBase.html#a686d279813c36ced41d202e86befaefb',1,'easynav_diagnostic_recovery::RecoveryMitigationBase::stop_robot()'],['../classeasynav__diagnostic__recovery_1_1SafetyReflexBase.html#a686d279813c36ced41d202e86befaefb',1,'easynav_diagnostic_recovery::SafetyReflexBase::stop_robot()']]]
 ];

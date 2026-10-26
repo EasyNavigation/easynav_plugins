@@ -103,6 +103,8 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;chrono&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
 <code>#include &quot;gtest/gtest.h&quot;</code><br />
 <code>#include &quot;rclcpp/rclcpp.hpp&quot;</code><br />
@@ -113,27 +115,35 @@ Include dependency graph for amcl_convergence_evaluator_tests.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="amcl__convergence__evaluator__tests_8cpp__incl.png" border="0" usemap="#alocalizers_2easynav__costmap__localizer_2tests_2amcl__convergence__evaluator__tests_8cpp" loading="lazy" alt=""/></div>
 <map name="alocalizers_2easynav__costmap__localizer_2tests_2amcl__convergence__evaluator__tests_8cpp" id="alocalizers_2easynav__costmap__localizer_2tests_2amcl__convergence__evaluator__tests_8cpp">
-<area shape="rect" title=" " alt="" coords="186,5,381,76"/>
+<area shape="rect" title=" " alt="" coords="240,5,434,76"/>
 <area shape="rect" title=" " alt="" coords="5,132,66,157"/>
-<area shape="poly" title=" " alt="" coords="196,79,79,126,77,128,75,123,77,122,194,74"/>
-<area shape="rect" title=" " alt="" coords="90,132,147,157"/>
-<area shape="poly" title=" " alt="" coords="228,79,152,125,150,121,226,74"/>
-<area shape="rect" title=" " alt="" coords="172,132,265,157"/>
-<area shape="poly" title=" " alt="" coords="264,78,236,120,232,117,259,75"/>
-<area shape="rect" title=" " alt="" coords="289,132,408,157"/>
-<area shape="poly" title=" " alt="" coords="308,75,335,117,331,120,303,78"/>
-<area shape="rect" title=" " alt="" coords="432,124,594,165"/>
-<area shape="poly" title=" " alt="" coords="363,74,456,115,454,120,361,79"/>
-<area shape="rect" href="AmclConvergenceEvaluator_8hpp.html" title="Declaration of the AmclConvergenceEvaluator plugin." alt="" coords="618,124,827,165"/>
-<area shape="poly" title=" " alt="" coords="381,62,623,117,622,123,380,67"/>
-<area shape="rect" href="RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="628,213,817,268"/>
-<area shape="poly" title=" " alt="" coords="725,165,725,197,720,197,720,165"/>
-<area shape="rect" title=" " alt="" coords="466,316,618,357"/>
-<area shape="poly" title=" " alt="" coords="671,271,595,311,592,306,669,267"/>
-<area shape="rect" title=" " alt="" coords="642,316,803,357"/>
-<area shape="poly" title=" " alt="" coords="725,269,725,301,720,301,720,269"/>
-<area shape="rect" title=" " alt="" coords="826,324,1029,350"/>
-<area shape="poly" title=" " alt="" coords="783,266,889,315,886,320,780,271"/>
+<area shape="poly" title=" " alt="" coords="240,73,79,127,77,127,75,123,77,121,239,68"/>
+<area shape="rect" title=" " alt="" coords="90,132,157,157"/>
+<area shape="poly" title=" " alt="" coords="265,79,164,127,162,122,263,74"/>
+<area shape="rect" title=" " alt="" coords="181,132,234,157"/>
+<area shape="poly" title=" " alt="" coords="294,79,236,124,233,120,291,74"/>
+<area shape="rect" title=" " alt="" coords="259,132,316,157"/>
+<area shape="poly" title=" " alt="" coords="323,77,302,119,298,116,318,75"/>
+<area shape="rect" title=" " alt="" coords="341,132,434,157"/>
+<area shape="poly" title=" " alt="" coords="356,75,377,116,372,119,352,77"/>
+<area shape="rect" title=" " alt="" coords="458,132,578,157"/>
+<area shape="poly" title=" " alt="" coords="400,74,484,121,482,126,397,79"/>
+<area shape="rect" title=" " alt="" coords="602,124,763,165"/>
+<area shape="poly" title=" " alt="" coords="435,68,602,117,600,122,434,73"/>
+<area shape="rect" href="AmclConvergenceEvaluator_8hpp.html" title="Declaration of the AmclConvergenceEvaluator plugin." alt="" coords="787,124,996,165"/>
+<area shape="poly" title=" " alt="" coords="435,57,772,119,771,124,434,62"/>
+<area shape="rect" title=" " alt="" coords="706,228,773,253"/>
+<area shape="poly" title=" " alt="" coords="861,168,774,221,771,217,858,163"/>
+<area shape="rect" href="RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="797,213,986,268"/>
+<area shape="poly" title=" " alt="" coords="894,165,894,197,889,197,889,165"/>
+<area shape="rect" title=" " alt="" coords="1010,228,1120,253"/>
+<area shape="poly" title=" " alt="" coords="929,163,1030,217,1028,222,927,168"/>
+<area shape="rect" title=" " alt="" coords="636,316,787,357"/>
+<area shape="poly" title=" " alt="" coords="841,271,764,311,761,306,838,267"/>
+<area shape="rect" title=" " alt="" coords="811,316,972,357"/>
+<area shape="poly" title=" " alt="" coords="894,269,894,301,889,301,889,269"/>
+<area shape="rect" title=" " alt="" coords="996,324,1198,350"/>
+<area shape="poly" title=" " alt="" coords="952,266,1058,315,1056,320,950,271"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -143,13 +153,123 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a2b54d1122352df102003a94eae119f94" id="r_a2b54d1122352df102003a94eae119f94"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a2b54d1122352df102003a94eae119f94">TEST_F</a> (<a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a>, ACompactCloudThatDoesNotMatchTheMapIsLost)</td></tr>
+<tr class="memitem:a871e29b7c6bda82dfbce217d6031eb0f" id="r_a871e29b7c6bda82dfbce217d6031eb0f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a871e29b7c6bda82dfbce217d6031eb0f">TEST_F</a> (<a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a>, AGoodMatchClearsItAndRestartsTheDebounce)</td></tr>
+<tr class="memitem:ad32bf8de401131ee5bfb66d9bc8218e9" id="r_ad32bf8de401131ee5bfb66d9bc8218e9"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ad32bf8de401131ee5bfb66d9bc8218e9">TEST_F</a> (<a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a>, AMatchThresholdOfZeroDoesNotCheckTheMatch)</td></tr>
+<tr class="memitem:a56c7f5b8ee65ea396f33d7a792599935" id="r_a56c7f5b8ee65ea396f33d7a792599935"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a56c7f5b8ee65ea396f33d7a792599935">TEST_F</a> (<a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a>, ASpreadCloudIsStillAnErrorAtOnce)</td></tr>
+<tr class="memitem:a4a057fee0e7fec2c9d03bf11a504fc60" id="r_a4a057fee0e7fec2c9d03bf11a504fc60"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4a057fee0e7fec2c9d03bf11a504fc60">TEST_F</a> (<a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a>, ASuddenDropOfTheMatchIsAKidnapping)</td></tr>
 <tr class="memitem:afc72a2d52a1c37f0139104066fbeacda" id="r_afc72a2d52a1c37f0139104066fbeacda"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#afc72a2d52a1c37f0139104066fbeacda">TEST_F</a> (<a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a>, ErrorWhenCovarianceAboveThreshold)</td></tr>
 <tr class="memitem:a4e83841e74620ec54cd0f8ef2e7ce193" id="r_a4e83841e74620ec54cd0f8ef2e7ce193"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4e83841e74620ec54cd0f8ef2e7ce193">TEST_F</a> (<a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a>, OkWhenCovarianceBelowThreshold)</td></tr>
 <tr class="memitem:a16e2f2f3eba07dafaa6a0970acbfc6a9" id="r_a16e2f2f3eba07dafaa6a0970acbfc6a9"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a16e2f2f3eba07dafaa6a0970acbfc6a9">TEST_F</a> (<a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a>, OkWithoutCovarianceData)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a2b54d1122352df102003a94eae119f94" name="a2b54d1122352df102003a94eae119f94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b54d1122352df102003a94eae119f94">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ACompactCloudThatDoesNotMatchTheMapIsLost</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a871e29b7c6bda82dfbce217d6031eb0f" name="a871e29b7c6bda82dfbce217d6031eb0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a871e29b7c6bda82dfbce217d6031eb0f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AGoodMatchClearsItAndRestartsTheDebounce</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad32bf8de401131ee5bfb66d9bc8218e9" name="ad32bf8de401131ee5bfb66d9bc8218e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad32bf8de401131ee5bfb66d9bc8218e9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AMatchThresholdOfZeroDoesNotCheckTheMatch</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a56c7f5b8ee65ea396f33d7a792599935" name="a56c7f5b8ee65ea396f33d7a792599935"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56c7f5b8ee65ea396f33d7a792599935">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ASpreadCloudIsStillAnErrorAtOnce</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4a057fee0e7fec2c9d03bf11a504fc60" name="a4a057fee0e7fec2c9d03bf11a504fc60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a057fee0e7fec2c9d03bf11a504fc60">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/8]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclConvergenceEvaluatorTestCase.html">AmclConvergenceEvaluatorTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ASuddenDropOfTheMatchIsAKidnapping</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afc72a2d52a1c37f0139104066fbeacda" name="afc72a2d52a1c37f0139104066fbeacda"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc72a2d52a1c37f0139104066fbeacda">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afc72a2d52a1c37f0139104066fbeacda">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -170,7 +290,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a4e83841e74620ec54cd0f8ef2e7ce193" name="a4e83841e74620ec54cd0f8ef2e7ce193"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e83841e74620ec54cd0f8ef2e7ce193">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e83841e74620ec54cd0f8ef2e7ce193">&#9670;&#160;</a></span>TEST_F() <span class="overload">[7/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -191,7 +311,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a16e2f2f3eba07dafaa6a0970acbfc6a9" name="a16e2f2f3eba07dafaa6a0970acbfc6a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16e2f2f3eba07dafaa6a0970acbfc6a9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a16e2f2f3eba07dafaa6a0970acbfc6a9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[8/8]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

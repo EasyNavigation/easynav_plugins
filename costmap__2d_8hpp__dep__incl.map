@@ -1,81 +1,95 @@
 <map id="common/easynav_costmap_common/include/easynav_costmap_common/costmap_2d.hpp" name="common/easynav_costmap_common/include/easynav_costmap_common/costmap_2d.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1948,5,2182,61"/>
-<area shape="rect" id="Node000002" href="$costmap__2d_8cpp.html" title=" " alt="" coords="5,124,215,180"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1932,37,1557,41,1065,51,813,61,579,73,378,90,227,112,175,126,174,121,225,106,378,85,579,68,813,55,1065,46,1557,35,1932,32"/>
-<area shape="rect" id="Node000003" href="$costmap__2d__tests_8cpp.html" title=" " alt="" coords="238,124,419,180"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1932,37,1596,41,1162,51,942,61,738,74,563,90,431,112,386,126,384,121,429,106,562,85,737,68,942,56,1162,46,1595,35,1932,32"/>
-<area shape="rect" id="Node000004" href="$costmap__bresenham__2d_8cpp.html" title=" " alt="" coords="442,124,623,180"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1932,38,1635,44,1261,56,898,78,749,93,636,112,591,126,589,121,635,106,748,88,898,73,1261,51,1635,39,1932,33"/>
-<area shape="rect" id="Node000005" href="$easynav__costmap__localizer_2src_2easynav__costmap__localizer_2AMCLLocalizer_8cpp.html" title="Implementation of the AMCLLocalizer class using Costmap2D." alt="" coords="647,116,832,187"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1932,40,1676,47,1362,61,1062,82,938,96,844,112,819,118,818,113,843,106,937,90,1061,77,1362,56,1676,42,1932,35"/>
-<area shape="rect" id="Node000006" href="$costmap__localizer__min__height__tests_8cpp.html" title="AMCLLocalizer &quot;min_height&quot;: points below it are floor hits, not used to correct." alt="" coords="855,116,1021,187"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1932,41,1714,50,1455,64,1210,84,1110,97,1033,112,1011,119,1009,113,1032,106,1109,92,1210,79,1455,59,1714,44,1932,36"/>
-<area shape="rect" id="Node000007" href="$costmap__localizer__reseed__tests_8cpp.html" title="AMCLLocalizer reseed(): while predict() runs on the real&#45;time thread, when the particles collapse,..." alt="" coords="1045,116,1220,187"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1932,38,1788,43,1614,55,1426,77,1332,92,1240,112,1215,119,1214,113,1239,106,1331,87,1425,72,1613,50,1788,37,1932,32"/>
-<area shape="rect" id="Node000008" href="$MapMatcher_8hpp.html" title="Declaration of MapMatcher, the cascade brute&#45;force map matching of MH&#45;AMCL." alt="" coords="1448,116,1628,187"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1933,53,1791,76,1640,112,1618,119,1617,113,1639,106,1790,71,1932,48"/>
-<area shape="rect" id="Node000010" href="$MHAMCLLocalizer_8cpp.html" title="Implementation of the MHAMCLLocalizer class using Costmap2D." alt="" coords="968,361,1148,432"/>
-<area shape="poly" id="edge21_Node000001_Node000010" title=" " alt="" coords="1932,43,1749,53,1546,68,1372,87,1312,99,1278,111,1260,129,1253,148,1247,171,1235,196,1163,289,1095,363,1091,359,1159,285,1230,193,1242,169,1248,147,1256,126,1275,107,1311,94,1371,82,1545,62,1748,47,1932,37"/>
-<area shape="rect" id="Node000012" href="$mhamcl__localizer__min__height__tests_8cpp.html" title="MHAMCLLocalizer &quot;min_height&quot;: points below it are floor hits, not used to correct." alt="" coords="1172,361,1368,432"/>
-<area shape="poly" id="edge23_Node000001_Node000012" title=" " alt="" coords="1933,46,1659,71,1529,89,1436,112,1387,133,1325,167,1269,206,1247,226,1234,244,1225,273,1228,303,1237,333,1250,360,1245,362,1232,335,1223,304,1220,272,1229,241,1243,222,1265,202,1322,163,1384,129,1434,106,1528,84,1658,66,1932,40"/>
-<area shape="rect" id="Node000014" href="$mhamcl__localizer__tests_8cpp.html" title=" " alt="" coords="1863,369,2048,424"/>
-<area shape="poly" id="edge24_Node000001_Node000014" title=" " alt="" coords="2063,77,2061,109,2061,195,2062,242,2067,279,2068,295,2062,315,2038,346,2009,370,2005,366,2035,343,2057,312,2063,294,2062,279,2057,243,2055,195,2055,109,2058,76"/>
-<area shape="rect" id="Node000016" href="$mhamcl__algorithm__tests_8cpp.html" title=" " alt="" coords="1856,250,2047,306"/>
-<area shape="poly" id="edge22_Node000001_Node000016" title=" " alt="" coords="2025,74,1998,110,1981,146,1970,184,1957,250,1952,249,1965,183,1976,144,1993,108,2021,71"/>
-<area shape="rect" id="Node000017" href="$ParticlesDistribution_8hpp.html" title="Declaration of ParticlesDistribution, a single pose hypothesis of MH&#45;AMCL." alt="" coords="1652,116,1832,187"/>
-<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1976,69,1833,121,1831,116,1974,64"/>
-<area shape="rect" id="Node000019" href="$CostmapMapsManager_8hpp.html" title="Declaration of the CostmapMapsManager method." alt="" coords="2102,116,2382,187"/>
-<area shape="poly" id="edge25_Node000001_Node000019" title=" " alt="" coords="2120,68,2191,114,2188,118,2117,72"/>
-<area shape="rect" id="Node000020" href="$CostmapMapsManager_8cpp.html" title=" " alt="" coords="2122,243,2362,313"/>
-<area shape="poly" id="edge32_Node000001_Node000020" title=" " alt="" coords="2064,77,2069,135,2078,166,2092,193,2117,219,2148,240,2145,244,2114,223,2088,196,2073,168,2064,136,2059,77"/>
-<area shape="rect" id="Node000022" href="$costmap__mapsmanager__tests_8cpp.html" title=" " alt="" coords="2607,243,2805,313"/>
-<area shape="poly" id="edge35_Node000001_Node000022" title=" " alt="" coords="2198,39,2248,48,2299,61,2349,81,2396,107,2416,128,2426,150,2435,172,2453,192,2608,243,2606,248,2450,197,2430,175,2421,152,2412,131,2392,111,2347,86,2297,66,2246,53,2197,44"/>
-<area shape="rect" id="Node000023" href="$easynav__costmap__maps__manager_2include_2easynav__costmap__maps__manager_2filters_2InflationFilter_8hpp.html" title=" " alt="" coords="2508,109,2709,195"/>
-<area shape="poly" id="edge29_Node000001_Node000023" title=" " alt="" coords="2198,50,2339,73,2489,106,2508,112,2507,117,2488,112,2338,79,2197,55"/>
-<area shape="rect" id="Node000024" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2InflationFilter_8cpp.html" title=" " alt="" coords="2829,243,3044,313"/>
-<area shape="poly" id="edge33_Node000001_Node000024" title=" " alt="" coords="2198,47,2340,71,2401,88,2444,107,2463,128,2472,151,2480,173,2498,193,2540,216,2578,228,2614,234,2649,234,2724,231,2768,232,2817,240,2829,243,2828,248,2816,245,2767,238,2724,236,2649,239,2614,239,2577,234,2538,220,2495,197,2475,176,2467,153,2459,131,2440,111,2399,93,2339,76,2197,52"/>
-<area shape="rect" id="Node000026" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2ObstacleFilter_8cpp.html" title=" " alt="" coords="2734,116,2956,187"/>
-<area shape="poly" id="edge34_Node000001_Node000026" title=" " alt="" coords="2198,39,2443,61,2584,80,2723,106,2749,113,2748,118,2721,112,2583,85,2442,66,2197,44"/>
-<area shape="rect" id="Node000027" href="$costmap__obstacle__filter__tests_8cpp.html" title="ObstacleFilter: &quot;min_height&quot; (points below it are floor hits and are not marked) and &quot;update_distance..." alt="" coords="2980,116,3154,187"/>
-<area shape="poly" id="edge36_Node000001_Node000027" title=" " alt="" coords="2198,38,2610,63,2817,83,2903,94,2968,106,2991,113,2990,118,2967,112,2902,99,2817,88,2609,68,2197,43"/>
-<area shape="rect" id="Node000028" href="$RoutesCostmapFilter_8cpp.html" title=" " alt="" coords="3178,116,3442,187"/>
-<area shape="poly" id="edge37_Node000001_Node000028" title=" " alt="" coords="2197,32,2388,36,2630,47,2898,69,3034,86,3166,106,3199,113,3198,118,3166,112,3033,91,2898,75,2630,52,2388,41,2197,37"/>
-<area shape="rect" id="Node000029" href="$routes__costmap__filter__tests_8cpp.html" title=" " alt="" coords="3465,116,3635,187"/>
-<area shape="poly" id="edge38_Node000001_Node000029" title=" " alt="" coords="2197,33,2487,38,2850,50,3200,72,3345,87,3455,106,3478,113,3477,119,3453,112,3344,93,3200,77,2849,56,2487,43,2197,38"/>
-<area shape="rect" id="Node000030" href="$routes__mapsmanager__tests_8cpp.html" title=" " alt="" coords="3658,116,3842,187"/>
-<area shape="poly" id="edge39_Node000001_Node000030" title=" " alt="" coords="2198,32,2524,36,2943,48,3155,57,3351,70,3520,86,3648,106,3673,113,3672,119,3647,112,3519,91,3351,75,3155,62,2943,53,2524,42,2198,38"/>
-<area shape="rect" id="Node000031" href="$CostmapPlanner_8hpp.html" title="Declaration of the CostmapPlanner class implementing A* path planning using Costmap2D." alt="" coords="3916,124,4168,180"/>
-<area shape="poly" id="edge40_Node000001_Node000031" title=" " alt="" coords="2197,33,2571,39,3061,51,3545,73,3746,88,3898,106,3961,121,3960,126,3898,112,3746,93,3545,78,3061,57,2571,44,2197,38"/>
-<area shape="rect" id="Node000032" href="$CostmapPlanner_8cpp.html" title="Implementation of the CostmapPlanner class using A* on Costmap2D." alt="" coords="3716,250,3917,306"/>
-<area shape="poly" id="edge44_Node000001_Node000032" title=" " alt="" coords="2197,32,2619,37,3156,48,3412,57,3628,70,3783,86,3831,96,3856,107,3867,123,3872,142,3870,180,3856,218,3838,251,3833,248,3851,216,3865,179,3867,142,3862,126,3852,111,3830,101,3783,91,3628,75,3411,63,3156,53,2619,42,2197,38"/>
-<area shape="rect" id="Node000034" href="$costmap__planner__tests_8cpp.html" title="Tests for CostmapPlanner: a failed plan leaves an empty path, not the previous one." alt="" coords="4166,250,4345,306"/>
-<area shape="poly" id="edge45_Node000001_Node000034" title=" " alt="" coords="2197,33,2685,38,3326,50,3635,60,3898,72,4089,87,4149,97,4181,107,4212,137,4233,176,4247,215,4254,249,4249,250,4242,217,4229,178,4208,141,4178,111,4148,102,4089,93,3898,77,3635,65,3326,55,2685,43,2197,38"/>
-<area shape="rect" id="Node000009" href="$MHAMCLLocalizer_8hpp.html" title="Declaration of the MHAMCLLocalizer method." alt="" coords="1244,243,1424,313"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1470,198,1393,244,1390,240,1467,193"/>
-<area shape="rect" id="Node000015" href="$MapMatcher_8cpp.html" title="Implementation of MapMatcher." alt="" coords="1448,243,1628,313"/>
-<area shape="poly" id="edge14_Node000008_Node000015" title=" " alt="" coords="1541,203,1541,242,1535,242,1535,203"/>
-<area shape="poly" id="edge15_Node000008_Node000016" title=" " alt="" coords="1635,190,1640,192,1697,208,1742,217,1845,240,1870,247,1868,252,1844,245,1741,223,1696,213,1639,197,1633,195"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1239,322,1141,363,1139,358,1237,317"/>
-<area shape="rect" id="Node000011" href="$mhamcl__localizer__last__known__pose__tests_8cpp.html" title="After a reconfiguration, the localizer starts from the pose the previous one left in NavState (&quot;robot..." alt="" coords="1612,361,1773,432"/>
-<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="1440,312,1600,359,1613,363,1611,368,1599,364,1438,317"/>
-<area shape="poly" id="edge11_Node000009_Node000012" title=" " alt="" coords="1310,328,1291,362,1287,360,1306,325"/>
-<area shape="rect" id="Node000013" href="$mhamcl__localizer__reconfigure__tests_8cpp.html" title="Regression test: initialize() may run several times on the same node (cleanup/configure)." alt="" coords="1392,361,1588,432"/>
-<area shape="poly" id="edge12_Node000009_Node000013" title=" " alt="" coords="1394,321,1445,359,1442,363,1391,325"/>
-<area shape="poly" id="edge13_Node000009_Node000014" title=" " alt="" coords="1439,311,1537,330,1613,338,1690,345,1786,359,1863,373,1862,378,1786,364,1689,351,1613,344,1536,335,1438,317"/>
-<area shape="poly" id="edge17_Node000017_Node000009" title=" " alt="" coords="1647,195,1641,197,1584,213,1539,222,1493,231,1436,245,1425,248,1424,243,1435,240,1492,226,1538,217,1583,208,1640,192,1645,190"/>
-<area shape="poly" id="edge18_Node000017_Node000015" title=" " alt="" coords="1674,198,1597,244,1594,240,1671,193"/>
-<area shape="poly" id="edge20_Node000017_Node000016" title=" " alt="" coords="1815,193,1907,247,1904,252,1812,198"/>
-<area shape="rect" id="Node000018" href="$ParticlesDistribution_8cpp.html" title="Implementation of ParticlesDistribution." alt="" coords="1652,243,1832,313"/>
-<area shape="poly" id="edge19_Node000017_Node000018" title=" " alt="" coords="1745,203,1745,242,1739,242,1739,203"/>
-<area shape="poly" id="edge26_Node000019_Node000020" title=" " alt="" coords="2245,203,2245,242,2239,242,2239,203"/>
-<area shape="rect" id="Node000021" href="$costmap__mapsmanager__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="2386,243,2583,313"/>
-<area shape="poly" id="edge27_Node000019_Node000021" title=" " alt="" coords="2324,192,2418,240,2415,244,2322,197"/>
-<area shape="poly" id="edge28_Node000019_Node000022" title=" " alt="" coords="2389,189,2401,192,2596,240,2608,243,2606,249,2595,245,2400,197,2387,194"/>
-<area shape="poly" id="edge30_Node000023_Node000024" title=" " alt="" coords="2725,194,2846,240,2844,245,2723,199"/>
-<area shape="rect" id="Node000025" href="$costmap__inflation__geometry__tests_8cpp.html" title="The inflation filter&#39;s inscribed radius is the robot&#39;s (&quot;robot_geometry&quot;); its own &quot;inscribed_radius&quot;..." alt="" coords="3068,243,3242,313"/>
-<area shape="poly" id="edge31_Node000023_Node000025" title=" " alt="" coords="2725,192,2818,210,2892,216,2966,223,3057,240,3069,243,3067,248,3056,245,2965,228,2892,222,2818,215,2724,198"/>
-<area shape="poly" id="edge41_Node000031_Node000032" title=" " alt="" coords="3981,190,3867,252,3865,247,3978,185"/>
-<area shape="rect" id="Node000033" href="$costmap__planner__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="3942,250,4142,306"/>
-<area shape="poly" id="edge42_Node000031_Node000033" title=" " alt="" coords="4045,195,4045,250,4039,250,4039,195"/>
-<area shape="poly" id="edge43_Node000031_Node000034" title=" " alt="" coords="4103,185,4210,247,4207,252,4100,190"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="2252,5,2487,61"/>
+<area shape="rect" id="Node000002" href="$costmap__2d_8cpp.html" title=" " alt="" coords="281,124,490,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2237,37,1857,40,1356,51,1100,60,862,73,657,90,502,112,451,126,449,121,501,106,656,85,861,68,1100,55,1356,45,1857,35,2237,32"/>
+<area shape="rect" id="Node000003" href="$costmap__2d__tests_8cpp.html" title=" " alt="" coords="514,124,694,180"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="2236,37,1894,40,1452,51,1228,60,1020,73,841,90,706,112,661,126,660,121,705,106,840,85,1019,68,1228,55,1452,46,1894,35,2236,32"/>
+<area shape="rect" id="Node000004" href="$costmap__bresenham__2d_8cpp.html" title=" " alt="" coords="718,124,898,180"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="2237,39,1935,45,1555,57,1186,79,1033,94,918,112,870,126,869,121,917,106,1033,88,1185,73,1555,52,1935,39,2237,33"/>
+<area shape="rect" id="Node000005" href="$easynav__costmap__localizer_2include_2easynav__costmap__localizer_2AMCLLocalizer_8hpp.html" title="Declaration of the AMCLLocalizer method." alt="" coords="1024,116,1208,187"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="2237,36,2044,39,1797,50,1524,72,1386,90,1251,112,1210,121,1208,116,1250,106,1385,84,1524,67,1797,44,2044,34,2237,31"/>
+<area shape="rect" id="Node000006" href="$easynav__costmap__localizer_2src_2easynav__costmap__localizer_2AMCLLocalizer_8cpp.html" title="Implementation of the AMCLLocalizer class using Costmap2D." alt="" coords="5,243,190,313"/>
+<area shape="poly" id="edge12_Node000001_Node000006" title=" " alt="" coords="2237,37,1912,39,1512,48,1320,58,1154,71,1027,89,984,99,956,111,946,120,940,130,935,152,930,176,924,187,912,197,884,212,849,223,766,237,669,243,565,243,359,237,271,238,202,245,191,248,190,242,201,240,271,233,359,232,565,237,669,237,766,232,848,218,882,207,909,192,919,183,925,174,930,151,935,128,942,117,953,107,982,94,1026,83,1153,66,1320,52,1511,43,1912,33,2237,31"/>
+<area shape="rect" id="Node000008" href="$costmap__localizer__min__height__tests_8cpp.html" title="AMCLLocalizer &quot;min_height&quot;: points below it are floor hits, not used to correct." alt="" coords="214,243,379,313"/>
+<area shape="poly" id="edge13_Node000001_Node000008" title=" " alt="" coords="2237,38,1925,42,1544,53,1361,63,1203,75,1082,91,1040,101,1013,111,1002,120,994,130,986,153,977,176,969,187,956,197,905,217,839,228,761,234,678,235,516,236,446,238,391,245,380,248,379,243,390,240,446,233,516,230,678,230,761,228,838,223,904,211,954,192,965,183,972,173,981,151,990,127,998,116,1011,107,1039,96,1081,86,1202,70,1361,57,1544,48,1925,37,2237,32"/>
+<area shape="rect" id="Node000009" href="$costmap__localizer__quality__tests_8cpp.html" title=" " alt="" coords="1030,243,1203,313"/>
+<area shape="poly" id="edge14_Node000001_Node000009" title=" " alt="" coords="2237,38,2019,42,1760,53,1633,63,1517,75,1418,91,1344,111,1268,163,1161,244,1158,240,1264,159,1342,107,1417,86,1516,70,1633,57,1760,48,2019,37,2237,32"/>
+<area shape="rect" id="Node000011" href="$costmap__localizer__reseed__tests_8cpp.html" title="AMCLLocalizer reseed(): while predict() runs on the real&#45;time thread, when the particles collapse,..." alt="" coords="1227,243,1402,313"/>
+<area shape="poly" id="edge15_Node000001_Node000011" title=" " alt="" coords="2237,41,2016,50,1763,64,1544,84,1467,97,1423,111,1390,139,1363,173,1343,210,1329,243,1324,241,1338,208,1358,171,1386,135,1420,107,1465,92,1543,79,1763,59,2016,44,2237,36"/>
+<area shape="rect" id="Node000013" href="$MapMatcher_8hpp.html" title="Declaration of MapMatcher, the cascade brute&#45;force map matching of MH&#45;AMCL." alt="" coords="1685,116,1865,187"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="2237,49,2066,72,1972,90,1880,112,1857,118,1856,113,1878,106,1970,84,2065,67,2237,44"/>
+<area shape="rect" id="Node000015" href="$MHAMCLLocalizer_8cpp.html" title="Implementation of the MHAMCLLocalizer class using Costmap2D." alt="" coords="1289,361,1469,432"/>
+<area shape="poly" id="edge30_Node000001_Node000015" title=" " alt="" coords="2237,44,2090,54,1928,68,1779,87,1719,99,1673,112,1608,137,1560,162,1517,195,1467,244,1444,273,1424,304,1395,362,1390,360,1420,301,1440,270,1464,241,1513,191,1557,157,1606,132,1671,106,1718,94,1778,82,1927,63,2089,49,2236,39"/>
+<area shape="rect" id="Node000017" href="$mhamcl__localizer__min__height__tests_8cpp.html" title="MHAMCLLocalizer &quot;min_height&quot;: points below it are floor hits, not used to correct." alt="" coords="1989,361,2184,432"/>
+<area shape="poly" id="edge32_Node000001_Node000017" title=" " alt="" coords="2363,77,2329,216,2311,280,2296,315,2272,337,2244,355,2186,379,2184,374,2242,350,2268,333,2291,312,2306,278,2324,215,2358,76"/>
+<area shape="rect" id="Node000019" href="$mhamcl__localizer__tests_8cpp.html" title=" " alt="" coords="2254,369,2440,424"/>
+<area shape="poly" id="edge33_Node000001_Node000019" title=" " alt="" coords="2370,77,2351,369,2346,368,2364,77"/>
+<area shape="rect" id="Node000021" href="$mhamcl__algorithm__tests_8cpp.html" title=" " alt="" coords="1886,250,2077,306"/>
+<area shape="poly" id="edge31_Node000001_Node000021" title=" " alt="" coords="2315,72,2026,252,2023,248,2312,67"/>
+<area shape="rect" id="Node000022" href="$ParticlesDistribution_8hpp.html" title="Declaration of ParticlesDistribution, a single pose hypothesis of MH&#45;AMCL." alt="" coords="1891,116,2072,187"/>
+<area shape="poly" id="edge25_Node000001_Node000022" title=" " alt="" coords="2265,68,2073,126,2071,121,2264,63"/>
+<area shape="rect" id="Node000024" href="$CostmapMapsManager_8hpp.html" title="Declaration of the CostmapMapsManager method." alt="" coords="2458,116,2737,187"/>
+<area shape="poly" id="edge34_Node000001_Node000024" title=" " alt="" coords="2437,66,2531,114,2529,118,2435,71"/>
+<area shape="rect" id="Node000025" href="$CostmapMapsManager_8cpp.html" title=" " alt="" coords="2407,243,2647,313"/>
+<area shape="poly" id="edge41_Node000001_Node000025" title=" " alt="" coords="2387,74,2412,132,2448,193,2490,241,2486,244,2443,196,2408,135,2382,76"/>
+<area shape="rect" id="Node000027" href="$costmap__mapsmanager__tests_8cpp.html" title=" " alt="" coords="2892,243,3090,313"/>
+<area shape="poly" id="edge44_Node000001_Node000027" title=" " alt="" coords="2502,47,2646,71,2708,88,2751,107,2772,127,2782,149,2791,171,2809,193,2849,220,2893,242,2891,247,2846,225,2805,197,2786,174,2777,151,2767,130,2748,111,2706,93,2645,77,2501,52"/>
+<area shape="rect" id="Node000028" href="$easynav__costmap__maps__manager_2include_2easynav__costmap__maps__manager_2filters_2InflationFilter_8hpp.html" title=" " alt="" coords="2864,109,3065,195"/>
+<area shape="poly" id="edge38_Node000001_Node000028" title=" " alt="" coords="2503,46,2667,70,2845,106,2864,112,2862,117,2844,112,2666,75,2502,52"/>
+<area shape="rect" id="Node000029" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2InflationFilter_8cpp.html" title=" " alt="" coords="3114,243,3329,313"/>
+<area shape="poly" id="edge42_Node000001_Node000029" title=" " alt="" coords="2503,43,2587,53,2673,67,2747,85,2799,107,2819,128,2827,151,2835,173,2854,193,2886,211,2916,223,2943,228,2971,230,3029,230,3063,233,3102,240,3114,243,3113,248,3101,245,3063,238,3029,236,2971,235,2943,233,2914,228,2884,216,2850,197,2831,175,2822,153,2814,131,2796,111,2746,90,2672,72,2587,59,2502,49"/>
+<area shape="rect" id="Node000031" href="$easynav__costmap__maps__manager_2src_2easynav__costmap__maps__manager_2filters_2ObstacleFilter_8cpp.html" title=" " alt="" coords="3089,116,3311,187"/>
+<area shape="poly" id="edge43_Node000001_Node000031" title=" " alt="" coords="2503,37,2625,45,2770,58,2925,78,3078,106,3105,113,3104,119,3077,112,2924,84,2769,64,2625,50,2502,42"/>
+<area shape="rect" id="Node000032" href="$costmap__obstacle__filter__tests_8cpp.html" title="ObstacleFilter: &quot;min_height&quot; (points below it are floor hits and are not marked) and &quot;update_distance..." alt="" coords="3336,116,3510,187"/>
+<area shape="poly" id="edge45_Node000001_Node000032" title=" " alt="" coords="2503,37,2940,62,3162,81,3254,93,3323,106,3347,113,3345,118,3322,112,3253,99,3162,87,2940,67,2502,42"/>
+<area shape="rect" id="Node000033" href="$RoutesCostmapFilter_8cpp.html" title=" " alt="" coords="3534,116,3797,187"/>
+<area shape="poly" id="edge46_Node000001_Node000033" title=" " alt="" coords="2502,31,2701,34,2956,45,3239,68,3382,85,3522,106,3555,113,3554,119,3521,112,3381,90,3238,73,2956,51,2701,40,2502,36"/>
+<area shape="rect" id="Node000034" href="$routes__costmap__filter__tests_8cpp.html" title=" " alt="" coords="3821,116,3990,187"/>
+<area shape="poly" id="edge47_Node000001_Node000034" title=" " alt="" coords="2502,33,2801,37,3179,49,3369,59,3545,71,3696,87,3810,106,3834,113,3832,119,3809,112,3695,92,3544,76,3369,64,3179,54,2801,43,2502,38"/>
+<area shape="rect" id="Node000035" href="$routes__mapsmanager__tests_8cpp.html" title=" " alt="" coords="4014,116,4197,187"/>
+<area shape="poly" id="edge48_Node000001_Node000035" title=" " alt="" coords="2502,32,2838,36,3272,47,3492,56,3696,69,3871,85,4003,106,4029,113,4027,119,4002,112,3870,91,3695,74,3491,61,3272,52,2838,41,2502,37"/>
+<area shape="rect" id="Node000036" href="$CostmapPlanner_8hpp.html" title="Declaration of the CostmapPlanner class implementing A* path planning using Costmap2D." alt="" coords="4272,124,4523,180"/>
+<area shape="poly" id="edge49_Node000001_Node000036" title=" " alt="" coords="2502,33,2885,38,3390,51,3890,72,4097,88,4254,106,4317,121,4316,126,4253,112,4096,93,3889,78,3390,56,2885,44,2502,38"/>
+<area shape="rect" id="Node000037" href="$CostmapPlanner_8cpp.html" title="Implementation of the CostmapPlanner class using A* on Costmap2D." alt="" coords="4072,250,4273,306"/>
+<area shape="poly" id="edge53_Node000001_Node000037" title=" " alt="" coords="2502,32,2935,36,3488,47,3752,56,3976,69,4137,86,4186,96,4211,107,4223,123,4228,142,4225,181,4211,219,4193,251,4188,249,4206,217,4220,180,4223,142,4218,126,4208,111,4184,101,4136,91,3976,74,3752,62,3488,52,2935,41,2502,38"/>
+<area shape="rect" id="Node000039" href="$costmap__planner__tests_8cpp.html" title="Tests for CostmapPlanner: a failed plan leaves an empty path, not the previous one." alt="" coords="4521,250,4700,306"/>
+<area shape="poly" id="edge54_Node000001_Node000039" title=" " alt="" coords="2502,33,3001,37,3659,49,3975,59,4246,71,4442,87,4504,96,4536,107,4568,137,4589,176,4603,215,4610,249,4605,250,4597,217,4584,178,4563,141,4533,111,4502,101,4442,92,4246,77,3975,64,3659,55,3001,43,2502,38"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1009,186,955,197,841,212,744,218,577,217,497,216,412,219,315,227,202,245,191,248,190,242,201,240,315,222,411,213,497,211,577,212,744,213,841,207,954,192,1008,181"/>
+<area shape="rect" id="Node000007" href="$costmap__localizer__last__known__pose__tests_8cpp.html" title="After a reconfiguration, the localizer starts from the pose the previous one left in NavState (&quot;robot..." alt="" coords="403,243,568,313"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="1017,195,1006,197,942,210,887,217,793,222,699,226,644,233,581,245,569,248,568,243,580,240,644,227,699,221,793,216,887,212,941,205,1005,192,1015,189"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="1017,195,1006,197,914,214,834,222,764,223,698,222,562,222,484,229,391,245,380,248,379,243,390,240,483,224,562,217,698,217,764,218,834,216,913,209,1005,192,1016,189"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="1119,203,1119,242,1114,242,1114,203"/>
+<area shape="rect" id="Node000010" href="$costmap__localizer__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="592,243,792,313"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="1014,195,1006,197,906,222,805,245,793,249,792,243,804,240,905,217,1005,192,1012,190"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="1186,193,1261,240,1258,244,1183,198"/>
+<area shape="rect" id="Node000012" href="$costmap__localizer__tests_8cpp.html" title=" " alt="" coords="816,250,1006,306"/>
+<area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="1047,198,957,252,954,248,1045,193"/>
+<area shape="rect" id="Node000014" href="$MHAMCLLocalizer_8hpp.html" title="Declaration of the MHAMCLLocalizer method." alt="" coords="1478,243,1658,313"/>
+<area shape="poly" id="edge17_Node000013_Node000014" title=" " alt="" coords="1706,198,1628,244,1625,240,1703,193"/>
+<area shape="rect" id="Node000020" href="$MapMatcher_8cpp.html" title="Implementation of MapMatcher." alt="" coords="1682,243,1862,313"/>
+<area shape="poly" id="edge23_Node000013_Node000020" title=" " alt="" coords="1776,203,1776,242,1770,242,1771,203"/>
+<area shape="poly" id="edge24_Node000013_Node000021" title=" " alt="" coords="1847,193,1938,248,1935,252,1844,198"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="1500,324,1437,363,1434,359,1498,319"/>
+<area shape="rect" id="Node000016" href="$mhamcl__localizer__last__known__pose__tests_8cpp.html" title="After a reconfiguration, the localizer starts from the pose the previous one left in NavState (&quot;robot..." alt="" coords="1713,361,1874,432"/>
+<area shape="poly" id="edge19_Node000014_Node000016" title=" " alt="" coords="1650,318,1728,358,1725,363,1647,323"/>
+<area shape="poly" id="edge20_Node000014_Node000017" title=" " alt="" coords="1674,311,1823,344,1989,375,1988,380,1822,349,1673,317"/>
+<area shape="rect" id="Node000018" href="$mhamcl__localizer__reconfigure__tests_8cpp.html" title="Regression test: initialize() may run several times on the same node (cleanup/configure)." alt="" coords="1493,361,1688,432"/>
+<area shape="poly" id="edge21_Node000014_Node000018" title=" " alt="" coords="1580,328,1587,360,1582,362,1575,329"/>
+<area shape="poly" id="edge22_Node000014_Node000019" title=" " alt="" coords="1674,311,1753,325,1820,333,1935,339,2051,343,2118,348,2197,359,2254,370,2253,375,2196,364,2118,354,2051,348,1935,344,1819,338,1752,330,1673,317"/>
+<area shape="poly" id="edge26_Node000022_Node000014" title=" " alt="" coords="1885,195,1878,197,1820,213,1774,222,1728,231,1670,245,1659,248,1658,243,1669,240,1727,226,1773,217,1819,208,1877,192,1883,190"/>
+<area shape="poly" id="edge27_Node000022_Node000020" title=" " alt="" coords="1911,198,1832,244,1830,240,1909,193"/>
+<area shape="poly" id="edge29_Node000022_Node000021" title=" " alt="" coords="1984,203,1984,250,1979,250,1979,203"/>
+<area shape="rect" id="Node000023" href="$ParticlesDistribution_8cpp.html" title="Implementation of ParticlesDistribution." alt="" coords="2101,243,2281,313"/>
+<area shape="poly" id="edge28_Node000022_Node000023" title=" " alt="" coords="2054,193,2133,240,2131,244,2052,198"/>
+<area shape="poly" id="edge35_Node000024_Node000025" title=" " alt="" coords="2573,202,2549,243,2544,241,2568,200"/>
+<area shape="rect" id="Node000026" href="$costmap__mapsmanager__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="2671,243,2868,313"/>
+<area shape="poly" id="edge36_Node000024_Node000026" title=" " alt="" coords="2659,194,2723,240,2720,244,2656,198"/>
+<area shape="poly" id="edge37_Node000024_Node000027" title=" " alt="" coords="2723,190,2892,243,2891,248,2721,195"/>
+<area shape="poly" id="edge39_Node000028_Node000029" title=" " alt="" coords="3067,199,3151,240,3148,244,3064,204"/>
+<area shape="rect" id="Node000030" href="$costmap__inflation__geometry__tests_8cpp.html" title="The inflation filter&#39;s inscribed radius is the robot&#39;s (&quot;robot_geometry&quot;); its own &quot;inscribed_radius&quot;..." alt="" coords="3353,243,3527,313"/>
+<area shape="poly" id="edge40_Node000028_Node000030" title=" " alt="" coords="3080,192,3154,208,3213,217,3271,225,3342,240,3353,243,3352,248,3341,245,3270,230,3212,222,3153,214,3079,198"/>
+<area shape="poly" id="edge50_Node000036_Node000037" title=" " alt="" coords="4336,190,4223,252,4220,247,4334,185"/>
+<area shape="rect" id="Node000038" href="$costmap__planner__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="4297,250,4498,306"/>
+<area shape="poly" id="edge51_Node000036_Node000038" title=" " alt="" coords="4400,195,4400,250,4395,250,4395,195"/>
+<area shape="poly" id="edge52_Node000036_Node000039" title=" " alt="" coords="4459,185,4565,247,4563,252,4456,190"/>
 </map>

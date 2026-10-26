@@ -1,23 +1,31 @@
 <map id="localizers/easynav_costmap_localizer/tests/amcl_convergence_evaluator_tests.cpp" name="localizers/easynav_costmap_localizer/tests/amcl_convergence_evaluator_tests.cpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="186,5,381,76"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="240,5,434,76"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,132,66,157"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,79,79,126,77,128,75,123,77,122,194,74"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="90,132,147,157"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="228,79,152,125,150,121,226,74"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="172,132,265,157"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="264,78,236,120,232,117,259,75"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="289,132,408,157"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="308,75,335,117,331,120,303,78"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="432,124,594,165"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="363,74,456,115,454,120,361,79"/>
-<area shape="rect" id="Node000007" href="$AmclConvergenceEvaluator_8hpp.html" title="Declaration of the AmclConvergenceEvaluator plugin." alt="" coords="618,124,827,165"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="381,62,623,117,622,123,380,67"/>
-<area shape="rect" id="Node000008" href="$RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="628,213,817,268"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="725,165,725,197,720,197,720,165"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="466,316,618,357"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="671,271,595,311,592,306,669,267"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="642,316,803,357"/>
-<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="725,269,725,301,720,301,720,269"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="826,324,1029,350"/>
-<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="783,266,889,315,886,320,780,271"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,73,79,127,77,127,75,123,77,121,239,68"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="90,132,157,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="265,79,164,127,162,122,263,74"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="181,132,234,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="294,79,236,124,233,120,291,74"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="259,132,316,157"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="323,77,302,119,298,116,318,75"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="341,132,434,157"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="356,75,377,116,372,119,352,77"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="458,132,578,157"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="400,74,484,121,482,126,397,79"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="602,124,763,165"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="435,68,602,117,600,122,434,73"/>
+<area shape="rect" id="Node000009" href="$AmclConvergenceEvaluator_8hpp.html" title="Declaration of the AmclConvergenceEvaluator plugin." alt="" coords="787,124,996,165"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="435,57,772,119,771,124,434,62"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="706,228,773,253"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="861,168,774,221,771,217,858,163"/>
+<area shape="rect" id="Node000011" href="$RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="797,213,986,268"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="894,165,894,197,889,197,889,165"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="1010,228,1120,253"/>
+<area shape="poly" id="edge14_Node000009_Node000015" title=" " alt="" coords="929,163,1030,217,1028,222,927,168"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="636,316,787,357"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="841,271,764,311,761,306,838,267"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="811,316,972,357"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="894,269,894,301,889,301,889,269"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="996,324,1198,350"/>
+<area shape="poly" id="edge13_Node000011_Node000014" title=" " alt="" coords="952,266,1058,315,1056,320,950,271"/>
 </map>
