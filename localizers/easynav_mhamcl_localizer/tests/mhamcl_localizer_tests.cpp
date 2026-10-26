@@ -50,6 +50,7 @@ public:
   using easynav::mhamcl::MHAMCLLocalizer::hypotheses_;
   using easynav::mhamcl::MHAMCLLocalizer::current_;
   using easynav::mhamcl::MHAMCLLocalizer::manage_hypotheses;
+  using easynav::mhamcl::MHAMCLLocalizer::select_hypothesis_locked;
   using easynav::mhamcl::MHAMCLLocalizer::update_rt;
 };
 
@@ -80,6 +81,7 @@ struct HypothesesFixture
         rclcpp::Parameter("test.max_hypotheses", 3),
         rclcpp::Parameter("test.initial_pose.std_dev_xy", 0.05),
         rclcpp::Parameter("test.initial_pose.std_dev_yaw", 0.05),
+        rclcpp::Parameter("test.min_winner_time", 0.3),
       });
     node = std::make_shared<easynav::LocalizerNode>(options);
     localizer = std::make_shared<FriendMHAMCLLocalizer>();
@@ -294,7 +296,7 @@ TEST_F(MHAMCLLocalizerTest, HypothesesThatConvergeAreMerged)
   EXPECT_EQ(f.localizer->current_, f.localizer->hypotheses_.front());
 }
 
-TEST_F(MHAMCLLocalizerTest, SelectedHypothesisChangesOnlyIfClearlyBetter)
+TEST_F(MHAMCLLocalizerTest, SelectedHypothesisChangesOnlyIfClearlyBetterForAWhile)
 {
   HypothesesFixture f;
   f.localizer->manage_hypotheses({candidate(5.0, 5.0, 1.0, 0.9)}, f.map);
@@ -307,14 +309,74 @@ TEST_F(MHAMCLLocalizerTest, SelectedHypothesisChangesOnlyIfClearlyBetter)
   // Better, but not enough
   first->set_quality(0.7);
   second->set_quality(0.8);
-  f.localizer->manage_hypotheses({}, f.map);
+  f.localizer->select_hypothesis_locked();
+  std::this_thread::sleep_for(std::chrono::milliseconds(400));
+  f.localizer->select_hypothesis_locked();
   EXPECT_EQ(f.localizer->current_, first);
 
-  // Clearly better
+  // Clearly better, but not yet for min_winner_time (0.3 s)
   second->set_quality(0.95);
-  f.localizer->manage_hypotheses({}, f.map);
+  f.localizer->select_hypothesis_locked();
+  EXPECT_EQ(f.localizer->current_, first);
+  std::this_thread::sleep_for(std::chrono::milliseconds(400));
+  f.localizer->select_hypothesis_locked();
   EXPECT_EQ(f.localizer->current_, second);
   EXPECT_NEAR(f.localizer->getEstimatedPose().getOrigin().x(), 5.0, 0.5);
+}
+
+TEST_F(MHAMCLLocalizerTest, ABriefDipOfTheSelectedOneDoesNotSwitch)
+{
+  HypothesesFixture f;
+  f.localizer->manage_hypotheses({candidate(5.0, 5.0, 1.0, 0.9)}, f.map);
+  auto first = f.localizer->hypotheses_[0];
+  auto second = f.localizer->hypotheses_[1];
+  f.localizer->current_ = first;
+  first->set_quality(0.9);
+  second->set_quality(0.8);
+
+  // People around: the selected one drops for less than min_winner_time
+  for (int k = 0; k < 3; ++k) {
+    first->set_quality(0.4);
+    f.localizer->select_hypothesis_locked();
+    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    first->set_quality(0.9);
+    f.localizer->select_hypothesis_locked();  // the challenge restarts
+    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+  }
+  EXPECT_EQ(f.localizer->current_, first);
+}
+
+TEST_F(MHAMCLLocalizerTest, SymmetricHypothesesNeverSwitch)
+{
+  HypothesesFixture f;
+  f.localizer->manage_hypotheses({candidate(5.0, 5.0, 1.0, 0.9)}, f.map);
+  auto first = f.localizer->hypotheses_[0];
+  auto second = f.localizer->hypotheses_[1];
+  f.localizer->current_ = first;
+  for (int k = 0; k < 8; ++k) {
+    // Equally good places, each slightly ahead now and then
+    first->set_quality(k % 2 ? 0.85 : 0.95);
+    second->set_quality(k % 2 ? 0.95 : 0.85);
+    f.localizer->select_hypothesis_locked();
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  }
+  EXPECT_EQ(f.localizer->current_, first);
+}
+
+TEST_F(MHAMCLLocalizerTest, ADroppedSelectedHypothesisIsReplacedByTheBestAtOnce)
+{
+  HypothesesFixture f;
+  f.localizer->manage_hypotheses(
+    {candidate(5.0, 5.0, 1.0, 0.9), candidate(-5.0, -5.0, 0.0, 0.9)}, f.map);
+  ASSERT_EQ(f.localizer->hypotheses_.size(), 3u);
+  auto first = f.localizer->hypotheses_[0];
+  f.localizer->current_ = first;
+  first->set_quality(0.01);  // very low: removed
+  f.localizer->hypotheses_[1]->set_quality(0.5);
+  f.localizer->hypotheses_[2]->set_quality(0.8);
+  auto best = f.localizer->hypotheses_[2];
+  f.localizer->manage_hypotheses({}, f.map);
+  EXPECT_EQ(f.localizer->current_, best);
 }
 
 namespace

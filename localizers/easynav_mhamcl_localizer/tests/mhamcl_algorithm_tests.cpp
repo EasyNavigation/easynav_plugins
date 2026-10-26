@@ -16,6 +16,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <utility>
 #include <vector>
 
 #include "tf2/LinearMath/Quaternion.hpp"
@@ -301,6 +302,62 @@ TEST(MapMatcherTest, FindsThePoseInTheWholeMap)
     unsigned int mx, my;
     ASSERT_TRUE(map.worldToMap(m.transform.getOrigin().x(), m.transform.getOrigin().y(), mx, my));
   }
+}
+
+TEST(MapMatcherTest, TheBestCandidateIsTheTruthWhateverTheHeading)
+{
+  // Headings off the coarse angle grid (pi/8): the exact-cell score lost them all.
+  const auto map = make_room();
+  for (const double yaw : {0.1, 0.2, 0.3, 1.0, -2.5, 2.9}) {
+    for (const auto & xy : std::vector<std::pair<double, double>>{{3.0, 6.0}, {6.0, 2.0}}) {
+      const auto truth = make_pose(xy.first, xy.second, yaw);
+      const auto scan = simulate_scan(map, truth, 360);
+      MapMatcher matcher(map, 4, M_PI / 8.0, 0.05);
+      const auto matches = matcher.get_matches(scan, 0.5);
+      ASSERT_FALSE(matches.empty()) << yaw;
+      const auto & best = matches.front();
+      EXPECT_LT((best.transform.getOrigin() - truth.getOrigin()).length(), 0.2) << yaw;
+      EXPECT_LT(std::abs(easynav::mhamcl::normalize_angle(yaw_of(best.transform) - yaw)), 0.1)
+        << yaw;
+      EXPECT_GT(best.weight, 0.7) << yaw;
+    }
+  }
+}
+
+TEST(MapMatcherTest, ItStillFindsTheTruthWithPeopleAround)
+{
+  const auto map = make_room();
+  const auto truth = make_pose(6.0, 2.0, 0.7);
+  auto scan = simulate_scan(map, truth, 360);
+  // A fifth of the beams hit people close to the robot, not in the map
+  for (std::size_t i = 0; i < scan.size(); i += 5) {
+    const double n = std::hypot(scan[i].x(), scan[i].y());
+    scan[i] = scan[i] * (0.8 / n);
+  }
+  MapMatcher matcher(map, 4, M_PI / 8.0, 0.05);
+  const auto matches = matcher.get_matches(scan, 0.5);
+  ASSERT_FALSE(matches.empty());
+  EXPECT_LT((matches.front().transform.getOrigin() - truth.getOrigin()).length(), 0.2);
+}
+
+TEST(MapMatcherTest, TheDistanceFieldAndTheAngleStepsOfTheLevels)
+{
+  const auto map = make_room();
+  MapMatcher matcher(map, 4, M_PI / 8.0, 0.05);
+  // Wall along x = [0, 0.1) (cell 0): 1 m from the center of cell 10, the nearest obstacle
+  EXPECT_NEAR(matcher.distance_to_obstacle(1.05, 6.55), 1.0, 0.05);
+  EXPECT_NEAR(matcher.distance_to_obstacle(0.05, 5.05), 0.0, 1e-6);
+  EXPECT_TRUE(std::isinf(matcher.distance_to_obstacle(-5.0, 5.0))) << "out of the map";
+  EXPECT_NEAR(matcher.angle_step(3), M_PI / 8.0, 1e-12);
+  EXPECT_NEAR(matcher.angle_step(0), M_PI / 64.0, 1e-12);
+}
+
+TEST(MapMatcherTest, AMapWithoutObstaclesGivesNoCandidates)
+{
+  easynav::Costmap2D map(50, 50, kRes, 0.0, 0.0, easynav::FREE_SPACE);
+  MapMatcher matcher(map, 3);
+  const std::vector<tf2::Vector3> scan = {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}};
+  EXPECT_TRUE(matcher.get_matches(scan, 0.1).empty());
 }
 
 TEST(MapMatcherTest, NoPointsNoCandidates)

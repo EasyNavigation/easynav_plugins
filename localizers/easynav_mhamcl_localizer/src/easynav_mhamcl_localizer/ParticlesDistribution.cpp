@@ -96,7 +96,7 @@ ParticlesDistribution::init(
     p.hits = 0.0f;
   }
 
-  quality_ = quality;
+  quality_ = smoothed_quality_ = quality;
 }
 
 void
@@ -196,6 +196,8 @@ ParticlesDistribution::correct(
     p.hits /= static_cast<float>(points.size());
     quality_ = std::max(quality_, static_cast<double>(p.hits));
   }
+  const double a = std::clamp(params_.quality_smoothing, 0.0, 1.0);
+  smoothed_quality_ += a * (quality_ - smoothed_quality_);
 }
 
 void
@@ -270,6 +272,7 @@ ParticlesDistribution::merge(const ParticlesDistribution & other)
   particles_.resize(size);
 
   quality_ = std::max(quality_, other.quality_);
+  smoothed_quality_ = std::max(smoothed_quality_, other.smoothed_quality_);
   normalize();
 }
 

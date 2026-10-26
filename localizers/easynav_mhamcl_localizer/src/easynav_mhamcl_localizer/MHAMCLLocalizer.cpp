@@ -141,10 +141,13 @@ MHAMCLLocalizer::on_initialize()
   param("hypo_merge_angle", hp.hypo_merge_angle);
   param("good_hypo_threshold", hp.good_hypo_threshold);
   param("min_hypo_diff_winner", hp.min_hypo_diff_winner);
+  param("min_winner_time", hp.min_winner_time);
+  param("quality_smoothing", pp.quality_smoothing);
   param("new_hypothesis_std_xy", hp.new_hypothesis_std_xy);
   param("new_hypothesis_std_yaw", hp.new_hypothesis_std_yaw);
   param("matcher_levels", hp.matcher_levels);
   param("matcher_angle_step", hp.matcher_angle_step);
+  param("matcher_beam_width", hp.matcher_beam_width);
 
   // Non-positive values are undefined behavior in std::normal_distribution or make no sense
   if (
@@ -168,6 +171,7 @@ MHAMCLLocalizer::on_initialize()
   }
 
   if (hp.max_hypotheses < 1 || hp.matcher_levels < 1 || hp.matcher_angle_step <= 0.0 ||
+    hp.matcher_beam_width < 1 ||
     correct_max_points < 1)
   {
     throw std::runtime_error("MHAMCLLocalizer: invalid hypotheses parameters");
@@ -237,6 +241,11 @@ MHAMCLLocalizer::update(NavState & nav_state)
 
   if (hypotheses_params_.multihypothesis && nav_state.has("map.base")) {
     run_matching(nav_state.get<Costmap2D>("map.base"));
+  }
+
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    select_hypothesis_locked();
   }
 
   {
@@ -317,6 +326,7 @@ MHAMCLLocalizer::init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStampe
   hypotheses_.clear();
   hypotheses_.push_back(hypothesis);
   current_ = hypothesis;
+  challenger_.reset();
 
   // Results of a matching launched before are not valid anymore
   matching_ = std::future<std::vector<TransformWeighted>>();
@@ -490,7 +500,10 @@ MHAMCLLocalizer::run_matching(const easynav::Costmap2D & map)
       // The pyramid is rebuilt only when the map changes
       const int64_t map_stamp_ns = map.getLastModifiedStamp().nanoseconds();
       if (!matcher_ || map_stamp_ns != matcher_map_stamp_ns_) {
-        matcher_ = std::make_shared<MapMatcher>(map, hp.matcher_levels, hp.matcher_angle_step);
+        matcher_ = std::make_shared<MapMatcher>(
+          map, hp.matcher_levels, hp.matcher_angle_step,
+          particles_params_.distance_perception_error,
+          static_cast<std::size_t>(hp.matcher_beam_width));
         matcher_map_stamp_ns_ = map_stamp_ns;
       }
 
@@ -550,7 +563,8 @@ MHAMCLLocalizer::manage_hypotheses(
 
   // Destruction: hypotheses out of the free space or that do not explain the perception
   for (auto it = hypotheses_.begin(); it != hypotheses_.end(); ) {
-    const double quality = (*it)->get_quality();
+    // Smoothed: a hypothesis is not dropped for one perception full of people
+    const double quality = (*it)->get_smoothed_quality();
     const bool very_low = quality < hp.very_low_q_hypo_threshold;
     const bool low = quality < hp.low_q_hypo_threshold;
     const bool max_reached = static_cast<int>(hypotheses_.size()) == hp.max_hypotheses;
@@ -564,7 +578,13 @@ MHAMCLLocalizer::manage_hypotheses(
   }
 
   if (std::find(hypotheses_.begin(), hypotheses_.end(), current_) == hypotheses_.end()) {
-    current_ = hypotheses_.front();
+    // The selected one is gone: the best of the rest, at once.
+    current_ = *std::max_element(
+      hypotheses_.begin(), hypotheses_.end(),
+      [](const Hypothesis & a, const Hypothesis & b) {
+        return a->get_smoothed_quality() < b->get_smoothed_quality();
+      });
+    challenger_.reset();
   }
 
   // Merge: hypotheses that converged to the same pose
@@ -576,6 +596,7 @@ MHAMCLLocalizer::manage_hypotheses(
       if (dist < hp.hypo_merge_distance && diff_yaw < hp.hypo_merge_angle) {
         hypotheses_[i]->merge(*hypotheses_[j]);
         if (current_ == hypotheses_[j]) {current_ = hypotheses_[i];}
+        if (challenger_ == hypotheses_[j]) {challenger_ = hypotheses_[i];}
         hypotheses_.erase(hypotheses_.begin() + j);
       } else {
         ++j;
@@ -583,19 +604,50 @@ MHAMCLLocalizer::manage_hypotheses(
     }
   }
 
-  // Selection: another hypothesis replaces the current one only if it is clearly better
-  double current_quality = current_->get_quality();
+  RCLCPP_DEBUG(
+    get_node()->get_logger(), "%zu hypotheses, selected quality %lf", hypotheses_.size(),
+    current_->get_smoothed_quality());
+}
+
+void
+MHAMCLLocalizer::select_hypothesis_locked()
+{
+  const auto & hp = hypotheses_params_;
+  if (!current_) {return;}
+
+  // The best of the others, by their smoothed quality
+  Hypothesis best;
   for (const auto & hypothesis : hypotheses_) {
-    const double quality = hypothesis->get_quality();
-    if (quality > hp.good_hypo_threshold && quality > current_quality + hp.min_hypo_diff_winner) {
-      current_quality = quality;
-      current_ = hypothesis;
+    if (hypothesis == current_) {continue;}
+    if (!best || hypothesis->get_smoothed_quality() > best->get_smoothed_quality()) {
+      best = hypothesis;
     }
   }
 
-  RCLCPP_DEBUG(
-    get_node()->get_logger(), "%zu hypotheses, selected quality %lf", hypotheses_.size(),
-    current_->get_quality());
+  // Clearly better (symmetric places, close qualities, never switch)...
+  const double current_quality = current_->get_smoothed_quality();
+  const bool better = best && best->get_smoothed_quality() > hp.good_hypo_threshold &&
+    best->get_smoothed_quality() > current_quality + hp.min_hypo_diff_winner;
+  if (!better) {
+    challenger_.reset();
+    return;
+  }
+
+  // ...and for a while (a person passing by lowers the current one only briefly)
+  const auto now = get_node()->now();
+  if (challenger_ != best) {
+    challenger_ = best;
+    challenger_since_ = now;
+    return;
+  }
+  if ((now - challenger_since_).seconds() >= hp.min_winner_time) {
+    RCLCPP_INFO(
+      get_node()->get_logger(),
+      "MHAMCLLocalizer: switching to another hypothesis (quality %.2f over %.2f)",
+      best->get_smoothed_quality(), current_quality);
+    current_ = best;
+    challenger_.reset();
+  }
 }
 
 tf2::Transform
