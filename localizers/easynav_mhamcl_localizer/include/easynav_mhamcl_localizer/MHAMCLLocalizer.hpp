@@ -101,10 +101,12 @@ protected:
     double hypo_merge_angle {0.5};
     double good_hypo_threshold {0.6};
     double min_hypo_diff_winner {0.2};
+    double min_winner_time {2.0};
     double new_hypothesis_std_xy {0.1};
     double new_hypothesis_std_yaw {0.1};
     int matcher_levels {4};
     double matcher_angle_step {M_PI / 8.0};
+    int matcher_beam_width {500};
   };
 
   /// \brief Apply the odometry increment to every hypothesis.
@@ -127,6 +129,9 @@ protected:
 
   /// \brief Launch (or harvest) the asynchronous map matching.
   void run_matching(const easynav::Costmap2D & map);
+
+  /// Switches to another hypothesis only after it beat the current one for min_winner_time.
+  void select_hypothesis_locked();
 
   /// \brief Callback for the initial pose. Discards all the hypotheses and starts a new one.
   void init_pose_callback(geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg);
@@ -187,6 +192,9 @@ protected:
 
   std::vector<Hypothesis> hypotheses_;
   Hypothesis current_;
+  /// The hypothesis beating the current one, and since when.
+  Hypothesis challenger_;
+  rclcpp::Time challenger_since_;
 
   ParticlesParams particles_params_;
   HypothesesParams hypotheses_params_;
