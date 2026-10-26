@@ -32,7 +32,8 @@ namespace easynav
  * Selected for diagnostics with hardware_id == "localizer.amcl" (shared with
  * AmclConvergenceEvaluator, in the same package). Takes control of "cmd_vel"
  * (requires_control() == true) and rotates slowly in place each RT cycle, re-checking the same
- * covariance trace the evaluator reads, until it drops back under threshold — or until `timeout`
+ * covariance trace the evaluator reads, until it drops back under threshold and the match score
+ * (if checked) is back above `match_threshold` — or until `timeout`
  * elapses without that happening, at which point it gives up (stops, returns FAILED) rather than
  * spinning forever.
  */
@@ -62,6 +63,10 @@ private:
   /// (no hysteresis between evaluator and mitigator thresholds yet), same as already noted for
   /// ObstacleTooCloseEvaluator/SafeRetreatRecovery.
   double covariance_threshold_ {1.0};
+
+  /// @brief And, if the localizer reports it, the match score must be at least this (0: not
+  /// checked). Same as AmclConvergenceEvaluator's by default.
+  double match_threshold_ {0.5};
 
   rclcpp::Time start_time_;
 };

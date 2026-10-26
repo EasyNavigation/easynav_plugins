@@ -247,6 +247,19 @@ AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
   node->get_parameter<double>(plugin_name + ".min_height", min_height_);
+  double alpha_slow = 0.001, alpha_fast = 0.1;
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".recovery_alpha_slow", alpha_slow);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".recovery_alpha_fast", alpha_fast);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".random_particles_max_fraction", random_particles_max_fraction_);
+  node->get_parameter<double>(plugin_name + ".recovery_alpha_slow", alpha_slow);
+  node->get_parameter<double>(plugin_name + ".recovery_alpha_fast", alpha_fast);
+  node->get_parameter<double>(
+    plugin_name + ".random_particles_max_fraction", random_particles_max_fraction_);
+  random_particles_max_fraction_ = std::clamp(random_particles_max_fraction_, 0.0, 0.5);
+  quality_ = LocalizationQuality(alpha_slow, alpha_fast);
   node->get_parameter<bool>(plugin_name + ".compute_odom_from_tf", compute_odom_from_tf_);
 
   node->get_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
@@ -358,13 +371,20 @@ AMCLLocalizer::update(NavState & nav_state)
   correct(nav_state);
 
   if ((get_node()->now() - last_reseed_).seconds() > reseed_time_) {
-    reseed();
+    const Costmap2D * map =
+      nav_state.has("map.base") ? &nav_state.get<Costmap2D>("map.base") : nullptr;
+    reseed(map, map ? random_particles_to_inject() : 0);
     last_reseed_ = get_node()->now();
   }
 
   const auto odom = get_pose();
   nav_state.set("robot_pose", odom);
   nav_state.set("localizer.amcl.covariance_trace", covariance_trace(odom));
+  if (quality_.has_data()) {
+    // Read by AmclConvergenceEvaluator and AmclRelocalizeMitigation.
+    nav_state.set("localizer.amcl.match_score", quality_.match_score());
+    nav_state.set("localizer.amcl.quality_ratio", quality_.quality_ratio());
+  }
 
   publishParticles();
 }
@@ -530,6 +550,8 @@ AMCLLocalizer::init_pose_callback(
 
   // Prevent immediate reseed after initialization
   last_reseed_ = get_node()->now();
+  // A new pose: the scores before it are no reference any more.
+  quality_.reset();
 
   // Compute map->basefootprint estimate
   tf2::Transform map2bf = getEstimatedPose();
@@ -666,6 +688,8 @@ AMCLLocalizer::correct(NavState & nav_state)
     return;
   }
 
+  double score_sum = 0.0, best_score = 0.0;
+  std::size_t scored = 0;
   for (auto & particle : particles_) {
     int hits = 0;
     int possible_hits = 0;
@@ -687,6 +711,16 @@ AMCLLocalizer::correct(NavState & nav_state)
 
     particle.hits += hits;
     particle.possible_hits += possible_hits;
+    if (possible_hits > 0) {
+      const double score = static_cast<double>(hits) / static_cast<double>(possible_hits);
+      score_sum += score;
+      best_score = std::max(best_score, score);
+      ++scored;
+    }
+  }
+  // Absolute scores, before the weights are normalized: they tell a lost filter apart.
+  if (scored > 0) {
+    quality_.add(score_sum / static_cast<double>(scored), best_score);
   }
 
   for (auto & particle : particles_) {
@@ -710,8 +744,16 @@ AMCLLocalizer::correct(NavState & nav_state)
   }
 }
 
+std::size_t
+AMCLLocalizer::random_particles_to_inject() const
+{
+  const double n = static_cast<double>(particles_.size());
+  const double share = std::min(quality_.injection_probability(), random_particles_max_fraction_);
+  return static_cast<std::size_t>(std::floor(share * n + 0.5));
+}
+
 void
-AMCLLocalizer::reseed()
+AMCLLocalizer::reseed(const Costmap2D * map, std::size_t n_random)
 {
   if (particles_.empty()) {return;}
   if (particles_[0].possible_hits == 0) {return;}
@@ -753,6 +795,31 @@ AMCLLocalizer::reseed()
     particles_[i].pose.setOrigin(new_origin);
     particles_[i].pose.setRotation(q);
     particles_[i].weight = ref_particle.weight;
+  }
+
+  // The worst ones (the last after sorting) go to random free poses of the map: if the filter is
+  // lost, one of them may land near the true pose and win the next reseeds.
+  if (map && n_random > 0 && map->getSizeInCellsX() > 0 && map->getSizeInCellsY() > 0) {
+    n_random = std::min(n_random, N - N_top);
+    std::uniform_int_distribution<unsigned int> cell_x(0, map->getSizeInCellsX() - 1);
+    std::uniform_int_distribution<unsigned int> cell_y(0, map->getSizeInCellsY() - 1);
+    std::uniform_real_distribution<double> any_yaw(-M_PI, M_PI);
+    const double min_weight = particles_[N_top - 1].weight;
+    std::size_t placed = 0;
+    for (std::size_t tries = 0; placed < n_random && tries < 100 * n_random; ++tries) {
+      const unsigned int cx = cell_x(rng_), cy = cell_y(rng_);
+      const uint8_t cost = map->getCost(cx, cy);
+      if (cost >= easynav::INSCRIBED_INFLATED_OBSTACLE) {continue;}  // obstacle or unknown
+      double wx, wy;
+      map->mapToWorld(cx, cy, wx, wy);
+      tf2::Quaternion q;
+      q.setRPY(0.0, 0.0, any_yaw(rng_));
+      auto & p = particles_[N - 1 - placed];
+      p.pose.setOrigin(tf2::Vector3(wx, wy, 0.0));
+      p.pose.setRotation(q);
+      p.weight = min_weight;
+      ++placed;
+    }
   }
 
   for (auto & particle : particles_) {

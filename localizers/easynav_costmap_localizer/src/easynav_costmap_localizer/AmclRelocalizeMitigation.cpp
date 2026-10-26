@@ -41,6 +41,9 @@ void AmclRelocalizeMitigation::on_initialize()
   node->get_parameter<double>(plugin_name + ".rotation_speed", rotation_speed_);
   node->get_parameter<double>(plugin_name + ".timeout", timeout_);
   node->get_parameter<double>(plugin_name + ".covariance_threshold", covariance_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".match_threshold", match_threshold_);
+  node->get_parameter<double>(plugin_name + ".match_threshold", match_threshold_);
 }
 
 bool AmclRelocalizeMitigation::can_handle(
@@ -66,7 +69,11 @@ easynav_diagnostic_recovery::RecoveryStatus AmclRelocalizeMitigation::on_cycle(N
   // snapshot copy) is required, not get(). See NavState's own get()/get_safe() guidance.
   if (nav_state.has("localizer.amcl.covariance_trace")) {
     const double trace = nav_state.get_safe<double>("localizer.amcl.covariance_trace");
-    if (trace <= covariance_threshold_) {
+    // A compact cloud is not enough: it must also match the map.
+    const bool matches = match_threshold_ <= 0.0 ||
+      !nav_state.has("localizer.amcl.match_score") ||
+      nav_state.get_safe<double>("localizer.amcl.match_score") >= match_threshold_;
+    if (trace <= covariance_threshold_ && matches) {
       stop_robot(nav_state);
       return easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED;
     }

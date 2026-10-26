@@ -31,6 +31,8 @@
 #include "tf2/LinearMath/Transform.hpp"
 #include "tf2_ros/transform_broadcaster.hpp"
 #include "easynav_core/LocalizerMethodBase.hpp"
+#include "easynav_costmap_common/costmap_2d.hpp"
+#include "easynav_costmap_localizer/LocalizationQuality.hpp"
 
 namespace easynav
 {
@@ -140,9 +142,21 @@ protected:
   void correct(NavState & nav_state);
 
   /**
-   * @brief Re-initializes the particle cloud if necessary.
+   * @brief Replaces the worse half of the particles with copies of the better half.
+   * @param map With it, the `n_random` worst particles get random free poses of the map instead
+   *   (kidnapping recovery).
+   * @param n_random How many of the worst particles to place at random.
    */
-  void reseed();
+  void reseed(const Costmap2D * map = nullptr, std::size_t n_random = 0);
+
+  /// @brief How many particles to place at random at the next reseed (from the quality drop).
+  std::size_t random_particles_to_inject() const;
+
+  /// @brief How well the particles explain the sensors (see LocalizationQuality).
+  LocalizationQuality quality_;
+
+  /// @brief At most this share of the particles is placed at random in a reseed.
+  double random_particles_max_fraction_ {0.25};
 
   /// TF broadcaster to publish map to base_footprint transform.
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
