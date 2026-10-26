@@ -212,7 +212,11 @@ protected:
 
 TEST_F(AMCLScoresTest, TheScoresTellARightPoseFromAWrongOne)
 {
-  auto localizer = make("scores_localizer");
+  node_ = std::make_shared<easynav::LocalizerNode>();
+  node_->declare_parameter("scores_localizer.num_particles", 100);
+  node_->declare_parameter("scores_localizer.random_particles_max_fraction", 0.25);
+  auto localizer = std::make_shared<TestAMCLLocalizer>();
+  localizer->initialize(node_, "scores_localizer");
   easynav::NavState nav_state;
   nav_state.set("map.base", walled_map());
   see_the_wall(nav_state);
@@ -301,6 +305,65 @@ TEST_F(AMCLScoresTest, WithoutAMapOrADropNoneIsRandom)
   for (const auto & p : localizer->particles_) {
     EXPECT_LT(p.pose.getOrigin().length(), 0.5);
   }
+}
+
+TEST_F(AMCLScoresTest, NoRandomParticlesByDefault)
+{
+  auto localizer = make("default_localizer", 100);
+  localizer->quality_.add(0.5, 0.8);
+  for (int i = 0; i < 50; ++i) {
+    localizer->quality_.add(0.0, 0.0);
+  }
+  EXPECT_GT(localizer->quality_.injection_probability(), 0.5) << "the drop is still reported";
+  EXPECT_EQ(localizer->random_particles_to_inject(), 0u);
+}
+
+TEST_F(AMCLScoresTest, FarParticlesDoNotDragTheEstimate)
+{
+  auto localizer = make("cluster_localizer", 100);
+  // 90 particles around (1, 1), 10 heavier ones scattered 5-20 m away
+  for (std::size_t i = 0; i < localizer->particles_.size(); ++i) {
+    auto & p = localizer->particles_[i];
+    p.pose.setIdentity();
+    if (i < 90) {
+      p.pose.setOrigin(tf2::Vector3(1.0 + 0.01 * (i % 5), 1.0 + 0.01 * (i % 7), 0.0));
+      p.weight = 0.009;
+    } else {
+      p.pose.setOrigin(tf2::Vector3(5.0 + 1.5 * (i - 90), -3.0 * (i - 90), 0.0));
+      p.weight = 0.019;
+    }
+  }
+  const auto est = localizer->getEstimatedPose().getOrigin();
+  EXPECT_NEAR(est.x(), 1.02, 0.05);
+  EXPECT_NEAR(est.y(), 1.03, 0.05);
+}
+
+TEST_F(AMCLScoresTest, AManyParticlesPlaceWinsOverOneHeavyParticle)
+{
+  auto localizer = make("mode_localizer", 50);
+  for (std::size_t i = 0; i < localizer->particles_.size(); ++i) {
+    auto & p = localizer->particles_[i];
+    p.pose.setIdentity();
+    p.pose.setOrigin(i == 0 ? tf2::Vector3(10.0, 0.0, 0.0) : tf2::Vector3(0.0, 0.0, 0.0));
+    p.weight = i == 0 ? 0.3 : 0.7 / 49.0;
+  }
+  EXPECT_NEAR(localizer->getEstimatedPose().getOrigin().x(), 0.0, 1e-6);
+}
+
+TEST_F(AMCLScoresTest, PointsOutOfTheMapAreMisses)
+{
+  auto localizer = make("border_localizer", 10);
+  easynav::NavState nav_state;
+  nav_state.set("map.base", walled_map());
+  see_the_wall(nav_state);
+  // 0.9 m beyond the map's +x border (2 m): every point is out of the map
+  place_all(*localizer, 2.0);
+  localizer->correct(nav_state);
+  for (const auto & p : localizer->particles_) {
+    EXPECT_GT(p.possible_hits, 0);
+    EXPECT_EQ(p.hits, 0);
+  }
+  EXPECT_LT(localizer->quality_.match_score(), 0.01);
 }
 
 TEST_F(AMCLScoresTest, TheShareOfRandomOnesIsCapped)
