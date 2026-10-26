@@ -22,6 +22,7 @@
 
 #include "easynav_sensors/types/IMUPerception.hpp"
 #include "easynav_sensors/types/GNSSPerception.hpp"
+#include "navmap_core/NavMap.hpp"
 #include "sensor_msgs/msg/nav_sat_status.hpp"
 
 #include <GeographicLib/UTMUPS.hpp>
@@ -30,6 +31,7 @@
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Quaternion.hpp"
+#include "tf2/utils.hpp"
 
 namespace easynav
 {
@@ -51,6 +53,9 @@ void FusionLocalizer::on_initialize()
       *node, plugin_name + ".initial_pose.use_last_known",
       use_last_known_pose_);
     node->get_parameter(plugin_name + ".initial_pose.use_last_known", use_last_known_pose_);
+    easynav::declare_parameter_if_absent<bool>(
+      *node, plugin_name + ".navmap_terrain", navmap_terrain_);
+    node->get_parameter(plugin_name + ".navmap_terrain", navmap_terrain_);
 
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
@@ -95,6 +100,11 @@ void FusionLocalizer::on_initialize()
         localizer_node, tf_info.tf_prefix, plugin_name + ".global_filter", false
       );
       ukf_global_->initialize();
+      if (navmap_terrain_) {
+        // The published estimate (topic and map -> odom) is on the terrain too.
+        ukf_global_->setOutputAdjuster(
+          [this](nav_msgs::msg::Odometry & odom) {place_on_terrain(odom);});
+      }
     } else {
       RCLCPP_WARN(
         localizer_node->get_logger(),
@@ -167,6 +177,7 @@ void FusionLocalizer::init_pose_callback(
   const geometry_msgs::msg::PoseWithCovarianceStamped::SharedPtr msg)
 {
   pending_last_pose_.reset();  // A newer pose supersedes the last known one.
+  terrain_.set_height_hint(msg->pose.pose.position.z);
   if (has_global_filter_) {
     nav_msgs::msg::Odometry global_odom;
     // Get current position to calculate the offset
@@ -200,6 +211,7 @@ void FusionLocalizer::update_rt(NavState & nav_state)
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
 
   if (has_global_filter_) {
+    terrain_nav_state_ = &nav_state;
     if (n_gps_sensors_ && nav_state.has_group("gnss")) {
       auto gps_data = nav_state.get_group<easynav::GNSSPerception>(std::string("gnss"));
       const auto & gps_cb_arr = ukf_global_->getGpsCallbackDataArr();
@@ -247,6 +259,9 @@ void FusionLocalizer::update_rt(NavState & nav_state)
       pending_last_pose_.reset();
     }
     if (ukf_global_->getFilteredOdometryMessage(&global_odom)) {
+      if (navmap_terrain_) {
+        place_on_terrain(global_odom);
+      }
       nav_state.set("robot_pose", global_odom);
       navsat_pub_->publish(odom_to_navsatfix(global_odom));
     }
@@ -264,6 +279,32 @@ void FusionLocalizer::update_rt(NavState & nav_state)
 
 void FusionLocalizer::update([[maybe_unused]] NavState & nav_state)
 {
+}
+
+void FusionLocalizer::place_on_terrain(nav_msgs::msg::Odometry & odom)
+{
+  if (!terrain_nav_state_ || !terrain_nav_state_->has("map.navmap")) {
+    return;
+  }
+  const auto & map = terrain_nav_state_->get<::navmap::NavMap>("map.navmap");
+
+  std::optional<tf2::Quaternion> imu;
+  if (terrain_nav_state_->has("imu")) {
+    const auto & o = terrain_nav_state_->get<IMUPerception>("imu").data.orientation;
+    tf2::Quaternion q(o.x, o.y, o.z, o.w);
+    if (q.length2() > 1e-12) {
+      imu = q.normalized();
+    }
+  }
+
+  const auto & p = odom.pose.pose;
+  const double yaw = tf2::getYaw(p.orientation);
+  const auto placed = terrain_.project(map, p.position.x, p.position.y, yaw, imu);
+  if (!placed) {
+    return;
+  }
+  odom.pose.pose.position.z = placed->z;
+  odom.pose.pose.orientation = tf2::toMsg(placed->orientation);
 }
 
 geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose(

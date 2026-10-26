@@ -21,6 +21,7 @@
   <depend>geographiclib</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
+  <depend>navmap_core</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>

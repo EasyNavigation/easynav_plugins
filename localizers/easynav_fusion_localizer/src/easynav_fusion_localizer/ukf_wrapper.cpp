@@ -2435,6 +2435,9 @@ void UkfWrapper::periodicUpdate()
   bool corrected_data = false;
 
   if (getFilteredOdometryMessage(filtered_position.get())) {
+    if (output_adjuster_) {
+      output_adjuster_(*filtered_position);
+    }
     world_base_link_trans_msg_.header.stamp =
       static_cast<rclcpp::Time>(filtered_position->header.stamp) + tf_time_offset_;
     world_base_link_trans_msg_.header.frame_id =

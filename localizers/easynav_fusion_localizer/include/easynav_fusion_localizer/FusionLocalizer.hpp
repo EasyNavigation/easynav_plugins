@@ -21,6 +21,7 @@
 #include <string>
 
 #include "easynav_core/LocalizerMethodBase.hpp"
+#include "easynav_fusion_localizer/NavMapTerrain.hpp"
 #include "easynav_fusion_localizer/ukf_wrapper.hpp"
 #include "sensor_msgs/msg/imu.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
@@ -118,6 +119,15 @@ private:
   std::string navsatfix_topic_;
 
   bool first_pose_received_{false};
+
+  /// @brief Places the global estimate on the NavMap's surface, if there is one.
+  void place_on_terrain(nav_msgs::msg::Odometry & odom);
+
+  /// @brief Whether to take z and attitude from a NavMap ("navmap_terrain").
+  bool navmap_terrain_{true};
+  NavMapTerrain terrain_;
+  /// @brief The NavState of the running update_rt(), for place_on_terrain().
+  const NavState * terrain_nav_state_{nullptr};
 };
 
 }  // namespace easynav
