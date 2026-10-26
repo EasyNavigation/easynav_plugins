@@ -34,10 +34,12 @@
 
 #include <deque>
 #include <fstream>
+#include <functional>
 #include <map>
 #include <memory>
 #include <queue>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "diagnostic_msgs/msg/diagnostic_status.hpp"
@@ -213,6 +215,15 @@ public:
   //! @return true if the filter is initialized, false otherwise
   //!
   bool getFilteredOdometryMessage(nav_msgs::msg::Odometry * message);
+
+  //! @brief Adjusts the filter's output before it is published (topic and TF).
+  using OutputAdjuster = std::function<void (nav_msgs::msg::Odometry &)>;
+
+  //! @brief Sets the output adjuster (nullptr: none), e.g. to place a planar
+  //! estimate on a terrain.
+  //! @param[in] adjuster - Called with each output to publish.
+  //!
+  void setOutputAdjuster(OutputAdjuster adjuster) {output_adjuster_ = std::move(adjuster);}
 
   //! @brief Retrieves the EKF's acceleration output for broadcasting
   //! @param[out] message - The standard ROS acceleration message to be filled
@@ -567,6 +578,10 @@ protected:
 
   //! @brief Whether we'll allow old measurements to cause a re-publication of the updated state
   bool permit_corrected_publication_;
+
+  //! @brief Applied to each output before it is published
+  //!
+  OutputAdjuster output_adjuster_;
 
   //! @brief The max (worst) dynamic diagnostic level.
   //!
