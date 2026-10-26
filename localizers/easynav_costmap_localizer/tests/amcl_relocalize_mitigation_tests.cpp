@@ -141,3 +141,41 @@ TEST_F(AmclRelocalizeMitigationTestCase, FailsAfterTimeoutWithoutRelocalizing)
   const auto & cmd = *proposed;
   EXPECT_DOUBLE_EQ(cmd.twist.angular.z, 0.0);
 }
+
+TEST_F(AmclRelocalizeMitigationTestCase, ACompactCloudMustAlsoMatchTheMap)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_match_node",
+    rclcpp::NodeOptions()
+    .append_parameter_override("amcl_mit5.covariance_threshold", 0.5)
+    .append_parameter_override("amcl_mit5.match_threshold", 0.3));
+  auto mit = make_mitigation(node, "amcl_mit5");
+
+  easynav::NavState nav_state;
+  nav_state.set("localizer.amcl.covariance_trace", 0.1);
+  nav_state.set("localizer.amcl.match_score", 0.1);  // compact, but lost
+
+  mit->internal_start(nav_state);
+  EXPECT_EQ(
+    mit->internal_cycle(nav_state), easynav_diagnostic_recovery::RecoveryStatus::RUNNING);
+
+  nav_state.set("localizer.amcl.match_score", 0.5);
+  EXPECT_EQ(
+    mit->internal_cycle(nav_state), easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED);
+}
+
+TEST_F(AmclRelocalizeMitigationTestCase, WithoutAMatchScoreOnlyTheCovarianceCounts)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_no_match_node",
+    rclcpp::NodeOptions()
+    .append_parameter_override("amcl_mit6.covariance_threshold", 0.5)
+    .append_parameter_override("amcl_mit6.match_threshold", 0.3));
+  auto mit = make_mitigation(node, "amcl_mit6");
+
+  easynav::NavState nav_state;
+  nav_state.set("localizer.amcl.covariance_trace", 0.1);
+  mit->internal_start(nav_state);
+  EXPECT_EQ(
+    mit->internal_cycle(nav_state), easynav_diagnostic_recovery::RecoveryStatus::SUCCEEDED);
+}
