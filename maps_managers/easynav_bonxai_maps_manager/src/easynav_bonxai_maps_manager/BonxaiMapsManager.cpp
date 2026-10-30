@@ -184,8 +184,7 @@ BonxaiMapsManager::update_from_pc2(const sensor_msgs::msg::PointCloud2 & pc2)
   geometry_msgs::msg::TransformStamped tf_msg;
   try {
     tf_msg = ::easynav::RTTFBuffer::getInstance()->lookupTransform(
-      tf_info.map_frame, pc2.header.frame_id, pc2.header.stamp,
-      rclcpp::Duration::from_seconds(0.05));
+      tf_info.map_frame, pc2.header.frame_id, pc2.header.stamp);  // RTTFBuffer extrapolates
   } catch (const tf2::TransformException & ex) {
     // Throttled: if TF is always late, every point cloud would warn
     RCLCPP_WARN_THROTTLE(
