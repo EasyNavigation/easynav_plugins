@@ -134,7 +134,7 @@ inline void set_rectangle(MPPIParams & p, double length, double width)
 /// Limits of a differential robot like the defaults of RobotLimits.
 inline MPPIParams diff_params()
 {
-  auto p = MPPIParams::defaults_for(MotionModel::Diff);
+  MPPIParams p;
   p.max_vx = 0.5;
   p.min_vx = -0.2;
   p.max_wz = 1.0;
@@ -151,7 +151,8 @@ inline MPPIParams diff_params()
 inline MPPIParams omni_params()
 {
   const auto diff = diff_params();
-  auto p = MPPIParams::defaults_for(MotionModel::Omni);
+  MPPIParams p;
+  p.motion_model = MotionModel::Omni;
   p.max_vx = diff.max_vx;
   p.max_wz = diff.max_wz;
   p.acc_vx = diff.acc_vx;

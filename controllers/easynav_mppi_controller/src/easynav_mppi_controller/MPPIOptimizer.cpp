@@ -33,7 +33,7 @@ constexpr double kExploreRatio = 0.1;
 /// Local path beyond the reach of the rollouts (m).
 constexpr double kLocalPathMargin = 1.0;
 /// Path weights while an obstacle blocks the path (the rollouts must leave it).
-constexpr double kBlockedPathScale = 0.1;
+constexpr double kBlockedPathScale = 0.01;
 
 double normalize(double angle)
 {

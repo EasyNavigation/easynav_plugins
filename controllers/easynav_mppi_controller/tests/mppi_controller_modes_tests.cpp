@@ -131,13 +131,17 @@ TEST_F(MppiModesTest, UnknownModesFailToInitialize)
   EXPECT_NO_THROW(make({{"mppi.fov", 1.57}})) << "deprecated, no effect";
 }
 
-TEST_F(MppiModesTest, TheWeightsDefaultToTheMotionModelsUnlessGiven)
+TEST_F(MppiModesTest, TheWeightsAreTheSameForBothMotionModelsUnlessGiven)
 {
-  const auto omni = easynav::MPPIParams::defaults_for(easynav::MotionModel::Omni);
-  EXPECT_DOUBLE_EQ(make({{"mppi.motion_model", "omni"}})->params_.path_weight, omni.path_weight);
-  EXPECT_DOUBLE_EQ(
-    make({{"mppi.motion_model", "omni"}, {"mppi.path_weight", 3.0}})->params_.path_weight, 3.0);
-  EXPECT_DOUBLE_EQ(make({})->params_.path_weight, easynav::MPPIParams{}.path_weight);
+  const easynav::MPPIParams defaults;
+  for (const char * model : {"diff", "omni"}) {
+    const auto mppi = make({{"mppi.motion_model", model}});
+    EXPECT_DOUBLE_EQ(mppi->params_.path_weight, defaults.path_weight) << model;
+    EXPECT_DOUBLE_EQ(mppi->params_.heading_weight, defaults.heading_weight) << model;
+    EXPECT_DOUBLE_EQ(
+      make({{"mppi.motion_model", model}, {"mppi.path_weight", 3.0}})->params_.path_weight, 3.0)
+      << model;
+  }
 }
 
 TEST_F(MppiModesTest, ADifferentialRobotNeverCommandsSideways)

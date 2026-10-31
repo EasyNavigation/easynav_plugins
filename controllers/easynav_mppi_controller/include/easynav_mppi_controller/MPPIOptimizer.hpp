@@ -106,9 +106,9 @@ struct MPPIParams
   /// Penalized within safety_radius - robot_radius of the robot's body (m).
   double safety_radius {0.6};
 
-  double path_weight {15.0};         ///< Distance to the path. Omni default: 40.
+  double path_weight {40.0};         ///< Distance to the path.
   double progress_weight {8.0};      ///< Path left to the end of the local path.
-  double heading_weight {10.0};      ///< Error to the heading of heading_mode. Omni: 20.
+  double heading_weight {20.0};      ///< Error to the heading of heading_mode.
   double heading_lookahead {0.5};    ///< "path" faces the path this far ahead (m).
   double goal_weight {5.0};          ///< Distance to the goal, when within reach.
   double goal_heading_weight {3.0};  ///< Error to the goal's heading, near the goal (omni).
@@ -120,20 +120,6 @@ struct MPPIParams
 
   double grid_resolution {0.05};     ///< Resolution of the obstacle and path grids (m).
   uint32_t seed {42};                ///< Random seed (results are repeatable).
-
-  /// \brief The defaults for \p model. A holonomic robot follows the path closely and keeps
-  /// its heading on its own; a differential one steers with its heading, so it needs room to
-  /// turn and leave the path.
-  static MPPIParams defaults_for(MotionModel model)
-  {
-    MPPIParams p;
-    p.motion_model = model;
-    if (model == MotionModel::Omni) {
-      p.path_weight = 40.0;
-      p.heading_weight = 20.0;
-    }
-    return p;
-  }
 };
 
 /// \brief What the optimizer is doing.

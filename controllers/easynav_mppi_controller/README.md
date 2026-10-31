@@ -50,7 +50,7 @@ better):
 | Backward velocity | `forward_weight` | Differential |
 | Accelerations | `smoothness_weight` | |
 
-When an obstacle lies on the path within reach, the path and heading weights drop to a tenth: the
+When an obstacle lies on the path within reach, the path and heading weights drop to a hundredth: the
 path is only a guide around it. The new solution is the average of the rollouts weighted by
 `exp(-(cost - best) / lambda)`; when that average is worse than the best rollout (two equally good
 options, such as turning left or right, average to a bad one), the best rollout is the solution.
@@ -121,9 +121,9 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.lambda` | `double` | `0.05` | Temperature: lower follows the best rollouts more closely. |
 | `<plugin>.vx_std`, `vy_std`, `wz_std` | `double` | `0.2`, `0.2`, `0.4` | Sampling noise of each velocity. |
 | `<plugin>.noise_correlation` | `double` | `0.8` | Correlation of the noise between steps, [0, 1). |
-| `<plugin>.path_weight` | `double` | `15.0` (`omni`: `40.0`) | Distance to the path. |
+| `<plugin>.path_weight` | `double` | `40.0` | Distance to the path. |
 | `<plugin>.progress_weight` | `double` | `8.0` | Path left to the end of the local path. |
-| `<plugin>.heading_weight` | `double` | `10.0` (`omni`: `20.0`) | Error to the heading of `heading_mode`. |
+| `<plugin>.heading_weight` | `double` | `20.0` | Error to the heading of `heading_mode`. |
 | `<plugin>.heading_lookahead` | `double` | `0.5` | `heading_mode: path` faces the path this far ahead (m). |
 | `<plugin>.goal_weight` | `double` | `5.0` | Distance to the goal, when within reach. |
 | `<plugin>.goal_heading_weight` | `double` | `3.0` | Error to the goal's heading near it (holonomic). |
@@ -140,10 +140,6 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.max_visualized_rollouts` | `int` | `20` | Rollouts published in `/mppi/candidates` (0: none). |
 | — | — | — | Velocity and acceleration limits are not this plugin's: they are the robot limits of `controller_node` (`robot_limits.max_linear_vel`, `min_linear_vel`, `max_lateral_vel`, `max_angular_vel`, and their accelerations and decelerations), queried with `ControllerMethodBase::get_robot_limits()` and also enforced by ControllerNode's velocity smoother. A safely limited speed applies at once. |
 | — | — | — | The robot's shape is `system_node.robot_geometry` (`radius`, `height`, `footprint`). |
-
-The weights default to those of the motion model: a holonomic robot follows the path closely and
-keeps its heading on its own; a differential one steers with its heading, so it needs room to turn
-and leave the path. Weights configured explicitly apply to either.
 
 > **Deprecated:** this plugin's former limit parameters (`max_linear_velocity`, `max_angular_velocity`, `max_linear_acceleration`, `max_angular_acceleration`, under the plugin's name) still apply, with a warning, where `controller_node.robot_limits.*` does not set that limit. They will stop working soon: move them to `robot_limits`. `fov` has no effect any more.
 

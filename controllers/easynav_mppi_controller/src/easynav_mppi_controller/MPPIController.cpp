@@ -61,8 +61,8 @@ MPPIController::on_initialize()
     throw std::runtime_error(
             "[" + plugin_name + "] motion_model '" + motion_model + "' is not diff or omni");
   }
-  // Weights default to those of the motion model.
-  MPPIParams p = MPPIParams::defaults_for(model);
+  MPPIParams p;
+  p.motion_model = model;
   int num_samples = p.num_samples;
   int horizon_steps = p.horizon_steps;
   param("heading_yaw", heading_yaw_);
