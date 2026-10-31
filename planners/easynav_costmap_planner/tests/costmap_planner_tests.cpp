@@ -158,6 +158,28 @@ protected:
     nav_state_.set("map", map_);
   }
 
+  // Cells within r (m) of (x, y) at cost, unless already costlier.
+  void disc(double x, double y, double r, unsigned char cost)
+  {
+    for (unsigned int cx = 0; cx < kCells; ++cx) {
+      for (unsigned int cy = 0; cy < kCells; ++cy) {
+        double wx, wy;
+        map_.mapToWorld(cx, cy, wx, wy);
+        if (std::hypot(wx - x, wy - y) <= r && map_.getCost(cx, cy) < cost) {
+          map_.setCost(cx, cy, cost);
+        }
+      }
+    }
+    nav_state_.set("map", map_);
+  }
+
+  unsigned char cost_at(const geometry_msgs::msg::Pose & pose) const
+  {
+    unsigned int cx, cy;
+    EXPECT_TRUE(map_.worldToMap(pose.position.x, pose.position.y, cx, cy));
+    return map_.getCost(cx, cy);
+  }
+
   nav_msgs::msg::Path path() const
   {
     return nav_state_.get<nav_msgs::msg::Path>("path");
@@ -283,6 +305,84 @@ TEST_F(CostmapPlannerTest, UnreachableGoalsGiveAnEmptyPath)
   set_goal(3.55, 0.55);
   planner_->update(nav_state_);
   EXPECT_TRUE(path().poses.empty()) << "split map";
+}
+
+// The robot inside the inflated zone (e.g. after cutting a corner): it may leave it, but the
+// rest of the path is out of it.
+TEST_F(CostmapPlannerTest, ARobotInsideTheInflatedZoneLeavesIt)
+{
+  // An obstacle 0.1 m from the robot, inflated by 0.3 m: the robot and every cell around it,
+  // two cells deep, are inside
+  disc(0.45, 0.55, 0.05, easynav::LETHAL_OBSTACLE);
+  disc(0.45, 0.55, 0.3, easynav::INSCRIBED_INFLATED_OBSTACLE);
+  ASSERT_EQ(cost_at(nav_state_.get<nav_msgs::msg::Odometry>("robot_pose").pose.pose),
+    easynav::INSCRIBED_INFLATED_OBSTACLE);
+
+  set_goal(3.05, 3.05);
+  planner_->update(nav_state_);
+  const auto p = path();
+  ASSERT_FALSE(p.poses.empty());
+  EXPECT_NEAR(p.poses.back().pose.position.x, 3.05, 1e-6);
+
+  // Inflated cells only at the start, within the inscribed radius (0.3 m), never lethal
+  bool left = false;
+  for (const auto & pose : p.poses) {
+    const auto cost = cost_at(pose.pose);
+    EXPECT_LT(cost, easynav::LETHAL_OBSTACLE);
+    if (cost < easynav::INSCRIBED_INFLATED_OBSTACLE) {
+      left = true;
+    } else {
+      EXPECT_FALSE(left) << "back into the inflated zone at (" << pose.pose.position.x <<
+        ", " << pose.pose.position.y << ")";
+      EXPECT_LE(std::hypot(pose.pose.position.x - 0.55, pose.pose.position.y - 0.55), 0.4);
+    }
+  }
+  EXPECT_TRUE(left);
+}
+
+TEST_F(CostmapPlannerTest, LeavingTheInflatedZoneNeverCrossesLethalOrUnknownCells)
+{
+  // Inside the inflated zone, closed by lethal cells beyond it
+  disc(0.55, 0.55, 0.25, easynav::INSCRIBED_INFLATED_OBSTACLE);
+  wall_off(0.55, 0.55);
+  set_goal(3.05, 3.05);
+  planner_->update(nav_state_);
+  EXPECT_TRUE(path().poses.empty()) << "lethal ring";
+
+  // The same, closed by unknown cells
+  SetUp();
+  disc(0.55, 0.55, 0.15, easynav::INSCRIBED_INFLATED_OBSTACLE);
+  for (int dx = -2; dx <= 2; ++dx) {
+    for (int dy = -2; dy <= 2; ++dy) {
+      if (std::abs(dx) == 2 || std::abs(dy) == 2) {
+        set_cell(0.55 + dx * kResolution, 0.55 + dy * kResolution, easynav::NO_INFORMATION);
+      }
+    }
+  }
+  set_goal(3.05, 3.05);
+  planner_->update(nav_state_);
+  EXPECT_TRUE(path().poses.empty()) << "unknown ring";
+}
+
+TEST_F(CostmapPlannerTest, LeavingTheInflatedZoneGoesNoFartherThanTheInscribedRadius)
+{
+  // A band of inflated cells 1 m wide around the robot, beyond its inscribed radius (0.3 m)
+  disc(0.55, 0.55, 1.0, easynav::INSCRIBED_INFLATED_OBSTACLE);
+  set_goal(3.05, 3.05);
+  planner_->update(nav_state_);
+  EXPECT_TRUE(path().poses.empty());
+}
+
+TEST_F(CostmapPlannerTest, FromAFreeCellInflatedCellsAreNotCrossed)
+{
+  // The robot in a free cell, a one-cell inflated band across the map between it and the goal
+  for (unsigned int y = 0; y < kCells; ++y) {
+    map_.setCost(20, y, easynav::INSCRIBED_INFLATED_OBSTACLE);
+  }
+  nav_state_.set("map", map_);
+  set_goal(3.05, 3.05);
+  planner_->update(nav_state_);
+  EXPECT_TRUE(path().poses.empty()) << "the band is only crossed when starting inside it";
 }
 
 TEST_F(CostmapPlannerTest, UnreachableGoalDoesNotKeepThePreviousPath)
