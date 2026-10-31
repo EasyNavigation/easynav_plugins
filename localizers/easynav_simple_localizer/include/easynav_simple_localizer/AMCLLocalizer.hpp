@@ -215,6 +215,9 @@ protected:
   /// Flag indicating if the odometry has been initialized.
   bool initialized_odom_ = false;
 
+  /// Robot velocity from the odometry (robot frame), reported in robot_pose.
+  geometry_msgs::msg::Twist odom_twist_;
+
   /// Time interval (in seconds) after which the particles should be reseeded.
   double reseed_time_;
 

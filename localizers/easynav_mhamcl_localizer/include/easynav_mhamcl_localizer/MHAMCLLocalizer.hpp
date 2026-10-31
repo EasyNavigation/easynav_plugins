@@ -211,6 +211,10 @@ protected:
   tf2::Transform odom_{tf2::Transform::getIdentity()};
   tf2::Transform last_odom_{tf2::Transform::getIdentity()};
   bool initialized_odom_ {false};
+  /// Robot velocity from the odometry (robot frame), reported in robot_pose.
+  geometry_msgs::msg::Twist odom_twist_;
+  /// Stamp of odom_ when taken from TF.
+  rclcpp::Time odom_tf_stamp_ {0, 0, RCL_ROS_TIME};
 
   double reseed_time_ {3.0};
   double hypotheses_time_ {3.0};

@@ -25,6 +25,7 @@
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
+#include "tf2/utils.hpp"
 
 #include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
@@ -42,6 +43,23 @@ namespace mhamcl
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
+
+namespace
+{
+
+/// Velocity (frame of \p from) that moves \p from to \p to in \p dt seconds.
+geometry_msgs::msg::Twist twist_between(
+  const tf2::Transform & from, const tf2::Transform & to, double dt)
+{
+  const tf2::Transform delta = from.inverseTimes(to);
+  geometry_msgs::msg::Twist twist;
+  twist.linear.x = delta.getOrigin().x() / dt;
+  twist.linear.y = delta.getOrigin().y() / dt;
+  twist.angular.z = tf2::getYaw(delta.getRotation()) / dt;
+  return twist;
+}
+
+}  // namespace
 
 MHAMCLLocalizer::MHAMCLLocalizer()
 : rng_(std::random_device{}())
@@ -355,6 +373,7 @@ MHAMCLLocalizer::update_odom(NavState & nav_state)
     if (msg.header.stamp.sec != 0 || msg.header.stamp.nanosec != 0) {
       last_odom_ = odom_;
       tf2::fromMsg(msg.pose.pose, odom_);
+      odom_twist_ = msg.twist.twist;
       last_input_time_ = msg.header.stamp;
 
       if (!initialized_odom_) {
@@ -383,8 +402,17 @@ MHAMCLLocalizer::update_odom_from_tf()
     return false;
   }
 
+  tf2::Transform tf_odom;
+  tf2::fromMsg(tf_msg.transform, tf_odom);
+  // TF has no velocity: from the motion since the previous sample (the same one: kept).
+  const rclcpp::Time stamp(tf_msg.header.stamp, RCL_ROS_TIME);
+  if (initialized_odom_ && stamp > odom_tf_stamp_) {
+    odom_twist_ = twist_between(odom_, tf_odom, (stamp - odom_tf_stamp_).seconds());
+  }
+  odom_tf_stamp_ = stamp;
+
   last_odom_ = odom_;
-  tf2::fromMsg(tf_msg.transform, odom_);
+  odom_ = tf_odom;
   last_input_time_ = tf_msg.header.stamp;
 
   if (!initialized_odom_) {
@@ -721,6 +749,7 @@ MHAMCLLocalizer::pose_msg_locked() const
   if (current_) {
     odom_msg.pose.covariance = current_->get_covariance();
   }
+  odom_msg.twist.twist = odom_twist_;
 
   return odom_msg;
 }
