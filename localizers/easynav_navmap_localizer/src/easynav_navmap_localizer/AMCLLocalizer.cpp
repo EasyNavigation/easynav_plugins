@@ -930,18 +930,6 @@ static inline std::string get_frame_id_from(const PointPerception & pp)
 }
 
 
-static inline tf2::Transform lookup_bf_to_sensor(
-  const std::string & robot_frame,
-  const std::string & sensor_frame)
-{
-  if (sensor_frame.empty()) {return tf2::Transform::getIdentity();}
-  geometry_msgs::msg::TransformStamped tf_msg =
-    RTTFBuffer::getInstance()->lookupTransform(
-    robot_frame, sensor_frame, tf2::TimePointZero, tf2::durationFromSec(0.0));
-  tf2::Transform T; tf2::fromMsg(tf_msg.transform, T);
-  return T;
-}
-
 struct ScoreAgg { float hits = 0.0f; float possible = 0.0f; };
 
 static ScoreAgg score_particle_sensor_cloud(
@@ -1056,22 +1044,27 @@ void AMCLLocalizer::correct(NavState & nav_state)
   // Each cloud where the sensor was when it took it, in the footprint the particles have now
   // (the odometry in between): a cloud a few hundred ms old, with the robot turning, would
   // otherwise be scored rotated
+  // (RTTFBuffer extrapolates a cloud slightly newer than the odometry). Without that TF the
+  // cloud is not scored: a wrong sensor pose would score the particles wrongly.
   const auto tf_info = RTTFBuffer::getInstance()->get_tf_info();
-  for (auto & b : bundles) {
-    try {
-      const auto msg = RTTFBuffer::getInstance()->lookupTransform(
-        tf_info.robot_footprint_frame, tf2::TimePointZero, b.frame_id,
-        tf2_ros::fromRclcpp(b.stamp), tf_info.odom_frame, tf2::durationFromSec(0.0));
-      tf2::fromMsg(msg.transform, b.T_bf_sensor);
-    } catch (const tf2::TransformException &) {
-      try {  // no odometry at the cloud's time: as if it were now
-        b.T_bf_sensor = lookup_bf_to_sensor(tf_info.robot_footprint_frame, b.frame_id);
-      } catch (const tf2::TransformException & ex) {
-        RCLCPP_WARN(
-          get_node()->get_logger(), "TF bf->%s failed: %s", b.frame_id.c_str(), ex.what());
-        b.T_bf_sensor = tf2::Transform::getIdentity();
-      }
-    }
+  bundles.erase(
+    std::remove_if(
+      bundles.begin(), bundles.end(), [&](SensorBundle & b) {
+        try {
+          const auto msg = RTTFBuffer::getInstance()->lookupTransform(
+            tf_info.robot_footprint_frame, tf2::TimePointZero, b.frame_id,
+            tf2_ros::fromRclcpp(b.stamp), tf_info.odom_frame);
+          tf2::fromMsg(msg.transform, b.T_bf_sensor);
+          return false;
+        } catch (const tf2::TransformException & ex) {
+          RCLCPP_WARN_THROTTLE(
+            get_node()->get_logger(), *get_node()->get_clock(), 2000,
+            "TF bf->%s failed, cloud not scored: %s", b.frame_id.c_str(), ex.what());
+          return true;
+        }
+      }), bundles.end());
+  if (bundles.empty()) {
+    return;
   }
 
   // Only points between min_point_height and max_point_height over the robot's footprint: the
