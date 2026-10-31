@@ -91,7 +91,7 @@ TEST_F(SimpleMapsManagerTest, BasicDynamicUpdate)
   perception->data.points[5].z = 0.2;
 
   perception->stamp = rclcpp::Time(0);
-  perception->frame_id = "map";
+  perception->frame_id = tf_info.map_frame;  // No TF to the map frame in this test
   perception->valid = true;
 
   navstate.set("laser", perception);
