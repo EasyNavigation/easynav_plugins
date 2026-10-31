@@ -24,6 +24,7 @@
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
+#include "tf2/utils.hpp"
 
 #include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
@@ -356,6 +357,18 @@ double covariance_trace(const nav_msgs::msg::Odometry & odom)
 {
   return odom.pose.covariance[0] + odom.pose.covariance[7] + odom.pose.covariance[35];
 }
+
+/// Velocity (frame of \p from) that moves \p from to \p to in \p dt seconds.
+geometry_msgs::msg::Twist twist_between(
+  const tf2::Transform & from, const tf2::Transform & to, double dt)
+{
+  const tf2::Transform delta = from.inverseTimes(to);
+  geometry_msgs::msg::Twist twist;
+  twist.linear.x = delta.getOrigin().x() / dt;
+  twist.linear.y = delta.getOrigin().y() / dt;
+  twist.angular.z = tf2::getYaw(delta.getRotation()) / dt;
+  return twist;
+}
 }  // namespace
 
 void
@@ -401,6 +414,7 @@ AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
   std::lock_guard<std::mutex> lock(particles_mutex_);
 
   tf2::fromMsg(msg->pose.pose, odom_);
+  odom_twist_ = msg->twist.twist;
   last_input_time_ = msg->header.stamp;
 
   if (!initialized_odom_) {
@@ -594,6 +608,13 @@ AMCLLocalizer::update_odom_from_tf()
 
   tf2::Transform tf_odom;
   tf2::fromMsg(tf_msg.transform, tf_odom);
+
+  // TF has no velocity: from the motion since the previous sample (the same one: kept).
+  const rclcpp::Time stamp(tf_msg.header.stamp, RCL_ROS_TIME);
+  if (initialized_odom_ && stamp > odom_tf_stamp_) {
+    odom_twist_ = twist_between(odom_, tf_odom, (stamp - odom_tf_stamp_).seconds());
+  }
+  odom_tf_stamp_ = stamp;
 
   last_odom_ = odom_;
   odom_ = tf_odom;
@@ -1012,12 +1033,7 @@ AMCLLocalizer::get_pose()
     odom_msg.pose.covariance[6 * 5 + 5] = yaw_var;
   }
 
-  odom_msg.twist.twist.linear.x = 0.0;
-  odom_msg.twist.twist.linear.y = 0.0;
-  odom_msg.twist.twist.linear.z = 0.0;
-  odom_msg.twist.twist.angular.x = 0.0;
-  odom_msg.twist.twist.angular.y = 0.0;
-  odom_msg.twist.twist.angular.z = 0.0;
+  odom_msg.twist.twist = odom_twist_;
 
   return odom_msg;
 }

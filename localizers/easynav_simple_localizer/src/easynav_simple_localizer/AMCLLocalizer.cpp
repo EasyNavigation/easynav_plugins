@@ -351,6 +351,7 @@ void
 AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
 {
   tf2::fromMsg(msg->pose.pose, odom_);
+  odom_twist_ = msg->twist.twist;
   last_input_time_ = msg->header.stamp;
 
   if (!initialized_odom_) {
@@ -869,12 +870,7 @@ AMCLLocalizer::get_pose()
     odom_msg.pose.covariance[6 * 5 + 5] = yaw_var;
   }
 
-  odom_msg.twist.twist.linear.x = 0.0;
-  odom_msg.twist.twist.linear.y = 0.0;
-  odom_msg.twist.twist.linear.z = 0.0;
-  odom_msg.twist.twist.angular.x = 0.0;
-  odom_msg.twist.twist.angular.y = 0.0;
-  odom_msg.twist.twist.angular.z = 0.0;
+  odom_msg.twist.twist = odom_twist_;
 
   return odom_msg;
 }

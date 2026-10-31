@@ -45,3 +45,6 @@ target_link_libraries(costmap_localizer_quality_tests
   ${PROJECT_NAME}
   rclcpp::rclcpp
 )
+
+ament_add_gtest(costmap_localizer_velocity_tests costmap_localizer_velocity_tests.cpp)
+target_link_libraries(costmap_localizer_velocity_tests ${PROJECT_NAME} rclcpp::rclcpp)

@@ -34,6 +34,7 @@
 #include "bonxai/probabilistic_map.hpp"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
+#include "tf2/utils.hpp"
 #include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
@@ -269,6 +270,18 @@ inflate_map(
 // ===================== ray cast (DDA, no-alloc) =====================
 namespace
 {
+
+/// Velocity (frame of \p from) that moves \p from to \p to in \p dt seconds.
+geometry_msgs::msg::Twist twist_between(
+  const tf2::Transform & from, const tf2::Transform & to, double dt)
+{
+  const tf2::Transform delta = from.inverseTimes(to);
+  geometry_msgs::msg::Twist twist;
+  twist.linear.x = delta.getOrigin().x() / dt;
+  twist.linear.y = delta.getOrigin().y() / dt;
+  twist.angular.z = tf2::getYaw(delta.getRotation()) / dt;
+  return twist;
+}
 
 inline bool ray_occluded_dda(
   const Bonxai::ProbabilisticMap & occ_map,
@@ -566,6 +579,7 @@ void AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
 {
   if (compute_odom_from_tf_) {return;}
   tf2::fromMsg(msg->pose.pose, odom_);
+  odom_twist_ = msg->twist.twist;
   last_input_time_ = msg->header.stamp;
   if (!initialized_odom_) {last_odom_ = odom_; initialized_odom_ = true;}
 }
@@ -770,7 +784,15 @@ void AMCLLocalizer::update_odom_from_tf()
     RCLCPP_WARN(get_node()->get_logger(), "TF failed: %s", ex.what());
     return;
   }
-  tf2::fromMsg(tf_msg.transform, odom_);
+  tf2::Transform tf_odom;
+  tf2::fromMsg(tf_msg.transform, tf_odom);
+  // TF has no velocity: from the motion since the previous sample (the same one: kept).
+  const rclcpp::Time stamp(tf_msg.header.stamp, RCL_ROS_TIME);
+  if (initialized_odom_ && stamp > odom_tf_stamp_) {
+    odom_twist_ = twist_between(odom_, tf_odom, (stamp - odom_tf_stamp_).seconds());
+  }
+  odom_tf_stamp_ = stamp;
+  odom_ = tf_odom;
   last_input_time_ = tf_msg.header.stamp;
   initialized_odom_ = true;
 }
@@ -1593,12 +1615,7 @@ AMCLLocalizer::get_pose()
     odom_msg.pose.covariance[6 * 5 + 5] = yaw_var;
   }
 
-  odom_msg.twist.twist.linear.x = 0.0;
-  odom_msg.twist.twist.linear.y = 0.0;
-  odom_msg.twist.twist.linear.z = 0.0;
-  odom_msg.twist.twist.angular.x = 0.0;
-  odom_msg.twist.twist.angular.y = 0.0;
-  odom_msg.twist.twist.angular.z = 0.0;
+  odom_msg.twist.twist = odom_twist_;
 
   return odom_msg;
 }
