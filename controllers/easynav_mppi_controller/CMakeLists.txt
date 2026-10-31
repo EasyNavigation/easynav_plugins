@@ -24,6 +24,8 @@ find_package(PCL REQUIRED COMPONENTS common io)
 add_library(${PROJECT_NAME} SHARED
   src/easynav_mppi_controller/MPPIController.cpp
   src/easynav_mppi_controller/MPPIOptimizer.cpp
+  src/easynav_mppi_controller/NearestGrid.cpp
+  src/easynav_mppi_controller/PointBuckets.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
