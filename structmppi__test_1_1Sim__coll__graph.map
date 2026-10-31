@@ -1,0 +1,38 @@
+<map id="Sim" name="Sim">
+<area shape="rect" id="Node000001" title="A robot following the optimizer&#39;s commands through a velocity smoother (as ControllerNode)." alt="" coords="642,722,686,748"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1MPPIOptimizer.html" title="MPPI (Williams et al.): rollouts of noisy control sequences around the previous solution,..." alt="" coords="348,154,457,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="473,178,496,188,541,217,572,245,597,279,620,326,632,362,641,410,655,528,665,721,660,722,649,529,636,411,627,363,616,328,592,282,568,249,537,222,494,193,471,182"/>
+<area shape="rect" id="Node000003" href="$structeasynav_1_1MPPIParams.html" title="Configuration of the optimizer. Weights are per meter/radian, averaged over the horizon." alt="" coords="353,203,452,229"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="428,239,470,286,522,353,575,432,620,518,640,575,653,634,665,721,659,722,648,635,635,577,616,520,571,435,518,356,466,290,424,242"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="38,129,133,154"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="149,139,217,147,253,156,287,169,300,179,311,190,353,205,351,210,308,194,296,183,284,173,251,161,216,152,148,144"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="66,203,105,229"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="120,213,352,213,352,219,120,219"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="56,566,115,592"/>
+<area shape="poly" id="edge15_Node000001_Node000006" title=" " alt="" coords="130,564,189,554,299,542,428,533,490,532,545,535,589,542,620,555,630,567,638,586,651,633,664,721,659,722,646,634,633,587,625,570,616,560,588,547,544,540,490,537,428,538,299,547,190,559,131,570"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="124,556,284,466,294,452,298,438,307,406,392,228,397,231,312,408,303,440,298,454,287,470,126,560"/>
+<area shape="rect" id="Node000009" href="$structeasynav_1_1Pose2D.html" title="Planar pose." alt="" coords="369,590,436,616"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="127,596,158,608,190,617,238,622,286,621,368,608,369,614,287,626,238,627,189,622,156,613,125,601"/>
+<area shape="rect" id="Node000010" href="$structeasynav_1_1Velocity.html" title="Velocity in the robot frame." alt="" coords="369,643,436,669"/>
+<area shape="poly" id="edge11_Node000010_Node000006" title=" " alt="" coords="103,604,139,652,163,675,191,692,216,701,236,702,285,692,309,680,367,662,369,667,311,685,287,697,237,707,215,706,189,697,160,679,135,655,99,607"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,22,166,48"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="181,25,210,28,238,35,264,46,288,64,299,79,304,96,301,128,298,160,302,175,312,190,330,204,353,211,351,216,328,208,308,194,297,177,293,160,296,128,299,96,295,82,284,67,262,51,236,40,209,33,181,30"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="52,75,119,101"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="135,87,222,95,261,103,287,115,300,134,301,154,302,173,312,190,331,203,353,210,352,215,328,208,308,194,296,174,295,154,295,136,284,119,259,108,221,100,135,92"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="451,589,490,584,535,584,579,593,620,613,642,637,655,667,662,697,665,721,660,722,657,698,650,669,637,640,616,617,577,598,534,590,491,590,452,594"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="452,654,532,662,577,673,619,690,639,704,654,720,651,723,636,708,617,694,575,678,531,668,451,659"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="378,695,426,721"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="442,709,642,730,641,735,442,715"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="310,749,495,774"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="511,766,564,764,617,755,641,746,643,751,619,760,565,769,511,772"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="352,802,453,828"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="469,821,504,822,543,819,581,810,617,796,630,786,640,773,655,747,660,749,645,776,633,789,619,800,583,816,544,824,505,827,469,826"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="313,855,492,881"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="507,879,565,873,592,863,616,849,636,827,649,799,659,747,665,748,654,800,641,829,620,853,594,868,566,878,508,884"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="313,909,492,934"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="474,935,510,937,548,935,584,926,616,908,625,897,632,880,645,835,659,748,664,749,650,836,637,882,629,900,620,912,586,931,549,941,510,943,474,940"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="327,962,478,988"/>
+<area shape="poly" id="edge18_Node000001_Node000016" title=" " alt="" coords="464,989,502,994,543,994,582,986,616,966,627,951,636,927,650,864,660,748,665,748,655,865,642,929,632,954,620,970,584,991,543,999,502,999,463,994"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="380,1037,425,1062"/>
+<area shape="poly" id="edge19_Node000001_Node000017" title=" " alt="" coords="440,1059,481,1068,528,1072,575,1066,597,1057,616,1044,631,1023,642,990,655,902,660,812,660,748,666,748,665,812,660,903,647,991,635,1025,620,1048,599,1062,577,1071,528,1078,480,1073,439,1064"/>
+</map>

@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000000" href="$classControllerMethodBase.html" title=" " alt="" coords="5,104,155,130"/>
 <area shape="rect" id="Node000001" href="$classeasynav_1_1MPCController.html" title="A MPC Controller." alt="" coords="251,5,356,31"/>
 <area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="110,93,152,65,202,40,250,25,252,30,204,45,155,70,113,97"/>
-<area shape="rect" id="Node000002" href="$classeasynav_1_1MPPIController.html" title="A MPPI Controller." alt="" coords="249,55,358,80"/>
+<area shape="rect" id="Node000002" href="$classeasynav_1_1MPPIController.html" title="MPPI controller for differential and holonomic (omnidirectional) robots." alt="" coords="249,55,358,80"/>
 <area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="156,97,248,77,249,82,157,103"/>
 <area shape="rect" id="Node000003" href="$classeasynav_1_1RegulatedPurePursuitController.html" title="Port of nav2_regulated_pure_pursuit_controller to EasyNav." alt="" coords="203,104,405,130"/>
 <area shape="poly" id="edge3_Node000000_Node000003" title=" " alt="" coords="170,114,202,114,202,120,170,120"/>

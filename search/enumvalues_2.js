@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['failed_0',['FAILED',['../namespaceeasynav__diagnostic__recovery.html#afe1f8b33e51a46c8b3a924e5ca31367eab9e14d9b2886bcff408b85aefa780419',1,'easynav_diagnostic_recovery']]]
+  ['clear_5fmemory_0',['CLEAR_MEMORY',['../namespaceBonxai.html#a73552f1ac7f3ddd1dcc476f665708735a1cec88f1b6874c99918ced51c77342d2',1,'Bonxai']]]
 ];

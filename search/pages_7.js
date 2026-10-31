@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['heuristic_5fscale_0',['Effect of &lt;span class=&quot;tt&quot;&gt;heuristic_scale&lt;/span&gt;',['../dir_940fda9e55c980df183eeb5f0adb62dc.html#autotoc_md266',1,'']]],
-  ['hypotheses_1',['Hypotheses',['../dir_b362ec6e2871aebb41e9d7a33376f88c.html#autotoc_md123',1,'']]],
-  ['hypothesis_2',['Particle filter of each hypothesis',['../dir_b362ec6e2871aebb41e9d7a33376f88c.html#autotoc_md121',1,'']]]
+  ['goal_20s_20heading_0',['Example: a holonomic robot keeping the goal&apos;s heading',['../dir_afbb35b9fe2a1f2f9444bbb0d694d2aa.html#autotoc_md42',1,'']]]
 ];

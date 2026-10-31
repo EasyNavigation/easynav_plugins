@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <area shape="rect" href="classControllerMethodBase.html" title=" " alt="" coords="5,104,155,130"/>
 <area shape="rect" href="classeasynav_1_1MPCController.html" title="A MPC Controller." alt="" coords="251,5,356,31"/>
 <area shape="poly" title=" " alt="" coords="110,93,152,65,202,40,250,25,252,30,204,45,155,70,113,97"/>
-<area shape="rect" href="classeasynav_1_1MPPIController.html" title="A MPPI Controller." alt="" coords="249,55,358,80"/>
+<area shape="rect" href="classeasynav_1_1MPPIController.html" title="MPPI controller for differential and holonomic (omnidirectional) robots." alt="" coords="249,55,358,80"/>
 <area shape="poly" title=" " alt="" coords="156,97,248,77,249,82,157,103"/>
 <area shape="rect" href="classeasynav_1_1RegulatedPurePursuitController.html" title="Port of nav2_regulated_pure_pursuit_controller to EasyNav." alt="" coords="203,104,405,130"/>
 <area shape="poly" title=" " alt="" coords="170,114,202,114,202,120,170,120"/>
@@ -418,17 +418,37 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <area shape="rect" href="classeasynav_1_1MPCParameters.html" title="A MPC parameters class." alt="" coords="5,5,123,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_39.png" border="0" usemap="#aMPPIOptimizer" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_39.png" border="0" usemap="#aMPPIInput" loading="lazy" alt=""/>
+<map name="aMPPIInput" id="aMPPIInput">
+<area shape="rect" href="structeasynav_1_1MPPIInput.html" title="One cycle&#39;s input." alt="" coords="5,5,89,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_40.png" border="0" usemap="#aMPPIInput" loading="lazy" alt=""/>
+<map name="aMPPIInput" id="aMPPIInput">
+<area shape="rect" href="structMPPIInput.html" title="One cycle&#39;s input." alt="" coords="5,5,89,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_41.png" border="0" usemap="#aMPPIOptimizer" loading="lazy" alt=""/>
 <map name="aMPPIOptimizer" id="aMPPIOptimizer">
-<area shape="rect" href="classeasynav_1_1MPPIOptimizer.html" title=" " alt="" coords="5,5,115,31"/>
+<area shape="rect" href="classeasynav_1_1MPPIOptimizer.html" title="MPPI (Williams et al.): rollouts of noisy control sequences around the previous solution,..." alt="" coords="5,5,115,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_40.png" border="0" usemap="#aMPPIResult" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_42.png" border="0" usemap="#aMPPIParams" loading="lazy" alt=""/>
+<map name="aMPPIParams" id="aMPPIParams">
+<area shape="rect" href="structeasynav_1_1MPPIParams.html" title="Configuration of the optimizer. Weights are per meter/radian, averaged over the horizon." alt="" coords="5,5,105,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_43.png" border="0" usemap="#aMPPIParams" loading="lazy" alt=""/>
+<map name="aMPPIParams" id="aMPPIParams">
+<area shape="rect" href="structmppi__test_1_1MPPIParams.html" title="Configuration of the optimizer. Weights are per meter/radian, averaged over the horizon." alt="" coords="5,5,105,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_44.png" border="0" usemap="#aMPPIResult" loading="lazy" alt=""/>
 <map name="aMPPIResult" id="aMPPIResult">
-<area shape="rect" href="structeasynav_1_1MPPIResult.html" title="Result structure for MPPI optimization containing control commands and trajectories." alt="" coords="5,5,97,31"/>
+<area shape="rect" href="structeasynav_1_1MPPIResult.html" title="One cycle&#39;s output." alt="" coords="5,5,97,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_41.png" border="0" usemap="#aNavMapFilter" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_45.png" border="0" usemap="#aNavMapFilter" loading="lazy" alt=""/>
 <map name="aNavMapFilter" id="aNavMapFilter">
 <area shape="rect" href="classeasynav_1_1navmap_1_1NavMapFilter.html" title=" " alt="" coords="5,31,105,56"/>
 <area shape="rect" href="classeasynav_1_1navmap_1_1InflationFilter.html" title="&quot;inflated_obstacles&quot;: cost by distance (along the surface) to the obstacles of the &quot;obstacles&quot; layer ..." alt="" coords="156,5,252,31"/>
@@ -437,32 +457,42 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <area shape="poly" title=" " alt="" coords="120,51,152,57,152,62,119,57"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_42.png" border="0" usemap="#aNavMapTerrain" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_46.png" border="0" usemap="#aNavMapTerrain" loading="lazy" alt=""/>
 <map name="aNavMapTerrain" id="aNavMapTerrain">
 <area shape="rect" href="classeasynav_1_1NavMapTerrain.html" title="Places a planar (x, y, yaw) estimate on the surface of a NavMap." alt="" coords="5,5,116,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_43.png" border="0" usemap="#aNavMapTerrain_1_1Result" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_47.png" border="0" usemap="#aNavMapTerrain_1_1Result" loading="lazy" alt=""/>
 <map name="aNavMapTerrain_1_1Result" id="aNavMapTerrain_1_1Result">
 <area shape="rect" href="structeasynav_1_1NavMapTerrain_1_1Result.html" title="The pose placed on the surface." alt="" coords="5,5,159,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_44.png" border="0" usemap="#aNLoptCallbackData" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_48.png" border="0" usemap="#aNearestGrid" loading="lazy" alt=""/>
+<map name="aNearestGrid" id="aNearestGrid">
+<area shape="rect" href="classeasynav_1_1NearestGrid.html" title="Square grid where each cell knows its nearest seed (8SSEDT&#45;like propagation)." alt="" coords="5,5,97,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_49.png" border="0" usemap="#aNearestGrid" loading="lazy" alt=""/>
+<map name="aNearestGrid" id="aNearestGrid">
+<area shape="rect" href="classNearestGrid.html" title="Square grid where each cell knows its nearest seed (8SSEDT&#45;like propagation)." alt="" coords="5,5,97,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_50.png" border="0" usemap="#aNLoptCallbackData" loading="lazy" alt=""/>
 <map name="aNLoptCallbackData" id="aNLoptCallbackData">
 <area shape="rect" href="structeasynav_1_1NLoptCallbackData.html" title="Struct used as element in callback." alt="" coords="5,5,140,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_45.png" border="0" usemap="#aObstacleBounds" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_51.png" border="0" usemap="#aObstacleBounds" loading="lazy" alt=""/>
 <map name="aObstacleBounds" id="aObstacleBounds">
 <area shape="rect" href="structeasynav_1_1ObstacleBounds.html" title=" " alt="" coords="5,5,123,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_46.png" border="0" usemap="#aObstacleProximity" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_52.png" border="0" usemap="#aObstacleProximity" loading="lazy" alt=""/>
 <map name="aObstacleProximity" id="aObstacleProximity">
 <area shape="rect" href="structeasynav__diagnostic__recovery_1_1ObstacleProximity.html" title="Distance and bearing (both in the robot frame) of the nearest point&#45;cloud perception." alt="" coords="5,5,132,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_47.png" border="0" usemap="#aOctomapFilter" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_53.png" border="0" usemap="#aOctomapFilter" loading="lazy" alt=""/>
 <map name="aOctomapFilter" id="aOctomapFilter">
 <area shape="rect" href="classeasynav_1_1octomap_1_1OctomapFilter.html" title=" " alt="" coords="5,31,109,56"/>
 <area shape="rect" href="classeasynav_1_1octomap_1_1InflationFilter.html" title=" " alt="" coords="160,5,256,31"/>
@@ -471,52 +501,52 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <area shape="poly" title=" " alt="" coords="125,52,157,57,156,62,124,57"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_48.png" border="0" usemap="#aParticle" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_54.png" border="0" usemap="#aParticle" loading="lazy" alt=""/>
 <map name="aParticle" id="aParticle">
 <area shape="rect" href="structeasynav_1_1mhamcl_1_1Particle.html" title="A single particle of a hypothesis." alt="" coords="5,5,71,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_49.png" border="0" usemap="#aParticle" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_55.png" border="0" usemap="#aParticle" loading="lazy" alt=""/>
 <map name="aParticle" id="aParticle">
 <area shape="rect" href="structeasynav_1_1navmap_1_1Particle.html" title="Structure representing a single particle in the AMCL algorithm." alt="" coords="5,5,71,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_50.png" border="0" usemap="#aParticle" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_56.png" border="0" usemap="#aParticle" loading="lazy" alt=""/>
 <map name="aParticle" id="aParticle">
 <area shape="rect" href="structeasynav_1_1Particle.html" title="Structure representing a single particle in the AMCL algorithm." alt="" coords="5,5,71,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_51.png" border="0" usemap="#aParticlesDistribution" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_57.png" border="0" usemap="#aParticlesDistribution" loading="lazy" alt=""/>
 <map name="aParticlesDistribution" id="aParticlesDistribution">
 <area shape="rect" href="classeasynav_1_1mhamcl_1_1ParticlesDistribution.html" title="A set of particles representing one hypothesis about the robot pose." alt="" coords="5,5,143,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_52.png" border="0" usemap="#aParticlesDistribution" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_58.png" border="0" usemap="#aParticlesDistribution" loading="lazy" alt=""/>
 <map name="aParticlesDistribution" id="aParticlesDistribution">
 <area shape="rect" href="classParticlesDistribution.html" title="A set of particles representing one hypothesis about the robot pose." alt="" coords="5,5,143,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_53.png" border="0" usemap="#aParticlesParams" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_59.png" border="0" usemap="#aParticlesParams" loading="lazy" alt=""/>
 <map name="aParticlesParams" id="aParticlesParams">
 <area shape="rect" href="structeasynav_1_1mhamcl_1_1ParticlesParams.html" title="Parameters of a hypothesis (a particle set)." alt="" coords="5,5,123,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_54.png" border="0" usemap="#aParticlesParams" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_60.png" border="0" usemap="#aParticlesParams" loading="lazy" alt=""/>
 <map name="aParticlesParams" id="aParticlesParams">
 <area shape="rect" href="structParticlesParams.html" title="Parameters of a hypothesis (a particle set)." alt="" coords="5,5,123,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_55.png" border="0" usemap="#aPerceptionModel" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_61.png" border="0" usemap="#aPerceptionModel" loading="lazy" alt=""/>
 <map name="aPerceptionModel" id="aPerceptionModel">
 <area shape="rect" href="classeasynav_1_1navmap_1_1PerceptionModel.html" title=" " alt="" coords="5,5,124,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_56.png" border="0" usemap="#aPIDController" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_62.png" border="0" usemap="#aPIDController" loading="lazy" alt=""/>
 <map name="aPIDController" id="aPIDController">
 <area shape="rect" href="classeasynav_1_1PIDController.html" title="A simple PID (Proportional&#45;Integral&#45;Derivative) controller implementation." alt="" coords="5,5,104,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_57.png" border="0" usemap="#aPlannerMethodBase" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_63.png" border="0" usemap="#aPlannerMethodBase" loading="lazy" alt=""/>
 <map name="aPlannerMethodBase" id="aPlannerMethodBase">
 <area shape="rect" href="classPlannerMethodBase.html" title=" " alt="" coords="5,55,144,80"/>
 <area shape="rect" href="classeasynav_1_1CostmapPlanner.html" title="A planner implementing the A* algorithm on a Costmap2D grid." alt="" coords="192,5,309,31"/>
@@ -529,320 +559,369 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <area shape="poly" title=" " alt="" coords="325,16,357,16,357,21,325,21"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_58.png" border="0" usemap="#aPoint3D" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_64.png" border="0" usemap="#aPoint3D" loading="lazy" alt=""/>
 <map name="aPoint3D" id="aPoint3D">
 <area shape="rect" href="structBonxai_1_1Point3D.html" title=" " alt="" coords="5,5,73,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_59.png" border="0" usemap="#aProbabilisticMap" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_65.png" border="0" usemap="#aPointBuckets" loading="lazy" alt=""/>
+<map name="aPointBuckets" id="aPointBuckets">
+<area shape="rect" href="classeasynav_1_1PointBuckets.html" title="Points binned in square cells (built once per cycle, then queried many times)." alt="" coords="5,5,105,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_66.png" border="0" usemap="#aPose2D" loading="lazy" alt=""/>
+<map name="aPose2D" id="aPose2D">
+<area shape="rect" href="structeasynav_1_1Pose2D.html" title="Planar pose." alt="" coords="5,5,73,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_67.png" border="0" usemap="#aPose2D" loading="lazy" alt=""/>
+<map name="aPose2D" id="aPose2D">
+<area shape="rect" href="structmppi__test_1_1Pose2D.html" title="Planar pose." alt="" coords="5,5,73,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_68.png" border="0" usemap="#aPose2D" loading="lazy" alt=""/>
+<map name="aPose2D" id="aPose2D">
+<area shape="rect" href="structPose2D.html" title="Planar pose." alt="" coords="5,5,73,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_69.png" border="0" usemap="#aProbabilisticMap" loading="lazy" alt=""/>
 <map name="aProbabilisticMap" id="aProbabilisticMap">
 <area shape="rect" href="classBonxai_1_1ProbabilisticMap.html" title="The ProbabilisticMap class is meant to behave as much as possible as octomap::Octree,..." alt="" coords="5,5,123,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_60.png" border="0" usemap="#aProbabilisticMap_1_1CellT" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_70.png" border="0" usemap="#aProbabilisticMap_1_1CellT" loading="lazy" alt=""/>
 <map name="aProbabilisticMap_1_1CellT" id="aProbabilisticMap_1_1CellT">
 <area shape="rect" href="structBonxai_1_1ProbabilisticMap_1_1CellT.html" title=" " alt="" coords="5,5,159,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_61.png" border="0" usemap="#aProbabilisticMap_1_1Options" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_71.png" border="0" usemap="#aProbabilisticMap_1_1Options" loading="lazy" alt=""/>
 <map name="aProbabilisticMap_1_1Options" id="aProbabilisticMap_1_1Options">
 <area shape="rect" href="structBonxai_1_1ProbabilisticMap_1_1Options.html" title="These default values are the same as OctoMap." alt="" coords="5,5,174,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_62.png" border="0" usemap="#aRecoveryManagerBase" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_72.png" border="0" usemap="#aRecoveryManagerBase" loading="lazy" alt=""/>
 <map name="aRecoveryManagerBase" id="aRecoveryManagerBase">
 <area shape="rect" title=" " alt="" coords="5,5,161,31"/>
 <area shape="rect" href="classeasynav__diagnostic__recovery_1_1DiagnosticRecoveryManager.html" title="A diagnosis&#45;driven recovery system (plugin easynav_diagnostic_recovery/DiagnosticRecoveryManager)." alt="" coords="209,5,395,31"/>
 <area shape="poly" title=" " alt="" coords="176,16,208,16,208,21,176,21"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_63.png" border="0" usemap="#aRecoveryManagerBase" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_73.png" border="0" usemap="#aRecoveryManagerBase" loading="lazy" alt=""/>
 <map name="aRecoveryManagerBase" id="aRecoveryManagerBase">
 <area shape="rect" href="classRecoveryManagerBase.html" title=" " alt="" coords="5,5,161,31"/>
 <area shape="rect" href="classeasynav_1_1SimpleRecoveryManager.html" title="A small, readable recovery system: a tutorial for writing your own." alt="" coords="209,5,374,31"/>
 <area shape="poly" title=" " alt="" coords="176,16,208,16,208,21,176,21"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_64.png" border="0" usemap="#aRouteSegment" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_74.png" border="0" usemap="#aRouteSegment" loading="lazy" alt=""/>
 <map name="aRouteSegment" id="aRouteSegment">
 <area shape="rect" href="structeasynav_1_1RouteSegment.html" title="Simple directed segment between two poses." alt="" coords="5,5,113,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_65.png" border="0" usemap="#aRouteSegment" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_75.png" border="0" usemap="#aRouteSegment" loading="lazy" alt=""/>
 <map name="aRouteSegment" id="aRouteSegment">
 <area shape="rect" href="structRouteSegment.html" title="Simple directed segment between two poses." alt="" coords="5,5,113,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_66.png" border="0" usemap="#aRoutesFilter" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_76.png" border="0" usemap="#aRoutesFilter" loading="lazy" alt=""/>
 <map name="aRoutesFilter" id="aRoutesFilter">
 <area shape="rect" href="classeasynav_1_1RoutesFilter.html" title="Base interface for all routes filters." alt="" coords="5,5,97,31"/>
 <area shape="rect" href="classeasynav_1_1RoutesCostmapFilter.html" title="Costmap filter that raises costs outside navigation routes." alt="" coords="145,5,288,31"/>
 <area shape="poly" title=" " alt="" coords="112,16,144,16,144,21,112,21"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_67.png" border="0" usemap="#aSaveParameters" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_77.png" border="0" usemap="#aSaveParameters" loading="lazy" alt=""/>
 <map name="aSaveParameters" id="aSaveParameters">
 <area shape="rect" href="structeasynav_1_1navmap_1_1SaveParameters.html" title=" " alt="" coords="5,5,124,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_68.png" border="0" usemap="#aSaveParameters" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_78.png" border="0" usemap="#aSaveParameters" loading="lazy" alt=""/>
 <map name="aSaveParameters" id="aSaveParameters">
 <area shape="rect" href="structeasynav_1_1octomap_1_1SaveParameters.html" title=" " alt="" coords="5,5,124,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_69.png" border="0" usemap="#aSaveParameters" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_79.png" border="0" usemap="#aSaveParameters" loading="lazy" alt=""/>
 <map name="aSaveParameters" id="aSaveParameters">
 <area shape="rect" href="structeasynav_1_1SaveParameters.html" title=" " alt="" coords="5,5,124,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_70.png" border="0" usemap="#aSaveParameters" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_80.png" border="0" usemap="#aSaveParameters" loading="lazy" alt=""/>
 <map name="aSaveParameters" id="aSaveParameters">
 <area shape="rect" href="structeasynav__bonxai_1_1SaveParameters.html" title=" " alt="" coords="5,5,124,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_71.png" border="0" usemap="#aScanPoint" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_81.png" border="0" usemap="#aScanPoint" loading="lazy" alt=""/>
 <map name="aScanPoint" id="aScanPoint">
 <area shape="rect" href="structeasynav_1_1mhamcl_1_1ScanPoint.html" title="A point of a perception, ready to be scored." alt="" coords="5,5,87,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_72.png" border="0" usemap="#aScanPoint" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_82.png" border="0" usemap="#aScanPoint" loading="lazy" alt=""/>
 <map name="aScanPoint" id="aScanPoint">
 <area shape="rect" href="structScanPoint.html" title="A point of a perception, ready to be scored." alt="" coords="5,5,87,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_73.png" border="0" usemap="#aScoreAgg" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_83.png" border="0" usemap="#aScoreAgg" loading="lazy" alt=""/>
 <map name="aScoreAgg" id="aScoreAgg">
 <area shape="rect" href="structeasynav_1_1navmap_1_1ScoreAgg.html" title=" " alt="" coords="5,5,84,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_74.png" border="0" usemap="#aSensorBundle" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_84.png" border="0" usemap="#aSensorBundle" loading="lazy" alt=""/>
 <map name="aSensorBundle" id="aSensorBundle">
 <area shape="rect" href="structeasynav_1_1navmap_1_1SensorBundle.html" title=" " alt="" coords="5,5,108,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_75.png" border="0" usemap="#aSerestController_1_1Vec2" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_85.png" border="0" usemap="#aSerestController_1_1Vec2" loading="lazy" alt=""/>
 <map name="aSerestController_1_1Vec2" id="aSerestController_1_1Vec2">
 <area shape="rect" href="structeasynav_1_1SerestController_1_1Vec2.html" title="Simple 2D vector utility type." alt="" coords="5,5,156,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_76.png" border="0" usemap="#aSimpleMap" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_86.png" border="0" usemap="#aSim" loading="lazy" alt=""/>
+<map name="aSim" id="aSim">
+<area shape="rect" href="structmppi__test_1_1Sim.html" title="A robot following the optimizer&#39;s commands through a velocity smoother (as ControllerNode)." alt="" coords="5,5,50,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_87.png" border="0" usemap="#aSim" loading="lazy" alt=""/>
+<map name="aSim" id="aSim">
+<area shape="rect" href="structSim.html" title="A robot following the optimizer&#39;s commands through a velocity smoother (as ControllerNode)." alt="" coords="5,5,50,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_88.png" border="0" usemap="#aSimpleMap" loading="lazy" alt=""/>
 <map name="aSimpleMap" id="aSimpleMap">
 <area shape="rect" href="classeasynav_1_1SimpleMap.html" title="Simple 2D uint8_t grid using basic C++ types, with full metric conversion support." alt="" coords="5,5,92,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_77.png" border="0" usemap="#aTest" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_89.png" border="0" usemap="#aTest" loading="lazy" alt=""/>
 <map name="aTest" id="aTest">
-<area shape="rect" title=" " alt="" coords="5,2141,53,2167"/>
+<area shape="rect" title=" " alt="" coords="5,2167,53,2192"/>
 <area shape="rect" href="classAMCLLocalizerTest.html" title="Fixture for SimpleController tests (minimal)." alt="" coords="157,5,294,31"/>
-<area shape="poly" title=" " alt="" coords="28,2126,28,1708,36,1023,45,673,57,368,75,145,86,76,99,41,125,21,156,13,158,18,127,26,103,44,91,77,80,146,62,368,50,673,41,1023,34,1708,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,28,1730,36,1036,44,682,57,373,74,147,85,76,99,41,125,21,156,13,158,18,127,26,103,44,91,78,80,147,62,373,49,682,41,1036,34,1730,33,2151"/>
 <area shape="rect" href="classAStarPlannerReconfigureTest.html" title=" " alt="" coords="129,55,322,80"/>
-<area shape="poly" title=" " alt="" coords="28,2126,29,1718,37,1049,45,707,58,409,75,192,86,124,98,90,112,78,128,70,130,74,115,82,103,93,91,126,80,193,63,410,51,707,42,1049,34,1718,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,29,1738,36,1060,45,715,57,413,75,193,86,125,98,90,112,78,128,70,130,74,115,82,103,93,91,126,80,194,63,414,50,715,42,1060,34,1738,33,2151"/>
 <area shape="rect" href="classAdvanceRecoveryTestCase.html" title=" " alt="" coords="134,104,316,130"/>
-<area shape="poly" title=" " alt="" coords="28,2126,29,1726,38,1074,46,741,59,452,76,240,86,174,98,141,114,127,133,118,135,123,117,131,103,144,91,176,81,241,64,452,52,742,43,1074,35,1726,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,29,1747,37,1087,46,750,58,456,76,241,86,175,98,141,114,127,133,118,135,123,117,131,103,144,91,176,81,242,64,456,51,750,43,1087,34,1748,33,2151"/>
 <area shape="rect" href="classAmclConvergenceEvaluatorTestCase.html" title=" " alt="" coords="135,154,316,194"/>
-<area shape="poly" title=" " alt="" coords="28,2125,30,1738,40,1108,49,787,61,507,77,302,87,239,98,206,114,191,133,181,135,186,117,196,103,209,92,240,82,303,66,507,54,787,45,1108,36,1738,33,2125"/>
+<area shape="poly" title=" " alt="" coords="28,2151,30,1759,39,1121,48,795,60,511,77,304,87,239,98,206,114,191,133,181,135,186,117,196,103,209,92,241,82,305,66,512,53,795,45,1121,35,1759,33,2151"/>
 <area shape="rect" href="classAmclRelocalizeMitigationTestCase.html" title=" " alt="" coords="142,219,308,260"/>
-<area shape="poly" title=" " alt="" coords="28,2125,31,1749,40,1140,49,830,62,560,78,363,87,302,98,270,118,253,141,243,143,248,121,258,103,273,92,303,83,364,67,561,55,830,46,1140,36,1749,33,2125"/>
+<area shape="poly" title=" " alt="" coords="28,2151,30,1770,40,1153,49,839,61,565,77,364,87,302,98,270,118,253,141,243,143,248,121,258,103,273,92,303,83,365,67,565,54,839,45,1153,36,1770,33,2151"/>
 <area shape="rect" href="classBonxaiMapsManagerReconfigureTest.html" title=" " alt="" coords="107,284,344,310"/>
-<area shape="poly" title=" " alt="" coords="28,2126,30,1758,40,1165,49,864,61,601,77,409,87,350,98,319,111,308,114,312,103,322,92,351,83,410,67,601,54,864,46,1165,36,1758,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,30,1779,40,1177,49,871,61,605,77,411,87,350,98,319,111,308,114,312,103,322,92,352,82,411,66,605,54,872,45,1177,36,1779,33,2151"/>
 <area shape="rect" href="classCancelMissionRecoveryTestCase.html" title=" " alt="" coords="117,333,334,359"/>
-<area shape="poly" title=" " alt="" coords="28,2126,31,1767,41,1190,50,897,62,642,78,456,87,398,98,369,115,355,119,359,103,372,93,400,83,457,67,643,55,898,46,1191,36,1767,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,31,1787,41,1202,49,905,62,646,78,457,87,399,98,369,115,355,119,359,103,372,93,400,83,458,67,647,55,905,46,1202,36,1787,33,2151"/>
 <area shape="rect" href="classCollisionSafetyReflexTest.html" title=" " alt="" coords="141,383,310,408"/>
-<area shape="poly" title=" " alt="" coords="28,2126,31,1776,42,1216,51,932,63,685,79,504,88,448,98,419,118,404,140,395,142,400,120,408,103,422,93,449,84,505,68,685,56,932,47,1216,37,1776,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,31,1797,41,1229,50,940,63,689,78,506,88,449,98,419,118,404,140,395,142,400,120,408,103,422,93,450,84,506,68,689,56,940,47,1229,36,1797,33,2151"/>
 <area shape="rect" href="classControllerStuckEvaluatorTestCase.html" title=" " alt="" coords="143,432,308,473"/>
-<area shape="poly" title=" " alt="" coords="28,2126,32,1789,44,1250,53,977,65,739,80,565,88,511,98,483,118,466,142,456,144,461,121,471,103,486,94,513,85,566,70,739,58,977,49,1250,37,1789,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2152,32,1810,43,1263,52,985,64,743,79,567,88,512,98,483,118,466,142,456,144,461,121,471,103,486,93,513,85,567,70,744,58,985,48,1263,37,1810,33,2152"/>
 <area shape="rect" href="classCostmap2DTest.html" title=" " alt="" coords="168,497,283,523"/>
-<area shape="poly" title=" " alt="" coords="28,2126,32,1796,43,1274,53,1009,65,779,80,612,88,559,98,533,113,520,130,512,167,504,168,509,132,517,116,524,103,536,94,561,85,612,70,780,58,1010,49,1274,37,1796,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,32,1818,43,1287,52,1018,64,784,79,613,88,560,98,533,113,520,130,512,167,504,168,509,132,517,116,524,103,536,93,561,85,614,69,784,57,1018,48,1287,37,1818,33,2151"/>
 <area shape="rect" href="classCostmapAMCLMinHeightTest.html" title=" " alt="" coords="128,547,323,572"/>
-<area shape="poly" title=" " alt="" coords="28,2126,32,1806,44,1300,53,1043,65,821,80,658,89,608,98,582,111,570,126,562,129,567,114,575,103,585,94,609,85,659,71,821,59,1044,49,1300,38,1806,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,32,1827,44,1312,53,1052,65,825,80,660,89,608,98,582,111,570,126,562,129,567,114,575,103,585,94,610,85,660,70,825,58,1052,49,1312,38,1827,33,2151"/>
 <area shape="rect" href="classCostmapAMCLReseedTest.html" title=" " alt="" coords="135,596,316,622"/>
-<area shape="poly" title=" " alt="" coords="28,2126,33,1815,45,1325,54,1078,66,862,81,705,89,656,98,631,115,618,134,609,136,614,118,622,103,634,94,658,86,706,71,863,60,1078,50,1326,38,1816,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,33,1835,45,1337,54,1085,66,866,80,706,89,657,98,631,115,618,134,609,136,614,118,622,103,634,94,658,86,707,71,866,59,1085,50,1337,38,1835,33,2151"/>
 <area shape="rect" href="classCostmapInflationGeometryTest.html" title=" " alt="" coords="125,645,326,671"/>
-<area shape="poly" title=" " alt="" coords="28,2126,33,1824,46,1350,55,1111,67,903,81,752,89,705,99,681,123,662,127,667,103,684,94,706,86,753,72,904,60,1111,51,1350,39,1824,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,33,1845,45,1363,55,1119,66,908,81,753,89,705,99,681,123,662,127,667,103,684,94,707,86,754,72,908,60,1119,51,1363,38,1845,33,2151"/>
 <area shape="rect" href="classCostmapLocalizerReconfigureTest.html" title=" " alt="" coords="116,695,335,720"/>
-<area shape="poly" title=" " alt="" coords="28,2126,34,1834,46,1376,56,1145,68,945,82,799,90,753,98,730,114,717,117,721,103,733,95,755,87,800,73,945,61,1146,52,1376,39,1834,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,33,1853,46,1388,55,1153,67,949,81,800,89,754,98,730,114,717,117,721,103,733,95,755,87,801,72,949,61,1153,51,1388,39,1853,33,2151"/>
 <area shape="rect" href="classCostmapMapsManagerReconfigureTest.html" title=" " alt="" coords="101,744,350,770"/>
-<area shape="poly" title=" " alt="" coords="28,2126,34,1842,47,1401,68,986,82,846,90,802,98,779,111,768,114,772,103,782,95,803,87,846,74,986,52,1401,39,1842,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,34,1863,47,1414,56,1187,68,990,82,847,90,802,98,779,111,768,114,772,103,782,95,804,87,848,73,991,62,1187,52,1414,39,1863,33,2151"/>
 <area shape="rect" href="classCostmapMapsManagerTest.html" title="Fixture for CostmapMapsManager tests." alt="" coords="135,793,316,819"/>
-<area shape="poly" title=" " alt="" coords="28,2126,34,1851,48,1426,69,1027,83,892,90,850,98,829,115,815,133,807,135,811,117,820,103,832,95,852,88,893,74,1028,53,1427,40,1851,34,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,34,1872,48,1439,69,1031,82,894,90,851,98,829,115,815,133,807,135,811,117,820,103,832,95,852,88,894,74,1032,53,1439,40,1872,33,2151"/>
 <area shape="rect" href="classCostmapObstacleFilterTest.html" title=" " alt="" coords="135,843,316,868"/>
-<area shape="poly" title=" " alt="" coords="28,2126,35,1860,49,1452,70,1069,83,939,90,899,99,878,115,864,134,856,136,861,118,869,103,881,96,900,88,940,75,1069,54,1452,40,1860,34,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,35,1881,48,1464,69,1073,83,940,90,899,98,878,115,864,134,856,136,861,118,869,103,881,95,901,88,941,75,1073,54,1464,40,1881,34,2151"/>
 <area shape="rect" href="classCostmapPlannerReconfigureTest.html" title=" " alt="" coords="120,892,331,918"/>
-<area shape="poly" title=" " alt="" coords="28,2126,35,1869,49,1477,71,1110,84,986,91,947,99,927,118,912,121,916,103,930,96,949,89,987,76,1110,55,1478,41,1870,34,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,35,1890,49,1489,70,1114,83,987,91,948,99,927,118,912,121,916,103,930,96,949,89,988,75,1115,54,1490,40,1890,34,2151"/>
 <area shape="rect" href="classCostmapPlannerTest.html" title=" " alt="" coords="154,941,297,967"/>
-<area shape="poly" title=" " alt="" coords="27,2126,27,1888,33,1522,41,1336,54,1172,73,1047,85,1004,99,978,123,960,152,951,154,956,126,964,103,981,90,1006,78,1048,59,1173,47,1337,38,1522,32,1888,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,36,1900,50,1516,71,1157,84,1035,91,998,99,978,123,960,152,951,154,956,126,964,103,981,96,999,89,1036,76,1157,55,1516,41,1900,34,2151"/>
 <area shape="rect" href="classDiagnosticRecoveryManagerReflexTest.html" title=" " alt="" coords="132,991,318,1032"/>
-<area shape="poly" title=" " alt="" coords="28,2126,28,1900,36,1555,44,1380,57,1225,75,1107,86,1067,99,1042,113,1028,131,1019,133,1024,116,1033,103,1045,91,1069,80,1108,62,1226,50,1381,41,1555,34,1900,33,2126"/>
+<area shape="poly" title=" " alt="" coords="27,2151,28,1920,35,1568,44,1389,56,1230,74,1109,85,1068,99,1042,113,1028,131,1019,133,1024,116,1033,103,1045,90,1070,79,1110,62,1231,49,1389,41,1568,33,1920,33,2151"/>
 <area shape="rect" href="classDiagnosticRecoveryManagerTest.html" title=" " alt="" coords="119,1056,332,1082"/>
-<area shape="poly" title=" " alt="" coords="28,2126,28,1908,36,1579,45,1412,57,1265,75,1153,86,1115,99,1091,117,1076,120,1081,103,1095,91,1117,80,1154,63,1266,50,1412,42,1579,34,1908,33,2126"/>
+<area shape="poly" title=" " alt="" coords="27,2151,28,1928,35,1591,44,1420,57,1269,74,1154,86,1115,99,1091,117,1076,120,1081,103,1095,90,1117,80,1156,62,1270,49,1421,41,1591,33,1928,33,2151"/>
 <area shape="rect" href="classFusionClockWaitTest.html" title=" " alt="" coords="153,1105,298,1131"/>
-<area shape="poly" title=" " alt="" coords="28,2126,29,1917,38,1604,46,1446,59,1306,76,1199,86,1163,99,1140,123,1123,151,1114,153,1119,125,1128,103,1144,91,1165,81,1200,64,1306,52,1446,43,1604,35,1917,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,29,1937,37,1616,46,1453,58,1310,75,1201,86,1164,99,1140,123,1123,151,1114,153,1119,125,1128,103,1144,91,1166,81,1202,63,1310,51,1454,42,1616,34,1937,33,2151"/>
 <area shape="rect" href="classFusionLocalFilterTest.html" title=" " alt="" coords="152,1155,299,1180"/>
-<area shape="poly" title=" " alt="" coords="28,2126,30,1926,39,1629,48,1479,60,1346,77,1245,87,1211,99,1190,123,1172,151,1164,152,1169,125,1177,103,1193,92,1213,82,1247,66,1347,53,1479,45,1629,35,1926,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,30,1947,38,1641,47,1487,60,1351,76,1247,87,1212,99,1190,123,1172,151,1164,152,1169,125,1177,103,1193,92,1214,82,1248,65,1351,52,1487,44,1641,35,1947,33,2151"/>
 <area shape="rect" href="classFusionLocalizerReconfigureTest.html" title=" " alt="" coords="122,1204,328,1230"/>
-<area shape="poly" title=" " alt="" coords="28,2126,31,1935,41,1653,50,1512,62,1387,78,1292,88,1259,99,1239,120,1223,123,1227,103,1243,92,1261,83,1293,67,1387,55,1512,46,1654,36,1935,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,30,1956,40,1666,49,1520,61,1391,77,1293,87,1260,99,1239,120,1223,123,1227,103,1243,92,1262,82,1294,66,1392,54,1520,45,1666,36,1956,33,2151"/>
 <area shape="rect" href="classFusionTerrainTest.html" title=" " alt="" coords="162,1253,288,1279"/>
-<area shape="poly" title=" " alt="" coords="28,2126,32,1944,42,1679,51,1545,63,1427,79,1338,88,1307,99,1288,112,1277,128,1269,161,1261,162,1266,130,1274,115,1281,103,1292,93,1310,84,1339,69,1428,57,1545,48,1679,37,1945,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,31,1965,42,1691,50,1553,63,1432,78,1340,88,1308,99,1288,112,1277,128,1269,161,1261,162,1266,129,1274,115,1281,103,1292,93,1310,83,1341,68,1433,56,1554,47,1691,37,1965,33,2151"/>
 <area shape="rect" href="classHumanAssistanceRecoveryTestCase.html" title=" " alt="" coords="106,1303,344,1328"/>
-<area shape="poly" title=" " alt="" coords="28,2126,33,1953,44,1704,53,1578,65,1468,80,1384,89,1356,99,1338,111,1327,115,1331,103,1341,94,1358,85,1385,70,1469,58,1579,49,1704,38,1954,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,32,1974,43,1716,52,1586,64,1472,79,1386,88,1356,99,1338,111,1327,115,1331,103,1341,93,1358,84,1387,69,1473,57,1587,48,1716,37,1974,33,2151"/>
 <area shape="rect" href="classMHAMCLLocalizerReconfigureTest.html" title=" " alt="" coords="113,1352,338,1378"/>
-<area shape="poly" title=" " alt="" coords="28,2125,33,1962,45,1728,55,1611,66,1508,81,1430,89,1404,99,1387,111,1376,115,1380,103,1391,94,1406,86,1432,72,1509,60,1612,51,1729,39,1962,34,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,33,1983,45,1741,54,1620,66,1513,80,1432,89,1404,99,1387,111,1376,115,1380,103,1391,94,1406,85,1433,71,1514,59,1620,50,1741,38,1984,34,2151"/>
 <area shape="rect" href="classMHAMCLMinHeightTest.html" title=" " alt="" coords="143,1401,308,1427"/>
-<area shape="poly" title=" " alt="" coords="28,2126,34,1972,47,1754,68,1549,82,1477,90,1452,99,1436,119,1421,142,1413,144,1418,121,1426,103,1440,95,1454,87,1478,73,1550,52,1754,40,1972,34,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,34,1993,46,1766,55,1653,67,1554,81,1478,89,1453,99,1436,119,1421,142,1413,144,1418,121,1426,103,1440,94,1455,86,1480,72,1555,61,1654,52,1767,39,1993,34,2151"/>
 <area shape="rect" href="classMPCControllerReconfigureTest.html" title=" " alt="" coords="126,1451,325,1476"/>
-<area shape="poly" title=" " alt="" coords="29,2125,35,1981,49,1779,69,1590,83,1523,90,1500,99,1486,124,1468,127,1472,103,1489,95,1502,88,1524,75,1591,54,1779,41,1981,34,2126"/>
+<area shape="poly" title=" " alt="" coords="29,2151,35,2002,48,1791,69,1594,82,1525,90,1501,99,1486,124,1468,127,1472,103,1489,95,1503,87,1526,74,1595,53,1791,40,2002,34,2151"/>
 <area shape="rect" href="classMPPIControllerReconfigureTest.html" title=" " alt="" coords="124,1500,327,1526"/>
-<area shape="poly" title=" " alt="" coords="29,2125,36,1990,50,1804,71,1631,84,1569,99,1535,122,1519,125,1523,103,1539,89,1571,76,1631,56,1804,42,1991,34,2126"/>
+<area shape="poly" title=" " alt="" coords="29,2151,36,2011,49,1816,70,1635,83,1571,99,1535,122,1519,125,1523,103,1539,88,1572,75,1636,55,1817,41,2012,34,2151"/>
 <area shape="rect" href="classMpcCollisionCheckerTest.html" title=" " alt="" coords="141,1549,310,1575"/>
-<area shape="poly" title=" " alt="" coords="27,2126,27,2009,34,1847,43,1764,55,1689,74,1627,85,1603,99,1584,118,1570,139,1561,141,1566,120,1575,103,1588,90,1606,79,1629,61,1690,48,1765,39,1847,32,2009,32,2126"/>
+<area shape="poly" title=" " alt="" coords="29,2151,37,2022,51,1842,72,1676,84,1617,99,1585,118,1570,139,1561,141,1566,120,1575,103,1588,89,1619,77,1677,56,1843,42,2022,34,2152"/>
 <area shape="rect" href="classMpcLegacyParamsFileTest.html" title=" " alt="" coords="135,1599,316,1624"/>
-<area shape="poly" title=" " alt="" coords="27,2126,29,2018,37,1871,46,1796,58,1728,76,1672,86,1650,99,1634,115,1621,134,1613,136,1617,118,1625,103,1637,91,1653,81,1674,64,1729,51,1797,42,1871,34,2018,33,2126"/>
+<area shape="poly" title=" " alt="" coords="27,2151,28,2039,36,1884,44,1805,57,1733,75,1674,86,1651,99,1634,115,1621,134,1613,136,1617,118,1625,103,1637,90,1654,80,1676,62,1734,49,1806,41,1884,33,2039,32,2151"/>
 <area shape="rect" href="classMpcMinHeightTest.html" title=" " alt="" coords="160,1648,291,1674"/>
-<area shape="poly" title=" " alt="" coords="28,2126,31,2027,40,1895,49,1828,62,1767,78,1717,99,1683,127,1665,159,1657,160,1662,129,1670,103,1687,83,1719,67,1768,55,1829,46,1895,36,2027,33,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,30,2047,39,1907,48,1837,60,1772,77,1719,99,1683,126,1665,159,1657,160,1662,129,1670,103,1687,82,1721,65,1773,53,1837,44,1908,35,2048,33,2151"/>
 <area shape="rect" href="classMpcRobotLimitsTest.html" title=" " alt="" coords="154,1697,296,1723"/>
-<area shape="poly" title=" " alt="" coords="28,2125,33,2036,44,1918,53,1860,65,1806,80,1762,99,1732,124,1715,153,1707,154,1712,126,1720,103,1736,85,1765,70,1808,58,1861,49,1919,38,2036,34,2126"/>
+<area shape="poly" title=" " alt="" coords="28,2151,32,2057,42,1931,51,1868,63,1811,79,1765,99,1732,124,1715,153,1707,154,1712,126,1720,103,1736,84,1767,68,1813,56,1869,47,1932,37,2057,33,2151"/>
 <area shape="rect" href="classMppiLegacyParamsFileTest.html" title=" " alt="" coords="134,1747,317,1772"/>
-<area shape="poly" title=" " alt="" coords="29,2126,35,2046,47,1943,68,1846,82,1808,99,1782,115,1770,132,1762,135,1766,117,1774,103,1785,86,1810,73,1847,52,1944,40,2046,34,2126"/>
-<area shape="rect" href="classMppiObstaclePointsTest.html" title=" " alt="" coords="143,1796,308,1822"/>
-<area shape="poly" title=" " alt="" coords="30,2126,37,2056,51,1968,71,1885,84,1853,99,1831,119,1817,142,1808,144,1813,122,1821,103,1835,88,1856,76,1887,56,1969,43,2056,35,2126"/>
-<area shape="rect" href="classMppiRobotLimitsTest.html" title=" " alt="" coords="153,1845,298,1871"/>
-<area shape="poly" title=" " alt="" coords="31,2125,54,1992,74,1925,86,1898,99,1880,124,1864,152,1856,153,1861,126,1869,102,1884,90,1901,79,1926,60,1994,36,2126"/>
-<area shape="rect" href="classNavMapMapsManagerReconfigureTest.html" title=" " alt="" coords="102,1895,348,1920"/>
-<area shape="poly" title=" " alt="" coords="28,2125,32,2082,43,2029,64,1975,79,1951,99,1929,115,1919,118,1923,102,1934,84,1954,69,1978,48,2030,37,2082,33,2126"/>
-<area shape="rect" href="classNavMapMapsManagerTest.html" title="Fixture for NavMapMapsManager tests." alt="" coords="136,1944,314,1970"/>
-<area shape="poly" title=" " alt="" coords="31,2125,38,2091,50,2051,70,2012,99,1979,116,1968,135,1960,137,1965,118,1973,102,1983,74,2015,55,2053,43,2092,36,2126"/>
-<area shape="rect" href="classNavMapPlannerTest.html" title=" " alt="" coords="155,1993,296,2019"/>
-<area shape="poly" title=" " alt="" coords="36,2125,59,2075,77,2049,99,2028,125,2014,154,2007,155,2012,127,2019,102,2032,81,2053,63,2078,41,2127"/>
-<area shape="rect" href="classNavmapAmclCorrectTest.html" title=" " alt="" coords="141,2043,310,2068"/>
-<area shape="poly" title=" " alt="" coords="46,2127,69,2100,99,2077,140,2062,142,2067,102,2082,73,2104,50,2130"/>
-<area shape="rect" href="classNavmapAmclPredictTest.html" title=" " alt="" coords="142,2092,309,2118"/>
-<area shape="poly" title=" " alt="" coords="66,2137,100,2126,145,2116,146,2121,101,2131,68,2142"/>
-<area shape="rect" href="classNavmapAmclRecoveryTest.html" title=" " alt="" coords="135,2141,316,2167"/>
-<area shape="poly" title=" " alt="" coords="69,2152,135,2152,135,2157,69,2157"/>
-<area shape="rect" href="classNavmapAmclSlipTest.html" title=" " alt="" coords="151,2191,300,2216"/>
-<area shape="poly" title=" " alt="" coords="68,2166,101,2177,151,2189,150,2194,100,2182,66,2171"/>
-<area shape="rect" href="classNavmapAmclThreadsTest.html" title=" " alt="" coords="139,2240,312,2266"/>
-<area shape="poly" title=" " alt="" coords="50,2178,73,2204,102,2227,140,2241,138,2246,99,2231,69,2208,46,2182"/>
-<area shape="rect" href="classNavmapInflationFilterTest.html" title=" " alt="" coords="140,2289,310,2315"/>
-<area shape="poly" title=" " alt="" coords="41,2181,63,2231,81,2256,102,2276,120,2286,141,2293,139,2298,118,2291,99,2280,77,2259,59,2233,36,2183"/>
-<area shape="rect" href="classNavmapInflationGeometryTest.html" title=" " alt="" coords="127,2339,324,2364"/>
-<area shape="poly" title=" " alt="" coords="36,2182,43,2216,55,2255,74,2293,102,2325,128,2340,125,2344,99,2330,70,2296,50,2257,38,2217,31,2183"/>
-<area shape="rect" href="classNavmapLocalizerReconfigureTest.html" title=" " alt="" coords="117,2388,334,2414"/>
-<area shape="poly" title=" " alt="" coords="33,2183,37,2226,48,2278,69,2331,84,2354,102,2375,118,2386,115,2390,99,2379,79,2358,64,2333,43,2280,32,2227,28,2183"/>
-<area shape="rect" href="classNavmapObstacleFilterTest.html" title=" " alt="" coords="137,2437,314,2463"/>
-<area shape="poly" title=" " alt="" coords="36,2182,60,2315,79,2382,90,2407,103,2424,119,2436,137,2443,135,2448,116,2440,99,2428,86,2410,74,2384,54,2316,31,2183"/>
-<area shape="rect" href="classNoPathEvaluatorTestCase.html" title=" " alt="" coords="138,2487,313,2512"/>
-<area shape="poly" title=" " alt="" coords="35,2182,43,2252,56,2340,76,2422,88,2453,103,2474,119,2486,138,2493,136,2498,116,2490,99,2477,84,2455,71,2423,51,2341,37,2253,30,2183"/>
-<area shape="rect" href="classNoPathWithFaultyPlannerTest.html" title=" " alt="" coords="127,2536,324,2562"/>
-<area shape="poly" title=" " alt="" coords="34,2182,40,2262,52,2364,73,2461,86,2498,103,2523,128,2540,125,2544,99,2527,82,2501,68,2463,47,2365,35,2262,29,2183"/>
-<area shape="rect" href="classObstacleProximityTest.html" title=" " alt="" coords="149,2585,302,2611"/>
-<area shape="poly" title=" " alt="" coords="34,2183,38,2272,49,2389,58,2448,70,2501,85,2544,103,2572,124,2587,150,2595,148,2601,122,2592,99,2576,80,2546,65,2502,53,2449,44,2390,33,2272,28,2183"/>
-<area shape="rect" href="classObstacleTooCloseEvaluatorTestCase.html" title=" " alt="" coords="134,2635,316,2676"/>
-<area shape="poly" title=" " alt="" coords="33,2182,37,2280,47,2412,56,2479,68,2539,83,2588,103,2622,117,2634,135,2643,133,2648,115,2639,99,2625,78,2591,62,2540,50,2480,41,2413,31,2281,28,2182"/>
-<area shape="rect" href="classRecoveryBasesTestCase.html" title=" " alt="" coords="141,2700,310,2726"/>
-<area shape="poly" title=" " alt="" coords="33,2182,34,2293,42,2444,50,2521,63,2591,80,2648,91,2669,103,2686,120,2699,142,2708,140,2713,118,2704,99,2689,86,2672,75,2650,58,2592,45,2522,36,2445,28,2293,27,2182"/>
-<area shape="rect" href="classRegulatedPpFaultyPlannerTest.html" title=" " alt="" coords="125,2749,326,2775"/>
-<area shape="poly" title=" " alt="" coords="34,2182,42,2310,57,2486,77,2649,89,2706,103,2736,126,2753,123,2757,99,2740,84,2708,72,2650,51,2487,37,2311,29,2183"/>
-<area shape="rect" href="classRegulatedPpLegacyParamsFileTest.html" title=" " alt="" coords="111,2799,340,2824"/>
-<area shape="poly" title=" " alt="" coords="34,2182,41,2320,55,2512,76,2690,89,2753,103,2786,115,2796,112,2800,99,2789,83,2754,70,2691,50,2512,36,2320,29,2183"/>
-<area shape="rect" href="classRegulatedPpRobotLimitsTest.html" title=" " alt="" coords="130,2848,321,2874"/>
-<area shape="poly" title=" " alt="" coords="34,2182,40,2329,53,2537,74,2731,88,2799,95,2822,103,2835,115,2846,130,2853,128,2858,112,2850,99,2839,90,2824,82,2800,69,2732,48,2537,35,2330,29,2183"/>
-<area shape="rect" href="classRegulatedPurePursuitControllerReconfigureTest.html" title=" " alt="" coords="124,2898,326,2938"/>
-<area shape="poly" title=" " alt="" coords="34,2183,40,2339,53,2562,73,2771,87,2845,95,2870,103,2884,126,2902,122,2906,99,2888,90,2872,82,2846,68,2772,47,2562,35,2339,29,2183"/>
-<area shape="rect" href="classRosGraphEvaluatorTestCase.html" title=" " alt="" coords="131,2963,320,2988"/>
-<area shape="poly" title=" " alt="" coords="34,2183,38,2351,50,2595,59,2717,71,2824,85,2905,94,2932,103,2948,116,2959,131,2967,129,2972,113,2964,99,2952,89,2934,80,2907,66,2825,54,2718,45,2595,33,2352,28,2183"/>
-<area shape="rect" href="classRotateRecoveryTest.html" title=" " alt="" coords="156,3012,295,3038"/>
-<area shape="poly" title=" " alt="" coords="33,2182,37,2360,48,2620,57,2751,69,2866,84,2953,93,2982,103,2999,127,3016,156,3024,155,3029,124,3021,99,3003,88,2984,79,2954,64,2867,52,2752,43,2621,32,2360,28,2182"/>
-<area shape="rect" href="classRoutesCostmapFilterTest.html" title=" " alt="" coords="141,3061,310,3087"/>
-<area shape="poly" title=" " alt="" coords="33,2182,36,2370,47,2646,56,2785,68,2907,83,2999,93,3030,103,3048,120,3062,141,3070,139,3075,117,3067,99,3052,88,3032,78,3000,62,2907,50,2785,41,2646,31,2370,28,2183"/>
-<area shape="rect" href="classRoutesMapsManagerReconfigureTest.html" title=" " alt="" coords="106,3111,344,3136"/>
-<area shape="poly" title=" " alt="" coords="33,2183,36,2379,45,2671,54,2818,66,2947,82,3046,92,3078,103,3098,115,3108,111,3112,99,3101,87,3080,77,3047,61,2948,49,2818,40,2671,30,2380,28,2183"/>
-<area shape="rect" href="classRoutesMapsManagerTest.html" title=" " alt="" coords="140,3160,310,3186"/>
-<area shape="poly" title=" " alt="" coords="33,2183,35,2389,44,2696,52,2851,65,2988,81,3092,92,3126,103,3147,120,3161,141,3169,139,3174,117,3165,99,3151,87,3128,76,3093,59,2989,47,2852,38,2696,30,2389,28,2183"/>
-<area shape="rect" href="classRppObstacleAreaTest.html" title=" " alt="" coords="151,3209,300,3235"/>
-<area shape="poly" title=" " alt="" coords="33,2183,34,2397,42,2721,51,2884,63,3029,80,3138,91,3175,103,3196,124,3212,151,3221,149,3226,122,3217,99,3200,86,3177,75,3139,58,3029,45,2885,37,2721,29,2398,28,2183"/>
-<area shape="rect" href="classSafeRetreatRecoveryTestCase.html" title=" " alt="" coords="125,3259,326,3284"/>
-<area shape="poly" title=" " alt="" coords="33,2183,33,2407,41,2746,49,2918,62,3069,79,3184,90,3223,103,3246,126,3263,123,3267,99,3249,85,3225,74,3185,56,3070,44,2918,35,2746,28,2407,27,2183"/>
-<area shape="rect" href="classSafetyChannelEvaluatorTest.html" title=" " alt="" coords="133,3308,318,3334"/>
-<area shape="poly" title=" " alt="" coords="33,2183,33,2416,39,2770,47,2951,60,3110,78,3231,90,3271,103,3295,117,3307,134,3315,131,3320,114,3311,99,3299,85,3273,73,3232,55,3110,42,2951,34,2771,27,2416,27,2183"/>
-<area shape="rect" href="classSerestControllerReconfigureTest.html" title=" " alt="" coords="121,3357,330,3383"/>
-<area shape="poly" title=" " alt="" coords="34,2182,41,2432,55,2813,76,3170,89,3290,96,3327,103,3345,123,3360,119,3364,99,3348,91,3328,84,3291,71,3170,50,2813,36,2432,28,2182"/>
-<area shape="rect" href="classSerestLegacyParamsFileTest.html" title=" " alt="" coords="129,3407,322,3432"/>
-<area shape="poly" title=" " alt="" coords="34,2182,40,2441,55,2839,76,3211,89,3337,96,3375,103,3394,115,3404,129,3412,127,3417,112,3409,98,3397,91,3377,83,3338,70,3212,49,2839,35,2442,28,2183"/>
-<area shape="rect" href="classSerestRobotLimitsTest.html" title=" " alt="" coords="148,3456,303,3482"/>
-<area shape="poly" title=" " alt="" coords="34,2183,40,2452,54,2865,75,3253,88,3384,95,3424,103,3443,123,3459,148,3467,147,3472,121,3463,99,3446,90,3425,83,3384,70,3253,48,2865,35,2452,28,2183"/>
-<area shape="rect" href="classSerestShortPathTest.html" title=" " alt="" coords="154,3505,297,3531"/>
-<area shape="poly" title=" " alt="" coords="34,2182,40,2459,53,2890,74,3294,88,3430,95,3472,103,3493,126,3509,154,3517,152,3522,123,3514,99,3496,90,3474,82,3431,69,3294,48,2890,34,2460,28,2182"/>
-<area shape="rect" href="classShutdownRecoveryTestCase.html" title=" " alt="" coords="131,3555,320,3580"/>
-<area shape="poly" title=" " alt="" coords="33,2182,39,2468,52,2915,62,3140,73,3335,87,3477,95,3521,103,3542,116,3553,132,3561,129,3566,113,3557,98,3545,90,3522,82,3478,68,3335,56,3140,47,2915,34,2468,28,2182"/>
-<area shape="rect" href="classSimpleAMCLMinHeightTest.html" title=" " alt="" coords="134,3604,317,3630"/>
-<area shape="poly" title=" " alt="" coords="33,2182,39,2478,51,2941,61,3174,73,3377,87,3524,95,3569,103,3591,117,3603,135,3611,132,3616,114,3608,98,3594,89,3571,81,3525,67,3377,56,3174,46,2941,33,2478,28,2183"/>
-<area shape="rect" href="classSimpleLegacyParamsFileTest.html" title=" " alt="" coords="128,3653,323,3679"/>
-<area shape="poly" title=" " alt="" coords="33,2182,38,2487,51,2966,60,3208,72,3418,86,3571,94,3618,103,3641,114,3651,129,3658,126,3663,111,3655,98,3644,89,3619,81,3572,67,3418,55,3208,45,2966,33,2487,28,2182"/>
-<area shape="rect" href="classSimpleLocalizerReconfigureTest.html" title=" " alt="" coords="122,3703,329,3728"/>
-<area shape="poly" title=" " alt="" coords="33,2183,38,2496,50,2991,59,3242,71,3459,86,3618,94,3666,103,3690,123,3705,120,3710,99,3693,89,3668,80,3618,66,3460,54,3242,45,2992,33,2496,28,2183"/>
-<area shape="rect" href="classSimpleMapTest.html" title="Fixture for SimpleMap tests (minimal)." alt="" coords="169,3752,282,3778"/>
-<area shape="poly" title=" " alt="" coords="33,2182,38,2505,49,3016,58,3275,70,3500,85,3664,94,3715,103,3739,116,3751,132,3759,169,3766,168,3771,131,3764,113,3755,98,3742,89,3716,80,3665,65,3501,53,3275,44,3016,32,2505,28,2182"/>
-<area shape="rect" href="classSimpleMapsManagerMinHeightTest.html" title=" " alt="" coords="111,3801,340,3827"/>
-<area shape="poly" title=" " alt="" coords="33,2182,37,2514,48,3042,58,3309,70,3542,85,3711,93,3763,103,3789,114,3799,111,3803,98,3792,88,3765,79,3712,64,3542,52,3310,43,3042,32,2514,28,2182"/>
-<area shape="rect" href="classSimpleMapsManagerReconfigureTest.html" title=" " alt="" coords="107,3851,344,3876"/>
-<area shape="poly" title=" " alt="" coords="33,2183,37,2523,48,3067,57,3343,69,3583,84,3758,93,3812,103,3838,114,3848,111,3852,98,3841,88,3813,79,3759,64,3584,51,3344,42,3068,32,2523,28,2183"/>
-<area shape="rect" href="classSimpleMapsManagerTest.html" title="Fixture for SimpleMapsManager tests (minimal)." alt="" coords="141,3900,310,3926"/>
-<area shape="poly" title=" " alt="" coords="33,2183,37,2533,47,3093,56,3377,68,3625,84,3805,93,3860,103,3887,120,3901,141,3909,139,3914,117,3906,99,3890,88,3862,78,3806,63,3625,51,3377,42,3093,31,2533,28,2183"/>
-<area shape="rect" href="classSimplePlannerGeometryTest.html" title=" " alt="" coords="132,3949,319,3975"/>
-<area shape="poly" title=" " alt="" coords="33,2183,36,2541,46,3118,55,3411,67,3666,83,3852,93,3909,103,3937,116,3948,133,3956,130,3961,113,3953,98,3940,87,3910,78,3852,62,3666,50,3411,41,3118,31,2541,28,2183"/>
-<area shape="rect" href="classSimplePlannerReconfigureTest.html" title=" " alt="" coords="126,3999,325,4024"/>
-<area shape="poly" title=" " alt="" coords="33,2183,36,2550,46,3143,54,3445,67,3707,83,3898,92,3957,103,3986,127,4003,124,4008,99,3989,87,3959,77,3899,61,3707,49,3445,40,3143,30,2550,28,2183"/>
-<area shape="rect" href="classSimplePlannerTest.html" title=" " alt="" coords="160,4048,291,4074"/>
-<area shape="poly" title=" " alt="" coords="33,2183,35,2559,45,3168,54,3478,66,3748,82,3945,92,4006,103,4035,114,4046,128,4053,160,4061,159,4066,126,4058,111,4050,98,4038,87,4007,77,3946,61,3749,48,3479,39,3169,30,2559,28,2183"/>
-<area shape="rect" href="classSimpleRecoveryManagerTest.html" title=" " alt="" coords="130,4097,321,4123"/>
-<area shape="poly" title=" " alt="" coords="33,2183,35,2568,44,3194,53,3512,65,3790,82,3992,92,4054,103,4085,115,4095,130,4103,128,4108,112,4100,98,4088,87,4056,76,3993,60,3790,47,3512,39,3194,30,2568,28,2183"/>
-<area shape="rect" href="classSimpleRobotLimitsTest.html" title=" " alt="" coords="147,4147,304,4172"/>
-<area shape="poly" title=" " alt="" coords="33,2182,35,2576,43,3218,52,3545,64,3831,81,4039,92,4103,103,4134,123,4149,147,4158,146,4163,120,4154,99,4137,86,4104,76,4039,59,3831,47,3546,38,3218,29,2576,28,2182"/>
-<area shape="rect" href="classVffControllerReconfigureTest.html" title=" " alt="" coords="132,4196,318,4222"/>
-<area shape="poly" title=" " alt="" coords="33,2183,34,2586,43,3244,51,3580,64,3872,81,4085,91,4151,103,4183,116,4195,133,4203,130,4208,113,4199,98,4186,86,4153,75,4086,58,3872,46,3580,37,3244,29,2586,28,2183"/>
-<area shape="rect" href="classVffRobotLimitsTest.html" title=" " alt="" coords="159,4245,292,4271"/>
-<area shape="poly" title=" " alt="" coords="33,2183,34,2594,42,3269,50,3613,63,3913,80,4132,91,4200,103,4233,128,4250,159,4258,158,4263,126,4255,99,4236,86,4201,75,4133,58,3914,45,3613,37,3269,29,2594,28,2183"/>
+<area shape="poly" title=" " alt="" coords="29,2151,34,2067,45,1956,66,1851,81,1810,99,1782,114,1770,132,1762,134,1766,117,1774,103,1785,85,1812,71,1852,51,1957,39,2067,34,2152"/>
+<area shape="rect" href="classMppiModesTest.html" title=" " alt="" coords="168,1796,282,1822"/>
+<area shape="poly" title=" " alt="" coords="29,2151,36,2076,49,1980,69,1890,83,1855,99,1831,114,1819,131,1811,167,1804,168,1809,133,1817,117,1824,103,1835,87,1858,74,1892,54,1981,41,2076,35,2151"/>
+<area shape="rect" href="classMppiObstaclePointsTest.html" title=" " alt="" coords="143,1845,308,1871"/>
+<area shape="poly" title=" " alt="" coords="31,2151,39,2086,52,2005,72,1930,85,1900,99,1880,119,1866,142,1858,144,1863,121,1871,103,1884,89,1903,77,1931,58,2006,44,2087,36,2152"/>
+<area shape="rect" href="classMppiRobotLimitsTest.html" title=" " alt="" coords="153,1895,298,1920"/>
+<area shape="poly" title=" " alt="" coords="27,2151,29,2103,39,2043,61,1982,77,1954,99,1929,124,1914,152,1906,153,1911,126,1919,102,1934,82,1957,65,1984,44,2044,34,2103,32,2151"/>
+<area shape="rect" href="classNavMapMapsManagerReconfigureTest.html" title=" " alt="" coords="102,1944,348,1970"/>
+<area shape="poly" title=" " alt="" coords="29,2151,34,2112,46,2065,67,2019,81,1997,99,1979,115,1968,118,1972,102,1983,85,2001,71,2021,51,2067,40,2113,34,2152"/>
+<area shape="rect" href="classNavMapMapsManagerTest.html" title="Fixture for NavMapMapsManager tests." alt="" coords="136,1993,314,2019"/>
+<area shape="poly" title=" " alt="" coords="33,2151,41,2122,54,2088,73,2055,99,2028,135,2010,137,2015,102,2032,77,2059,59,2091,46,2123,38,2152"/>
+<area shape="rect" href="classNavMapPlannerTest.html" title=" " alt="" coords="155,2043,296,2068"/>
+<area shape="poly" title=" " alt="" coords="40,2151,63,2113,80,2093,99,2077,126,2064,154,2057,155,2062,128,2069,102,2082,83,2097,68,2116,44,2154"/>
+<area shape="rect" href="classNavmapAmclCorrectTest.html" title=" " alt="" coords="141,2092,310,2118"/>
+<area shape="poly" title=" " alt="" coords="55,2154,100,2126,140,2113,142,2118,102,2131,58,2159"/>
+<area shape="rect" href="classNavmapAmclPredictTest.html" title=" " alt="" coords="142,2141,309,2167"/>
+<area shape="poly" title=" " alt="" coords="68,2172,141,2162,142,2168,68,2177"/>
+<area shape="rect" href="classNavmapAmclRecoveryTest.html" title=" " alt="" coords="135,2191,316,2216"/>
+<area shape="poly" title=" " alt="" coords="68,2182,135,2190,134,2195,68,2187"/>
+<area shape="rect" href="classNavmapAmclSlipTest.html" title=" " alt="" coords="151,2240,300,2266"/>
+<area shape="poly" title=" " alt="" coords="59,2200,102,2226,152,2241,150,2246,100,2231,56,2205"/>
+<area shape="rect" href="classNavmapAmclThreadsTest.html" title=" " alt="" coords="139,2289,312,2315"/>
+<area shape="poly" title=" " alt="" coords="45,2205,68,2243,84,2261,102,2276,140,2292,137,2297,99,2280,80,2265,64,2246,40,2208"/>
+<area shape="rect" href="classNavmapInflationFilterTest.html" title=" " alt="" coords="140,2339,310,2364"/>
+<area shape="poly" title=" " alt="" coords="38,2207,46,2235,59,2268,77,2299,102,2325,120,2336,141,2344,139,2349,118,2341,99,2330,73,2302,54,2270,41,2237,33,2208"/>
+<area shape="rect" href="classNavmapInflationGeometryTest.html" title=" " alt="" coords="127,2388,324,2414"/>
+<area shape="poly" title=" " alt="" coords="35,2207,40,2246,51,2291,71,2337,85,2357,102,2375,128,2390,125,2394,99,2379,81,2361,67,2339,46,2293,35,2247,29,2208"/>
+<area shape="rect" href="classNavmapLocalizerReconfigureTest.html" title=" " alt="" coords="117,2437,334,2463"/>
+<area shape="poly" title=" " alt="" coords="32,2208,35,2255,44,2314,65,2374,82,2401,102,2424,118,2435,115,2440,99,2428,77,2404,61,2376,39,2315,29,2256,27,2208"/>
+<area shape="rect" href="classNavmapObstacleFilterTest.html" title=" " alt="" coords="137,2487,314,2512"/>
+<area shape="poly" title=" " alt="" coords="36,2207,44,2272,58,2352,77,2427,89,2455,103,2474,119,2485,137,2493,135,2498,116,2490,99,2477,85,2457,72,2428,53,2353,39,2273,31,2208"/>
+<area shape="rect" href="classNoPathEvaluatorTestCase.html" title=" " alt="" coords="138,2536,313,2562"/>
+<area shape="poly" title=" " alt="" coords="35,2208,41,2282,54,2377,74,2466,87,2500,103,2523,119,2535,138,2543,136,2548,116,2540,99,2527,83,2503,69,2468,49,2378,36,2283,29,2208"/>
+<area shape="rect" href="classNoPathWithFaultyPlannerTest.html" title=" " alt="" coords="127,2585,324,2611"/>
+<area shape="poly" title=" " alt="" coords="34,2207,39,2291,51,2401,71,2506,85,2546,103,2572,128,2589,125,2593,99,2576,81,2548,66,2507,45,2402,34,2292,29,2208"/>
+<area shape="rect" href="classObstacleProximityTest.html" title=" " alt="" coords="149,2635,302,2660"/>
+<area shape="poly" title=" " alt="" coords="33,2208,37,2302,47,2426,56,2489,68,2545,84,2591,103,2622,124,2637,150,2645,148,2650,122,2641,99,2625,79,2593,63,2547,51,2490,42,2427,32,2302,28,2208"/>
+<area shape="rect" href="classObstacleTooCloseEvaluatorTestCase.html" title=" " alt="" coords="134,2684,316,2725"/>
+<area shape="poly" title=" " alt="" coords="33,2208,36,2311,45,2450,54,2520,66,2584,82,2636,103,2671,117,2684,135,2693,133,2697,114,2688,99,2675,77,2638,61,2585,49,2521,40,2450,30,2311,28,2208"/>
+<area shape="rect" href="classRecoveryBasesTestCase.html" title=" " alt="" coords="141,2749,310,2775"/>
+<area shape="poly" title=" " alt="" coords="32,2208,33,2322,40,2481,49,2562,62,2635,79,2695,90,2718,103,2735,120,2749,142,2757,140,2762,118,2753,99,2739,86,2721,74,2697,56,2636,43,2562,35,2482,27,2323,27,2208"/>
+<area shape="rect" href="classRegulatedPpFaultyPlannerTest.html" title=" " alt="" coords="125,2799,326,2824"/>
+<area shape="poly" title=" " alt="" coords="34,2208,42,2340,56,2524,76,2694,89,2754,103,2786,126,2802,123,2807,99,2789,84,2756,71,2695,51,2525,37,2341,29,2208"/>
+<area shape="rect" href="classRegulatedPpLegacyParamsFileTest.html" title=" " alt="" coords="111,2848,340,2874"/>
+<area shape="poly" title=" " alt="" coords="34,2208,41,2350,54,2549,75,2735,88,2800,103,2835,115,2846,112,2850,99,2838,83,2802,70,2736,49,2550,36,2350,29,2208"/>
+<area shape="rect" href="classRegulatedPpRobotLimitsTest.html" title=" " alt="" coords="130,2897,321,2923"/>
+<area shape="poly" title=" " alt="" coords="34,2207,40,2359,53,2574,73,2776,87,2847,95,2870,103,2884,115,2895,130,2903,128,2907,112,2899,99,2888,90,2873,82,2848,68,2777,47,2575,35,2359,29,2208"/>
+<area shape="rect" href="classRegulatedPurePursuitControllerReconfigureTest.html" title=" " alt="" coords="124,2947,326,2988"/>
+<area shape="poly" title=" " alt="" coords="34,2208,39,2368,52,2599,73,2816,87,2893,94,2918,103,2934,126,2951,122,2956,99,2937,90,2920,81,2894,67,2817,47,2600,34,2369,28,2208"/>
+<area shape="rect" href="classRosGraphEvaluatorTestCase.html" title=" " alt="" coords="131,3012,320,3038"/>
+<area shape="poly" title=" " alt="" coords="33,2208,38,2381,49,2632,58,2758,70,2869,85,2953,94,2981,103,2998,116,3009,131,3017,129,3021,113,3013,99,3001,89,2983,80,2954,65,2870,53,2759,44,2632,33,2381,28,2208"/>
+<area shape="rect" href="classRotateRecoveryTest.html" title=" " alt="" coords="156,3061,295,3087"/>
+<area shape="poly" title=" " alt="" coords="33,2208,37,2391,47,2658,56,2793,68,2911,84,3001,93,3031,103,3048,127,3065,156,3073,155,3079,124,3070,99,3052,88,3033,79,3002,63,2912,51,2793,42,2659,32,2391,28,2208"/>
+<area shape="rect" href="classRoutesCostmapFilterTest.html" title=" " alt="" coords="141,3111,310,3136"/>
+<area shape="poly" title=" " alt="" coords="33,2208,36,2400,46,2683,55,2826,67,2952,83,3047,92,3079,103,3098,120,3111,142,3120,140,3125,118,3116,99,3101,87,3081,78,3048,62,2952,49,2826,41,2683,31,2400,28,2208"/>
+<area shape="rect" href="classRoutesMapsManagerReconfigureTest.html" title=" " alt="" coords="106,3160,344,3186"/>
+<area shape="poly" title=" " alt="" coords="33,2208,35,2409,44,2708,53,2859,65,2992,82,3093,92,3127,103,3147,115,3157,111,3161,99,3151,87,3129,77,3095,60,2993,48,2860,39,2708,30,2409,28,2208"/>
+<area shape="rect" href="classRoutesMapsManagerTest.html" title=" " alt="" coords="140,3209,310,3235"/>
+<area shape="poly" title=" " alt="" coords="33,2208,34,2418,43,2733,51,2892,64,3033,81,3140,91,3175,103,3196,120,3210,141,3218,139,3223,117,3215,99,3200,86,3177,76,3141,59,3034,46,2893,38,2733,29,2418,28,2208"/>
+<area shape="rect" href="classRppObstacleAreaTest.html" title=" " alt="" coords="151,3259,300,3284"/>
+<area shape="poly" title=" " alt="" coords="33,2208,34,2428,41,2758,50,2926,62,3074,80,3186,91,3223,103,3246,124,3262,151,3270,149,3275,122,3266,99,3249,86,3225,75,3187,57,3074,45,2926,36,2759,28,2428,28,2208"/>
+<area shape="rect" href="classSafeRetreatRecoveryTestCase.html" title=" " alt="" coords="125,3308,326,3334"/>
+<area shape="poly" title=" " alt="" coords="33,2208,33,2436,40,2783,48,2959,61,3114,79,3232,90,3272,103,3295,126,3312,123,3316,99,3299,85,3274,74,3233,56,3115,43,2959,35,2783,28,2436,27,2208"/>
+<area shape="rect" href="classSafetyChannelEvaluatorTest.html" title=" " alt="" coords="133,3357,318,3383"/>
+<area shape="poly" title=" " alt="" coords="33,2208,32,2444,38,2807,47,2992,59,3155,78,3278,90,3320,103,3344,117,3356,134,3364,131,3369,114,3361,99,3348,85,3322,73,3279,54,3155,41,2992,33,2807,27,2444,27,2208"/>
+<area shape="rect" href="classSerestControllerReconfigureTest.html" title=" " alt="" coords="121,3407,330,3432"/>
+<area shape="poly" title=" " alt="" coords="34,2208,41,2463,55,2852,76,3216,89,3338,96,3376,103,3394,123,3409,119,3413,99,3397,91,3377,84,3339,71,3216,50,2852,35,2463,28,2208"/>
+<area shape="rect" href="classSerestLegacyParamsFileTest.html" title=" " alt="" coords="129,3456,322,3482"/>
+<area shape="poly" title=" " alt="" coords="34,2208,40,2471,54,2876,75,3257,88,3385,96,3424,103,3443,115,3454,129,3461,127,3466,112,3458,98,3446,90,3426,83,3386,70,3257,49,2877,35,2471,28,2208"/>
+<area shape="rect" href="classSerestRobotLimitsTest.html" title=" " alt="" coords="148,3505,303,3531"/>
+<area shape="poly" title=" " alt="" coords="34,2208,40,2480,53,2902,74,3298,88,3432,95,3473,103,3493,123,3508,148,3516,147,3521,121,3513,99,3496,90,3474,83,3432,69,3298,48,2902,34,2480,28,2208"/>
+<area shape="rect" href="classSerestShortPathTest.html" title=" " alt="" coords="154,3555,297,3580"/>
+<area shape="poly" title=" " alt="" coords="33,2208,39,2490,53,2928,74,3340,87,3479,95,3521,103,3542,126,3558,154,3567,152,3572,123,3563,99,3545,90,3523,82,3479,68,3340,47,2928,34,2490,28,2208"/>
+<area shape="rect" href="classShutdownRecoveryTestCase.html" title=" " alt="" coords="131,3604,320,3630"/>
+<area shape="poly" title=" " alt="" coords="33,2208,39,2499,52,2953,61,3182,73,3381,87,3525,95,3570,103,3591,116,3602,132,3610,129,3615,113,3607,98,3594,90,3571,82,3526,68,3381,56,3182,47,2953,34,2499,28,2208"/>
+<area shape="rect" href="classSimpleAMCLMinHeightTest.html" title=" " alt="" coords="134,3653,317,3679"/>
+<area shape="poly" title=" " alt="" coords="33,2208,39,2508,51,2978,61,3216,72,3422,86,3572,94,3618,103,3641,117,3653,135,3661,132,3666,114,3657,98,3644,89,3620,81,3573,67,3422,55,3216,46,2978,33,2508,28,2208"/>
+<area shape="rect" href="classSimpleLegacyParamsFileTest.html" title=" " alt="" coords="128,3703,323,3728"/>
+<area shape="poly" title=" " alt="" coords="33,2208,38,2517,50,3004,60,3250,71,3463,86,3619,94,3667,103,3690,114,3700,129,3708,126,3713,111,3705,98,3693,89,3668,81,3620,66,3464,54,3250,45,3004,33,2517,28,2208"/>
+<area shape="rect" href="classSimpleLocalizerReconfigureTest.html" title=" " alt="" coords="122,3752,329,3778"/>
+<area shape="poly" title=" " alt="" coords="33,2208,38,2526,50,3029,59,3283,71,3505,85,3666,94,3715,103,3739,123,3755,120,3759,99,3742,89,3717,80,3666,65,3505,54,3284,44,3029,33,2526,28,2208"/>
+<area shape="rect" href="classSimpleMapTest.html" title="Fixture for SimpleMap tests (minimal)." alt="" coords="169,3801,282,3827"/>
+<area shape="poly" title=" " alt="" coords="33,2208,37,2535,49,3055,58,3318,70,3546,85,3713,94,3764,103,3789,116,3800,132,3808,169,3815,168,3820,131,3813,113,3805,98,3792,88,3765,80,3713,65,3546,53,3318,44,3055,32,2535,28,2208"/>
+<area shape="rect" href="classSimpleMapsManagerMinHeightTest.html" title=" " alt="" coords="111,3851,340,3876"/>
+<area shape="poly" title=" " alt="" coords="33,2207,37,2543,48,3079,57,3351,69,3587,84,3759,93,3812,103,3838,114,3848,111,3852,98,3841,88,3814,79,3760,64,3587,52,3351,43,3079,32,2543,28,2208"/>
+<area shape="rect" href="classSimpleMapsManagerReconfigureTest.html" title=" " alt="" coords="107,3900,344,3926"/>
+<area shape="poly" title=" " alt="" coords="33,2208,37,2552,47,3105,56,3385,68,3628,84,3806,93,3861,103,3887,114,3898,111,3902,98,3890,88,3862,79,3807,63,3629,51,3385,42,3105,31,2553,28,2208"/>
+<area shape="rect" href="classSimpleMapsManagerTest.html" title="Fixture for SimpleMapsManager tests (minimal)." alt="" coords="141,3949,310,3975"/>
+<area shape="poly" title=" " alt="" coords="33,2208,36,2562,47,3130,56,3419,68,3670,83,3853,93,3909,103,3937,120,3950,141,3959,139,3964,117,3955,99,3940,88,3911,78,3854,62,3670,50,3419,41,3130,31,2562,28,2208"/>
+<area shape="rect" href="classSimplePlannerGeometryTest.html" title=" " alt="" coords="132,3999,319,4024"/>
+<area shape="poly" title=" " alt="" coords="33,2208,36,2572,46,3156,55,3453,67,3711,83,3900,93,3958,103,3986,116,3997,133,4005,130,4010,113,4002,98,3989,87,3959,78,3900,62,3712,49,3453,41,3156,31,2572,28,2208"/>
+<area shape="rect" href="classSimplePlannerReconfigureTest.html" title=" " alt="" coords="126,4048,325,4074"/>
+<area shape="poly" title=" " alt="" coords="33,2208,36,2580,45,3181,54,3486,66,3752,82,3946,92,4006,103,4035,127,4053,124,4057,99,4038,87,4008,77,3947,61,3753,49,3487,40,3181,30,2580,28,2208"/>
+<area shape="rect" href="classSimplePlannerTest.html" title=" " alt="" coords="160,4097,291,4123"/>
+<area shape="poly" title=" " alt="" coords="33,2208,35,2588,44,3205,53,3520,65,3793,82,3993,92,4055,103,4085,114,4095,128,4102,160,4110,159,4116,126,4107,111,4099,98,4088,87,4056,77,3994,60,3794,48,3520,39,3206,30,2588,28,2208"/>
+<area shape="rect" href="classSimpleRecoveryManagerTest.html" title=" " alt="" coords="130,4147,321,4172"/>
+<area shape="poly" title=" " alt="" coords="33,2208,35,2598,44,3231,52,3554,65,3835,82,4040,92,4103,103,4134,115,4145,130,4153,128,4157,112,4149,98,4137,87,4104,76,4041,59,3835,47,3554,38,3231,30,2598,28,2208"/>
+<area shape="rect" href="classSimpleRobotLimitsTest.html" title=" " alt="" coords="147,4196,304,4222"/>
+<area shape="poly" title=" " alt="" coords="33,2208,35,2607,43,3256,52,3588,64,3876,81,4087,91,4152,103,4183,123,4199,147,4207,146,4212,120,4203,99,4186,86,4153,76,4087,59,3877,46,3588,38,3256,29,2607,28,2208"/>
+<area shape="rect" href="classVffControllerReconfigureTest.html" title=" " alt="" coords="132,4245,318,4271"/>
+<area shape="poly" title=" " alt="" coords="33,2208,34,2614,42,3281,51,3621,63,3917,81,4133,91,4200,103,4233,116,4244,133,4252,130,4257,113,4249,98,4236,86,4201,75,4134,58,3917,45,3621,37,3281,29,2614,28,2208"/>
+<area shape="rect" href="classVffRobotLimitsTest.html" title=" " alt="" coords="159,4295,292,4320"/>
+<area shape="poly" title=" " alt="" coords="33,2208,34,2624,42,3306,50,3655,63,3959,80,4180,91,4249,103,4282,128,4300,159,4308,158,4313,126,4304,99,4285,86,4250,75,4181,57,3959,45,3655,36,3307,29,2624,28,2208"/>
 <area shape="rect" href="classCollisionSafetyReflexCheckTest.html" title=" " alt="" coords="403,383,608,408"/>
 <area shape="poly" title=" " alt="" coords="325,393,402,393,402,398,325,398"/>
 <area shape="rect" href="classControllerStuckFreshWindowTest.html" title=" " alt="" coords="398,440,613,466"/>
 <area shape="poly" title=" " alt="" coords="323,450,398,450,398,456,323,456"/>
-<area shape="rect" href="classNavmapObstacleFilterLimitsTest.html" title=" " alt="" coords="399,2437,612,2463"/>
-<area shape="poly" title=" " alt="" coords="330,2448,399,2448,399,2453,330,2453"/>
-<area shape="rect" href="classSafeRetreatDirectionTest.html" title=" " alt="" coords="422,3259,589,3284"/>
-<area shape="poly" title=" " alt="" coords="341,3269,422,3269,422,3274,341,3274"/>
-<area shape="rect" href="classSensorsLostTest.html" title=" " alt="" coords="445,4097,566,4123"/>
-<area shape="poly" title=" " alt="" coords="337,4108,445,4108,445,4113,337,4113"/>
-<area shape="rect" href="classSensorsLostSimTimeTest.html" title=" " alt="" coords="661,4097,835,4123"/>
-<area shape="poly" title=" " alt="" coords="582,4108,661,4108,661,4113,582,4113"/>
+<area shape="rect" href="classNavmapObstacleFilterLimitsTest.html" title=" " alt="" coords="399,2487,612,2512"/>
+<area shape="poly" title=" " alt="" coords="330,2497,399,2497,399,2502,330,2502"/>
+<area shape="rect" href="classSafeRetreatDirectionTest.html" title=" " alt="" coords="422,3308,589,3334"/>
+<area shape="poly" title=" " alt="" coords="341,3318,422,3318,422,3324,341,3324"/>
+<area shape="rect" href="classSensorsLostTest.html" title=" " alt="" coords="445,4147,566,4172"/>
+<area shape="poly" title=" " alt="" coords="337,4157,445,4157,445,4162,337,4162"/>
+<area shape="rect" href="classSensorsLostSimTimeTest.html" title=" " alt="" coords="661,4147,835,4172"/>
+<area shape="poly" title=" " alt="" coords="582,4157,661,4157,661,4162,582,4162"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_78.png" border="0" usemap="#aTrajectorySample" loading="lazy" alt=""/>
-<map name="aTrajectorySample" id="aTrajectorySample">
-<area shape="rect" href="structeasynav_1_1TrajectorySample.html" title=" " alt="" coords="5,5,128,31"/>
+<tr><td><img src="inherit_graph_90.png" border="0" usemap="#aTestWithParam" loading="lazy" alt=""/>
+<map name="aTestWithParam" id="aTestWithParam">
+<area shape="rect" title=" " alt="" coords="5,5,117,31"/>
+<area shape="rect" href="classMppiScenarioTest.html" title=" " alt="" coords="165,5,291,31"/>
+<area shape="poly" title=" " alt="" coords="132,16,164,16,164,21,132,21"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_79.png" border="0" usemap="#aTransformWeighted" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_91.png" border="0" usemap="#aTransformWeighted" loading="lazy" alt=""/>
 <map name="aTransformWeighted" id="aTransformWeighted">
 <area shape="rect" href="structeasynav_1_1mhamcl_1_1TransformWeighted.html" title="A candidate pose in the map and how well the perception fits it." alt="" coords="5,5,140,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_80.png" border="0" usemap="#aUkfWrapper" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_92.png" border="0" usemap="#aUkfWrapper" loading="lazy" alt=""/>
 <map name="aUkfWrapper" id="aUkfWrapper">
 <area shape="rect" href="classrobot__localization_1_1UkfWrapper.html" title=" " alt="" coords="5,5,96,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_81.png" border="0" usemap="#aVFFVectors" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_93.png" border="0" usemap="#aVelocity" loading="lazy" alt=""/>
+<map name="aVelocity" id="aVelocity">
+<area shape="rect" href="structeasynav_1_1Velocity.html" title="Velocity in the robot frame." alt="" coords="5,5,73,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_94.png" border="0" usemap="#aVelocity" loading="lazy" alt=""/>
+<map name="aVelocity" id="aVelocity">
+<area shape="rect" href="structmppi__test_1_1Velocity.html" title="Velocity in the robot frame." alt="" coords="5,5,73,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_95.png" border="0" usemap="#aVelocity" loading="lazy" alt=""/>
+<map name="aVelocity" id="aVelocity">
+<area shape="rect" href="structVelocity.html" title="Velocity in the robot frame." alt="" coords="5,5,73,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_96.png" border="0" usemap="#aVFFVectors" loading="lazy" alt=""/>
 <map name="aVFFVectors" id="aVFFVectors">
 <area shape="rect" href="structeasynav_1_1VFFVectors.html" title="A structure to hold the VFF vectors." alt="" coords="5,5,97,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_82.png" border="0" usemap="#aVoxelGrid_3_01DataT_01_4" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_97.png" border="0" usemap="#aVoxelGrid_3_01DataT_01_4" loading="lazy" alt=""/>
 <map name="aVoxelGrid_3_01DataT_01_4" id="aVoxelGrid_3_01DataT_01_4">
 <area shape="rect" href="classBonxai_1_1VoxelGrid.html" title=" " alt="" coords="5,5,140,31"/>
 </map>
 </td></tr>
-<tr><td><img src="inherit_graph_83.png" border="0" usemap="#aVoxelGrid_3_01DataT_01_4_1_1ConstAccessor" loading="lazy" alt=""/>
+<tr><td><img src="inherit_graph_98.png" border="0" usemap="#aVoxelGrid_3_01DataT_01_4_1_1ConstAccessor" loading="lazy" alt=""/>
 <map name="aVoxelGrid_3_01DataT_01_4_1_1ConstAccessor" id="aVoxelGrid_3_01DataT_01_4_1_1ConstAccessor">
 <area shape="rect" href="classBonxai_1_1VoxelGrid_1_1ConstAccessor.html" title=" " alt="" coords="5,5,140,46"/>
 <area shape="rect" href="classBonxai_1_1VoxelGrid_1_1Accessor.html" title="Class to be used to set and get values of a cell of the Grid." alt="" coords="188,5,322,46"/>

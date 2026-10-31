@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['green_0',['GREEN',['../namespaceeasynav.html#ae4ffed3c06abcc7e0ae6e9c32e6f2b24aa60bd322f93178d68184e30e162571ca',1,'easynav']]]
+  ['diff_0',['Diff',['../namespaceeasynav.html#af102c0483ef611ae0217c72c0a950743a49630f5d7723e9b41474bd1cb1887b9d',1,'easynav']]]
 ];

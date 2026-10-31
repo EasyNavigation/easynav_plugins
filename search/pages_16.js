@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['⚙️_20controllers_0',['⚙️ Controllers',['../index.html#autotoc_md10',1,'']]]
+  ['yaml_20format_0',['Routes YAML Format',['../dir_7d49775df75e06e73d0caabaf8eab5c7.html#autotoc_md240',1,'']]]
 ];

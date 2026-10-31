@@ -1,15 +1,23 @@
 <map id="controllers/easynav_mppi_controller/include/easynav_mppi_controller/MPPIOptimizer.hpp" name="controllers/easynav_mppi_controller/include/easynav_mppi_controller/MPPIOptimizer.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="395,5,563,76"/>
-<area shape="rect" id="Node000002" href="$MPPIController_8hpp.html" title=" " alt="" coords="299,124,467,195"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="443,90,413,125,409,122,439,86"/>
-<area shape="rect" id="Node000007" href="$MPPIOptimizer_8cpp.html" title=" " alt="" coords="491,124,659,195"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="519,86,548,122,544,125,515,90"/>
+<area shape="rect" id="Node000001" title="Model Predictive Path Integral optimizer, for differential and holonomic robots." alt="" coords="724,5,892,76"/>
+<area shape="rect" id="Node000002" href="$MPPIController_8hpp.html" title=" " alt="" coords="481,124,650,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="723,85,639,126,637,121,721,81"/>
+<area shape="rect" id="Node000008" href="$MPPIOptimizer_8cpp.html" title=" " alt="" coords="724,124,892,195"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="811,91,811,124,806,124,806,91"/>
+<area shape="rect" id="Node000009" href="$mppi__sim_8hpp.html" title="Kinematic simulation of a robot driven by the MPPI optimizer, for the tests." alt="" coords="967,132,1116,187"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="892,81,988,129,986,133,890,86"/>
 <area shape="rect" id="Node000003" href="$MPPIController_8cpp.html" title="Implementation of the MPPIController class." alt="" coords="5,243,174,313"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="285,202,175,246,173,241,283,197"/>
-<area shape="rect" id="Node000004" href="$mppi__controller__obstacle__points__tests_8cpp.html" title="MPPI takes the obstacle points in the robot frame, towards where it moves." alt="" coords="198,243,368,313"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="346,208,314,244,310,241,342,204"/>
-<area shape="rect" id="Node000005" href="$mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="391,243,574,313"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="424,204,455,241,451,244,420,208"/>
-<area shape="rect" id="Node000006" href="$mppi__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="599,243,748,313"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="482,197,599,244,597,249,480,202"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="467,181,333,209,186,245,175,249,173,243,185,240,331,204,465,176"/>
+<area shape="rect" id="Node000004" href="$mppi__controller__modes__tests_8cpp.html" title="The MPPI plugin: its parameters, the commands it writes for each motion model and heading mode,..." alt="" coords="198,243,357,313"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="468,203,359,247,357,242,466,198"/>
+<area shape="rect" id="Node000005" href="$mppi__controller__obstacle__points__tests_8cpp.html" title="MPPI takes the obstacle points all around the robot, within its height and range." alt="" coords="381,243,550,313"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="528,208,497,244,493,241,524,204"/>
+<area shape="rect" id="Node000006" href="$mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="574,243,757,313"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="607,204,638,241,634,244,603,208"/>
+<area shape="rect" id="Node000007" href="$mppi__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="782,243,931,313"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="665,197,782,244,780,249,663,202"/>
+<area shape="rect" id="Node000010" href="$mppi__optimizer__tests_8cpp.html" title="The MPPI optimizer: what it does with invalid input, at the goal, when blocked, within its limits,..." alt="" coords="955,250,1128,306"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1044,202,1044,250,1039,250,1039,202"/>
+<area shape="rect" id="Node000011" href="$mppi__scenarios__tests_8cpp.html" title="End to end: every motion model and heading mode, on every kind of path, drives the robot to the goal ..." alt="" coords="1152,250,1328,306"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="1102,193,1195,247,1192,252,1099,198"/>
 </map>

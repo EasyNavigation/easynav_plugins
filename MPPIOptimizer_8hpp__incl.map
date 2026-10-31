@@ -1,17 +1,31 @@
 <map id="controllers/easynav_mppi_controller/include/easynav_mppi_controller/MPPIOptimizer.hpp" name="controllers/easynav_mppi_controller/include/easynav_mppi_controller/MPPIOptimizer.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="267,5,435,76"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,124,57,150"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="268,69,72,126,71,120,266,63"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="81,124,138,150"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="267,77,153,121,152,116,265,72"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="163,124,227,150"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="295,79,229,118,227,113,292,74"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="252,124,450,150"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="354,76,354,108,348,108,348,76"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="475,124,638,150"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="428,74,517,115,515,120,426,79"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="662,124,781,150"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="436,61,660,117,658,122,435,66"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="805,124,924,150"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="436,55,790,119,789,125,435,60"/>
+<area shape="rect" id="Node000001" title="Model Predictive Path Integral optimizer, for differential and holonomic robots." alt="" coords="444,5,612,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="78,213,138,238"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="443,45,328,50,199,63,139,74,86,87,43,105,15,126,10,135,8,143,15,163,37,188,65,206,62,210,34,192,11,166,3,144,5,133,11,122,41,100,84,82,138,69,199,58,328,45,443,40"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="454,132,519,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="516,77,500,118,495,116,511,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="543,132,596,157"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="544,75,561,116,556,118,539,77"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="199,213,257,238"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="444,48,395,56,345,71,297,93,255,126,244,142,236,160,230,198,225,197,231,159,239,139,251,122,294,89,343,66,394,51,443,43"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="620,132,783,157"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="588,74,669,121,666,126,586,79"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="807,132,926,157"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="613,65,812,124,811,129,612,70"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="950,132,1068,157"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="613,55,765,84,938,121,951,125,950,130,937,127,764,89,612,60"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1093,124,1254,165"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="613,50,820,80,1078,121,1077,126,819,85,612,56"/>
+<area shape="rect" id="Node000010" href="$NearestGrid_8hpp.html" title="Square grid that gives, for any point, the nearest of a set of seed points in O(1)." alt="" coords="26,124,190,165"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="444,65,205,122,203,117,443,60"/>
+<area shape="rect" id="Node000011" href="$PointBuckets_8hpp.html" title="Points binned in square cells, to visit those near a position." alt="" coords="266,124,430,165"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="468,79,397,118,394,114,465,74"/>
+<area shape="poly" id="edge10_Node000010_Node000002" title=" " alt="" coords="111,165,111,197,105,197,105,165"/>
+<area shape="poly" id="edge11_Node000010_Node000005" title=" " alt="" coords="139,163,198,202,196,206,136,167"/>
+<area shape="poly" id="edge15_Node000011_Node000002" title=" " alt="" coords="289,168,154,212,152,207,287,163"/>
+<area shape="poly" id="edge16_Node000011_Node000005" title=" " alt="" coords="320,167,260,206,257,202,317,163"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="295,213,369,238"/>
+<area shape="poly" id="edge13_Node000011_Node000012" title=" " alt="" coords="347,166,340,198,335,197,341,165"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="393,213,450,238"/>
+<area shape="poly" id="edge14_Node000011_Node000013" title=" " alt="" coords="368,163,402,199,398,203,364,167"/>
 </map>

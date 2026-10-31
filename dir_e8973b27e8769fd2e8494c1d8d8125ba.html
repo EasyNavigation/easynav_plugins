@@ -107,7 +107,7 @@ Directory dependency graph for tests:</div>
 <area shape="rect" href="dir_505656093d12b0360e7f3679abf382eb.html" title="include" alt="" coords="66,126,128,152"/>
 <area shape="rect" href="dir_e8973b27e8769fd2e8494c1d8d8125ba.html" title="tests" alt="" coords="72,52,122,78"/>
 <area shape="poly" href="dir_000148_000090.html" alt="" coords="100,78,100,110,95,110,95,78"/>
-<area shape="rect" href="dir_000148_000090.html" title="3" alt="" coords="102,100,109,115"/>
+<area shape="rect" href="dir_000148_000090.html" title="6" alt="" coords="102,100,109,115"/>
 <area shape="rect" href="dir_afbb35b9fe2a1f2f9444bbb0d694d2aa.html" title="easynav_mppi_controller" alt="" coords="16,16,180,162"/>
 </map>
 </div>
@@ -116,12 +116,20 @@ Directory dependency graph for tests:</div>
 Files</h2></td></tr>
 <tr class="memitem:mppi_5Fcontroller_5Flegacy_5Fparams_5Ffile_5Ftests_2Ecpp" id="r_mppi_5Fcontroller_5Flegacy_5Fparams_5Ffile_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="mppi__controller__legacy__params__file__tests_8cpp.html">mppi_controller_legacy_params_file_tests.cpp</a></td></tr>
 <tr class="memdesc:mppi__controller__legacy__params__file__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">A real parameter file from before robot_limits (easynav_indoor_testcase, costmap.mppi.params.yaml) keeps working: its deprecated parameters apply. <br /></td></tr>
+<tr class="memitem:mppi_5Fcontroller_5Fmodes_5Ftests_2Ecpp" id="r_mppi_5Fcontroller_5Fmodes_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="mppi__controller__modes__tests_8cpp.html">mppi_controller_modes_tests.cpp</a></td></tr>
+<tr class="memdesc:mppi__controller__modes__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">The MPPI plugin: its parameters, the commands it writes for each motion model and heading mode, heading_reference, and the robot's footprint. <br /></td></tr>
 <tr class="memitem:mppi_5Fcontroller_5Fobstacle_5Fpoints_5Ftests_2Ecpp" id="r_mppi_5Fcontroller_5Fobstacle_5Fpoints_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="mppi__controller__obstacle__points__tests_8cpp.html">mppi_controller_obstacle_points_tests.cpp</a></td></tr>
-<tr class="memdesc:mppi__controller__obstacle__points__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPPI takes the obstacle points in the robot frame, towards where it moves. <br /></td></tr>
+<tr class="memdesc:mppi__controller__obstacle__points__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPPI takes the obstacle points all around the robot, within its height and range. <br /></td></tr>
 <tr class="memitem:mppi_5Fcontroller_5Freconfigure_5Ftests_2Ecpp" id="r_mppi_5Fcontroller_5Freconfigure_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="mppi__controller__reconfigure__tests_8cpp.html">mppi_controller_reconfigure_tests.cpp</a></td></tr>
 <tr class="memdesc:mppi__controller__reconfigure__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens across a cleanup/reconfigure cycle) without throwing. <br /></td></tr>
 <tr class="memitem:mppi_5Fcontroller_5Frobot_5Flimits_5Ftests_2Ecpp" id="r_mppi_5Fcontroller_5Frobot_5Flimits_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="mppi__controller__robot__limits__tests_8cpp.html">mppi_controller_robot_limits_tests.cpp</a></td></tr>
 <tr class="memdesc:mppi__controller__robot__limits__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">The deprecated limit parameters of this controller still work, and "robot_limits.*" in controller_node takes precedence over them. <br /></td></tr>
+<tr class="memitem:mppi_5Foptimizer_5Ftests_2Ecpp" id="r_mppi_5Foptimizer_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="mppi__optimizer__tests_8cpp.html">mppi_optimizer_tests.cpp</a></td></tr>
+<tr class="memdesc:mppi__optimizer__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">The MPPI optimizer: what it does with invalid input, at the goal, when blocked, within its limits, and its nearest-seed grid. <br /></td></tr>
+<tr class="memitem:mppi_5Fscenarios_5Ftests_2Ecpp" id="r_mppi_5Fscenarios_5Ftests_2Ecpp"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="mppi__scenarios__tests_8cpp.html">mppi_scenarios_tests.cpp</a></td></tr>
+<tr class="memdesc:mppi__scenarios__tests_8cpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">End to end: every motion model and heading mode, on every kind of path, drives the robot to the goal within its limits, near the path, clear of obstacles and with the heading of the mode. <br /></td></tr>
+<tr class="memitem:mppi_5Fsim_2Ehpp" id="r_mppi_5Fsim_2Ehpp"><td class="memItemLeft"><a href="mppi__sim_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="mppi__sim_8hpp.html">mppi_sim.hpp</a></td></tr>
+<tr class="memdesc:mppi__sim_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kinematic simulation of a robot driven by the MPPI optimizer, for the tests. <br /></td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

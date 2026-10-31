@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classeasynav_1_1SimpleMap.html" title="Simple 2D uint8_t grid using basic C++ types, with full metric conversion support." alt="" coords="5,5,92,31"/>
+<area shape="rect" id="Node000000" href="$classeasynav_1_1RoutesFilter.html" title="Base interface for all routes filters." alt="" coords="5,5,97,31"/>
+<area shape="rect" id="Node000001" href="$classeasynav_1_1RoutesCostmapFilter.html" title="Costmap filter that raises costs outside navigation routes." alt="" coords="145,5,288,31"/>
+<area shape="poly" id="edge75_Node000000_Node000001" title=" " alt="" coords="112,16,144,16,144,21,112,21"/>
 </map>

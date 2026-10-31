@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 </div><!--header-->
 <div class="contents">
 
-<p>MPPI takes the obstacle points in the robot frame, towards where it moves.  
+<p>MPPI takes the obstacle points all around the robot, within its height and range.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
@@ -123,59 +123,72 @@ Include dependency graph for mppi_controller_obstacle_points_tests.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="mppi__controller__obstacle__points__tests_8cpp__incl.png" border="0" usemap="#acontrollers_2easynav__mppi__controller_2tests_2mppi__controller__obstacle__points__tests_8cpp" loading="lazy" alt=""/></div>
 <map name="acontrollers_2easynav__mppi__controller_2tests_2mppi__controller__obstacle__points__tests_8cpp" id="acontrollers_2easynav__mppi__controller_2tests_2mppi__controller__obstacle__points__tests_8cpp">
-<area shape="rect" title="MPPI takes the obstacle points in the robot frame, towards where it moves." alt="" coords="1265,5,1434,76"/>
-<area shape="rect" title=" " alt="" coords="582,132,640,157"/>
-<area shape="poly" title=" " alt="" coords="1265,48,1145,55,993,69,826,92,660,127,653,128,652,123,659,121,825,87,992,64,1144,50,1264,42"/>
-<area shape="rect" title=" " alt="" coords="72,220,140,246"/>
-<area shape="poly" title=" " alt="" coords="1265,49,1125,59,961,74,806,97,744,111,698,126,684,136,676,146,667,157,652,167,581,193,518,205,460,208,406,205,292,197,227,201,152,215,145,217,144,212,151,210,226,196,292,192,406,199,460,202,517,200,579,188,650,162,663,153,672,143,681,132,695,122,742,105,805,91,960,69,1125,53,1264,44"/>
-<area shape="rect" title=" " alt="" coords="163,220,216,246"/>
-<area shape="poly" title=" " alt="" coords="1265,44,1159,48,1030,60,890,85,821,103,755,126,738,136,727,146,715,157,698,167,629,188,569,198,515,200,464,197,413,194,359,194,299,200,229,215,225,216,224,211,228,210,298,194,359,189,413,189,465,192,515,194,569,192,628,183,695,162,712,153,723,143,735,132,753,122,820,98,889,80,1029,55,1159,43,1265,38"/>
-<area shape="rect" title=" " alt="" coords="870,301,928,327"/>
-<area shape="poly" title=" " alt="" coords="1320,78,1305,100,1294,125,1291,144,1294,164,1302,188,1311,212,1317,234,1316,244,1310,255,1285,274,1246,288,1198,299,1145,306,1034,314,943,316,943,311,1034,309,1144,301,1197,294,1244,283,1282,269,1307,252,1311,243,1311,235,1306,213,1297,190,1289,165,1285,144,1289,123,1300,98,1316,75"/>
-<area shape="rect" title=" " alt="" coords="1303,132,1396,157"/>
-<area shape="poly" title=" " alt="" coords="1352,76,1352,116,1347,116,1347,76"/>
-<area shape="rect" title=" " alt="" coords="1421,132,1540,157"/>
-<area shape="poly" title=" " alt="" coords="1396,74,1455,120,1452,124,1393,79"/>
-<area shape="rect" title=" " alt="" coords="1564,124,1725,165"/>
-<area shape="poly" title=" " alt="" coords="1436,69,1574,116,1572,121,1434,74"/>
-<area shape="rect" title=" " alt="" coords="1749,124,1950,165"/>
-<area shape="poly" title=" " alt="" coords="1435,57,1738,118,1737,123,1434,62"/>
-<area shape="rect" title=" " alt="" coords="1974,132,2171,157"/>
-<area shape="poly" title=" " alt="" coords="1435,50,1673,80,1964,121,1991,126,1990,131,1963,127,1673,85,1434,55"/>
-<area shape="rect" title=" " alt="" coords="2195,132,2416,157"/>
-<area shape="poly" title=" " alt="" coords="1435,46,1763,75,2183,121,2217,126,2217,131,2183,127,1763,81,1434,51"/>
-<area shape="rect" title=" " alt="" coords="1134,213,1296,253"/>
-<area shape="poly" title=" " alt="" coords="1296,78,1271,100,1249,125,1232,161,1222,198,1217,197,1227,160,1245,123,1267,96,1293,74"/>
-<area shape="rect" title=" " alt="" coords="2440,124,2598,165"/>
-<area shape="poly" title=" " alt="" coords="1435,42,1613,50,1857,64,2137,87,2425,121,2425,126,2137,93,1856,70,1613,55,1435,47"/>
-<area shape="rect" href="MPPIController_8hpp.html" title=" " alt="" coords="766,124,931,165"/>
-<area shape="poly" title=" " alt="" coords="1265,62,947,126,946,121,1264,57"/>
-<area shape="poly" title=" " alt="" coords="766,159,697,167,543,177,422,179,302,187,233,198,152,215,145,217,144,212,151,210,232,192,302,182,422,174,542,172,696,162,765,154"/>
-<area shape="poly" title=" " alt="" coords="767,164,748,167,668,176,601,180,485,180,430,181,372,186,306,197,229,215,225,216,224,211,228,210,305,191,371,181,430,176,485,174,601,174,668,171,747,162,766,159"/>
-<area shape="poly" title=" " alt="" coords="857,164,894,286,889,287,852,166"/>
-<area shape="poly" title=" " alt="" coords="932,162,1120,207,1119,212,931,168"/>
-<area shape="rect" title=" " alt="" coords="794,301,845,327"/>
-<area shape="poly" title=" " alt="" coords="848,165,827,286,821,286,843,164"/>
-<area shape="rect" title=" " alt="" coords="936,213,1110,253"/>
-<area shape="poly" title=" " alt="" coords="889,163,971,203,969,208,887,168"/>
-<area shape="rect" title=" " alt="" coords="430,213,633,253"/>
-<area shape="poly" title=" " alt="" coords="777,168,618,211,617,206,775,163"/>
-<area shape="rect" href="MPPIOptimizer_8hpp.html" title=" " alt="" coords="241,213,405,253"/>
-<area shape="poly" title=" " alt="" coords="767,164,748,167,586,191,421,215,420,210,585,185,747,162,766,159"/>
-<area shape="rect" title=" " alt="" coords="657,213,810,253"/>
-<area shape="poly" title=" " alt="" coords="824,167,773,205,770,201,821,163"/>
-<area shape="poly" title=" " alt="" coords="406,249,418,251,539,266,635,272,732,280,855,299,855,304,731,286,634,278,538,271,417,256,405,254"/>
-<area shape="poly" title=" " alt="" coords="406,249,418,251,519,265,599,273,678,281,778,299,779,299,778,304,777,304,677,287,598,278,519,270,417,256,405,254"/>
-<area shape="rect" title=" " alt="" coords="291,301,355,327"/>
-<area shape="poly" title=" " alt="" coords="326,254,326,286,320,286,320,254"/>
-<area shape="rect" title=" " alt="" coords="380,301,578,327"/>
-<area shape="poly" title=" " alt="" coords="363,252,443,292,440,296,361,256"/>
-<area shape="rect" title=" " alt="" coords="603,301,766,327"/>
-<area shape="poly" title=" " alt="" coords="406,250,614,295,613,300,405,255"/>
-<area shape="rect" title=" " alt="" coords="5,301,124,327"/>
-<area shape="poly" title=" " alt="" coords="259,256,120,299,118,294,258,251"/>
-<area shape="rect" title=" " alt="" coords="148,301,266,327"/>
-<area shape="poly" title=" " alt="" coords="296,256,239,295,236,290,293,252"/>
+<area shape="rect" title="MPPI takes the obstacle points all around the robot, within its height and range." alt="" coords="1534,5,1703,76"/>
+<area shape="rect" title=" " alt="" coords="10,390,67,416"/>
+<area shape="poly" title=" " alt="" coords="1534,47,1178,61,943,73,698,91,463,113,259,141,175,157,107,175,57,194,29,214,18,233,11,253,9,297,18,340,30,375,25,377,13,341,4,297,6,252,13,230,25,211,55,189,105,169,174,152,258,135,462,107,697,85,943,68,1178,55,1533,42"/>
+<area shape="rect" title=" " alt="" coords="1481,132,1548,157"/>
+<area shape="poly" title=" " alt="" coords="1585,78,1540,123,1536,119,1582,74"/>
+<area shape="rect" title=" " alt="" coords="1316,309,1369,334"/>
+<area shape="poly" title=" " alt="" coords="1535,65,1478,89,1451,106,1427,126,1396,166,1374,212,1359,257,1350,294,1345,293,1354,256,1369,210,1392,164,1424,122,1448,102,1476,84,1533,60"/>
+<area shape="rect" title=" " alt="" coords="437,390,494,416"/>
+<area shape="poly" title=" " alt="" coords="1535,78,1501,99,1471,126,1452,155,1441,183,1434,240,1431,267,1424,294,1409,320,1383,344,1363,354,1331,362,1240,375,1120,386,984,393,709,402,510,404,510,399,709,396,984,388,1120,380,1239,370,1330,357,1361,349,1380,340,1405,317,1419,292,1426,266,1429,239,1436,182,1447,152,1467,122,1498,95,1532,74"/>
+<area shape="rect" title=" " alt="" coords="1572,132,1665,157"/>
+<area shape="poly" title=" " alt="" coords="1621,76,1621,116,1616,116,1616,76"/>
+<area shape="rect" title=" " alt="" coords="1690,132,1809,157"/>
+<area shape="poly" title=" " alt="" coords="1665,74,1724,120,1721,124,1662,79"/>
+<area shape="rect" title=" " alt="" coords="1833,124,1994,165"/>
+<area shape="poly" title=" " alt="" coords="1705,69,1843,116,1841,121,1703,74"/>
+<area shape="rect" title=" " alt="" coords="2018,124,2219,165"/>
+<area shape="poly" title=" " alt="" coords="1704,57,2007,118,2006,123,1703,62"/>
+<area shape="rect" title=" " alt="" coords="2243,132,2440,157"/>
+<area shape="poly" title=" " alt="" coords="1704,50,1942,80,2233,121,2260,126,2259,131,2232,127,1941,85,1703,55"/>
+<area shape="rect" title=" " alt="" coords="2464,132,2685,157"/>
+<area shape="poly" title=" " alt="" coords="1704,46,2032,75,2452,121,2486,126,2486,131,2452,127,2032,81,1703,51"/>
+<area shape="rect" title=" " alt="" coords="39,213,201,253"/>
+<area shape="poly" title=" " alt="" coords="1534,50,1174,77,942,99,708,127,440,170,216,214,215,209,440,165,708,121,942,94,1174,72,1534,45"/>
+<area shape="rect" title=" " alt="" coords="2709,124,2867,165"/>
+<area shape="poly" title=" " alt="" coords="1704,42,1882,50,2126,64,2406,87,2694,121,2694,126,2406,93,2125,70,1882,55,1704,47"/>
+<area shape="rect" href="MPPIController_8hpp.html" title=" " alt="" coords="721,124,885,165"/>
+<area shape="poly" title=" " alt="" coords="1534,55,901,134,900,128,1533,50"/>
+<area shape="poly" title=" " alt="" coords="885,143,999,146,1127,156,1188,165,1243,176,1288,191,1319,211,1333,229,1342,251,1347,293,1342,294,1337,252,1329,232,1316,215,1285,196,1241,181,1187,170,1126,161,998,151,885,148"/>
+<area shape="poly" title=" " alt="" coords="721,155,497,178,216,215,216,210,496,172,720,150"/>
+<area shape="rect" title=" " alt="" coords="224,220,291,246"/>
+<area shape="poly" title=" " alt="" coords="720,153,528,172,415,190,303,215,298,217,296,212,302,210,414,185,527,167,720,147"/>
+<area shape="rect" title=" " alt="" coords="314,213,489,253"/>
+<area shape="poly" title=" " alt="" coords="721,166,505,212,504,207,720,161"/>
+<area shape="rect" title=" " alt="" coords="701,213,904,253"/>
+<area shape="poly" title=" " alt="" coords="805,165,805,197,800,197,800,165"/>
+<area shape="rect" title=" " alt="" coords="928,220,1128,246"/>
+<area shape="poly" title=" " alt="" coords="855,163,984,212,982,217,853,168"/>
+<area shape="rect" href="MPPIOptimizer_8hpp.html" title="Model Predictive Path Integral optimizer, for differential and holonomic robots." alt="" coords="513,213,677,253"/>
+<area shape="poly" title=" " alt="" coords="757,168,657,209,655,204,755,163"/>
+<area shape="rect" title=" " alt="" coords="1151,213,1305,253"/>
+<area shape="poly" title=" " alt="" coords="886,159,1137,209,1135,214,885,164"/>
+<area shape="poly" title=" " alt="" coords="678,249,690,251,782,261,861,265,995,265,1060,265,1129,269,1207,280,1298,299,1305,301,1303,306,1297,304,1206,285,1129,275,1060,271,995,270,861,270,782,266,689,256,677,254"/>
+<area shape="poly" title=" " alt="" coords="582,255,486,379,482,376,578,252"/>
+<area shape="rect" title=" " alt="" coords="255,390,316,416"/>
+<area shape="poly" title=" " alt="" coords="513,254,384,283,312,304,301,319,294,337,288,375,282,374,289,336,296,316,309,299,383,278,512,249"/>
+<area shape="rect" title=" " alt="" coords="563,309,627,334"/>
+<area shape="poly" title=" " alt="" coords="597,254,597,293,592,293,592,254"/>
+<area shape="rect" title=" " alt="" coords="650,309,814,334"/>
+<area shape="poly" title=" " alt="" coords="627,252,702,298,699,303,625,256"/>
+<area shape="rect" title=" " alt="" coords="838,309,957,334"/>
+<area shape="poly" title=" " alt="" coords="665,251,841,302,840,307,663,257"/>
+<area shape="rect" title=" " alt="" coords="981,309,1099,334"/>
+<area shape="poly" title=" " alt="" coords="678,248,690,251,830,273,969,299,983,302,981,307,968,304,829,279,689,256,677,254"/>
+<area shape="rect" title=" " alt="" coords="1123,301,1285,342"/>
+<area shape="poly" title=" " alt="" coords="678,249,690,251,806,266,897,274,990,283,1109,298,1108,304,990,288,897,280,805,271,689,256,677,254"/>
+<area shape="rect" href="NearestGrid_8hpp.html" title="Square grid that gives, for any point, the nearest of a set of seed points in O(1)." alt="" coords="323,301,488,342"/>
+<area shape="poly" title=" " alt="" coords="553,256,463,297,461,292,551,251"/>
+<area shape="rect" href="PointBuckets_8hpp.html" title="Points binned in square cells, to visit those near a position." alt="" coords="83,301,248,342"/>
+<area shape="poly" title=" " alt="" coords="513,254,501,256,263,303,262,298,500,251,512,248"/>
+<area shape="poly" title=" " alt="" coords="422,341,449,376,445,379,418,344"/>
+<area shape="poly" title=" " alt="" coords="377,345,318,384,315,379,374,340"/>
+<area shape="poly" title=" " alt="" coords="136,345,73,384,70,379,133,340"/>
+<area shape="poly" title=" " alt="" coords="241,340,423,388,422,393,240,345"/>
+<area shape="poly" title=" " alt="" coords="197,340,256,379,253,384,194,345"/>
+<area shape="rect" title=" " alt="" coords="128,390,203,416"/>
+<area shape="poly" title=" " alt="" coords="168,342,168,374,163,374,163,342"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -185,18 +198,17 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:abf44845d0248b7a676a215669c809128" id="r_abf44845d0248b7a676a215669c809128"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#abf44845d0248b7a676a215669c809128">TEST_F</a> (<a class="el" href="classMppiObstaclePointsTest.html">MppiObstaclePointsTest</a>, AheadAndBesideAreKeptBehindIsNot)</td></tr>
-<tr class="memitem:a18ea0dc5802a72ce846d258af82b5b7e" id="r_a18ea0dc5802a72ce846d258af82b5b7e"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a18ea0dc5802a72ce846d258af82b5b7e">TEST_F</a> (<a class="el" href="classMppiObstaclePointsTest.html">MppiObstaclePointsTest</a>, BackwardLooksBehind)</td></tr>
+<tr class="memitem:ae0fe8687834f2f2c3d53099ebd8a5c7f" id="r_ae0fe8687834f2f2c3d53099ebd8a5c7f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae0fe8687834f2f2c3d53099ebd8a5c7f">TEST_F</a> (<a class="el" href="classMppiObstaclePointsTest.html">MppiObstaclePointsTest</a>, AllAroundAreKept)</td></tr>
 <tr class="memitem:a87ca253f422bba1002bf01d2b5790c87" id="r_a87ca253f422bba1002bf01d2b5790c87"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a87ca253f422bba1002bf01d2b5790c87">TEST_F</a> (<a class="el" href="classMppiObstaclePointsTest.html">MppiObstaclePointsTest</a>, BeyondTheRangeIsNotKept)</td></tr>
 <tr class="memitem:a300dd1dca50aec1a7522cc8130600b27" id="r_a300dd1dca50aec1a7522cc8130600b27"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a300dd1dca50aec1a7522cc8130600b27">TEST_F</a> (<a class="el" href="classMppiObstaclePointsTest.html">MppiObstaclePointsTest</a>, ItIsTheRobotsFrameNotTheMaps)</td></tr>
 <tr class="memitem:af45641d09a067eede1728a9e94d1f7c5" id="r_af45641d09a067eede1728a9e94d1f7c5"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#af45641d09a067eede1728a9e94d1f7c5">TEST_F</a> (<a class="el" href="classMppiObstaclePointsTest.html">MppiObstaclePointsTest</a>, NoPerceptionsGiveNoPoints)</td></tr>
 <tr class="memitem:af7407a98be45c61192ff52de34ba8b02" id="r_af7407a98be45c61192ff52de34ba8b02"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#af7407a98be45c61192ff52de34ba8b02">TEST_F</a> (<a class="el" href="classMppiObstaclePointsTest.html">MppiObstaclePointsTest</a>, TheGroundAndAboveTheRobotAreNotKept)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>MPPI takes the obstacle points in the robot frame, towards where it moves. </p>
+<div class="textblock"><p>MPPI takes the obstacle points all around the robot, within its height and range. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
-<a id="abf44845d0248b7a676a215669c809128" name="abf44845d0248b7a676a215669c809128"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf44845d0248b7a676a215669c809128">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/6]</span></h2>
+<a id="ae0fe8687834f2f2c3d53099ebd8a5c7f" name="ae0fe8687834f2f2c3d53099ebd8a5c7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0fe8687834f2f2c3d53099ebd8a5c7f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,28 +221,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">AheadAndBesideAreKeptBehindIsNot</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a18ea0dc5802a72ce846d258af82b5b7e" name="a18ea0dc5802a72ce846d258af82b5b7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18ea0dc5802a72ce846d258af82b5b7e">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">TEST_F </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classMppiObstaclePointsTest.html">MppiObstaclePointsTest</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">BackwardLooksBehind</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+          <td class="paramtype">AllAroundAreKept</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -238,7 +229,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a87ca253f422bba1002bf01d2b5790c87" name="a87ca253f422bba1002bf01d2b5790c87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87ca253f422bba1002bf01d2b5790c87">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a87ca253f422bba1002bf01d2b5790c87">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -259,7 +250,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a300dd1dca50aec1a7522cc8130600b27" name="a300dd1dca50aec1a7522cc8130600b27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a300dd1dca50aec1a7522cc8130600b27">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a300dd1dca50aec1a7522cc8130600b27">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -280,7 +271,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="af45641d09a067eede1728a9e94d1f7c5" name="af45641d09a067eede1728a9e94d1f7c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af45641d09a067eede1728a9e94d1f7c5">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af45641d09a067eede1728a9e94d1f7c5">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -301,7 +292,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="af7407a98be45c61192ff52de34ba8b02" name="af7407a98be45c61192ff52de34ba8b02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7407a98be45c61192ff52de34ba8b02">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af7407a98be45c61192ff52de34ba8b02">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

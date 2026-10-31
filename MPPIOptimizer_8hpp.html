@@ -98,37 +98,59 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">MPPIOptimizer.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;utility&gt;</code><br />
-<code>#include &lt;vector&gt;</code><br />
+
+<p>Model Predictive Path Integral optimizer, for differential and holonomic robots.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;random&gt;</code><br />
-<code>#include &quot;geometry_msgs/msg/pose.hpp&quot;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;nav_msgs/msg/path.hpp&quot;</code><br />
 <code>#include &quot;pcl/point_cloud.h&quot;</code><br />
 <code>#include &quot;pcl/point_types.h&quot;</code><br />
+<code>#include &quot;easynav_common/types/RobotGeometry.hpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="NearestGrid_8hpp_source.html">easynav_mppi_controller/NearestGrid.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="PointBuckets_8hpp_source.html">easynav_mppi_controller/PointBuckets.hpp</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for MPPIOptimizer.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="MPPIOptimizer_8hpp__incl.png" border="0" usemap="#acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIOptimizer_8hpp" loading="lazy" alt=""/></div>
 <map name="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIOptimizer_8hpp" id="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIOptimizer_8hpp">
-<area shape="rect" title=" " alt="" coords="267,5,435,76"/>
-<area shape="rect" title=" " alt="" coords="5,124,57,150"/>
-<area shape="poly" title=" " alt="" coords="268,69,72,126,71,120,266,63"/>
-<area shape="rect" title=" " alt="" coords="81,124,138,150"/>
-<area shape="poly" title=" " alt="" coords="267,77,153,121,152,116,265,72"/>
-<area shape="rect" title=" " alt="" coords="163,124,227,150"/>
-<area shape="poly" title=" " alt="" coords="295,79,229,118,227,113,292,74"/>
-<area shape="rect" title=" " alt="" coords="252,124,450,150"/>
-<area shape="poly" title=" " alt="" coords="354,76,354,108,348,108,348,76"/>
-<area shape="rect" title=" " alt="" coords="475,124,638,150"/>
-<area shape="poly" title=" " alt="" coords="428,74,517,115,515,120,426,79"/>
-<area shape="rect" title=" " alt="" coords="662,124,781,150"/>
-<area shape="poly" title=" " alt="" coords="436,61,660,117,658,122,435,66"/>
-<area shape="rect" title=" " alt="" coords="805,124,924,150"/>
-<area shape="poly" title=" " alt="" coords="436,55,790,119,789,125,435,60"/>
+<area shape="rect" title="Model Predictive Path Integral optimizer, for differential and holonomic robots." alt="" coords="444,5,612,76"/>
+<area shape="rect" title=" " alt="" coords="78,213,138,238"/>
+<area shape="poly" title=" " alt="" coords="443,45,328,50,199,63,139,74,86,87,43,105,15,126,10,135,8,143,15,163,37,188,65,206,62,210,34,192,11,166,3,144,5,133,11,122,41,100,84,82,138,69,199,58,328,45,443,40"/>
+<area shape="rect" title=" " alt="" coords="454,132,519,157"/>
+<area shape="poly" title=" " alt="" coords="516,77,500,118,495,116,511,75"/>
+<area shape="rect" title=" " alt="" coords="543,132,596,157"/>
+<area shape="poly" title=" " alt="" coords="544,75,561,116,556,118,539,77"/>
+<area shape="rect" title=" " alt="" coords="199,213,257,238"/>
+<area shape="poly" title=" " alt="" coords="444,48,395,56,345,71,297,93,255,126,244,142,236,160,230,198,225,197,231,159,239,139,251,122,294,89,343,66,394,51,443,43"/>
+<area shape="rect" title=" " alt="" coords="620,132,783,157"/>
+<area shape="poly" title=" " alt="" coords="588,74,669,121,666,126,586,79"/>
+<area shape="rect" title=" " alt="" coords="807,132,926,157"/>
+<area shape="poly" title=" " alt="" coords="613,65,812,124,811,129,612,70"/>
+<area shape="rect" title=" " alt="" coords="950,132,1068,157"/>
+<area shape="poly" title=" " alt="" coords="613,55,765,84,938,121,951,125,950,130,937,127,764,89,612,60"/>
+<area shape="rect" title=" " alt="" coords="1093,124,1254,165"/>
+<area shape="poly" title=" " alt="" coords="613,50,820,80,1078,121,1077,126,819,85,612,56"/>
+<area shape="rect" href="NearestGrid_8hpp.html" title="Square grid that gives, for any point, the nearest of a set of seed points in O(1)." alt="" coords="26,124,190,165"/>
+<area shape="poly" title=" " alt="" coords="444,65,205,122,203,117,443,60"/>
+<area shape="rect" href="PointBuckets_8hpp.html" title="Points binned in square cells, to visit those near a position." alt="" coords="266,124,430,165"/>
+<area shape="poly" title=" " alt="" coords="468,79,397,118,394,114,465,74"/>
+<area shape="poly" title=" " alt="" coords="111,165,111,197,105,197,105,165"/>
+<area shape="poly" title=" " alt="" coords="139,163,198,202,196,206,136,167"/>
+<area shape="poly" title=" " alt="" coords="289,168,154,212,152,207,287,163"/>
+<area shape="poly" title=" " alt="" coords="320,167,260,206,257,202,317,163"/>
+<area shape="rect" title=" " alt="" coords="295,213,369,238"/>
+<area shape="poly" title=" " alt="" coords="347,166,340,198,335,197,341,165"/>
+<area shape="rect" title=" " alt="" coords="393,213,450,238"/>
+<area shape="poly" title=" " alt="" coords="368,163,402,199,398,203,364,167"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -136,19 +158,27 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="MPPIOptimizer_8hpp__dep__incl.png" border="0" usemap="#acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIOptimizer_8hppdep" loading="lazy" alt=""/></div>
 <map name="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIOptimizer_8hppdep" id="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIOptimizer_8hppdep">
-<area shape="rect" title=" " alt="" coords="395,5,563,76"/>
-<area shape="rect" href="MPPIController_8hpp.html" title=" " alt="" coords="299,124,467,195"/>
-<area shape="poly" title=" " alt="" coords="443,90,413,125,409,122,439,86"/>
-<area shape="rect" href="MPPIOptimizer_8cpp.html" title=" " alt="" coords="491,124,659,195"/>
-<area shape="poly" title=" " alt="" coords="519,86,548,122,544,125,515,90"/>
+<area shape="rect" title="Model Predictive Path Integral optimizer, for differential and holonomic robots." alt="" coords="724,5,892,76"/>
+<area shape="rect" href="MPPIController_8hpp.html" title=" " alt="" coords="481,124,650,195"/>
+<area shape="poly" title=" " alt="" coords="723,85,639,126,637,121,721,81"/>
+<area shape="rect" href="MPPIOptimizer_8cpp.html" title=" " alt="" coords="724,124,892,195"/>
+<area shape="poly" title=" " alt="" coords="811,91,811,124,806,124,806,91"/>
+<area shape="rect" href="mppi__sim_8hpp.html" title="Kinematic simulation of a robot driven by the MPPI optimizer, for the tests." alt="" coords="967,132,1116,187"/>
+<area shape="poly" title=" " alt="" coords="892,81,988,129,986,133,890,86"/>
 <area shape="rect" href="MPPIController_8cpp.html" title="Implementation of the MPPIController class." alt="" coords="5,243,174,313"/>
-<area shape="poly" title=" " alt="" coords="285,202,175,246,173,241,283,197"/>
-<area shape="rect" href="mppi__controller__obstacle__points__tests_8cpp.html" title="MPPI takes the obstacle points in the robot frame, towards where it moves." alt="" coords="198,243,368,313"/>
-<area shape="poly" title=" " alt="" coords="346,208,314,244,310,241,342,204"/>
-<area shape="rect" href="mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="391,243,574,313"/>
-<area shape="poly" title=" " alt="" coords="424,204,455,241,451,244,420,208"/>
-<area shape="rect" href="mppi__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="599,243,748,313"/>
-<area shape="poly" title=" " alt="" coords="482,197,599,244,597,249,480,202"/>
+<area shape="poly" title=" " alt="" coords="467,181,333,209,186,245,175,249,173,243,185,240,331,204,465,176"/>
+<area shape="rect" href="mppi__controller__modes__tests_8cpp.html" title="The MPPI plugin: its parameters, the commands it writes for each motion model and heading mode,..." alt="" coords="198,243,357,313"/>
+<area shape="poly" title=" " alt="" coords="468,203,359,247,357,242,466,198"/>
+<area shape="rect" href="mppi__controller__obstacle__points__tests_8cpp.html" title="MPPI takes the obstacle points all around the robot, within its height and range." alt="" coords="381,243,550,313"/>
+<area shape="poly" title=" " alt="" coords="528,208,497,244,493,241,524,204"/>
+<area shape="rect" href="mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="574,243,757,313"/>
+<area shape="poly" title=" " alt="" coords="607,204,638,241,634,244,603,208"/>
+<area shape="rect" href="mppi__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="782,243,931,313"/>
+<area shape="poly" title=" " alt="" coords="665,197,782,244,780,249,663,202"/>
+<area shape="rect" href="mppi__optimizer__tests_8cpp.html" title="The MPPI optimizer: what it does with invalid input, at the goal, when blocked, within its limits,..." alt="" coords="955,250,1128,306"/>
+<area shape="poly" title=" " alt="" coords="1044,202,1044,250,1039,250,1039,202"/>
+<area shape="rect" href="mppi__scenarios__tests_8cpp.html" title="End to end: every motion model and heading mode, on every kind of path, drives the robot to the goal ..." alt="" coords="1152,250,1328,306"/>
+<area shape="poly" title=" " alt="" coords="1102,193,1195,247,1192,252,1099,198"/>
 </map>
 </div>
 </div>
@@ -156,17 +186,61 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:MPPIInput" id="r_MPPIInput"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1MPPIInput.html">MPPIInput</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One cycle's input.  <a href="structeasynav_1_1MPPIInput.html#details">More...</a><br /></td></tr>
 <tr class="memitem:MPPIOptimizer" id="r_MPPIOptimizer"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPPIOptimizer.html">MPPIOptimizer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPPI (Williams et al.): rollouts of noisy control sequences around the previous solution, weighted by the exponential of their cost.  <a href="classeasynav_1_1MPPIOptimizer.html#details">More...</a><br /></td></tr>
+<tr class="memitem:MPPIParams" id="r_MPPIParams"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1MPPIParams.html">MPPIParams</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration of the optimizer. Weights are per meter/radian, averaged over the horizon.  <a href="structeasynav_1_1MPPIParams.html#details">More...</a><br /></td></tr>
 <tr class="memitem:MPPIResult" id="r_MPPIResult"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1MPPIResult.html">MPPIResult</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result structure for MPPI optimization containing control commands and trajectories.  <a href="structeasynav_1_1MPPIResult.html#details">More...</a><br /></td></tr>
-<tr class="memitem:TrajectorySample" id="r_TrajectorySample"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1TrajectorySample.html">TrajectorySample</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One cycle's output.  <a href="structeasynav_1_1MPPIResult.html#details">More...</a><br /></td></tr>
+<tr class="memitem:Pose2D" id="r_Pose2D"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1Pose2D.html">Pose2D</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Planar pose.  <a href="structeasynav_1_1Pose2D.html#details">More...</a><br /></td></tr>
+<tr class="memitem:Velocity" id="r_Velocity"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1Velocity.html">Velocity</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structeasynav_1_1Velocity.html" title="Velocity in the robot frame.">Velocity</a> in the robot frame.  <a href="structeasynav_1_1Velocity.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:easynav" id="r_easynav"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html">easynav</a></td></tr>
 <tr class="memdesc:namespaceeasynav"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a mapping for often used cost values. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a566b196400978c683dc788d649a271b4" id="r_a566b196400978c683dc788d649a271b4"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4">HeadingMode</a> { <br />
+&#160;&#160;<a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4aac70412e939d72a9234cdebb1af5867b">Path</a>
+, <a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4ab24ce0cd392a5b0b8dedc66c25213594">Free</a>
+, <a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4a12c74214cb4c18cf36d885303d6aa2e1">Goal</a>
+, <a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4abcd8db575b47c838e5d551e3973db4ac">Hold</a>
+, <br />
+&#160;&#160;<a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4a4457d440870ad6d42bab9082d9bf9b61">Fixed</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a566b196400978c683dc788d649a271b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Orientation kept while moving (the goal's is always reached at the end).  <a href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4">More...</a><br /></td></tr>
+<tr class="memitem:af102c0483ef611ae0217c72c0a950743" id="r_af102c0483ef611ae0217c72c0a950743"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html#af102c0483ef611ae0217c72c0a950743">MotionModel</a> { <a class="el" href="namespaceeasynav.html#af102c0483ef611ae0217c72c0a950743a49630f5d7723e9b41474bd1cb1887b9d">Diff</a>
+, <a class="el" href="namespaceeasynav.html#af102c0483ef611ae0217c72c0a950743aaff17ad867475b05184370472ca92771">Omni</a>
+ }</td></tr>
+<tr class="memdesc:af102c0483ef611ae0217c72c0a950743"><td class="mdescLeft">&#160;</td><td class="mdescRight">How the robot moves.  <a href="namespaceeasynav.html#af102c0483ef611ae0217c72c0a950743">More...</a><br /></td></tr>
+<tr class="memitem:a0404ec87c5965f8922fecda16e621f21" id="r_a0404ec87c5965f8922fecda16e621f21"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21">MPPIStatus</a> { <br />
+&#160;&#160;<a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21a6f796b0e6deb4f4c2c0ee0ed5e10e117">Following</a>
+, <a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21a8c5da05f74ecb045d6ca746373aec07d">Aligning</a>
+, <a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21a168d3e51452f6d8988f75ed882e74eb6">Arrived</a>
+, <a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21a4ecc0d90eec1cea3e9db96583a1bb9c2">Blocked</a>
+, <br />
+&#160;&#160;<a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21ad1d2245c4d9d60b8da25dda25d2af489">NoPath</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a0404ec87c5965f8922fecda16e621f21"><td class="mdescLeft">&#160;</td><td class="mdescRight">What the optimizer is doing.  <a href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21">More...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:abb6c1de8910e8575e7a4c845221155d1" id="r_abb6c1de8910e8575e7a4c845221155d1"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html#abb6c1de8910e8575e7a4c845221155d1">parse_heading_mode</a> (const std::string &amp;name, <a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4">HeadingMode</a> &amp;mode)</td></tr>
+<tr class="memdesc:abb6c1de8910e8575e7a4c845221155d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses "path"/"free"/"goal"/"hold"/"fixed"; false if unknown.  <br /></td></tr>
+<tr class="memitem:ad4df1b2ae2c1fdde930fc4fc8951bc78" id="r_ad4df1b2ae2c1fdde930fc4fc8951bc78"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html#ad4df1b2ae2c1fdde930fc4fc8951bc78">parse_motion_model</a> (const std::string &amp;name, <a class="el" href="namespaceeasynav.html#af102c0483ef611ae0217c72c0a950743">MotionModel</a> &amp;model)</td></tr>
+<tr class="memdesc:ad4df1b2ae2c1fdde930fc4fc8951bc78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses "diff"/"omni"; false if unknown.  <br /></td></tr>
 </table>
-</div><!-- contents -->
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Model Predictive Path Integral optimizer, for differential and holonomic robots. </p>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0

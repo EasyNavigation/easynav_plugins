@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['load_5fmap_5fsuccess_0',['LOAD_MAP_SUCCESS',['../namespaceeasynav__bonxai.html#a3150b0c80fdf34b4b642b72a83c8b66aaf9bf88604f11ae4f4bd0b4dcaac31248',1,'easynav_bonxai::LOAD_MAP_SUCCESS'],['../namespaceeasynav.html#a3150b0c80fdf34b4b642b72a83c8b66aaf9bf88604f11ae4f4bd0b4dcaac31248',1,'easynav::LOAD_MAP_SUCCESS'],['../namespaceeasynav_1_1navmap.html#a3150b0c80fdf34b4b642b72a83c8b66aaf9bf88604f11ae4f4bd0b4dcaac31248',1,'easynav::navmap::LOAD_MAP_SUCCESS'],['../namespaceeasynav_1_1octomap.html#a3150b0c80fdf34b4b642b72a83c8b66aaf9bf88604f11ae4f4bd0b4dcaac31248',1,'easynav::octomap::LOAD_MAP_SUCCESS']]]
+  ['goal_0',['Goal',['../namespaceeasynav.html#a566b196400978c683dc788d649a271b4a12c74214cb4c18cf36d885303d6aa2e1',1,'easynav']]],
+  ['green_1',['GREEN',['../namespaceeasynav.html#ae4ffed3c06abcc7e0ae6e9c32e6f2b24aa60bd322f93178d68184e30e162571ca',1,'easynav']]]
 ];

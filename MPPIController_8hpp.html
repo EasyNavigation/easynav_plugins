@@ -98,16 +98,16 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">MPPIController.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;memory&gt;</code><br />
+<div class="textblock"><code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
-<code>#include &lt;utility&gt;</code><br />
-<code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;geometry_msgs/msg/twist_stamped.hpp&quot;</code><br />
 <code>#include &quot;easynav_core/ControllerMethodBase.hpp&quot;</code><br />
+<code>#include &quot;easynav_core/RobotLimits.hpp&quot;</code><br />
 <code>#include &quot;easynav_common/types/NavState.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="MPPIOptimizer_8hpp_source.html">easynav_mppi_controller/MPPIOptimizer.hpp</a>&quot;</code><br />
 <code>#include &quot;visualization_msgs/msg/marker_array.hpp&quot;</code><br />
@@ -116,37 +116,50 @@ Include dependency graph for MPPIController.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="MPPIController_8hpp__incl.png" border="0" usemap="#acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hpp" loading="lazy" alt=""/></div>
 <map name="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hpp" id="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hpp">
-<area shape="rect" title=" " alt="" coords="274,5,442,76"/>
-<area shape="rect" title=" " alt="" coords="5,132,73,157"/>
-<area shape="poly" title=" " alt="" coords="274,67,183,94,85,127,81,128,80,123,83,121,181,89,272,62"/>
-<area shape="rect" title=" " alt="" coords="96,132,150,157"/>
-<area shape="poly" title=" " alt="" coords="279,79,165,128,163,123,277,74"/>
-<area shape="rect" title=" " alt="" coords="101,213,153,238"/>
-<area shape="poly" title=" " alt="" coords="301,79,233,126,188,166,150,203,147,199,184,162,229,122,298,74"/>
-<area shape="rect" title=" " alt="" coords="177,213,234,238"/>
-<area shape="poly" title=" " alt="" coords="314,78,265,126,239,163,220,200,215,197,235,161,261,122,310,74"/>
-<area shape="rect" title=" " alt="" coords="464,124,638,165"/>
-<area shape="poly" title=" " alt="" coords="425,74,502,114,499,119,422,79"/>
-<area shape="rect" title=" " alt="" coords="663,124,866,165"/>
-<area shape="poly" title=" " alt="" coords="443,60,671,117,670,122,442,66"/>
-<area shape="rect" title=" " alt="" coords="890,124,1052,165"/>
-<area shape="poly" title=" " alt="" coords="442,51,636,81,875,121,875,126,635,86,442,57"/>
-<area shape="rect" href="MPPIOptimizer_8hpp.html" title=" " alt="" coords="276,124,440,165"/>
-<area shape="poly" title=" " alt="" coords="360,76,360,108,355,108,355,76"/>
-<area shape="rect" title=" " alt="" coords="1076,124,1229,165"/>
-<area shape="poly" title=" " alt="" coords="443,46,714,74,885,95,1060,121,1060,126,884,100,713,79,442,52"/>
-<area shape="poly" title=" " alt="" coords="301,168,168,213,166,208,299,163"/>
-<area shape="poly" title=" " alt="" coords="321,168,244,207,241,203,318,163"/>
-<area shape="rect" title=" " alt="" coords="955,213,1019,238"/>
-<area shape="poly" title=" " alt="" coords="441,160,453,162,587,178,694,184,802,191,940,210,939,215,802,197,694,189,587,183,452,167,440,165"/>
-<area shape="rect" title=" " alt="" coords="258,213,457,238"/>
-<area shape="poly" title=" " alt="" coords="360,165,360,197,355,197,355,165"/>
-<area shape="rect" title=" " alt="" coords="481,213,645,238"/>
-<area shape="poly" title=" " alt="" coords="410,163,519,204,517,209,408,168"/>
-<area shape="rect" title=" " alt="" coords="669,213,788,238"/>
-<area shape="poly" title=" " alt="" coords="441,161,657,206,656,212,440,166"/>
-<area shape="rect" title=" " alt="" coords="812,213,930,238"/>
-<area shape="poly" title=" " alt="" coords="441,160,453,162,623,187,797,210,796,215,622,192,452,167,440,165"/>
+<area shape="rect" title=" " alt="" coords="822,5,991,76"/>
+<area shape="rect" title=" " alt="" coords="383,132,449,157"/>
+<area shape="poly" title=" " alt="" coords="822,56,658,84,563,103,469,127,462,129,460,123,467,121,561,98,657,79,822,51"/>
+<area shape="rect" title=" " alt="" coords="5,220,59,246"/>
+<area shape="poly" title=" " alt="" coords="823,51,753,59,674,74,592,96,513,126,499,136,489,147,478,157,462,167,406,187,356,196,311,199,268,198,180,196,129,202,71,215,68,216,66,211,70,210,129,196,180,191,268,193,311,194,356,191,404,182,460,162,475,153,485,143,495,132,511,122,590,91,673,69,753,54,822,45"/>
+<area shape="rect" title=" " alt="" coords="713,124,887,165"/>
+<area shape="poly" title=" " alt="" coords="872,78,833,115,830,111,869,74"/>
+<area shape="rect" title=" " alt="" coords="912,124,1115,165"/>
+<area shape="poly" title=" " alt="" coords="945,74,984,111,980,115,941,78"/>
+<area shape="rect" title=" " alt="" coords="1139,132,1338,157"/>
+<area shape="poly" title=" " alt="" coords="992,65,1185,124,1183,129,991,70"/>
+<area shape="rect" title=" " alt="" coords="1362,124,1523,165"/>
+<area shape="poly" title=" " alt="" coords="992,54,1347,121,1346,126,991,60"/>
+<area shape="rect" href="MPPIOptimizer_8hpp.html" title="Model Predictive Path Integral optimizer, for differential and holonomic robots." alt="" coords="524,124,689,165"/>
+<area shape="poly" title=" " alt="" coords="823,73,680,121,678,116,821,68"/>
+<area shape="rect" title=" " alt="" coords="1547,124,1701,165"/>
+<area shape="poly" title=" " alt="" coords="992,48,1231,76,1532,121,1531,126,1230,82,991,53"/>
+<area shape="poly" title=" " alt="" coords="525,164,506,167,383,179,286,182,191,189,136,199,71,215,68,216,66,211,70,210,134,194,190,184,286,176,382,174,505,162,524,159"/>
+<area shape="rect" title=" " alt="" coords="1002,301,1062,327"/>
+<area shape="poly" title=" " alt="" coords="690,160,702,162,771,168,861,173,948,185,983,195,1008,211,1021,227,1030,247,1035,285,1030,286,1024,248,1017,230,1005,215,981,200,946,190,860,178,770,173,701,167,689,165"/>
+<area shape="rect" title=" " alt="" coords="272,220,336,246"/>
+<area shape="poly" title=" " alt="" coords="525,166,439,188,349,215,345,217,343,212,347,210,438,183,524,161"/>
+<area shape="rect" title=" " alt="" coords="1123,301,1181,327"/>
+<area shape="poly" title=" " alt="" coords="690,160,702,162,806,167,981,172,1153,185,1215,195,1236,202,1249,211,1256,221,1257,232,1249,255,1226,281,1196,300,1193,295,1222,277,1244,252,1252,232,1251,223,1245,215,1233,207,1213,201,1152,190,981,178,806,172,701,167,689,165"/>
+<area shape="rect" title=" " alt="" coords="360,220,523,246"/>
+<area shape="poly" title=" " alt="" coords="570,168,479,215,477,210,568,163"/>
+<area shape="rect" title=" " alt="" coords="548,220,666,246"/>
+<area shape="poly" title=" " alt="" coords="609,165,609,205,604,205,604,165"/>
+<area shape="rect" title=" " alt="" coords="690,220,808,246"/>
+<area shape="poly" title=" " alt="" coords="640,163,718,210,715,214,638,167"/>
+<area shape="rect" title=" " alt="" coords="833,213,994,253"/>
+<area shape="poly" title=" " alt="" coords="677,163,830,206,828,211,676,168"/>
+<area shape="rect" href="NearestGrid_8hpp.html" title="Square grid that gives, for any point, the nearest of a set of seed points in O(1)." alt="" coords="1070,213,1234,253"/>
+<area shape="poly" title=" " alt="" coords="690,160,702,162,876,186,1051,210,1055,211,1054,216,1050,215,876,192,701,167,689,165"/>
+<area shape="rect" href="PointBuckets_8hpp.html" title="Points binned in square cells, to visit those near a position." alt="" coords="83,213,248,253"/>
+<area shape="poly" title=" " alt="" coords="524,164,263,215,262,209,523,159"/>
+<area shape="poly" title=" " alt="" coords="1124,256,1064,295,1061,290,1121,252"/>
+<area shape="poly" title=" " alt="" coords="1155,254,1155,286,1149,286,1149,254"/>
+<area shape="poly" title=" " alt="" coords="248,249,260,251,472,275,681,292,986,309,986,314,681,297,472,280,260,256,247,254"/>
+<area shape="poly" title=" " alt="" coords="248,249,260,251,384,265,488,273,667,278,846,282,951,288,1075,299,1108,303,1107,308,1074,304,951,293,846,287,667,283,488,278,383,270,260,256,247,254"/>
+<area shape="rect" title=" " alt="" coords="83,301,157,327"/>
+<area shape="poly" title=" " alt="" coords="156,255,137,289,132,286,152,252"/>
+<area shape="rect" title=" " alt="" coords="181,301,238,327"/>
+<area shape="poly" title=" " alt="" coords="179,252,198,286,193,289,174,255"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -154,15 +167,17 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="MPPIController_8hpp__dep__incl.png" border="0" usemap="#acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hppdep" loading="lazy" alt=""/></div>
 <map name="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hppdep" id="acontrollers_2easynav__mppi__controller_2include_2easynav__mppi__controller_2MPPIController_8hppdep">
-<area shape="rect" title=" " alt="" coords="299,5,467,76"/>
+<area shape="rect" title=" " alt="" coords="381,5,550,76"/>
 <area shape="rect" href="MPPIController_8cpp.html" title="Implementation of the MPPIController class." alt="" coords="5,124,174,195"/>
-<area shape="poly" title=" " alt="" coords="285,83,175,127,173,122,283,78"/>
-<area shape="rect" href="mppi__controller__obstacle__points__tests_8cpp.html" title="MPPI takes the obstacle points in the robot frame, towards where it moves." alt="" coords="198,124,368,195"/>
-<area shape="poly" title=" " alt="" coords="346,89,314,125,310,122,342,86"/>
-<area shape="rect" href="mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="391,124,574,195"/>
-<area shape="poly" title=" " alt="" coords="424,86,455,122,451,125,420,89"/>
-<area shape="rect" href="mppi__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="599,124,748,195"/>
-<area shape="poly" title=" " alt="" coords="482,79,599,125,597,130,480,84"/>
+<area shape="poly" title=" " alt="" coords="368,72,186,127,175,130,173,125,185,121,366,67"/>
+<area shape="rect" href="mppi__controller__modes__tests_8cpp.html" title="The MPPI plugin: its parameters, the commands it writes for each motion model and heading mode,..." alt="" coords="198,124,357,195"/>
+<area shape="poly" title=" " alt="" coords="398,87,335,126,332,121,395,82"/>
+<area shape="rect" href="mppi__controller__obstacle__points__tests_8cpp.html" title="MPPI takes the obstacle points all around the robot, within its height and range." alt="" coords="381,124,550,195"/>
+<area shape="poly" title=" " alt="" coords="468,91,468,124,463,124,463,91"/>
+<area shape="rect" href="mppi__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="574,124,757,195"/>
+<area shape="poly" title=" " alt="" coords="539,82,607,121,605,126,537,86"/>
+<area shape="rect" href="mppi__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="782,124,931,195"/>
+<area shape="poly" title=" " alt="" coords="566,63,665,90,770,121,782,125,780,131,769,127,664,95,564,68"/>
 </map>
 </div>
 </div>
@@ -171,12 +186,17 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:MPPIController" id="r_MPPIController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPPIController.html">MPPIController</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A MPPI Controller.  <a href="classeasynav_1_1MPPIController.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPPI controller for differential and holonomic (omnidirectional) robots.  <a href="classeasynav_1_1MPPIController.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:easynav" id="r_easynav"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html">easynav</a></td></tr>
 <tr class="memdesc:namespaceeasynav"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a mapping for often used cost values. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a98791a7fe06cb491955738345de8fea4" id="r_a98791a7fe06cb491955738345de8fea4"><td class="memItemLeft">constexpr char&#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html#a98791a7fe06cb491955738345de8fea4">kHeadingReferenceKey</a> [] = &quot;heading_reference&quot;</td></tr>
+<tr class="memdesc:a98791a7fe06cb491955738345de8fea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">NavState key of an optional heading (double, rad, path frame) for holonomic robots: while present, the robot keeps it as it moves, whatever heading_mode says.  <br /></td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

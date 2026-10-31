@@ -1,0 +1,7 @@
+<map id="controllers/easynav_mppi_controller/include/easynav_mppi_controller/NearestGrid.hpp" name="controllers/easynav_mppi_controller/include/easynav_mppi_controller/NearestGrid.hpp">
+<area shape="rect" id="Node000001" title="Square grid that gives, for any point, the nearest of a set of seed points in O(1)." alt="" coords="5,5,174,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="18,124,78,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,77,62,110,57,108,72,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="102,124,160,150"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="107,75,122,108,117,110,102,77"/>
+</map>

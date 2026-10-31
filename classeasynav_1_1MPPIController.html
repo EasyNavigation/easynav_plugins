@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 </div><!--header-->
 <div class="contents">
 
-<p>A MPPI Controller.  
+<p>MPPI controller for differential and holonomic (omnidirectional) robots.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="MPPIController_8hpp_source.html">MPPIController.hpp</a>&gt;</code></p>
@@ -114,7 +114,7 @@ Inheritance diagram for MPPIController:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1MPPIController__inherit__graph.png" border="0" usemap="#aMPPIController_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="aMPPIController_inherit__map" id="aMPPIController_inherit__map">
-<area shape="rect" title="A MPPI Controller." alt="" coords="25,79,135,105"/>
+<area shape="rect" title="MPPI controller for differential and holonomic (omnidirectional) robots." alt="" coords="25,79,135,105"/>
 <area shape="rect" href="classControllerMethodBase.html" title=" " alt="" coords="5,5,155,31"/>
 <area shape="poly" title=" " alt="" coords="83,46,83,79,77,79,77,46"/>
 </map>
@@ -124,19 +124,42 @@ Collaboration diagram for MPPIController:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1MPPIController__coll__graph.png" border="0" usemap="#aMPPIController_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aMPPIController_coll__map" id="aMPPIController_coll__map">
-<area shape="rect" title="A MPPI Controller." alt="" coords="337,501,446,527"/>
-<area shape="rect" href="classControllerMethodBase.html" title=" " alt="" coords="5,11,155,36"/>
-<area shape="poly" title=" " alt="" coords="156,5,196,3,238,6,279,17,314,40,327,56,338,76,357,130,370,196,380,269,390,408,393,501,387,501,385,409,374,269,365,197,351,132,334,78,323,59,311,44,277,22,237,11,196,8,156,11"/>
-<area shape="rect" title=" " alt="" coords="61,75,99,100"/>
-<area shape="poly" title=" " alt="" coords="115,85,225,93,279,103,300,111,315,120,334,150,351,194,363,249,374,308,387,422,392,500,387,501,381,423,368,308,358,250,345,196,330,153,311,124,297,116,277,108,225,98,115,91"/>
-<area shape="rect" title=" " alt="" coords="50,475,110,500"/>
-<area shape="poly" title=" " alt="" coords="125,489,337,507,336,512,125,494"/>
-<area shape="rect" title=" " alt="" coords="27,527,133,552"/>
-<area shape="poly" title=" " alt="" coords="148,543,227,544,312,537,357,525,358,530,313,542,227,550,148,548"/>
-<area shape="rect" title=" " alt="" coords="10,576,150,617"/>
-<area shape="poly" title=" " alt="" coords="165,598,238,592,276,585,312,573,349,551,377,525,380,529,352,555,314,578,277,590,239,598,166,603"/>
-<area shape="rect" title=" " alt="" coords="40,677,120,703"/>
-<area shape="poly" title=" " alt="" coords="135,696,176,699,223,696,269,687,311,666,328,652,342,635,364,595,378,557,385,527,390,528,383,558,369,598,347,638,332,656,314,671,271,692,223,702,176,704,135,702"/>
+<area shape="rect" title="MPPI controller for differential and holonomic (omnidirectional) robots." alt="" coords="650,752,759,778"/>
+<area shape="rect" href="classControllerMethodBase.html" title=" " alt="" coords="314,5,464,31"/>
+<area shape="poly" title=" " alt="" coords="479,7,518,9,558,17,596,33,628,58,637,74,646,100,661,177,674,277,684,391,699,612,705,752,700,752,694,613,679,391,668,278,656,177,641,101,633,76,624,61,593,38,557,23,518,15,479,12"/>
+<area shape="rect" href="structeasynav_1_1MPPIParams.html" title="Configuration of the optimizer. Weights are per meter/radian, averaged over the horizon." alt="" coords="339,253,438,279"/>
+<area shape="poly" title=" " alt="" coords="423,287,470,331,515,388,556,450,624,574,674,682,701,751,696,753,669,684,619,576,551,452,510,391,466,335,419,291"/>
+<area shape="rect" title=" " alt="" coords="38,183,133,208"/>
+<area shape="poly" title=" " alt="" coords="149,199,216,208,286,224,359,250,357,255,285,229,215,214,148,204"/>
+<area shape="rect" title=" " alt="" coords="66,97,105,123"/>
+<area shape="poly" title=" " alt="" coords="119,98,154,91,197,86,242,86,286,94,400,133,446,153,486,176,523,204,558,239,592,281,628,334,645,371,659,421,682,546,697,669,705,751,700,752,692,670,677,547,654,422,640,372,624,337,588,284,554,242,519,208,483,181,443,158,398,138,285,99,241,91,197,91,155,96,120,103"/>
+<area shape="poly" title=" " alt="" coords="120,117,211,147,287,177,339,215,377,251,374,255,336,219,284,182,209,152,119,123"/>
+<area shape="rect" title=" " alt="" coords="56,611,115,636"/>
+<area shape="poly" title=" " alt="" coords="131,617,244,608,390,603,463,605,530,610,586,619,627,635,657,660,679,692,694,725,702,751,697,753,689,727,674,695,653,664,625,639,585,624,529,615,462,610,390,609,244,614,131,622"/>
+<area shape="poly" title=" " alt="" coords="130,617,168,611,210,598,251,577,284,547,299,520,305,495,305,470,300,445,293,392,296,363,307,332,333,300,362,277,365,282,336,304,312,334,301,364,298,392,306,444,310,469,311,495,304,522,288,551,254,582,212,603,169,616,131,623"/>
+<area shape="rect" href="structeasynav_1_1Velocity.html" title="Velocity in the robot frame." alt="" coords="355,804,422,830"/>
+<area shape="poly" title=" " alt="" coords="114,645,198,715,253,754,311,788,356,805,354,810,309,793,250,758,195,719,110,649"/>
+<area shape="rect" title=" " alt="" coords="5,236,166,262"/>
+<area shape="poly" title=" " alt="" coords="182,252,339,261,339,266,181,257"/>
+<area shape="rect" title=" " alt="" coords="52,289,119,315"/>
+<area shape="poly" title=" " alt="" coords="135,298,206,294,285,285,338,275,339,281,286,290,206,299,135,303"/>
+<area shape="rect" title=" " alt="" coords="338,653,440,679"/>
+<area shape="poly" title=" " alt="" coords="455,661,539,667,584,676,627,692,648,704,667,720,695,750,692,754,664,724,645,709,625,697,583,682,538,672,455,666"/>
+<area shape="rect" href="classeasynav_1_1MPPIOptimizer.html" title="MPPI (Williams et al.): rollouts of noisy control sequences around the previous solution,..." alt="" coords="334,703,444,728"/>
+<area shape="poly" title=" " alt="" coords="459,717,540,724,627,738,666,749,664,754,625,743,539,730,459,722"/>
+<area shape="rect" title=" " alt="" coords="343,752,434,778"/>
+<area shape="poly" title=" " alt="" coords="450,762,650,762,650,768,450,768"/>
+<area shape="poly" title=" " alt="" coords="438,813,526,806,625,791,671,776,673,781,627,796,526,812,438,818"/>
+<area shape="rect" title=" " alt="" coords="310,859,468,884"/>
+<area shape="poly" title=" " alt="" coords="483,871,555,862,591,852,625,839,646,826,665,809,692,777,696,780,668,813,649,830,627,844,592,857,556,867,484,876"/>
+<area shape="rect" title=" " alt="" coords="366,912,412,938"/>
+<area shape="poly" title=" " alt="" coords="427,928,470,932,522,931,575,921,601,912,624,899,654,872,675,838,689,804,698,777,703,779,694,806,680,840,658,875,628,903,603,917,577,926,522,936,470,937,427,934"/>
+<area shape="rect" title=" " alt="" coords="343,965,435,991"/>
+<area shape="poly" title=" " alt="" coords="450,988,492,992,538,991,584,981,624,960,645,941,661,918,684,866,696,816,700,778,705,779,701,817,689,868,666,921,649,945,628,965,585,986,539,996,492,997,450,993"/>
+<area shape="rect" title=" " alt="" coords="336,1019,442,1044"/>
+<area shape="poly" title=" " alt="" coords="455,1045,497,1050,541,1050,585,1041,624,1020,650,994,670,963,684,929,693,893,701,825,701,778,707,778,707,826,698,894,689,930,674,966,654,998,628,1025,587,1046,542,1055,496,1056,454,1050"/>
+<area shape="rect" title=" " alt="" coords="349,1113,428,1139"/>
+<area shape="poly" title=" " alt="" coords="444,1140,487,1148,535,1151,583,1143,605,1134,624,1121,643,1097,658,1058,671,1009,681,956,694,850,700,778,705,778,700,851,686,956,676,1010,663,1059,647,1099,628,1125,607,1139,584,1148,536,1156,487,1154,443,1145"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -152,52 +175,57 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a58347b9245968668bd3478a3b08d1c73" id="r_a58347b9245968668bd3478a3b08d1c73"><td class="memItemLeft">pcl::PointCloud&lt; pcl::PointXYZ &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a58347b9245968668bd3478a3b08d1c73">obstacle_points</a> (const NavState &amp;nav_state, bool backward) const</td></tr>
-<tr class="memdesc:a58347b9245968668bd3478a3b08d1c73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obstacle points (map frame) within the robot's height, around it and towards where it moves (behind it when <code class="param">backward</code>).  <br /></td></tr>
-<tr class="memitem:a21363d3659ba43821aaba326d647f883" id="r_a21363d3659ba43821aaba326d647f883"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a21363d3659ba43821aaba326d647f883">publish_mppi_markers</a> (const std::vector&lt; std::vector&lt; std::pair&lt; double, double &gt; &gt; &gt; &amp;all_trajs, const std::vector&lt; std::pair&lt; double, double &gt; &gt; &amp;best_traj)</td></tr>
-<tr class="memdesc:a21363d3659ba43821aaba326d647f883"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes MPPI markers for visualization.  <br /></td></tr>
+<tr class="memitem:a43bf19353622acd54392b6a5b2696568" id="r_a43bf19353622acd54392b6a5b2696568"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a43bf19353622acd54392b6a5b2696568">apply_limits</a> (const RobotLimits &amp;limits)</td></tr>
+<tr class="memdesc:a43bf19353622acd54392b6a5b2696568"><td class="mdescLeft">&#160;</td><td class="mdescRight">The optimizer's limits from the robot limits.  <br /></td></tr>
+<tr class="memitem:aff1fc04e2611e55f39bbdb3a5d0bc34f" id="r_aff1fc04e2611e55f39bbdb3a5d0bc34f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aff1fc04e2611e55f39bbdb3a5d0bc34f">clear_markers</a> ()</td></tr>
+<tr class="memdesc:aff1fc04e2611e55f39bbdb3a5d0bc34f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deletes the markers.  <br /></td></tr>
+<tr class="memitem:a90691b433a689c5132b9d5ded11b36eb" id="r_a90691b433a689c5132b9d5ded11b36eb"><td class="memItemLeft">pcl::PointCloud&lt; pcl::PointXYZ &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a90691b433a689c5132b9d5ded11b36eb">obstacle_points</a> (const NavState &amp;nav_state) const</td></tr>
+<tr class="memdesc:a90691b433a689c5132b9d5ded11b36eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obstacle points (map frame) within the robot's height and obstacle_range of it, all around it (a holonomic robot moves in any direction, any robot turns).  <br /></td></tr>
+<tr class="memitem:a23e96d7ccfadae1137f846efc76dcf7a" id="r_a23e96d7ccfadae1137f846efc76dcf7a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a23e96d7ccfadae1137f846efc76dcf7a">publish_markers</a> ()</td></tr>
+<tr class="memdesc:a23e96d7ccfadae1137f846efc76dcf7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes the rollouts and the optimal trajectory.  <br /></td></tr>
+<tr class="memitem:a67f00e680c1be8bdcbf2fcb5876a80d1" id="r_a67f00e680c1be8bdcbf2fcb5876a80d1"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a67f00e680c1be8bdcbf2fcb5876a80d1">stop</a> (NavState &amp;nav_state, bool forget_goal)</td></tr>
+<tr class="memdesc:a67f00e680c1be8bdcbf2fcb5876a80d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the robot and forgets the solution and the goal.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a42a65ea434d32fceba0cf1d6f88c9159" id="r_a42a65ea434d32fceba0cf1d6f88c9159"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a42a65ea434d32fceba0cf1d6f88c9159">dt_</a> {0.1}</td></tr>
-<tr class="memdesc:a42a65ea434d32fceba0cf1d6f88c9159"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time step for MPPI.  <br /></td></tr>
-<tr class="memitem:ad23828a2bf11c1cf8df11e6400adde2e" id="r_ad23828a2bf11c1cf8df11e6400adde2e"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ad23828a2bf11c1cf8df11e6400adde2e">fov_</a> {M_PI / 2.0}</td></tr>
-<tr class="memdesc:ad23828a2bf11c1cf8df11e6400adde2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field of view for MPPI.  <br /></td></tr>
-<tr class="memitem:ad6ba936c86b5a6bebce3778150cb08a8" id="r_ad6ba936c86b5a6bebce3778150cb08a8"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ad6ba936c86b5a6bebce3778150cb08a8">horizon_steps_</a> {10}</td></tr>
-<tr class="memdesc:ad6ba936c86b5a6bebce3778150cb08a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prediction horizon for MPPI.  <br /></td></tr>
-<tr class="memitem:a628b9037215320c310cee6b1370b011d" id="r_a628b9037215320c310cee6b1370b011d"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a628b9037215320c310cee6b1370b011d">lambda_</a> {0.1}</td></tr>
-<tr class="memdesc:a628b9037215320c310cee6b1370b011d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temperature parameter for MPPI.  <br /></td></tr>
-<tr class="memitem:a612f1561fb617beec22a83692b302ba5" id="r_a612f1561fb617beec22a83692b302ba5"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a612f1561fb617beec22a83692b302ba5">max_ang_acc_</a> {1.0}</td></tr>
-<tr class="memdesc:a612f1561fb617beec22a83692b302ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum angular acceleration for MPPI.  <br /></td></tr>
-<tr class="memitem:ac19f307b9783300d26fd4c53ce744f4e" id="r_ac19f307b9783300d26fd4c53ce744f4e"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ac19f307b9783300d26fd4c53ce744f4e">max_ang_vel_</a> {1.0}</td></tr>
-<tr class="memdesc:ac19f307b9783300d26fd4c53ce744f4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum angular velocity for MPPI.  <br /></td></tr>
-<tr class="memitem:aed29cb07dfb250c6010ee111e5f26d9c" id="r_aed29cb07dfb250c6010ee111e5f26d9c"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#aed29cb07dfb250c6010ee111e5f26d9c">max_lin_acc_</a> {0.5}</td></tr>
-<tr class="memdesc:aed29cb07dfb250c6010ee111e5f26d9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum linear acceleration for MPPI.  <br /></td></tr>
-<tr class="memitem:a2842ab7e326293e6af511fd4fd9aa174" id="r_a2842ab7e326293e6af511fd4fd9aa174"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a2842ab7e326293e6af511fd4fd9aa174">max_lin_vel_</a> {1.0}</td></tr>
-<tr class="memdesc:a2842ab7e326293e6af511fd4fd9aa174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum linear velocity for MPPI.  <br /></td></tr>
+<tr class="memitem:a18ae766dcf62833dd8a677b96585de5a" id="r_a18ae766dcf62833dd8a677b96585de5a"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a18ae766dcf62833dd8a677b96585de5a">goal_x_</a> {0.0}</td></tr>
+<tr class="memitem:aea424fd8cd57a9774a83e478da070d01" id="r_aea424fd8cd57a9774a83e478da070d01"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#aea424fd8cd57a9774a83e478da070d01">goal_y_</a> {0.0}</td></tr>
+<tr class="memitem:afcef2c6e0093b5624645a72d55d65cd1" id="r_afcef2c6e0093b5624645a72d55d65cd1"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#afcef2c6e0093b5624645a72d55d65cd1">have_goal_</a> {false}</td></tr>
+<tr class="memitem:a14466f45de2b64459d33c15f6a268ceb" id="r_a14466f45de2b64459d33c15f6a268ceb"><td class="memItemLeft"><a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4">HeadingMode</a>&#160;</td><td class="memItemRight"><a class="el" href="#a14466f45de2b64459d33c15f6a268ceb">heading_mode_</a> {<a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4aac70412e939d72a9234cdebb1af5867b">HeadingMode::Path</a>}</td></tr>
+<tr class="memitem:a7673afd7954fe56921eae420b36dceab" id="r_a7673afd7954fe56921eae420b36dceab"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a7673afd7954fe56921eae420b36dceab">heading_yaw_</a> {0.0}</td></tr>
+<tr class="memdesc:a7673afd7954fe56921eae420b36dceab"><td class="mdescLeft">&#160;</td><td class="mdescRight">For heading_mode "fixed" (rad).  <br /></td></tr>
+<tr class="memitem:a17605f2449adcd45a8136e8bbd81ba04" id="r_a17605f2449adcd45a8136e8bbd81ba04"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a17605f2449adcd45a8136e8bbd81ba04">hold_yaw_</a> {0.0}</td></tr>
+<tr class="memdesc:a17605f2449adcd45a8136e8bbd81ba04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Heading when the current goal was received (mode "hold").  <br /></td></tr>
+<tr class="memitem:aeb5301a2f2ada1673efc5455686952b1" id="r_aeb5301a2f2ada1673efc5455686952b1"><td class="memItemLeft"><a class="el" href="structVelocity.html">Velocity</a>&#160;</td><td class="memItemRight"><a class="el" href="#aeb5301a2f2ada1673efc5455686952b1">last_cmd_</a></td></tr>
+<tr class="memdesc:aeb5301a2f2ada1673efc5455686952b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last command (the velocity the robot is reaching).  <br /></td></tr>
+<tr class="memitem:a5f9bfb9a254b809fad6cf4f97885af0d" id="r_a5f9bfb9a254b809fad6cf4f97885af0d"><td class="memItemLeft"><a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21">MPPIStatus</a>&#160;</td><td class="memItemRight"><a class="el" href="#a5f9bfb9a254b809fad6cf4f97885af0d">last_status_</a> {<a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21ad1d2245c4d9d60b8da25dda25d2af489">MPPIStatus::NoPath</a>}</td></tr>
+<tr class="memitem:acdcd649ea53f64b70ea5b0d491ffacf4" id="r_acdcd649ea53f64b70ea5b0d491ffacf4"><td class="memItemLeft">std::optional&lt; rclcpp::Time &gt;&#160;</td><td class="memItemRight"><a class="el" href="#acdcd649ea53f64b70ea5b0d491ffacf4">last_update_</a></td></tr>
+<tr class="memitem:aac631a7408d116f88d6e7efd694d5e3b" id="r_aac631a7408d116f88d6e7efd694d5e3b"><td class="memItemLeft">RobotLimits&#160;</td><td class="memItemRight"><a class="el" href="#aac631a7408d116f88d6e7efd694d5e3b">limits_</a></td></tr>
+<tr class="memdesc:aac631a7408d116f88d6e7efd694d5e3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Limits the optimizer uses now.  <br /></td></tr>
+<tr class="memitem:a3e607aa7aa3c14e1d3658c88f373220b" id="r_a3e607aa7aa3c14e1d3658c88f373220b"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a3e607aa7aa3c14e1d3658c88f373220b">max_visualized_rollouts_</a> {20}</td></tr>
+<tr class="memdesc:a3e607aa7aa3c14e1d3658c88f373220b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Candidate rollouts published (0: none).  <br /></td></tr>
 <tr class="memitem:a8e951781a235ccfcde6fafd1c2058e70" id="r_a8e951781a235ccfcde6fafd1c2058e70"><td class="memItemLeft">rclcpp::Publisher&lt; visualization_msgs::msg::MarkerArray &gt;::SharedPtr&#160;</td><td class="memItemRight"><a class="el" href="#a8e951781a235ccfcde6fafd1c2058e70">mppi_candidates_pub_</a></td></tr>
 <tr class="memdesc:a8e951781a235ccfcde6fafd1c2058e70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publisher for MPPI candidates markers.  <br /></td></tr>
 <tr class="memitem:af417c44d779639cc93a6e41e23717559" id="r_af417c44d779639cc93a6e41e23717559"><td class="memItemLeft">rclcpp::Publisher&lt; visualization_msgs::msg::MarkerArray &gt;::SharedPtr&#160;</td><td class="memItemRight"><a class="el" href="#af417c44d779639cc93a6e41e23717559">mppi_optimal_pub_</a></td></tr>
 <tr class="memdesc:af417c44d779639cc93a6e41e23717559"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publisher for MPPI optimal path markers.  <br /></td></tr>
-<tr class="memitem:a80a55a93bfafd6db6d1a68bb3b7939ad" id="r_a80a55a93bfafd6db6d1a68bb3b7939ad"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a80a55a93bfafd6db6d1a68bb3b7939ad">num_samples_</a> {100}</td></tr>
-<tr class="memdesc:a80a55a93bfafd6db6d1a68bb3b7939ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of samples for MPPI.  <br /></td></tr>
 <tr class="memitem:a1a5e5613c53c0d35c73cfae7af265a47" id="r_a1a5e5613c53c0d35c73cfae7af265a47"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a1a5e5613c53c0d35c73cfae7af265a47">obstacle_range_</a> {2.0}</td></tr>
 <tr class="memdesc:a1a5e5613c53c0d35c73cfae7af265a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Obstacles farther than this from the robot are ignored (m).  <br /></td></tr>
-<tr class="memitem:a184ccf785fbb6405ccc1f44510abe9d6" id="r_a184ccf785fbb6405ccc1f44510abe9d6"><td class="memItemLeft">std::unique_ptr&lt; <a class="el" href="classeasynav_1_1MPPIOptimizer.html">MPPIOptimizer</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a184ccf785fbb6405ccc1f44510abe9d6">optimizer_</a></td></tr>
-<tr class="memdesc:a184ccf785fbb6405ccc1f44510abe9d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPPI optimizer.  <br /></td></tr>
+<tr class="memitem:a3baa903d20e0fcfc0aba9b8fb8f96934" id="r_a3baa903d20e0fcfc0aba9b8fb8f96934"><td class="memItemLeft"><a class="el" href="classeasynav_1_1MPPIOptimizer.html">MPPIOptimizer</a>&#160;</td><td class="memItemRight"><a class="el" href="#a3baa903d20e0fcfc0aba9b8fb8f96934">optimizer_</a></td></tr>
+<tr class="memitem:a6ce4e3bdface3baa6247223e984649b6" id="r_a6ce4e3bdface3baa6247223e984649b6"><td class="memItemLeft"><a class="el" href="structeasynav_1_1MPPIParams.html">MPPIParams</a>&#160;</td><td class="memItemRight"><a class="el" href="#a6ce4e3bdface3baa6247223e984649b6">params_</a></td></tr>
+<tr class="memdesc:a6ce4e3bdface3baa6247223e984649b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optimizer configuration.  <br /></td></tr>
 <tr class="memitem:a3b1a610ddcaa48196346f29c38ea9501" id="r_a3b1a610ddcaa48196346f29c38ea9501"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3b1a610ddcaa48196346f29c38ea9501">robot_height_</a> {0.5}</td></tr>
 <tr class="memdesc:a3b1a610ddcaa48196346f29c38ea9501"><td class="mdescLeft">&#160;</td><td class="mdescRight">From robot_geometry.  <br /></td></tr>
-<tr class="memitem:a6ad83f7f5a09b0babb739d6eebaa48a6" id="r_a6ad83f7f5a09b0babb739d6eebaa48a6"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a6ad83f7f5a09b0babb739d6eebaa48a6">robot_radius_</a> {0.3}</td></tr>
-<tr class="memdesc:a6ad83f7f5a09b0babb739d6eebaa48a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">From robot_geometry.  <br /></td></tr>
-<tr class="memitem:a325e56d896dee4cab40d843ce180b331" id="r_a325e56d896dee4cab40d843ce180b331"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a325e56d896dee4cab40d843ce180b331">safety_radius_</a> {0.6}</td></tr>
-<tr class="memdesc:a325e56d896dee4cab40d843ce180b331"><td class="mdescLeft">&#160;</td><td class="mdescRight">Safety radius for obstacle avoidance.  <br /></td></tr>
 <tr class="memitem:a6a9de5bbd5031ab9139b7bb4e69cfd80" id="r_a6a9de5bbd5031ab9139b7bb4e69cfd80"><td class="memItemLeft">geometry_msgs::msg::TwistStamped&#160;</td><td class="memItemRight"><a class="el" href="#a6a9de5bbd5031ab9139b7bb4e69cfd80">twist_stamped_</a></td></tr>
 <tr class="memdesc:a6a9de5bbd5031ab9139b7bb4e69cfd80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current velocity command.  <br /></td></tr>
+<tr class="memitem:a45c2501b01542c9a73e880ede4981293" id="r_a45c2501b01542c9a73e880ede4981293"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a45c2501b01542c9a73e880ede4981293">xy_goal_tolerance_</a> {0.25}</td></tr>
+<tr class="memdesc:a45c2501b01542c9a73e880ede4981293"><td class="mdescLeft">&#160;</td><td class="mdescRight">Positional tolerance to the goal (m).  <br /></td></tr>
+<tr class="memitem:ac245610d11427fc015cdd59ef746717c" id="r_ac245610d11427fc015cdd59ef746717c"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#ac245610d11427fc015cdd59ef746717c">yaw_goal_tolerance_</a> {0.25}</td></tr>
+<tr class="memdesc:ac245610d11427fc015cdd59ef746717c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Angular tolerance to the goal (rad).  <br /></td></tr>
 <tr class="memitem:af197716f6f654b79a14cf9eaedc1c4c8" id="r_af197716f6f654b79a14cf9eaedc1c4c8"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#af197716f6f654b79a14cf9eaedc1c4c8">z_min_filter_</a> {0.0}</td></tr>
 <tr class="memdesc:af197716f6f654b79a14cf9eaedc1c4c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points below this height (robot frame) are the ground (m).  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A MPPI Controller. </p>
+<div class="textblock"><p>MPPI controller for differential and holonomic (omnidirectional) robots. </p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad9b24cab72366c4f858ec99e057815fc" name="ad9b24cab72366c4f858ec99e057815fc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad9b24cab72366c4f858ec99e057815fc">&#9670;&#160;</a></span>MPPIController()</h2>
@@ -244,8 +272,62 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a58347b9245968668bd3478a3b08d1c73" name="a58347b9245968668bd3478a3b08d1c73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58347b9245968668bd3478a3b08d1c73">&#9670;&#160;</a></span>obstacle_points()</h2>
+<a id="a43bf19353622acd54392b6a5b2696568" name="a43bf19353622acd54392b6a5b2696568"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43bf19353622acd54392b6a5b2696568">&#9670;&#160;</a></span>apply_limits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void apply_limits </td>
+          <td>(</td>
+          <td class="paramtype">const RobotLimits &amp;</td>          <td class="paramname"><span class="paramname"><em>limits</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The optimizer's limits from the robot limits. </p>
+
+</div>
+</div>
+<a id="aff1fc04e2611e55f39bbdb3a5d0bc34f" name="aff1fc04e2611e55f39bbdb3a5d0bc34f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff1fc04e2611e55f39bbdb3a5d0bc34f">&#9670;&#160;</a></span>clear_markers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void clear_markers </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deletes the markers. </p>
+
+</div>
+</div>
+<a id="a90691b433a689c5132b9d5ded11b36eb" name="a90691b433a689c5132b9d5ded11b36eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90691b433a689c5132b9d5ded11b36eb">&#9670;&#160;</a></span>obstacle_points()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -256,12 +338,8 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">pcl::PointCloud&lt; pcl::PointXYZ &gt; obstacle_points </td>
           <td>(</td>
-          <td class="paramtype">const NavState &amp;</td>          <td class="paramname"><span class="paramname"><em>nav_state</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>backward</em></span>&#160;) const</td>
+          <td class="paramtype">const NavState &amp;</td>          <td class="paramname"><span class="paramname"><em>nav_state</em></span></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -271,7 +349,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Obstacle points (map frame) within the robot's height, around it and towards where it moves (behind it when <code class="param">backward</code>). </p>
+<p>Obstacle points (map frame) within the robot's height and obstacle_range of it, all around it (a holonomic robot moves in any direction, any robot turns). </p>
 
 </div>
 </div>
@@ -301,15 +379,15 @@ Protected Attributes</h2></td></tr>
 <p>Initializes parameters and MPPI controller. </p>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::runtime_error</td><td>if initialization fails. </td></tr>
+    <tr><td class="paramname">std::runtime_error</td><td>if a parameter is invalid. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a21363d3659ba43821aaba326d647f883" name="a21363d3659ba43821aaba326d647f883"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21363d3659ba43821aaba326d647f883">&#9670;&#160;</a></span>publish_mppi_markers()</h2>
+<a id="a23e96d7ccfadae1137f846efc76dcf7a" name="a23e96d7ccfadae1137f846efc76dcf7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23e96d7ccfadae1137f846efc76dcf7a">&#9670;&#160;</a></span>publish_markers()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -318,14 +396,10 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void publish_mppi_markers </td>
+          <td class="memname">void publish_markers </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::vector&lt; std::pair&lt; double, double &gt; &gt; &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>all_trajs</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; std::pair&lt; double, double &gt; &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>best_traj</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -335,14 +409,38 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Publishes MPPI markers for visualization. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">all_trajs</td><td>All trajectories generated by MPPI. </td></tr>
-    <tr><td class="paramname">best_traj</td><td>Optimal trajectory generated by MPPI. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Publishes the rollouts and the optimal trajectory. </p>
+
+</div>
+</div>
+<a id="a67f00e680c1be8bdcbf2fcb5876a80d1" name="a67f00e680c1be8bdcbf2fcb5876a80d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67f00e680c1be8bdcbf2fcb5876a80d1">&#9670;&#160;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void stop </td>
+          <td>(</td>
+          <td class="paramtype">NavState &amp;</td>          <td class="paramname"><span class="paramname"><em>nav_state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forget_goal</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stops the robot and forgets the solution and the goal. </p>
 
 </div>
 </div>
@@ -380,8 +478,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="a42a65ea434d32fceba0cf1d6f88c9159" name="a42a65ea434d32fceba0cf1d6f88c9159"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a42a65ea434d32fceba0cf1d6f88c9159">&#9670;&#160;</a></span>dt_</h2>
+<a id="a18ae766dcf62833dd8a677b96585de5a" name="a18ae766dcf62833dd8a677b96585de5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18ae766dcf62833dd8a677b96585de5a">&#9670;&#160;</a></span>goal_x_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -390,7 +488,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double dt_ {0.1}</td>
+          <td class="memname">double goal_x_ {0.0}</td>
         </tr>
       </table>
   </td>
@@ -400,12 +498,10 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Time step for MPPI. </p>
-
 </div>
 </div>
-<a id="ad23828a2bf11c1cf8df11e6400adde2e" name="ad23828a2bf11c1cf8df11e6400adde2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad23828a2bf11c1cf8df11e6400adde2e">&#9670;&#160;</a></span>fov_</h2>
+<a id="aea424fd8cd57a9774a83e478da070d01" name="aea424fd8cd57a9774a83e478da070d01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea424fd8cd57a9774a83e478da070d01">&#9670;&#160;</a></span>goal_y_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -414,7 +510,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double fov_ {M_PI / 2.0}</td>
+          <td class="memname">double goal_y_ {0.0}</td>
         </tr>
       </table>
   </td>
@@ -424,12 +520,10 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Field of view for MPPI. </p>
-
 </div>
 </div>
-<a id="ad6ba936c86b5a6bebce3778150cb08a8" name="ad6ba936c86b5a6bebce3778150cb08a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6ba936c86b5a6bebce3778150cb08a8">&#9670;&#160;</a></span>horizon_steps_</h2>
+<a id="afcef2c6e0093b5624645a72d55d65cd1" name="afcef2c6e0093b5624645a72d55d65cd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcef2c6e0093b5624645a72d55d65cd1">&#9670;&#160;</a></span>have_goal_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -438,7 +532,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int horizon_steps_ {10}</td>
+          <td class="memname">bool have_goal_ {false}</td>
         </tr>
       </table>
   </td>
@@ -448,12 +542,10 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Prediction horizon for MPPI. </p>
-
 </div>
 </div>
-<a id="a628b9037215320c310cee6b1370b011d" name="a628b9037215320c310cee6b1370b011d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a628b9037215320c310cee6b1370b011d">&#9670;&#160;</a></span>lambda_</h2>
+<a id="a14466f45de2b64459d33c15f6a268ceb" name="a14466f45de2b64459d33c15f6a268ceb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14466f45de2b64459d33c15f6a268ceb">&#9670;&#160;</a></span>heading_mode_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -462,7 +554,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double lambda_ {0.1}</td>
+          <td class="memname"><a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4">HeadingMode</a> heading_mode_ {<a class="el" href="namespaceeasynav.html#a566b196400978c683dc788d649a271b4aac70412e939d72a9234cdebb1af5867b">HeadingMode::Path</a>}</td>
         </tr>
       </table>
   </td>
@@ -472,12 +564,10 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Temperature parameter for MPPI. </p>
-
 </div>
 </div>
-<a id="a612f1561fb617beec22a83692b302ba5" name="a612f1561fb617beec22a83692b302ba5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a612f1561fb617beec22a83692b302ba5">&#9670;&#160;</a></span>max_ang_acc_</h2>
+<a id="a7673afd7954fe56921eae420b36dceab" name="a7673afd7954fe56921eae420b36dceab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7673afd7954fe56921eae420b36dceab">&#9670;&#160;</a></span>heading_yaw_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -486,7 +576,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double max_ang_acc_ {1.0}</td>
+          <td class="memname">double heading_yaw_ {0.0}</td>
         </tr>
       </table>
   </td>
@@ -496,12 +586,12 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Maximum angular acceleration for MPPI. </p>
+<p>For heading_mode "fixed" (rad). </p>
 
 </div>
 </div>
-<a id="ac19f307b9783300d26fd4c53ce744f4e" name="ac19f307b9783300d26fd4c53ce744f4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac19f307b9783300d26fd4c53ce744f4e">&#9670;&#160;</a></span>max_ang_vel_</h2>
+<a id="a17605f2449adcd45a8136e8bbd81ba04" name="a17605f2449adcd45a8136e8bbd81ba04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17605f2449adcd45a8136e8bbd81ba04">&#9670;&#160;</a></span>hold_yaw_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -510,7 +600,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double max_ang_vel_ {1.0}</td>
+          <td class="memname">double hold_yaw_ {0.0}</td>
         </tr>
       </table>
   </td>
@@ -520,12 +610,12 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Maximum angular velocity for MPPI. </p>
+<p>Heading when the current goal was received (mode "hold"). </p>
 
 </div>
 </div>
-<a id="aed29cb07dfb250c6010ee111e5f26d9c" name="aed29cb07dfb250c6010ee111e5f26d9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed29cb07dfb250c6010ee111e5f26d9c">&#9670;&#160;</a></span>max_lin_acc_</h2>
+<a id="aeb5301a2f2ada1673efc5455686952b1" name="aeb5301a2f2ada1673efc5455686952b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb5301a2f2ada1673efc5455686952b1">&#9670;&#160;</a></span>last_cmd_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -534,7 +624,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double max_lin_acc_ {0.5}</td>
+          <td class="memname"><a class="el" href="structVelocity.html">Velocity</a> last_cmd_</td>
         </tr>
       </table>
   </td>
@@ -544,12 +634,12 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Maximum linear acceleration for MPPI. </p>
+<p>Last command (the velocity the robot is reaching). </p>
 
 </div>
 </div>
-<a id="a2842ab7e326293e6af511fd4fd9aa174" name="a2842ab7e326293e6af511fd4fd9aa174"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2842ab7e326293e6af511fd4fd9aa174">&#9670;&#160;</a></span>max_lin_vel_</h2>
+<a id="a5f9bfb9a254b809fad6cf4f97885af0d" name="a5f9bfb9a254b809fad6cf4f97885af0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f9bfb9a254b809fad6cf4f97885af0d">&#9670;&#160;</a></span>last_status_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -558,7 +648,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double max_lin_vel_ {1.0}</td>
+          <td class="memname"><a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21">MPPIStatus</a> last_status_ {<a class="el" href="namespaceeasynav.html#a0404ec87c5965f8922fecda16e621f21ad1d2245c4d9d60b8da25dda25d2af489">MPPIStatus::NoPath</a>}</td>
         </tr>
       </table>
   </td>
@@ -568,7 +658,75 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Maximum linear velocity for MPPI. </p>
+</div>
+</div>
+<a id="acdcd649ea53f64b70ea5b0d491ffacf4" name="acdcd649ea53f64b70ea5b0d491ffacf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdcd649ea53f64b70ea5b0d491ffacf4">&#9670;&#160;</a></span>last_update_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::optional&lt;rclcpp::Time&gt; last_update_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aac631a7408d116f88d6e7efd694d5e3b" name="aac631a7408d116f88d6e7efd694d5e3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac631a7408d116f88d6e7efd694d5e3b">&#9670;&#160;</a></span>limits_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RobotLimits limits_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Limits the optimizer uses now. </p>
+
+</div>
+</div>
+<a id="a3e607aa7aa3c14e1d3658c88f373220b" name="a3e607aa7aa3c14e1d3658c88f373220b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e607aa7aa3c14e1d3658c88f373220b">&#9670;&#160;</a></span>max_visualized_rollouts_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int max_visualized_rollouts_ {20}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Candidate rollouts published (0: none). </p>
 
 </div>
 </div>
@@ -620,30 +778,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a80a55a93bfafd6db6d1a68bb3b7939ad" name="a80a55a93bfafd6db6d1a68bb3b7939ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80a55a93bfafd6db6d1a68bb3b7939ad">&#9670;&#160;</a></span>num_samples_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int num_samples_ {100}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Number of samples for MPPI. </p>
-
-</div>
-</div>
 <a id="a1a5e5613c53c0d35c73cfae7af265a47" name="a1a5e5613c53c0d35c73cfae7af265a47"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a5e5613c53c0d35c73cfae7af265a47">&#9670;&#160;</a></span>obstacle_range_</h2>
 
@@ -668,8 +802,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a184ccf785fbb6405ccc1f44510abe9d6" name="a184ccf785fbb6405ccc1f44510abe9d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a184ccf785fbb6405ccc1f44510abe9d6">&#9670;&#160;</a></span>optimizer_</h2>
+<a id="a3baa903d20e0fcfc0aba9b8fb8f96934" name="a3baa903d20e0fcfc0aba9b8fb8f96934"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3baa903d20e0fcfc0aba9b8fb8f96934">&#9670;&#160;</a></span>optimizer_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -678,7 +812,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unique_ptr&lt;<a class="el" href="classeasynav_1_1MPPIOptimizer.html">MPPIOptimizer</a>&gt; optimizer_</td>
+          <td class="memname"><a class="el" href="classeasynav_1_1MPPIOptimizer.html">MPPIOptimizer</a> optimizer_</td>
         </tr>
       </table>
   </td>
@@ -688,7 +822,29 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>MPPI optimizer. </p>
+</div>
+</div>
+<a id="a6ce4e3bdface3baa6247223e984649b6" name="a6ce4e3bdface3baa6247223e984649b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ce4e3bdface3baa6247223e984649b6">&#9670;&#160;</a></span>params_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structeasynav_1_1MPPIParams.html">MPPIParams</a> params_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Optimizer configuration. </p>
 
 </div>
 </div>
@@ -716,54 +872,6 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6ad83f7f5a09b0babb739d6eebaa48a6" name="a6ad83f7f5a09b0babb739d6eebaa48a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ad83f7f5a09b0babb739d6eebaa48a6">&#9670;&#160;</a></span>robot_radius_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double robot_radius_ {0.3}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>From robot_geometry. </p>
-
-</div>
-</div>
-<a id="a325e56d896dee4cab40d843ce180b331" name="a325e56d896dee4cab40d843ce180b331"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a325e56d896dee4cab40d843ce180b331">&#9670;&#160;</a></span>safety_radius_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double safety_radius_ {0.6}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Safety radius for obstacle avoidance. </p>
-
-</div>
-</div>
 <a id="a6a9de5bbd5031ab9139b7bb4e69cfd80" name="a6a9de5bbd5031ab9139b7bb4e69cfd80"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6a9de5bbd5031ab9139b7bb4e69cfd80">&#9670;&#160;</a></span>twist_stamped_</h2>
 
@@ -785,6 +893,54 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Current velocity command. </p>
+
+</div>
+</div>
+<a id="a45c2501b01542c9a73e880ede4981293" name="a45c2501b01542c9a73e880ede4981293"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45c2501b01542c9a73e880ede4981293">&#9670;&#160;</a></span>xy_goal_tolerance_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double xy_goal_tolerance_ {0.25}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Positional tolerance to the goal (m). </p>
+
+</div>
+</div>
+<a id="ac245610d11427fc015cdd59ef746717c" name="ac245610d11427fc015cdd59ef746717c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac245610d11427fc015cdd59ef746717c">&#9670;&#160;</a></span>yaw_goal_tolerance_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double yaw_goal_tolerance_ {0.25}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Angular tolerance to the goal (rad). </p>
 
 </div>
 </div>

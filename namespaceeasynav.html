@@ -155,12 +155,19 @@ Classes</h2></td></tr>
 <tr class="memitem:MPCParameters" id="r_MPCParameters"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPCParameters.html">MPCParameters</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A MPC parameters class.  <a href="classeasynav_1_1MPCParameters.html#details">More...</a><br /></td></tr>
 <tr class="memitem:MPPIController" id="r_MPPIController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPPIController.html">MPPIController</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A MPPI Controller.  <a href="classeasynav_1_1MPPIController.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPPI controller for differential and holonomic (omnidirectional) robots.  <a href="classeasynav_1_1MPPIController.html#details">More...</a><br /></td></tr>
+<tr class="memitem:MPPIInput" id="r_MPPIInput"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1MPPIInput.html">MPPIInput</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One cycle's input.  <a href="structeasynav_1_1MPPIInput.html#details">More...</a><br /></td></tr>
 <tr class="memitem:MPPIOptimizer" id="r_MPPIOptimizer"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1MPPIOptimizer.html">MPPIOptimizer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPPI (Williams et al.): rollouts of noisy control sequences around the previous solution, weighted by the exponential of their cost.  <a href="classeasynav_1_1MPPIOptimizer.html#details">More...</a><br /></td></tr>
+<tr class="memitem:MPPIParams" id="r_MPPIParams"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1MPPIParams.html">MPPIParams</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration of the optimizer. Weights are per meter/radian, averaged over the horizon.  <a href="structeasynav_1_1MPPIParams.html#details">More...</a><br /></td></tr>
 <tr class="memitem:MPPIResult" id="r_MPPIResult"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1MPPIResult.html">MPPIResult</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result structure for MPPI optimization containing control commands and trajectories.  <a href="structeasynav_1_1MPPIResult.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One cycle's output.  <a href="structeasynav_1_1MPPIResult.html#details">More...</a><br /></td></tr>
 <tr class="memitem:NavMapTerrain" id="r_NavMapTerrain"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1NavMapTerrain.html">NavMapTerrain</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Places a planar (x, y, yaw) estimate on the surface of a NavMap.  <a href="classeasynav_1_1NavMapTerrain.html#details">More...</a><br /></td></tr>
+<tr class="memitem:NearestGrid" id="r_NearestGrid"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1NearestGrid.html">NearestGrid</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Square grid where each cell knows its nearest seed (8SSEDT-like propagation).  <a href="classeasynav_1_1NearestGrid.html#details">More...</a><br /></td></tr>
 <tr class="memitem:NLoptCallbackData" id="r_NLoptCallbackData"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1NLoptCallbackData.html">NLoptCallbackData</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct used as element in callback.  <a href="structeasynav_1_1NLoptCallbackData.html#details">More...</a><br /></td></tr>
 <tr class="memitem:NoPathEvaluator" id="r_NoPathEvaluator"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1NoPathEvaluator.html">NoPathEvaluator</a></td></tr>
@@ -173,6 +180,10 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure representing a single particle in the AMCL algorithm.  <a href="structeasynav_1_1Particle.html#details">More...</a><br /></td></tr>
 <tr class="memitem:PIDController" id="r_PIDController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1PIDController.html">PIDController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A simple PID (Proportional-Integral-Derivative) controller implementation.  <a href="classeasynav_1_1PIDController.html#details">More...</a><br /></td></tr>
+<tr class="memitem:PointBuckets" id="r_PointBuckets"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1PointBuckets.html">PointBuckets</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points binned in square cells (built once per cycle, then queried many times).  <a href="classeasynav_1_1PointBuckets.html#details">More...</a><br /></td></tr>
+<tr class="memitem:Pose2D" id="r_Pose2D"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1Pose2D.html">Pose2D</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Planar pose.  <a href="structeasynav_1_1Pose2D.html#details">More...</a><br /></td></tr>
 <tr class="memitem:RegulatedPurePursuitController" id="r_RegulatedPurePursuitController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1RegulatedPurePursuitController.html">RegulatedPurePursuitController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Port of nav2_regulated_pure_pursuit_controller to EasyNav.  <a href="classeasynav_1_1RegulatedPurePursuitController.html#details">More...</a><br /></td></tr>
 <tr class="memitem:RosGraphEvaluator" id="r_RosGraphEvaluator"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1RosGraphEvaluator.html">RosGraphEvaluator</a></td></tr>
@@ -206,7 +217,8 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A planner implementing the A* algorithm on a <a class="el" href="classeasynav_1_1SimpleMap.html" title="Simple 2D uint8_t grid using basic C++ types, with full metric conversion support.">SimpleMap</a> grid.  <a href="classeasynav_1_1SimplePlanner.html#details">More...</a><br /></td></tr>
 <tr class="memitem:SimpleRecoveryManager" id="r_SimpleRecoveryManager"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1SimpleRecoveryManager.html">SimpleRecoveryManager</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A small, readable recovery system: a tutorial for writing your own.  <a href="classeasynav_1_1SimpleRecoveryManager.html#details">More...</a><br /></td></tr>
-<tr class="memitem:TrajectorySample" id="r_TrajectorySample"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1TrajectorySample.html">TrajectorySample</a></td></tr>
+<tr class="memitem:Velocity" id="r_Velocity"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1Velocity.html">Velocity</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structeasynav_1_1Velocity.html" title="Velocity in the robot frame.">Velocity</a> in the robot frame.  <a href="structeasynav_1_1Velocity.html#details">More...</a><br /></td></tr>
 <tr class="memitem:VffController" id="r_VffController"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classeasynav_1_1VffController.html">VffController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A default "Vff" implementation for the Control Method.  <a href="classeasynav_1_1VffController.html#details">More...</a><br /></td></tr>
 <tr class="memitem:VFFVectors" id="r_VFFVectors"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structeasynav_1_1VFFVectors.html">VFFVectors</a></td></tr>
@@ -223,6 +235,16 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#a7a97a116707da5eb8ba2e97825d41814a6a061313d22e51e0f25b7cd4dc065233">Max</a> = 1
 , <a class="el" href="#a7a97a116707da5eb8ba2e97825d41814af9d907c2f1c745d93e4b597c09fc588a">MaxWithoutUnknownOverwrite</a> = 2
  }</td></tr>
+<tr class="memitem:a566b196400978c683dc788d649a271b4" id="r_a566b196400978c683dc788d649a271b4"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a566b196400978c683dc788d649a271b4">HeadingMode</a> { <br />
+&#160;&#160;<a class="el" href="#a566b196400978c683dc788d649a271b4aac70412e939d72a9234cdebb1af5867b">Path</a>
+, <a class="el" href="#a566b196400978c683dc788d649a271b4ab24ce0cd392a5b0b8dedc66c25213594">Free</a>
+, <a class="el" href="#a566b196400978c683dc788d649a271b4a12c74214cb4c18cf36d885303d6aa2e1">Goal</a>
+, <a class="el" href="#a566b196400978c683dc788d649a271b4abcd8db575b47c838e5d551e3973db4ac">Hold</a>
+, <br />
+&#160;&#160;<a class="el" href="#a566b196400978c683dc788d649a271b4a4457d440870ad6d42bab9082d9bf9b61">Fixed</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a566b196400978c683dc788d649a271b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Orientation kept while moving (the goal's is always reached at the end).  <a href="#a566b196400978c683dc788d649a271b4">More...</a><br /></td></tr>
 <tr class="memitem:a3150b0c80fdf34b4b642b72a83c8b66a" id="r_a3150b0c80fdf34b4b642b72a83c8b66a"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#a3150b0c80fdf34b4b642b72a83c8b66a">LOAD_MAP_STATUS</a> { <a class="el" href="#a3150b0c80fdf34b4b642b72a83c8b66aaf9bf88604f11ae4f4bd0b4dcaac31248">LOAD_MAP_SUCCESS</a>
 , <a class="el" href="#a3150b0c80fdf34b4b642b72a83c8b66aa9af1ecc5286ef37a6ffff742275d6fa7">MAP_DOES_NOT_EXIST</a>
 , <a class="el" href="#a3150b0c80fdf34b4b642b72a83c8b66aa07b968e1f78383da45e2f0da57907365">INVALID_MAP_METADATA</a>
@@ -232,6 +254,20 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#aa17ca8c572605df6a7d49a362f6d7534a85a7cd587d6142dbfc1a4de05af7b75d">Scale</a>
 , <a class="el" href="#aa17ca8c572605df6a7d49a362f6d7534a65e65c8ab0d8609ce12fc68a03cb8e00">Raw</a>
  }</td></tr>
+<tr class="memitem:af102c0483ef611ae0217c72c0a950743" id="r_af102c0483ef611ae0217c72c0a950743"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#af102c0483ef611ae0217c72c0a950743">MotionModel</a> { <a class="el" href="#af102c0483ef611ae0217c72c0a950743a49630f5d7723e9b41474bd1cb1887b9d">Diff</a>
+, <a class="el" href="#af102c0483ef611ae0217c72c0a950743aaff17ad867475b05184370472ca92771">Omni</a>
+ }</td></tr>
+<tr class="memdesc:af102c0483ef611ae0217c72c0a950743"><td class="mdescLeft">&#160;</td><td class="mdescRight">How the robot moves.  <a href="#af102c0483ef611ae0217c72c0a950743">More...</a><br /></td></tr>
+<tr class="memitem:a0404ec87c5965f8922fecda16e621f21" id="r_a0404ec87c5965f8922fecda16e621f21"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a0404ec87c5965f8922fecda16e621f21">MPPIStatus</a> { <br />
+&#160;&#160;<a class="el" href="#a0404ec87c5965f8922fecda16e621f21a6f796b0e6deb4f4c2c0ee0ed5e10e117">Following</a>
+, <a class="el" href="#a0404ec87c5965f8922fecda16e621f21a8c5da05f74ecb045d6ca746373aec07d">Aligning</a>
+, <a class="el" href="#a0404ec87c5965f8922fecda16e621f21a168d3e51452f6d8988f75ed882e74eb6">Arrived</a>
+, <a class="el" href="#a0404ec87c5965f8922fecda16e621f21a4ecc0d90eec1cea3e9db96583a1bb9c2">Blocked</a>
+, <br />
+&#160;&#160;<a class="el" href="#a0404ec87c5965f8922fecda16e621f21ad1d2245c4d9d60b8da25dda25d2af489">NoPath</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a0404ec87c5965f8922fecda16e621f21"><td class="mdescLeft">&#160;</td><td class="mdescRight">What the optimizer is doing.  <a href="#a0404ec87c5965f8922fecda16e621f21">More...</a><br /></td></tr>
 <tr class="memitem:ae4ffed3c06abcc7e0ae6e9c32e6f2b24" id="r_ae4ffed3c06abcc7e0ae6e9c32e6f2b24"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#ae4ffed3c06abcc7e0ae6e9c32e6f2b24">VFFColor</a> { <a class="el" href="#ae4ffed3c06abcc7e0ae6e9c32e6f2b24af80f9a890089d211842d59625e561f88">RED</a>
 , <a class="el" href="#ae4ffed3c06abcc7e0ae6e9c32e6f2b24aa60bd322f93178d68184e30e162571ca">GREEN</a>
 , <a class="el" href="#ae4ffed3c06abcc7e0ae6e9c32e6f2b24a35d6719cb4d7577c031b3d79057a1b79">BLUE</a>
@@ -287,6 +323,10 @@ Functions</h2></td></tr>
 <tr class="memdesc:a8073b4d2bf21d487cd8619896aed9959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize a 2D vector, with a safe fallback for very small norms.  <br /></td></tr>
 <tr class="memitem:a6a442a5fec850c953734564959a562ba" id="r_a6a442a5fec850c953734564959a562ba"><td class="memItemLeft">geometry_msgs::msg::Quaternion&#160;</td><td class="memItemRight"><a class="el" href="#a6a442a5fec850c953734564959a562ba">orientationAroundZAxis</a> (double angle)</td></tr>
 <tr class="memdesc:a6a442a5fec850c953734564959a562ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a geometry_msgs Quaternion from a yaw angle.  <br /></td></tr>
+<tr class="memitem:abb6c1de8910e8575e7a4c845221155d1" id="r_abb6c1de8910e8575e7a4c845221155d1"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#abb6c1de8910e8575e7a4c845221155d1">parse_heading_mode</a> (const std::string &amp;name, <a class="el" href="#a566b196400978c683dc788d649a271b4">HeadingMode</a> &amp;mode)</td></tr>
+<tr class="memdesc:abb6c1de8910e8575e7a4c845221155d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses "path"/"free"/"goal"/"hold"/"fixed"; false if unknown.  <br /></td></tr>
+<tr class="memitem:ad4df1b2ae2c1fdde930fc4fc8951bc78" id="r_ad4df1b2ae2c1fdde930fc4fc8951bc78"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ad4df1b2ae2c1fdde930fc4fc8951bc78">parse_motion_model</a> (const std::string &amp;name, <a class="el" href="#af102c0483ef611ae0217c72c0a950743">MotionModel</a> &amp;model)</td></tr>
+<tr class="memdesc:ad4df1b2ae2c1fdde930fc4fc8951bc78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parses "diff"/"omni"; false if unknown.  <br /></td></tr>
 <tr class="memitem:afac22b36fad17acea17ac83c1394b644" id="r_afac22b36fad17acea17ac83c1394b644"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#afac22b36fad17acea17ac83c1394b644">printTransform</a> (const tf2::Transform &amp;tf)</td></tr>
 <tr class="memitem:a69b5059f2bc03a473b8f66bb61a16015" id="r_a69b5059f2bc03a473b8f66bb61a16015"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a69b5059f2bc03a473b8f66bb61a16015">save_routes_to_yaml</a> (const std::string &amp;yaml_file, const <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d">RoutesMap</a> &amp;routes, std::string &amp;error_message)</td></tr>
 <tr class="memdesc:a69b5059f2bc03a473b8f66bb61a16015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Persist a <a class="el" href="#a988f05128bb99c6e960f5d5a192af54d" title="Container type representing a full set of navigation routes.">RoutesMap</a> to a routes YAML file, in the exact format <a class="el" href="#aa838b8b9383af3d24e142bcaecf7aca9" title="Load a RoutesMap from a routes YAML file.">load_routes_from_yaml()</a> reads back: a top-level <span class="tt">routes: [name, ...]</span> list plus one <span class="tt">start</span>/<span class="tt">end</span> pose-pair entry per name.  <br /></td></tr>
@@ -304,6 +344,8 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:a98791a7fe06cb491955738345de8fea4" id="r_a98791a7fe06cb491955738345de8fea4"><td class="memItemLeft">constexpr char&#160;</td><td class="memItemRight"><a class="el" href="#a98791a7fe06cb491955738345de8fea4">kHeadingReferenceKey</a> [] = &quot;heading_reference&quot;</td></tr>
+<tr class="memdesc:a98791a7fe06cb491955738345de8fea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">NavState key of an optional heading (double, rad, path frame) for holonomic robots: while present, the robot keeps it as it moves, whatever heading_mode says.  <br /></td></tr>
 <tr class="memitem:a1296b5d8f82cf65d273b29f09c38da0d" id="r_a1296b5d8f82cf65d273b29f09c38da0d"><td class="memItemLeft">constexpr double&#160;</td><td class="memItemRight"><a class="el" href="#a1296b5d8f82cf65d273b29f09c38da0d">kNoOrientationCovariance</a> = 1e5</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
@@ -358,6 +400,42 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a566b196400978c683dc788d649a271b4" name="a566b196400978c683dc788d649a271b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a566b196400978c683dc788d649a271b4">&#9670;&#160;</a></span>HeadingMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a566b196400978c683dc788d649a271b4">HeadingMode</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Orientation kept while moving (the goal's is always reached at the end). </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a566b196400978c683dc788d649a271b4aac70412e939d72a9234cdebb1af5867b" name="a566b196400978c683dc788d649a271b4aac70412e939d72a9234cdebb1af5867b"></a>Path&#160;</td><td class="fielddoc"><p>Facing along the path (the only one for a differential robot). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a566b196400978c683dc788d649a271b4ab24ce0cd392a5b0b8dedc66c25213594" name="a566b196400978c683dc788d649a271b4ab24ce0cd392a5b0b8dedc66c25213594"></a>Free&#160;</td><td class="fielddoc"><p>Any: the optimizer chooses. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a566b196400978c683dc788d649a271b4a12c74214cb4c18cf36d885303d6aa2e1" name="a566b196400978c683dc788d649a271b4a12c74214cb4c18cf36d885303d6aa2e1"></a>Goal&#160;</td><td class="fielddoc"><p>The goal's orientation, all the way. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a566b196400978c683dc788d649a271b4abcd8db575b47c838e5d551e3973db4ac" name="a566b196400978c683dc788d649a271b4abcd8db575b47c838e5d551e3973db4ac"></a>Hold&#160;</td><td class="fielddoc"><p>The robot's orientation when the goal was received. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a566b196400978c683dc788d649a271b4a4457d440870ad6d42bab9082d9bf9b61" name="a566b196400978c683dc788d649a271b4a4457d440870ad6d42bab9082d9bf9b61"></a>Fixed&#160;</td><td class="fielddoc"><p>A given orientation (map frame). </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a id="a3150b0c80fdf34b4b642b72a83c8b66a" name="a3150b0c80fdf34b4b642b72a83c8b66a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3150b0c80fdf34b4b642b72a83c8b66a">&#9670;&#160;</a></span>LOAD_MAP_STATUS</h2>
 
@@ -403,6 +481,72 @@ Variables</h2></td></tr>
 <tr><td class="fieldname"><a id="aa17ca8c572605df6a7d49a362f6d7534a85a7cd587d6142dbfc1a4de05af7b75d" name="aa17ca8c572605df6a7d49a362f6d7534a85a7cd587d6142dbfc1a4de05af7b75d"></a>Scale&#160;</td><td class="fielddoc"><p>Together with associated threshold values (occupied and free): alpha &lt; 1.0 - Unknown (-1) lightness &gt;= occ_th - Occupied (100) ... (linearly interpolate to) lightness &lt;= free_th - Free (0). </p>
 </td></tr>
 <tr><td class="fieldname"><a id="aa17ca8c572605df6a7d49a362f6d7534a65e65c8ab0d8609ce12fc68a03cb8e00" name="aa17ca8c572605df6a7d49a362f6d7534a65e65c8ab0d8609ce12fc68a03cb8e00"></a>Raw&#160;</td><td class="fielddoc"><p>Lightness = 0 - Free (0) ... (linearly interpolate to) Lightness = 100 - Occupied (100) Lightness &gt;= 101 - Unknown. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="af102c0483ef611ae0217c72c0a950743" name="af102c0483ef611ae0217c72c0a950743"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af102c0483ef611ae0217c72c0a950743">&#9670;&#160;</a></span>MotionModel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#af102c0483ef611ae0217c72c0a950743">MotionModel</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How the robot moves. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="af102c0483ef611ae0217c72c0a950743a49630f5d7723e9b41474bd1cb1887b9d" name="af102c0483ef611ae0217c72c0a950743a49630f5d7723e9b41474bd1cb1887b9d"></a>Diff&#160;</td><td class="fielddoc"><p>Differential (or skid steer): vx and wz. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af102c0483ef611ae0217c72c0a950743aaff17ad867475b05184370472ca92771" name="af102c0483ef611ae0217c72c0a950743aaff17ad867475b05184370472ca92771"></a>Omni&#160;</td><td class="fielddoc"><p>Holonomic (omnidirectional, mecanum): vx, vy and wz. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a0404ec87c5965f8922fecda16e621f21" name="a0404ec87c5965f8922fecda16e621f21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0404ec87c5965f8922fecda16e621f21">&#9670;&#160;</a></span>MPPIStatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a0404ec87c5965f8922fecda16e621f21">MPPIStatus</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What the optimizer is doing. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0404ec87c5965f8922fecda16e621f21a6f796b0e6deb4f4c2c0ee0ed5e10e117" name="a0404ec87c5965f8922fecda16e621f21a6f796b0e6deb4f4c2c0ee0ed5e10e117"></a>Following&#160;</td><td class="fielddoc"><p>Moving along the path. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0404ec87c5965f8922fecda16e621f21a8c5da05f74ecb045d6ca746373aec07d" name="a0404ec87c5965f8922fecda16e621f21a8c5da05f74ecb045d6ca746373aec07d"></a>Aligning&#160;</td><td class="fielddoc"><p>At the goal position, turning to the goal's heading. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0404ec87c5965f8922fecda16e621f21a168d3e51452f6d8988f75ed882e74eb6" name="a0404ec87c5965f8922fecda16e621f21a168d3e51452f6d8988f75ed882e74eb6"></a>Arrived&#160;</td><td class="fielddoc"><p>At the goal, within both tolerances: stopped. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0404ec87c5965f8922fecda16e621f21a4ecc0d90eec1cea3e9db96583a1bb9c2" name="a0404ec87c5965f8922fecda16e621f21a4ecc0d90eec1cea3e9db96583a1bb9c2"></a>Blocked&#160;</td><td class="fielddoc"><p>Every rollout collides: stopping. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a0404ec87c5965f8922fecda16e621f21ad1d2245c4d9d60b8da25dda25d2af489" name="a0404ec87c5965f8922fecda16e621f21ad1d2245c4d9d60b8da25dda25d2af489"></a>NoPath&#160;</td><td class="fielddoc"><p>No valid path or pose: stopped. </p>
 </td></tr>
 </table>
 
@@ -1168,6 +1312,52 @@ template&lt;typename Iter, typename Getter&gt; </div>
 
 </div>
 </div>
+<a id="abb6c1de8910e8575e7a4c845221155d1" name="abb6c1de8910e8575e7a4c845221155d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb6c1de8910e8575e7a4c845221155d1">&#9670;&#160;</a></span>parse_heading_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool parse_heading_mode </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a566b196400978c683dc788d649a271b4">HeadingMode</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>mode</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parses "path"/"free"/"goal"/"hold"/"fixed"; false if unknown. </p>
+
+</div>
+</div>
+<a id="ad4df1b2ae2c1fdde930fc4fc8951bc78" name="ad4df1b2ae2c1fdde930fc4fc8951bc78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4df1b2ae2c1fdde930fc4fc8951bc78">&#9670;&#160;</a></span>parse_motion_model()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool parse_motion_model </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#af102c0483ef611ae0217c72c0a950743">MotionModel</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>model</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parses "diff"/"omni"; false if unknown. </p>
+
+</div>
+</div>
 <a id="afac22b36fad17acea17ac83c1394b644" name="afac22b36fad17acea17ac83c1394b644"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afac22b36fad17acea17ac83c1394b644">&#9670;&#160;</a></span>printTransform()</h2>
 
@@ -1379,6 +1569,30 @@ template&lt;typename T&gt; </div>
 </div>
 </div>
 <a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">Variable Documentation</h2>
+<a id="a98791a7fe06cb491955738345de8fea4" name="a98791a7fe06cb491955738345de8fea4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98791a7fe06cb491955738345de8fea4">&#9670;&#160;</a></span>kHeadingReferenceKey</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char kHeadingReferenceKey[] = &quot;heading_reference&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>NavState key of an optional heading (double, rad, path frame) for holonomic robots: while present, the robot keeps it as it moves, whatever heading_mode says. </p>
+
+</div>
+</div>
 <a id="a1296b5d8f82cf65d273b29f09c38da0d" name="a1296b5d8f82cf65d273b29f09c38da0d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1296b5d8f82cf65d273b29f09c38da0d">&#9670;&#160;</a></span>kNoOrientationCovariance</h2>
 

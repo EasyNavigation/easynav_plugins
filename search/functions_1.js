@@ -6,7 +6,8 @@ var searchData=
   ['block_3',['block',['../classCostmapPlannerTest.html#a4d21ccc22009dc3efa5af724fabea986',1,'CostmapPlannerTest']]],
   ['bonxaimapsmanager_4',['BonxaiMapsManager',['../classeasynav__bonxai_1_1BonxaiMapsManager.html#a98b7d5ef6cefefaa3bc86c39ca1094be',1,'easynav_bonxai::BonxaiMapsManager']]],
   ['brakes_5',['brakes',['../classCollisionSafetyReflexCheckTest.html#aa94186b82f66dc167e4d7dbaf42431c0',1,'CollisionSafetyReflexCheckTest']]],
-  ['build_5fdistance_5ffield_6',['build_distance_field',['../classeasynav_1_1mhamcl_1_1MapMatcher.html#a65ee67d8d7863536e845aa406b98c603',1,'easynav::mhamcl::MapMatcher::build_distance_field()'],['../classMapMatcher.html#a65ee67d8d7863536e845aa406b98c603',1,'MapMatcher::build_distance_field()']]],
-  ['build_5fterrain_7',['build_terrain',['../classeasynav_1_1navmap_1_1AStarPlanner.html#a45e17f92ebac35e41baaa4a621eea7a8',1,'easynav::navmap::AStarPlanner']]],
-  ['by_5fweight_5f_8',['by_weight_',['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#a7fe15919f6e701163cd7149e0e94f782',1,'easynav::navmap::AMCLLocalizer']]]
+  ['build_6',['build',['../classeasynav_1_1PointBuckets.html#a7740c7ab195c03ac140f1f75f633470f',1,'easynav::PointBuckets']]],
+  ['build_5fdistance_5ffield_7',['build_distance_field',['../classeasynav_1_1mhamcl_1_1MapMatcher.html#a65ee67d8d7863536e845aa406b98c603',1,'easynav::mhamcl::MapMatcher::build_distance_field()'],['../classMapMatcher.html#a65ee67d8d7863536e845aa406b98c603',1,'MapMatcher::build_distance_field()']]],
+  ['build_5fterrain_8',['build_terrain',['../classeasynav_1_1navmap_1_1AStarPlanner.html#a45e17f92ebac35e41baaa4a621eea7a8',1,'easynav::navmap::AStarPlanner']]],
+  ['by_5fweight_5f_9',['by_weight_',['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#a7fe15919f6e701163cd7149e0e94f782',1,'easynav::navmap::AMCLLocalizer']]]
 ];

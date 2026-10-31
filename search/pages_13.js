@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['velocity_20limits_0',['Velocity limits',['../dir_b6df9622c65432573c19f0228db4f4b2.html#autotoc_md84',1,'']]],
-  ['version_1',['version',['../dir_7ddc676eb27f46842c32f71c619789e5.html#autotoc_md48',1,'Adaptations from the Nav2 version'],['../dir_b362ec6e2871aebb41e9d7a33376f88c.html#autotoc_md115',1,'Differences with the Nav2 version']]]
+  ['usage_0',['Usage',['../dir_eb6561881223f5d4348e8fc4dee0038a.html#autotoc_md307',1,'Usage'],['../dir_b914104ef47cb0d0151b35e35c90056a.html#autotoc_md311',1,'Usage']]]
 ];

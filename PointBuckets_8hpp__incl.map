@@ -1,0 +1,11 @@
+<map id="controllers/easynav_mppi_controller/include/easynav_mppi_controller/PointBuckets.hpp" name="controllers/easynav_mppi_controller/include/easynav_mppi_controller/PointBuckets.hpp">
+<area shape="rect" id="Node000001" title="Points binned in square cells, to visit those near a position." alt="" coords="89,5,257,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,124,80,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,79,73,117,70,113,123,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="103,124,160,150"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,77,146,110,141,108,156,75"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="184,124,245,150"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="191,75,205,108,201,110,186,77"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="268,124,326,150"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="221,74,271,112,268,117,217,79"/>
+</map>

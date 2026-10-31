@@ -16,9 +16,10 @@ var searchData=
   ['navmapobstaclefiltertest_13',['NavmapObstacleFilterTest',['../classNavmapObstacleFilterTest.html',1,'']]],
   ['navmapplannertest_14',['NavMapPlannerTest',['../classNavMapPlannerTest.html',1,'']]],
   ['navmapterrain_15',['NavMapTerrain',['../classeasynav_1_1NavMapTerrain.html',1,'easynav']]],
-  ['neighbor_16',['Neighbor',['../structeasynav_1_1navmap_1_1AStarPlanner_1_1Neighbor.html',1,'easynav::navmap::AStarPlanner']]],
-  ['nloptcallbackdata_17',['NLoptCallbackData',['../structeasynav_1_1NLoptCallbackData.html',1,'easynav']]],
-  ['nopathevaluator_18',['NoPathEvaluator',['../classeasynav_1_1NoPathEvaluator.html',1,'easynav']]],
-  ['nopathevaluatortestcase_19',['NoPathEvaluatorTestCase',['../classNoPathEvaluatorTestCase.html',1,'']]],
-  ['nopathwithfaultyplannertest_20',['NoPathWithFaultyPlannerTest',['../classNoPathWithFaultyPlannerTest.html',1,'']]]
+  ['nearestgrid_16',['NearestGrid',['../classeasynav_1_1NearestGrid.html',1,'NearestGrid'],['../classNearestGrid.html',1,'NearestGrid']]],
+  ['neighbor_17',['Neighbor',['../structeasynav_1_1navmap_1_1AStarPlanner_1_1Neighbor.html',1,'easynav::navmap::AStarPlanner']]],
+  ['nloptcallbackdata_18',['NLoptCallbackData',['../structeasynav_1_1NLoptCallbackData.html',1,'easynav']]],
+  ['nopathevaluator_19',['NoPathEvaluator',['../classeasynav_1_1NoPathEvaluator.html',1,'easynav']]],
+  ['nopathevaluatortestcase_20',['NoPathEvaluatorTestCase',['../classNoPathEvaluatorTestCase.html',1,'']]],
+  ['nopathwithfaultyplannertest_21',['NoPathWithFaultyPlannerTest',['../classNoPathWithFaultyPlannerTest.html',1,'']]]
 ];

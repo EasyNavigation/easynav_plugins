@@ -6,12 +6,13 @@ var searchData=
   ['findfirston_3',['findFirstOn',['../classBonxai_1_1Mask.html#a0a56882e6080afc284b0852ff916c9c8',1,'Bonxai::Mask']]],
   ['finite_4',['finite',['../classSerestShortPathTest.html#a4bf66ea3ab1ed33dd4ff23d5d03666c1',1,'SerestShortPathTest']]],
   ['first_5fafter_5fintegrated_5fdistance_5',['first_after_integrated_distance',['../namespaceeasynav.html#a4cfeb59f1f792582dcc310ce537a0dc0',1,'easynav']]],
-  ['force_5fpath_6',['force_path',['../classFriendAMCLLocalizer.html#aa88c207d8b68a2ffba1a870becf9f487',1,'FriendAMCLLocalizer::force_path()'],['../classFriendSimpleMapsManager.html#aa88c207d8b68a2ffba1a870becf9f487',1,'FriendSimpleMapsManager::force_path()']]],
-  ['forcetwod_7',['forceTwoD',['../classrobot__localization_1_1UkfWrapper.html#a655bf22560c99efc42980878a8924746',1,'robot_localization::UkfWrapper']]],
-  ['foreachcell_8',['forEachCell',['../classBonxai_1_1VoxelGrid.html#ac5bc4a75ffd258ca1592efb20a285bf1',1,'Bonxai::VoxelGrid::forEachCell(VisitorFunction func) const'],['../classBonxai_1_1VoxelGrid.html#a2b27e73efd934d794860839f226b0d3f',1,'Bonxai::VoxelGrid::forEachCell(VisitorFunction func)']]],
-  ['free_5fdistance_5falong_5fx_9',['free_distance_along_x',['../namespaceeasynav__diagnostic__recovery.html#ada38df5e7cf3dbfcca98ff9e9c92c428',1,'easynav_diagnostic_recovery::free_distance_along_x()'],['../obstacle__proximity__tests_8cpp.html#ada38df5e7cf3dbfcca98ff9e9c92c428',1,'free_distance_along_x():&#160;ObstacleProximity.cpp']]],
-  ['from_5fmsg_10',['from_msg',['../namespaceeasynav.html#aa3942576f265f4ad4b6d408f52423620',1,'easynav']]],
-  ['from_5foccupancy_5fgrid_11',['from_occupancy_grid',['../classeasynav_1_1SimpleMap.html#a14359bb8f06ad0b19ff1a01e41c23992',1,'easynav::SimpleMap']]],
-  ['full_5fturn_12',['full_turn',['../classRotateRecoveryTest.html#a7085cf783a4166bb504b8b895cdefe50',1,'RotateRecoveryTest']]],
-  ['fusionlocalizer_13',['FusionLocalizer',['../classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d',1,'easynav::FusionLocalizer']]]
+  ['for_5feach_5fnear_6',['for_each_near',['../classeasynav_1_1PointBuckets.html#a0349f7867d6fcfd28ce2b2aa6afe9234',1,'easynav::PointBuckets']]],
+  ['force_5fpath_7',['force_path',['../classFriendAMCLLocalizer.html#aa88c207d8b68a2ffba1a870becf9f487',1,'FriendAMCLLocalizer::force_path()'],['../classFriendSimpleMapsManager.html#aa88c207d8b68a2ffba1a870becf9f487',1,'FriendSimpleMapsManager::force_path()']]],
+  ['forcetwod_8',['forceTwoD',['../classrobot__localization_1_1UkfWrapper.html#a655bf22560c99efc42980878a8924746',1,'robot_localization::UkfWrapper']]],
+  ['foreachcell_9',['forEachCell',['../classBonxai_1_1VoxelGrid.html#ac5bc4a75ffd258ca1592efb20a285bf1',1,'Bonxai::VoxelGrid::forEachCell(VisitorFunction func) const'],['../classBonxai_1_1VoxelGrid.html#a2b27e73efd934d794860839f226b0d3f',1,'Bonxai::VoxelGrid::forEachCell(VisitorFunction func)']]],
+  ['free_5fdistance_5falong_5fx_10',['free_distance_along_x',['../namespaceeasynav__diagnostic__recovery.html#ada38df5e7cf3dbfcca98ff9e9c92c428',1,'easynav_diagnostic_recovery::free_distance_along_x()'],['../obstacle__proximity__tests_8cpp.html#ada38df5e7cf3dbfcca98ff9e9c92c428',1,'free_distance_along_x():&#160;ObstacleProximity.cpp']]],
+  ['from_5fmsg_11',['from_msg',['../namespaceeasynav.html#aa3942576f265f4ad4b6d408f52423620',1,'easynav']]],
+  ['from_5foccupancy_5fgrid_12',['from_occupancy_grid',['../classeasynav_1_1SimpleMap.html#a14359bb8f06ad0b19ff1a01e41c23992',1,'easynav::SimpleMap']]],
+  ['full_5fturn_13',['full_turn',['../classRotateRecoveryTest.html#a7085cf783a4166bb504b8b895cdefe50',1,'RotateRecoveryTest']]],
+  ['fusionlocalizer_14',['FusionLocalizer',['../classeasynav_1_1FusionLocalizer.html#a4ab82fdd319b5448ddb43d4e4564576d',1,'easynav::FusionLocalizer']]]
 ];

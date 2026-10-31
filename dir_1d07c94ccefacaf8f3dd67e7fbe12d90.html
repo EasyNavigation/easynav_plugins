@@ -123,20 +123,20 @@ Directories</h2></td></tr>
 <tr class="memitem:tests" id="r_tests"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_191014c8ae5067e82ee00eb3abad1220.html">tests</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md190"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md194"></a>
 easynav_navmap_maps_manager</h1>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md191"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md195"></a>
 Description</h1>
 <p>Maps Manager that maintains a <a href="https://github.com/EasyNavigation/NavMap">NavMap</a> (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds.</p>
 <p>This package also includes map filters implemented as plugins (<span class="tt">ObstacleFilter</span> and <span class="tt">InflationFilter</span>) that operate on NavMap layers to detect obstacles and inflate their costs, enabling cost-aware path planning.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md192"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md196"></a>
 Authors and Maintainers</h1>
 <ul>
 <li><b>Authors:</b> Intelligent Robotics Lab <br  />
 </li>
 <li><b>Maintainer:</b> Francisco Martín Rico <a href="mai'+'lto:+'fmr'+'ic'+'o@g'+'ma'+'il.'+'co'+'m'">fmric<span class="obfuscator">.nosp@m.</span>o@gm<span class="obfuscator">.nosp@m.</span>ail.c<span class="obfuscator">.nosp@m.</span>om</a></li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md193"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md197"></a>
 Supported ROS 2 Distributions</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -152,7 +152,7 @@ Supported ROS 2 Distributions</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">rolling  </td><td class="markdownTableBodyNone"><img src="https://img.shields.io/badge/rolling-supported-brightgreen" alt="rolling" class="inline"/>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md194"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md198"></a>
 Plugin (pluginlib)</h1>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager</span></li>
@@ -162,7 +162,7 @@ Plugin (pluginlib)</h1>
 <li><b>Description:</b> <br  />
  Maps Manager that maintains a NavMap (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds, and applying dynamic filters to generate obstacle and inflated layers.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md195"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md199"></a>
 Parameters</h1>
 <p>All parameters are declared under the plugin namespace, i.e. <br  />
  <span class="tt">/&lt;node_fqn&gt;/easynav_navmap_maps_manager/NavMapMapsManager/...</span></p>
@@ -182,7 +182,7 @@ Parameters</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.filters</span>  </td><td class="markdownTableBodyNone"><span class="tt">list&lt;string&gt;</span>  </td><td class="markdownTableBodyRight"><span class="tt">[]</span>  </td><td class="markdownTableBodyNone">Ordered list of filter plugin names to be applied after map loading (e.g. <span class="tt">["obstacles", "inflation"]</span>).  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md196"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md200"></a>
 Local mode</h2>
 <p>With <span class="tt">&lt;plugin&gt;.local.enabled</span>, the maps manager keeps a NavMap around the robot, in its frame, rebuilt continuously from the point perceptions in NavState (scans accumulated in <span class="tt">odom</span> over <span class="tt">accumulate_time</span>, cropped to the window and meshed with <span class="tt">navmap_ros::from_points</span>). Each rebuild is published on <span class="tt">&lt;plugin&gt;/map</span> and replaces the map in NavState; the filters run on it as usual (the ObstacleFilter works in the NavMap's own frame). A map loaded from a file is replaced at the first rebuild.</p>
 <table class="markdownTable">
@@ -205,9 +205,9 @@ Local mode</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.local.resolution</span>, <span class="tt">max_dz</span>, <span class="tt">max_slope_deg</span>, <span class="tt">min_clearance</span>, <span class="tt">min_surface_area</span>, <span class="tt">max_hole_area</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.3</span>, <span class="tt">0.25</span>, <span class="tt">30</span>, <span class="tt">1.0</span>, <span class="tt">1.0</span>, <span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Mesher parameters (<span class="tt">navmap_ros::BuildParams</span>).  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md197"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md201"></a>
 Filter Plugins</h2>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md198"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md202"></a>
 <b>ObstacleFilter</b></h3>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager/ObstaclesFilter</span></li>
@@ -244,7 +244,7 @@ Filter Plugins</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Output Layer:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Updates or creates NavMap layer <span class="tt">"obstacles"</span>.  </td></tr>
 </table>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md199"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md203"></a>
 <b>InflationFilter</b></h3>
 <ul>
 <li><b>Plugin Name:</b> <span class="tt">easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</span></li>
@@ -268,9 +268,9 @@ Filter Plugins</h2>
 <td class="markdownTableBodyNone"><b>Output Layer:</b>  </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyNone">Writes to <span class="tt">"inflated_obstacles"</span>.  </td></tr>
 </table>
 <p>The filters update the map in <span class="tt">NavState</span> in place and record which cells they change; the maps manager publishes those changes and clears them at the end of each cycle.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md200"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md204"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md201"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md205"></a>
 Subscriptions and Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -284,7 +284,7 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Subscription  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/incoming_pc2_map</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs/msg/PointCloud2</span>  </td><td class="markdownTableBodyNone">Input point cloud to build/update NavMap.  </td><td class="markdownTableBodyNone">depth=100  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md202"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md206"></a>
 Services</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -292,7 +292,7 @@ Services</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Service Server  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node_fqn&gt;/&lt;plugin&gt;/savemap</span>  </td><td class="markdownTableBodyNone"><span class="tt">std_srvs/srv/Trigger</span>  </td><td class="markdownTableBodyNone">Saves the current NavMap and layers to disk.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md203"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md207"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -302,7 +302,7 @@ NavState Keys</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">map.navmap</span>  </td><td class="markdownTableBodyNone"><span class="tt">::navmap::NavMap</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Stores the maintained NavMap, including generated layers <span class="tt">"obstacles"</span> and <span class="tt">"inflated_obstacles"</span>.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md204"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md208"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -310,7 +310,7 @@ TF Frames</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Publishes  </td><td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyNone">No TF broadcasting in this manager; outputs are stamped in their configured frame.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md205"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md209"></a>
 Example Configuration</h1>
 <div class="fragment"><div class="line">maps_manager_node:</div>
 <div class="line">  ros__parameters:</div>
@@ -329,7 +329,7 @@ Example Configuration</h1>
 <div class="line">        plugin: easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter</div>
 <div class="line">        inflation_radius: 1.0</div>
 <div class="line">        cost_scaling_factor: 2.0</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md206"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md210"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->

@@ -1,0 +1,7 @@
+<map id="controllers/easynav_mppi_controller/tests/mppi_sim.hpp" name="controllers/easynav_mppi_controller/tests/mppi_sim.hpp">
+<area shape="rect" id="Node000001" title="Kinematic simulation of a robot driven by the MPPI optimizer, for the tests." alt="" coords="116,5,265,61"/>
+<area shape="rect" id="Node000002" href="$mppi__optimizer__tests_8cpp.html" title="The MPPI optimizer: what it does with invalid input, at the goal, when blocked, within its limits,..." alt="" coords="5,109,178,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,74,120,110,116,106,151,70"/>
+<area shape="rect" id="Node000003" href="$mppi__scenarios__tests_8cpp.html" title="End to end: every motion model and heading mode, on every kind of path, drives the robot to the goal ..." alt="" coords="202,109,378,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,70,265,106,261,110,226,74"/>
+</map>

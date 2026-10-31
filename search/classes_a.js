@@ -18,9 +18,13 @@ var searchData=
   ['mpcrobotlimitstest_15',['MpcRobotLimitsTest',['../classMpcRobotLimitsTest.html',1,'']]],
   ['mppicontroller_16',['MPPIController',['../classeasynav_1_1MPPIController.html',1,'easynav']]],
   ['mppicontrollerreconfiguretest_17',['MPPIControllerReconfigureTest',['../classMPPIControllerReconfigureTest.html',1,'']]],
-  ['mppilegacyparamsfiletest_18',['MppiLegacyParamsFileTest',['../classMppiLegacyParamsFileTest.html',1,'']]],
-  ['mppiobstaclepointstest_19',['MppiObstaclePointsTest',['../classMppiObstaclePointsTest.html',1,'']]],
-  ['mppioptimizer_20',['MPPIOptimizer',['../classeasynav_1_1MPPIOptimizer.html',1,'easynav']]],
-  ['mppiresult_21',['MPPIResult',['../structeasynav_1_1MPPIResult.html',1,'easynav']]],
-  ['mppirobotlimitstest_22',['MppiRobotLimitsTest',['../classMppiRobotLimitsTest.html',1,'']]]
+  ['mppiinput_18',['MPPIInput',['../structeasynav_1_1MPPIInput.html',1,'MPPIInput'],['../structMPPIInput.html',1,'MPPIInput']]],
+  ['mppilegacyparamsfiletest_19',['MppiLegacyParamsFileTest',['../classMppiLegacyParamsFileTest.html',1,'']]],
+  ['mppimodestest_20',['MppiModesTest',['../classMppiModesTest.html',1,'']]],
+  ['mppiobstaclepointstest_21',['MppiObstaclePointsTest',['../classMppiObstaclePointsTest.html',1,'']]],
+  ['mppioptimizer_22',['MPPIOptimizer',['../classeasynav_1_1MPPIOptimizer.html',1,'easynav']]],
+  ['mppiparams_23',['MPPIParams',['../structeasynav_1_1MPPIParams.html',1,'MPPIParams'],['../structmppi__test_1_1MPPIParams.html',1,'MPPIParams']]],
+  ['mppiresult_24',['MPPIResult',['../structeasynav_1_1MPPIResult.html',1,'easynav']]],
+  ['mppirobotlimitstest_25',['MppiRobotLimitsTest',['../classMppiRobotLimitsTest.html',1,'']]],
+  ['mppiscenariotest_26',['MppiScenarioTest',['../classMppiScenarioTest.html',1,'']]]
 ];
