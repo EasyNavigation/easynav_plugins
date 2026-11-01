@@ -1167,6 +1167,10 @@ void UkfWrapper::loadParams()
     deceleration_limits.resize(TWIST_SIZE, 1.0);
     deceleration_gains.resize(TWIST_SIZE, 1.0);
   }
+  // Control disabled by its configuration: none of it applies (the IMU setup still reads it)
+  if (!use_control_) {
+    control_update_vector.assign(TWIST_SIZE, false);
+  }
 
   bool dynamic_process_noise_covariance = declare_or_get(
     param_prefix +
