@@ -27,6 +27,7 @@
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
+#include "GeographicLib/LocalCartesian.hpp"
 
 namespace easynav
 {
@@ -102,6 +103,17 @@ private:
 
   sensor_msgs::msg::NavSatFix
   odom_to_navsatfix(const nav_msgs::msg::Odometry & odom_msg);
+
+  /// @brief Map axes: "utm" (the UTM grid) or "enu" (east and north at the origin).
+  std::string projection_{"utm"};
+  /// @brief The local east-north-up projection at the origin (projection "enu").
+  std::unique_ptr<GeographicLib::LocalCartesian> enu_;
+
+  /// @brief Moves \p pose from the GNSS antenna (\p antenna_frame) to the frame the global
+  /// filter estimates, with the robot's attitude in \p pose. Unchanged if the antenna's mounting
+  /// is unknown.
+  void antenna_to_robot(
+    geometry_msgs::msg::PoseWithCovarianceStamped & pose, const std::string & antenna_frame);
 
   double latitude_origin_{0.0};
   double longitude_origin_{0.0};
