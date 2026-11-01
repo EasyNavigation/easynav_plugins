@@ -161,7 +161,8 @@ Protected Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Level-1 recovery evaluator that diagnoses a missing or empty planner path. </p>
-<p>A generic, domain-agnostic evaluator: it only knows about the "path" key that any PlannerMethodBase-derived plugin is expected to produce, not about any specific planner's internals. </p>
+<p>A generic, domain-agnostic evaluator: it only knows about the "path" key that any PlannerMethodBase-derived plugin is expected to produce, not about any specific planner's internals.</p>
+<p>An empty path is an ERROR only once it has lasted "debounce_duration" seconds: a planner may fail for a single cycle (e.g. with the robot inside the inflated zone) and plan again at once. </p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a6368ee411db9f637bbd834de2c33d1bc" name="a6368ee411db9f637bbd834de2c33d1bc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6368ee411db9f637bbd834de2c33d1bc">&#9670;&#160;</a></span>NoPathEvaluator()</h2>

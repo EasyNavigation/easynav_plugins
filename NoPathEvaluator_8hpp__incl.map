@@ -1,11 +1,15 @@
 <map id="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/evaluators/NoPathEvaluator.hpp" name="recoveries/easynav_diagnostic_recovery/include/easynav_diagnostic_recovery/evaluators/NoPathEvaluator.hpp">
-<area shape="rect" id="Node000001" title="Declaration of the NoPathEvaluator plugin." alt="" coords="127,5,395,76"/>
-<area shape="rect" id="Node000002" href="$RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="166,124,356,180"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="264,76,264,108,258,108,258,76"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,228,157,268"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="210,183,133,222,131,218,208,178"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="180,228,342,268"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="264,180,264,212,258,212,258,180"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="365,235,568,261"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="321,178,427,226,425,231,319,183"/>
+<area shape="rect" id="Node000001" title="Declaration of the NoPathEvaluator plugin." alt="" coords="17,5,284,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,139,72,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,78,63,130,59,126,113,74"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="96,139,205,165"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,76,153,123,148,123,148,76"/>
+<area shape="rect" id="Node000004" href="$RecoveryEvaluatorBase_8hpp.html" title="Declaration of the abstract base class RecoveryEvaluatorBase." alt="" coords="229,124,418,180"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="207,74,269,113,266,118,204,79"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="68,228,220,268"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="273,183,196,222,194,218,271,178"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="243,228,404,268"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="326,180,326,212,321,212,321,180"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="428,235,630,261"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="384,178,490,226,488,231,382,183"/>
 </map>

@@ -144,6 +144,8 @@ Collaboration diagram for CostmapPlannerTest:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a4d21ccc22009dc3efa5af724fabea986" id="r_a4d21ccc22009dc3efa5af724fabea986"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4d21ccc22009dc3efa5af724fabea986">block</a> (double x0, double y0, double x1, double y1)</td></tr>
+<tr class="memitem:a0a522fc43dc7b97f022db1d2f1f97e52" id="r_a0a522fc43dc7b97f022db1d2f1f97e52"><td class="memItemLeft">unsigned char&#160;</td><td class="memItemRight"><a class="el" href="#a0a522fc43dc7b97f022db1d2f1f97e52">cost_at</a> (const geometry_msgs::msg::Pose &amp;pose) const</td></tr>
+<tr class="memitem:a76258faefe07af8759dd59a1dee6b10a" id="r_a76258faefe07af8759dd59a1dee6b10a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a76258faefe07af8759dd59a1dee6b10a">disc</a> (double x, double y, double r, unsigned char cost)</td></tr>
 <tr class="memitem:a467f34d639cbcf27829ccefd70a0c406" id="r_a467f34d639cbcf27829ccefd70a0c406"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a467f34d639cbcf27829ccefd70a0c406">expect_path_clear</a> (const nav_msgs::msg::Path &amp;p) const</td></tr>
 <tr class="memitem:a15df632ab3876f7f21f0cee208b41759" id="r_a15df632ab3876f7f21f0cee208b41759"><td class="memItemLeft">nav_msgs::msg::Path&#160;</td><td class="memItemRight"><a class="el" href="#a15df632ab3876f7f21f0cee208b41759">path</a> () const</td></tr>
 <tr class="memitem:a423c0e668f41bd9906d14e8762aaa85d" id="r_a423c0e668f41bd9906d14e8762aaa85d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a423c0e668f41bd9906d14e8762aaa85d">set_cell</a> (double x, double y, unsigned char cost)</td></tr>
@@ -193,6 +195,70 @@ Static Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y1</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a522fc43dc7b97f022db1d2f1f97e52" name="a0a522fc43dc7b97f022db1d2f1f97e52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a522fc43dc7b97f022db1d2f1f97e52">&#9670;&#160;</a></span>cost_at()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char cost_at </td>
+          <td>(</td>
+          <td class="paramtype">const geometry_msgs::msg::Pose &amp;</td>          <td class="paramname"><span class="paramname"><em>pose</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a76258faefe07af8759dd59a1dee6b10a" name="a76258faefe07af8759dd59a1dee6b10a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76258faefe07af8759dd59a1dee6b10a">&#9670;&#160;</a></span>disc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void disc </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>y</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>r</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char</td>          <td class="paramname"><span class="paramname"><em>cost</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

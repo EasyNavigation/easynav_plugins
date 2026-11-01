@@ -185,6 +185,9 @@ Parameters</h1>
 <td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.continuous_replan</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">true</span>  </td><td class="markdownTableBodyNone">If <span class="tt">true</span>, re-plans continuously as the map/goal changes; if <span class="tt">false</span>, plans once per request.  </td></tr>
 </table>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md269"></a>
+Cells it plans through</h2>
+<p>Cells at or above <span class="tt">INSCRIBED_INFLATED_OBSTACLE</span> (253: in collision, lethal or unknown) are never part of a path, except to leave the inflated zone: when the robot is already inside it (e.g. after cutting a corner), the inscribed cells within its inscribed radius (<span class="tt">robot_geometry.inscribed_radius</span>) are traversable, so the path leads out instead of being empty. Lethal and unknown cells never are.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md270"></a>
 Effect of <span class="tt">cost_factor</span></h2>
 <p>The planner uses a per-step traversal cost:</p>
 <p>$$ g_{\text{new}} = g_{\text{current}} + \text{step_cost} \cdot \left(1 + \text{cost_factor} \cdot \frac{\text{cell_cost}}{\text{LETHAL_OBSTACLE}}\right) $$</p>
@@ -200,7 +203,7 @@ Effect of <span class="tt">cost_factor</span></h2>
 </ul>
 </li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md270"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md271"></a>
 Effect of <span class="tt">heuristic_scale</span></h2>
 <p>The A* priority is:</p>
 <p>$$ f = g + h, \quad h = \text{heuristic_scale} \cdot d_{\text{cells}}(\text{current}, \text{goal}) $$</p>
@@ -232,9 +235,9 @@ Effect of <span class="tt">heuristic_scale</span></h2>
 </li>
 </ul>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md272"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md273"></a>
 Interfaces (Topics and Services)</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md273"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md274"></a>
 Publications</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -244,7 +247,7 @@ Publications</h2>
 </table>
 <p>This plugin does not create subscriptions or services directly; it reads inputs via NavState.</p>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md275"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md276"></a>
 NavState Keys</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -259,7 +262,7 @@ NavState Keys</h1>
 <td class="markdownTableBodyNone"><span class="tt">path</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Path</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">Output path to follow.  </td></tr>
 </table>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md277"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md278"></a>
 TF Frames</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -268,7 +271,7 @@ TF Frames</h1>
 <td class="markdownTableBodyNone">Reads  </td><td class="markdownTableBodyNone"><span class="tt">map -&gt; base_footprint</span>  </td><td class="markdownTableBodyNone">Requires consistent frames between the costmap and the published path.  </td></tr>
 </table>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md279"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md280"></a>
 License</h1>
 <p>Apache-2.0 </p>
 </div></div><!-- contents -->
