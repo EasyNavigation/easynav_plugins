@@ -38,6 +38,10 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.heuristic_scale` | `double` | `1.0` | Scaling factor applied to the A* heuristic term. Controls the trade-off between following the cheapest route vs. going more directly. |
 | `<plugin>.continuous_replan` | `bool` | `true` | If `true`, re-plans continuously as the map/goal changes; if `false`, plans once per request. |
 
+### Cells it plans through
+
+Cells at or above `INSCRIBED_INFLATED_OBSTACLE` (253: in collision, lethal or unknown) are never part of a path, except to leave the inflated zone: when the robot is already inside it (e.g. after cutting a corner), the inscribed cells within its inscribed radius (`robot_geometry.inscribed_radius`) are traversable, so the path leads out instead of being empty. Lethal and unknown cells never are.
+
 ### Effect of `cost_factor`
 
 The planner uses a per-step traversal cost:

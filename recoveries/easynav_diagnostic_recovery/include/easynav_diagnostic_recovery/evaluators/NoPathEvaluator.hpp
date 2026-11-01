@@ -18,6 +18,10 @@
 #ifndef EASYNAV_DIAGNOSTIC_RECOVERY__EVALUATORS__NOPATHEVALUATOR_HPP_
 #define EASYNAV_DIAGNOSTIC_RECOVERY__EVALUATORS__NOPATHEVALUATOR_HPP_
 
+#include <optional>
+
+#include "rclcpp/time.hpp"
+
 #include "easynav_diagnostic_recovery/RecoveryEvaluatorBase.hpp"
 
 namespace easynav
@@ -30,6 +34,9 @@ namespace easynav
  * A generic, domain-agnostic evaluator: it only knows about the "path" key that any
  * PlannerMethodBase-derived plugin is expected to produce, not about any specific planner's
  * internals.
+ *
+ * An empty path is an ERROR only once it has lasted "debounce_duration" seconds: a planner may
+ * fail for a single cycle (e.g. with the robot inside the inflated zone) and plan again at once.
  */
 class NoPathEvaluator : public easynav_diagnostic_recovery::RecoveryEvaluatorBase
 {
@@ -41,6 +48,13 @@ public:
 
 protected:
   void update(NavState & nav_state) override;
+
+private:
+  /// @brief Seconds the path must stay empty before it is an ERROR.
+  double debounce_duration_ {1.0};
+
+  /// @brief Since when the path has been empty, with an active goal.
+  std::optional<rclcpp::Time> empty_since_;
 };
 
 }  // namespace easynav

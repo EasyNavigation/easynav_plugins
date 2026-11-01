@@ -20,11 +20,18 @@
 
 #include "easynav_diagnostic_recovery/evaluators/NoPathEvaluator.hpp"
 
+#include "easynav_common/Parameters.hpp"
+
 namespace easynav
 {
 
 void NoPathEvaluator::on_initialize()
 {
+  auto node = get_node();
+  const auto & plugin_name = get_plugin_name();
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".debounce_duration", debounce_duration_);
+  node->get_parameter<double>(plugin_name + ".debounce_duration", debounce_duration_);
 }
 
 void NoPathEvaluator::update(NavState & nav_state)
@@ -39,6 +46,12 @@ void NoPathEvaluator::update(NavState & nav_state)
   const bool has_active_goal = nav_state.has("goals") &&
     !nav_state.get<nav_msgs::msg::Goals>("goals").goals.empty();
 
+  if (!has_active_goal || !nav_state.has("path") ||
+    !nav_state.get<nav_msgs::msg::Path>("path").poses.empty())
+  {
+    empty_since_.reset();
+  }
+
   if (!has_active_goal) {
     status.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
     status.message = "no active goal";
@@ -51,8 +64,17 @@ void NoPathEvaluator::update(NavState & nav_state)
     // own get()/get_safe() guidance in NavState.hpp).
     const auto & path = nav_state.get<nav_msgs::msg::Path>("path");
     if (path.poses.empty()) {
-      status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
-      status.message = "planner produced an empty path";
+      if (!empty_since_.has_value()) {
+        empty_since_ = get_node()->now();
+      }
+      if ((get_node()->now() - *empty_since_).seconds() < debounce_duration_) {
+        // A planner may fail for one cycle and plan again at once: not an error yet
+        status.level = diagnostic_msgs::msg::DiagnosticStatus::WARN;
+        status.message = "empty path, confirming";
+      } else {
+        status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
+        status.message = "planner produced an empty path";
+      }
     } else {
       status.level = diagnostic_msgs::msg::DiagnosticStatus::OK;
       status.message = "path available";
