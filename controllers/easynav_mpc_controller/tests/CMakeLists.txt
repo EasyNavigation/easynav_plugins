@@ -22,8 +22,17 @@ target_link_libraries(mpc_controller_legacy_params_file_tests easynav_controller
 target_compile_definitions(mpc_controller_legacy_params_file_tests
   PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data")
 
-ament_add_gtest(mpc_controller_collision_checker_tests mpc_controller_collision_checker_tests.cpp)
-target_link_libraries(mpc_controller_collision_checker_tests ${PROJECT_NAME})
+ament_add_gtest(mpc_controller_params_tests mpc_controller_params_tests.cpp)
+target_link_libraries(mpc_controller_params_tests ${PROJECT_NAME})
+
+ament_add_gtest(mpc_core_tests mpc_core_tests.cpp)
+target_link_libraries(mpc_core_tests ${PROJECT_NAME})
+
+ament_add_gtest(mpc_scenarios_tests mpc_scenarios_tests.cpp TIMEOUT 300)
+target_link_libraries(mpc_scenarios_tests
+  ${PROJECT_NAME}
+  easynav_controller::easynav_controller
+)
 
 ament_add_gtest(mpc_controller_min_height_tests mpc_controller_min_height_tests.cpp)
 target_link_libraries(mpc_controller_min_height_tests ${PROJECT_NAME})

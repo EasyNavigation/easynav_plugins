@@ -31,6 +31,7 @@
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
 #include "sensor_msgs/point_cloud2_iterator.hpp"
+#include "geometry_msgs/msg/transform_stamped.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_common/types/NavState.hpp"
@@ -62,7 +63,7 @@ protected:
 
   // Runs one MPC cycle with three obstacle points, at heights 0.05, 0.08 and 0.20 m and
   // x = -0.5, -1.0, -1.5 (inside the MPC's detection box), and returns the x of the points
-  // published on /mpc/detection (the obstacles the MPC takes into account).
+  // published on <node>/mpc/obstacles (the obstacles the MPC takes into account).
   static std::set<double> detected(double min_height_param, double * min_height = nullptr)
   {
     static int count = 0;
@@ -79,11 +80,19 @@ protected:
     node->configure();
     node->activate();
 
+    // The robot at the map's origin: points are filtered by height in its frame
+    geometry_msgs::msg::TransformStamped tf;
+    tf.header.frame_id = easynav::RTTFBuffer::getInstance()->get_tf_info().map_frame;
+    tf.child_frame_id = easynav::RTTFBuffer::getInstance()->get_tf_info().robot_frame;
+    tf.transform.rotation.w = 1.0;
+    easynav::RTTFBuffer::getInstance()->setTransform(tf, "mpc_min_height_test", true);
+
+    const std::string topic = "/controller_node_" + suffix + "/mpc/obstacles";
     std::set<double> xs;
     bool received = false;
     auto listener = rclcpp::Node::make_shared("detection_listener_" + suffix);
     auto sub = listener->create_subscription<sensor_msgs::msg::PointCloud2>(
-      "/mpc/detection", 10, [&](sensor_msgs::msg::PointCloud2::SharedPtr cloud) {
+      topic, 10, [&](sensor_msgs::msg::PointCloud2::SharedPtr cloud) {
         if (cloud->width * cloud->height > 0) {
           for (sensor_msgs::PointCloud2ConstIterator<float> it(*cloud, "x"); it != it.end(); ++it) {
             xs.insert(std::round(*it * 10.0) / 10.0);
@@ -122,7 +131,7 @@ protected:
     executor.add_node(listener);
     // Discovery: wait until the listener is matched with the detection publisher
     const auto deadline = std::chrono::steady_clock::now() + 5s;
-    while (listener->count_publishers("/mpc/detection") == 0 &&
+    while (listener->count_publishers(topic) == 0 &&
       std::chrono::steady_clock::now() < deadline)
     {
       executor.spin_some();
@@ -134,7 +143,7 @@ protected:
       executor.spin_some();
       std::this_thread::sleep_for(10ms);
     }
-    EXPECT_TRUE(received) << "no /mpc/detection message";
+    EXPECT_TRUE(received) << "no " << topic << " message";
     return xs;
   }
 };
