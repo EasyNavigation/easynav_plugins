@@ -16,360 +16,496 @@
 /// \file
 /// \brief Implementation of the MPCController class.
 
-#include <nlopt.hpp>
+#include "easynav_mpc_controller/MPCController.hpp"
+
+#include <algorithm>
+#include <cmath>
+#include <string>
+#include <vector>
+
+#include "nav_msgs/msg/odometry.hpp"
+#include "pcl_conversions/pcl_conversions.h"
 
 #include "easynav_common/Parameters.hpp"
-#include "easynav_mpc_controller/MPCController.hpp"
-#include "easynav_system/GoalManager.hpp"
-
 #include "easynav_common/RTTFBuffer.hpp"
+#include "easynav_sensors/types/PointPerception.hpp"
+#include "easynav_system/GoalManager.hpp"
 
 namespace easynav
 {
 
-MPCController::MPCController() {}
+namespace
+{
 
-MPCController::~MPCController() = default;
+const char * status_name(mpc::QPStatus status)
+{
+  switch (status) {
+    case mpc::QPStatus::Solved: return "solved";
+    case mpc::QPStatus::Inaccurate: return "inaccurate";
+    case mpc::QPStatus::Infeasible: return "infeasible";
+    default: return "failed";
+  }
+}
+
+double yaw_of(const geometry_msgs::msg::Quaternion & q)
+{
+  return std::atan2(2.0 * (q.w * q.z + q.x * q.y), 1.0 - 2.0 * (q.y * q.y + q.z * q.z));
+}
+
+}  // namespace
 
 void
 MPCController::on_initialize()
 {
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
+  const auto & overrides = node->get_node_parameters_interface()->get_parameter_overrides();
+  auto param = [&](const std::string & name, auto & value) {
+      using T = std::decay_t<decltype(value)>;
+      easynav::declare_parameter_if_absent<T>(*node, plugin_name + "." + name, value);
+      node->get_parameter<T>(plugin_name + "." + name, value);
+    };
+  auto given = [&](const std::string & name) {
+      return overrides.count(plugin_name + "." + name) > 0;
+    };
 
-  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".horizon_steps", horizon_steps_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
-  easynav::declare_parameter_if_absent<double>(
-    *node, plugin_name + ".safety_radius",
-    safety_radius_);
-  easynav::declare_parameter_if_absent<bool>(*node, plugin_name + ".verbose", verbose_);
-  easynav::declare_parameter_if_absent<bool>(
-    *node, plugin_name + ".use_collision_checker", use_collision_checker_);
-  easynav::declare_parameter_if_absent<double>(
-    *node, plugin_name + ".fallback_goal_pos_tol",
-    fallback_goal_pos_tol_);
-  easynav::declare_parameter_if_absent<double>(
-    *node, plugin_name + ".fallback_goal_yaw_tol",
-    fallback_goal_yaw_tol_);
-
-  node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
-  node->get_parameter<double>(plugin_name + ".dt", dt_);
-  node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-  // Velocity limits: the robot's (controller_node "robot_limits.*").
-  const auto limits = get_robot_limits(
-    {"max_linear_velocity", "", "max_angular_velocity", "", "", "", ""});
-  max_lin_vel_ = limits.max_linear_vel;
-  max_ang_vel_ = limits.max_angular_vel;
-  node->get_parameter<bool>(plugin_name + ".verbose", verbose_);
-  node->get_parameter<bool>(plugin_name + ".use_collision_checker", use_collision_checker_);
-
-  node->get_parameter<double>(plugin_name + ".fallback_goal_pos_tol", fallback_goal_pos_tol_);
-  node->get_parameter<double>(plugin_name + ".fallback_goal_yaw_tol", fallback_goal_yaw_tol_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
-  node->get_parameter<double>(plugin_name + ".min_height", min_height_);
-
-  optimizer_ = std::make_unique<MPCOptimizer>();
-
-  mpc_path_pub_ =
-    node->create_publisher<nav_msgs::msg::Path>("/mpc/path", 10);
-
-  detection_pub_ =
-    node->create_publisher<sensor_msgs::msg::PointCloud2>("/mpc/detection", 10);
-}
-
-void
-MPCController::publish_mpc_path(
-  void * data, const std::vector<double> & best_vel,
-  nav_msgs::msg::Path path)
-{
-  MPCParameters * params = reinterpret_cast<MPCParameters *>(data);
-  nav_msgs::msg::Path mpc_path_;
-
-  if (best_vel.size() > 0) {
-    mpc_path_.header.stamp = get_node()->now();
-    mpc_path_.header.frame_id = path.header.frame_id;
-    for (size_t i = 0; i + 1 < best_vel.size(); i += 2) {
-      geometry_msgs::msg::PoseStamped pose_stamped;
-      double v = best_vel[i];
-      double w = best_vel[i + 1];
-      pose_stamped.header.frame_id = path.header.frame_id;
-      pose_stamped.header.stamp = path.header.stamp;
-      auto state = optimizer_->kinematic_model(params->x0, params->theta0, v, w, dt_);
-      pose_stamped.pose.position.x = state[0];
-      pose_stamped.pose.position.y = state[1];
-      mpc_path_.poses.push_back(pose_stamped);
-    }
-    mpc_path_pub_->publish(mpc_path_);
+  std::string motion_model = "diff";
+  param("motion_model", motion_model);
+  if (!mpc::parse_motion_model(motion_model, model_)) {
+    throw std::runtime_error(
+            "[" + plugin_name + "] motion_model '" + motion_model +
+            "' is not diff, omni, ackermann or aerial");
   }
-}
+  layout_ = mpc::ModelLayout(model_);
 
-void
-MPCController::collision_checker(void * data, std::vector<double> & u)
-{
-  MPCParameters * params = reinterpret_cast<MPCParameters *>(data);
-  double x_m = 0.0, y_m = 0.0, dist = 0.0, angle = 0.0;
-  size_t real_points = 0;
-  for (const auto & point : params->points) {
-    if (!std::isnan(point.x) || !std::isnan(point.y)) {
-      x_m += (point.x - params->x0[0]);
-      y_m += (point.y - params->x0[1]);
-      real_points++;
-    }
+  mpc::MPCParams p;
+  p.model = model_;
+  param("horizon_steps", p.horizon_steps);
+  param("dt", p.dt);
+  param("time_constant", p.time_constant);
+  param("weight_xy", p.weight_xy);
+  param("weight_z", p.weight_z);
+  param("weight_yaw", p.weight_yaw);
+  param("terminal_factor", p.terminal_factor);
+  param("near_weight", p.near_weight);
+  param("weight_linear_vel", p.weight_linear_vel);
+  param("weight_angular_vel", p.weight_angular_vel);
+  param("weight_linear_rate", p.weight_linear_rate);
+  param("weight_angular_rate", p.weight_angular_rate);
+  param("obstacle_range", p.obstacle_range);
+  param("obstacles_per_step", p.obstacles_per_step);
+  param("safety_margin", p.safety_margin);
+  param("max_iterations", p.qp.max_iterations);
+  param("tolerance", p.qp.eps_abs);
+  p.qp.eps_rel = p.qp.eps_abs;
+  param("latency", latency_);
+  param("rotate_to_heading_angle", rotate_to_heading_angle_);
+  param("goal_align_gain", goal_align_gain_);
+  param("min_height", min_height_);
+  param("use_odometry_velocity", use_odometry_velocity_);
+  param("max_lateral_acc", speed_limits_.max_lateral_acc);
+  param("approach_speed", speed_limits_.approach_speed);
+  double curvature_window = 1.0;
+  param("curvature_window", curvature_window);
+  double path_smoothing = -1.0;  // auto: from the turning radius
+  param("path_smoothing", path_smoothing);
+
+  // Deprecated goal tolerances: still read if the new ones are not given
+  if (given("fallback_goal_pos_tol") && !given("xy_goal_tolerance")) {
+    param("fallback_goal_pos_tol", xy_goal_tolerance_);
   }
-  if (real_points != 0) {
-    x_m /= real_points;
-    y_m /= real_points;
-    dist = std::hypot(x_m, y_m);
-    angle = std::atan2(y_m, x_m) - params->theta0[2];
-    if (dist < safety_radius_) {
-      if (!collision_state_) {
-        collision_state_ = true;
-        last_v_ = u[0];
-        last_w_ = u[1];
-      }
+  if (given("fallback_goal_yaw_tol") && !given("yaw_goal_tolerance")) {
+    param("fallback_goal_yaw_tol", yaw_goal_tolerance_);
+  }
+  param("xy_goal_tolerance", xy_goal_tolerance_);
+  param("yaw_goal_tolerance", yaw_goal_tolerance_);
+  for (const char * old : {"fallback_goal_pos_tol", "fallback_goal_yaw_tol"}) {
+    if (given(old)) {
       RCLCPP_WARN(
-        get_node()->get_logger(),
-        "[COLLISION] Collision detected at: [%f] m and Theta: [%f] degrees", dist,
-        (angle * 180.00 / M_PI) );
-      last_v_ = collision_factor_ * last_v_ * safety_radius_ / dist;
-      last_w_ = collision_factor_ * last_w_ * safety_radius_ / dist;
-      u[0] = -last_v_;
-      u[1] = -last_w_;
-    } else {
-      collision_state_ = false;
+        node->get_logger(), "[%s] '%s' is deprecated: use %s", plugin_name.c_str(), old,
+        std::string(old).find("pos") != std::string::npos ? "xy_goal_tolerance" :
+        "yaw_goal_tolerance");
     }
+  }
+  for (const char * removed : {"safety_radius", "use_collision_checker", "verbose"}) {
+    if (given(removed)) {
+      RCLCPP_WARN(
+        node->get_logger(), "[%s] '%s' has no effect any more: remove it (obstacles are "
+        "constraints, with robot_geometry and safety_margin)", plugin_name.c_str(), removed);
+    }
+  }
+
+  if (p.horizon_steps < 1 || p.horizon_steps > 500 || !(p.dt > 0.0) || p.time_constant < 0.0 ||
+    p.obstacles_per_step < 0 || p.qp.max_iterations < 1 || !(p.qp.eps_abs > 0.0) ||
+    !(p.near_weight > 0.0) || p.near_weight > 1.0 ||
+    latency_ < 0.0 || !(curvature_window > 0.0) || !(speed_limits_.max_lateral_acc > 0.0) ||
+    speed_limits_.approach_speed < 0.0)
+  {
+    throw std::runtime_error(
+            "[" + plugin_name + "] invalid parameters: horizon_steps 1-500, dt > 0, "
+            "time_constant >= 0, max_iterations >= 1, tolerance > 0, latency >= 0, "
+            "near_weight in (0, 1], "
+            "curvature_window > 0, max_lateral_acc > 0, approach_speed >= 0");
+  }
+
+  const auto geometry = get_robot_geometry();
+  shape_.radius = geometry.radius;
+  shape_.footprint.clear();
+  for (const auto & v : geometry.footprint) {
+    shape_.footprint.emplace_back(v.x, v.y);
+  }
+  robot_height_ = geometry.height;
+
+  optimizer_.configure(p);
+  reference_ = mpc::Reference(model_);
+  reference_.curvature_window = curvature_window;
+
+  // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
+  apply_limits(
+    get_robot_limits({"max_linear_velocity", "", "max_angular_velocity", "", "", "", ""}));
+  reference_.path_smoothing = path_smoothing >= 0.0 ? path_smoothing :
+    (layout_.holonomic() ? 0.0 : 1.45 * limits_.min_turning_radius);
+  if (model_ == mpc::MotionModel::Ackermann && limits_.min_turning_radius <= 0.0) {
+    RCLCPP_WARN(
+      node->get_logger(), "[%s] motion_model 'ackermann' without "
+      "robot_limits.min_turning_radius: nothing keeps the curvature within the steering",
+      plugin_name.c_str());
+  }
+  if (model_ == mpc::MotionModel::Aerial && limits_.max_vertical_vel <= 0.0) {
+    RCLCPP_WARN(
+      node->get_logger(), "[%s] motion_model 'aerial' with robot_limits.max_vertical_vel 0: "
+      "it will not change height", plugin_name.c_str());
+  }
+
+  velocity_ = Eigen::VectorXd::Zero(layout_.nv);
+  last_cmd_ = Eigen::VectorXd::Zero(layout_.nv);
+  last_update_.reset();
+  aligning_ = rotating_ = false;
+
+  const std::string prefix =
+    node->get_node_base_interface()->get_fully_qualified_name() + std::string("/") + plugin_name;
+  predicted_pub_ = node->create_publisher<nav_msgs::msg::Path>(prefix + "/predicted", 10);
+  reference_pub_ = node->create_publisher<nav_msgs::msg::Path>(prefix + "/reference", 10);
+  obstacles_pub_ = node->create_publisher<sensor_msgs::msg::PointCloud2>(
+    prefix + "/obstacles", 10);
+}
+
+void
+MPCController::apply_limits(const RobotLimits & limits)
+{
+  limits_ = limits;
+  std::vector<mpc::AxisLimits> axes(layout_.nv);
+  axes[0] = {limits.min_linear_vel, limits.max_linear_vel, limits.max_linear_acc,
+    limits.max_linear_decel};
+  if (layout_.vy >= 0) {
+    axes[layout_.vy] = {-limits.max_lateral_vel, limits.max_lateral_vel, limits.max_lateral_acc,
+      limits.max_lateral_decel};
+  }
+  if (layout_.vz >= 0) {
+    axes[layout_.vz] = {-limits.max_vertical_vel, limits.max_vertical_vel,
+      limits.max_vertical_acc, limits.max_vertical_decel};
+  }
+  axes[layout_.wz] = {-limits.max_angular_vel, limits.max_angular_vel, limits.max_angular_acc,
+    limits.max_angular_decel};
+  optimizer_.set_axes(axes, layout_.holonomic() ? 0.0 : limits.min_turning_radius);
+
+  speed_limits_.max_vel = limits.max_linear_vel;
+  speed_limits_.max_vertical_vel = limits.max_vertical_vel;
+  speed_limits_.acc = limits.max_linear_acc;
+  speed_limits_.decel = limits.max_linear_decel;
+  speed_limits_.max_angular_vel = limits.max_angular_vel;
+}
+
+std::vector<Eigen::Vector3d>
+MPCController::obstacle_points(const NavState & nav_state, const Eigen::VectorXd & pose)
+{
+  std::vector<Eigen::Vector3d> out;
+  const auto & perceptions = nav_state.get_no_group<PointPerception>();
+  if (perceptions.empty()) {
+    return out;
+  }
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  const auto & params = optimizer_.params();
+  // As far as the reference looks: the horizon at full speed and the stop after it
+  const double vmax = speed_limits_.max_vel;
+  const double braking = vmax * vmax / (2.0 * std::max(speed_limits_.decel, 1e-3));
+  const double range = std::max(
+    params.obstacle_range, vmax * params.horizon_steps * params.dt + braking + shape_.radius);
+  // Ground robots: what is between the floor and their top; aerial ones: everything around
+  const double z_lo = layout_.aerial() ? -range : min_height_;
+  const double z_hi = layout_.aerial() ? range : robot_height_;
+  const auto & points = PointPerceptionsOpsView(perceptions)
+    .downsample(0.1)
+    .fuse(tf_info.robot_frame)
+    .filter({-range, -range, z_lo}, {range, range, z_hi}, false)
+    .fuse(tf_info.map_frame)
+    .downsample(0.2)
+    .as_points();
+  constexpr double kSelfMargin = 0.1;  // sensor noise around the robot's own body (m)
+  const Eigen::Vector3d position(pose(0), pose(1), layout_.aerial() ? pose(2) : 0.0);
+  const double c = std::cos(pose(layout_.yaw)), s = std::sin(pose(layout_.yaw));
+  pcl::PointCloud<pcl::PointXYZ> kept;
+  out.reserve(points.size());
+  for (const auto & pt : points) {
+    if (!std::isfinite(pt.x) || !std::isfinite(pt.y) || !std::isfinite(pt.z)) {
+      continue;
+    }
+    const Eigen::Vector3d d = Eigen::Vector3d(pt.x, pt.y, pt.z) - position;
+    const bool own_body = layout_.aerial() ?
+      d.norm() <= shape_.radius + kSelfMargin :
+      shape_.contains(Eigen::Vector2d(c * d.x() + s * d.y(), -s * d.x() + c * d.y()), kSelfMargin);
+    if (own_body) {
+      continue;
+    }
+    out.emplace_back(pt.x, pt.y, pt.z);
+    kept.push_back(pt);
+  }
+  if (obstacles_pub_->get_subscription_count() > 0) {
+    sensor_msgs::msg::PointCloud2 cloud;
+    if (!kept.empty()) {
+      pcl::toROSMsg(kept, cloud);
+    } else {
+      cloud.height = 1;  // toROSMsg() indexes the data of an empty cloud
+    }
+    cloud.header.frame_id = tf_info.map_frame;
+    cloud.header.stamp = get_node()->now();
+    obstacles_pub_->publish(cloud);
+  }
+  return out;
+}
+
+void
+MPCController::publish_command(NavState & nav_state, const Eigen::VectorXd & v)
+{
+  cmd_vel_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().robot_frame;
+  cmd_vel_.header.stamp = get_node()->now();
+  cmd_vel_.twist = geometry_msgs::msg::Twist();
+  cmd_vel_.twist.linear.x = v(0);
+  if (layout_.vy >= 0) {cmd_vel_.twist.linear.y = v(layout_.vy);}
+  if (layout_.vz >= 0) {cmd_vel_.twist.linear.z = v(layout_.vz);}
+  cmd_vel_.twist.angular.z = v(layout_.wz);
+  nav_state.set("cmd_vel", cmd_vel_);
+  last_cmd_ = v;
+}
+
+void
+MPCController::stop(NavState & nav_state)
+{
+  optimizer_.reset();
+  aligning_ = rotating_ = false;
+  publish_command(nav_state, Eigen::VectorXd::Zero(layout_.nv));
+}
+
+Eigen::VectorXd
+MPCController::braking(double dt) const
+{
+  const auto & axes = optimizer_.params().axes;
+  Eigen::VectorXd v = velocity_;
+  for (int j = 0; j < layout_.nv; ++j) {
+    const double step = axes[j].decel * dt;
+    v(j) = v(j) > 0.0 ? std::max(0.0, v(j) - step) : std::min(0.0, v(j) + step);
+  }
+  return v;
+}
+
+void
+MPCController::publish_paths(
+  const std::vector<Eigen::VectorXd> & predicted, const std::vector<Eigen::VectorXd> & reference,
+  const std::string & frame)
+{
+  auto to_path = [&](const std::vector<Eigen::VectorXd> & poses) {
+      nav_msgs::msg::Path path;
+      path.header.frame_id = frame;
+      path.header.stamp = get_node()->now();
+      for (const auto & p : poses) {
+        geometry_msgs::msg::PoseStamped ps;
+        ps.header = path.header;
+        ps.pose.position.x = p(0);
+        ps.pose.position.y = p(1);
+        if (layout_.aerial()) {ps.pose.position.z = p(2);}
+        ps.pose.orientation.z = std::sin(0.5 * p(layout_.yaw));
+        ps.pose.orientation.w = std::cos(0.5 * p(layout_.yaw));
+        path.poses.push_back(ps);
+      }
+      return path;
+    };
+  if (predicted_pub_->get_subscription_count() > 0) {
+    predicted_pub_->publish(to_path(predicted));
+  }
+  if (reference_pub_->get_subscription_count() > 0) {
+    reference_pub_->publish(to_path(reference));
   }
 }
 
 void
 MPCController::update_rt(NavState & nav_state)
 {
-  // If navigation is IDLE, force zero velocity
-  if (nav_state.has("navigation_state")) {
-    const auto nav_state_val = nav_state.get_safe<easynav::GoalManager::State>("navigation_state");
-    if (nav_state_val == easynav::GoalManager::State::IDLE) {
-      cmd_vel_.header.stamp = get_node()->now();
-      cmd_vel_.twist.linear.x = 0.0;
-      cmd_vel_.twist.angular.z = 0.0;
-      nav_state.set("cmd_vel", cmd_vel_);
-      return;
-    }
+  const auto now = get_node()->now();
+  const auto & params = optimizer_.params();
+  double elapsed = params.dt;
+  if (last_update_ && last_update_->get_clock_type() == now.get_clock_type()) {
+    elapsed = std::clamp((now - *last_update_).seconds(), 0.0, 0.5);
   }
+  last_update_ = now;
 
-  const auto & perceptions = nav_state.get_no_group<PointPerception>();
-
-  if (!nav_state.has("path") || !nav_state.has("robot_pose") || perceptions.empty()) {
-    if (verbose_) {
-      std::cout << "No Path, No Points or No Robot Pose" << std::endl;
-    }
-    return;
-  }
-
-  nav_msgs::msg::Path path = nav_state.get_safe<nav_msgs::msg::Path>("path");
-  if (path.poses.empty()) {
-    // If the path is empty, stop the robot
-    cmd_vel_.header.frame_id = path.header.frame_id;
-    cmd_vel_.header.stamp = get_node()->now();
-    cmd_vel_.twist.linear.x = 0.0;
-    cmd_vel_.twist.angular.z = 0.0;
-    nav_state.set("cmd_vel", cmd_vel_);
-    return;
-  }
-
-  // Build a local path that:
-  // 1) keeps only the segment that brings the robot closer to the goal, and
-  // 2) prepends a short straight segment from the robot pose to that segment.
-  const auto & robot_pose_msg = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
-  const auto & robot_p = robot_pose_msg.pose.pose.position;
-
-  // Goal is the last point of the planner path
-  const auto & goal_p = path.poses.back().pose.position;
-
-  nav_msgs::msg::Path local_path;
-  local_path.header = path.header;
-  local_path.poses.clear();
-
-  // 1) Find the first index that actually brings us closer to the goal than our current pose
-  const double d_robot_goal = std::hypot(goal_p.x - robot_p.x, goal_p.y - robot_p.y);
-  std::size_t start_idx = 0;
-  for (std::size_t i = 0; i < path.poses.size(); ++i) {
-    const auto & pi = path.poses[i].pose.position;
-    const double d_pi_goal = std::hypot(goal_p.x - pi.x, goal_p.y - pi.y);
-    if (d_pi_goal <= d_robot_goal) {
-      start_idx = i;
-      break;
-    }
-  }
-
-  // 2) Prepend a point at the robot position to ensure continuity from the current pose
-  geometry_msgs::msg::PoseStamped robot_ps;
-  robot_ps.header = path.header;
-  robot_ps.pose.position = robot_p;
-  robot_ps.pose.orientation = path.poses[start_idx].pose.orientation;
-  local_path.poses.push_back(robot_ps);
-
-  // 3) Copy the remaining points from start_idx to the goal
-  for (std::size_t i = start_idx; i < path.poses.size(); ++i) {
-    local_path.poses.push_back(path.poses[i]);
-  }
-
-  // Use the local path from now on
-  path = local_path;
-
-  int num_elements = path.poses.size();
-  size_t local_horizon;
-  if (num_elements > horizon_steps_) {
-    local_horizon = horizon_steps_;
-  } else {
-    local_horizon = num_elements - 1;
-  }
-  const auto & last_pose = path.poses[local_horizon].pose.position;
-  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
-
-  const auto & filtered = PointPerceptionsOpsView(perceptions)
-    .filter({-2.0, -0.35, -1.0}, {0.0, 0.35, 1.0})
-    .fuse(tf_info.map_frame)
-    .filter({NAN, NAN, min_height_}, {NAN, NAN, NAN})
-    .collapse({NAN, NAN, 0.1})
-    .downsample(0.1)
-    .as_points();
-
-  sensor_msgs::msg::PointCloud2 cloud_out;
-  // pcl::toROSMsg() indexes the data of an empty cloud (undefined behavior)
-  if (!filtered.empty()) {
-    pcl::toROSMsg(filtered, cloud_out);
-  } else {
-    cloud_out.height = 1;
-  }
-  cloud_out.header.frame_id = path.header.frame_id;
-  cloud_out.header.stamp = get_node()->now();
-  detection_pub_->publish(cloud_out);
-
-  const auto pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
-  double roll_, pitch_, yaw_;
-  tf2::Quaternion q(
-    pose.orientation.x,
-    pose.orientation.y,
-    pose.orientation.z,
-    pose.orientation.w);
-  tf2::Matrix3x3 m(q);
-  m.getRPY(roll_, pitch_, yaw_);
-
-  // MPC Code
-  double minf;
-  std::vector<double> u(2 * horizon_steps_, 0.0);
-
-  auto params = MPCParameters(
-    Eigen::Vector2d(static_cast<double>(last_pose.x), static_cast<double>(last_pose.y)),
-    {pose.position.x, pose.position.y, pose.position.z},
-    {roll_, pitch_, yaw_},
-    filtered,
-    static_cast<int>(horizon_steps_),
-    dt_);
-
-  NLoptCallbackData cbdata{optimizer_.get(), &params};
-
-  nlopt::opt opt(nlopt::LN_COBYLA, static_cast<int>(u.size()));
-  opt.set_min_objective(easynav::MPCOptimizer::nlopt_cost_callback, &cbdata);
-
-  std::vector<double> lb(2 * horizon_steps_);
-  std::vector<double> ub(2 * horizon_steps_);
-  for (int k = 0; k < horizon_steps_; k++) {
-    lb[2 * k] = -max_lin_vel_;
-    lb[2 * k + 1] = -max_ang_vel_;
-    ub[2 * k] = max_lin_vel_;
-    ub[2 * k + 1] = max_ang_vel_;
-  }
-  opt.set_lower_bounds(lb);
-  opt.set_upper_bounds(ub);
-  opt.set_xtol_rel(1e-3);
-  opt.set_ftol_rel(1e-3);
-  // opt.set_maxeval(1000);
-
-  try {
-    nlopt::result result = opt.optimize(u, minf);
-    if (verbose_) {
-      if (result > 0) {
-        std::cerr << "Optimization Successful " << std::endl;
-        std::cout << "Result: " << result << std::endl;
-      } else {
-        std::cerr << "Optimization Unsuccessful " << std::endl;
-      }
-    }
-  } catch (std::exception & e) {
-    std::cerr << "Optimization Error: " << e.what() << std::endl;
-  }
-
-  if (use_collision_checker_) {
-    collision_checker(&params, u);
-  }
-
-  // Final alignment phase with hysteresis on distance:
-  // - Enter when dist_to_goal <= 0.5 * pos_tol
-  // - Stay in this phase (even if dist grows slightly) until dist_to_goal > pos_tol
+  if (nav_state.has("navigation_state") &&
+    nav_state.get_safe<GoalManager::State>("navigation_state") == GoalManager::State::IDLE)
   {
-    const auto & goal_pose = path.poses.back().pose;
+    stop(nav_state);
+    return;
+  }
+  if (!nav_state.has("path") || !nav_state.has("robot_pose")) {
+    return;
+  }
+  const auto & path = nav_state.get_safe<nav_msgs::msg::Path>("path");
+  if (path.poses.empty()) {
+    reference_.reset();
+    stop(nav_state);
+    return;
+  }
 
-    double pos_tol = fallback_goal_pos_tol_;
-    double yaw_tol = fallback_goal_yaw_tol_;
-
-    if (nav_state.has("goal_tolerance.position")) {
-      pos_tol = nav_state.get_safe<double>("goal_tolerance.position");
-    }
-    if (nav_state.has("goal_tolerance.yaw")) {
-      yaw_tol = nav_state.get_safe<double>("goal_tolerance.yaw");
-    }
-
-    const double dx_g = goal_pose.position.x - pose.position.x;
-    const double dy_g = goal_pose.position.y - pose.position.y;
-    const double dist_to_goal = std::hypot(dx_g, dy_g);
-
-    const double yaw_goal = std::atan2(
-      2.0 * (goal_pose.orientation.w * goal_pose.orientation.z +
-      goal_pose.orientation.x * goal_pose.orientation.y),
-      1.0 - 2.0 * (goal_pose.orientation.y * goal_pose.orientation.y +
-      goal_pose.orientation.z * goal_pose.orientation.z));
-    double e_theta_goal = std::atan2(std::sin(yaw_ - yaw_goal), std::cos(yaw_ - yaw_goal));
-
-    const double enter_dist = 0.5 * pos_tol;
-
-    // Hysteresis based on distance to goal: start aligning when we are
-    // well inside the goal radius (enter_dist) and keep aligning until
-    // we move clearly outside (dist_to_goal > pos_tol).
-    const bool inside_hysteresis_band = (dist_to_goal <= pos_tol);
-    const bool should_enter_alignment = (dist_to_goal <= enter_dist);
-
-    if ((inside_hysteresis_band && std::fabs(e_theta_goal) > yaw_tol) ||
-      should_enter_alignment)
+  // Limits may change at runtime (e.g. a safely limited speed).
+  if (auto * provider = dynamic_cast<RobotLimitsProvider *>(get_node().get())) {
+    const auto limits = provider->get_robot_limits();
+    if (limits.max_linear_vel != limits_.max_linear_vel ||
+      limits.min_linear_vel != limits_.min_linear_vel ||
+      limits.max_lateral_vel != limits_.max_lateral_vel ||
+      limits.max_vertical_vel != limits_.max_vertical_vel ||
+      limits.max_angular_vel != limits_.max_angular_vel)
     {
-      // Stay in place and rotate towards the goal orientation using a simple P controller
-      const double k_align = 1.0;
-      double vlin = 0.0;
-      double vrot = -k_align * e_theta_goal;
-
-      vrot = std::clamp(vrot, -max_ang_vel_, max_ang_vel_);
-
-      cmd_vel_.header.frame_id = path.header.frame_id;
-      cmd_vel_.header.stamp = get_node()->now();
-      cmd_vel_.twist.linear.x = vlin;
-      cmd_vel_.twist.angular.z = vrot;
-
-      nav_state.set("cmd_vel", cmd_vel_);
-      publish_mpc_path(&params, u, path);
-      return;
+      apply_limits(limits);
     }
   }
 
-  // Publish the computed velocity command
-  cmd_vel_.header.frame_id = path.header.frame_id;
-  cmd_vel_.header.stamp = get_node()->now();
-  cmd_vel_.twist.linear.x = u[0];
-  cmd_vel_.twist.angular.z = u[1];
+  // The robot's state: pose, and velocity (the commands, lagging as the model says, or the
+  // odometry's)
+  const auto & odom = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
+  const auto & pp = odom.pose.pose;
+  Eigen::VectorXd pose(layout_.np);
+  pose(0) = pp.position.x;
+  pose(1) = pp.position.y;
+  if (layout_.aerial()) {pose(2) = pp.position.z;}
+  pose(layout_.yaw) = yaw_of(pp.orientation);
+  if (!pose.allFinite()) {
+    stop(nav_state);
+    return;
+  }
+  if (use_odometry_velocity_) {
+    const auto & t = odom.twist.twist;
+    velocity_(0) = t.linear.x;
+    if (layout_.vy >= 0) {velocity_(layout_.vy) = t.linear.y;}
+    if (layout_.vz >= 0) {velocity_(layout_.vz) = t.linear.z;}
+    velocity_(layout_.wz) = t.angular.z;
+  } else {
+    const double a = params.time_constant > 0.0 ? std::exp(-elapsed / params.time_constant) : 0.0;
+    velocity_ = a * velocity_ + (1.0 - a) * last_cmd_;
+  }
+  if (!velocity_.allFinite()) {
+    velocity_.setZero();
+  }
+  if (latency_ > 0.0) {
+    pose = mpc::step(layout_, pose, velocity_, latency_);  // where the command will act
+  }
 
-  nav_state.set("cmd_vel", cmd_vel_);
+  // At the goal: turn to its heading (if the robot can turn in place), then stop
+  const auto & goal = path.poses.back().pose;
+  double xy_tol = xy_goal_tolerance_, yaw_tol = yaw_goal_tolerance_;
+  if (nav_state.has("goal_tolerance.position")) {
+    xy_tol = std::min(xy_tol, nav_state.get_safe<double>("goal_tolerance.position"));
+  }
+  if (nav_state.has("goal_tolerance.yaw")) {
+    yaw_tol = std::min(yaw_tol, nav_state.get_safe<double>("goal_tolerance.yaw"));
+  }
+  Eigen::Vector3d to_goal(goal.position.x - pose(0), goal.position.y - pose(1), 0.0);
+  if (layout_.aerial()) {to_goal.z() = goal.position.z - pose(2);}
+  const double goal_dist = to_goal.norm();
+  const auto & q = goal.orientation;
+  const bool goal_has_yaw = q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w > 0.5;
+  if (goal_dist <= xy_tol || (aligning_ && goal_dist <= 2.0 * xy_tol)) {
+    const double yaw_error = goal_has_yaw ? mpc::angle_diff(yaw_of(q), pose(layout_.yaw)) : 0;
+    optimizer_.reset();
+    rotating_ = false;
+    if (layout_.turns_in_place() && std::abs(yaw_error) > yaw_tol) {
+      aligning_ = true;
+      Eigen::VectorXd v = Eigen::VectorXd::Zero(layout_.nv);
+      v(layout_.wz) = std::clamp(
+        goal_align_gain_ * yaw_error, -limits_.max_angular_vel, limits_.max_angular_vel);
+      publish_command(nav_state, v);
+    } else {
+      aligning_ = false;
+      publish_command(nav_state, Eigen::VectorXd::Zero(layout_.nv));
+    }
+    return;
+  }
+  aligning_ = false;
+  last_result_ = mpc::MPCResult();
 
-  // Publish the path
-  publish_mpc_path(&params, u, path);
+  reference_.set_path(path);
+  if (reference_.empty()) {
+    stop(nav_state);
+    return;
+  }
+
+  obstacles_.set(obstacle_points(nav_state, pose), layout_.aerial());
+  const double speed = layout_.aerial() ?
+    std::hypot(velocity_(0), velocity_(layout_.vz)) : std::abs(velocity_(0));
+  const Eigen::Vector3d position(pose(0), pose(1), layout_.aerial() ? pose(2) : 0.0);
+  const auto ref = reference_.build(
+    position, pose(layout_.yaw), speed, params.horizon_steps, params.dt, speed_limits_,
+    &obstacles_, shape_, params.safety_margin);
+
+  // A differential robot facing away from the path turns in place first
+  if (model_ == mpc::MotionModel::Diff && !ref.poses.empty()) {
+    const double heading_error = mpc::angle_diff(ref.poses[0](layout_.yaw), pose(layout_.yaw));
+    if ((std::abs(heading_error) > rotate_to_heading_angle_ ||
+      (rotating_ && std::abs(heading_error) > 0.5 * rotate_to_heading_angle_)) &&
+      std::abs(velocity_(0)) < 0.25 * std::max(limits_.max_linear_vel, 0.1))
+    {
+      rotating_ = true;
+      optimizer_.reset();
+      Eigen::VectorXd v = Eigen::VectorXd::Zero(layout_.nv);
+      v(layout_.wz) = std::clamp(
+        goal_align_gain_ * heading_error, -limits_.max_angular_vel, limits_.max_angular_vel);
+      publish_command(nav_state, v);
+      return;
+    }
+  }
+  rotating_ = false;
+
+  mpc::MPCInput input;
+  input.pose = pose;
+  input.velocity = velocity_;
+  input.last_cmd = last_cmd_;
+  input.reference = &ref;
+  input.obstacles = &obstacles_;
+  input.shape = &shape_;
+  last_result_ = optimizer_.compute(input);
+
+  const auto & logger = get_node()->get_logger();
+  auto & clock = *get_node()->get_clock();
+  if (last_result_.status == mpc::QPStatus::Solved ||
+    last_result_.status == mpc::QPStatus::Inaccurate)
+  {
+    publish_command(nav_state, last_result_.cmd);
+  } else {
+    RCLCPP_WARN_THROTTLE(
+      logger, clock, 1000, "[%s] QP %s: braking", get_plugin_name().c_str(),
+      status_name(last_result_.status));
+    publish_command(nav_state, braking(elapsed));
+  }
+  if (last_result_.solve_ms > 1000.0 * params.dt) {
+    RCLCPP_WARN_THROTTLE(
+      logger, clock, 5000, "[%s] the QP took %.1f ms (%d variables, %d constraints)",
+      get_plugin_name().c_str(), last_result_.solve_ms, last_result_.variables,
+      last_result_.constraints);
+  }
+
+  if (predicted_pub_->get_subscription_count() > 0 ||
+    reference_pub_->get_subscription_count() > 0)
+  {
+    publish_paths(
+      last_result_.predicted, ref.poses, RTTFBuffer::getInstance()->get_tf_info().map_frame);
+  }
 }
 
 }  // namespace easynav

@@ -1,4 +1,4 @@
-// Copyright 2025 Intelligent Robotics Lab
+// Copyright 2026 Intelligent Robotics Lab
 //
 // This file is part of the project Easy Navigation (EasyNav in short)
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,120 +13,109 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #pragma once
+/// \file
+/// \brief The MPC's optimization: a quadratic program over the horizon, linearized around the
+/// previous solution, solved once per control cycle.
+
 #ifndef EASYNAV_MPC_CONTROLLER__MPCOPTIMIZER_HPP_
 #define EASYNAV_MPC_CONTROLLER__MPCOPTIMIZER_HPP_
 
 #include <vector>
 
-#include "geometry_msgs/msg/pose.hpp"
-#include "nav_msgs/msg/path.hpp"
-#include "pcl/point_cloud.h"
-#include "pcl/point_types.h"
+#include "Eigen/Core"
+
+#include "easynav_mpc_controller/MotionModel.hpp"
+#include "easynav_mpc_controller/Obstacles.hpp"
+#include "easynav_mpc_controller/QPSolver.hpp"
+#include "easynav_mpc_controller/Reference.hpp"
 
 namespace easynav
 {
-
-/// \brief A MPC parameters class.
-class MPCParameters
+namespace mpc
 {
-public:
-  MPCParameters(
-    Eigen::Vector2d goal,
-    Eigen::Vector3d x0,
-    Eigen::Vector3d theta0,
-    const pcl::PointCloud<pcl::PointXYZ> & points,
-    int N,
-    double dt);
 
-  /// \brief Destructor.
-  ~MPCParameters();
-
-  Eigen::Vector2d goal;                           ///< Goal pose (x,y) to optimizer.
-  Eigen::Vector3d x0;                             ///< Init pos (x,y,z).
-  Eigen::Vector3d theta0;                         ///< Init orientation (roll,pitch,yaw).
-  const pcl::PointCloud<pcl::PointXYZ> & points;  ///< Filtered Point Cloud to detect collisions.
-
-  /// \brief Get the number of horizont steps
-  /// \return integer value of amount of horizont step used in optimization
-  int get_steps();
-
-  /// \brief Get the differential time used by integrator in kinematic model
-  /// \return double value of time in seconds
-  double get_timestep();
-
-  /// \brief Get angular cost used in angle optimization
-  /// \return double value of angular cost
-  double get_angular_tracking_cost();
-
-  /// \brief Get effort cost matrix used in optimization
-  /// \return Eigen::Matrix2d as effort cost matrix
-  Eigen::Matrix2d get_effort_cost();
-
-  /// \brief Get tracking cost matrix used in optimization
-  /// \return Eigen::Matrix2d as tracking cost matrix
-  Eigen::Matrix2d get_tracking_cost();
-
-  /// \brief Get smooth cost matrix used in optimization
-  /// \return Eigen::Matrix2d as smooth cost matrix
-  Eigen::Matrix2d get_smooth_cost();
-
-private:
-  int N_ {5};                                     ///< Horizont Step to optimize.
-  double dt_ {0.1};                               ///< Differential time to integrate.
-  Eigen::Matrix2d Q_ {{4.0, 0.0}, {0.0, 4.0}};    ///< Tracking Cost Matrix
-  Eigen::Matrix2d R_ {{0.1, 0.0}, {0.0, 0.1}};    ///< Effort Cost Matrix
-  Eigen::Matrix2d Rd_ {{0.1, 0.0}, {0.0, 0.1}};   ///< Smooth Cost Matrix
-  double qtheta_ {3.0};                           ///< Angular cost value.
+/// @brief Per velocity component (vx, [vy], [vz], wz): bounds and acceleration limits.
+struct AxisLimits
+{
+  double min {0.0};
+  double max {0.0};
+  double acc {1.0};    ///< Speeding up (/s^2).
+  double decel {1.0};  ///< Slowing down (/s^2).
 };
 
-/// \brief A MPC Optimizer class.
+struct MPCParams
+{
+  MotionModel model {MotionModel::Diff};
+  int horizon_steps {20};
+  double dt {0.1};
+  /// First-order lag of the robot's velocity behind the command (s). 0: it follows at once.
+  double time_constant {0.0};
+
+  double weight_xy {10.0};       ///< Position error (per m^2).
+  double weight_z {10.0};        ///< Height error (aerial).
+  double weight_yaw {2.0};       ///< Heading error (per rad^2).
+  double terminal_factor {5.0};  ///< Weight of the last pose, relative to the others.
+  /// Pose weights grow linearly along the horizon from this factor (first step) to 1: below 1,
+  /// the robot is not pressed to be on the path right now, only further ahead (less weaving).
+  double near_weight {1.0};
+  double weight_linear_vel {0.5};    ///< Linear velocity off the reference.
+  double weight_angular_vel {0.2};   ///< Angular velocity off the reference.
+  double weight_linear_rate {1.0};   ///< Change of the linear command between steps.
+  double weight_angular_rate {1.0};  ///< Change of the angular command between steps.
+
+  std::vector<AxisLimits> axes;  ///< One per velocity component (model's layout).
+  double min_turning_radius {0.0};  ///< |wz| <= vx / radius (and vx >= 0) when > 0.
+
+  double obstacle_range {3.0};    ///< Obstacles farther than this from a pose are ignored (m).
+  int obstacles_per_step {2};     ///< Half-planes per pose, from different directions.
+  double safety_margin {0.1};     ///< Clearance from the robot's shape to obstacles (m).
+
+  QPSettings qp;
+};
+
+struct MPCInput
+{
+  Eigen::VectorXd pose;      ///< Model's pose layout.
+  Eigen::VectorXd velocity;  ///< Robot's velocity now (body frame, model's layout).
+  Eigen::VectorXd last_cmd;  ///< Command sent last cycle (rate cost of the first step).
+  const ReferenceTrajectory * reference {nullptr};
+  const Obstacles * obstacles {nullptr};
+  const RobotShape * shape {nullptr};
+};
+
+struct MPCResult
+{
+  QPStatus status {QPStatus::Failed};
+  Eigen::VectorXd cmd;                    ///< First command (valid if solved).
+  std::vector<Eigen::VectorXd> commands;  ///< All of them.
+  std::vector<Eigen::VectorXd> predicted;  ///< Poses 0..N they lead to.
+  int variables {0};
+  int constraints {0};
+  double solve_ms {0.0};
+};
+
+/// @brief Builds and solves the horizon's QP. The deviations from a nominal trajectory (the
+/// previous solution, shifted one step, rolled out from the robot's state) are the variables:
+/// poses, velocities and commands at every step, tied by the linearized model.
 class MPCOptimizer
 {
 public:
-  MPCOptimizer();
+  void configure(const MPCParams & params);
+  const MPCParams & params() const {return params_;}
+  void set_axes(const std::vector<AxisLimits> & axes, double min_turning_radius);
 
-  /// \brief Destructor.
-  ~MPCOptimizer();
+  MPCResult compute(const MPCInput & input);
 
-  /// \brief Kinematic model for a particle used by optmizer to stimate final position
-  /// \param x Eigen::Vector3d Initial position for robot (x,y,z)
-  /// \param q Eigen::Vector3d Initial angel for robot (roll, pitch , yaw)
-  /// \param v double lineal velocity
-  /// \param w double angular velocity
-  /// \param dt double differential time used for integration
-  /// \return Eigen::Vector3d Final state for robot (x,y,yaw)
-  Eigen::Vector3d kinematic_model(
-    const Eigen::Vector3d & x,
-    const Eigen::Vector3d & q, double v, double w, double dt);
+  /// Forget the previous solution (a new goal, a stop).
+  void reset() {previous_.clear();}
 
-  /// \brief Wrap for real cost function
-  /// \param u std::vector<double> Velocity vector to be optimized
-  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this
-  /// implementation.
-  /// \param data MPCParameter pointer with parameters used by optimizer
-  /// \return double cost value used by nlOpt in internal callback
-  double cost_function(const std::vector<double> & u, [[maybe_unused]]
-    std::vector<double> & grad, void * data);
-
-  /// \brief Real cost function with static propierties
-  /// \param u std::vector<double> Velocity vector to be optimized
-  /// \param grad std::vector<double> gradient values for optimizer. It is NOT used for this
-  /// implementation.
-  /// \param data MPCParameter pointer with parameters used by optimizer
-  /// \return double cost value used by nlOpt in internal callback
-  static double nlopt_cost_callback(
-    const std::vector<double> & x,
-    std::vector<double> & grad, void * data);
+private:
+  MPCParams params_;
+  ModelLayout layout_ {MotionModel::Diff};
+  std::vector<Eigen::VectorXd> previous_;  ///< Commands of the last solution.
 };
 
-/// \brief Struct used as element in callback.
-struct NLoptCallbackData
-{
-  MPCOptimizer * optimizer;                        ///< Pointer to optimizer.
-  MPCParameters * params;                          ///< Pointer to parameter for optimizer.
-};
-
+}  // namespace mpc
 }  // namespace easynav
 
 #endif  // EASYNAV_MPC_CONTROLLER__MPCOPTIMIZER_HPP_
