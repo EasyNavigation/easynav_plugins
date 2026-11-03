@@ -80,7 +80,7 @@ var searchData=
   ['localizationquality_77',['LocalizationQuality',['../classeasynav_1_1LocalizationQuality.html',1,'LocalizationQuality'],['../classeasynav_1_1LocalizationQuality.html#ad36e9677fec133f73dcb82dd19756ded',1,'easynav::LocalizationQuality::LocalizationQuality()']]],
   ['localizationquality_2ecpp_78',['LocalizationQuality.cpp',['../LocalizationQuality_8cpp.html',1,'']]],
   ['localizationquality_2ehpp_79',['LocalizationQuality.hpp',['../LocalizationQuality_8hpp.html',1,'']]],
-  ['localizer_5f_80',['localizer_',['../classFusionClockWaitTest.html#a2c404241ee28ed56b94859f7b5139570',1,'FusionClockWaitTest']]],
+  ['localizer_5f_80',['localizer_',['../classFusionClockWaitTest.html#a2c404241ee28ed56b94859f7b5139570',1,'FusionClockWaitTest::localizer_'],['../classFusionGpsTest.html#a9515471fe9788189586b80f1ad085fa5',1,'FusionGpsTest::localizer_']]],
   ['localizermethodbase_81',['LocalizerMethodBase',['../classLocalizerMethodBase.html',1,'']]],
   ['localizers_82',['📍 Localizers',['../index.html#autotoc_md14',1,'']]],
   ['log_83',['log',['../structeasynav__diagnostic__recovery_1_1MitigationReport.html#ac81e864adfdd61a7c3ed8164f732527b',1,'easynav_diagnostic_recovery::MitigationReport']]],

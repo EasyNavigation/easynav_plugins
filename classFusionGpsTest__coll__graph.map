@@ -1,0 +1,11 @@
+<map id="FusionGpsTest" name="FusionGpsTest">
+<area shape="rect" id="Node000001" title=" " alt="" coords="135,117,246,143"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,53,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="62,45,173,114,170,119,60,49"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="77,13,157,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,50,184,115,179,118,132,53"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="181,5,349,46"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="244,60,201,118,197,115,240,57"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="374,13,450,38"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="383,49,345,73,301,95,236,119,234,114,299,91,342,68,380,45"/>
+</map>

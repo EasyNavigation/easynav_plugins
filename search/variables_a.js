@@ -53,7 +53,7 @@ var searchData=
   ['link_5ftype_5fok_5f_50',['link_type_ok_',['../classeasynav_1_1navmap_1_1AStarPlanner.html#a9379a3269b36f9880a7746081c5a6f27',1,'easynav::navmap::AStarPlanner']]],
   ['listener_5f_51',['listener_',['../classRegulatedPpFaultyPlannerTest.html#aca406e9a7ce3a65d6092decdb6e9ab91',1,'RegulatedPpFaultyPlannerTest']]],
   ['local_5ffilter_5f_52',['local_filter_',['../classrobot__localization_1_1UkfWrapper.html#a9be0d2b6e97457bc993c83035f29ab6a',1,'robot_localization::UkfWrapper']]],
-  ['localizer_5f_53',['localizer_',['../classFusionClockWaitTest.html#a2c404241ee28ed56b94859f7b5139570',1,'FusionClockWaitTest']]],
+  ['localizer_5f_53',['localizer_',['../classFusionClockWaitTest.html#a2c404241ee28ed56b94859f7b5139570',1,'FusionClockWaitTest::localizer_'],['../classFusionGpsTest.html#a9515471fe9788189586b80f1ad085fa5',1,'FusionGpsTest::localizer_']]],
   ['log_54',['log',['../structeasynav__diagnostic__recovery_1_1MitigationReport.html#ac81e864adfdd61a7c3ed8164f732527b',1,'easynav_diagnostic_recovery::MitigationReport']]],
   ['log2dim_5f_55',['log2dim_',['../classBonxai_1_1GridBlockAllocator.html#a5765eef43f314366e8a7f8743ff772b3',1,'Bonxai::GridBlockAllocator']]],
   ['look_5fahead_5fdist_5f_56',['look_ahead_dist_',['../classeasynav_1_1SimpleController.html#aafe39db8fdd7f0300e7696422f6247f1',1,'easynav::SimpleController']]],

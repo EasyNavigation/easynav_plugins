@@ -201,6 +201,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a1ea903cf5419f2a27fb61f1b32c58483"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a measurement to the queue of measurements to be processed.  <br /></td></tr>
 <tr class="memitem:a655bf22560c99efc42980878a8924746" id="r_a655bf22560c99efc42980878a8924746"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a655bf22560c99efc42980878a8924746">forceTwoD</a> (Eigen::VectorXd &amp;measurement, Eigen::MatrixXd &amp;measurement_covariance, std::vector&lt; bool &gt; &amp;update_vector)</td></tr>
 <tr class="memdesc:a655bf22560c99efc42980878a8924746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for zeroing out 3D variables within measurements.  <br /></td></tr>
+<tr class="memitem:aa44a8c769ff527d1e16cb36a7fcff76a" id="r_aa44a8c769ff527d1e16cb36a7fcff76a"><td class="memItemLeft">const std::string &amp;&#160;</td><td class="memItemRight"><a class="el" href="#aa44a8c769ff527d1e16cb36a7fcff76a">getBaseLinkFrameId</a> () const</td></tr>
+<tr class="memdesc:aa44a8c769ff527d1e16cb36a7fcff76a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The robot frame the filter estimates (base_link_frame).  <br /></td></tr>
 <tr class="memitem:a15bf2ae81e3e71f2bb7817cd494dc681" id="r_a15bf2ae81e3e71f2bb7817cd494dc681"><td class="memItemLeft">robot_localization::Ukf &amp;&#160;</td><td class="memItemRight"><a class="el" href="#a15bf2ae81e3e71f2bb7817cd494dc681">getFilter</a> ()</td></tr>
 <tr class="memdesc:a15bf2ae81e3e71f2bb7817cd494dc681"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to get filter.  <br /></td></tr>
 <tr class="memitem:a16e2fbe409fb4d4a093154c1e491f857" id="r_a16e2fbe409fb4d4a093154c1e491f857"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a16e2fbe409fb4d4a093154c1e491f857">getFilteredAccelMessage</a> (geometry_msgs::msg::AccelWithCovarianceStamped *message)</td></tr>
@@ -981,6 +983,25 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <p>If we're in 2D mode, then for every measurement from every sensor, we call this. It sets the 3D variables to 0, gives those variables tiny variances, and sets their updateVector values to 1. </p>
+
+</div>
+</div>
+<a id="aa44a8c769ff527d1e16cb36a7fcff76a" name="aa44a8c769ff527d1e16cb36a7fcff76a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa44a8c769ff527d1e16cb36a7fcff76a">&#9670;&#160;</a></span>getBaseLinkFrameId()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string &amp; getBaseLinkFrameId </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The robot frame the filter estimates (base_link_frame). </p>
 
 </div>
 </div>
