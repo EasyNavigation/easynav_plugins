@@ -1,0 +1,5 @@
+<map id="controllers/easynav_mpc_controller/tests/mpc_sim.hpp" name="controllers/easynav_mpc_controller/tests/mpc_sim.hpp">
+<area shape="rect" id="Node000001" title="Closed loop of the MPC with a simulated robot: the controller in a ControllerNode (robot limits),..." alt="" coords="19,5,165,61"/>
+<area shape="rect" id="Node000002" href="$mpc__scenarios__tests_8cpp.html" title="The MPC in closed loop with a simulated robot of each motion model: it reaches the goal along the pat..." alt="" coords="5,109,179,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,77,95,108,89,108,89,77"/>
+</map>

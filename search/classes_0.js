@@ -10,5 +10,6 @@ var searchData=
   ['amclrelocalizemitigation_7',['AmclRelocalizeMitigation',['../classeasynav_1_1AmclRelocalizeMitigation.html',1,'easynav']]],
   ['amclrelocalizemitigationtestcase_8',['AmclRelocalizeMitigationTestCase',['../classAmclRelocalizeMitigationTestCase.html',1,'']]],
   ['astarplanner_9',['AStarPlanner',['../classeasynav_1_1navmap_1_1AStarPlanner.html',1,'easynav::navmap']]],
-  ['astarplannerreconfiguretest_10',['AStarPlannerReconfigureTest',['../classAStarPlannerReconfigureTest.html',1,'']]]
+  ['astarplannerreconfiguretest_10',['AStarPlannerReconfigureTest',['../classAStarPlannerReconfigureTest.html',1,'']]],
+  ['axislimits_11',['AxisLimits',['../structeasynav_1_1mpc_1_1AxisLimits.html',1,'easynav::mpc']]]
 ];

@@ -1,0 +1,27 @@
+<map id="controllers/easynav_mpc_controller/include/easynav_mpc_controller/QPSolver.hpp" name="controllers/easynav_mpc_controller/include/easynav_mpc_controller/QPSolver.hpp">
+<area shape="rect" id="Node000001" title="A quadratic program solved with OSQP (0.6 or 1.0, whichever osqp_vendor brings)." alt="" coords="779,5,944,76"/>
+<area shape="rect" id="Node000002" href="$MPCOptimizer_8hpp.html" title="The MPC&#39;s optimization: a quadratic program over the horizon, linearized around the previous solution..." alt="" coords="589,124,755,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="794,87,730,126,727,121,791,82"/>
+<area shape="rect" id="Node000012" href="$QPSolver_8cpp.html" title=" " alt="" coords="779,124,944,195"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="864,91,864,124,859,124,859,91"/>
+<area shape="rect" id="Node000013" href="$mpc__core__tests_8cpp.html" title="The MPC&#39;s parts: motion models and their linearization, the QP solver, the robot&#39;s shape against obst..." alt="" coords="968,132,1114,187"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="929,82,1001,129,998,133,926,87"/>
+<area shape="rect" id="Node000003" href="$MPCController_8hpp.html" title=" " alt="" coords="495,243,660,313"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="637,208,607,244,603,241,633,205"/>
+<area shape="rect" id="Node000011" href="$MPCOptimizer_8cpp.html" title=" " alt="" coords="684,243,849,313"/>
+<area shape="poly" id="edge10_Node000002_Node000011" title=" " alt="" coords="711,205,741,241,737,244,707,208"/>
+<area shape="rect" id="Node000004" href="$MPCController_8cpp.html" title="Implementation of the MPCController class." alt="" coords="5,361,171,432"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="480,298,339,326,183,364,172,367,170,362,182,359,337,321,479,293"/>
+<area shape="rect" id="Node000005" href="$mpc__controller__min__height__tests_8cpp.html" title="MPCController &quot;min_height&quot;: points below it are floor hits, not obstacles." alt="" coords="195,361,376,432"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="481,321,373,363,371,358,479,316"/>
+<area shape="rect" id="Node000006" href="$mpc__controller__params__tests_8cpp.html" title="MPCController parameters: motion models, validation, deprecated and removed ones, and the topics unde..." alt="" coords="400,361,560,432"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="541,327,511,363,507,359,537,323"/>
+<area shape="rect" id="Node000007" href="$mpc__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="584,361,765,432"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="618,323,648,359,644,363,614,327"/>
+<area shape="rect" id="Node000008" href="$mpc__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="790,361,936,432"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="676,316,790,363,788,368,674,321"/>
+<area shape="rect" id="Node000009" href="$mpc__sim_8hpp.html" title="Closed loop of the MPC with a simulated robot: the controller in a ControllerNode (robot limits),..." alt="" coords="960,369,1106,424"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="675,311,753,327,814,334,874,342,949,359,970,366,969,371,947,364,873,347,813,339,752,332,674,316"/>
+<area shape="rect" id="Node000010" href="$mpc__scenarios__tests_8cpp.html" title="The MPC in closed loop with a simulated robot of each motion model: it reaches the goal along the pat..." alt="" coords="947,480,1120,536"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="1036,440,1036,480,1031,480,1031,440"/>
+</map>

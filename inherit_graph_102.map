@@ -1,0 +1,189 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,2191,53,2216"/>
+<area shape="rect" id="Node000001" href="$classAMCLLocalizerTest.html" title="Fixture for SimpleController tests (minimal)." alt="" coords="157,5,294,31"/>
+<area shape="poly" id="edge76_Node000000_Node000001" title=" " alt="" coords="28,2175,28,1749,35,1047,44,689,56,376,74,148,85,77,99,41,125,21,156,13,158,18,127,26,103,44,91,78,79,148,62,377,49,689,41,1047,33,1749,33,2175"/>
+<area shape="rect" id="Node000002" href="$classAStarPlannerReconfigureTest.html" title=" " alt="" coords="129,55,322,80"/>
+<area shape="poly" id="edge77_Node000000_Node000002" title=" " alt="" coords="28,2175,28,1757,36,1072,45,722,57,417,75,194,86,125,98,90,112,78,128,70,130,74,115,82,103,93,91,127,80,195,62,418,50,723,41,1072,34,1757,33,2175"/>
+<area shape="rect" id="Node000003" href="$classAdvanceRecoveryTestCase.html" title=" " alt="" coords="134,104,316,130"/>
+<area shape="poly" id="edge78_Node000000_Node000003" title=" " alt="" coords="28,2175,29,1767,37,1099,46,758,58,460,75,243,86,175,98,141,114,127,133,118,135,123,117,131,103,144,91,176,81,243,63,460,51,758,42,1099,34,1767,33,2175"/>
+<area shape="rect" id="Node000004" href="$classAmclConvergenceEvaluatorTestCase.html" title=" " alt="" coords="135,154,316,194"/>
+<area shape="poly" id="edge79_Node000000_Node000004" title=" " alt="" coords="28,2175,30,1779,39,1133,48,803,60,515,77,305,87,240,98,206,114,191,133,181,135,186,117,196,103,209,92,241,82,306,65,516,53,803,44,1133,35,1779,33,2175"/>
+<area shape="rect" id="Node000005" href="$classAmclRelocalizeMitigationTestCase.html" title=" " alt="" coords="142,219,308,260"/>
+<area shape="poly" id="edge80_Node000000_Node000005" title=" " alt="" coords="28,2175,30,1790,40,1165,49,846,61,569,77,366,87,302,98,270,118,253,141,243,143,248,121,258,103,273,92,304,82,366,66,569,54,846,45,1165,36,1790,33,2175"/>
+<area shape="rect" id="Node000006" href="$classBonxaiMapsManagerReconfigureTest.html" title=" " alt="" coords="107,284,344,310"/>
+<area shape="poly" id="edge81_Node000000_Node000006" title=" " alt="" coords="28,2175,30,1798,39,1189,48,879,61,609,77,412,87,351,98,319,111,308,114,312,103,322,92,352,82,413,66,609,54,879,45,1189,35,1798,33,2175"/>
+<area shape="rect" id="Node000007" href="$classCancelMissionRecoveryTestCase.html" title=" " alt="" coords="117,333,334,359"/>
+<area shape="poly" id="edge82_Node000000_Node000007" title=" " alt="" coords="28,2175,30,1807,40,1214,49,913,61,650,77,459,87,399,98,369,115,355,119,359,103,372,92,400,83,459,67,651,54,913,46,1215,36,1808,33,2175"/>
+<area shape="rect" id="Node000008" href="$classCollisionSafetyReflexTest.html" title=" " alt="" coords="141,383,310,408"/>
+<area shape="poly" id="edge83_Node000000_Node000008" title=" " alt="" coords="28,2175,31,1817,41,1241,50,948,62,693,78,507,88,449,98,419,118,404,140,395,142,400,120,408,103,422,93,450,83,507,68,693,55,948,46,1241,36,1817,33,2175"/>
+<area shape="rect" id="Node000010" href="$classControllerStuckEvaluatorTestCase.html" title=" " alt="" coords="143,432,308,473"/>
+<area shape="poly" id="edge85_Node000000_Node000010" title=" " alt="" coords="28,2175,32,1829,43,1274,52,992,64,747,79,568,88,512,98,483,118,466,142,456,144,461,121,471,103,486,93,513,84,569,69,747,57,993,48,1274,37,1829,33,2175"/>
+<area shape="rect" id="Node000012" href="$classCostmap2DTest.html" title=" " alt="" coords="168,497,283,523"/>
+<area shape="poly" id="edge87_Node000000_Node000012" title=" " alt="" coords="28,2175,32,1838,43,1299,52,1025,64,788,79,614,88,560,98,533,113,520,130,512,167,504,168,509,132,517,116,524,103,536,93,562,84,615,69,788,57,1026,48,1299,37,1838,33,2175"/>
+<area shape="rect" id="Node000013" href="$classCostmapAMCLMinHeightTest.html" title=" " alt="" coords="128,547,323,572"/>
+<area shape="poly" id="edge88_Node000000_Node000013" title=" " alt="" coords="28,2175,32,1846,43,1323,53,1059,65,829,80,661,88,609,98,582,111,570,126,562,129,567,114,575,103,585,94,610,85,662,70,829,58,1059,49,1323,37,1846,33,2175"/>
+<area shape="rect" id="Node000014" href="$classCostmapAMCLReseedTest.html" title=" " alt="" coords="135,596,316,622"/>
+<area shape="poly" id="edge89_Node000000_Node000014" title=" " alt="" coords="28,2175,32,1855,44,1349,53,1093,65,870,80,708,89,657,98,631,115,618,134,609,136,614,118,622,103,634,94,659,85,708,71,870,59,1093,49,1349,38,1855,33,2175"/>
+<area shape="rect" id="Node000015" href="$classCostmapInflationGeometryTest.html" title=" " alt="" coords="125,645,326,671"/>
+<area shape="poly" id="edge90_Node000000_Node000015" title=" " alt="" coords="28,2175,33,1865,45,1375,54,1127,66,912,81,755,89,706,99,681,123,662,127,667,103,684,94,707,86,755,71,912,60,1127,50,1375,38,1865,33,2175"/>
+<area shape="rect" id="Node000016" href="$classCostmapLocalizerReconfigureTest.html" title=" " alt="" coords="116,695,335,720"/>
+<area shape="poly" id="edge91_Node000000_Node000016" title=" " alt="" coords="28,2175,33,1873,46,1400,55,1160,67,953,81,801,89,754,98,730,114,717,117,721,103,733,94,756,86,802,72,953,60,1161,51,1400,39,1873,33,2175"/>
+<area shape="rect" id="Node000017" href="$classCostmapMapsManagerReconfigureTest.html" title=" " alt="" coords="101,744,350,770"/>
+<area shape="poly" id="edge92_Node000000_Node000017" title=" " alt="" coords="28,2175,34,1883,46,1426,56,1195,68,994,82,848,90,803,98,779,111,768,114,772,103,782,95,804,87,849,73,995,61,1195,52,1426,39,1883,33,2176"/>
+<area shape="rect" id="Node000018" href="$classCostmapMapsManagerTest.html" title="Fixture for CostmapMapsManager tests." alt="" coords="135,793,316,819"/>
+<area shape="poly" id="edge93_Node000000_Node000018" title=" " alt="" coords="28,2175,34,1892,47,1451,68,1035,82,895,90,851,98,829,115,815,133,807,135,811,117,820,103,832,95,853,87,896,74,1036,52,1451,39,1892,33,2175"/>
+<area shape="rect" id="Node000019" href="$classCostmapObstacleFilterTest.html" title=" " alt="" coords="135,843,316,868"/>
+<area shape="poly" id="edge94_Node000000_Node000019" title=" " alt="" coords="28,2175,34,1901,48,1476,69,1077,83,942,90,900,98,878,115,864,134,856,136,861,118,869,103,881,95,901,88,942,74,1077,53,1476,40,1901,34,2175"/>
+<area shape="rect" id="Node000020" href="$classCostmapPlannerReconfigureTest.html" title=" " alt="" coords="120,892,331,918"/>
+<area shape="poly" id="edge95_Node000000_Node000020" title=" " alt="" coords="28,2175,35,1910,49,1501,70,1118,83,988,90,948,99,927,118,912,121,916,103,930,96,950,88,989,75,1118,54,1501,40,1910,34,2175"/>
+<area shape="rect" id="Node000021" href="$classCostmapPlannerTest.html" title=" " alt="" coords="154,941,297,967"/>
+<area shape="poly" id="edge96_Node000000_Node000021" title=" " alt="" coords="28,2175,35,1919,50,1527,71,1161,84,1037,91,998,99,978,123,960,152,951,154,956,126,964,103,981,96,999,89,1037,76,1161,55,1528,41,1919,34,2175"/>
+<area shape="rect" id="Node000022" href="$classDiagnosticRecoveryManagerReflexTest.html" title=" " alt="" coords="132,991,318,1032"/>
+<area shape="poly" id="edge97_Node000000_Node000022" title=" " alt="" coords="27,2175,28,1940,35,1580,43,1396,56,1234,74,1110,85,1068,99,1042,113,1028,131,1019,133,1024,116,1033,103,1045,90,1070,79,1112,61,1235,48,1397,40,1580,33,1940,33,2175"/>
+<area shape="rect" id="Node000023" href="$classDiagnosticRecoveryManagerTest.html" title=" " alt="" coords="119,1056,332,1082"/>
+<area shape="poly" id="edge98_Node000000_Node000023" title=" " alt="" coords="27,2175,28,1948,35,1604,43,1428,56,1274,74,1156,85,1116,99,1091,117,1076,120,1081,103,1095,90,1118,79,1157,61,1274,48,1429,40,1604,33,1948,33,2175"/>
+<area shape="rect" id="Node000024" href="$classFusionClockWaitTest.html" title=" " alt="" coords="153,1105,298,1131"/>
+<area shape="poly" id="edge99_Node000000_Node000024" title=" " alt="" coords="28,2175,28,1957,36,1628,45,1461,57,1314,75,1202,86,1164,99,1140,123,1123,151,1114,153,1119,125,1128,103,1144,91,1166,80,1203,63,1315,50,1462,42,1628,34,1957,33,2175"/>
+<area shape="rect" id="Node000025" href="$classFusionLocalFilterTest.html" title=" " alt="" coords="152,1155,299,1180"/>
+<area shape="poly" id="edge100_Node000000_Node000025" title=" " alt="" coords="28,2175,29,1967,38,1653,46,1495,59,1355,76,1249,86,1212,99,1190,123,1172,151,1164,152,1169,125,1177,103,1193,91,1214,81,1250,64,1356,52,1495,43,1654,35,1967,33,2175"/>
+<area shape="rect" id="Node000026" href="$classFusionLocalizerReconfigureTest.html" title=" " alt="" coords="122,1204,328,1230"/>
+<area shape="poly" id="edge101_Node000000_Node000026" title=" " alt="" coords="28,2175,30,1976,39,1678,48,1528,60,1396,77,1295,87,1260,99,1239,120,1223,123,1227,103,1243,92,1262,82,1296,66,1396,53,1528,45,1678,35,1976,33,2175"/>
+<area shape="rect" id="Node000027" href="$classFusionTerrainTest.html" title=" " alt="" coords="162,1253,288,1279"/>
+<area shape="poly" id="edge102_Node000000_Node000027" title=" " alt="" coords="28,2175,31,1984,41,1703,50,1561,62,1436,78,1341,88,1309,99,1288,112,1277,128,1269,161,1261,162,1266,129,1274,115,1281,103,1292,92,1311,83,1342,67,1437,55,1561,46,1703,36,1984,33,2175"/>
+<area shape="rect" id="Node000028" href="$classHumanAssistanceRecoveryTestCase.html" title=" " alt="" coords="106,1303,344,1328"/>
+<area shape="poly" id="edge103_Node000000_Node000028" title=" " alt="" coords="28,2175,32,1994,42,1728,51,1594,63,1477,79,1387,88,1357,99,1338,111,1327,115,1331,103,1341,93,1359,84,1388,69,1477,57,1595,48,1728,37,1994,33,2175"/>
+<area shape="rect" id="Node000029" href="$classMHAMCLLocalizerReconfigureTest.html" title=" " alt="" coords="113,1352,338,1378"/>
+<area shape="poly" id="edge104_Node000000_Node000029" title=" " alt="" coords="28,2175,33,2003,44,1753,53,1628,65,1517,80,1434,89,1405,99,1387,111,1376,115,1380,103,1391,94,1407,85,1435,70,1518,58,1628,49,1753,38,2003,33,2175"/>
+<area shape="rect" id="Node000030" href="$classMHAMCLMinHeightTest.html" title=" " alt="" coords="143,1401,308,1427"/>
+<area shape="poly" id="edge105_Node000000_Node000030" title=" " alt="" coords="28,2175,33,2012,45,1778,55,1661,66,1558,81,1480,89,1453,99,1436,119,1421,142,1412,144,1417,121,1426,103,1440,94,1455,86,1481,72,1559,60,1661,51,1778,39,2012,34,2175"/>
+<area shape="rect" id="Node000031" href="$classMPCControllerReconfigureTest.html" title=" " alt="" coords="126,1451,325,1476"/>
+<area shape="poly" id="edge106_Node000000_Node000031" title=" " alt="" coords="28,2175,34,2021,47,1803,68,1599,82,1526,90,1501,99,1486,124,1468,127,1472,103,1489,95,1503,87,1527,73,1599,52,1803,40,2022,34,2175"/>
+<area shape="rect" id="Node000032" href="$classMPPIControllerReconfigureTest.html" title=" " alt="" coords="124,1500,327,1526"/>
+<area shape="poly" id="edge107_Node000000_Node000032" title=" " alt="" coords="29,2175,35,2030,49,1828,69,1639,83,1572,90,1549,99,1535,122,1519,125,1523,103,1539,95,1552,88,1574,75,1640,54,1828,41,2031,34,2175"/>
+<area shape="rect" id="Node000033" href="$classMpcLegacyParamsFileTest.html" title=" " alt="" coords="135,1549,316,1575"/>
+<area shape="poly" id="edge108_Node000000_Node000033" title=" " alt="" coords="29,2175,36,2040,50,1853,71,1680,84,1618,99,1585,115,1571,134,1563,136,1568,118,1576,103,1588,89,1620,76,1681,56,1854,42,2040,34,2175"/>
+<area shape="rect" id="Node000034" href="$classMpcMinHeightTest.html" title=" " alt="" coords="160,1599,291,1624"/>
+<area shape="poly" id="edge109_Node000000_Node000034" title=" " alt="" coords="27,2175,27,2059,34,1896,43,1814,55,1738,74,1676,85,1652,99,1634,126,1615,158,1607,160,1612,128,1620,103,1637,90,1655,79,1678,61,1739,48,1814,39,1897,32,2059,32,2175"/>
+<area shape="rect" id="Node000035" href="$classMpcParamsTest.html" title=" " alt="" coords="167,1648,284,1674"/>
+<area shape="poly" id="edge110_Node000000_Node000035" title=" " alt="" coords="27,2175,29,2068,37,1920,46,1845,58,1777,76,1721,86,1700,99,1683,113,1671,130,1663,166,1656,167,1661,132,1668,116,1676,103,1687,91,1702,81,1723,64,1779,51,1846,42,1921,34,2068,33,2175"/>
+<area shape="rect" id="Node000036" href="$classMpcRobotLimitsTest.html" title=" " alt="" coords="154,1697,296,1723"/>
+<area shape="poly" id="edge111_Node000000_Node000036" title=" " alt="" coords="28,2175,31,2076,40,1944,49,1877,62,1816,78,1767,99,1732,124,1715,153,1707,155,1712,126,1720,103,1736,83,1769,67,1818,55,1878,46,1944,36,2077,33,2175"/>
+<area shape="rect" id="Node000037" href="$classMpcScenarios.html" title=" " alt="" coords="173,1747,278,1772"/>
+<area shape="poly" id="edge112_Node000000_Node000037" title=" " alt="" coords="28,2175,33,2085,44,1968,53,1909,65,1856,80,1812,99,1782,115,1769,133,1761,172,1754,173,1759,135,1766,118,1774,103,1785,85,1814,70,1857,58,1910,49,1968,38,2086,34,2175"/>
+<area shape="rect" id="Node000038" href="$classMppiLegacyParamsFileTest.html" title=" " alt="" coords="134,1796,317,1822"/>
+<area shape="poly" id="edge113_Node000000_Node000038" title=" " alt="" coords="29,2175,35,2095,47,1992,68,1895,82,1857,99,1831,115,1819,132,1811,135,1816,117,1824,103,1835,86,1859,73,1897,52,1993,40,2096,34,2175"/>
+<area shape="rect" id="Node000039" href="$classMppiModesTest.html" title=" " alt="" coords="168,1845,282,1871"/>
+<area shape="poly" id="edge114_Node000000_Node000039" title=" " alt="" coords="30,2175,37,2105,51,2017,71,1934,84,1902,99,1880,114,1869,131,1861,168,1854,169,1859,133,1866,117,1873,103,1884,88,1905,76,1936,56,2018,43,2106,35,2176"/>
+<area shape="rect" id="Node000040" href="$classMppiObstaclePointsTest.html" title=" " alt="" coords="143,1895,308,1920"/>
+<area shape="poly" id="edge115_Node000000_Node000040" title=" " alt="" coords="31,2175,54,2042,74,1974,86,1948,99,1930,119,1916,142,1908,144,1913,121,1921,103,1933,90,1950,79,1976,60,2043,36,2176"/>
+<area shape="rect" id="Node000041" href="$classMppiRobotLimitsTest.html" title=" " alt="" coords="153,1944,298,1970"/>
+<area shape="poly" id="edge116_Node000000_Node000041" title=" " alt="" coords="28,2174,32,2131,43,2078,64,2024,79,2000,99,1979,124,1963,151,1955,153,1960,126,1968,102,1983,84,2003,69,2027,48,2080,37,2132,33,2175"/>
+<area shape="rect" id="Node000042" href="$classNavMapMapsManagerReconfigureTest.html" title=" " alt="" coords="102,1993,348,2019"/>
+<area shape="poly" id="edge117_Node000000_Node000042" title=" " alt="" coords="31,2175,38,2140,50,2101,70,2061,99,2028,116,2017,119,2022,102,2032,74,2064,55,2103,43,2142,36,2176"/>
+<area shape="rect" id="Node000043" href="$classNavMapMapsManagerTest.html" title="Fixture for NavMapMapsManager tests." alt="" coords="136,2043,314,2068"/>
+<area shape="poly" id="edge118_Node000000_Node000043" title=" " alt="" coords="36,2174,59,2124,77,2099,99,2077,135,2061,137,2065,102,2082,81,2102,63,2127,41,2177"/>
+<area shape="rect" id="Node000044" href="$classNavMapPlannerTest.html" title=" " alt="" coords="155,2092,296,2118"/>
+<area shape="poly" id="edge119_Node000000_Node000044" title=" " alt="" coords="46,2176,69,2150,99,2127,126,2115,154,2108,155,2113,128,2120,102,2131,73,2153,50,2180"/>
+<area shape="rect" id="Node000045" href="$classNavmapAmclCorrectTest.html" title=" " alt="" coords="141,2141,310,2167"/>
+<area shape="poly" id="edge120_Node000000_Node000045" title=" " alt="" coords="66,2187,100,2176,145,2165,146,2170,101,2181,68,2192"/>
+<area shape="rect" id="Node000046" href="$classNavmapAmclPredictTest.html" title=" " alt="" coords="142,2191,309,2216"/>
+<area shape="poly" id="edge121_Node000000_Node000046" title=" " alt="" coords="69,2201,141,2201,141,2206,69,2206"/>
+<area shape="rect" id="Node000047" href="$classNavmapAmclRecoveryTest.html" title=" " alt="" coords="135,2240,316,2266"/>
+<area shape="poly" id="edge122_Node000000_Node000047" title=" " alt="" coords="68,2215,101,2226,146,2237,145,2242,100,2231,66,2220"/>
+<area shape="rect" id="Node000048" href="$classNavmapAmclSlipTest.html" title=" " alt="" coords="151,2289,300,2315"/>
+<area shape="poly" id="edge123_Node000000_Node000048" title=" " alt="" coords="50,2227,73,2254,102,2276,126,2286,152,2293,150,2298,124,2291,99,2280,69,2257,46,2231"/>
+<area shape="rect" id="Node000049" href="$classNavmapAmclThreadsTest.html" title=" " alt="" coords="139,2339,312,2364"/>
+<area shape="poly" id="edge124_Node000000_Node000049" title=" " alt="" coords="41,2230,63,2280,81,2305,102,2325,140,2342,137,2347,99,2330,77,2308,59,2283,36,2233"/>
+<area shape="rect" id="Node000050" href="$classNavmapInflationFilterTest.html" title=" " alt="" coords="140,2388,310,2414"/>
+<area shape="poly" id="edge125_Node000000_Node000050" title=" " alt="" coords="36,2231,43,2265,55,2304,74,2343,102,2375,120,2386,141,2394,139,2399,118,2391,99,2379,70,2346,50,2306,38,2267,31,2232"/>
+<area shape="rect" id="Node000051" href="$classNavmapInflationGeometryTest.html" title=" " alt="" coords="127,2437,324,2463"/>
+<area shape="poly" id="edge126_Node000000_Node000051" title=" " alt="" coords="33,2232,37,2275,48,2327,69,2380,84,2404,102,2424,128,2439,125,2444,99,2428,79,2407,64,2383,43,2329,32,2276,28,2233"/>
+<area shape="rect" id="Node000052" href="$classNavmapLocalizerReconfigureTest.html" title=" " alt="" coords="117,2487,334,2512"/>
+<area shape="poly" id="edge127_Node000000_Node000052" title=" " alt="" coords="36,2231,60,2364,79,2431,90,2457,103,2474,119,2485,116,2489,99,2477,86,2459,74,2433,54,2365,31,2232"/>
+<area shape="rect" id="Node000053" href="$classNavmapObstacleFilterTest.html" title=" " alt="" coords="137,2536,314,2562"/>
+<area shape="poly" id="edge128_Node000000_Node000053" title=" " alt="" coords="35,2231,43,2301,56,2389,76,2471,88,2502,103,2523,118,2535,137,2542,135,2547,116,2539,99,2527,84,2505,71,2473,51,2390,37,2302,30,2232"/>
+<area shape="rect" id="Node000055" href="$classNoPathEvaluatorTestCase.html" title=" " alt="" coords="138,2585,313,2611"/>
+<area shape="poly" id="edge130_Node000000_Node000055" title=" " alt="" coords="34,2232,40,2311,52,2414,73,2510,86,2548,103,2572,119,2584,138,2592,136,2597,116,2589,99,2576,82,2550,68,2512,47,2415,35,2312,29,2232"/>
+<area shape="rect" id="Node000056" href="$classNoPathWithFaultyPlannerTest.html" title=" " alt="" coords="127,2635,324,2660"/>
+<area shape="poly" id="edge131_Node000000_Node000056" title=" " alt="" coords="34,2232,38,2321,49,2439,58,2497,70,2550,85,2593,103,2622,128,2638,125,2643,99,2625,80,2595,65,2551,53,2498,44,2439,33,2322,28,2232"/>
+<area shape="rect" id="Node000057" href="$classObstacleProximityTest.html" title=" " alt="" coords="149,2684,302,2710"/>
+<area shape="poly" id="edge132_Node000000_Node000057" title=" " alt="" coords="33,2232,36,2330,46,2463,55,2529,67,2589,83,2638,103,2671,124,2686,150,2694,148,2699,122,2691,99,2675,78,2640,62,2591,49,2530,40,2463,31,2331,28,2232"/>
+<area shape="rect" id="Node000058" href="$classObstacleTooCloseEvaluatorTestCase.html" title=" " alt="" coords="134,2734,316,2774"/>
+<area shape="poly" id="edge133_Node000000_Node000058" title=" " alt="" coords="33,2232,35,2340,44,2486,52,2560,65,2628,81,2683,103,2720,117,2733,135,2742,133,2747,114,2737,99,2724,76,2685,60,2629,47,2561,38,2487,29,2340,28,2232"/>
+<area shape="rect" id="Node000059" href="$classRecoveryBasesTestCase.html" title=" " alt="" coords="141,2799,310,2824"/>
+<area shape="poly" id="edge134_Node000000_Node000059" title=" " alt="" coords="35,2232,43,2360,57,2535,77,2697,90,2754,103,2785,120,2798,142,2807,140,2811,118,2803,99,2788,85,2756,72,2698,52,2536,37,2360,29,2232"/>
+<area shape="rect" id="Node000060" href="$classRegulatedPpFaultyPlannerTest.html" title=" " alt="" coords="125,2848,326,2874"/>
+<area shape="poly" id="edge135_Node000000_Node000060" title=" " alt="" coords="34,2232,41,2369,55,2561,76,2739,89,2802,103,2835,126,2852,123,2856,99,2839,83,2803,70,2740,50,2562,36,2370,29,2232"/>
+<area shape="rect" id="Node000061" href="$classRegulatedPpLegacyParamsFileTest.html" title=" " alt="" coords="111,2897,340,2923"/>
+<area shape="poly" id="edge136_Node000000_Node000061" title=" " alt="" coords="34,2232,40,2379,53,2586,74,2780,88,2848,95,2871,103,2884,115,2895,112,2899,99,2888,90,2873,82,2850,69,2781,48,2587,35,2379,29,2232"/>
+<area shape="rect" id="Node000062" href="$classRegulatedPpRobotLimitsTest.html" title=" " alt="" coords="130,2947,321,2972"/>
+<area shape="poly" id="edge137_Node000000_Node000062" title=" " alt="" coords="34,2232,39,2389,52,2612,61,2723,73,2821,87,2895,94,2919,103,2934,115,2944,131,2952,128,2957,113,2949,99,2937,90,2921,81,2896,67,2822,56,2724,47,2612,34,2389,28,2232"/>
+<area shape="rect" id="Node000063" href="$classRegulatedPurePursuitControllerReconfigureTest.html" title=" " alt="" coords="124,2996,326,3037"/>
+<area shape="poly" id="edge138_Node000000_Node000063" title=" " alt="" coords="34,2232,39,2397,51,2636,60,2756,72,2861,86,2941,94,2967,103,2983,126,3001,122,3005,99,2987,89,2969,81,2942,67,2862,55,2756,46,2637,34,2398,28,2232"/>
+<area shape="rect" id="Node000064" href="$classRosGraphEvaluatorTestCase.html" title=" " alt="" coords="131,3061,320,3087"/>
+<area shape="poly" id="edge139_Node000000_Node000064" title=" " alt="" coords="33,2232,37,2410,48,2670,57,2800,69,2914,84,3001,93,3030,103,3047,116,3058,131,3066,129,3071,113,3063,99,3051,88,3032,79,3002,64,2915,52,2800,43,2670,32,2410,28,2232"/>
+<area shape="rect" id="Node000065" href="$classRotateRecoveryTest.html" title=" " alt="" coords="156,3111,295,3136"/>
+<area shape="poly" id="edge140_Node000000_Node000065" title=" " alt="" coords="33,2232,36,2419,47,2695,56,2834,68,2956,83,3049,93,3079,103,3098,127,3115,156,3123,155,3128,124,3119,99,3101,88,3081,78,3050,62,2957,50,2834,41,2695,31,2419,28,2232"/>
+<area shape="rect" id="Node000066" href="$classRoutesCostmapFilterTest.html" title=" " alt="" coords="141,3160,310,3186"/>
+<area shape="poly" id="edge141_Node000000_Node000066" title=" " alt="" coords="33,2232,36,2429,45,2720,54,2867,66,2997,82,3095,92,3128,103,3147,120,3161,142,3169,140,3174,118,3165,99,3151,87,3130,77,3096,61,2997,49,2868,40,2721,30,2429,28,2232"/>
+<area shape="rect" id="Node000067" href="$classRoutesMapsManagerReconfigureTest.html" title=" " alt="" coords="106,3209,344,3235"/>
+<area shape="poly" id="edge142_Node000000_Node000067" title=" " alt="" coords="33,2232,35,2438,44,2745,52,2901,65,3037,81,3141,92,3176,103,3197,115,3207,111,3211,99,3200,87,3178,76,3142,59,3038,47,2901,38,2746,30,2438,28,2232"/>
+<area shape="rect" id="Node000068" href="$classRoutesMapsManagerTest.html" title=" " alt="" coords="140,3259,310,3284"/>
+<area shape="poly" id="edge143_Node000000_Node000068" title=" " alt="" coords="33,2232,34,2447,42,2770,51,2934,63,3078,80,3187,91,3224,103,3246,120,3259,141,3268,139,3273,117,3264,99,3249,86,3226,75,3189,58,3079,45,2934,37,2770,29,2447,28,2232"/>
+<area shape="rect" id="Node000069" href="$classRppObstacleAreaTest.html" title=" " alt="" coords="151,3308,300,3334"/>
+<area shape="poly" id="edge144_Node000000_Node000069" title=" " alt="" coords="33,2232,33,2456,41,2795,49,2967,62,3119,79,3234,90,3272,103,3295,124,3311,151,3319,149,3324,122,3316,99,3299,85,3274,74,3235,56,3119,44,2967,35,2796,28,2456,27,2232"/>
+<area shape="rect" id="Node000070" href="$classSafeRetreatRecoveryTestCase.html" title=" " alt="" coords="125,3357,326,3383"/>
+<area shape="poly" id="edge145_Node000000_Node000070" title=" " alt="" coords="33,2232,33,2465,39,2820,47,3000,60,3159,78,3280,90,3320,103,3344,126,3361,123,3366,99,3348,85,3322,73,3281,55,3160,42,3000,34,2820,27,2465,27,2232"/>
+<area shape="rect" id="Node000072" href="$classSafetyChannelEvaluatorTest.html" title=" " alt="" coords="133,3407,318,3432"/>
+<area shape="poly" id="edge147_Node000000_Node000072" title=" " alt="" coords="34,2232,41,2481,55,2863,76,3219,89,3339,96,3376,103,3394,117,3406,134,3414,131,3418,114,3410,98,3397,91,3378,84,3340,71,3220,50,2863,36,2482,28,2232"/>
+<area shape="rect" id="Node000073" href="$classSerestControllerReconfigureTest.html" title=" " alt="" coords="121,3456,330,3482"/>
+<area shape="poly" id="edge148_Node000000_Node000073" title=" " alt="" coords="34,2232,40,2491,55,2888,76,3261,89,3386,96,3425,103,3443,123,3458,119,3463,99,3446,91,3426,83,3387,70,3261,49,2888,35,2491,28,2232"/>
+<area shape="rect" id="Node000074" href="$classSerestLegacyParamsFileTest.html" title=" " alt="" coords="129,3505,322,3531"/>
+<area shape="poly" id="edge149_Node000000_Node000074" title=" " alt="" coords="34,2232,40,2501,54,2914,75,3302,88,3433,95,3473,103,3493,115,3503,129,3511,127,3515,112,3507,98,3496,90,3475,83,3434,70,3303,48,2915,35,2501,28,2232"/>
+<area shape="rect" id="Node000075" href="$classSerestRobotLimitsTest.html" title=" " alt="" coords="148,3555,303,3580"/>
+<area shape="poly" id="edge150_Node000000_Node000075" title=" " alt="" coords="34,2232,40,2509,53,2939,74,3343,88,3480,95,3522,103,3542,123,3557,148,3566,147,3571,121,3562,99,3545,90,3523,82,3480,69,3344,48,2939,34,2509,28,2232"/>
+<area shape="rect" id="Node000076" href="$classSerestShortPathTest.html" title=" " alt="" coords="154,3604,297,3630"/>
+<area shape="poly" id="edge151_Node000000_Node000076" title=" " alt="" coords="33,2231,39,2518,52,2964,62,3189,73,3384,87,3527,95,3570,103,3591,126,3608,154,3616,152,3621,123,3613,99,3594,90,3572,82,3527,68,3385,56,3189,47,2964,34,2518,28,2232"/>
+<area shape="rect" id="Node000077" href="$classShutdownRecoveryTestCase.html" title=" " alt="" coords="131,3653,320,3679"/>
+<area shape="poly" id="edge152_Node000000_Node000077" title=" " alt="" coords="33,2232,39,2527,51,2990,61,3223,73,3426,87,3573,95,3619,103,3641,116,3652,132,3660,129,3664,113,3656,98,3644,89,3620,81,3574,67,3426,56,3224,46,2990,33,2528,28,2232"/>
+<area shape="rect" id="Node000078" href="$classSimpleAMCLMinHeightTest.html" title=" " alt="" coords="134,3703,317,3728"/>
+<area shape="poly" id="edge153_Node000000_Node000078" title=" " alt="" coords="33,2232,38,2536,51,3015,60,3257,72,3467,86,3620,94,3667,103,3690,117,3702,135,3710,132,3715,114,3706,98,3693,89,3669,81,3621,67,3468,55,3257,45,3015,33,2536,28,2232"/>
+<area shape="rect" id="Node000079" href="$classSimpleLegacyParamsFileTest.html" title=" " alt="" coords="128,3752,323,3778"/>
+<area shape="poly" id="edge154_Node000000_Node000079" title=" " alt="" coords="33,2232,38,2546,50,3041,59,3291,71,3509,86,3667,94,3716,103,3739,114,3750,129,3757,126,3762,111,3754,98,3742,89,3717,80,3668,66,3509,54,3291,45,3041,33,2546,28,2232"/>
+<area shape="rect" id="Node000080" href="$classSimpleLocalizerReconfigureTest.html" title=" " alt="" coords="122,3801,329,3827"/>
+<area shape="poly" id="edge155_Node000000_Node000080" title=" " alt="" coords="33,2231,38,2554,49,3065,58,3325,70,3550,85,3714,94,3764,103,3789,123,3804,120,3808,99,3792,89,3766,80,3714,65,3550,53,3325,44,3066,32,2554,28,2232"/>
+<area shape="rect" id="Node000081" href="$classSimpleMapTest.html" title="Fixture for SimpleMap tests (minimal)." alt="" coords="169,3851,282,3876"/>
+<area shape="poly" id="edge156_Node000000_Node000081" title=" " alt="" coords="33,2232,37,2563,48,3091,58,3359,70,3591,85,3761,93,3813,103,3838,116,3850,133,3857,170,3864,169,3870,131,3862,113,3854,98,3841,88,3814,79,3761,64,3591,52,3359,43,3091,32,2563,28,2232"/>
+<area shape="rect" id="Node000082" href="$classSimpleMapsManagerMinHeightTest.html" title=" " alt="" coords="111,3900,340,3926"/>
+<area shape="poly" id="edge157_Node000000_Node000082" title=" " alt="" coords="33,2232,37,2573,48,3117,57,3393,69,3633,84,3807,93,3861,103,3887,114,3898,111,3902,98,3890,88,3862,79,3808,64,3633,51,3393,42,3117,32,2573,28,2232"/>
+<area shape="rect" id="Node000083" href="$classSimpleMapsManagerReconfigureTest.html" title=" " alt="" coords="107,3949,344,3975"/>
+<area shape="poly" id="edge158_Node000000_Node000083" title=" " alt="" coords="33,2232,37,2582,47,3142,56,3427,68,3674,84,3854,93,3910,103,3937,114,3947,111,3951,98,3940,88,3911,78,3855,63,3674,51,3427,42,3142,31,2582,28,2232"/>
+<area shape="rect" id="Node000084" href="$classSimpleMapsManagerTest.html" title="Fixture for SimpleMapsManager tests (minimal)." alt="" coords="141,3999,310,4024"/>
+<area shape="poly" id="edge159_Node000000_Node000084" title=" " alt="" coords="33,2232,36,2590,46,3167,55,3460,67,3715,83,3901,93,3958,103,3986,120,4000,141,4008,139,4013,117,4004,99,3989,87,3959,78,3902,62,3715,50,3460,41,3167,31,2590,28,2232"/>
+<area shape="rect" id="Node000085" href="$classSimplePlannerGeometryTest.html" title=" " alt="" coords="132,4048,319,4074"/>
+<area shape="poly" id="edge160_Node000000_Node000085" title=" " alt="" coords="33,2232,36,2599,46,3192,54,3494,67,3756,83,3948,92,4007,103,4035,116,4047,133,4055,130,4060,113,4051,98,4038,87,4008,77,3948,61,3757,49,3494,40,3193,30,2600,28,2232"/>
+<area shape="rect" id="Node000086" href="$classSimplePlannerReconfigureTest.html" title=" " alt="" coords="126,4097,325,4123"/>
+<area shape="poly" id="edge161_Node000000_Node000086" title=" " alt="" coords="33,2232,35,2609,45,3218,54,3528,66,3798,82,3994,92,4055,103,4085,127,4102,124,4106,99,4088,87,4056,77,3995,61,3798,48,3528,39,3218,30,2609,28,2232"/>
+<area shape="rect" id="Node000087" href="$classSimplePlannerTest.html" title=" " alt="" coords="160,4147,291,4172"/>
+<area shape="poly" id="edge162_Node000000_Node000087" title=" " alt="" coords="33,2232,35,2617,44,3243,53,3562,65,3839,82,4041,92,4104,103,4134,114,4144,128,4152,160,4160,159,4165,126,4157,111,4149,98,4137,87,4105,76,4042,60,3839,47,3562,39,3243,30,2617,28,2232"/>
+<area shape="rect" id="Node000088" href="$classSimpleRecoveryManagerTest.html" title=" " alt="" coords="130,4196,321,4222"/>
+<area shape="poly" id="edge163_Node000000_Node000088" title=" " alt="" coords="33,2232,35,2625,43,3268,52,3595,64,3880,81,4088,92,4152,103,4183,115,4194,130,4202,128,4207,112,4199,98,4186,86,4153,76,4089,59,3880,47,3595,38,3268,29,2625,28,2232"/>
+<area shape="rect" id="Node000091" href="$classSimpleRobotLimitsTest.html" title=" " alt="" coords="147,4245,304,4271"/>
+<area shape="poly" id="edge166_Node000000_Node000091" title=" " alt="" coords="33,2232,34,2635,43,3293,51,3629,64,3921,81,4135,91,4201,103,4233,123,4248,147,4256,146,4261,120,4253,99,4236,86,4202,75,4135,58,3922,46,3629,37,3293,29,2635,28,2232"/>
+<area shape="rect" id="Node000092" href="$classVffControllerReconfigureTest.html" title=" " alt="" coords="132,4295,318,4320"/>
+<area shape="poly" id="edge167_Node000000_Node000092" title=" " alt="" coords="33,2232,34,2644,42,3318,50,3663,63,3963,80,4182,91,4249,103,4282,116,4293,133,4302,130,4306,113,4298,98,4285,86,4250,75,4182,58,3963,45,3663,37,3318,29,2644,28,2232"/>
+<area shape="rect" id="Node000093" href="$classVffRobotLimitsTest.html" title=" " alt="" coords="159,4344,292,4370"/>
+<area shape="poly" id="edge168_Node000000_Node000093" title=" " alt="" coords="33,2232,34,2652,41,3343,50,3696,62,4004,80,4228,91,4297,103,4331,128,4349,159,4357,158,4362,126,4354,99,4334,86,4299,74,4229,57,4004,44,3696,36,3343,28,2652,28,2232"/>
+<area shape="rect" id="Node000009" href="$classCollisionSafetyReflexCheckTest.html" title=" " alt="" coords="403,383,608,408"/>
+<area shape="poly" id="edge84_Node000008_Node000009" title=" " alt="" coords="325,393,402,393,402,398,325,398"/>
+<area shape="rect" id="Node000011" href="$classControllerStuckFreshWindowTest.html" title=" " alt="" coords="398,440,613,466"/>
+<area shape="poly" id="edge86_Node000010_Node000011" title=" " alt="" coords="323,450,398,450,398,456,323,456"/>
+<area shape="rect" id="Node000054" href="$classNavmapObstacleFilterLimitsTest.html" title=" " alt="" coords="399,2536,612,2562"/>
+<area shape="poly" id="edge129_Node000053_Node000054" title=" " alt="" coords="330,2546,399,2546,399,2552,330,2552"/>
+<area shape="rect" id="Node000071" href="$classSafeRetreatDirectionTest.html" title=" " alt="" coords="422,3357,589,3383"/>
+<area shape="poly" id="edge146_Node000070_Node000071" title=" " alt="" coords="341,3368,422,3368,422,3373,341,3373"/>
+<area shape="rect" id="Node000089" href="$classSensorsLostTest.html" title=" " alt="" coords="445,4196,566,4222"/>
+<area shape="poly" id="edge164_Node000088_Node000089" title=" " alt="" coords="337,4206,445,4206,445,4212,337,4212"/>
+<area shape="rect" id="Node000090" href="$classSensorsLostSimTimeTest.html" title=" " alt="" coords="661,4196,835,4222"/>
+<area shape="poly" id="edge165_Node000089_Node000090" title=" " alt="" coords="582,4206,661,4206,661,4212,582,4212"/>
+</map>

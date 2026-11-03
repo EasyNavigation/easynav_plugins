@@ -1,0 +1,7 @@
+<map id="QPProblem" name="QPProblem">
+<area shape="rect" id="Node000001" title="min 0.5 x&#39; P x + q&#39; x subject to l &lt;= A x &lt;= u." alt="" coords="109,143,198,168"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,163,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,44,149,141,145,143,95,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="186,5,262,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,46,162,143,157,141,208,44"/>
+</map>

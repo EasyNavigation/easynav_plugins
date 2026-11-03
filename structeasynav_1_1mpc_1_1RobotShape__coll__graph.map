@@ -1,0 +1,7 @@
+<map id="RobotShape" name="RobotShape">
+<area shape="rect" id="Node000001" title="The robot&#39;s shape around its frame: a polygon (x, y) or, if empty, a circle of radius." alt="" coords="113,102,206,128"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,175,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,42,153,100,148,103,106,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="199,5,258,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,46,195,80,174,103,170,100,191,76,212,43"/>
+</map>

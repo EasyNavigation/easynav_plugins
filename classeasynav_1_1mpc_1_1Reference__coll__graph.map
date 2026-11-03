@@ -1,0 +1,5 @@
+<map id="Reference" name="Reference">
+<area shape="rect" id="Node000001" title="The path, prepared once per path: arc length, heading, curvature and slope, and the robot&#39;s progress ..." alt="" coords="5,122,86,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="16,5,75,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="48,47,48,122,43,122,43,47"/>
+</map>

@@ -10,5 +10,5 @@ var searchData=
   ['updatebounds_7',['updateBounds',['../classeasynav_1_1InflationFilter.html#a343f4f8e39c1727a6e029e8cb1b3891d',1,'easynav::InflationFilter']]],
   ['updatecosts_8',['updateCosts',['../classeasynav_1_1InflationFilter.html#a0a7f31ef9068aed7fb604dbaad977c0e',1,'easynav::InflationFilter']]],
   ['updateorigin_9',['updateOrigin',['../classeasynav_1_1Costmap2D.html#a77c9af44b5abc03309b56eea543b6e54',1,'easynav::Costmap2D::updateOrigin()'],['../classCostmap2D.html#a77c9af44b5abc03309b56eea543b6e54',1,'Costmap2D::updateOrigin()']]],
-  ['uses_5fcollision_5fchecker_10',['uses_collision_checker',['../classMpcCollisionCheckerTest.html#a5417a836c10210a5e99aec1990a49b41',1,'MpcCollisionCheckerTest']]]
+  ['use_5fz_10',['use_z',['../classeasynav_1_1mpc_1_1Obstacles.html#a61b954ec54ca9223d00cd2068cdc8ef1',1,'easynav::mpc::Obstacles']]]
 ];

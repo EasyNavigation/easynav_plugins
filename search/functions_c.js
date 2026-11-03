@@ -2,9 +2,9 @@ var searchData=
 [
   ['navmapfilter_0',['NavMapFilter',['../classeasynav_1_1navmap_1_1NavMapFilter.html#a225602ee95bfbf08d63951860087b115',1,'easynav::navmap::NavMapFilter']]],
   ['navmapmapsmanager_1',['NavMapMapsManager',['../classeasynav_1_1navmap_1_1NavMapMapsManager.html#a8dfd720a6f4a06ea73bb7fafdf6c50ad',1,'easynav::navmap::NavMapMapsManager']]],
-  ['nearest_2',['nearest',['../classeasynav_1_1NearestGrid.html#a7c44b603a1f5e0a09d7aee4dfe2aae1a',1,'easynav::NearestGrid::nearest()'],['../classNearestGrid.html#a7c44b603a1f5e0a09d7aee4dfe2aae1a',1,'NearestGrid::nearest()']]],
-  ['needs_5frecompute_5fbase_5f_3',['needs_recompute_base_',['../classeasynav_1_1InflationFilter.html#abd1883cdb809b6fc4d169f86dc0ff6bd',1,'easynav::InflationFilter']]],
-  ['nlopt_5fcost_5fcallback_4',['nlopt_cost_callback',['../classeasynav_1_1MPCOptimizer.html#a101ab57c349494af575115d0c4bd9656',1,'easynav::MPCOptimizer']]],
+  ['near_2',['near',['../classeasynav_1_1mpc_1_1Obstacles.html#ace7868dfdbe9ae1b20116999cf0ccc7f',1,'easynav::mpc::Obstacles']]],
+  ['nearest_3',['nearest',['../classeasynav_1_1NearestGrid.html#a7c44b603a1f5e0a09d7aee4dfe2aae1a',1,'easynav::NearestGrid::nearest()'],['../classNearestGrid.html#a7c44b603a1f5e0a09d7aee4dfe2aae1a',1,'NearestGrid::nearest()']]],
+  ['needs_5frecompute_5fbase_5f_4',['needs_recompute_base_',['../classeasynav_1_1InflationFilter.html#abd1883cdb809b6fc4d169f86dc0ff6bd',1,'easynav::InflationFilter']]],
   ['no_5fpoints_5fto_5fcorrect_5',['no_points_to_correct',['../classCostmapAMCLMinHeightTest.html#a89839b987f301f7ff54aee34861effae',1,'CostmapAMCLMinHeightTest::no_points_to_correct()'],['../classMHAMCLMinHeightTest.html#a89839b987f301f7ff54aee34861effae',1,'MHAMCLMinHeightTest::no_points_to_correct()'],['../classSimpleAMCLMinHeightTest.html#a89839b987f301f7ff54aee34861effae',1,'SimpleAMCLMinHeightTest::no_points_to_correct()']]],
   ['nopathevaluator_6',['NoPathEvaluator',['../classeasynav_1_1NoPathEvaluator.html#a6368ee411db9f637bbd834de2c33d1bc',1,'easynav::NoPathEvaluator']]],
   ['norm_7',['norm',['../namespaceeasynav.html#abf04c966ff4505d2e278c4c388ca4915',1,'easynav']]],

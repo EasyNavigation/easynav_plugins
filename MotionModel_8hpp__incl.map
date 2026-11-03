@@ -1,0 +1,7 @@
+<map id="controllers/easynav_mpc_controller/include/easynav_mpc_controller/MotionModel.hpp" name="controllers/easynav_mpc_controller/include/easynav_mpc_controller/MotionModel.hpp">
+<area shape="rect" id="Node000001" title="Kinematic motion models of the MPC: the pose they reach with a body velocity, and its linearization." alt="" coords="5,5,171,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="15,124,68,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,77,57,111,52,109,69,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="92,124,177,150"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="107,75,124,109,119,111,103,77"/>
+</map>

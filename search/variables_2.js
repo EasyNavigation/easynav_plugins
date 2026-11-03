@@ -18,13 +18,13 @@ var searchData=
   ['clamp_5fmin_5flog_15',['clamp_min_log',['../structBonxai_1_1ProbabilisticMap_1_1Options.html#aaf9d16c3c90721cfc4b8e25601176b89',1,'Bonxai::ProbabilisticMap::Options']]],
   ['clearance_5fdistance_5f_16',['clearance_distance_',['../classeasynav_1_1SimplePlanner.html#ad7416beee4bf13e959b0728084b548ee',1,'easynav::SimplePlanner']]],
   ['cloud_17',['cloud',['../structeasynav_1_1navmap_1_1SensorBundle.html#adb4add18344f6e293fa2e36abc52f451',1,'easynav::navmap::SensorBundle']]],
-  ['cmd_18',['cmd',['../structeasynav_1_1MPPIResult.html#ac6bed0cd251951ab5ba4b7048340dbe8',1,'easynav::MPPIResult']]],
-  ['cmd_5fvel_5f_19',['cmd_vel_',['../classeasynav_1_1RegulatedPurePursuitController.html#ae7629561d44229545f0f23863e422dfb',1,'easynav::RegulatedPurePursuitController']]],
+  ['cmd_18',['cmd',['../structeasynav_1_1mpc_1_1MPCResult.html#a795fda56ce62f7be6f311dab856d244d',1,'easynav::mpc::MPCResult::cmd'],['../structeasynav_1_1MPPIResult.html#ac6bed0cd251951ab5ba4b7048340dbe8',1,'easynav::MPPIResult::cmd']]],
+  ['cmd_5fvel_5f_19',['cmd_vel_',['../classeasynav_1_1MPCController.html#ae7629561d44229545f0f23863e422dfb',1,'easynav::MPCController::cmd_vel_'],['../classeasynav_1_1RegulatedPurePursuitController.html#ae7629561d44229545f0f23863e422dfb',1,'easynav::RegulatedPurePursuitController::cmd_vel_']]],
   ['cmds_20',['cmds',['../structmppi__test_1_1Sim.html#a410208bc4f2891aee684fbf9ef69927c',1,'mppi_test::Sim::cmds'],['../structSim.html#a410208bc4f2891aee684fbf9ef69927c',1,'Sim::cmds']]],
   ['collision_5fcost_21',['collision_cost',['../structeasynav_1_1MPPIParams.html#abaf40d0559b353c6b6e155c5fb5dfc24',1,'easynav::MPPIParams::collision_cost'],['../structmppi__test_1_1MPPIParams.html#abaf40d0559b353c6b6e155c5fb5dfc24',1,'mppi_test::MPPIParams::collision_cost']]],
-  ['collision_5ffactor_5f_22',['collision_factor_',['../classeasynav_1_1MPCController.html#a4f8ff516ef566f0441fde402097403c1',1,'easynav::MPCController']]],
-  ['collision_5fstate_5f_23',['collision_state_',['../classeasynav_1_1MPCController.html#a9f29c73267ceaae34beee81630c14ca3',1,'easynav::MPCController']]],
-  ['compute_5fodom_5ffrom_5ftf_5f_24',['compute_odom_from_tf_',['../classeasynav_1_1AMCLLocalizer.html#af402f8786d4f74cc9a70e1ccb8884a76',1,'easynav::AMCLLocalizer::compute_odom_from_tf_'],['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#af402f8786d4f74cc9a70e1ccb8884a76',1,'easynav::navmap::AMCLLocalizer::compute_odom_from_tf_']]],
+  ['commands_22',['commands',['../structeasynav_1_1mpc_1_1MPCResult.html#ae44d6a2ba3ff1c4da920bdf55863d3b2',1,'easynav::mpc::MPCResult']]],
+  ['compute_5fodom_5ffrom_5ftf_5f_23',['compute_odom_from_tf_',['../classeasynav_1_1AMCLLocalizer.html#af402f8786d4f74cc9a70e1ccb8884a76',1,'easynav::AMCLLocalizer::compute_odom_from_tf_'],['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#af402f8786d4f74cc9a70e1ccb8884a76',1,'easynav::navmap::AMCLLocalizer::compute_odom_from_tf_']]],
+  ['constraints_24',['constraints',['../structeasynav_1_1mpc_1_1MPCResult.html#ae2b720af5c848c00893eedbc2aec38be',1,'easynav::mpc::MPCResult']]],
   ['continuous_5freplan_5f_25',['continuous_replan_',['../classeasynav_1_1CostmapPlanner.html#a35e94cf5823e535adf42e15573b348d8',1,'easynav::CostmapPlanner::continuous_replan_'],['../classeasynav_1_1navmap_1_1AStarPlanner.html#a35e94cf5823e535adf42e15573b348d8',1,'easynav::navmap::AStarPlanner::continuous_replan_']]],
   ['control_5fsub_5f_26',['control_sub_',['../classrobot__localization_1_1UkfWrapper.html#acf4171f7a9246db7c0d4959a36212f43',1,'robot_localization::UkfWrapper']]],
   ['controller_5fnode_5f_27',['controller_node_',['../classRegulatedPpFaultyPlannerTest.html#ad3e2ec1c1aec4bae8862a849fbd7664f',1,'RegulatedPpFaultyPlannerTest']]],
@@ -42,5 +42,6 @@ var searchData=
   ['current_5fpath_5f_39',['current_path_',['../classeasynav_1_1CostmapPlanner.html#a8dc6b25f90bfb16f7f1d95b51800aa00',1,'easynav::CostmapPlanner::current_path_'],['../classeasynav_1_1navmap_1_1AStarPlanner.html#a8dc6b25f90bfb16f7f1d95b51800aa00',1,'easynav::navmap::AStarPlanner::current_path_'],['../classeasynav_1_1SimplePlanner.html#a8dc6b25f90bfb16f7f1d95b51800aa00',1,'easynav::SimplePlanner::current_path_']]],
   ['curvature_5flookahead_5fdist_5f_40',['curvature_lookahead_dist_',['../classeasynav_1_1RegulatedPurePursuitController.html#a5221288ed780aa3321fa1ac86d18fa37',1,'easynav::RegulatedPurePursuitController']]],
   ['curvature_5flookahead_5fpoint_5fpub_5f_41',['curvature_lookahead_point_pub_',['../classeasynav_1_1RegulatedPurePursuitController.html#a07ccca8ec94b929da9f35fb58256ff9a',1,'easynav::RegulatedPurePursuitController']]],
-  ['cycle_5fcalls_42',['cycle_calls',['../classTrackingMitigation.html#a56f69f04859a288f90897181b6ac2a9e',1,'TrackingMitigation']]]
+  ['curvature_5fwindow_42',['curvature_window',['../classeasynav_1_1mpc_1_1Reference.html#ae2ffab81268c560b91b8a4295df3a2f1',1,'easynav::mpc::Reference']]],
+  ['cycle_5fcalls_43',['cycle_calls',['../classTrackingMitigation.html#a56f69f04859a288f90897181b6ac2a9e',1,'TrackingMitigation']]]
 ];

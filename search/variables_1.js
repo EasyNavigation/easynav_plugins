@@ -8,5 +8,6 @@ var searchData=
   ['bearing_5',['bearing',['../structeasynav__diagnostic__recovery_1_1ObstacleProximity.html#ac30d56017f78b797fbc4a025a55efa6f',1,'easynav_diagnostic_recovery::ObstacleProximity']]],
   ['block_5fbytes_5f_6',['block_bytes_',['../classBonxai_1_1GridBlockAllocator.html#abc62222fc2e52fabb62c35a6eab51b7c',1,'Bonxai::GridBlockAllocator']]],
   ['blocks_5fper_5fchunk_7',['blocks_per_chunk',['../classBonxai_1_1GridBlockAllocator.html#afc0b98a2e8e94f974af8ca45f5955682',1,'Bonxai::GridBlockAllocator']]],
-  ['bonxai_5fmap_5f_8',['bonxai_map_',['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#a259305db58b5f74104a940060871c814',1,'easynav::navmap::AMCLLocalizer']]]
+  ['body_5fpoints_8',['body_points',['../structmpc__sim_1_1Scenario.html#ade9887e7e34c66997db7fdce1c71a947',1,'mpc_sim::Scenario']]],
+  ['bonxai_5fmap_5f_9',['bonxai_map_',['../classeasynav_1_1navmap_1_1AMCLLocalizer.html#a259305db58b5f74104a940060871c814',1,'easynav::navmap::AMCLLocalizer']]]
 ];

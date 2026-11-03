@@ -1,25 +1,5 @@
 var searchData=
 [
-  ['recoverybasestestcase_0',['RecoveryBasesTestCase',['../classRecoveryBasesTestCase.html',1,'']]],
-  ['recoveryevaluatorbase_1',['RecoveryEvaluatorBase',['../classeasynav__diagnostic__recovery_1_1RecoveryEvaluatorBase.html',1,'easynav_diagnostic_recovery']]],
-  ['recoverymanagerbase_2',['RecoveryManagerBase',['../classRecoveryManagerBase.html',1,'']]],
-  ['recoverymitigationbase_3',['RecoveryMitigationBase',['../classeasynav__diagnostic__recovery_1_1RecoveryMitigationBase.html',1,'easynav_diagnostic_recovery']]],
-  ['regulatedppfaultyplannertest_4',['RegulatedPpFaultyPlannerTest',['../classRegulatedPpFaultyPlannerTest.html',1,'']]],
-  ['regulatedpplegacyparamsfiletest_5',['RegulatedPpLegacyParamsFileTest',['../classRegulatedPpLegacyParamsFileTest.html',1,'']]],
-  ['regulatedpprobotlimitstest_6',['RegulatedPpRobotLimitsTest',['../classRegulatedPpRobotLimitsTest.html',1,'']]],
-  ['regulatedpurepursuitcontroller_7',['RegulatedPurePursuitController',['../classeasynav_1_1RegulatedPurePursuitController.html',1,'easynav']]],
-  ['regulatedpurepursuitcontrollerreconfiguretest_8',['RegulatedPurePursuitControllerReconfigureTest',['../classRegulatedPurePursuitControllerReconfigureTest.html',1,'']]],
-  ['result_9',['Result',['../structeasynav_1_1NavMapTerrain_1_1Result.html',1,'easynav::NavMapTerrain']]],
-  ['rosgraphevaluator_10',['RosGraphEvaluator',['../classeasynav_1_1RosGraphEvaluator.html',1,'easynav']]],
-  ['rosgraphevaluatortestcase_11',['RosGraphEvaluatorTestCase',['../classRosGraphEvaluatorTestCase.html',1,'']]],
-  ['rotaterecovery_12',['RotateRecovery',['../classeasynav_1_1RotateRecovery.html',1,'easynav']]],
-  ['rotaterecoverytest_13',['RotateRecoveryTest',['../classRotateRecoveryTest.html',1,'']]],
-  ['routescostmapfilter_14',['RoutesCostmapFilter',['../classeasynav_1_1RoutesCostmapFilter.html',1,'RoutesCostmapFilter'],['../classRoutesCostmapFilter.html',1,'RoutesCostmapFilter']]],
-  ['routescostmapfiltertest_15',['RoutesCostmapFilterTest',['../classRoutesCostmapFilterTest.html',1,'']]],
-  ['routesegment_16',['RouteSegment',['../structeasynav_1_1RouteSegment.html',1,'RouteSegment'],['../structRouteSegment.html',1,'RouteSegment']]],
-  ['routesfilter_17',['RoutesFilter',['../classeasynav_1_1RoutesFilter.html',1,'easynav']]],
-  ['routesmapsmanager_18',['RoutesMapsManager',['../classeasynav_1_1RoutesMapsManager.html',1,'RoutesMapsManager'],['../classRoutesMapsManager.html',1,'RoutesMapsManager']]],
-  ['routesmapsmanagerreconfiguretest_19',['RoutesMapsManagerReconfigureTest',['../classRoutesMapsManagerReconfigureTest.html',1,'']]],
-  ['routesmapsmanagertest_20',['RoutesMapsManagerTest',['../classRoutesMapsManagerTest.html',1,'']]],
-  ['rppobstacleareatest_21',['RppObstacleAreaTest',['../classRppObstacleAreaTest.html',1,'']]]
+  ['qpproblem_0',['QPProblem',['../structeasynav_1_1mpc_1_1QPProblem.html',1,'easynav::mpc']]],
+  ['qpsettings_1',['QPSettings',['../structeasynav_1_1mpc_1_1QPSettings.html',1,'easynav::mpc']]]
 ];

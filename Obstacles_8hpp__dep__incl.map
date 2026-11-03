@@ -1,0 +1,35 @@
+<map id="controllers/easynav_mpc_controller/include/easynav_mpc_controller/Obstacles.hpp" name="controllers/easynav_mpc_controller/include/easynav_mpc_controller/Obstacles.hpp">
+<area shape="rect" id="Node000001" title="The perceived obstacle points and the robot&#39;s shape: collisions, nearest points and the robot&#39;s exten..." alt="" coords="804,5,969,76"/>
+<area shape="rect" id="Node000002" href="$MPCController_8hpp.html" title=" " alt="" coords="495,361,660,432"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="790,70,730,94,673,126,638,152,612,176,592,204,575,244,567,273,566,304,572,361,566,361,560,304,562,273,569,242,587,201,608,172,634,148,671,122,728,89,788,65"/>
+<area shape="rect" id="Node000010" href="$MPCOptimizer_8hpp.html" title="The MPC&#39;s optimization: a quadratic program over the horizon, linearized around the previous solution..." alt="" coords="804,243,969,313"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="889,92,889,242,884,242,884,92"/>
+<area shape="rect" id="Node000012" href="$Reference_8hpp.html" title="The reference the MPC tracks: poses and velocities sampled along the path ahead of the robot,..." alt="" coords="684,124,849,195"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="842,89,804,126,800,122,839,85"/>
+<area shape="rect" id="Node000014" href="$mpc__core__tests_8cpp.html" title="The MPC&#39;s parts: motion models and their linearization, the QP solver, the robot&#39;s shape against obst..." alt="" coords="994,250,1140,306"/>
+<area shape="poly" id="edge18_Node000001_Node000014" title=" " alt="" coords="907,89,931,141,965,193,994,223,1026,247,1022,252,990,227,961,196,927,144,902,92"/>
+<area shape="rect" id="Node000015" href="$Obstacles_8cpp.html" title=" " alt="" coords="975,124,1140,195"/>
+<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="952,83,1008,121,1005,126,949,87"/>
+<area shape="rect" id="Node000003" href="$MPCController_8cpp.html" title="Implementation of the MPCController class." alt="" coords="5,480,171,551"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="480,417,339,445,183,483,172,486,170,481,182,477,337,439,479,412"/>
+<area shape="rect" id="Node000004" href="$mpc__controller__min__height__tests_8cpp.html" title="MPCController &quot;min_height&quot;: points below it are floor hits, not obstacles." alt="" coords="195,480,376,551"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="481,439,373,482,371,477,479,434"/>
+<area shape="rect" id="Node000005" href="$mpc__controller__params__tests_8cpp.html" title="MPCController parameters: motion models, validation, deprecated and removed ones, and the topics unde..." alt="" coords="400,480,560,551"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="541,446,511,481,507,478,537,442"/>
+<area shape="rect" id="Node000006" href="$mpc__controller__reconfigure__tests_8cpp.html" title="Regression test: a plugin must tolerate initialize() being called twice on the same node (as happens ..." alt="" coords="584,480,765,551"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="618,442,648,478,644,481,614,446"/>
+<area shape="rect" id="Node000007" href="$mpc__controller__robot__limits__tests_8cpp.html" title="The deprecated limit parameters of this controller still work, and &quot;robot_limits.*&quot; in controller_nod..." alt="" coords="790,480,936,551"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="676,435,790,482,788,487,674,440"/>
+<area shape="rect" id="Node000008" href="$mpc__sim_8hpp.html" title="Closed loop of the MPC with a simulated robot: the controller in a ControllerNode (robot limits),..." alt="" coords="960,488,1106,543"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="676,413,806,440,949,477,969,484,968,489,947,483,805,445,675,418"/>
+<area shape="rect" id="Node000009" href="$mpc__scenarios__tests_8cpp.html" title="The MPC in closed loop with a simulated robot of each motion model: it reaches the goal along the pat..." alt="" coords="947,599,1120,654"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="1036,558,1036,598,1031,598,1031,558"/>
+<area shape="poly" id="edge10_Node000010_Node000002" title=" " alt="" coords="790,318,661,367,659,362,788,313"/>
+<area shape="rect" id="Node000011" href="$MPCOptimizer_8cpp.html" title=" " alt="" coords="804,361,969,432"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="889,329,889,361,884,361,884,329"/>
+<area shape="poly" id="edge13_Node000012_Node000002" title=" " alt="" coords="671,193,635,215,605,244,590,272,581,303,577,361,572,361,576,302,585,270,601,241,631,211,668,188"/>
+<area shape="poly" id="edge14_Node000012_Node000010" title=" " alt="" coords="815,203,853,240,849,244,811,207"/>
+<area shape="rect" id="Node000013" href="$Reference_8cpp.html" title=" " alt="" coords="615,243,780,313"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="741,209,720,244,716,241,736,207"/>
+<area shape="poly" id="edge16_Node000012_Node000014" title=" " alt="" coords="865,195,982,240,1000,247,998,252,980,245,863,200"/>
+</map>

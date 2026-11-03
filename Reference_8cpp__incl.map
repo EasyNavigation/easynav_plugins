@@ -1,0 +1,32 @@
+<map id="controllers/easynav_mpc_controller/src/easynav_mpc_controller/Reference.cpp" name="controllers/easynav_mpc_controller/src/easynav_mpc_controller/Reference.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="358,5,523,76"/>
+<area shape="rect" id="Node000002" href="$Reference_8hpp.html" title="The reference the MPC tracks: poses and velocities sampled along the path ahead of the robot,..." alt="" coords="175,124,336,165"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="379,79,306,118,303,114,376,74"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="360,132,434,157"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="428,77,410,118,406,116,423,75"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="457,132,515,157"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="458,75,477,116,472,119,454,77"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="538,132,591,157"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="485,74,540,120,537,124,481,79"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="253,301,311,327"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="261,164,280,286,275,286,256,165"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="145,301,230,327"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="250,166,200,288,195,286,245,164"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="479,220,642,246"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="326,163,504,213,503,218,324,168"/>
+<area shape="rect" id="Node000006" href="$MotionModel_8hpp.html" title="Kinematic motion models of the MPC: the pose they reach with a body velocity, and its linearization." alt="" coords="5,213,167,253"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="218,168,139,208,137,203,216,163"/>
+<area shape="rect" id="Node000008" href="$Obstacles_8hpp.html" title="The perceived obstacle points and the robot&#39;s shape: collisions, nearest points and the robot&#39;s exten..." alt="" coords="293,213,455,253"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="284,163,337,201,334,206,281,167"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="113,252,162,289,158,294,109,256"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="59,301,113,327"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="89,254,89,286,83,286,83,254"/>
+<area shape="poly" id="edge12_Node000008_Node000003" title=" " alt="" coords="353,256,309,293,306,289,350,252"/>
+<area shape="poly" id="edge13_Node000008_Node000004" title=" " alt="" coords="328,256,231,297,229,293,326,251"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="334,301,395,327"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="374,254,371,286,365,285,369,253"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="419,301,529,327"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="400,252,449,290,445,294,397,256"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="554,301,605,327"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="426,251,540,295,538,300,424,256"/>
+</map>

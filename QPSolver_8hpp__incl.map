@@ -1,0 +1,7 @@
+<map id="controllers/easynav_mpc_controller/include/easynav_mpc_controller/QPSolver.hpp" name="controllers/easynav_mpc_controller/include/easynav_mpc_controller/QPSolver.hpp">
+<area shape="rect" id="Node000001" title="A quadratic program solved with OSQP (0.6 or 1.0, whichever osqp_vendor brings)." alt="" coords="29,5,194,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,124,90,150"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="90,78,67,112,62,109,86,75"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,124,240,150"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="138,75,162,109,157,112,133,78"/>
+</map>

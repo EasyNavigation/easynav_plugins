@@ -35,10 +35,9 @@ var searchData=
   ['mhamcllocalizer_32',['MHAMCLLocalizer',['../classeasynav_1_1mhamcl_1_1MHAMCLLocalizer.html#ac13154069314d076508905407bc9e96f',1,'easynav::mhamcl::MHAMCLLocalizer']]],
   ['min_5fby_33',['min_by',['../namespaceeasynav.html#a59672d31699bbc5315de772437430212',1,'easynav']]],
   ['mitigate_34',['mitigate',['../classeasynav__diagnostic__recovery_1_1DummySafetyReflex.html#acb4c72bca8e537fb613edb83dc3e6449',1,'easynav_diagnostic_recovery::DummySafetyReflex::mitigate()'],['../classeasynav_1_1CollisionSafetyReflex.html#ad3a483124f3fdb72d249e0110c378948',1,'easynav::CollisionSafetyReflex::mitigate()'],['../classeasynav__diagnostic__recovery_1_1SafetyReflexBase.html#ab4e323da4fbd4cc1adecd5729d9eba1f',1,'easynav_diagnostic_recovery::SafetyReflexBase::mitigate()'],['../classTrackingReflex.html#acb4c72bca8e537fb613edb83dc3e6449',1,'TrackingReflex::mitigate()'],['../classThrowingCheckReflex.html#a3640ff3186ac8af582c65acf92d70a0c',1,'ThrowingCheckReflex::mitigate()'],['../classThrowingMitigateReflex.html#a3640ff3186ac8af582c65acf92d70a0c',1,'ThrowingMitigateReflex::mitigate()']]],
-  ['move_35',['move',['../classNavmapAmclSlipTest.html#aa7ebed0e955b618cf568bc45ea2579be',1,'NavmapAmclSlipTest']]],
-  ['moved_5foff_5fcluster_36',['moved_off_cluster',['../classNavmapAmclRecoveryTest.html#a0bc2620c88d8377f4660494619ceed62',1,'NavmapAmclRecoveryTest']]],
-  ['mpccontroller_37',['MPCController',['../classeasynav_1_1MPCController.html#a2be280aed96a9bd0b3b9a89cba7d921e',1,'easynav::MPCController']]],
-  ['mpcoptimizer_38',['MPCOptimizer',['../classeasynav_1_1MPCOptimizer.html#adb9413825ab398d52a090f19af3ba9d7',1,'easynav::MPCOptimizer']]],
-  ['mpcparameters_39',['MPCParameters',['../classeasynav_1_1MPCParameters.html#ad95fb2bdbfff4265ff7e446254f085b1',1,'easynav::MPCParameters']]],
-  ['mppicontroller_40',['MPPIController',['../classeasynav_1_1MPPIController.html#ad9b24cab72366c4f858ec99e057815fc',1,'easynav::MPPIController']]]
+  ['modellayout_35',['ModelLayout',['../structeasynav_1_1mpc_1_1ModelLayout.html#afe46cc0e3edbdea29cb8aabdeb756eea',1,'easynav::mpc::ModelLayout::ModelLayout()'],['../structModelLayout.html#afe46cc0e3edbdea29cb8aabdeb756eea',1,'ModelLayout::ModelLayout()']]],
+  ['move_36',['move',['../classNavmapAmclSlipTest.html#aa7ebed0e955b618cf568bc45ea2579be',1,'NavmapAmclSlipTest']]],
+  ['moved_5foff_5fcluster_37',['moved_off_cluster',['../classNavmapAmclRecoveryTest.html#a0bc2620c88d8377f4660494619ceed62',1,'NavmapAmclRecoveryTest']]],
+  ['mpccontroller_38',['MPCController',['../classeasynav_1_1MPCController.html#a735ee9b771bdb0f99cf5d2d4f01eff1d',1,'easynav::MPCController']]],
+  ['mppicontroller_39',['MPPIController',['../classeasynav_1_1MPPIController.html#ad9b24cab72366c4f858ec99e057815fc',1,'easynav::MPPIController']]]
 ];

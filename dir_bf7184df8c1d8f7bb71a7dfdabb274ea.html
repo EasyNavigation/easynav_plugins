@@ -111,8 +111,17 @@ Directory dependency graph for easynav_mpc_controller:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:MotionModel_2Ehpp" id="r_MotionModel_2Ehpp"><td class="memItemLeft"><a href="MotionModel_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="MotionModel_8hpp.html">MotionModel.hpp</a></td></tr>
+<tr class="memdesc:MotionModel_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kinematic motion models of the MPC: the pose they reach with a body velocity, and its linearization. <br /></td></tr>
 <tr class="memitem:MPCController_2Ehpp" id="r_MPCController_2Ehpp"><td class="memItemLeft"><a href="MPCController_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="MPCController_8hpp.html">MPCController.hpp</a></td></tr>
 <tr class="memitem:MPCOptimizer_2Ehpp" id="r_MPCOptimizer_2Ehpp"><td class="memItemLeft"><a href="MPCOptimizer_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="MPCOptimizer_8hpp.html">MPCOptimizer.hpp</a></td></tr>
+<tr class="memdesc:MPCOptimizer_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">The MPC's optimization: a quadratic program over the horizon, linearized around the previous solution, solved once per control cycle. <br /></td></tr>
+<tr class="memitem:Obstacles_2Ehpp" id="r_Obstacles_2Ehpp"><td class="memItemLeft"><a href="Obstacles_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="Obstacles_8hpp.html">Obstacles.hpp</a></td></tr>
+<tr class="memdesc:Obstacles_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">The perceived obstacle points and the robot's shape: collisions, nearest points and the robot's extent towards a point. <br /></td></tr>
+<tr class="memitem:QPSolver_2Ehpp" id="r_QPSolver_2Ehpp"><td class="memItemLeft"><a href="QPSolver_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="QPSolver_8hpp.html">QPSolver.hpp</a></td></tr>
+<tr class="memdesc:QPSolver_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">A quadratic program solved with OSQP (0.6 or 1.0, whichever osqp_vendor brings). <br /></td></tr>
+<tr class="memitem:Reference_2Ehpp" id="r_Reference_2Ehpp"><td class="memItemLeft"><a href="Reference_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="Reference_8hpp.html">Reference.hpp</a></td></tr>
+<tr class="memdesc:Reference_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">The reference the MPC tracks: poses and velocities sampled along the path ahead of the robot, at the speed the path's curvature, the goal and the obstacles allow. <br /></td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->

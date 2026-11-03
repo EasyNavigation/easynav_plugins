@@ -1,0 +1,5 @@
+<map id="SpeedLimits" name="SpeedLimits">
+<area shape="rect" id="Node000001" title="What limits the reference speed." alt="" coords="5,224,100,250"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="23,5,82,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="55,46,55,224,50,224,50,46"/>
+</map>

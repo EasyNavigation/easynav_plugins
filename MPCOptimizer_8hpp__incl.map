@@ -1,13 +1,35 @@
 <map id="controllers/easynav_mpc_controller/include/easynav_mpc_controller/MPCOptimizer.hpp" name="controllers/easynav_mpc_controller/include/easynav_mpc_controller/MPCOptimizer.hpp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="309,5,474,76"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,124,63,150"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="309,66,78,126,77,121,307,61"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="87,124,285,150"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="317,79,228,120,225,115,314,74"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="310,124,473,150"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="394,76,394,108,389,108,389,76"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="498,124,616,150"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="454,74,524,114,521,118,451,79"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="640,124,758,150"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="475,65,646,116,644,122,474,70"/>
+<area shape="rect" id="Node000001" title="The MPC&#39;s optimization: a quadratic program over the horizon, linearized around the previous solution..." alt="" coords="391,5,557,76"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,301,63,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="392,53,308,69,214,98,168,120,124,146,85,177,51,214,42,231,36,250,34,286,29,286,31,249,37,229,46,211,81,173,121,141,166,115,212,94,307,64,391,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="492,301,576,327"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="484,76,531,286,526,287,479,77"/>
+<area shape="rect" id="Node000004" href="$MotionModel_8hpp.html" title="Kinematic motion models of the MPC: the pose they reach with a body velocity, and its linearization." alt="" coords="572,213,733,253"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="509,75,555,122,626,199,622,203,551,126,505,78"/>
+<area shape="rect" id="Node000006" href="$Obstacles_8hpp.html" title="The perceived obstacle points and the robot&#39;s shape: collisions, nearest points and the robot&#39;s exten..." alt="" coords="97,213,259,253"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="392,77,345,100,299,126,250,165,208,204,205,200,246,161,297,122,343,95,390,72"/>
+<area shape="rect" id="Node000010" href="$QPSolver_8hpp.html" title="A quadratic program solved with OSQP (0.6 or 1.0, whichever osqp_vendor brings)." alt="" coords="740,124,901,165"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="558,64,740,117,738,122,556,69"/>
+<area shape="rect" id="Node000012" href="$Reference_8hpp.html" title="The reference the MPC tracks: poses and velocities sampled along the path ahead of the robot,..." alt="" coords="309,124,471,165"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="448,78,418,114,414,110,444,74"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="625,256,567,295,564,290,622,252"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="626,301,679,327"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="655,254,655,286,650,286,650,254"/>
+<area shape="poly" id="edge10_Node000006_Node000002" title=" " alt="" coords="143,256,71,296,68,291,141,252"/>
+<area shape="poly" id="edge11_Node000006_Node000003" title=" " alt="" coords="260,250,477,298,476,303,259,255"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="297,301,358,327"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="217,252,292,291,290,296,214,256"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="87,301,197,327"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="172,255,156,288,151,286,167,253"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="222,301,273,327"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="197,252,229,288,225,291,193,256"/>
+<area shape="poly" id="edge13_Node000010_Node000003" title=" " alt="" coords="852,163,875,182,896,205,906,230,904,243,897,256,780,278,592,307,591,302,779,273,894,251,899,241,900,231,891,208,872,186,849,167"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="758,220,883,246"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="823,165,823,205,818,205,818,165"/>
+<area shape="poly" id="edge16_Node000012_Node000002" title=" " alt="" coords="309,158,181,181,124,196,86,215,71,230,59,249,43,287,38,285,54,246,67,227,83,210,122,191,180,176,309,153"/>
+<area shape="poly" id="edge17_Node000012_Node000003" title=" " alt="" coords="413,163,460,211,519,287,515,290,456,214,409,167"/>
+<area shape="poly" id="edge19_Node000012_Node000004" title=" " alt="" coords="450,163,579,205,577,210,449,168"/>
+<area shape="poly" id="edge20_Node000012_Node000006" title=" " alt="" coords="343,168,241,209,239,204,341,163"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="283,220,446,246"/>
+<area shape="poly" id="edge18_Node000012_Node000013" title=" " alt="" coords="387,166,375,206,370,204,382,164"/>
 </map>

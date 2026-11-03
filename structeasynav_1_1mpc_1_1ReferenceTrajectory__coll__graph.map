@@ -1,0 +1,7 @@
+<map id="ReferenceTrajectory" name="ReferenceTrajectory">
+<area shape="rect" id="Node000001" title="The reference over the horizon: N + 1 poses (from the robot&#39;s projection) and the N velocities betwee..." alt="" coords="92,143,229,168"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,177,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,44,141,117,155,141,151,144,136,120,100,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="201,5,261,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,47,221,83,204,120,180,144,177,140,199,117,216,81,225,46"/>
+</map>

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['obstacle_5fat_0',['obstacle_at',['../classCollisionSafetyReflexCheckTest.html#abfcadf913fa11c734c95959e7e4cc487',1,'CollisionSafetyReflexCheckTest']]],
-  ['obstacle_5fpoints_1',['obstacle_points',['../classeasynav_1_1MPPIController.html#a90691b433a689c5132b9d5ded11b36eb',1,'easynav::MPPIController']]],
+  ['obstacle_5fpoints_1',['obstacle_points',['../classeasynav_1_1MPCController.html#acae2dc6c8c36610be89397d3697922fd',1,'easynav::MPCController::obstacle_points()'],['../classeasynav_1_1MPPIController.html#a90691b433a689c5132b9d5ded11b36eb',1,'easynav::MPPIController::obstacle_points()']]],
   ['obstacleconstraint_2',['obstacleConstraint',['../namespaceeasynav_1_1heuristics.html#a60bad7c958cb7f7f9d4b903b24cc22b9',1,'easynav::heuristics::obstacleConstraint()'],['../regulated__pp__controller__tests_8cpp.html#a60bad7c958cb7f7f9d4b903b24cc22b9',1,'obstacleConstraint():&#160;regulation_functions.hpp']]],
   ['obstaclefilter_3',['ObstacleFilter',['../classeasynav_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0',1,'easynav::ObstacleFilter::ObstacleFilter()'],['../classeasynav_1_1navmap_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0',1,'easynav::navmap::ObstacleFilter::ObstacleFilter()'],['../classeasynav_1_1octomap_1_1ObstacleFilter.html#a93c8fbce74f889285cb13fa80d49eae0',1,'easynav::octomap::ObstacleFilter::ObstacleFilter()']]],
   ['obstacles_5fat_4',['obstacles_at',['../classNavmapObstacleFilterTest.html#aa4ddc34e512df3f1cc9dc192ecdafe8a',1,'NavmapObstacleFilterTest']]],

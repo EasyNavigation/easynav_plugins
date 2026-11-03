@@ -11,7 +11,7 @@ var searchData=
   ['differentiatemeasurements_8',['differentiateMeasurements',['../classrobot__localization_1_1UkfWrapper.html#a7432a041997a0b73cd0ad0b6e611768e',1,'robot_localization::UkfWrapper']]],
   ['disc_9',['disc',['../classCostmapPlannerTest.html#a76258faefe07af8759dd59a1dee6b10a',1,'CostmapPlannerTest']]],
   ['distance_10',['distance',['../classeasynav_1_1NearestGrid.html#acfc60da6f8736109180d6eb613760c13',1,'easynav::NearestGrid::distance()'],['../classRppObstacleAreaTest.html#a1b2cccc52cf6a1a12597fa9ba0a20d7b',1,'RppObstacleAreaTest::distance()'],['../classNearestGrid.html#acfc60da6f8736109180d6eb613760c13',1,'NearestGrid::distance()']]],
-  ['distance_5fto_11',['distance_to',['../namespacemppi__test.html#ab7d5766ca76eda404b097c5950f57af1',1,'mppi_test']]],
+  ['distance_5fto_11',['distance_to',['../namespacempc__sim.html#ae886817b72eb60b3dc514288eca7752a',1,'mpc_sim::distance_to()'],['../namespacemppi__test.html#ab7d5766ca76eda404b097c5950f57af1',1,'mppi_test::distance_to()']]],
   ['distance_5fto_5fobstacle_12',['distance_to_obstacle',['../classeasynav_1_1mhamcl_1_1MapMatcher.html#a9a205ba5b40dc196318e6d207135ef03',1,'easynav::mhamcl::MapMatcher::distance_to_obstacle()'],['../classMapMatcher.html#a9a205ba5b40dc196318e6d207135ef03',1,'MapMatcher::distance_to_obstacle()']]],
   ['distancelookup_13',['distanceLookup',['../classeasynav_1_1InflationFilter.html#a0fde2f26bec05814c7b326aaff70ef66',1,'easynav::InflationFilter']]],
   ['dot_14',['dot',['../namespaceeasynav.html#a63a1a53961555a7d2a4e28b39685ee6c',1,'easynav']]],

@@ -101,28 +101,63 @@ document.addEventListener('DOMContentLoaded', codefold.init);
   <div class="headertitle"><div class="title">MPCOptimizer.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-
-<p>Implementation of MPCParameters and MPCOptimizer classes.  
-<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="MPCOptimizer_8hpp_source.html">easynav_mpc_controller/MPCOptimizer.hpp</a>&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;chrono&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &quot;Eigen/SparseCore&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for MPCOptimizer.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="MPCOptimizer_8cpp__incl.png" border="0" usemap="#acontrollers_2easynav__mpc__controller_2src_2easynav__mpc__controller_2MPCOptimizer_8cpp" loading="lazy" alt=""/></div>
 <map name="acontrollers_2easynav__mpc__controller_2src_2easynav__mpc__controller_2MPCOptimizer_8cpp" id="acontrollers_2easynav__mpc__controller_2src_2easynav__mpc__controller_2MPCOptimizer_8cpp">
-<area shape="rect" title="Implementation of MPCParameters and MPCOptimizer classes." alt="" coords="309,5,474,76"/>
-<area shape="rect" href="MPCOptimizer_8hpp.html" title=" " alt="" coords="311,124,472,165"/>
-<area shape="poly" title=" " alt="" coords="394,76,394,108,389,108,389,76"/>
-<area shape="rect" title=" " alt="" coords="5,213,63,238"/>
-<area shape="poly" title=" " alt="" coords="311,164,78,215,77,210,310,159"/>
-<area shape="rect" title=" " alt="" coords="87,213,285,238"/>
-<area shape="poly" title=" " alt="" coords="341,168,232,209,230,204,339,163"/>
-<area shape="rect" title=" " alt="" coords="310,213,473,238"/>
-<area shape="poly" title=" " alt="" coords="394,165,394,197,389,197,389,165"/>
-<area shape="rect" title=" " alt="" coords="498,213,616,238"/>
-<area shape="poly" title=" " alt="" coords="434,163,519,203,516,208,431,168"/>
-<area shape="rect" title=" " alt="" coords="640,213,758,238"/>
-<area shape="poly" title=" " alt="" coords="469,163,638,206,637,211,468,168"/>
+<area shape="rect" title=" " alt="" coords="875,5,1041,76"/>
+<area shape="rect" href="MPCOptimizer_8hpp.html" title="The MPC&#39;s optimization: a quadratic program over the horizon, linearized around the previous solution..." alt="" coords="372,124,533,165"/>
+<area shape="poly" title=" " alt="" coords="876,61,549,126,548,121,875,56"/>
+<area shape="rect" title=" " alt="" coords="5,390,63,416"/>
+<area shape="poly" title=" " alt="" coords="875,50,642,75,501,97,361,127,238,158,188,179,127,215,78,252,61,272,46,302,36,339,35,375,29,374,31,338,41,300,57,270,74,248,125,210,185,174,237,153,360,121,500,91,641,69,874,45"/>
+<area shape="rect" title=" " alt="" coords="846,309,971,334"/>
+<area shape="poly" title=" " alt="" coords="934,78,921,100,911,125,903,170,901,216,907,293,902,294,896,216,898,170,906,123,916,98,929,75"/>
+<area shape="rect" title=" " alt="" coords="921,132,995,157"/>
+<area shape="poly" title=" " alt="" coords="961,76,961,116,955,116,955,76"/>
+<area shape="rect" title=" " alt="" coords="1020,132,1080,157"/>
+<area shape="poly" title=" " alt="" coords="991,74,1031,118,1027,122,987,78"/>
+<area shape="rect" title=" " alt="" coords="1104,132,1161,157"/>
+<area shape="poly" title=" " alt="" coords="1019,74,1100,121,1097,126,1016,79"/>
+<area shape="rect" title=" " alt="" coords="1185,132,1238,157"/>
+<area shape="poly" title=" " alt="" coords="1042,69,1175,122,1176,122,1174,127,1173,126,1040,74"/>
+<area shape="poly" title=" " alt="" coords="372,161,300,178,220,206,180,225,141,247,105,273,73,303,61,320,52,338,41,375,36,374,47,336,57,317,69,300,102,269,138,243,178,220,218,202,299,173,371,156"/>
+<area shape="rect" title=" " alt="" coords="381,390,466,416"/>
+<area shape="poly" title=" " alt="" coords="412,167,384,187,363,214,356,235,354,257,364,302,384,343,406,376,402,379,379,346,359,303,349,257,351,234,358,211,380,183,408,163"/>
+<area shape="rect" href="MotionModel_8hpp.html" title="Kinematic motion models of the MPC: the pose they reach with a body velocity, and its linearization." alt="" coords="609,301,771,342"/>
+<area shape="poly" title=" " alt="" coords="482,163,548,211,654,290,650,294,544,215,479,167"/>
+<area shape="rect" href="Obstacles_8hpp.html" title="The perceived obstacle points and the robot&#39;s shape: collisions, nearest points and the robot&#39;s exten..." alt="" coords="135,301,296,342"/>
+<area shape="poly" title=" " alt="" coords="403,168,360,188,317,215,275,252,241,291,237,287,271,248,314,211,357,184,401,163"/>
+<area shape="rect" href="QPSolver_8hpp.html" title="A quadratic program solved with OSQP (0.6 or 1.0, whichever osqp_vendor brings)." alt="" coords="684,213,845,253"/>
+<area shape="poly" title=" " alt="" coords="525,163,680,205,678,211,523,168"/>
+<area shape="rect" href="Reference_8hpp.html" title="The reference the MPC tracks: poses and velocities sampled along the path ahead of the robot,..." alt="" coords="372,213,533,253"/>
+<area shape="poly" title=" " alt="" coords="455,165,455,197,450,197,450,165"/>
+<area shape="poly" title=" " alt="" coords="624,345,480,388,479,382,623,340"/>
+<area shape="rect" title=" " alt="" coords="663,390,717,416"/>
+<area shape="poly" title=" " alt="" coords="693,342,693,374,687,374,687,342"/>
+<area shape="poly" title=" " alt="" coords="171,345,77,386,75,381,169,340"/>
+<area shape="poly" title=" " alt="" coords="268,340,378,382,376,387,266,345"/>
+<area shape="rect" title=" " alt="" coords="86,390,147,416"/>
+<area shape="poly" title=" " alt="" coords="193,344,145,382,142,378,189,340"/>
+<area shape="rect" title=" " alt="" coords="171,390,281,416"/>
+<area shape="poly" title=" " alt="" coords="221,342,225,374,220,375,215,343"/>
+<area shape="rect" title=" " alt="" coords="306,390,357,416"/>
+<area shape="poly" title=" " alt="" coords="246,340,302,379,300,383,243,345"/>
+<area shape="poly" title=" " alt="" coords="779,253,788,273,795,297,795,322,785,344,765,360,734,372,653,390,562,399,481,403,481,398,562,394,652,385,732,367,762,355,781,340,790,321,790,298,783,275,774,255"/>
+<area shape="poly" title=" " alt="" coords="799,252,877,298,874,303,796,256"/>
+<area shape="poly" title=" " alt="" coords="372,239,314,245,251,257,186,276,125,304,102,320,82,339,52,378,47,375,78,335,99,315,122,299,184,271,249,252,314,240,371,234"/>
+<area shape="poly" title=" " alt="" coords="438,255,424,277,413,302,410,340,417,375,411,376,404,340,407,301,419,275,434,252"/>
+<area shape="poly" title=" " alt="" coords="507,251,623,293,621,298,506,256"/>
+<area shape="poly" title=" " alt="" coords="400,256,284,298,283,293,398,251"/>
+<area shape="rect" title=" " alt="" coords="422,309,585,334"/>
+<area shape="poly" title=" " alt="" coords="466,252,491,294,486,297,462,255"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -130,10 +165,9 @@ Include dependency graph for MPCOptimizer.cpp:</div>
 Namespaces</h2></td></tr>
 <tr class="memitem:easynav" id="r_easynav"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav.html">easynav</a></td></tr>
 <tr class="memdesc:namespaceeasynav"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a mapping for often used cost values. <br /></td></tr>
+<tr class="memitem:easynav_3A_3Ampc" id="r_easynav_3A_3Ampc"><td class="memItemLeft">namespace &#160;</td><td class="memItemRight"><a class="el" href="namespaceeasynav_1_1mpc.html">easynav::mpc</a></td></tr>
 </table>
-<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Implementation of MPCParameters and MPCOptimizer classes. </p>
-</div></div><!-- contents -->
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0
