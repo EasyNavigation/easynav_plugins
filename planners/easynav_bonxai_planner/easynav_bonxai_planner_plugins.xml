@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_bonxai_planner">
+    <class name="easynav_bonxai_planner/BonxaiPlanner" type="easynav::BonxaiPlanner" base_class_type="easynav::PlannerMethodBase">
+      <description>
+      A* in 3D over a Bonxai map, for aerial robots, keeping a clearance from the obstacles.
+      </description>
+    </class>
+  </library>
+</class_libraries>

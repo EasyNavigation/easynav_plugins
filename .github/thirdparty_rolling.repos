@@ -12,9 +12,8 @@ repositories:
     url: https://github.com/EasyNavigation/NavMap.git
     version: rolling
   # robot_localization: ros-rolling-robot-localization is not in the main
-  # repository yet, and upstream rolling-devel lacks an #include <numeric>
-  # (cra-ros-pkg/robot_localization#986). Back to upstream once merged.
+  # repository yet. Remove this entry once it is.
   ThirdParty/robot_localization:
     type: git
-    url: https://github.com/EasyNavigation/robot_localization.git
-    version: include_numeric
+    url: https://github.com/cra-ros-pkg/robot_localization.git
+    version: rolling-devel
