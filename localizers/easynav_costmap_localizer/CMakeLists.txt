@@ -72,8 +72,10 @@ target_link_libraries(amcl_relocalize_mitigation PUBLIC
   easynav_core::easynav_core
   easynav_diagnostic_recovery::easynav_diagnostic_recovery
   pluginlib::pluginlib
+  rclcpp::rclcpp
   ${diagnostic_msgs_TARGETS}
   ${geometry_msgs_TARGETS}
+  ${nav_msgs_TARGETS}
 )
 
 install(

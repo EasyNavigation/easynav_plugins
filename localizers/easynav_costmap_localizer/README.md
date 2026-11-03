@@ -45,6 +45,8 @@ All parameters are declared under the plugin namespace, i.e., `/<node_fqn>/easyn
 | `<plugin>.noise_translation_to_rotation` | `double` | `0.01` | Translation-to-rotation noise coupling. |
 | `<plugin>.min_noise_xy` | `double` | `0.05` | XY noise (m) of each particle reseeded around its parent, and minimum XY spread when the initial pose is set. |
 | `<plugin>.min_noise_yaw` | `double` | `0.05` | Yaw noise (rad) of each particle reseeded around its parent, and minimum yaw spread when the initial pose is set. |
+| `<plugin>.reset_refine_time` | `double` | `3.0` | After an initial pose (e.g. RViz2's, or `AmclRelocalizeMitigation`'s), for this long (s), the reseeds spread the new particles more, so that the cloud keeps refining the pose with the robot standing still. `0` disables it. |
+| `<plugin>.reset_refine_noise` | `double` | `0.25` | That extra spread at the start, as a fraction of the initial pose's deviation; it falls to `min_noise_*` by the end of `reset_refine_time`. `0` disables it. |
 | `<plugin>.min_height` | `double` | `0.1` | Points lower than this (m, `base_footprint` frame) are the floor and do not correct the particles. Lower it for sensors mounted lower (e.g. a laser 0.095 m high). |
 | `<plugin>.compute_odom_from_tf` | `bool` | `false` | If true, read odometry from TF (odom->base_footprint) instead of /odom topic. |
 

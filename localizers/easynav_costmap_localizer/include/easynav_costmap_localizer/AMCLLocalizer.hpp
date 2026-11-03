@@ -236,6 +236,20 @@ protected:
   /// Points below this height (m, robot footprint frame) are ignored: floor hits
   double min_height_ {0.1};
 
+  /// After an initial pose, for this long (s), the reseeds spread the new particles more: a robot
+  /// standing still has no motion noise, and the cloud would settle where it first converged.
+  double reset_refine_time_ {3.0};
+
+  /// That extra spread at the start, as a fraction of the initial pose's deviation; it falls to
+  /// min_noise_* by the end of reset_refine_time.
+  double reset_refine_noise_ {0.25};
+
+  /// Refining after an initial pose: since when, and its starting deviations (m, rad).
+  bool refining_ {false};
+  rclcpp::Time refine_start_;
+  double refine_xy_ {0.0};
+  double refine_yaw_ {0.0};
+
   /// Whether to use TFs to compute odom
   bool compute_odom_from_tf_ {false};
 

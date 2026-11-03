@@ -28,6 +28,8 @@
 
 #include "gtest/gtest.h"
 
+#include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
+
 #include "rclcpp/rclcpp.hpp"
 
 #include "easynav_common/RTTFBuffer.hpp"
@@ -44,6 +46,7 @@ namespace
 class TestAMCLLocalizer : public easynav::AMCLLocalizer
 {
 public:
+  using easynav::AMCLLocalizer::init_pose_callback;
   using easynav::AMCLLocalizer::odom_callback;
   using easynav::AMCLLocalizer::particles_;
   using easynav::AMCLLocalizer::reseed;
@@ -202,4 +205,125 @@ TEST_F(CostmapAMCLReseedTest, ReseedWithAlikeWeightsDoesNotSpreadTheCloud)
     localizer->reseed();
   }
   EXPECT_LT(std_xy(), 2.0 * before) << "before " << before << " after " << std_xy();
+}
+
+namespace
+{
+
+// RViz2's "2D Pose Estimate" at (1, 2, 0)
+std::unique_ptr<geometry_msgs::msg::PoseWithCovarianceStamped> rviz_pose()
+{
+  auto msg = std::make_unique<geometry_msgs::msg::PoseWithCovarianceStamped>();
+  msg->header.frame_id = "map";
+  msg->pose.pose.position.x = 1.0;
+  msg->pose.pose.position.y = 2.0;
+  msg->pose.pose.orientation.w = 1.0;
+  msg->pose.covariance[0] = 0.25;
+  msg->pose.covariance[7] = 0.25;
+  msg->pose.covariance[35] = 0.06853891945200942;
+  return msg;
+}
+
+// Collapses the cloud on (1, 2, 0), all alike, reseeds it and returns the deviation of the new
+// particles from there (xy, yaw)
+std::pair<double, double> reseed_spread(TestAMCLLocalizer & localizer)
+{
+  auto & ps = localizer.particles_;
+  for (auto & p : ps) {
+    p.pose.setIdentity();
+    p.pose.setOrigin(tf2::Vector3(1.0, 2.0, 0.0));
+    p.hits = 10;
+    p.possible_hits = 20;
+    p.weight = 1.0 / static_cast<double>(ps.size());
+  }
+  localizer.reseed();
+  double xy = 0.0, yaw = 0.0;
+  const std::size_t from = ps.size() / 2;  // the reseeded ones
+  for (std::size_t i = from; i < ps.size(); ++i) {
+    const auto o = ps[i].pose.getOrigin();
+    xy += 0.5 * (std::pow(o.x() - 1.0, 2) + std::pow(o.y() - 2.0, 2));
+    double r, pi, y;
+    tf2::Matrix3x3(ps[i].pose.getRotation()).getRPY(r, pi, y);
+    yaw += y * y;
+  }
+  const double n = static_cast<double>(ps.size() - from);
+  return {std::sqrt(xy / n), std::sqrt(yaw / n)};
+}
+
+}  // namespace
+
+// Standing still there is no motion noise: after an initial pose the reseeds spread the new
+// particles more, so that the cloud keeps looking for the pose that matches best, falling to
+// min_noise by the end of reset_refine_time. Only after an initial pose.
+TEST_F(CostmapAMCLReseedTest, AfterAnInitialPoseTheReseedsRefineItForAWhile)
+{
+  auto node = std::make_shared<easynav::LocalizerNode>();
+  const std::string name = "refine_localizer";
+  node->declare_parameter(name + ".num_particles", 2000);
+  node->declare_parameter(name + ".min_noise_xy", 0.01);
+  node->declare_parameter(name + ".min_noise_yaw", 0.01);
+  node->declare_parameter(name + ".reset_refine_time", 0.6);
+  node->declare_parameter(name + ".reset_refine_noise", 0.25);
+  auto localizer = std::make_shared<TestAMCLLocalizer>();
+  localizer->initialize(node, name);
+
+  // Before any initial pose: min_noise
+  auto [xy, yaw] = reseed_spread(*localizer);
+  EXPECT_NEAR(xy, 0.01, 0.002);
+  EXPECT_NEAR(yaw, 0.01, 0.002);
+
+  // Right after it: a quarter of its deviations (0.5 m, pi/12 rad)
+  localizer->init_pose_callback(rviz_pose());
+  std::tie(xy, yaw) = reseed_spread(*localizer);
+  EXPECT_NEAR(xy, 0.125, 0.02);
+  EXPECT_NEAR(yaw, 0.0654, 0.01);
+
+  // Halfway: about half of it
+  std::this_thread::sleep_for(std::chrono::milliseconds(300));
+  std::tie(xy, yaw) = reseed_spread(*localizer);
+  EXPECT_GT(xy, 0.04);
+  EXPECT_LT(xy, 0.085);
+
+  // Over: min_noise again
+  std::this_thread::sleep_for(std::chrono::milliseconds(400));
+  std::tie(xy, yaw) = reseed_spread(*localizer);
+  EXPECT_NEAR(xy, 0.01, 0.002);
+  EXPECT_NEAR(yaw, 0.01, 0.002);
+
+  // A new initial pose refines again
+  localizer->init_pose_callback(rviz_pose());
+  std::tie(xy, yaw) = reseed_spread(*localizer);
+  EXPECT_NEAR(xy, 0.125, 0.02);
+}
+
+TEST_F(CostmapAMCLReseedTest, TheRefinementCanBeTurnedOff)
+{
+  for (const auto & [time, noise] : {std::pair{0.0, 0.25}, std::pair{3.0, 0.0}}) {
+    auto node = std::make_shared<easynav::LocalizerNode>();
+    const std::string name = "no_refine_localizer";
+    node->declare_parameter(name + ".num_particles", 2000);
+    node->declare_parameter(name + ".min_noise_xy", 0.01);
+    node->declare_parameter(name + ".min_noise_yaw", 0.01);
+    node->declare_parameter(name + ".reset_refine_time", time);
+    node->declare_parameter(name + ".reset_refine_noise", noise);
+    auto localizer = std::make_shared<TestAMCLLocalizer>();
+    localizer->initialize(node, name);
+    localizer->init_pose_callback(rviz_pose());
+    const auto [xy, yaw] = reseed_spread(*localizer);
+    EXPECT_NEAR(xy, 0.01, 0.002) << "time " << time << " noise " << noise;
+    EXPECT_NEAR(yaw, 0.01, 0.002) << "time " << time << " noise " << noise;
+  }
+}
+
+TEST_F(CostmapAMCLReseedTest, NegativeRefinementIsRejected)
+{
+  for (const auto & [param, value] : {std::pair{"reset_refine_time", -1.0},
+      std::pair{"reset_refine_noise", -0.1}})
+  {
+    auto node = std::make_shared<easynav::LocalizerNode>();
+    const std::string name = "bad_refine_localizer";
+    node->declare_parameter(name + "." + param, value);
+    auto localizer = std::make_shared<TestAMCLLocalizer>();
+    EXPECT_ANY_THROW(localizer->initialize(node, name)) << param;
+  }
 }
