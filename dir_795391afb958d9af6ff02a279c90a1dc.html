@@ -128,7 +128,13 @@ easynav_mpc_controller</h1>
 <p>"" "![ROS 2: rolling](https://img.shields.io/badge/ROS%202-rolling-blue)"</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
 Description</h1>
-<p>A Model Predictive Controller (MPC) implementation for Easy Navigation.</p>
+<p>Linear time-varying Model Predictive Controller (MPC) for differential, omnidirectional, Ackermann and aerial robots. Each cycle it predicts <span class="tt">horizon_steps</span> steps of <span class="tt">dt</span> and solves a sparse quadratic program with <a href="https://osqp.org">OSQP</a> (<span class="tt">osqp_vendor</span>).</p>
+<ul>
+<li><b>Motion models</b> (<span class="tt">motion_model</span>): <span class="tt">diff</span> (x, y, yaw; <span class="tt">linear.x</span> and <span class="tt">angular.z</span>), <span class="tt">omni</span> (also <span class="tt">linear.y</span>), <span class="tt">ackermann</span> (like <span class="tt">diff</span>, with the turning radius) and <span class="tt">aerial</span> (x, y, z, yaw; also <span class="tt">linear.z</span>). The model is linearized around a nominal trajectory: the previous solution shifted one step, or the reference when the robot lags behind it. <span class="tt">time_constant</span> models how the robot's velocity lags behind the command.</li>
+<li><b>Reference:</b> the path is projected forward from the robot (never backward) and given a speed profile within the robot's limits, the path's curvature (<span class="tt">max_lateral_acc</span>, <span class="tt">max_angular_vel</span>), the goal and the obstacles ahead, where it stops. For robots with a turning radius, corners are smoothed (<span class="tt">path_smoothing</span>).</li>
+<li><b>Constraints:</b> velocity and acceleration of each axis, from the robot limits; <span class="tt">|angular.z| &lt;= linear.x / min_turning_radius</span> for Ackermann; and, for each step, half-planes that keep the robot's shape (<span class="tt">robot_geometry</span>, the footprint or the radius) <span class="tt">safety_margin</span> away from the nearest obstacles. The bounds always include the nominal trajectory, so the program always has a solution.</li>
+<li><b>At the goal:</b> within <span class="tt">xy_goal_tolerance</span> it turns to the goal's heading (robots that can turn in place) and stops. A differential robot facing away from the path turns in place first (<span class="tt">rotate_to_heading_angle</span>).</li>
+</ul>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
 Authors and Maintainers</h1>
 <ul>
@@ -158,31 +164,80 @@ Plugin (pluginlib)</h1>
 <li><b>Type:</b> <span class="tt"><a class="el" href="classeasynav_1_1MPCController.html" title="Model predictive controller: tracks the path with a linear time-varying MPC.">easynav::MPCController</a></span></li>
 <li><b>Base Class:</b> <span class="tt">easynav::ControllerMethodBase</span></li>
 <li><b>Library:</b> <span class="tt">easynav_mpc_controller</span></li>
-<li><b>Description:</b> A Model Predictive Controller (MPC) implementation for Easy Navigation.</li>
+<li><b>Description:</b> Linear time-varying MPC (OSQP) for differential, omnidirectional, Ackermann and aerial robots.</li>
 </ul>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
 Parameters</h1>
-<p>All parameters are declared under the plugin namespace, i.e., <span class="tt">/&lt;node_fqn&gt;/easynav_mpc_controller/MPCController/...</span>.</p>
+<p>All parameters are declared under the plugin namespace, i.e., <span class="tt">/&lt;node_fqn&gt;/&lt;plugin&gt;/...</span>. Invalid values fail to configure.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Name  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadRight">Default  </th><th class="markdownTableHeadNone">Description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.horizon_steps</span>  </td><td class="markdownTableBodyNone"><span class="tt">int</span>  </td><td class="markdownTableBodyRight"><span class="tt">5</span>  </td><td class="markdownTableBodyNone">Number of time steps in the prediction horizon.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.motion_model</span>  </td><td class="markdownTableBodyNone"><span class="tt">string</span>  </td><td class="markdownTableBodyRight"><span class="tt">diff</span>  </td><td class="markdownTableBodyNone"><span class="tt">diff</span>, <span class="tt">omni</span>, <span class="tt">ackermann</span> or <span class="tt">aerial</span>.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.dt</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Integration time step (seconds).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.horizon_steps</span>  </td><td class="markdownTableBodyNone"><span class="tt">int</span>  </td><td class="markdownTableBodyRight"><span class="tt">20</span>  </td><td class="markdownTableBodyNone">Steps in the prediction horizon (1-500).  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.safety_radius</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.35</span>  </td><td class="markdownTableBodyNone">Safety radius to check possible collisions.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.dt</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Time of each step (s).  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyRight">—  </td><td class="markdownTableBodyNone"><a class="el" href="structVelocity.html" title="Velocity in the robot frame.">Velocity</a> and acceleration limits are not this plugin's: they are the robot limits of <span class="tt">controller_node</span> (<span class="tt">robot_limits.max_linear_vel</span>, <span class="tt">min_linear_vel</span>, <span class="tt">max_angular_vel</span>, <span class="tt">max_linear_acc</span>, <span class="tt">max_linear_decel</span>, <span class="tt">max_angular_acc</span>, <span class="tt">max_angular_decel</span>), queried with <span class="tt">ControllerMethodBase::get_robot_limits()</span> and also enforced by ControllerNode's velocity smoother.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.time_constant</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">First-order lag of the robot's velocity behind the command (s). 0: it follows the command at once.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.verbose</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">false</span>  </td><td class="markdownTableBodyNone">Show data on terminal about Optimization.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.latency</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.0</span>  </td><td class="markdownTableBodyNone">Delay until a command acts (s): the robot is predicted forward this long before solving.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.use_collision_checker</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">false</span>  </td><td class="markdownTableBodyNone">Enables the in-loop obstacle constraint (within <span class="tt">safety_radius</span>).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.use_odometry_velocity</span>  </td><td class="markdownTableBodyNone"><span class="tt">bool</span>  </td><td class="markdownTableBodyRight"><span class="tt">false</span>  </td><td class="markdownTableBodyNone">Take the current velocity from <span class="tt">robot_pose</span>'s twist instead of from the commands sent (through <span class="tt">time_constant</span>).  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Perceived points lower than this (m, map frame) are the floor, not obstacles to avoid. Lower it for sensors mounted lower (e.g. a laser 0.095 m high).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.weight_xy</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">10.0</span>  </td><td class="markdownTableBodyNone">Weight of the position error (per m²).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.weight_z</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">10.0</span>  </td><td class="markdownTableBodyNone">Weight of the height error (aerial).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.weight_yaw</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">2.0</span>  </td><td class="markdownTableBodyNone">Weight of the heading error (per rad²).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.terminal_factor</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">5.0</span>  </td><td class="markdownTableBodyNone">Weight of the last pose, relative to the others.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.near_weight</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">The pose weights grow linearly along the horizon from this factor (first step) to 1. Below 1, the robot is pressed less to be on the path right now than further ahead: less weaving. In (0, 1].  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.weight_linear_vel</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.5</span>  </td><td class="markdownTableBodyNone">Weight of the linear velocity off the reference's.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.weight_angular_vel</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.2</span>  </td><td class="markdownTableBodyNone">Weight of the angular velocity off the reference's.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.weight_linear_rate</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Weight of the change of the linear command between steps.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.weight_angular_rate</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Weight of the change of the angular command between steps.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.max_lateral_acc</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Lateral acceleration (speed² × curvature, m/s²) the reference's speed keeps to in curves.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.approach_speed</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Lowest reference speed (m/s) while the goal is not reached.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.curvature_window</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Half length (m) of the window the path's heading is averaged over: planners' paths zigzag on their grid.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.path_smoothing</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">-1.0</span>  </td><td class="markdownTableBodyNone">Rounding of the path's corners (m). Negative: automatic, 1.45 × <span class="tt">min_turning_radius</span> for robots with a turning radius (rounds a 90° corner to that radius), none for the rest.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.obstacle_range</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">3.0</span>  </td><td class="markdownTableBodyNone">Minimum distance (m) obstacles are taken from; it grows with the distance the horizon covers at full speed plus the braking distance.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.obstacles_per_step</span>  </td><td class="markdownTableBodyNone"><span class="tt">int</span>  </td><td class="markdownTableBodyRight"><span class="tt">2</span>  </td><td class="markdownTableBodyNone">Half-planes per step, from obstacles in different directions.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.safety_margin</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Clearance (m) between the robot's shape and the obstacles.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.min_height</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.1</span>  </td><td class="markdownTableBodyNone">Perceived points lower than this (m, robot frame) are the floor, not obstacles (ground robots). Lower it for sensors mounted lower.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.xy_goal_tolerance</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.2</span>  </td><td class="markdownTableBodyNone">Distance (m) to the goal at which the robot stops moving along the path. <span class="tt">goal_tolerance.position</span> in NavState, if lower, takes over.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.yaw_goal_tolerance</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.2</span>  </td><td class="markdownTableBodyNone">Heading error (rad) at the goal to stop turning. <span class="tt">goal_tolerance.yaw</span> in NavState, if lower, takes over.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.goal_align_gain</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">1.0</span>  </td><td class="markdownTableBodyNone">Angular velocity per radian of heading error when turning in place (at the goal, or towards the path).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.rotate_to_heading_angle</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.785</span>  </td><td class="markdownTableBodyNone">A differential robot whose heading is farther than this (rad) from the path's turns in place first, until it is within half of it.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.max_iterations</span>  </td><td class="markdownTableBodyNone"><span class="tt">int</span>  </td><td class="markdownTableBodyRight"><span class="tt">400</span>  </td><td class="markdownTableBodyNone">OSQP iterations per cycle: bounds the solve time.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">&lt;plugin&gt;.tolerance</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyRight"><span class="tt">0.001</span>  </td><td class="markdownTableBodyNone">OSQP absolute and relative tolerance.  </td></tr>
 </table>
+<p><a class="el" href="structVelocity.html" title="Velocity in the robot frame.">Velocity</a> and acceleration limits are not this plugin's: they are the robot limits of <span class="tt">controller_node</span> (<span class="tt">robot_limits.*</span>: linear, lateral, vertical and angular velocity, acceleration and deceleration, and <span class="tt">min_turning_radius</span>), queried with <span class="tt">ControllerMethodBase::get_robot_limits()</span> and also enforced by ControllerNode's velocity smoother. The robot's shape is <span class="tt">robot_geometry</span> (footprint or radius, and height).</p>
+<ul>
+<li><span class="tt">ackermann</span> without <span class="tt">robot_limits.min_turning_radius</span> warns: nothing keeps the curvature within the steering.</li>
+<li><span class="tt">aerial</span> with <span class="tt">robot_limits.max_vertical_vel</span> 0 warns: it will not change height.</li>
+</ul>
 <blockquote class="doxtable">
-<p><b>Deprecated:</b> this plugin's former limit parameters (<span class="tt">max_linear_velocity</span>, <span class="tt">max_angular_velocity</span>, under the plugin's name) still apply, with a warning, where <span class="tt">controller_node.robot_limits.*</span> does not set that limit. They will stop working soon: move them to <span class="tt">robot_limits</span>. </p>
+<p><b>Deprecated:</b> <span class="tt">fallback_goal_pos_tol</span> and <span class="tt">fallback_goal_yaw_tol</span> still apply, with a warning, where <span class="tt">xy_goal_tolerance</span> and <span class="tt">yaw_goal_tolerance</span> are not given; so do the former limit parameters (<span class="tt">max_linear_velocity</span>, <span class="tt">max_angular_velocity</span>) where <span class="tt">robot_limits.*</span> does not set that limit. <span class="tt">safety_radius</span>, <span class="tt">use_collision_checker</span> and <span class="tt">verbose</span> no longer have any effect and only warn: obstacles are constraints, from <span class="tt">robot_geometry</span> and <span class="tt">safety_margin</span>. </p>
 </blockquote>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
 Interfaces (Topics and Services)</h1>
@@ -192,9 +247,11 @@ Subscriptions and Publications</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Direction  </th><th class="markdownTableHeadNone">Topic  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Purpose  </th><th class="markdownTableHeadNone">QoS  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">/mpc/path</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/path</span>  </td><td class="markdownTableBodyNone">MPC trajectories generate by Predictive Component.  </td><td class="markdownTableBodyNone">QoS depth=10  </td></tr>
+<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node&gt;/&lt;plugin&gt;/predicted</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/Path</span>  </td><td class="markdownTableBodyNone">The poses the solution leads to.  </td><td class="markdownTableBodyNone">depth 10  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">/mpc/detection</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs::msg::PointCloud2</span>  </td><td class="markdownTableBodyNone">Detections used by collision checker.  </td><td class="markdownTableBodyNone">QoS depth=10  </td></tr>
+<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node&gt;/&lt;plugin&gt;/reference</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs/msg/Path</span>  </td><td class="markdownTableBodyNone">The reference the solution follows.  </td><td class="markdownTableBodyNone">depth 10  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Publisher  </td><td class="markdownTableBodyNone"><span class="tt">&lt;node&gt;/&lt;plugin&gt;/obstacles</span>  </td><td class="markdownTableBodyNone"><span class="tt">sensor_msgs/msg/PointCloud2</span>  </td><td class="markdownTableBodyNone">The obstacle points taken into account.  </td><td class="markdownTableBodyNone">depth 10  </td></tr>
 </table>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
 Services</h2>
@@ -205,17 +262,19 @@ NavState Keys</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Key  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Access  </th><th class="markdownTableHeadNone">Notes  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">path</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Path</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Target path to track.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">path</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Path</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Path to follow; its last pose is the goal.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">robot_pose</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Odometry</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Current robot pose/state.  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">robot_pose</span>  </td><td class="markdownTableBodyNone"><span class="tt">nav_msgs::msg::Odometry</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Current pose (and velocity, with <span class="tt">use_odometry_velocity</span>).  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">cmd_vel</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs::msg::TwistStamped</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Last commanded velocity (if provided in state).  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">goal_tolerance.position</span>, <span class="tt">goal_tolerance.yaw</span>  </td><td class="markdownTableBodyNone"><span class="tt">double</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">The current goal's tolerances, if set.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">points</span>  </td><td class="markdownTableBodyNone"><span class="tt">PointPerceptions</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Perception point cloud(s) used for costs.  </td></tr>
+<td class="markdownTableBodyNone">Point perceptions  </td><td class="markdownTableBodyNone"><span class="tt">PointPerception</span>  </td><td class="markdownTableBodyNone"><b>Read</b>  </td><td class="markdownTableBodyNone">Obstacles.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">cmd_vel</span>  </td><td class="markdownTableBodyNone"><span class="tt">geometry_msgs::msg::TwistStamped</span>  </td><td class="markdownTableBodyNone"><b>Write</b>  </td><td class="markdownTableBodyNone">The command.  </td></tr>
 </table>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
 TF Frames</h1>
-<p>This controller does not explicitly publish or require TF frames in code.</p>
+<p>The obstacle points are fused in the robot frame (to keep those around the robot) and in the map frame.</p>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md32"></a>
 License</h1>
 <p>Apache-2.0 </p>
