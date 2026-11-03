@@ -71,7 +71,7 @@ Each plugin's parameters are under `recovery_manager.<type>.`. Every mitigation 
 | `easynav_diagnostic_recovery/HumanAssistanceRecovery` | Handles any `ERROR` not in `ignored_hardware_ids`: stops and waits until those clear. `timeout` 0 waits forever. | `timeout` (0.0), `ignored_hardware_ids` ([`ros_graph`]) |
 | `easynav_diagnostic_recovery/CancelMissionRecovery` | Handles any `ERROR`: aborts the mission. The last resort. | — |
 | `easynav_costmap_localizer/AmclConvergenceEvaluator` | `ERROR` (`localizer.amcl`) if AMCL's covariance trace exceeds the threshold. | `covariance_threshold` (1.0) |
-| `easynav_costmap_localizer/AmclRelocalizeMitigation` | Handles `localizer.amcl`: rotates until AMCL converges, or fails after `timeout`. | `covariance_threshold` (1.0), `rotation_speed` (0.3), `timeout` (5.0) |
+| `easynav_costmap_localizer/AmclRelocalizeMitigation` | Handles `localizer.amcl`: holds the robot and resets AMCL's pose (on `initialpose`, with RViz2's covariance) to where the robot was when it got lost, then up to `max_offset` m from it. Each of the `attempts` has `attempt_timeout` s to converge, by the evaluator's criteria; fails if none does. Resets nothing if AMCL has already converged when it starts. | `attempts` (5), `attempt_timeout` (5.0), `max_offset` (1.0), `covariance_threshold` (1.0), `match_threshold` (0.5), `quality_ratio_threshold` (0.5) |
 
 ## Usage
 

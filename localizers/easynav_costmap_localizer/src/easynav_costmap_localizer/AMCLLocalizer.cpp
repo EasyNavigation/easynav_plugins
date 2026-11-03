@@ -250,6 +250,12 @@ AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
   node->get_parameter<double>(plugin_name + ".min_height", min_height_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".reset_refine_time", reset_refine_time_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".reset_refine_noise", reset_refine_noise_);
+  node->get_parameter<double>(plugin_name + ".reset_refine_time", reset_refine_time_);
+  node->get_parameter<double>(plugin_name + ".reset_refine_noise", reset_refine_noise_);
   double alpha_slow = 0.001, alpha_fast = 0.1;
   easynav::declare_parameter_if_absent<double>(
     *node, plugin_name + ".recovery_alpha_slow", alpha_slow);
@@ -283,6 +289,9 @@ AMCLLocalizer::on_initialize()
     min_noise_yaw_ <= 0.0)
   {
     throw std::runtime_error("AMCLLocalizer: standard deviations must be positive");
+  }
+  if (!(reset_refine_time_ >= 0.0) || !(reset_refine_noise_ >= 0.0)) {
+    throw std::runtime_error("AMCLLocalizer: reset_refine_time and reset_refine_noise >= 0");
   }
 
   RCLCPP_INFO(node->get_logger(), "Initialized AMCL pose with %d particles", num_particles);
@@ -569,6 +578,11 @@ AMCLLocalizer::init_pose_callback(
 
   // Prevent immediate reseed after initialization
   last_reseed_ = get_node()->now();
+  // Then the reseeds refine it (see reset_refine_time)
+  refining_ = reset_refine_time_ > 0.0 && reset_refine_noise_ > 0.0;
+  refine_start_ = last_reseed_;
+  refine_xy_ = reset_refine_noise_ * std::sqrt(0.5 * (l00 * l00 + l10 * l10 + l11 * l11));
+  refine_yaw_ = reset_refine_noise_ * yaw_stddev;
   // A new pose: the scores before it are no reference any more.
   quality_.reset();
 
@@ -796,9 +810,21 @@ AMCLLocalizer::reseed(const Costmap2D * map, std::size_t n_random)
     });
 
   // Fixed noise around the parent: noise from the spread of the best ones made the cloud grow
-  // without bound at every reseed when the weights do not tell the particles apart.
-  std::normal_distribution<double> xy_noise(0.0, min_noise_xy_);
-  std::normal_distribution<double> yaw_noise(0.0, min_noise_yaw_);
+  // without bound at every reseed when the weights do not tell the particles apart. Only after
+  // an initial pose, more for a while, falling to it: the particles can still move to the pose
+  // that matches best without the robot moving.
+  double sd_xy = min_noise_xy_, sd_yaw = min_noise_yaw_;
+  if (refining_) {
+    const double left = 1.0 - (get_node()->now() - refine_start_).seconds() / reset_refine_time_;
+    if (left > 0.0) {
+      sd_xy = std::max(sd_xy, left * refine_xy_);
+      sd_yaw = std::max(sd_yaw, left * refine_yaw_);
+    } else {
+      refining_ = false;
+    }
+  }
+  std::normal_distribution<double> xy_noise(0.0, sd_xy);
+  std::normal_distribution<double> yaw_noise(0.0, sd_yaw);
   std::normal_distribution<double> index_dist(0.0, std::max(0.05 * static_cast<double>(N), 1e-12));
 
   for (std::size_t i = N_top; i < N; ++i) {
