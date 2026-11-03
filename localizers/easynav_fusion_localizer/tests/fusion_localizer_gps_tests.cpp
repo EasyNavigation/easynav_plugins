@@ -113,16 +113,33 @@ protected:
     return p;
   }
 
-  void set_imu_yaw(double yaw)
+  /// An IMU in \p frame (empty: the robot's) whose frame has \p yaw.
+  void set_imu_yaw(double yaw, const std::string & frame = "")
   {
-    easynav::IMUPerception imu;
     tf2::Quaternion q;
     q.setRPY(0.0, 0.0, yaw);
-    imu.data.orientation.x = q.x();
-    imu.data.orientation.y = q.y();
-    imu.data.orientation.z = q.z();
-    imu.data.orientation.w = q.w();
+    set_imu(q.x(), q.y(), q.z(), q.w(), 0.0, frame);
+  }
+
+  void set_imu(
+    double x, double y, double z, double w, double covariance0, const std::string & frame = "")
+  {
+    easynav::IMUPerception imu;
+    imu.data.header.frame_id = frame;
+    imu.data.orientation.x = x;
+    imu.data.orientation.y = y;
+    imu.data.orientation.z = z;
+    imu.data.orientation.w = w;
+    imu.data.orientation_covariance[0] = covariance0;
     nav_state_.set("imu", imu);
+  }
+
+  static bool finite(const std::optional<nav_msgs::msg::Odometry> & pose)
+  {
+    return pose && std::isfinite(pose->pose.pose.position.x) &&
+           std::isfinite(pose->pose.pose.position.y) &&
+           std::isfinite(pose->pose.pose.position.z) &&
+           std::isfinite(pose->pose.pose.orientation.w);
   }
 
   /// Feeds the same antenna position for \p seconds (one fix per cycle); the last estimate.
@@ -146,7 +163,7 @@ protected:
     return last;
   }
 
-  static void mount(const std::string & frame, double x, double y, double z)
+  static void mount(const std::string & frame, double x, double y, double z, double yaw = 0.0)
   {
     geometry_msgs::msg::TransformStamped t;
     t.header.frame_id = "base_footprint";
@@ -154,7 +171,12 @@ protected:
     t.transform.translation.x = x;
     t.transform.translation.y = y;
     t.transform.translation.z = z;
-    t.transform.rotation.w = 1.0;
+    tf2::Quaternion q;
+    q.setRPY(0.0, 0.0, yaw);
+    t.transform.rotation.x = q.x();
+    t.transform.rotation.y = q.y();
+    t.transform.rotation.z = q.z();
+    t.transform.rotation.w = q.w();
     easynav::RTTFBuffer::getInstance()->setTransform(t, "fusion_gps_test", true);
   }
 
@@ -232,6 +254,103 @@ TEST_F(FusionGpsTest, WithoutImuTheFirstFixIsTheAntennas)
   ASSERT_TRUE(first);
   EXPECT_NEAR(first->pose.pose.position.x, 30.0, 0.02);
   EXPECT_NEAR(first->pose.pose.position.y, 30.0, 0.02);
+}
+
+TEST_F(FusionGpsTest, AnImuMountedTurnedGivesTheRobotsAttitude)
+{
+  // IMU turned 90 deg left on the robot; the robot faces north, so the IMU's frame faces west
+  mount("imu_turned", 0.2, 0.0, 0.3, M_PI / 2.0);
+  mount("gps_ahead_t", 1.5, 0.0, 1.0);
+  make("enu");
+  set_imu_yaw(M_PI, "imu_turned");
+  const auto first = feed(100.0, 50.0, "gps_ahead_t", 0.0);
+  ASSERT_TRUE(first);
+  EXPECT_NEAR(first->pose.pose.position.x, 100.0, 0.02);
+  EXPECT_NEAR(first->pose.pose.position.y, 48.5, 0.02) << "1.5 m south: the robot faces north";
+  const auto later = feed(100.0, 50.0, "gps_ahead_t", 1.5);
+  ASSERT_TRUE(later);
+  EXPECT_NEAR(later->pose.pose.position.x, 100.0, 0.1);
+  EXPECT_NEAR(later->pose.pose.position.y, 48.5, 0.1);
+}
+
+TEST_F(FusionGpsTest, AnAntennaMountedTurnedOnlyCountsItsOffset)
+{
+  // The antenna's frame turned 90 deg changes nothing: 1.5 m ahead, 0.5 m left; robot faces west
+  mount("gps_turned", 1.5, 0.5, 1.0, M_PI / 2.0);
+  make("enu");
+  set_imu_yaw(M_PI);
+  const auto first = feed(-40.0, 20.0, "gps_turned", 0.0);
+  ASSERT_TRUE(first);
+  EXPECT_NEAR(first->pose.pose.position.x, -38.5, 0.02);
+  EXPECT_NEAR(first->pose.pose.position.y, 20.5, 0.02);
+  const auto later = feed(-40.0, 20.0, "gps_turned", 1.5);
+  ASSERT_TRUE(later);
+  EXPECT_NEAR(later->pose.pose.position.x, -38.5, 0.1);
+  EXPECT_NEAR(later->pose.pose.position.y, 20.5, 0.1);
+}
+
+TEST_F(FusionGpsTest, AnImuWithoutOrientationIsNoAttitude)
+{
+  // orientation_covariance[0] = -1 and a null quaternion, as sensor_msgs/Imu says
+  mount("gps_no_orientation", 1.5, 0.0, 1.0);
+  make("enu");
+  set_imu(0.0, 0.0, 0.0, 0.0, -1.0);
+  const auto first = feed(30.0, 30.0, "gps_no_orientation", 0.0);
+  ASSERT_TRUE(finite(first));
+  EXPECT_NEAR(first->pose.pose.position.x, 30.0, 0.02) << "the robot starts at the antenna";
+  EXPECT_NEAR(first->pose.pose.position.y, 30.0, 0.02);
+  EXPECT_TRUE(finite(feed(30.0, 30.0, "gps_no_orientation", 1.0)));
+}
+
+TEST_F(FusionGpsTest, ANullOrNonFiniteQuaternionIsNoAttitude)
+{
+  mount("gps_null_q", 1.5, 0.0, 1.0);
+  make("enu");
+  set_imu(0.0, 0.0, 0.0, 0.0, 0.0);
+  const auto first = feed(30.0, 30.0, "gps_null_q", 0.0);
+  ASSERT_TRUE(finite(first));
+  EXPECT_NEAR(first->pose.pose.position.x, 30.0, 0.02);
+  EXPECT_NEAR(first->pose.pose.position.y, 30.0, 0.02);
+  set_imu(NAN, 0.0, 0.0, 1.0, 0.0);
+  EXPECT_TRUE(finite(feed(30.0, 30.0, "gps_null_q", 1.0)));
+  set_imu(0.0, 0.0, 0.0, 0.0, 0.0);
+  EXPECT_TRUE(finite(feed(30.0, 30.0, "gps_null_q", 0.5)));
+}
+
+TEST_F(FusionGpsTest, AnImuWithAnUnknownMountingIsNoAttitude)
+{
+  // Its yaw would put the robot 1.5 m west of the antenna; without its mounting, it is not used
+  mount("gps_imu_unknown", 1.5, 0.0, 1.0);
+  make("enu");
+  set_imu_yaw(0.0, "imu_not_in_tf");
+  const auto first = feed(30.0, 30.0, "gps_imu_unknown", 0.0);
+  ASSERT_TRUE(finite(first));
+  EXPECT_NEAR(first->pose.pose.position.x, 30.0, 0.02);
+  EXPECT_NEAR(first->pose.pose.position.y, 30.0, 0.02);
+}
+
+TEST_F(FusionGpsTest, WithoutImuLaterFixesUseTheEstimatedHeading)
+{
+  // No IMU: the filter's heading (east here, nothing turns it) removes the mounting
+  mount("gps_estimated", 1.5, 0.0, 1.0);
+  make("enu");
+  const auto pose = feed(30.0, 30.0, "gps_estimated", 2.0);
+  ASSERT_TRUE(finite(pose));
+  EXPECT_NEAR(pose->pose.pose.position.x, 28.5, 0.15);
+  EXPECT_NEAR(pose->pose.pose.position.y, 30.0, 0.15);
+}
+
+TEST_F(FusionGpsTest, AnImuThatAppearsLaterGivesTheAttitudeFromThen)
+{
+  // First fix without IMU (robot at the antenna), then the IMU says the robot faces north
+  mount("gps_imu_late", 1.5, 0.0, 1.0);
+  make("enu");
+  ASSERT_TRUE(finite(feed(100.0, 50.0, "gps_imu_late", 0.0)));
+  set_imu_yaw(M_PI / 2.0);
+  const auto pose = feed(100.0, 50.0, "gps_imu_late", 2.0);
+  ASSERT_TRUE(finite(pose));
+  EXPECT_NEAR(pose->pose.pose.position.x, 100.0, 0.15);
+  EXPECT_NEAR(pose->pose.pose.position.y, 48.5, 0.15);
 }
 
 TEST_F(FusionGpsTest, ThePublishedFixOfTheEstimateIsInTheSameProjection)

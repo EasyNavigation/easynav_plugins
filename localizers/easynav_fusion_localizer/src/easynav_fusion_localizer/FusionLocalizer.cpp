@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cmath>
+
 #include "easynav_common/Parameters.hpp"
 #include "easynav_fusion_localizer/FusionLocalizer.hpp"
 
@@ -240,24 +242,42 @@ void FusionLocalizer::update_rt(NavState & nav_state)
             std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(
             navsatfix_to_pose(
               gps_data[i]->data));
-          // The fix is the antenna's position: the filter moves it to the robot with this
-          // attitude (a fix carries none)
-          const bool has_attitude = nav_state.has("imu");
-          if (has_attitude) {
-            pose->pose.pose.orientation =
-              nav_state.get<IMUPerception>(std::string("imu")).data.orientation;
+          // The fix is the antenna's position (it carries no attitude)
+          const std::string & antenna_frame = gps_data[i]->data.header.frame_id;
+          const auto antenna_mount = mounting(antenna_frame);
+          std::optional<tf2::Quaternion> attitude;
+          if (nav_state.has("imu")) {
+            attitude = robot_attitude(nav_state.get<IMUPerception>(std::string("imu")));
           }
           if (!first_pose_received_) {
             RCLCPP_INFO(
               get_node()->get_logger(),
               "First valid GPS fix received. Initializing filter state.");
-            if (has_attitude) {
-              antenna_to_robot(*pose, gps_data[i]->data.header.frame_id);
+            if (attitude) {
+              pose->pose.pose.orientation = tf2::toMsg(*attitude);
+            }
+            if (attitude && antenna_mount) {
+              antenna_to_robot(*pose, *antenna_mount, *attitude);
+            } else if (!antenna_mount || antenna_mount->getOrigin().length2() > 0.0) {
+              RCLCPP_WARN(
+                get_node()->get_logger(), "GNSS antenna mounting (%s) or robot attitude (IMU) "
+                "unknown: the first fix places the robot at the antenna", antenna_frame.c_str());
             }
             ukf_global_->setPoseCallback(pose);
             first_pose_received_ = true;
             continue;
           }
+          // The filter removes the mounting with the antenna's orientation: the robot's attitude
+          // from the IMU or, without it, the estimated one
+          tf2::Quaternion antenna_q = attitude.value_or(tf2::Quaternion::getIdentity());
+          nav_msgs::msg::Odometry estimate;
+          if (!attitude && ukf_global_->getFilteredOdometryMessage(&estimate)) {
+            tf2::fromMsg(estimate.pose.pose.orientation, antenna_q);
+          }
+          if (antenna_mount) {
+            antenna_q *= antenna_mount->getRotation();
+          }
+          pose->pose.pose.orientation = tf2::toMsg(antenna_q.normalized());
           ukf_global_->poseCallback(
             pose,
             gps_cb_arr[i],
@@ -326,29 +346,51 @@ void FusionLocalizer::place_on_terrain(nav_msgs::msg::Odometry & odom)
   odom.pose.pose.orientation = tf2::toMsg(placed->orientation);
 }
 
-void FusionLocalizer::antenna_to_robot(
-  geometry_msgs::msg::PoseWithCovarianceStamped & pose, const std::string & antenna_frame)
+std::optional<tf2::Quaternion> FusionLocalizer::robot_attitude(const IMUPerception & imu)
 {
-  // The frame the filter estimates (its base_link_frame)
+  // orientation_covariance[0] == -1: the IMU gives no orientation (sensor_msgs/Imu)
+  const auto & o = imu.data.orientation;
+  tf2::Quaternion q(o.x, o.y, o.z, o.w);
+  if (imu.data.orientation_covariance[0] == -1.0 || !std::isfinite(q.length2()) ||
+    q.length2() < 1e-6)
+  {
+    return std::nullopt;
+  }
+  const auto imu_mount = mounting(imu.data.header.frame_id);
+  if (!imu_mount) {
+    return std::nullopt;
+  }
+  // The IMU's orientation is its frame's: robot = imu * mounting^-1
+  return (q.normalized() * imu_mount->getRotation().inverse()).normalized();
+}
+
+std::optional<tf2::Transform> FusionLocalizer::mounting(const std::string & frame)
+{
   const std::string & robot_frame = ukf_global_->getBaseLinkFrameId();
-  if (antenna_frame.empty() || antenna_frame == robot_frame) {
-    return;
+  if (frame.empty() || frame == robot_frame) {
+    return tf2::Transform::getIdentity();
   }
-  geometry_msgs::msg::TransformStamped mount;
+  if (const auto found = mountings_.find(frame); found != mountings_.end()) {
+    return found->second;
+  }
   try {
-    mount = RTTFBuffer::getInstance()->lookupTransform(
-      robot_frame, antenna_frame, tf2::TimePointZero);
-  } catch (const tf2::TransformException & e) {
-    RCLCPP_WARN(
-      get_node()->get_logger(), "GNSS antenna mounting unknown (%s): the first fix places the "
-      "robot at the antenna", e.what());
-    return;
+    tf2::Transform mount;
+    tf2::fromMsg(
+      RTTFBuffer::getInstance()->lookupTransform(robot_frame, frame, tf2::TimePointZero).transform,
+      mount);
+    mountings_[frame] = mount;
+    return mount;
+  } catch (const tf2::TransformException &) {
+    return std::nullopt;
   }
+}
+
+void FusionLocalizer::antenna_to_robot(
+  geometry_msgs::msg::PoseWithCovarianceStamped & pose, const tf2::Transform & antenna_mount,
+  const tf2::Quaternion & attitude)
+{
   // robot = antenna - R(attitude) * antenna offset in the robot frame
-  tf2::Quaternion q;
-  tf2::fromMsg(pose.pose.pose.orientation, q);
-  const auto & t = mount.transform.translation;
-  const tf2::Vector3 offset = tf2::quatRotate(q.normalized(), tf2::Vector3(t.x, t.y, t.z));
+  const tf2::Vector3 offset = tf2::quatRotate(attitude, antenna_mount.getOrigin());
   pose.pose.pose.position.x -= offset.x();
   pose.pose.pose.position.y -= offset.y();
   pose.pose.pose.position.z -= offset.z();
