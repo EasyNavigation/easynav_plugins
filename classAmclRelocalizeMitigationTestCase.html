@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="header">
   <div class="summary">
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="classAmclRelocalizeMitigationTestCase-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">AmclRelocalizeMitigationTestCase Class Reference</div></div>
 </div><!--header-->
@@ -123,8 +124,39 @@ Collaboration diagram for AmclRelocalizeMitigationTestCase:</div>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a03106d29a21e40ca6c09f16ab124d432" id="r_a03106d29a21e40ca6c09f16ab124d432"><td class="memItemLeft">std::shared_ptr&lt; <a class="el" href="classeasynav_1_1AmclRelocalizeMitigation.html">easynav::AmclRelocalizeMitigation</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a03106d29a21e40ca6c09f16ab124d432">make_mitigation</a> (const std::shared_ptr&lt; rclcpp_lifecycle::LifecycleNode &gt; &amp;node, const std::string &amp;name)</td></tr>
 <tr class="memitem:a3a1707f6479611fdc609a3eb8a0cef1b" id="r_a3a1707f6479611fdc609a3eb8a0cef1b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a3a1707f6479611fdc609a3eb8a0cef1b">SetUp</a> () override</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:a7a2bdbc1b8e2f7d79ac0ffc7f1895f8f" id="r_a7a2bdbc1b8e2f7d79ac0ffc7f1895f8f"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a7a2bdbc1b8e2f7d79ac0ffc7f1895f8f">expect_still</a> (const easynav::NavState &amp;nav_state)</td></tr>
+<tr class="memitem:a7daafc56b23c05185c55396df501a229" id="r_a7daafc56b23c05185c55396df501a229"><td class="memItemLeft">static rclcpp::NodeOptions&#160;</td><td class="memItemRight"><a class="el" href="#a7daafc56b23c05185c55396df501a229">options</a> (const std::string &amp;name, int attempts, double attempt_timeout, double max_offset=1.0)</td></tr>
+<tr class="memitem:a2494d93f27ce3fbd71b92e080427e1cd" id="r_a2494d93f27ce3fbd71b92e080427e1cd"><td class="memItemLeft">static <a class="el" href="namespaceeasynav__diagnostic__recovery.html#afe1f8b33e51a46c8b3a924e5ca31367e">RecoveryStatus</a>&#160;</td><td class="memItemRight"><a class="el" href="#a2494d93f27ce3fbd71b92e080427e1cd">run</a> (const std::shared_ptr&lt; <a class="el" href="classeasynav_1_1AmclRelocalizeMitigation.html">easynav::AmclRelocalizeMitigation</a> &gt; &amp;mit, easynav::NavState &amp;nav_state, double timeout=5.0, PoseCatcher *catcher=nullptr)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a7a2bdbc1b8e2f7d79ac0ffc7f1895f8f" name="a7a2bdbc1b8e2f7d79ac0ffc7f1895f8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a2bdbc1b8e2f7d79ac0ffc7f1895f8f">&#9670;&#160;</a></span>expect_still()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void expect_still </td>
+          <td>(</td>
+          <td class="paramtype">const easynav::NavState &amp;</td>          <td class="paramname"><span class="paramname"><em>nav_state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a03106d29a21e40ca6c09f16ab124d432" name="a03106d29a21e40ca6c09f16ab124d432"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a03106d29a21e40ca6c09f16ab124d432">&#9670;&#160;</a></span>make_mitigation()</h2>
 
@@ -148,6 +180,84 @@ Protected Member Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7daafc56b23c05185c55396df501a229" name="a7daafc56b23c05185c55396df501a229"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7daafc56b23c05185c55396df501a229">&#9670;&#160;</a></span>options()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">rclcpp::NodeOptions options </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>attempts</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>attempt_timeout</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>max_offset</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1.0</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2494d93f27ce3fbd71b92e080427e1cd" name="a2494d93f27ce3fbd71b92e080427e1cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2494d93f27ce3fbd71b92e080427e1cd">&#9670;&#160;</a></span>run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceeasynav__diagnostic__recovery.html#afe1f8b33e51a46c8b3a924e5ca31367e">RecoveryStatus</a> run </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classeasynav_1_1AmclRelocalizeMitigation.html">easynav::AmclRelocalizeMitigation</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>mit</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">easynav::NavState &amp;</td>          <td class="paramname"><span class="paramname"><em>nav_state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>timeout</em></span><span class="paramdefsep"> = </span><span class="paramdefval">5.0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PoseCatcher *</td>          <td class="paramname"><span class="paramname"><em>catcher</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel protected">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

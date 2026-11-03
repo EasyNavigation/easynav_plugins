@@ -98,16 +98,23 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">amcl_relocalize_mitigation_tests.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;chrono&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
 <code>#include &lt;thread&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;gtest/gtest.h&quot;</code><br />
 <code>#include &quot;rclcpp/rclcpp.hpp&quot;</code><br />
 <code>#include &quot;rclcpp_lifecycle/lifecycle_node.hpp&quot;</code><br />
+<code>#include &quot;geometry_msgs/msg/pose_with_covariance_stamped.hpp&quot;</code><br />
 <code>#include &quot;geometry_msgs/msg/twist_stamped.hpp&quot;</code><br />
+<code>#include &quot;nav_msgs/msg/odometry.hpp&quot;</code><br />
 <code>#include &quot;easynav_common/RTTFBuffer.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="AmclRelocalizeMitigation_8hpp_source.html">easynav_costmap_localizer/AmclRelocalizeMitigation.hpp</a>&quot;</code><br />
 <code>#include &quot;easynav_core/VelocityCommand.hpp&quot;</code><br />
@@ -116,42 +123,56 @@ Include dependency graph for amcl_relocalize_mitigation_tests.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="amcl__relocalize__mitigation__tests_8cpp__incl.png" border="0" usemap="#alocalizers_2easynav__costmap__localizer_2tests_2amcl__relocalize__mitigation__tests_8cpp" loading="lazy" alt=""/></div>
 <map name="alocalizers_2easynav__costmap__localizer_2tests_2amcl__relocalize__mitigation__tests_8cpp" id="alocalizers_2easynav__costmap__localizer_2tests_2amcl__relocalize__mitigation__tests_8cpp">
-<area shape="rect" title=" " alt="" coords="424,5,602,76"/>
+<area shape="rect" title=" " alt="" coords="556,5,734,76"/>
 <area shape="rect" title=" " alt="" coords="5,132,66,157"/>
-<area shape="poly" title=" " alt="" coords="424,55,261,81,168,101,78,127,74,128,72,123,76,121,167,96,260,76,423,50"/>
+<area shape="poly" title=" " alt="" coords="556,50,456,58,336,73,206,95,78,127,74,128,72,123,76,121,205,90,335,68,456,53,555,44"/>
 <area shape="rect" title=" " alt="" coords="90,132,147,157"/>
-<area shape="poly" title=" " alt="" coords="424,60,298,87,160,127,157,128,155,123,159,121,297,82,423,55"/>
-<area shape="rect" title=" " alt="" coords="172,132,265,157"/>
-<area shape="poly" title=" " alt="" coords="424,75,268,129,267,124,423,70"/>
-<area shape="rect" title=" " alt="" coords="289,132,408,157"/>
-<area shape="poly" title=" " alt="" coords="458,79,383,125,380,121,455,74"/>
-<area shape="rect" title=" " alt="" coords="432,124,594,165"/>
-<area shape="poly" title=" " alt="" coords="516,76,516,108,510,108,510,76"/>
-<area shape="rect" title=" " alt="" coords="618,124,792,165"/>
-<area shape="poly" title=" " alt="" coords="580,74,656,114,653,119,577,79"/>
-<area shape="rect" title=" " alt="" coords="816,132,1037,157"/>
-<area shape="poly" title=" " alt="" coords="603,61,863,125,861,130,601,66"/>
-<area shape="rect" href="AmclRelocalizeMitigation_8hpp.html" title="Declaration of the AmclRelocalizeMitigation plugin." alt="" coords="1061,124,1255,165"/>
-<area shape="poly" title=" " alt="" coords="602,52,1046,121,1045,126,602,58"/>
-<area shape="rect" title=" " alt="" coords="1574,324,1809,350"/>
-<area shape="poly" title=" " alt="" coords="602,39,734,43,901,55,1086,80,1178,98,1268,121,1328,141,1387,165,1499,218,1594,271,1662,313,1660,318,1592,276,1496,223,1385,170,1326,146,1267,127,1177,103,1085,85,901,60,733,48,602,44"/>
-<area shape="rect" title=" " alt="" coords="929,228,1038,253"/>
-<area shape="poly" title=" " alt="" coords="1123,168,1021,222,1018,218,1120,163"/>
-<area shape="rect" href="RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="1062,213,1254,268"/>
-<area shape="poly" title=" " alt="" coords="1161,165,1161,197,1156,197,1156,165"/>
-<area shape="rect" title=" " alt="" coords="672,324,732,350"/>
-<area shape="poly" title=" " alt="" coords="1063,268,1051,271,964,284,897,291,830,299,746,319,741,320,739,315,744,314,829,294,896,285,964,279,1050,266,1062,263"/>
-<area shape="rect" title=" " alt="" coords="757,324,810,350"/>
-<area shape="poly" title=" " alt="" coords="1063,268,1051,271,986,283,935,291,886,300,823,319,820,320,819,315,821,314,884,295,935,286,985,278,1050,266,1062,263"/>
-<area shape="rect" title=" " alt="" coords="834,316,986,357"/>
-<area shape="poly" title=" " alt="" coords="1087,271,977,313,975,308,1085,266"/>
-<area shape="rect" title=" " alt="" coords="1010,316,1138,357"/>
-<area shape="poly" title=" " alt="" coords="1136,271,1104,306,1100,303,1132,267"/>
-<area shape="rect" title=" " alt="" coords="1163,316,1324,357"/>
-<area shape="poly" title=" " alt="" coords="1185,267,1218,303,1214,307,1181,271"/>
-<area shape="rect" title=" " alt="" coords="1348,324,1550,350"/>
-<area shape="poly" title=" " alt="" coords="1243,266,1398,316,1396,321,1241,271"/>
-<area shape="poly" title=" " alt="" coords="1255,256,1608,318,1607,323,1254,261"/>
+<area shape="poly" title=" " alt="" coords="556,54,375,81,270,101,167,127,161,128,159,123,165,121,269,96,374,76,555,49"/>
+<area shape="rect" title=" " alt="" coords="693,324,746,350"/>
+<area shape="poly" title=" " alt="" coords="556,48,460,56,357,71,309,81,267,93,234,108,212,126,206,135,205,144,212,163,234,190,260,214,317,254,381,284,448,305,515,320,578,328,678,334,677,339,577,333,514,325,447,310,379,289,314,259,256,218,231,194,208,166,199,144,201,133,208,122,231,104,265,88,308,76,356,65,459,51,555,43"/>
+<area shape="rect" title=" " alt="" coords="223,132,280,157"/>
+<area shape="poly" title=" " alt="" coords="556,60,430,87,292,127,290,127,288,122,291,121,429,82,555,55"/>
+<area shape="rect" title=" " alt="" coords="304,132,362,157"/>
+<area shape="poly" title=" " alt="" coords="557,68,468,94,375,127,373,127,371,123,373,121,467,89,555,63"/>
+<area shape="rect" title=" " alt="" coords="386,132,480,157"/>
+<area shape="poly" title=" " alt="" coords="574,79,473,127,471,122,571,74"/>
+<area shape="rect" title=" " alt="" coords="504,132,623,157"/>
+<area shape="poly" title=" " alt="" coords="619,78,584,121,580,118,615,75"/>
+<area shape="rect" title=" " alt="" coords="647,124,808,165"/>
+<area shape="poly" title=" " alt="" coords="675,75,704,110,700,114,671,78"/>
+<area shape="rect" title=" " alt="" coords="839,220,1042,261"/>
+<area shape="poly" title=" " alt="" coords="735,74,779,96,822,122,874,164,916,206,912,210,870,168,819,126,777,101,733,79"/>
+<area shape="rect" title=" " alt="" coords="883,124,1057,165"/>
+<area shape="poly" title=" " alt="" coords="735,67,894,116,892,122,733,72"/>
+<area shape="rect" title=" " alt="" coords="1081,132,1272,157"/>
+<area shape="poly" title=" " alt="" coords="734,56,1098,125,1098,131,733,62"/>
+<area shape="rect" title=" " alt="" coords="1297,132,1518,157"/>
+<area shape="poly" title=" " alt="" coords="734,50,1285,121,1317,126,1316,131,1284,127,734,55"/>
+<area shape="rect" href="AmclRelocalizeMitigation_8hpp.html" title="Declaration of the AmclRelocalizeMitigation plugin." alt="" coords="1542,124,1737,165"/>
+<area shape="poly" title=" " alt="" coords="734,45,1077,73,1299,94,1527,121,1526,126,1299,99,1077,78,733,51"/>
+<area shape="rect" title=" " alt="" coords="2049,324,2283,350"/>
+<area shape="poly" title=" " alt="" coords="734,41,962,49,1256,64,1542,87,1660,103,1750,121,1808,140,1867,163,1977,217,2071,270,2138,313,2135,317,2068,275,1975,222,1865,168,1807,145,1748,127,1659,108,1542,93,1255,69,962,54,734,47"/>
+<area shape="poly" title=" " alt="" coords="1542,166,1531,167,1278,202,1058,229,1058,223,1277,197,1530,162,1541,160"/>
+<area shape="rect" title=" " alt="" coords="1241,228,1305,253"/>
+<area shape="poly" title=" " alt="" coords="1542,167,1405,194,1318,215,1304,222,1302,217,1316,210,1404,189,1541,162"/>
+<area shape="rect" title=" " alt="" coords="1329,228,1465,253"/>
+<area shape="poly" title=" " alt="" coords="1590,168,1443,224,1441,219,1588,163"/>
+<area shape="rect" title=" " alt="" coords="1489,228,1598,253"/>
+<area shape="poly" title=" " alt="" coords="1621,167,1568,219,1564,215,1618,163"/>
+<area shape="rect" href="RecoveryMitigationBase_8hpp.html" title="Declaration of the abstract base class RecoveryMitigationBase." alt="" coords="1622,213,1814,268"/>
+<area shape="poly" title=" " alt="" coords="1658,163,1688,199,1684,202,1654,167"/>
+<area shape="poly" title=" " alt="" coords="1623,269,1611,271,1360,303,1113,322,903,333,762,337,762,332,903,328,1113,317,1359,297,1610,266,1622,264"/>
+<area shape="rect" title=" " alt="" coords="1225,324,1286,350"/>
+<area shape="poly" title=" " alt="" coords="1623,268,1611,271,1522,284,1453,290,1384,298,1298,319,1294,320,1292,315,1296,314,1383,293,1452,285,1522,279,1610,266,1622,263"/>
+<area shape="rect" title=" " alt="" coords="1309,316,1460,357"/>
+<area shape="poly" title=" " alt="" coords="1623,271,1470,314,1469,309,1621,266"/>
+<area shape="rect" title=" " alt="" coords="1485,316,1613,357"/>
+<area shape="poly" title=" " alt="" coords="1670,271,1599,311,1596,306,1668,267"/>
+<area shape="rect" title=" " alt="" coords="1638,316,1799,357"/>
+<area shape="poly" title=" " alt="" coords="1721,269,1721,301,1716,301,1716,269"/>
+<area shape="rect" title=" " alt="" coords="1822,324,2025,350"/>
+<area shape="poly" title=" " alt="" coords="1779,266,1885,315,1882,320,1776,271"/>
+<area shape="poly" title=" " alt="" coords="1815,259,2094,318,2093,323,1814,265"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -159,19 +180,80 @@ Include dependency graph for amcl_relocalize_mitigation_tests.cpp:</div>
 Classes</h2></td></tr>
 <tr class="memitem:AmclRelocalizeMitigationTestCase" id="r_AmclRelocalizeMitigationTestCase"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ae7bba912769fe6f6adc4f5bc37d807fe" id="r_ae7bba912769fe6f6adc4f5bc37d807fe"><td class="memItemLeft">using&#160;</td><td class="memItemRight"><a class="el" href="#ae7bba912769fe6f6adc4f5bc37d807fe">PoseMsg</a> = geometry_msgs::msg::PoseWithCovarianceStamped</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:afe1f8b33e51a46c8b3a924e5ca31367e" id="r_afe1f8b33e51a46c8b3a924e5ca31367e"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#afe1f8b33e51a46c8b3a924e5ca31367e">RecoveryStatus</a> </td></tr>
+<tr class="memdesc:afe1f8b33e51a46c8b3a924e5ca31367e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outcome of one cycle of a RecoveryMitigationBase plugin.  <a href="#afe1f8b33e51a46c8b3a924e5ca31367e">More...</a><br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a588ee59668fa9a56db72aac2eefb49e9" id="r_a588ee59668fa9a56db72aac2eefb49e9"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a588ee59668fa9a56db72aac2eefb49e9">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, ACompactCloudMustAlsoMatchTheMap)</td></tr>
+<tr class="memitem:ae8451553ab13ea9276a05a634144c492" id="r_ae8451553ab13ea9276a05a634144c492"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae8451553ab13ea9276a05a634144c492">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, AlreadyConvergedAtStartResetsNothing)</td></tr>
 <tr class="memitem:aaddcf3aaaf91216c070f7e2b6c17a0d8" id="r_aaddcf3aaaf91216c070f7e2b6c17a0d8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aaddcf3aaaf91216c070f7e2b6c17a0d8">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, CanHandleOnlyLocalizerAmclErrors)</td></tr>
-<tr class="memitem:a4d9f92efda680539e4a982a074e134b9" id="r_a4d9f92efda680539e4a982a074e134b9"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4d9f92efda680539e4a982a074e134b9">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, FailsAfterTimeoutWithoutRelocalizing)</td></tr>
+<tr class="memitem:af9ca38d9e3ab66dc8cd1fb253a0703e1" id="r_af9ca38d9e3ab66dc8cd1fb253a0703e1"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#af9ca38d9e3ab66dc8cd1fb253a0703e1">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, ConvergenceIsCheckedUntilTheEndOfTheAttempt)</td></tr>
+<tr class="memitem:a186d300077506e8bc83c73435f45a89f" id="r_a186d300077506e8bc83c73435f45a89f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a186d300077506e8bc83c73435f45a89f">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, ConvergenceIsNotCheckedRightAfterAReset)</td></tr>
+<tr class="memitem:acc830931ebdef923fe3c50c58db491a2" id="r_acc830931ebdef923fe3c50c58db491a2"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#acc830931ebdef923fe3c50c58db491a2">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, DefaultsAreFiveAttemptsOfFiveSecondsWithinAMeter)</td></tr>
+<tr class="memitem:aadd03579be3b58d031bf0052e0cd8d0c" id="r_aadd03579be3b58d031bf0052e0cd8d0c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aadd03579be3b58d031bf0052e0cd8d0c">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, EachRecoveryStartsFromTheRobotPoseThen)</td></tr>
+<tr class="memitem:ae72fe43c691159dd7c863486a771be77" id="r_ae72fe43c691159dd7c863486a771be77"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae72fe43c691159dd7c863486a771be77">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, FirstAttemptIsTheLostPoseWithRvizCovariance)</td></tr>
+<tr class="memitem:abc2be766627b8cb0f48c47e6e0d5cd0d" id="r_abc2be766627b8cb0f48c47e6e0d5cd0d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#abc2be766627b8cb0f48c47e6e0d5cd0d">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, NextAttemptsAreOffsetUpToMaxOffset)</td></tr>
+<tr class="memitem:a848e5051246cc87f9378ccbe67de5b2c" id="r_a848e5051246cc87f9378ccbe67de5b2c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a848e5051246cc87f9378ccbe67de5b2c">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, OffsetsSpreadOverTheWholeDisc)</td></tr>
+<tr class="memitem:ac35e38e3e6b81553606c15758597f00d" id="r_ac35e38e3e6b81553606c15758597f00d"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac35e38e3e6b81553606c15758597f00d">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, OneAttemptOnlyTriesTheLostPose)</td></tr>
+<tr class="memitem:a4194eb2dad21e8ff65147bfe5c5d55b8" id="r_a4194eb2dad21e8ff65147bfe5c5d55b8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a4194eb2dad21e8ff65147bfe5c5d55b8">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, RejectsInvalidParameters)</td></tr>
 <tr class="memitem:a5b704fb4be21a22e139849245c649e45" id="r_a5b704fb4be21a22e139849245c649e45"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a5b704fb4be21a22e139849245c649e45">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, RequiresControl)</td></tr>
-<tr class="memitem:ae044f9fb3854bf5f13770bfa57c4e111" id="r_ae044f9fb3854bf5f13770bfa57c4e111"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae044f9fb3854bf5f13770bfa57c4e111">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, RotatesInPlaceWhileDivergedAndWithinTimeout)</td></tr>
-<tr class="memitem:a2f0fc878e5882627f7381c350b75364f" id="r_a2f0fc878e5882627f7381c350b75364f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a2f0fc878e5882627f7381c350b75364f">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, SucceedsOnceCovarianceDropsBelowThreshold)</td></tr>
+<tr class="memitem:af12a2adbebbacf339ad53da3d6289d64" id="r_af12a2adbebbacf339ad53da3d6289d64"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#af12a2adbebbacf339ad53da3d6289d64">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, SucceedsOnALaterAttempt)</td></tr>
+<tr class="memitem:afdf35920b06a425abb891c778da848d4" id="r_afdf35920b06a425abb891c778da848d4"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#afdf35920b06a425abb891c778da848d4">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, TheQualityRatioMustAlsoBeSteady)</td></tr>
+<tr class="memitem:a8aa7790ef22ec8bd4b73b4dfd186e9e4" id="r_a8aa7790ef22ec8bd4b73b4dfd186e9e4"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a8aa7790ef22ec8bd4b73b4dfd186e9e4">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, WithoutACovarianceItDoesNotConverge)</td></tr>
 <tr class="memitem:a93e80acc60872c6ca4438df409996ad8" id="r_a93e80acc60872c6ca4438df409996ad8"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a93e80acc60872c6ca4438df409996ad8">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, WithoutAMatchScoreOnlyTheCovarianceCounts)</td></tr>
+<tr class="memitem:ae4dfb9b1d138c788aae6461917dcf8b6" id="r_ae4dfb9b1d138c788aae6461917dcf8b6"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ae4dfb9b1d138c788aae6461917dcf8b6">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, WithoutARobotPoseItFailsWithoutResetting)</td></tr>
+<tr class="memitem:a10f983e833bcc3a46272d3be6eb659a3" id="r_a10f983e833bcc3a46272d3be6eb659a3"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a10f983e833bcc3a46272d3be6eb659a3">TEST_F</a> (<a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a>, ZeroMaxOffsetRepeatsTheLostPose)</td></tr>
 </table>
+<a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Typedef Documentation</h2>
+<a id="ae7bba912769fe6f6adc4f5bc37d807fe" name="ae7bba912769fe6f6adc4f5bc37d807fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7bba912769fe6f6adc4f5bc37d807fe">&#9670;&#160;</a></span>PoseMsg</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="#ae7bba912769fe6f6adc4f5bc37d807fe">PoseMsg</a> = geometry_msgs::msg::PoseWithCovarianceStamped</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<a id="afe1f8b33e51a46c8b3a924e5ca31367e" name="afe1f8b33e51a46c8b3a924e5ca31367e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe1f8b33e51a46c8b3a924e5ca31367e">&#9670;&#160;</a></span>RecoveryStatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="namespaceeasynav__diagnostic__recovery.html#afe1f8b33e51a46c8b3a924e5ca31367e">RecoveryStatus</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Outcome of one cycle of a RecoveryMitigationBase plugin. </p>
+
+</div>
+</div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
 <a id="a588ee59668fa9a56db72aac2eefb49e9" name="a588ee59668fa9a56db72aac2eefb49e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a588ee59668fa9a56db72aac2eefb49e9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a588ee59668fa9a56db72aac2eefb49e9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[1/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -191,8 +273,29 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ae8451553ab13ea9276a05a634144c492" name="ae8451553ab13ea9276a05a634144c492"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8451553ab13ea9276a05a634144c492">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AlreadyConvergedAtStartResetsNothing</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aaddcf3aaaf91216c070f7e2b6c17a0d8" name="aaddcf3aaaf91216c070f7e2b6c17a0d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaddcf3aaaf91216c070f7e2b6c17a0d8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[2/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aaddcf3aaaf91216c070f7e2b6c17a0d8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -212,8 +315,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4d9f92efda680539e4a982a074e134b9" name="a4d9f92efda680539e4a982a074e134b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d9f92efda680539e4a982a074e134b9">&#9670;&#160;</a></span>TEST_F() <span class="overload">[3/7]</span></h2>
+<a id="af9ca38d9e3ab66dc8cd1fb253a0703e1" name="af9ca38d9e3ab66dc8cd1fb253a0703e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9ca38d9e3ab66dc8cd1fb253a0703e1">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,7 +329,175 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FailsAfterTimeoutWithoutRelocalizing</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+          <td class="paramtype">ConvergenceIsCheckedUntilTheEndOfTheAttempt</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a186d300077506e8bc83c73435f45a89f" name="a186d300077506e8bc83c73435f45a89f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a186d300077506e8bc83c73435f45a89f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ConvergenceIsNotCheckedRightAfterAReset</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc830931ebdef923fe3c50c58db491a2" name="acc830931ebdef923fe3c50c58db491a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc830931ebdef923fe3c50c58db491a2">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">DefaultsAreFiveAttemptsOfFiveSecondsWithinAMeter</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aadd03579be3b58d031bf0052e0cd8d0c" name="aadd03579be3b58d031bf0052e0cd8d0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadd03579be3b58d031bf0052e0cd8d0c">&#9670;&#160;</a></span>TEST_F() <span class="overload">[7/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">EachRecoveryStartsFromTheRobotPoseThen</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae72fe43c691159dd7c863486a771be77" name="ae72fe43c691159dd7c863486a771be77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae72fe43c691159dd7c863486a771be77">&#9670;&#160;</a></span>TEST_F() <span class="overload">[8/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">FirstAttemptIsTheLostPoseWithRvizCovariance</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc2be766627b8cb0f48c47e6e0d5cd0d" name="abc2be766627b8cb0f48c47e6e0d5cd0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc2be766627b8cb0f48c47e6e0d5cd0d">&#9670;&#160;</a></span>TEST_F() <span class="overload">[9/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">NextAttemptsAreOffsetUpToMaxOffset</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a848e5051246cc87f9378ccbe67de5b2c" name="a848e5051246cc87f9378ccbe67de5b2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a848e5051246cc87f9378ccbe67de5b2c">&#9670;&#160;</a></span>TEST_F() <span class="overload">[10/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OffsetsSpreadOverTheWholeDisc</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac35e38e3e6b81553606c15758597f00d" name="ac35e38e3e6b81553606c15758597f00d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac35e38e3e6b81553606c15758597f00d">&#9670;&#160;</a></span>TEST_F() <span class="overload">[11/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OneAttemptOnlyTriesTheLostPose</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4194eb2dad21e8ff65147bfe5c5d55b8" name="a4194eb2dad21e8ff65147bfe5c5d55b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4194eb2dad21e8ff65147bfe5c5d55b8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[12/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">RejectsInvalidParameters</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -234,7 +505,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a5b704fb4be21a22e139849245c649e45" name="a5b704fb4be21a22e139849245c649e45"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b704fb4be21a22e139849245c649e45">&#9670;&#160;</a></span>TEST_F() <span class="overload">[4/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b704fb4be21a22e139849245c649e45">&#9670;&#160;</a></span>TEST_F() <span class="overload">[13/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -254,8 +525,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae044f9fb3854bf5f13770bfa57c4e111" name="ae044f9fb3854bf5f13770bfa57c4e111"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae044f9fb3854bf5f13770bfa57c4e111">&#9670;&#160;</a></span>TEST_F() <span class="overload">[5/7]</span></h2>
+<a id="af12a2adbebbacf339ad53da3d6289d64" name="af12a2adbebbacf339ad53da3d6289d64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af12a2adbebbacf339ad53da3d6289d64">&#9670;&#160;</a></span>TEST_F() <span class="overload">[14/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -268,15 +539,15 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">RotatesInPlaceWhileDivergedAndWithinTimeout</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+          <td class="paramtype">SucceedsOnALaterAttempt</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a2f0fc878e5882627f7381c350b75364f" name="a2f0fc878e5882627f7381c350b75364f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f0fc878e5882627f7381c350b75364f">&#9670;&#160;</a></span>TEST_F() <span class="overload">[6/7]</span></h2>
+<a id="afdf35920b06a425abb891c778da848d4" name="afdf35920b06a425abb891c778da848d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdf35920b06a425abb891c778da848d4">&#9670;&#160;</a></span>TEST_F() <span class="overload">[15/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -289,7 +560,28 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">SucceedsOnceCovarianceDropsBelowThreshold</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+          <td class="paramtype">TheQualityRatioMustAlsoBeSteady</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8aa7790ef22ec8bd4b73b4dfd186e9e4" name="a8aa7790ef22ec8bd4b73b4dfd186e9e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8aa7790ef22ec8bd4b73b4dfd186e9e4">&#9670;&#160;</a></span>TEST_F() <span class="overload">[16/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">WithoutACovarianceItDoesNotConverge</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -297,7 +589,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="a93e80acc60872c6ca4438df409996ad8" name="a93e80acc60872c6ca4438df409996ad8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93e80acc60872c6ca4438df409996ad8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[7/7]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a93e80acc60872c6ca4438df409996ad8">&#9670;&#160;</a></span>TEST_F() <span class="overload">[17/19]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -311,6 +603,48 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">WithoutAMatchScoreOnlyTheCovarianceCounts</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae4dfb9b1d138c788aae6461917dcf8b6" name="ae4dfb9b1d138c788aae6461917dcf8b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4dfb9b1d138c788aae6461917dcf8b6">&#9670;&#160;</a></span>TEST_F() <span class="overload">[18/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">WithoutARobotPoseItFailsWithoutResetting</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a10f983e833bcc3a46272d3be6eb659a3" name="a10f983e833bcc3a46272d3be6eb659a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10f983e833bcc3a46272d3be6eb659a3">&#9670;&#160;</a></span>TEST_F() <span class="overload">[19/19]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TEST_F </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAmclRelocalizeMitigationTestCase.html">AmclRelocalizeMitigationTestCase</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ZeroMaxOffsetRepeatsTheLostPose</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 </div><!--header-->
 <div class="contents">
 
-<p>Level-1 movement mitigation: rotates in place to help AMCL relocalize.  
+<p>Level-1 mitigation: resets AMCL's pose around where the robot was when it got lost.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="AmclRelocalizeMitigation_8hpp_source.html">AmclRelocalizeMitigation.hpp</a>&gt;</code></p>
@@ -113,7 +113,7 @@ Inheritance diagram for AmclRelocalizeMitigation:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1AmclRelocalizeMitigation__inherit__graph.png" border="0" usemap="#aAmclRelocalizeMitigation_inherit__map" loading="lazy" alt="Inheritance graph"/></div>
 <map name="aAmclRelocalizeMitigation_inherit__map" id="aAmclRelocalizeMitigation_inherit__map">
-<area shape="rect" title="Level&#45;1 movement mitigation: rotates in place to help AMCL relocalize." alt="" coords="5,153,172,178"/>
+<area shape="rect" title="Level&#45;1 mitigation: resets AMCL&#39;s pose around where the robot was when it got lost." alt="" coords="5,153,172,178"/>
 <area shape="rect" href="classeasynav__diagnostic__recovery_1_1RecoveryMitigationBase.html" title="Base class for level&#45;1 (deliberative) mitigation plugins." alt="" coords="8,79,169,105"/>
 <area shape="poly" title=" " alt="" coords="91,120,91,152,86,152,86,120"/>
 <area shape="rect" title=" " alt="" coords="41,5,136,31"/>
@@ -125,7 +125,7 @@ Collaboration diagram for AmclRelocalizeMitigation:</div>
 <div class="dyncontent">
 <div class="center"><img src="classeasynav_1_1AmclRelocalizeMitigation__coll__graph.png" border="0" usemap="#aAmclRelocalizeMitigation_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aAmclRelocalizeMitigation_coll__map" id="aAmclRelocalizeMitigation_coll__map">
-<area shape="rect" title="Level&#45;1 movement mitigation: rotates in place to help AMCL relocalize." alt="" coords="5,153,172,178"/>
+<area shape="rect" title="Level&#45;1 mitigation: resets AMCL&#39;s pose around where the robot was when it got lost." alt="" coords="5,153,172,178"/>
 <area shape="rect" href="classeasynav__diagnostic__recovery_1_1RecoveryMitigationBase.html" title="Base class for level&#45;1 (deliberative) mitigation plugins." alt="" coords="8,79,169,105"/>
 <area shape="poly" title=" " alt="" coords="91,120,91,152,86,152,86,120"/>
 <area shape="rect" title=" " alt="" coords="41,5,136,31"/>
@@ -171,8 +171,13 @@ Protected Member Functions</h2></td></tr>
 <tr class="memdesc:a686d279813c36ced41d202e86befaefb pro_methods_classeasynav__diagnostic__recovery_1_1RecoveryMitigationBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fail-safe default: proposes a zero velocity (see <a class="el" href="classeasynav__diagnostic__recovery_1_1RecoveryMitigationBase.html#ab1af75b6424b4d1d3164742e8e5b65e8" title="Proposes cmd as this cycle&#39;s velocity command of a control-owning mitigation.">command_velocity()</a>).  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Level-1 movement mitigation: rotates in place to help AMCL relocalize. </p>
-<p>Selected for diagnostics with hardware_id == "localizer.amcl" (shared with <a class="el" href="classeasynav_1_1AmclConvergenceEvaluator.html" title="Level-1 recovery evaluator: diagnoses AMCL particle-filter divergence.">AmclConvergenceEvaluator</a>, in the same package). Takes control of "cmd_vel" (<a class="el" href="#ae14654866920e0fcbb3d6bf39e0ffddf" title="Whether this mitigation needs to own &quot;cmd_vel&quot; (via &quot;control_owner&quot;) while active.">requires_control()</a> == true) and rotates slowly in place each RT cycle, re-checking the same covariance trace the evaluator reads, until it drops back under threshold and the match score (if checked) is back above <span class="tt">match_threshold</span> — or until <span class="tt">timeout</span> elapses without that happening, at which point it gives up (stops, returns FAILED) rather than spinning forever. </p>
+<div class="textblock"><p>Level-1 mitigation: resets AMCL's pose around where the robot was when it got lost. </p>
+<p>Selected for diagnostics with hardware_id == "localizer.amcl" (shared with <a class="el" href="classeasynav_1_1AmclConvergenceEvaluator.html" title="Level-1 recovery evaluator: diagnoses AMCL particle-filter divergence.">AmclConvergenceEvaluator</a>, in the same package). Holds the robot still (<a class="el" href="#ae14654866920e0fcbb3d6bf39e0ffddf" title="Whether this mitigation needs to own &quot;cmd_vel&quot; (via &quot;control_owner&quot;) while active.">requires_control()</a>) and publishes an initial pose on "initialpose", with RViz2's "2D Pose Estimate" covariance, up to <span class="tt">attempts</span> times:</p><ul>
+<li>the first one at the robot's pose when the recovery started;</li>
+<li>the next ones at that pose moved up to <span class="tt">max_offset</span> m in a random direction.</li>
+</ul>
+<p>Each attempt has <span class="tt">attempt_timeout</span> s to converge, by the evaluator's criteria: the covariance trace under <span class="tt">covariance_threshold</span>, and the match score and quality ratio (if reported) at least <span class="tt">match_threshold</span> and <span class="tt">quality_ratio_threshold</span>. Only checked after the localizer has had time to correct the new pose (the scores before it are of the old one). SUCCEEDED when an attempt converges, FAILED when none does, or at once if there is no robot pose to reset to.</p>
+<p>If AMCL has already converged when it starts (the diagnostic that selected it was evaluated before), it resets nothing: SUCCEEDED. </p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0276c5ca0068409832c13e3b3c295d4a" name="a0276c5ca0068409832c13e3b3c295d4a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0276c5ca0068409832c13e3b3c295d4a">&#9670;&#160;</a></span>AmclRelocalizeMitigation()</h2>

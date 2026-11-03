@@ -32,7 +32,7 @@
 <area shape="poly" id="edge50_Node000012_Node000014" title=" " alt="" coords="243,707,288,644,319,611,356,583,383,570,385,575,358,587,323,615,292,648,247,710"/>
 <area shape="rect" id="Node000015" href="$classeasynav_1_1AdvanceRecovery.html" title="Level&#45;1 movement mitigation: advances a short distance when the robot is stuck." alt="" coords="385,597,511,623"/>
 <area shape="poly" id="edge51_Node000012_Node000015" title=" " alt="" coords="252,709,298,669,356,632,384,621,386,626,358,637,301,673,255,713"/>
-<area shape="rect" id="Node000016" href="$classeasynav_1_1AmclRelocalizeMitigation.html" title="Level&#45;1 movement mitigation: rotates in place to help AMCL relocalize." alt="" coords="365,647,531,672"/>
+<area shape="rect" id="Node000016" href="$classeasynav_1_1AmclRelocalizeMitigation.html" title="Level&#45;1 mitigation: resets AMCL&#39;s pose around where the robot was when it got lost." alt="" coords="365,647,531,672"/>
 <area shape="poly" id="edge52_Node000012_Node000016" title=" " alt="" coords="273,713,356,681,392,670,393,676,358,686,275,718"/>
 <area shape="rect" id="Node000017" href="$classeasynav_1_1CancelMissionRecovery.html" title="Level&#45;1 mission&#45;level last resort: cancels the active mission, reporting the error." alt="" coords="368,696,528,722"/>
 <area shape="poly" id="edge53_Node000012_Node000017" title=" " alt="" coords="324,720,367,715,368,721,325,726"/>
