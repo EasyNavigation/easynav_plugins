@@ -15,18 +15,23 @@
 
 #pragma once
 
-#include <optional>
 #include <memory>
+#include <optional>
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 #include "easynav_core/LocalizerMethodBase.hpp"
+#include "easynav_sensors/types/IMUPerception.hpp"
+#include "tf2/LinearMath/Quaternion.hpp"
+#include "tf2/LinearMath/Transform.hpp"
 #include "easynav_fusion_localizer/NavMapTerrain.hpp"
 #include "easynav_fusion_localizer/ukf_wrapper.hpp"
 #include "sensor_msgs/msg/imu.hpp"
 #include "sensor_msgs/msg/nav_sat_fix.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
+#include "GeographicLib/LocalCartesian.hpp"
 
 namespace easynav
 {
@@ -102,6 +107,27 @@ private:
 
   sensor_msgs::msg::NavSatFix
   odom_to_navsatfix(const nav_msgs::msg::Odometry & odom_msg);
+
+  /// @brief Map axes: "utm" (the UTM grid) or "enu" (east and north at the origin).
+  std::string projection_{"utm"};
+  /// @brief The local east-north-up projection at the origin (projection "enu").
+  std::unique_ptr<GeographicLib::LocalCartesian> enu_;
+
+  /// @brief The robot's attitude from \p imu: its orientation without the IMU's mounting. Empty
+  /// if the IMU reports no orientation or its mounting is unknown.
+  std::optional<tf2::Quaternion> robot_attitude(const IMUPerception & imu);
+
+  /// @brief The mounting of \p frame on the frame the global filter estimates (identity for that
+  /// frame or an empty one). Empty if TF does not have it.
+  std::optional<tf2::Transform> mounting(const std::string & frame);
+  /// @brief Mountings already found (they are fixed).
+  std::unordered_map<std::string, tf2::Transform> mountings_;
+
+  /// @brief Moves \p pose from the GNSS antenna, mounted as \p antenna_mount, to the robot with
+  /// the robot's \p attitude.
+  static void antenna_to_robot(
+    geometry_msgs::msg::PoseWithCovarianceStamped & pose, const tf2::Transform & antenna_mount,
+    const tf2::Quaternion & attitude);
 
   double latitude_origin_{0.0};
   double longitude_origin_{0.0};

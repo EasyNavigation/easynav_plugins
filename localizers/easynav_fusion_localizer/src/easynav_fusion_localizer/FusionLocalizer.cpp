@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <cmath>
+
 #include "easynav_common/Parameters.hpp"
 #include "easynav_fusion_localizer/FusionLocalizer.hpp"
 
@@ -136,10 +138,16 @@ void FusionLocalizer::on_initialize()
       easynav::declare_parameter_if_absent(
         *localizer_node, plugin_name + ".navsatfix_topic",
         std::string("gps/filtered"));
+      easynav::declare_parameter_if_absent(
+        *localizer_node, plugin_name + ".projection", projection_);
       localizer_node->get_parameter(plugin_name + ".latitude_origin", latitude_origin_);
       localizer_node->get_parameter(plugin_name + ".longitude_origin", longitude_origin_);
       localizer_node->get_parameter(plugin_name + ".altitude_origin", altitude_origin_);
       localizer_node->get_parameter(plugin_name + ".navsatfix_topic", navsatfix_topic_);
+      localizer_node->get_parameter(plugin_name + ".projection", projection_);
+      if (projection_ != "utm" && projection_ != "enu") {
+        throw std::runtime_error("projection '" + projection_ + "' is not utm or enu");
+      }
       navsat_pub_ = localizer_node->create_publisher<sensor_msgs::msg::NavSatFix>(
         navsatfix_topic_, rclcpp::QoS(10));
     }
@@ -156,6 +164,13 @@ void FusionLocalizer::on_initialize()
       UTM_zone_northp_, UTM_origin_x_, UTM_origin_y_);
     UTM_zone_ = std::to_string(UTM_zone_number_) + (UTM_zone_northp_ ? "N" : "S");
     UTM_origin_z_ = altitude_origin_;
+    if (projection_ == "enu") {
+      // The map's origin is the projection's: offsets only move it (initial pose)
+      enu_ = std::make_unique<GeographicLib::LocalCartesian>(
+        latitude_origin_, longitude_origin_, altitude_origin_);
+      UTM_origin_x_ = 0.0;
+      UTM_origin_y_ = 0.0;
+    }
 
     n_gps_sensors_ = static_cast<int>(ukf_global_->getGpsCallbackDataArr().size());
     last_gps_stamp_.resize(n_gps_sensors_, rclcpp::Time(0, 0, RCL_ROS_TIME));
@@ -227,18 +242,42 @@ void FusionLocalizer::update_rt(NavState & nav_state)
             std::make_shared<geometry_msgs::msg::PoseWithCovarianceStamped>(
             navsatfix_to_pose(
               gps_data[i]->data));
+          // The fix is the antenna's position (it carries no attitude)
+          const std::string & antenna_frame = gps_data[i]->data.header.frame_id;
+          const auto antenna_mount = mounting(antenna_frame);
+          std::optional<tf2::Quaternion> attitude;
+          if (nav_state.has("imu")) {
+            attitude = robot_attitude(nav_state.get<IMUPerception>(std::string("imu")));
+          }
           if (!first_pose_received_) {
             RCLCPP_INFO(
               get_node()->get_logger(),
               "First valid GPS fix received. Initializing filter state.");
-            if (nav_state.has("imu")) {
-              auto imu_data = nav_state.get<IMUPerception>(std::string("imu"));
-              pose->pose.pose.orientation = imu_data.data.orientation;
+            if (attitude) {
+              pose->pose.pose.orientation = tf2::toMsg(*attitude);
+            }
+            if (attitude && antenna_mount) {
+              antenna_to_robot(*pose, *antenna_mount, *attitude);
+            } else if (!antenna_mount || antenna_mount->getOrigin().length2() > 0.0) {
+              RCLCPP_WARN(
+                get_node()->get_logger(), "GNSS antenna mounting (%s) or robot attitude (IMU) "
+                "unknown: the first fix places the robot at the antenna", antenna_frame.c_str());
             }
             ukf_global_->setPoseCallback(pose);
             first_pose_received_ = true;
             continue;
           }
+          // The filter removes the mounting with the antenna's orientation: the robot's attitude
+          // from the IMU or, without it, the estimated one
+          tf2::Quaternion antenna_q = attitude.value_or(tf2::Quaternion::getIdentity());
+          nav_msgs::msg::Odometry estimate;
+          if (!attitude && ukf_global_->getFilteredOdometryMessage(&estimate)) {
+            tf2::fromMsg(estimate.pose.pose.orientation, antenna_q);
+          }
+          if (antenna_mount) {
+            antenna_q *= antenna_mount->getRotation();
+          }
+          pose->pose.pose.orientation = tf2::toMsg(antenna_q.normalized());
           ukf_global_->poseCallback(
             pose,
             gps_cb_arr[i],
@@ -307,6 +346,56 @@ void FusionLocalizer::place_on_terrain(nav_msgs::msg::Odometry & odom)
   odom.pose.pose.orientation = tf2::toMsg(placed->orientation);
 }
 
+std::optional<tf2::Quaternion> FusionLocalizer::robot_attitude(const IMUPerception & imu)
+{
+  // orientation_covariance[0] == -1: the IMU gives no orientation (sensor_msgs/Imu)
+  const auto & o = imu.data.orientation;
+  tf2::Quaternion q(o.x, o.y, o.z, o.w);
+  if (imu.data.orientation_covariance[0] == -1.0 || !std::isfinite(q.length2()) ||
+    q.length2() < 1e-6)
+  {
+    return std::nullopt;
+  }
+  const auto imu_mount = mounting(imu.data.header.frame_id);
+  if (!imu_mount) {
+    return std::nullopt;
+  }
+  // The IMU's orientation is its frame's: robot = imu * mounting^-1
+  return (q.normalized() * imu_mount->getRotation().inverse()).normalized();
+}
+
+std::optional<tf2::Transform> FusionLocalizer::mounting(const std::string & frame)
+{
+  const std::string & robot_frame = ukf_global_->getBaseLinkFrameId();
+  if (frame.empty() || frame == robot_frame) {
+    return tf2::Transform::getIdentity();
+  }
+  if (const auto found = mountings_.find(frame); found != mountings_.end()) {
+    return found->second;
+  }
+  try {
+    tf2::Transform mount;
+    tf2::fromMsg(
+      RTTFBuffer::getInstance()->lookupTransform(robot_frame, frame, tf2::TimePointZero).transform,
+      mount);
+    mountings_[frame] = mount;
+    return mount;
+  } catch (const tf2::TransformException &) {
+    return std::nullopt;
+  }
+}
+
+void FusionLocalizer::antenna_to_robot(
+  geometry_msgs::msg::PoseWithCovarianceStamped & pose, const tf2::Transform & antenna_mount,
+  const tf2::Quaternion & attitude)
+{
+  // robot = antenna - R(attitude) * antenna offset in the robot frame
+  const tf2::Vector3 offset = tf2::quatRotate(attitude, antenna_mount.getOrigin());
+  pose.pose.pose.position.x -= offset.x();
+  pose.pose.pose.position.y -= offset.y();
+  pose.pose.pose.position.z -= offset.z();
+}
+
 geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose(
   const sensor_msgs::msg::NavSatFix & navsat_msg)
 {
@@ -318,17 +407,21 @@ geometry_msgs::msg::PoseWithCovarianceStamped FusionLocalizer::navsatfix_to_pose
   pose_msg.header.frame_id = tf_info.map_frame;
 
   double utm_x, utm_y;
-  int zone;
-  bool northp;
-
-  GeographicLib::UTMUPS::Forward(
-    navsat_msg.latitude,
-    navsat_msg.longitude,
-    zone,
-    northp,
-    utm_x,
-    utm_y,
-    UTM_zone_number_);
+  if (enu_) {
+    double up;
+    enu_->Forward(navsat_msg.latitude, navsat_msg.longitude, navsat_msg.altitude, utm_x, utm_y, up);
+  } else {
+    int zone;
+    bool northp;
+    GeographicLib::UTMUPS::Forward(
+      navsat_msg.latitude,
+      navsat_msg.longitude,
+      zone,
+      northp,
+      utm_x,
+      utm_y,
+      UTM_zone_number_);
+  }
 
   pose_msg.pose.pose.position.x = utm_x - UTM_origin_x_;
   pose_msg.pose.pose.position.y = utm_y - UTM_origin_y_;
@@ -386,8 +479,13 @@ sensor_msgs::msg::NavSatFix FusionLocalizer::odom_to_navsatfix(
 
   double latitude = 0.0;
   double longitude = 0.0;
-  GeographicLib::UTMUPS::Reverse(
-    UTM_zone_number_, UTM_zone_northp_, utm_x, utm_y, latitude, longitude);
+  if (enu_) {
+    double altitude;
+    enu_->Reverse(utm_x, utm_y, 0.0, latitude, longitude, altitude);
+  } else {
+    GeographicLib::UTMUPS::Reverse(
+      UTM_zone_number_, UTM_zone_northp_, utm_x, utm_y, latitude, longitude);
+  }
 
   navsat_msg.latitude = latitude;
   navsat_msg.longitude = longitude;

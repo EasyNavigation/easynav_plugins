@@ -360,6 +360,12 @@ public:
     return gps_callbackData_arr_;
   }
 
+  //! @brief The robot frame the filter estimates (base_link_frame)
+  const std::string & getBaseLinkFrameId() const
+  {
+    return base_link_frame_id_;
+  }
+
 protected:
   //! @brief Finds the latest filter state before the given timestamp and makes
   //! it the current state again.
