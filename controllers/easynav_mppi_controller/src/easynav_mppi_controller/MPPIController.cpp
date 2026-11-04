@@ -16,6 +16,12 @@
 /// \file
 /// \brief Implementation of the MPPIController class.
 
+#include <algorithm>
+#include <cmath>
+#include <stdexcept>
+#include <string>
+#include <type_traits>
+
 #include "easynav_common/Parameters.hpp"
 #include "easynav_mppi_controller/MPPIController.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
@@ -24,6 +30,8 @@
 #include "easynav_system/GoalManager.hpp"
 
 #include "nav_msgs/msg/odometry.hpp"
+#include "tf2/utils.hpp"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 namespace easynav
 {
@@ -38,41 +46,101 @@ MPPIController::on_initialize()
   auto node = get_node();
   const auto & plugin_name = get_plugin_name();
 
-  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".num_samples", num_samples_);
-  easynav::declare_parameter_if_absent<int>(*node, plugin_name + ".horizon_steps", horizon_steps_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".dt", dt_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".lambda", lambda_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".fov", fov_);
-  easynav::declare_parameter_if_absent<double>(
-    *node, plugin_name + ".safety_radius",
-    safety_radius_);
+  auto param = [&](const std::string & name, auto & value) {
+      using T = std::decay_t<decltype(value)>;
+      easynav::declare_parameter_if_absent<T>(*node, plugin_name + "." + name, value);
+      node->get_parameter<T>(plugin_name + "." + name, value);
+    };
 
-  node->get_parameter<int>(plugin_name + ".num_samples", num_samples_);
-  node->get_parameter<int>(plugin_name + ".horizon_steps", horizon_steps_);
-  node->get_parameter<double>(plugin_name + ".dt", dt_);
-  node->get_parameter<double>(plugin_name + ".lambda", lambda_);
+  std::string motion_model = "diff";
+  std::string heading_mode = "path";
+  param("motion_model", motion_model);
+  param("heading_mode", heading_mode);
+  MotionModel model;
+  if (!parse_motion_model(motion_model, model)) {
+    throw std::runtime_error(
+            "[" + plugin_name + "] motion_model '" + motion_model + "' is not diff or omni");
+  }
+  MPPIParams p;
+  p.motion_model = model;
+  int num_samples = p.num_samples;
+  int horizon_steps = p.horizon_steps;
+  param("heading_yaw", heading_yaw_);
+  param("num_samples", num_samples);
+  param("horizon_steps", horizon_steps);
+  param("dt", p.dt);
+  param("lambda", p.lambda);
+  param("vx_std", p.vx_std);
+  param("vy_std", p.vy_std);
+  param("wz_std", p.wz_std);
+  param("safety_radius", p.safety_radius);
+  param("path_weight", p.path_weight);
+  param("progress_weight", p.progress_weight);
+  param("heading_weight", p.heading_weight);
+  param("heading_lookahead", p.heading_lookahead);
+  param("noise_correlation", p.noise_correlation);
+  param("goal_weight", p.goal_weight);
+  param("goal_heading_weight", p.goal_heading_weight);
+  param("goal_heading_distance", p.goal_heading_distance);
+  param("obstacle_weight", p.obstacle_weight);
+  param("smoothness_weight", p.smoothness_weight);
+  param("forward_weight", p.forward_weight);
+  param("grid_resolution", p.grid_resolution);
+  param("xy_goal_tolerance", xy_goal_tolerance_);
+  param("yaw_goal_tolerance", yaw_goal_tolerance_);
+  param("obstacle_range", obstacle_range_);
+  param("z_min_filter", z_min_filter_);
+  param("max_visualized_rollouts", max_visualized_rollouts_);
+  p.num_samples = num_samples;
+  p.horizon_steps = horizon_steps;
+
+  const auto & overrides = node->get_node_parameters_interface()->get_parameter_overrides();
+  if (overrides.count(plugin_name + ".fov") > 0) {
+    RCLCPP_WARN(
+      node->get_logger(), "[%s] '%s.fov' has no effect any more: remove it",
+      plugin_name.c_str(), plugin_name.c_str());
+  }
+
+  if (!parse_heading_mode(heading_mode, heading_mode_)) {
+    throw std::runtime_error(
+            "[" + plugin_name + "] heading_mode '" + heading_mode +
+            "' is not path, free, goal, hold or fixed");
+  }
+  if (p.motion_model == MotionModel::Diff && heading_mode_ != HeadingMode::Path) {
+    RCLCPP_WARN(
+      node->get_logger(), "[%s] heading_mode '%s' needs motion_model 'omni': a differential "
+      "robot faces along the path", plugin_name.c_str(), heading_mode.c_str());
+    heading_mode_ = HeadingMode::Path;
+  }
+
+  const auto geometry = get_robot_geometry();
+  p.robot_radius = geometry.radius;
+  p.inscribed_radius = geometry.inscribed_radius;
+  p.footprint = geometry.footprint;
+  if (!p.footprint.empty()) {
+    // The robot's exact shape: the configured radii may be planning margins.
+    p.robot_radius = footprint_radius(p.footprint);
+    p.inscribed_radius = footprint_inscribed_radius(p.footprint);
+  }
+  robot_height_ = geometry.height;
+  if (p.safety_radius < p.robot_radius) {
+    RCLCPP_WARN(
+      node->get_logger(), "[%s] safety_radius %.2f is below robot_geometry.radius %.2f: using "
+      "the radius", plugin_name.c_str(), p.safety_radius, p.robot_radius);
+  }
+
   // Velocity and acceleration limits: the robot's (controller_node "robot_limits.*").
-  const auto limits = get_robot_limits(
+  limits_ = get_robot_limits(
     {"max_linear_velocity", "", "max_angular_velocity", "max_linear_acceleration", "",
       "max_angular_acceleration", ""});
-  max_lin_vel_ = limits.max_linear_vel;
-  max_ang_vel_ = limits.max_angular_vel;
-  max_lin_acc_ = limits.max_linear_acc;
-  max_ang_acc_ = limits.max_angular_acc;
-  node->get_parameter<double>(plugin_name + ".fov", fov_);
-  node->get_parameter<double>(plugin_name + ".safety_radius", safety_radius_);
-  easynav::declare_parameter_if_absent<double>(
-    *node, plugin_name + ".obstacle_range", obstacle_range_);
-  easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".z_min_filter", z_min_filter_);
-  node->get_parameter<double>(plugin_name + ".obstacle_range", obstacle_range_);
-  node->get_parameter<double>(plugin_name + ".z_min_filter", z_min_filter_);
-  const auto geometry = get_robot_geometry();
-  robot_radius_ = geometry.radius;
-  robot_height_ = geometry.height;
+  params_ = p;
+  optimizer_.configure(params_);
+  apply_limits(limits_);
 
-  optimizer_ = std::make_unique<MPPIOptimizer>(
-    num_samples_, horizon_steps_, dt_, lambda_,
-    max_lin_vel_, max_ang_vel_, fov_, safety_radius_);
+  last_cmd_ = Velocity{};
+  last_update_.reset();
+  have_goal_ = false;
+  last_status_ = MPPIStatus::NoPath;
 
   mppi_candidates_pub_ =
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/candidates", 10);
@@ -80,86 +148,128 @@ MPPIController::on_initialize()
     node->create_publisher<visualization_msgs::msg::MarkerArray>("/mppi/optimal_path", 10);
 }
 
-void MPPIController::publish_mppi_markers(
-  const std::vector<std::vector<std::pair<double, double>>> & all_trajs,
-  const std::vector<std::pair<double, double>> & best_traj)
+void
+MPPIController::apply_limits(const RobotLimits & limits)
 {
-  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
-  visualization_msgs::msg::MarkerArray candidates;
-  visualization_msgs::msg::MarkerArray optimal;
-  int id = 0;
-
-  // Candidates in blue
-  for (const auto & traj : all_trajs) {
-    visualization_msgs::msg::Marker marker;
-    marker.header.frame_id = tf_info.map_frame;
-    marker.header.stamp = rclcpp::Clock().now();
-    marker.ns = "mppi_candidates";
-    marker.id = id++;
-    marker.type = visualization_msgs::msg::Marker::LINE_STRIP;
-    marker.action = visualization_msgs::msg::Marker::ADD;
-    marker.scale.x = 0.02;
-    marker.color.r = 0.0;
-    marker.color.g = 0.0;
-    marker.color.b = 1.0;
-    marker.color.a = 0.5;
-
-    for (const auto & [x, y] : traj) {
-      geometry_msgs::msg::Point p;
-      p.x = x;
-      p.y = y;
-      p.z = 0.05;
-      marker.points.push_back(p);
-    }
-
-    candidates.markers.push_back(marker);
-  }
-
-  // Best trajectory in red
-  visualization_msgs::msg::Marker best_marker;
-  best_marker.header.frame_id = tf_info.map_frame;
-  best_marker.header.stamp = rclcpp::Clock().now();
-  best_marker.ns = "mppi_optimal_path";
-  best_marker.id = id++;
-  best_marker.type = visualization_msgs::msg::Marker::LINE_STRIP;
-  best_marker.action = visualization_msgs::msg::Marker::ADD;
-  best_marker.scale.x = 0.05;
-  best_marker.color.r = 1.0;
-  best_marker.color.g = 0.0;
-  best_marker.color.b = 0.0;
-  best_marker.color.a = 0.8;
-
-  for (const auto & [x, y] : best_traj) {
-    geometry_msgs::msg::Point p;
-    p.x = x;
-    p.y = y;
-    p.z = 0.1;
-    best_marker.points.push_back(p);
-  }
-
-  optimal.markers.push_back(best_marker);
-
-  // Publish the markers
-  mppi_candidates_pub_->publish(candidates);
-  mppi_optimal_pub_->publish(optimal);
+  limits_ = limits;
+  MPPIParams p = optimizer_.params();
+  p.max_vx = limits.max_linear_vel;
+  p.min_vx = limits.min_linear_vel;
+  p.max_vy = limits.max_lateral_vel;
+  p.max_wz = limits.max_angular_vel;
+  p.acc_vx = limits.max_linear_acc;
+  p.decel_vx = limits.max_linear_decel;
+  p.acc_vy = limits.max_lateral_acc;
+  p.decel_vy = limits.max_lateral_decel;
+  p.acc_wz = limits.max_angular_acc;
+  p.decel_wz = limits.max_angular_decel;
+  optimizer_.set_limits(p);
 }
 
+void
+MPPIController::publish_markers()
+{
+  const bool candidates = max_visualized_rollouts_ > 0 &&
+    mppi_candidates_pub_->get_subscription_count() > 0 && optimizer_.rollouts() > 0;
+  const bool optimal = mppi_optimal_pub_->get_subscription_count() > 0;
+  if (!candidates && !optimal) {
+    return;
+  }
+  const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+  const auto stamp = get_node()->now();
+  const int steps = optimizer_.params().horizon_steps;
+
+  auto line = [&](const std::string & ns, int id, double width, double r, double b, double a) {
+      visualization_msgs::msg::Marker marker;
+      marker.header.frame_id = tf_info.map_frame;
+      marker.header.stamp = stamp;
+      marker.ns = ns;
+      marker.id = id;
+      marker.type = visualization_msgs::msg::Marker::LINE_STRIP;
+      marker.action = visualization_msgs::msg::Marker::ADD;
+      marker.scale.x = width;
+      marker.color.r = r;
+      marker.color.b = b;
+      marker.color.a = a;
+      marker.pose.orientation.w = 1.0;
+      return marker;
+    };
+
+  if (candidates) {
+    visualization_msgs::msg::MarkerArray array;
+    const int shown = std::min(max_visualized_rollouts_, optimizer_.rollouts());
+    const int stride = std::max(1, optimizer_.rollouts() / shown);
+    for (int i = 0; i < shown; ++i) {
+      auto marker = line("mppi_candidates", i, 0.02, 0.0, 1.0, 0.5);
+      const auto * poses = optimizer_.rollout(i * stride);
+      for (int t = 0; t <= steps; ++t) {
+        geometry_msgs::msg::Point p;
+        p.x = poses[t].x;
+        p.y = poses[t].y;
+        p.z = 0.05;
+        marker.points.push_back(p);
+      }
+      array.markers.push_back(marker);
+    }
+    mppi_candidates_pub_->publish(array);
+  }
+
+  if (optimal) {
+    visualization_msgs::msg::MarkerArray array;
+    auto marker = line("mppi_optimal_path", 0, 0.05, 1.0, 0.0, 0.8);
+    for (const auto & pose : optimizer_.optimal_trajectory()) {
+      geometry_msgs::msg::Point p;
+      p.x = pose.x;
+      p.y = pose.y;
+      p.z = 0.1;
+      marker.points.push_back(p);
+    }
+    array.markers.push_back(marker);
+    mppi_optimal_pub_->publish(array);
+  }
+}
+
+void
+MPPIController::clear_markers()
+{
+  visualization_msgs::msg::MarkerArray clear;
+  visualization_msgs::msg::Marker delete_all;
+  delete_all.action = visualization_msgs::msg::Marker::DELETEALL;
+  clear.markers.push_back(delete_all);
+  mppi_candidates_pub_->publish(clear);
+  mppi_optimal_pub_->publish(clear);
+}
+
+void
+MPPIController::stop(NavState & nav_state, bool forget_goal)
+{
+  optimizer_.reset();
+  last_cmd_ = Velocity{};
+  if (forget_goal) {
+    have_goal_ = false;
+  }
+  twist_stamped_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().robot_frame;
+  twist_stamped_.header.stamp = get_node()->now();
+  twist_stamped_.twist = geometry_msgs::msg::Twist();
+  nav_state.set("cmd_vel", twist_stamped_);
+  if (last_status_ == MPPIStatus::Following) {
+    clear_markers();
+  }
+  last_status_ = MPPIStatus::NoPath;
+}
 
 pcl::PointCloud<pcl::PointXYZ>
-MPPIController::obstacle_points(const NavState & nav_state, bool backward) const
+MPPIController::obstacle_points(const NavState & nav_state) const
 {
   const auto & perceptions = nav_state.get_no_group<PointPerception>();
   const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
-  // Robot frame: from just behind the robot to obstacle_range ahead (mirrored when backward).
-  const double x_min = backward ? -obstacle_range_ : -robot_radius_;
-  const double x_max = backward ? robot_radius_ : obstacle_range_;
   // Downsampled first (indices only): fewer points to transform in the filter.
   return PointPerceptionsOpsView(perceptions)
          .downsample(0.1)
          .fuse(tf_info.robot_frame)
          .filter(
-    {x_min, -obstacle_range_, z_min_filter_},
-    {x_max, obstacle_range_, robot_height_}, false)
+    {-obstacle_range_, -obstacle_range_, z_min_filter_},
+    {obstacle_range_, obstacle_range_, robot_height_}, false)
          .fuse(tf_info.map_frame)
          .collapse({NAN, NAN, 0.1})
          .downsample(0.1)
@@ -169,25 +279,11 @@ MPPIController::obstacle_points(const NavState & nav_state, bool backward) const
 void
 MPPIController::update_rt(NavState & nav_state)
 {
-  // If navigation is IDLE, force zero velocity
-  if (nav_state.has("navigation_state")) {
-    const auto nav_state_val = nav_state.get_safe<easynav::GoalManager::State>("navigation_state");
-    if (nav_state_val == easynav::GoalManager::State::IDLE) {
-      twist_stamped_.header.stamp = get_node()->now();
-      twist_stamped_.twist.linear.x = 0.0;
-      twist_stamped_.twist.angular.z = 0.0;
-      nav_state.set("cmd_vel", twist_stamped_);
-
-      // Also clear visualization markers when idle
-      visualization_msgs::msg::MarkerArray clear_markers;
-      visualization_msgs::msg::Marker delete_all;
-      delete_all.action = visualization_msgs::msg::Marker::DELETEALL;
-      clear_markers.markers.push_back(delete_all);
-
-      mppi_candidates_pub_->publish(clear_markers);
-      mppi_optimal_pub_->publish(clear_markers);
-      return;
-    }
+  if (nav_state.has("navigation_state") &&
+    nav_state.get_safe<GoalManager::State>("navigation_state") == GoalManager::State::IDLE)
+  {
+    stop(nav_state, true);
+    return;
   }
 
   if (!nav_state.has("path") || !nav_state.has("robot_pose")) {
@@ -195,58 +291,96 @@ MPPIController::update_rt(NavState & nav_state)
   }
 
   const auto & path = nav_state.get_safe<nav_msgs::msg::Path>("path");
-
   if (path.poses.empty()) {
-    // If the path is empty, stop the robot and clear markers
-    twist_stamped_.header.frame_id = path.header.frame_id;
-    twist_stamped_.header.stamp = get_node()->now();
-    twist_stamped_.twist.linear.x = 0.0;
-    twist_stamped_.twist.angular.z = 0.0;
-    nav_state.set("cmd_vel", twist_stamped_);
-
-    visualization_msgs::msg::MarkerArray clear_markers;
-    visualization_msgs::msg::Marker delete_all;
-    delete_all.action = visualization_msgs::msg::Marker::DELETEALL;
-    clear_markers.markers.push_back(delete_all);
-
-    mppi_candidates_pub_->publish(clear_markers);
-    mppi_optimal_pub_->publish(clear_markers);
+    stop(nav_state, true);
     return;
   }
 
-  const auto pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
-  const bool backward = nav_state.has("cmd_vel") &&
-    nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel").twist.linear.x < 0.0;
-  const auto filtered = obstacle_points(nav_state, backward);
-
-  // Compute the control using MPPI with points
-  auto result = optimizer_->compute_control(pose, path, filtered);
-
-  // Prevent abrupt changes in velocity
-  const auto & current_twist = nav_state.get<geometry_msgs::msg::TwistStamped>("cmd_vel");
-  double dv = result.v - current_twist.twist.linear.x;
-  double dw = result.w - current_twist.twist.angular.z;
-  double max_dv = max_lin_acc_ * dt_;
-  double max_dw = max_ang_acc_ * dt_;
-  if (std::abs(dv) > max_dv) {
-    result.v = current_twist.twist.linear.x + (dv > 0 ? max_dv : -max_dv);
+  // Limits may change at runtime (e.g. a safely limited speed).
+  if (auto * provider = dynamic_cast<RobotLimitsProvider *>(get_node().get())) {
+    const auto limits = provider->get_robot_limits();
+    if (limits.max_linear_vel != limits_.max_linear_vel ||
+      limits.min_linear_vel != limits_.min_linear_vel ||
+      limits.max_lateral_vel != limits_.max_lateral_vel ||
+      limits.max_angular_vel != limits_.max_angular_vel)
+    {
+      apply_limits(limits);
+    }
   }
-  if (std::abs(dw) > max_dw) {
-    result.w = current_twist.twist.angular.z + (dw > 0 ? max_dw : -max_dw);
+
+  const auto & pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose").pose.pose;
+  MPPIInput input;
+  input.pose = {pose.position.x, pose.position.y, tf2::getYaw(pose.orientation)};
+  input.velocity = last_cmd_;
+  input.path = &path;
+
+  // A new goal: its "hold" heading is the robot's now.
+  const auto & goal = path.poses.back().pose.position;
+  if (!have_goal_ || goal.x != goal_x_ || goal.y != goal_y_) {
+    have_goal_ = true;
+    goal_x_ = goal.x;
+    goal_y_ = goal.y;
+    hold_yaw_ = input.pose.yaw;
   }
-  result.v = std::clamp(result.v, -max_lin_vel_, max_lin_vel_);
-  result.w = std::clamp(result.w, -max_ang_vel_, max_ang_vel_);
 
-  // Publish the computed velocity command
-  twist_stamped_.header.frame_id = path.header.frame_id;
-  twist_stamped_.header.stamp = get_node()->now();
-  twist_stamped_.twist.linear.x = result.v;
-  twist_stamped_.twist.angular.z = result.w;
+  input.heading_mode = heading_mode_;
+  input.heading_yaw = heading_yaw_;
+  if (heading_mode_ == HeadingMode::Hold) {
+    input.heading_mode = HeadingMode::Fixed;
+    input.heading_yaw = hold_yaw_;
+  }
+  if (params_.motion_model == MotionModel::Omni && nav_state.has(kHeadingReferenceKey)) {
+    input.heading_mode = HeadingMode::Fixed;
+    input.heading_yaw = nav_state.get_safe<double>(kHeadingReferenceKey);
+  }
 
+  // The strictest of the controller's and the system's tolerances (the system decides success).
+  input.xy_goal_tolerance = xy_goal_tolerance_;
+  input.yaw_goal_tolerance = yaw_goal_tolerance_;
+  if (nav_state.has("goal_tolerance.position")) {
+    input.xy_goal_tolerance =
+      std::min(input.xy_goal_tolerance, nav_state.get_safe<double>("goal_tolerance.position"));
+  }
+  if (nav_state.has("goal_tolerance.yaw")) {
+    input.yaw_goal_tolerance =
+      std::min(input.yaw_goal_tolerance, nav_state.get_safe<double>("goal_tolerance.yaw"));
+  }
+
+  const auto now = get_node()->now();
+  if (last_update_ && last_update_->get_clock_type() == now.get_clock_type()) {
+    input.elapsed = std::clamp((now - *last_update_).seconds(), 0.0, 1.0);
+  }
+  last_update_ = now;
+
+  const auto obstacles = obstacle_points(nav_state);
+  input.obstacles = &obstacles;
+
+  const auto result = optimizer_.compute(input);
+  if (result.status == MPPIStatus::Blocked) {
+    RCLCPP_WARN_THROTTLE(
+      get_node()->get_logger(), *get_node()->get_clock(), 1000,
+      "[%s] every trajectory collides: stopping", get_plugin_name().c_str());
+  } else if (result.status == MPPIStatus::NoPath) {
+    RCLCPP_WARN_THROTTLE(
+      get_node()->get_logger(), *get_node()->get_clock(), 1000,
+      "[%s] non-finite path or pose: stopping", get_plugin_name().c_str());
+  }
+  last_cmd_ = result.cmd;
+
+  twist_stamped_.header.frame_id = RTTFBuffer::getInstance()->get_tf_info().robot_frame;
+  twist_stamped_.header.stamp = now;
+  twist_stamped_.twist = geometry_msgs::msg::Twist();
+  twist_stamped_.twist.linear.x = result.cmd.vx;
+  twist_stamped_.twist.linear.y = result.cmd.vy;
+  twist_stamped_.twist.angular.z = result.cmd.wz;
   nav_state.set("cmd_vel", twist_stamped_);
 
-  // Publish the MPPI markers
-  publish_mppi_markers(result.all_trajectories, result.best_trajectory);
+  if (result.status == MPPIStatus::Following) {
+    publish_markers();
+  } else if (last_status_ == MPPIStatus::Following) {
+    clear_markers();
+  }
+  last_status_ = result.status;
 }
 
 }  // namespace easynav

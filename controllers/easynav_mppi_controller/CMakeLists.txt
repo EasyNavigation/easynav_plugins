@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
 project(easynav_mppi_controller)
 
+# Unoptimized, the rollouts do not fit in a control cycle
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -24,6 +29,8 @@ find_package(PCL REQUIRED COMPONENTS common io)
 add_library(${PROJECT_NAME} SHARED
   src/easynav_mppi_controller/MPPIController.cpp
   src/easynav_mppi_controller/MPPIOptimizer.cpp
+  src/easynav_mppi_controller/NearestGrid.cpp
+  src/easynav_mppi_controller/PointBuckets.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

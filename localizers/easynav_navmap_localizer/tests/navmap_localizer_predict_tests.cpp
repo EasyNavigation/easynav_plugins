@@ -307,7 +307,8 @@ TEST_F(NavmapAmclPredictTest, WithoutImuOnARampTheEstimateFollowsTheSurface)
   tf2::Matrix3x3(amcl_->getEstimatedPose().getRotation()).getRPY(r, p, y);
   EXPECT_NEAR(std::abs(p), std::atan(0.25), 0.02);  // facing up the ramp
   EXPECT_NEAR(r, 0.0, 0.02);
-  EXPECT_NEAR(amcl_->getEstimatedPose().getOrigin().z(),
+  EXPECT_NEAR(
+    amcl_->getEstimatedPose().getOrigin().z(),
     0.25 * amcl_->getEstimatedPose().getOrigin().x(), 0.02);
 }
 

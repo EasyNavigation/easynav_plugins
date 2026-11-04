@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <chrono>
+#include <string>
 #include <thread>
 
 #include "gtest/gtest.h"
@@ -34,6 +35,11 @@ protected:
     if (!rclcpp::ok()) {
       rclcpp::init(0, nullptr);
     }
+  }
+
+  static uint8_t level(const easynav::NavState & nav_state, const std::string & name)
+  {
+    return nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics." + name).level;
   }
 
   static void set_active_goal(easynav::NavState & nav_state)
@@ -96,9 +102,11 @@ TEST_F(NoPathEvaluatorTestCase, WarnsWhenNoPathYetWithAnActiveGoal)
     diagnostic_msgs::msg::DiagnosticStatus::WARN);
 }
 
-TEST_F(NoPathEvaluatorTestCase, ErrorsOnEmptyPathWithAnActiveGoal)
+TEST_F(NoPathEvaluatorTestCase, AnEmptyPathIsAnErrorOnlyAfterTheDebounce)
 {
-  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_empty_path_node");
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_empty_path_node", rclcpp::NodeOptions().parameter_overrides(
+      {rclcpp::Parameter("no_path3.debounce_duration", 0.5)}));
   easynav::NoPathEvaluator eval;
   eval.initialize(node, "no_path3");
 
@@ -108,10 +116,117 @@ TEST_F(NoPathEvaluatorTestCase, ErrorsOnEmptyPathWithAnActiveGoal)
 
   std::this_thread::sleep_for(std::chrono::milliseconds(120));
   eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path3"), diagnostic_msgs::msg::DiagnosticStatus::WARN);
 
-  EXPECT_EQ(
-    nav_state.get<diagnostic_msgs::msg::DiagnosticStatus>("diagnostics.no_path3").level,
-    diagnostic_msgs::msg::DiagnosticStatus::ERROR);
+  // Still within the 0.5 s
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path3"), diagnostic_msgs::msg::DiagnosticStatus::WARN);
+
+  // Past it, and while it lasts
+  std::this_thread::sleep_for(std::chrono::milliseconds(400));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path3"), diagnostic_msgs::msg::DiagnosticStatus::ERROR);
+  std::this_thread::sleep_for(std::chrono::milliseconds(120));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path3"), diagnostic_msgs::msg::DiagnosticStatus::ERROR);
+}
+
+TEST_F(NoPathEvaluatorTestCase, ByDefaultAnEmptyPathMustLastOneSecond)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("test_default_debounce_node");
+  easynav::NoPathEvaluator eval;
+  eval.initialize(node, "no_path5");
+  EXPECT_DOUBLE_EQ(node->get_parameter("no_path5.debounce_duration").as_double(), 1.0);
+
+  easynav::NavState nav_state;
+  set_active_goal(nav_state);
+  nav_state.set("path", nav_msgs::msg::Path());
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(120));
+  eval.internal_update(nav_state);
+  std::this_thread::sleep_for(std::chrono::milliseconds(600));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path5"), diagnostic_msgs::msg::DiagnosticStatus::WARN);
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path5"), diagnostic_msgs::msg::DiagnosticStatus::ERROR);
+}
+
+TEST_F(NoPathEvaluatorTestCase, ZeroDebounceIsAnErrorAtOnce)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_zero_debounce_node", rclcpp::NodeOptions().parameter_overrides(
+      {rclcpp::Parameter("no_path6.debounce_duration", 0.0)}));
+  easynav::NoPathEvaluator eval;
+  eval.initialize(node, "no_path6");
+
+  easynav::NavState nav_state;
+  set_active_goal(nav_state);
+  nav_state.set("path", nav_msgs::msg::Path());
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(120));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path6"), diagnostic_msgs::msg::DiagnosticStatus::ERROR);
+}
+
+TEST_F(NoPathEvaluatorTestCase, APathInBetweenRestartsTheDebounce)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_restart_debounce_node", rclcpp::NodeOptions().parameter_overrides(
+      {rclcpp::Parameter("no_path7.debounce_duration", 0.4)}));
+  easynav::NoPathEvaluator eval;
+  eval.initialize(node, "no_path7");
+
+  easynav::NavState nav_state;
+  set_active_goal(nav_state);
+  nav_msgs::msg::Path path;
+  path.poses.push_back(geometry_msgs::msg::PoseStamped());
+
+  // Empty, a path again (one cycle), empty: never 0.4 s in a row
+  for (int i = 0; i < 4; ++i) {
+    nav_state.set("path", nav_msgs::msg::Path());
+    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    eval.internal_update(nav_state);
+    std::this_thread::sleep_for(std::chrono::milliseconds(150));
+    eval.internal_update(nav_state);
+    EXPECT_EQ(level(nav_state, "no_path7"), diagnostic_msgs::msg::DiagnosticStatus::WARN);
+
+    nav_state.set("path", path);
+    std::this_thread::sleep_for(std::chrono::milliseconds(120));
+    eval.internal_update(nav_state);
+    EXPECT_EQ(level(nav_state, "no_path7"), diagnostic_msgs::msg::DiagnosticStatus::OK);
+  }
+}
+
+TEST_F(NoPathEvaluatorTestCase, ANewGoalRestartsTheDebounce)
+{
+  auto node = std::make_shared<rclcpp_lifecycle::LifecycleNode>(
+    "test_goal_debounce_node", rclcpp::NodeOptions().parameter_overrides(
+      {rclcpp::Parameter("no_path8.debounce_duration", 0.4)}));
+  easynav::NoPathEvaluator eval;
+  eval.initialize(node, "no_path8");
+
+  easynav::NavState nav_state;
+  set_active_goal(nav_state);
+  nav_state.set("path", nav_msgs::msg::Path());
+  std::this_thread::sleep_for(std::chrono::milliseconds(120));
+  eval.internal_update(nav_state);
+  std::this_thread::sleep_for(std::chrono::milliseconds(400));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path8"), diagnostic_msgs::msg::DiagnosticStatus::ERROR);
+
+  // The goal is gone (finished or cancelled), then a new one, still without a path
+  nav_state.set("goals", nav_msgs::msg::Goals());
+  std::this_thread::sleep_for(std::chrono::milliseconds(120));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path8"), diagnostic_msgs::msg::DiagnosticStatus::OK);
+
+  set_active_goal(nav_state);
+  std::this_thread::sleep_for(std::chrono::milliseconds(120));
+  eval.internal_update(nav_state);
+  EXPECT_EQ(level(nav_state, "no_path8"), diagnostic_msgs::msg::DiagnosticStatus::WARN);
 }
 
 TEST_F(NoPathEvaluatorTestCase, OkWhenPathHasPosesWithAnActiveGoal)

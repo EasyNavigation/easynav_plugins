@@ -195,7 +195,7 @@ TEST_F(NavmapAmclThreadsTest, ReseededPosesAreAppliedByTheRtThread)
   std::vector<tf2::Transform> before;
   for (const auto & p : amcl_->particles_) {
     before.push_back(p.pose);
-                                                                     }
+  }
 
   amcl_->reseed();
   ASSERT_TRUE(amcl_->pending_.load());

@@ -153,7 +153,7 @@ TEST_F(ObstacleMemoryTest, AnObstacleOutOfSightIsRemembered)
   EXPECT_EQ(nm.layer_type_name("obstacles_logodds"), "int16");
   for (int i = 0; i < 5; ++i) {
     cycle({});
-                                         }  // nothing seen, no ray crosses it
+  }                                         // nothing seen, no ray crosses it
   EXPECT_EQ(at(3.03f, 2.03f), LETHAL);
   EXPECT_EQ(at(1.03f, 1.03f), FREE);
   EXPECT_EQ(at(3.55f, 2.05f), LETHAL);  // static
@@ -186,7 +186,7 @@ TEST_F(ObstacleMemoryTest, SensorsFillInUnknownButNeverEraseTheStaticMap)
   // The ground seen on the unknown strip, and beyond the static obstacle
   for (int i = 0; i < 5; ++i) {
     cycle({}, {{3.86f, 2.02f}, {3.16f, 1.12f}});
-                                                                           }
+  }
   EXPECT_EQ(at(3.16f, 1.12f), FREE);
   EXPECT_EQ(at(3.55f, 2.05f), LETHAL);  // the static obstacle stays
   EXPECT_EQ(at(3.86f, 2.02f), FREE);
@@ -223,7 +223,7 @@ TEST_F(ObstacleMemoryTest, WithoutClearingRaysChangeNothing)
   cycle({{3.03f, 2.03f}});
   for (int i = 0; i < 5; ++i) {
     cycle({}, {{3.53f, 2.03f}});
-                                                           }
+  }
   EXPECT_EQ(at(3.03f, 2.03f), LETHAL);
 }
 

@@ -24,3 +24,13 @@ target_compile_definitions(mppi_controller_legacy_params_file_tests
 
 ament_add_gtest(mppi_controller_obstacle_points_tests mppi_controller_obstacle_points_tests.cpp)
 target_link_libraries(mppi_controller_obstacle_points_tests ${PROJECT_NAME})
+
+find_package(PCL REQUIRED COMPONENTS common)
+ament_add_gtest(mppi_optimizer_tests mppi_optimizer_tests.cpp TIMEOUT 300)
+target_link_libraries(mppi_optimizer_tests ${PROJECT_NAME})
+
+ament_add_gtest(mppi_scenarios_tests mppi_scenarios_tests.cpp TIMEOUT 900)
+target_link_libraries(mppi_scenarios_tests ${PROJECT_NAME})
+
+ament_add_gtest(mppi_controller_modes_tests mppi_controller_modes_tests.cpp)
+target_link_libraries(mppi_controller_modes_tests ${PROJECT_NAME})

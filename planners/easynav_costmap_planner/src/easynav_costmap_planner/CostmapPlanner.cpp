@@ -333,6 +333,11 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
   open.push(GridNode{static_cast<int>(sx), static_cast<int>(sy), 0.0, initial_h});
   cost_so_far[idx(sx, sy)] = 0.0;
 
+  // A robot already inside the inflated zone (e.g. after cutting a corner) may leave it: the
+  // inscribed cells within its inscribed radius are traversable. Never lethal or unknown cells.
+  const bool escaping = map.getCost(sx, sy) >= INSCRIBED_INFLATED_OBSTACLE;
+  const double escape_cells = get_robot_geometry().inscribed_radius / map.getResolution() + 1.0;
+
   while (!open.empty()) {
     auto current = open.top();
     open.pop();
@@ -345,7 +350,11 @@ std::vector<geometry_msgs::msg::Pose> CostmapPlanner::a_star_path(
 
       uint8_t cell_cost = map.getCost(nx, ny);
       // Reject cells that would cause collision (>= INSCRIBED_INFLATED_OBSTACLE = 253)
-      if (cell_cost >= INSCRIBED_INFLATED_OBSTACLE) {continue;}
+      if (cell_cost >= INSCRIBED_INFLATED_OBSTACLE) {
+        const bool leaving = escaping && cell_cost == INSCRIBED_INFLATED_OBSTACLE &&
+          std::hypot(nx - static_cast<int>(sx), ny - static_cast<int>(sy)) <= escape_cells;
+        if (!leaving) {continue;}
+      }
 
       const double normalized_cost =
         static_cast<double>(cell_cost) / INSCRIBED_INFLATED_OBSTACLE;

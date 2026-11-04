@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /// \file
-/// \brief MPPI takes the obstacle points in the robot frame, towards where it moves.
+/// \brief MPPI takes the obstacle points all around the robot, within its height and range.
 
 #include <cmath>
 #include <memory>
@@ -87,9 +87,9 @@ protected:
   }
 
   // Whether a point near (x, y) in the map is among the obstacle points.
-  bool kept(double x, double y, bool backward = false)
+  bool kept(double x, double y)
   {
-    for (const auto & p : mppi_.obstacle_points(nav_state_, backward)) {
+    for (const auto & p : mppi_.obstacle_points(nav_state_)) {
       if (std::hypot(p.x - x, p.y - y) < 0.1) {return true;}
     }
     return false;
@@ -100,32 +100,31 @@ protected:
   easynav::NavState nav_state_;
 };
 
-TEST_F(MppiObstaclePointsTest, AheadAndBesideAreKeptBehindIsNot)
+TEST_F(MppiObstaclePointsTest, AllAroundAreKept)
 {
+  // A holonomic robot moves in any direction, and any robot turns.
   make(0.0, 0.0, 0.0);
-  perceive({{1.0, 0.0, 0.3}, {0.0, 1.0, 0.3}, {-1.0, 0.0, 0.3}, {-0.2, 0.0, 0.3}});
+  perceive(
+    {{1.0, 0.0, 0.3}, {0.0, 1.0, 0.3}, {-1.0, 0.0, 0.3}, {0.0, -1.0, 0.3}, {-1.9, 1.9, 0.3}});
   EXPECT_TRUE(kept(1.0, 0.0));
   EXPECT_TRUE(kept(0.0, 1.0));
-  EXPECT_FALSE(kept(-1.0, 0.0));
-  EXPECT_TRUE(kept(-0.2, 0.0));    // within the robot radius (0.3)
+  EXPECT_TRUE(kept(-1.0, 0.0));
+  EXPECT_TRUE(kept(0.0, -1.0));
+  EXPECT_TRUE(kept(-1.9, 1.9));
 }
 
 TEST_F(MppiObstaclePointsTest, BeyondTheRangeIsNotKept)
 {
   make(0.0, 0.0, 0.0);
-  perceive({{1.9, 0.0, 0.3}, {2.3, 0.0, 0.3}, {0.5, 2.3, 0.3}, {0.5, -1.9, 0.3}});
+  perceive(
+    {{1.9, 0.0, 0.3}, {2.3, 0.0, 0.3}, {0.5, 2.3, 0.3}, {0.5, -1.9, 0.3}, {-2.3, 0.0, 0.3},
+      {-1.9, 0.0, 0.3}});
   EXPECT_TRUE(kept(1.9, 0.0));
   EXPECT_FALSE(kept(2.3, 0.0));
   EXPECT_FALSE(kept(0.5, 2.3));
   EXPECT_TRUE(kept(0.5, -1.9));
-}
-
-TEST_F(MppiObstaclePointsTest, BackwardLooksBehind)
-{
-  make(0.0, 0.0, 0.0);
-  perceive({{1.0, 0.0, 0.3}, {-1.0, 0.0, 0.3}});
-  EXPECT_FALSE(kept(1.0, 0.0, true));
-  EXPECT_TRUE(kept(-1.0, 0.0, true));
+  EXPECT_FALSE(kept(-2.3, 0.0));
+  EXPECT_TRUE(kept(-1.9, 0.0));
 }
 
 TEST_F(MppiObstaclePointsTest, TheGroundAndAboveTheRobotAreNotKept)
@@ -139,16 +138,18 @@ TEST_F(MppiObstaclePointsTest, TheGroundAndAboveTheRobotAreNotKept)
 
 TEST_F(MppiObstaclePointsTest, ItIsTheRobotsFrameNotTheMaps)
 {
-  // Robot at (3, 1) facing +y: "ahead" is +y in the map.
-  make(3.0, 1.0, M_PI / 2.0);
-  perceive({{3.0, 2.0, 0.3}, {3.0, 0.0, 0.3}, {4.0, 1.0, 0.3}});
-  EXPECT_TRUE(kept(3.0, 2.0));
-  EXPECT_FALSE(kept(3.0, 0.0));
-  EXPECT_TRUE(kept(4.0, 1.0));      // beside it
+  // Robot at (3, 1) facing 45 degrees: the range is a square rotated with it.
+  make(3.0, 1.0, M_PI / 4.0);
+  // 1.9 m along its x axis: inside; the same distance along the map's x and y: a corner
+  // of the rotated square (2.69 m away along the robot's diagonal), outside.
+  const float d = 1.9f / std::sqrt(2.0f);
+  perceive({{3.0f + d, 1.0f + d, 0.3f}, {4.9f, 2.9f, 0.3f}});
+  EXPECT_TRUE(kept(3.0 + d, 1.0 + d));
+  EXPECT_FALSE(kept(3.0 + 1.9, 1.0 + 1.9));
 }
 
 TEST_F(MppiObstaclePointsTest, NoPerceptionsGiveNoPoints)
 {
   make(0.0, 0.0, 0.0);
-  EXPECT_TRUE(mppi_.obstacle_points(nav_state_, false).empty());
+  EXPECT_TRUE(mppi_.obstacle_points(nav_state_).empty());
 }

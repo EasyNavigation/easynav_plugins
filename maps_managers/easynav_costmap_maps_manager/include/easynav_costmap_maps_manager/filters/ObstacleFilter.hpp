@@ -37,6 +37,10 @@ public:
 protected:
   /// Points below this height (m, map frame) are ignored: floor hits ("<plugin>.min_height")
   double min_height_ {0.1};
+
+  /// Only points within this distance (m) of the robot, along x and along y of the map frame,
+  /// update the map ("<plugin>.update_distance"); 0 or less: every point does.
+  double update_distance_ {5.0};
 };
 
 }  // namespace easynav

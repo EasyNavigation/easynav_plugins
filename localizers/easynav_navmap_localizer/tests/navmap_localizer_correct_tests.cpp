@@ -186,10 +186,12 @@ protected:
 
 TEST_F(NavmapAmclCorrectTest, ThePoseThatSeesTheCloudScoresBest)
 {
-  make({rclcpp::Parameter("loc.min_point_height", 0.3),
+  make(
+    {rclcpp::Parameter("loc.min_point_height", 0.3),
       rclcpp::Parameter("loc.max_point_height", 1.8)});
   nav_state_.set("laser", see(2.0, 3.5, 0.3, now_));
-  place({{2.0, 3.5, 0.3}, {2.5, 3.5, 0.3}, {2.0, 3.0, 0.3}, {1.6, 3.8, 0.3}, {2.0, 3.5, 0.6},
+  place(
+    {{2.0, 3.5, 0.3}, {2.5, 3.5, 0.3}, {2.0, 3.0, 0.3}, {1.6, 3.8, 0.3}, {2.0, 3.5, 0.6},
       {2.0, 3.5, 0.0}});
   amcl_->correct(nav_state_);
   EXPECT_GT(score(0), 0.6);  // the map's probability where the points fall
@@ -201,7 +203,8 @@ TEST_F(NavmapAmclCorrectTest, ThePoseThatSeesTheCloudScoresBest)
 TEST_F(NavmapAmclCorrectTest, OnlyPointsWithinTheHeightBandAreScored)
 {
   // Floor and ceiling fit any particle under them: out of the band, they are not scored
-  make({rclcpp::Parameter("loc.min_point_height", 0.3),
+  make(
+    {rclcpp::Parameter("loc.min_point_height", 0.3),
       rclcpp::Parameter("loc.max_point_height", 1.8)});
   auto cloud = see(3.0, 3.0, 0.0, now_);
   std::size_t in_band = 0;
@@ -229,13 +232,15 @@ TEST_F(NavmapAmclCorrectTest, ASensorNearTheFloorIsNotBlindedByIt)
   // occlusion check many look blocked and the true pose scores far less; without it, the true
   // pose is the best.
   sensor_z_ = 0.05;
-  make({rclcpp::Parameter("loc.min_point_height", 0.3),
+  make(
+    {rclcpp::Parameter("loc.min_point_height", 0.3),
       rclcpp::Parameter("loc.ray_occlusion", true)});
   nav_state_.set("laser", see(3.0, 2.5, 0.2, now_));
   place({{3.0, 2.5, 0.2}, {3.4, 2.5, 0.2}});
   amcl_->correct(nav_state_);
   const double occluded = score(0);
-  make({rclcpp::Parameter("loc.min_point_height", 0.3),
+  make(
+    {rclcpp::Parameter("loc.min_point_height", 0.3),
       rclcpp::Parameter("loc.ray_occlusion", false)});
   nav_state_.set("laser", see(3.0, 2.5, 0.2, now_));
   place({{3.0, 2.5, 0.2}, {3.4, 2.5, 0.2}});

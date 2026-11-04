@@ -65,6 +65,7 @@ struct ParticlesParams
   double reseed_noise_yaw {0.05};           ///< Std dev of the yaw noise of a reseeded one (rad).
   double good_quality_threshold {0.6};      ///< Above it, the set is shrunk on reseed.
   double low_quality_threshold {0.25};      ///< Below it, the set is grown on reseed.
+  double quality_smoothing {0.2};           ///< Weight of a new correction in the smoothed quality.
 };
 
 /**
@@ -128,7 +129,11 @@ public:
   double get_quality() const {return quality_;}
 
   /// \brief Overwrite the quality (e.g. to give a fresh hypothesis a fair start).
-  void set_quality(double quality) {quality_ = quality;}
+  void set_quality(double quality) {quality_ = smoothed_quality_ = quality;}
+
+  /// \brief Quality averaged over the last corrections (quality_smoothing): what the selection
+  /// of the hypothesis compares, so a single bad perception (people around) does not count.
+  double get_smoothed_quality() const {return smoothed_quality_;}
 
   /// \brief The particles.
   const std::vector<Particle> & get_particles() const {return particles_;}
@@ -145,6 +150,7 @@ protected:
   std::mt19937 rng_;
   std::vector<Particle> particles_;
   double quality_ {0.0};
+  double smoothed_quality_ {0.0};
 };
 
 /// \brief Yaw of a transform.

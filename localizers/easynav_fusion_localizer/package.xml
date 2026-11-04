@@ -21,6 +21,7 @@
   <depend>geographiclib</depend>
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
+  <depend>navmap_core</depend>
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
@@ -37,6 +38,7 @@
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
   <test_depend>robot_localization</test_depend>
+  <test_depend>rosgraph_msgs</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

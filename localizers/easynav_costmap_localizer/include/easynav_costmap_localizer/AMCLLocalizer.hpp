@@ -22,6 +22,7 @@
 #include <vector>
 #include <random>
 #include <memory>
+#include <mutex>
 
 #include "Eigen/Geometry"
 #include "geometry_msgs/msg/pose_array.hpp"
@@ -30,6 +31,8 @@
 #include "tf2/LinearMath/Transform.hpp"
 #include "tf2_ros/transform_broadcaster.hpp"
 #include "easynav_core/LocalizerMethodBase.hpp"
+#include "easynav_costmap_common/costmap_2d.hpp"
+#include "easynav_costmap_localizer/LocalizationQuality.hpp"
 
 namespace easynav
 {
@@ -139,9 +142,25 @@ protected:
   void correct(NavState & nav_state);
 
   /**
-   * @brief Re-initializes the particle cloud if necessary.
+   * @brief Replaces the worse half of the particles with copies of the better half.
+   * @param map With it, the `n_random` worst particles get random free poses of the map instead
+   *   (kidnapping recovery).
+   * @param n_random How many of the worst particles to place at random.
    */
-  void reseed();
+  void reseed(const Costmap2D * map = nullptr, std::size_t n_random = 0);
+
+  /// @brief How many particles to place at random at the next reseed (from the quality drop).
+  std::size_t random_particles_to_inject() const;
+
+  /// @brief How well the particles explain the sensors (see LocalizationQuality).
+  LocalizationQuality quality_;
+
+  /// @brief At most this share of the particles is placed at random in a reseed (0: never).
+  double random_particles_max_fraction_ {0.0};
+
+  /// @brief The estimate is the weighted mean of the particles within this distance (m) of the
+  /// densest one: far particles (e.g. random ones) never drag it to a point in between.
+  double estimate_cluster_radius_ {1.0};
 
   /// TF broadcaster to publish map to base_footprint transform.
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
@@ -189,6 +208,10 @@ protected:
   /// List of particles representing the belief distribution.
   std::vector<Particle> particles_;
 
+  /// Guards particles_ and the odometry: update_rt() (predict) and odom_callback() run on the
+  /// real-time thread, update() (correct, reseed) and init_pose_callback() on the other one.
+  std::mutex particles_mutex_;
+
   /// Random number generator used for sampling noise.
   std::mt19937 rng_;
 
@@ -213,6 +236,20 @@ protected:
   /// Points below this height (m, robot footprint frame) are ignored: floor hits
   double min_height_ {0.1};
 
+  /// After an initial pose, for this long (s), the reseeds spread the new particles more: a robot
+  /// standing still has no motion noise, and the cloud would settle where it first converged.
+  double reset_refine_time_ {3.0};
+
+  /// That extra spread at the start, as a fraction of the initial pose's deviation; it falls to
+  /// min_noise_* by the end of reset_refine_time.
+  double reset_refine_noise_ {0.25};
+
+  /// Refining after an initial pose: since when, and its starting deviations (m, rad).
+  bool refining_ {false};
+  rclcpp::Time refine_start_;
+  double refine_xy_ {0.0};
+  double refine_yaw_ {0.0};
+
   /// Whether to use TFs to compute odom
   bool compute_odom_from_tf_ {false};
 
@@ -224,6 +261,12 @@ protected:
 
   /// Flag indicating if the odometry has been initialized.
   bool initialized_odom_ = false;
+
+  /// Robot velocity from the odometry (robot frame), reported in robot_pose.
+  geometry_msgs::msg::Twist odom_twist_;
+
+  /// Stamp of odom_ when taken from TF.
+  rclcpp::Time odom_tf_stamp_ {0, 0, RCL_ROS_TIME};
 
   /// Time interval (in seconds) after which the particles should be reseeded.
   double reseed_time_;

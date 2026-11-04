@@ -59,7 +59,7 @@ Each plugin's parameters are under `recovery_manager.<type>.`. Every mitigation 
 | Plugin | Does | Parameters (default) |
 |---|---|---|
 | `easynav_diagnostic_recovery/CollisionSafetyReflex` | Brakes if the commanded motion would hit an obstacle within its stopping distance. The robot's radius and height come from `system_node.robot_geometry`. | `brake_acc` (0.5), `safety_margin` (0.1), `z_min_filter` (0.0), `downsample_leaf_size` (0.1), `debug_markers` (false) |
-| `easynav_diagnostic_recovery/NoPathEvaluator` | `ERROR` (`planner`) if there is a goal but the path is empty (`WARN` until the first path). | — |
+| `easynav_diagnostic_recovery/NoPathEvaluator` | `ERROR` (`planner`) if there is a goal but the path has been empty for `debounce_duration` s (`WARN` until the first path, and while it is confirming): a planner may fail for one cycle and plan again at once. | `debounce_duration` (1.0) |
 | `easynav_diagnostic_recovery/ObstacleTooCloseEvaluator` | `ERROR` (`obstacle_proximity`) if the robot is stopped closer than `safe_distance` (from the robot center) to an obstacle (after `debounce_duration` s stopped). Points below `z_min_filter` or above the robot height (`robot_geometry`) are ignored. | `safe_distance` (0.6), `z_min_filter` (0.0), `debounce_duration` (0.2), `linear_velocity_epsilon` (0.02), `angular_velocity_epsilon` (0.05) |
 | `easynav_diagnostic_recovery/ControllerStuckEvaluator` | `ERROR` (`controller_stuck`) if commanded to move but not progressing (not while paused or during a protective stop). | `linear_velocity_threshold` (0.02), `progress_distance_threshold` (0.05), `stuck_time_threshold` (2.0) |
 | `easynav_diagnostic_recovery/RosGraphEvaluator` | `ERROR` (`ros_graph`) if an EasyNav subscription has no publisher, or its velocity output has no consumer. | `freq` (10.0), `startup_grace` (15.0), `error_debounce` (2.0), `ignored_topics`, `ignored_consumers` |
@@ -71,7 +71,7 @@ Each plugin's parameters are under `recovery_manager.<type>.`. Every mitigation 
 | `easynav_diagnostic_recovery/HumanAssistanceRecovery` | Handles any `ERROR` not in `ignored_hardware_ids`: stops and waits until those clear. `timeout` 0 waits forever. | `timeout` (0.0), `ignored_hardware_ids` ([`ros_graph`]) |
 | `easynav_diagnostic_recovery/CancelMissionRecovery` | Handles any `ERROR`: aborts the mission. The last resort. | — |
 | `easynav_costmap_localizer/AmclConvergenceEvaluator` | `ERROR` (`localizer.amcl`) if AMCL's covariance trace exceeds the threshold. | `covariance_threshold` (1.0) |
-| `easynav_costmap_localizer/AmclRelocalizeMitigation` | Handles `localizer.amcl`: rotates until AMCL converges, or fails after `timeout`. | `covariance_threshold` (1.0), `rotation_speed` (0.3), `timeout` (5.0) |
+| `easynav_costmap_localizer/AmclRelocalizeMitigation` | Handles `localizer.amcl`: holds the robot and resets AMCL's pose (on `initialpose`, with RViz2's covariance) to where the robot was when it got lost, then up to `max_offset` m from it. Each of the `attempts` has `attempt_timeout` s to converge, by the evaluator's criteria; fails if none does. Resets nothing if AMCL has already converged when it starts. | `attempts` (5), `attempt_timeout` (5.0), `max_offset` (1.0), `covariance_threshold` (1.0), `match_threshold` (0.5), `quality_ratio_threshold` (0.5) |
 
 ## Usage
 

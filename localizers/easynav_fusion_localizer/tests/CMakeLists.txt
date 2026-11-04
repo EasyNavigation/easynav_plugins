@@ -26,3 +26,29 @@ target_link_libraries(fusion_localizer_local_filter_tests
   rclcpp::rclcpp
   easynav_localizer::easynav_localizer
 )
+
+find_package(rosgraph_msgs REQUIRED)
+ament_add_gtest(fusion_localizer_clock_wait_tests fusion_localizer_clock_wait_tests.cpp)
+target_link_libraries(fusion_localizer_clock_wait_tests
+  fusion_localizer
+  rclcpp::rclcpp
+  easynav_localizer::easynav_localizer
+  ${rosgraph_msgs_TARGETS}
+)
+
+ament_add_gtest(navmap_terrain_tests navmap_terrain_tests.cpp)
+target_link_libraries(navmap_terrain_tests fusion_localizer)
+
+ament_add_gtest(fusion_localizer_terrain_tests fusion_localizer_terrain_tests.cpp)
+target_link_libraries(fusion_localizer_terrain_tests
+  fusion_localizer
+  rclcpp::rclcpp
+  easynav_localizer::easynav_localizer
+)
+
+ament_add_gtest(fusion_localizer_gps_tests fusion_localizer_gps_tests.cpp)
+target_link_libraries(fusion_localizer_gps_tests
+  fusion_localizer
+  rclcpp::rclcpp
+  easynav_localizer::easynav_localizer
+)

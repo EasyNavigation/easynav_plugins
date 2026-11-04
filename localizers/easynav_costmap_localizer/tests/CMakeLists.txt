@@ -35,3 +35,16 @@ target_link_libraries(amcl_relocalize_mitigation_tests
 
 ament_add_gtest(costmap_localizer_min_height_tests costmap_localizer_min_height_tests.cpp)
 target_link_libraries(costmap_localizer_min_height_tests ${PROJECT_NAME})
+
+ament_add_gtest(costmap_localizer_reseed_tests costmap_localizer_reseed_tests.cpp
+  TIMEOUT 120)
+target_link_libraries(costmap_localizer_reseed_tests ${PROJECT_NAME})
+
+ament_add_gtest(costmap_localizer_quality_tests costmap_localizer_quality_tests.cpp)
+target_link_libraries(costmap_localizer_quality_tests
+  ${PROJECT_NAME}
+  rclcpp::rclcpp
+)
+
+ament_add_gtest(costmap_localizer_velocity_tests costmap_localizer_velocity_tests.cpp)
+target_link_libraries(costmap_localizer_velocity_tests ${PROJECT_NAME} rclcpp::rclcpp)

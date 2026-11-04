@@ -241,8 +241,10 @@ TEST(IncrementalInflation, MatchesAFullRecomputationAfterEveryChange)
     filter.update(nav_state);
 
     NavMap ref = *map;
-    ASSERT_TRUE(filter.inflate_layer_u8(ref, "obstacles", "ref", 0.6f, 3.0f, filter.inscribed(),
-      true));
+    ASSERT_TRUE(
+      filter.inflate_layer_u8(
+        ref, "obstacles", "ref", 0.6f, 3.0f, filter.inscribed(),
+        true));
     const auto inc = map->layers.get("inflated_obstacles");
     ASSERT_TRUE(inc);
     std::set<NavCelId> differ;

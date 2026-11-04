@@ -274,3 +274,35 @@ TEST_F(FusionLocalFilterTest, TheFiltersDoNotKeepTheNodeAlive)
   localizer.reset();
   EXPECT_TRUE(weak.expired());
 }
+
+// use_control with a control_config that cannot be used disables the control term; the IMU
+// setup, which checks it against the measured accelerations, must not read past it.
+TEST_F(FusionLocalFilterTest, AnUnusableControlConfigWithAnImuDisablesControl)
+{
+  const std::vector<std::pair<std::string, std::optional<std::vector<bool>>>> configs = {
+    {"missing", std::nullopt},
+    {"empty", std::vector<bool>{}},
+    {"too short", std::vector<bool>{true}},
+    {"too long", std::vector<bool>(7, true)},
+    {"all false", std::vector<bool>(6, false)},
+    {"valid", std::vector<bool>{true, false, false, false, false, true}}};
+  for (const auto & [name, config] : configs) {
+    auto params = velocities_only();
+    params.push_back({"fusion.local_filter.use_control", true});
+    if (config) {
+      params.push_back({"fusion.local_filter.control_config", *config});
+    }
+    // The IMU measures the accelerations too, so control on them is checked
+    params.push_back({"fusion.local_filter.imu0", "test_imu"});
+    params.push_back(
+      {"fusion.local_filter.imu0_config", std::vector<bool>{
+          false, false, false, false, false, false,
+          false, false, false, false, false, true,
+          true, true, true}});
+    params.push_back({"fusion.local_filter.imu0_remove_gravitational_acceleration", true});
+    bool all_finite = false;
+    const auto last = run(params, 0.5, 0.3, 1.0, &all_finite);
+    ASSERT_TRUE(last.has_value()) << name;
+    EXPECT_TRUE(all_finite) << name;
+  }
+}

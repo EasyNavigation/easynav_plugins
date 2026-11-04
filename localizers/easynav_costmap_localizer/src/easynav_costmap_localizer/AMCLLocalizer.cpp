@@ -16,10 +16,15 @@
 /// \file
 /// \brief Implementation of the AMCLLocalizer class using Costmap2D.
 
+#include <algorithm>
+#include <cmath>
+#include <numeric>
 #include <random>
+#include <vector>
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include "tf2/LinearMath/Vector3.hpp"
+#include "tf2/utils.hpp"
 
 #include "easynav_common/Parameters.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
@@ -245,6 +250,28 @@ AMCLLocalizer::on_initialize()
   node->get_parameter<double>(plugin_name + ".min_noise_yaw", min_noise_yaw_);
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".min_height", min_height_);
   node->get_parameter<double>(plugin_name + ".min_height", min_height_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".reset_refine_time", reset_refine_time_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".reset_refine_noise", reset_refine_noise_);
+  node->get_parameter<double>(plugin_name + ".reset_refine_time", reset_refine_time_);
+  node->get_parameter<double>(plugin_name + ".reset_refine_noise", reset_refine_noise_);
+  double alpha_slow = 0.001, alpha_fast = 0.1;
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".recovery_alpha_slow", alpha_slow);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".recovery_alpha_fast", alpha_fast);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".random_particles_max_fraction", random_particles_max_fraction_);
+  node->get_parameter<double>(plugin_name + ".recovery_alpha_slow", alpha_slow);
+  node->get_parameter<double>(plugin_name + ".recovery_alpha_fast", alpha_fast);
+  node->get_parameter<double>(
+    plugin_name + ".random_particles_max_fraction", random_particles_max_fraction_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".estimate_cluster_radius", estimate_cluster_radius_);
+  node->get_parameter<double>(plugin_name + ".estimate_cluster_radius", estimate_cluster_radius_);
+  random_particles_max_fraction_ = std::clamp(random_particles_max_fraction_, 0.0, 0.5);
+  quality_ = LocalizationQuality(alpha_slow, alpha_fast);
   node->get_parameter<bool>(plugin_name + ".compute_odom_from_tf", compute_odom_from_tf_);
 
   node->get_parameter<double>(plugin_name + ".reseed_freq", reseed_freq);
@@ -262,6 +289,9 @@ AMCLLocalizer::on_initialize()
     min_noise_yaw_ <= 0.0)
   {
     throw std::runtime_error("AMCLLocalizer: standard deviations must be positive");
+  }
+  if (!(reset_refine_time_ >= 0.0) || !(reset_refine_noise_ >= 0.0)) {
+    throw std::runtime_error("AMCLLocalizer: reset_refine_time and reset_refine_noise >= 0");
   }
 
   RCLCPP_INFO(node->get_logger(), "Initialized AMCL pose with %d particles", num_particles);
@@ -336,11 +366,24 @@ double covariance_trace(const nav_msgs::msg::Odometry & odom)
 {
   return odom.pose.covariance[0] + odom.pose.covariance[7] + odom.pose.covariance[35];
 }
+
+/// Velocity (frame of \p from) that moves \p from to \p to in \p dt seconds.
+geometry_msgs::msg::Twist twist_between(
+  const tf2::Transform & from, const tf2::Transform & to, double dt)
+{
+  const tf2::Transform delta = from.inverseTimes(to);
+  geometry_msgs::msg::Twist twist;
+  twist.linear.x = delta.getOrigin().x() / dt;
+  twist.linear.y = delta.getOrigin().y() / dt;
+  twist.angular.z = tf2::getYaw(delta.getRotation()) / dt;
+  return twist;
+}
 }  // namespace
 
 void
 AMCLLocalizer::update_rt(NavState & nav_state)
 {
+  std::lock_guard<std::mutex> lock(particles_mutex_);
   predict(nav_state);
 
   const auto odom = get_pose();
@@ -351,16 +394,24 @@ AMCLLocalizer::update_rt(NavState & nav_state)
 void
 AMCLLocalizer::update(NavState & nav_state)
 {
+  std::lock_guard<std::mutex> lock(particles_mutex_);
   correct(nav_state);
 
   if ((get_node()->now() - last_reseed_).seconds() > reseed_time_) {
-    reseed();
+    const Costmap2D * map =
+      nav_state.has("map.base") ? &nav_state.get<Costmap2D>("map.base") : nullptr;
+    reseed(map, map ? random_particles_to_inject() : 0);
     last_reseed_ = get_node()->now();
   }
 
   const auto odom = get_pose();
   nav_state.set("robot_pose", odom);
   nav_state.set("localizer.amcl.covariance_trace", covariance_trace(odom));
+  if (quality_.has_data()) {
+    // Read by AmclConvergenceEvaluator and AmclRelocalizeMitigation.
+    nav_state.set("localizer.amcl.match_score", quality_.match_score());
+    nav_state.set("localizer.amcl.quality_ratio", quality_.quality_ratio());
+  }
 
   publishParticles();
 }
@@ -369,8 +420,10 @@ void
 AMCLLocalizer::odom_callback(nav_msgs::msg::Odometry::UniquePtr msg)
 {
   if (compute_odom_from_tf_) {return;}
+  std::lock_guard<std::mutex> lock(particles_mutex_);
 
   tf2::fromMsg(msg->pose.pose, odom_);
+  odom_twist_ = msg->twist.twist;
   last_input_time_ = msg->header.stamp;
 
   if (!initialized_odom_) {
@@ -395,6 +448,7 @@ void
 AMCLLocalizer::init_pose_callback(
   geometry_msgs::msg::PoseWithCovarianceStamped::UniquePtr msg)
 {
+  std::lock_guard<std::mutex> lock(particles_mutex_);
   if (particles_.empty()) {
     return;
   }
@@ -524,6 +578,13 @@ AMCLLocalizer::init_pose_callback(
 
   // Prevent immediate reseed after initialization
   last_reseed_ = get_node()->now();
+  // Then the reseeds refine it (see reset_refine_time)
+  refining_ = reset_refine_time_ > 0.0 && reset_refine_noise_ > 0.0;
+  refine_start_ = last_reseed_;
+  refine_xy_ = reset_refine_noise_ * std::sqrt(0.5 * (l00 * l00 + l10 * l10 + l11 * l11));
+  refine_yaw_ = reset_refine_noise_ * yaw_stddev;
+  // A new pose: the scores before it are no reference any more.
+  quality_.reset();
 
   // Compute map->basefootprint estimate
   tf2::Transform map2bf = getEstimatedPose();
@@ -561,6 +622,13 @@ AMCLLocalizer::update_odom_from_tf()
 
   tf2::Transform tf_odom;
   tf2::fromMsg(tf_msg.transform, tf_odom);
+
+  // TF has no velocity: from the motion since the previous sample (the same one: kept).
+  const rclcpp::Time stamp(tf_msg.header.stamp, RCL_ROS_TIME);
+  if (initialized_odom_ && stamp > odom_tf_stamp_) {
+    odom_twist_ = twist_between(odom_, tf_odom, (stamp - odom_tf_stamp_).seconds());
+  }
+  odom_tf_stamp_ = stamp;
 
   last_odom_ = odom_;
   odom_ = tf_odom;
@@ -660,6 +728,8 @@ AMCLLocalizer::correct(NavState & nav_state)
     return;
   }
 
+  double score_sum = 0.0, best_score = 0.0;
+  std::size_t scored = 0;
   for (auto & particle : particles_) {
     int hits = 0;
     int possible_hits = 0;
@@ -667,12 +737,14 @@ AMCLLocalizer::correct(NavState & nav_state)
     for (const auto & pt : filtered) {
       tf2::Vector3 pt_world = particle.pose * tf2::Vector3(pt.x, pt.y, pt.z);
 
+      // A point out of the map is a miss: otherwise a particle near the border, with few
+      // points on the map, could match them all.
+      ++possible_hits;
       unsigned int cx, cy;
       if (!map_static.worldToMap(pt_world.x(), pt_world.y(), cx, cy)) {
         continue;
       }
 
-      ++possible_hits;
       uint8_t cost = map_static.getCost(cx, cy);
       if (cost == easynav::LETHAL_OBSTACLE) {
         ++hits;
@@ -681,6 +753,16 @@ AMCLLocalizer::correct(NavState & nav_state)
 
     particle.hits += hits;
     particle.possible_hits += possible_hits;
+    if (possible_hits > 0) {
+      const double score = static_cast<double>(hits) / static_cast<double>(possible_hits);
+      score_sum += score;
+      best_score = std::max(best_score, score);
+      ++scored;
+    }
+  }
+  // Absolute scores, before the weights are normalized: they tell a lost filter apart.
+  if (scored > 0) {
+    quality_.add(score_sum / static_cast<double>(scored), best_score);
   }
 
   for (auto & particle : particles_) {
@@ -704,8 +786,16 @@ AMCLLocalizer::correct(NavState & nav_state)
   }
 }
 
+std::size_t
+AMCLLocalizer::random_particles_to_inject() const
+{
+  const double n = static_cast<double>(particles_.size());
+  const double share = std::min(quality_.injection_probability(), random_particles_max_fraction_);
+  return static_cast<std::size_t>(std::floor(share * n + 0.5));
+}
+
 void
-AMCLLocalizer::reseed()
+AMCLLocalizer::reseed(const Costmap2D * map, std::size_t n_random)
 {
   if (particles_.empty()) {return;}
   if (particles_[0].possible_hits == 0) {return;}
@@ -719,22 +809,23 @@ AMCLLocalizer::reseed()
       return a.weight > b.weight;
     });
 
-  tf2::Vector3 mean = computeMean(particles_, 0, N_top);
-  tf2::Matrix3x3 cov = computeCovariance(particles_, 0, N_top, mean);
-
-  double a = cov[0][0];
-  double b = cov[0][1];
-  double c = cov[1][1];
-
-  double l00 = std::sqrt(a);
-  double l10 = b / l00;
-  double l11 = std::sqrt(c - l10 * l10);
-
-  double yaw_variance = computeYawVariance(particles_, 0, N_top);
-  double yaw_stddev = std::sqrt(yaw_variance);
-  std::normal_distribution<double> yaw_noise(0.0, std::max(yaw_stddev, min_noise_yaw_));
+  // Fixed noise around the parent: noise from the spread of the best ones made the cloud grow
+  // without bound at every reseed when the weights do not tell the particles apart. Only after
+  // an initial pose, more for a while, falling to it: the particles can still move to the pose
+  // that matches best without the robot moving.
+  double sd_xy = min_noise_xy_, sd_yaw = min_noise_yaw_;
+  if (refining_) {
+    const double left = 1.0 - (get_node()->now() - refine_start_).seconds() / reset_refine_time_;
+    if (left > 0.0) {
+      sd_xy = std::max(sd_xy, left * refine_xy_);
+      sd_yaw = std::max(sd_yaw, left * refine_yaw_);
+    } else {
+      refining_ = false;
+    }
+  }
+  std::normal_distribution<double> xy_noise(0.0, sd_xy);
+  std::normal_distribution<double> yaw_noise(0.0, sd_yaw);
   std::normal_distribution<double> index_dist(0.0, std::max(0.05 * static_cast<double>(N), 1e-12));
-  std::normal_distribution<double> standard_normal(0.0, 1.0);
 
   for (std::size_t i = N_top; i < N; ++i) {
     int selected_idx;
@@ -745,15 +836,6 @@ AMCLLocalizer::reseed()
     const auto & ref_particle = particles_[selected_idx];
 
     tf2::Vector3 origin = ref_particle.pose.getOrigin();
-
-    double z0 = standard_normal(rng_);
-    double z1 = standard_normal(rng_);
-    double dx = l00 * z0;
-    double dy = l10 * z0 + l11 * z1;
-
-    std::normal_distribution<double> xy_noise(0.0, std::max(
-        sqrt(dx * dx + dy * dy),
-        min_noise_xy_));
 
     tf2::Vector3 new_origin(origin.x() + xy_noise(rng_), origin.y() + xy_noise(rng_), 0.0);
 
@@ -767,6 +849,30 @@ AMCLLocalizer::reseed()
     particles_[i].pose.setOrigin(new_origin);
     particles_[i].pose.setRotation(q);
     particles_[i].weight = ref_particle.weight;
+  }
+
+  // The worst ones (the last after sorting) go to random free poses of the map: if the filter is
+  // lost, one of them may land near the true pose and win the next reseeds.
+  if (map && n_random > 0 && map->getSizeInCellsX() > 0 && map->getSizeInCellsY() > 0) {
+    n_random = std::min(n_random, N - N_top);
+    std::uniform_int_distribution<unsigned int> cell_x(0, map->getSizeInCellsX() - 1);
+    std::uniform_int_distribution<unsigned int> cell_y(0, map->getSizeInCellsY() - 1);
+    std::uniform_real_distribution<double> any_yaw(-M_PI, M_PI);
+    std::size_t placed = 0;
+    for (std::size_t tries = 0; placed < n_random && tries < 100 * n_random; ++tries) {
+      const unsigned int cx = cell_x(rng_), cy = cell_y(rng_);
+      const uint8_t cost = map->getCost(cx, cy);
+      if (cost >= easynav::INSCRIBED_INFLATED_OBSTACLE) {continue;}  // obstacle or unknown
+      double wx, wy;
+      map->mapToWorld(cx, cy, wx, wy);
+      tf2::Quaternion q;
+      q.setRPY(0.0, 0.0, any_yaw(rng_));
+      auto & p = particles_[N - 1 - placed];
+      p.pose.setOrigin(tf2::Vector3(wx, wy, 0.0));
+      p.pose.setRotation(q);
+      p.weight = 0.0;  // no say in the estimate until the scans confirm it
+      ++placed;
+    }
   }
 
   for (auto & particle : particles_) {
@@ -828,20 +934,49 @@ AMCLLocalizer::getEstimatedPose() const
     return tf2::Transform::getIdentity();
   }
 
-  const std::size_t N = particles_.size();
-  const std::size_t N_top = N / 2;
+  // The densest place: the particle with the most weight within estimate_cluster_radius
+  const double r2 = estimate_cluster_radius_ * estimate_cluster_radius_;
+  auto near = [r2](const Particle & a, const Particle & b) {
+      return (a.pose.getOrigin() - b.pose.getOrigin()).length2() <= r2;
+    };
+  // Candidates to center: the heaviest particles (linear cost in the number of particles)
+  std::vector<std::size_t> order(particles_.size());
+  std::iota(order.begin(), order.end(), 0);
+  const std::size_t n_centers = std::min<std::size_t>(order.size(), 20);
+  std::partial_sort(
+    order.begin(), order.begin() + static_cast<std::ptrdiff_t>(n_centers), order.end(),
+    [this](std::size_t a, std::size_t b) {return particles_[a].weight > particles_[b].weight;});
+  std::size_t center = order[0];
+  double best_mass = -1.0;
+  for (std::size_t k = 0; k < n_centers; ++k) {
+    const std::size_t i = order[k];
+    double mass = 0.0;
+    for (const auto & other : particles_) {
+      if (near(particles_[i], other)) {mass += other.weight;}
+    }
+    // Ties (e.g. all weights equal) go to the heavier particle
+    if (mass > best_mass ||
+      (mass == best_mass && particles_[i].weight > particles_[center].weight))
+    {
+      best_mass = mass;
+      center = i;
+    }
+  }
 
-  std::vector<Particle> sorted_particles = particles_;
-  std::sort(
-    sorted_particles.begin(), sorted_particles.end(),
-    [](const Particle & a, const Particle & b) {
-      return a.weight > b.weight;
-    });
-
-  tf2::Vector3 mean = computeMean(sorted_particles, 0, N_top);
+  // Its weighted mean position, and the heading of its best particle
+  tf2::Vector3 sum(0.0, 0.0, 0.0);
+  double total = 0.0;
+  std::size_t best = center;
+  for (std::size_t i = 0; i < particles_.size(); ++i) {
+    if (!near(particles_[center], particles_[i])) {continue;}
+    sum += particles_[i].pose.getOrigin() * particles_[i].weight;
+    total += particles_[i].weight;
+    if (particles_[i].weight > particles_[best].weight) {best = i;}
+  }
+  const tf2::Vector3 mean = total > 0.0 ? sum / total : particles_[center].pose.getOrigin();
 
   double roll, pitch, yaw;
-  tf2::Matrix3x3(sorted_particles[0].pose.getRotation()).getRPY(roll, pitch, yaw);
+  tf2::Matrix3x3(particles_[best].pose.getRotation()).getRPY(roll, pitch, yaw);
   tf2::Quaternion q;
   q.setRPY(0.0, 0.0, yaw);
 
@@ -924,12 +1059,7 @@ AMCLLocalizer::get_pose()
     odom_msg.pose.covariance[6 * 5 + 5] = yaw_var;
   }
 
-  odom_msg.twist.twist.linear.x = 0.0;
-  odom_msg.twist.twist.linear.y = 0.0;
-  odom_msg.twist.twist.linear.z = 0.0;
-  odom_msg.twist.twist.angular.x = 0.0;
-  odom_msg.twist.twist.angular.y = 0.0;
-  odom_msg.twist.twist.angular.z = 0.0;
+  odom_msg.twist.twist = odom_twist_;
 
   return odom_msg;
 }

@@ -176,7 +176,7 @@ OctomapMapsManager::on_initialize()
       try {
         tf_msg = RTTFBuffer::getInstance()->lookupTransform(
           RTTFBuffer::getInstance()->get_tf_info().map_frame, msg->header.frame_id,
-          msg->header.stamp, rclcpp::Duration::from_seconds(0.05));
+          msg->header.stamp);  // RTTFBuffer extrapolates
       } catch (const tf2::TransformException & ex) {
         RCLCPP_WARN(get_node()->get_logger(), "OctomapMapsManager: TF failed: %s", ex.what());
         return;

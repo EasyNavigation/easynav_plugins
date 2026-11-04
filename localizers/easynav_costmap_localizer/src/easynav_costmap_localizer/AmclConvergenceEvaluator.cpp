@@ -30,6 +30,15 @@ void AmclConvergenceEvaluator::on_initialize()
     *node, plugin_name + ".covariance_threshold",
     covariance_threshold_);
   node->get_parameter<double>(plugin_name + ".covariance_threshold", covariance_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".match_threshold", match_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".quality_ratio_threshold", quality_ratio_threshold_);
+  easynav::declare_parameter_if_absent<double>(
+    *node, plugin_name + ".debounce_duration", debounce_duration_);
+  node->get_parameter<double>(plugin_name + ".match_threshold", match_threshold_);
+  node->get_parameter<double>(plugin_name + ".quality_ratio_threshold", quality_ratio_threshold_);
+  node->get_parameter<double>(plugin_name + ".debounce_duration", debounce_duration_);
 }
 
 void AmclConvergenceEvaluator::update(NavState & nav_state)
@@ -46,19 +55,49 @@ void AmclConvergenceEvaluator::update(NavState & nav_state)
     return;
   }
 
+  auto add_value = [&status](const std::string & key, double value) {
+      diagnostic_msgs::msg::KeyValue kv;
+      kv.key = key;
+      kv.value = std::to_string(value);
+      status.values.push_back(kv);
+    };
+
   // Written by AMCLLocalizer from both its RT and non-RT cycles; this evaluator runs on
   // RecoveryManagerNode's non-RT cycle, so get_safe() (a snapshot copy) is required here, not
   // get(). See NavState's own get()/get_safe() guidance.
   const double trace = nav_state.get_safe<double>("localizer.amcl.covariance_trace");
+  add_value("covariance_trace", trace);
+
+  // The scores, if the localizer reports them.
+  std::string low_reason;
+  if (nav_state.has("localizer.amcl.match_score")) {
+    const double match = nav_state.get_safe<double>("localizer.amcl.match_score");
+    add_value("match_score", match);
+    if (match_threshold_ > 0.0 && match < match_threshold_) {
+      low_reason = "scans do not match the map (lost)";
+    }
+  }
+  if (nav_state.has("localizer.amcl.quality_ratio")) {
+    const double ratio = nav_state.get_safe<double>("localizer.amcl.quality_ratio");
+    add_value("quality_ratio", ratio);
+    if (low_reason.empty() && ratio < quality_ratio_threshold_) {
+      low_reason = "scan match dropped (kidnapped?)";
+    }
+  }
+
+  const auto now = get_node()->now();
+  if (low_reason.empty()) {
+    low_since_.reset();
+  } else if (!low_since_) {
+    low_since_ = now;
+  }
 
   if (trace > covariance_threshold_) {
     status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
     status.message = "particle filter diverged";
-
-    diagnostic_msgs::msg::KeyValue trace_kv;
-    trace_kv.key = "covariance_trace";
-    trace_kv.value = std::to_string(trace);
-    status.values.push_back(trace_kv);
+  } else if (low_since_ && (now - *low_since_).seconds() >= debounce_duration_) {
+    status.level = diagnostic_msgs::msg::DiagnosticStatus::ERROR;
+    status.message = low_reason;
   }
 
   publish_diagnostic(nav_state, status);

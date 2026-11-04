@@ -61,7 +61,8 @@ protected:
   // The playgrounds' tolerances: the controller's own equal to the system's.
   void SetUp() override
   {
-    make({rclcpp::Parameter("rpp.xy_goal_tolerance", 0.3),
+    make(
+      {rclcpp::Parameter("rpp.xy_goal_tolerance", 0.3),
         rclcpp::Parameter("rpp.yaw_goal_tolerance", 0.15)});
   }
 

@@ -29,3 +29,6 @@ target_link_libraries(mhamcl_localizer_last_known_pose_tests
 
 ament_add_gtest(mhamcl_localizer_min_height_tests mhamcl_localizer_min_height_tests.cpp)
 target_link_libraries(mhamcl_localizer_min_height_tests ${PROJECT_NAME})
+
+ament_add_gtest(mhamcl_localizer_velocity_tests mhamcl_localizer_velocity_tests.cpp)
+target_link_libraries(mhamcl_localizer_velocity_tests ${PROJECT_NAME} rclcpp::rclcpp)

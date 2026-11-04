@@ -19,7 +19,8 @@ jobs:
       - name: Repo checkout
         uses: actions/checkout@v6
         with:
-          ref: rolling
+          # A PR's own repos file; rolling on push and schedule.
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || 'rolling' }}
       # The image can lag behind the published packages, and mixing them breaks the ABI
       # (e.g. geographic_msgs built against a newer std_msgs): upgrade it first.
       - name: Upgrade the image's packages

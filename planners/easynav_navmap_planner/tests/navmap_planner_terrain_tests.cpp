@@ -45,7 +45,7 @@ using ::navmap::NavMap;
 namespace
 {
 
-using Height = std::function<float(float, float)>;
+using Height = std::function<float (float, float)>;
 
 using SharedVertices = std::map<std::tuple<int64_t, int64_t, int64_t>, uint32_t>;
 
@@ -298,7 +298,7 @@ TEST_F(TerrainPlannerTest, RoughPatchesAreAvoidedWithMaxRoughness)
   std::vector<float> noise(61 * 31);
   for (auto & v : noise) {
     v = N(rng);
-                                     }
+  }
   // Rubble over x in [2, 4], y in [0, 2]
   const Height rubble = [&](float x, float y) {
       const int i = static_cast<int>(std::lround(x * 10.0f)),
@@ -353,7 +353,8 @@ TEST_F(TerrainPlannerTest, LinksJoinSurfacesByTheirKind)
   make({rclcpp::Parameter("links.types", std::vector<std::string>{"stairs", "nonsense"})});
   set_map(nm);
   EXPECT_FALSE(plan(0.55f, 1.05f, 0.0f, 4.45f, 1.05f, 3.0f).poses.empty());
-  make({rclcpp::Parameter("links.enabled", false),
+  make(
+    {rclcpp::Parameter("links.enabled", false),
       rclcpp::Parameter("links.types", std::vector<std::string>{"stairs"})});
   set_map(nm);
   EXPECT_TRUE(plan(0.55f, 1.05f, 0.0f, 4.45f, 1.05f, 3.0f).poses.empty());
