@@ -79,6 +79,7 @@ public:
 
 protected:
   double cost_factor_ {2.0};        ///< Scaling factor applied to cell cost values.
+  double heuristic_weight_ {1.0};   ///< Weighted A*: the heuristic times this (1 = admissible).
   double cost_weight_ {5.0};        ///< Weight of the cell cost (inflation) against length.
   double cost_axial_ {1.0};         ///< Cost multiplier for axial (horizontal/vertical) moves.
   double cost_diagonal_ {1.0};      ///< Cost multiplier for diagonal moves.
@@ -132,12 +133,56 @@ protected:
   /// Distance between the centroids of neighbor NavCels (mean): the path's spacing.
   double cel_spacing_ {0.1};
 
-  /// Cached per-NavCel occupancy / cost values (0..255).
+  /// Per-NavCel cost values (0..255) of a cost layer that is not uint8 of the map's size (else
+  /// the layer itself is read, through occ_data_: no copy of the whole map per plan).
   std::vector<std::uint8_t> occ_;
+  /// The cost layer's own data during a_star_path(), when it is uint8 of the map's size.
+  const std::uint8_t * occ_data_ {nullptr};
+  /// Cost of NavCel @p c in the plan being made.
+  std::uint8_t occ(::navmap::NavCelId c) const {return occ_data_ ? occ_data_[c] : occ_[c];}
 
-  /// Reusable buffers for A* search cost and parent links.
+  /// Reusable buffers for A* search cost and parent links. An entry is valid in the current
+  /// search only if its stamp is epoch_: nothing of size N is reset per plan, so a plan costs
+  /// what it explores, not the size of the map.
   std::vector<double> g_;
   std::vector<::navmap::NavCelId> parent_;
+  std::vector<std::uint32_t> g_stamp_;
+  /// Weighted A* only (heuristic_weight > 1): a NavCel is closed in this search if its stamp is
+  /// epoch_. Sized on the first weighted search, so the admissible A* uses no memory for it.
+  std::vector<std::uint32_t> closed_stamp_;
+  std::uint32_t epoch_ {0};
+
+  /// > 0: the path being followed is kept while it stays traversable, unless a new one is
+  /// shorter by this fraction (0.2: 20 %). Against the oscillation of replanning on a map that
+  /// changes with the robot's position (a level-of-detail map). 0 (default): always the new one.
+  double replan_hysteresis_ {0.0};
+  /// With replan_hysteresis: only this much of the followed path (m, along it from the robot) must
+  /// still be traversable to keep it. On a level-of-detail map the far part is coarse and changes
+  /// with every re-mesh (its poses may even fall outside the new coarse NavCels): it is checked
+  /// when the robot gets near. 0 (default): the whole path.
+  double replan_hysteresis_horizon_ {0.0};
+  /// What the last a_star_path() did (for measurements): NavCels taken from the open list
+  /// (expanded, re-expansions of a NavCel reached again by a cheaper way included) and entries
+  /// pushed to it.
+  struct SearchStats
+  {
+    std::size_t expanded{0};
+    std::size_t pushed{0};
+  };
+  SearchStats last_search_stats_;
+
+  /// The path being followed (for replan_hysteresis) and its goal.
+  std::vector<geometry_msgs::msg::Pose> followed_;
+  geometry_msgs::msg::Pose followed_goal_;
+
+  /**
+   * @brief With replan_hysteresis: the path to follow, the new one or what is left of the
+   *        current one (still traversable on @p map and not much longer). Remembers it.
+   *        Without: @p fresh.
+   */
+  std::vector<geometry_msgs::msg::Pose> choose_path(
+    const ::navmap::NavMap & map, const geometry_msgs::msg::Pose & robot,
+    const geometry_msgs::msg::Pose & goal, std::vector<geometry_msgs::msg::Pose> fresh);
 
   /// Which NavCels are within the terrain limits (terrain_ok_), for a new geometry.
   void build_terrain(const ::navmap::NavMap & map);
