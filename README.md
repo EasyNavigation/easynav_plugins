@@ -84,6 +84,7 @@ Map management plugins that provide, update, and store different environment rep
 |---|---|---|
 | `easynav_navmap_maps_manager` | Manages NavMap mesh layers. | [README](./maps_managers/easynav_navmap_maps_manager/README.md) |
 | `easynav_bonxai_maps_manager` | Manages Bonxai probabilistic voxel maps. | [README](./maps_managers/easynav_bonxai_maps_manager/README.md) |
+| `easynav_bigmap_maps_manager` | Large maps: a NavMap whose triangles are fine around the robot and coarse far away (dynamic level of detail of a DEM or of a NavMap with several floors). | [README](./maps_managers/easynav_bigmap_maps_manager/README.md) |
 | `easynav_octomap_maps_manager` | Manages OctoMap 3D occupancy trees. | [README](./maps_managers/easynav_octomap_maps_manager/README.md) |
 | `easynav_costmap_maps_manager` | Manages Costmap2D layers with filters. | [README](./maps_managers/easynav_costmap_maps_manager/README.md) |
 | `easynav_simple_maps_manager` | Minimal example map manager (SimpleMap). | [README](./maps_managers/easynav_simple_maps_manager/README.md) |
