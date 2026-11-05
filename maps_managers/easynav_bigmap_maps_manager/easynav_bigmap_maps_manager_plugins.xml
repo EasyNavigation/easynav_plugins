@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_bigmap_maps_manager">
+    <class name="easynav_bigmap_maps_manager/BigMapMapsManager" type="easynav::bigmap::BigMapMapsManager" base_class_type="easynav::MapsManagerBase">
+      <description>
+      Maps manager for large terrains: a NavMap whose triangle size grows with the distance to the robot (RTIN dynamic LOD).
+      </description>
+    </class>
+  </library>
+</class_libraries>
