@@ -80,10 +80,11 @@ protected:
   }
 
   // Robot \p dist_to_goal m before the goal on the path, heading +x (the goal wants +y).
-  geometry_msgs::msg::Twist step(double dist_to_goal, double yaw = 0.0)
+  geometry_msgs::msg::Twist step(double dist_to_goal, double yaw = 0.0, double z = 0.0)
   {
     nav_msgs::msg::Odometry odom;
     odom.pose.pose.position.x = 3.0 - dist_to_goal;
+    odom.pose.pose.position.z = z;
     tf2::Quaternion q;
     q.setRPY(0.0, 0.0, yaw);
     odom.pose.pose.orientation.z = q.z();
@@ -168,4 +169,21 @@ TEST_F(RppGoalApproachTest, WithoutSystemTolerancesItsOwnApply)
   nav_state_->set("path", path_to(3.0, M_PI_2));
   EXPECT_GT(step(0.3).linear.x, 0.0);
   EXPECT_TRUE(turning_in_place(step(0.15)));
+}
+
+TEST_F(RppGoalApproachTest, RightAboveTheGoalOnAnotherFloorItIsNotThere)
+{
+  // a garage: the goal on the ground floor, the robot on the floor over it (2.3 m), on its way
+  // down; with the system's height tolerance it neither turns to the goal heading nor stops
+  nav_state_->set("goal_tolerance.height", 1.0);
+  EXPECT_GT(step(0.1, 0.0, 2.3).linear.x, 0.0);
+  const auto t = step(0.25, M_PI_2, 2.3);
+  EXPECT_FALSE(t.linear.x == 0.0 && t.angular.z == 0.0);
+  // on the goal's floor, as before
+  EXPECT_TRUE(turning_in_place(step(0.1, 0.0, 0.2)));
+}
+
+TEST_F(RppGoalApproachTest, WithoutASystemHeightToleranceTheHeightIsIgnoredAsBefore)
+{
+  EXPECT_TRUE(turning_in_place(step(0.1, 0.0, 2.3)));
 }
