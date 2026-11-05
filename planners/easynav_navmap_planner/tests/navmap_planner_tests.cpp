@@ -831,3 +831,58 @@ TEST_F(NavMapPlannerTest, WithHysteresisWhatIsLeftOfTheFollowedPathIsFoundInHeig
   EXPECT_NEAR(kept.front().position.z, 0.0, 1e-9);
   EXPECT_EQ(kept.size(), 4u);
 }
+
+TEST_F(NavMapPlannerTest, WeightedAStarStillPlansWhenTheMapChangesSizeAndComesBack)
+{
+  // A level-of-detail map changes size all the time. A plan that returns before searching (here,
+  // the goal is on an obstacle) must not leave the closed stamps of the first map to the third
+  node_->declare_parameter("planner_ws.heuristic_weight", 1.5);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_ws");
+  const auto big = nav_state_.get<::navmap::NavMap>("map.navmap");   // 40 x 40 cells
+  const auto start = at(0.55, 0.55);
+  const auto goal = at(3.45, 0.55);
+  const auto first = planner->a_star_path(big, start, goal);
+  ASSERT_FALSE(first.empty());
+
+  auto grid = grid_;
+  grid.info.width = 30;
+  grid.info.height = 30;
+  grid.data.assign(30 * 30, 0);
+  grid.data[5 * 30 + 25] = 100;   // the cell of (2.55, 0.55)
+  auto small = navmap_ros::from_occupancy_grid(grid);
+  for (std::size_t c = 0; c < small.navcels.size(); ++c) {
+    const auto cid = static_cast<::navmap::NavCelId>(c);
+    small.layer_set<std::uint8_t>(
+      "obstacles", cid, small.layer_get<std::uint8_t>("occupancy", cid, 0));
+  }
+  EXPECT_TRUE(planner->a_star_path(small, start, at(2.55, 0.55)).empty());
+
+  const auto again = planner->a_star_path(big, start, goal);
+  ASSERT_FALSE(again.empty()) << "NavCels of the first search read as closed";
+  EXPECT_EQ(again.size(), first.size());
+}
+
+TEST_F(NavMapPlannerTest, WithHysteresisAnObstacleOfAFloatCostLayerOnTheFollowedPathDropsIt)
+{
+  node_->declare_parameter("planner_hf.replan_hysteresis", 0.5);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_hf");
+  const auto goal = at(3.5, 1.0);
+  planner->choose_path(
+    nav_state_.get<::navmap::NavMap>("map.navmap"), at(0.5, 1.0), goal, straight(0.5, 3.5, 1.0));
+
+  // a wall across x = 2.5 m in a float layer, the type the planner converts instead of reading
+  auto walled = nav_state_.get<::navmap::NavMap>("map.navmap");
+  for (std::size_t c = 0; c < walled.navcels.size(); ++c) {
+    const auto cid = static_cast<::navmap::NavCelId>(c);
+    const auto p = walled.navcel_centroid(cid);
+    walled.layer_set<float>(
+      "inflated_obstacles", cid, std::abs(p.x() - 2.5f) < 0.15f ? 254.0f : 0.0f);
+  }
+  auto longer = straight(0.5, 3.5, 3.3);
+  longer.insert(longer.begin(), at(0.5, 1.0));
+  const auto chosen = planner->choose_path(walled, at(0.5, 1.0), goal, longer);
+  ASSERT_FALSE(chosen.empty());
+  EXPECT_NEAR(chosen.back().position.y, 3.3, 1e-9) << "the followed path crosses the wall";
+}

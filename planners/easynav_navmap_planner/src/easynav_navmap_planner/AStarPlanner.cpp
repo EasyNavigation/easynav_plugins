@@ -39,6 +39,13 @@ namespace easynav
 namespace navmap
 {
 
+// How far from the start (m) the inscribed band is still traversable: the robot may be in it.
+constexpr double kEscapeDistance = 1.0;
+// How far (m) the robot may be from the path it follows for it to be kept (replan hysteresis).
+constexpr double kMaxPathOffset = 2.0;
+// A point is on a surface if the surface is within this height (m) of it: floors over each other.
+constexpr float kSurfaceHeightTolerance = 0.5f;
+
 static double compute_path_length(const nav_msgs::msg::Path & path)
 {
   double total_length = 0.0;
@@ -218,12 +225,8 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::choose_path(
       }
       return l;
     };
-  // What is left of the followed path: the poses after its segment nearest the robot (the pose
-  // nearest the robot may be behind it: the poses of a shortcut path are metres apart, and
-  // going back to it, then forward, then back again is an oscillation). Nearest in 3D: with
-  // floors over each other the path may pass right under the robot (its end on the floor below,
-  // the robot on its way down above it); nearest in the plane, that part would be "what is left"
-  // and the robot would stay over the goal
+  // What is left of the path: the poses after its segment nearest the robot, in 3D (a path may
+  // pass right under the robot on floors over each other). Nearest pose could be behind it.
   std::size_t from = 1;
   double best = std::numeric_limits<double>::infinity();
   for (std::size_t k = 0; k + 1 < followed_.size(); ++k) {
@@ -237,14 +240,18 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::choose_path(
       a.z + t * (b.z - a.z) - robot.position.z);
     if (d < best) {best = d; from = k + 1;}
   }
-  // Still traversable on this map (it may have changed under it), up to the horizon: the path
-  // from the robot, sampled along its segments (its poses are metres apart: a segment can cut a
-  // corner its ends do not), on NavCels below the inscribed cost and within the terrain limits.
-  // In the first metre the inscribed band is allowed (the robot may be in it, as a plan from there
-  // allows), an obstacle or a hole is not.
+  // Still traversable on the current map, up to the horizon: sampled along the path from the robot,
+  // below the inscribed cost (kEscapeDistance around the robot: below lethal) and in the terrain
+  // limits. The cost is read as a_star_path does (any layer type).
+  const std::string cost_layer =
+    map.has_layer("inflated_obstacles") ? "inflated_obstacles" : "obstacles";
   const auto cost = std::dynamic_pointer_cast<::navmap::LayerView<std::uint8_t>>(
-    map.layers.get(map.has_layer("inflated_obstacles") ? "inflated_obstacles" : "obstacles"));
-  bool valid = best < 2.0;
+    map.layers.get(cost_layer));
+  auto cost_at = [&](::navmap::NavCelId c) -> std::uint8_t {
+      return cost && c < cost->size() ? (*cost)[c] :
+             map.layer_get<std::uint8_t>(cost_layer, c, navmap_ros::FREE_SPACE);
+    };
+  bool valid = best < kMaxPathOffset;
   ::navmap::NavMap::LocateOpts opts;
   const double step = std::clamp(cel_spacing_, 0.05, 0.25);
   double along = 0.0;
@@ -269,9 +276,9 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::choose_path(
         break;
       }
       opts.hint_cid = c;
-      const std::uint8_t v = cost && c < cost->size() ? (*cost)[c] : navmap_ros::FREE_SPACE;
+      const std::uint8_t v = cost_at(c);
       const bool near = (q - Eigen::Vector3d(robot.position.x, robot.position.y,
-        robot.position.z)).head<2>().norm() < 1.0;
+        robot.position.z)).head<2>().norm() < kEscapeDistance;
       valid = (near ? v < navmap_ros::LETHAL_OBSTACLE : v <
         navmap_ros::INSCRIBED_INFLATED_OBSTACLE) &&
         (terrain_ok_.size() != map.navcels.size() || terrain_ok_[c]);
@@ -280,13 +287,19 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::choose_path(
     prev = next;
   }
   if (!valid) {return remember(std::move(fresh));}
-  // the new path only if it is clearly shorter (or there is no other)
+  // The new path only if it is clearly shorter. If A* found none (fresh is empty) but this one is
+  // still valid up to the horizon, keep it; it is checked every cycle and replaced as soon as it
+  // is no longer valid.
   const double left = std::hypot(
     followed_[from].position.x - robot.position.x,
     followed_[from].position.y - robot.position.y) + length(followed_, from);
   if (!fresh.empty() && length(fresh, 0) < (1.0 - replan_hysteresis_) * left) {
     return remember(std::move(fresh));
   }
+  if (fresh.empty()) {
+    RCLCPP_DEBUG(get_node()->get_logger(), "A* found no path: keeping the followed one");
+  }
+  // It starts at followed_[from], ahead of the robot; the first segment was checked above
   std::vector<geometry_msgs::msg::Pose> kept(followed_.begin() + static_cast<std::ptrdiff_t>(from),
     followed_.end());
   return remember(std::move(kept));
@@ -350,7 +363,7 @@ AStarPlanner::path_smoother(
       const Eigen::Vector3f on = ::navmap::closest_point_on_triangle(
         pts[i], navmap.positions.at(tri.v[0]), navmap.positions.at(tri.v[1]),
         navmap.positions.at(tri.v[2]));
-      ok = std::abs(on.z() - pts[i].z()) < 0.5f;
+      ok = std::abs(on.z() - pts[i].z()) < kSurfaceHeightTolerance;
     }
     if (!ok) {
       // Fallback to closest triangle (keeps the query on-surface)
@@ -555,6 +568,7 @@ void AStarPlanner::ensure_graph_cache(const ::navmap::NavMap & map)
     g_.assign(N, std::numeric_limits<double>::infinity());
     parent_.assign(N, std::numeric_limits<::navmap::NavCelId>::max());
     g_stamp_.assign(N, 0);
+    closed_stamp_.clear();   // epoch_ restarts: old stamps would read as closed (sized when used)
     epoch_ = 0;
   }
   if (++epoch_ == 0) {   // wrapped: clear the stamps once
@@ -617,7 +631,7 @@ std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
       auto inside = [&](NavCelId c) {
           const auto t = vertices(c);
           return in_triangle_xy(p, t[0], t[1], t[2]) &&
-                 std::abs(height_at(p, t[0], t[1], t[2]) - p.z()) < 0.5f;
+                 std::abs(height_at(p, t[0], t[1], t[2]) - p.z()) < kSurfaceHeightTolerance;
         };
       if (inside(from)) {out = from; return true;}
       for (const auto & nb : neighbors_[from]) {
@@ -677,7 +691,7 @@ std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
       NavCelId c;
       if (!locate_near(b, cur, c)) {return false;}
       const auto t = vertices(c);
-      return std::abs(height_at(b, t[0], t[1], t[2]) - b.z()) < 0.5f;
+      return std::abs(height_at(b, t[0], t[1], t[2]) - b.z()) < kSurfaceHeightTolerance;
     };
 
   // Greedy: from each kept waypoint, the farthest visible one (exponential, then binary search)
@@ -816,10 +830,8 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
       const std::uint8_t v = occ(c);
       return v < INSCRIBED_INFLATED_OBSTACLE && terrain_ok_[c];
     };
-  // How far from the start inscribed cells are still traversable (m).
-  constexpr double kEscapeDistance = 1.0;
   // The robot may already be within the inscribed band (e.g. stopped by a reflex): it can
-  // leave it, unless it is on an obstacle or an unknown cell.
+  // leave it (within kEscapeDistance), unless it is on an obstacle or an unknown cell.
   auto can_start_at = [&](NavCelId c) -> bool {
       const std::uint8_t v = occ(c);
       return (v != LETHAL_OBSTACLE) && (v != NO_INFORMATION);
@@ -894,11 +906,8 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   open.push(Node{cid_start, h(cid_start, cid_goal)});
   last_search_stats_ = SearchStats{0, 1};
 
-  // Weighted A* (heuristic_weight > 1): the heuristic is no longer consistent, so a NavCel can be
-  // reached more cheaply after it was expanded. Re-opening it can make the search explode on large
-  // maps; weighted A* without re-opening keeps the bound (paths at most heuristic_weight times the
-  // optimal cost), so each NavCel is expanded once and stale queue entries are skipped. With the
-  // admissible heuristic (weight 1) the search is the classic one, unchanged.
+  // Weighted A* (heuristic_weight > 1) without re-opening: each NavCel is expanded once (paths at
+  // most heuristic_weight times the optimal cost). With weight 1 the search is the classic one.
   const bool weighted = heuristic_weight_ > 1.0;
   if (weighted && closed_stamp_.size() != N) {closed_stamp_.assign(N, 0);}
   auto closed = [&](NavCelId c) {return closed_stamp_[c] == epoch_;};
