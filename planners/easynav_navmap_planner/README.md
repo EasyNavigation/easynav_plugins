@@ -55,6 +55,9 @@ All parameters are declared under the plugin namespace, i.e.
 | Name | Type | Default | Description |
 |---|---|---:|---|
 | `<plugin>.cost_factor` | `double` | `2.0` | Multiplicative weight for geometric distance; values > 1 increase the relative importance of distance. |
+| `<plugin>.heuristic_weight` | `double` | `1.0` | Weighted A*: the heuristic is multiplied by this weight (values below 1 are taken as 1). `1` keeps A* admissible (shortest paths); a larger weight expands fewer NavCels and may return paths up to that factor longer (weighted A* without re-opening: each NavCel is expanded once). |
+| `<plugin>.replan_hysteresis` | `double` | `0.0` | If above 0, the path being followed is kept while it stays traversable, unless a new one is shorter by this fraction (`0.2`: 20 %); what is left of it (from the robot, in 3D) is published. Against the oscillation of replanning on a map that changes with the robot's position (a level-of-detail map). `0`: always the new path. |
+| `<plugin>.replan_hysteresis_horizon` | `double` | `0.0` | With `replan_hysteresis`: only this much of the followed path (m, along it from the robot) must still be traversable to keep it; the far part of a level-of-detail map is coarse and changes with every re-mesh, so it is checked when the robot gets near. `0`: the whole path. |
 | `<plugin>.cost_weight` | `double` | `5.0` | Weight of the cell cost (inflation) against the path length; higher values keep paths farther from obstacles. |
 | `<plugin>.continuous_replan` | `bool` | `true` | If true, recomputes the path whenever `NavState` updates; if false, plans once per goal. |
 | `<plugin>.terrain.slope_weight` | `double` | `0.0` | Extra cost per meter on a sloped NavCel: `slope_weight * tan²(slope)`, up, down or across. Gentle slopes cost little and steep ones a lot: with `20`, 5° adds 0.15 per meter, 10° 0.6, 20° 2.6 and 30° 6.7 (the flat costs `cost_factor`, 2). `0` ignores the slope. |

@@ -20,9 +20,11 @@
 #include <cmath>
 #include <cstdint>
 #include <functional>
+#include <map>
 #include <memory>
 #include <random>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "gtest/gtest.h"
@@ -45,21 +47,33 @@ namespace
 
 using Height = std::function<float (float, float)>;
 
-// nx x ny cells of 0.1 m from (x0, y0), at height h, as one surface; cells where keep(x, y)
+using SharedVertices = std::map<std::tuple<int64_t, int64_t, int64_t>, uint32_t>;
+
+// nx x ny cells of 0.1 m from (x0, y0), at height h, as one surface; cells where keep(x, y). With
+// `shared`, a vertex where another grid with the same `shared` has one (to the mm) is that one:
+// the grids are joined there
 void add_grid(
   NavMap & nm, int nx, int ny, float x0, float y0, const Height & h,
-  const std::function<bool(float, float)> & keep = nullptr)
+  const std::function<bool(float, float)> & keep = nullptr, SharedVertices * shared = nullptr)
 {
   const float r = 0.1f;
   const std::size_t s = nm.create_surface("map");
-  const auto base = static_cast<uint32_t>(nm.positions.size());
+  std::vector<uint32_t> ids;
   for (int j = 0; j <= ny; ++j) {
     for (int i = 0; i <= nx; ++i) {
-      const float x = x0 + i * r, y = y0 + j * r;
-      nm.add_vertex({x, y, h(x, y)});
+      const float x = x0 + i * r, y = y0 + j * r, z = h(x, y);
+      const auto key = std::make_tuple(std::llround(x * 1000), std::llround(y * 1000),
+        std::llround(z * 1000));
+      const auto it = shared ? shared->find(key) : SharedVertices::iterator{};
+      if (shared && it != shared->end()) {
+        ids.push_back(it->second);
+        continue;
+      }
+      ids.push_back(static_cast<uint32_t>(nm.add_vertex({x, y, z})));
+      if (shared) {(*shared)[key] = ids.back();}
     }
   }
-  auto v = [&](int i, int j) {return base + static_cast<uint32_t>(j * (nx + 1) + i);};
+  auto v = [&](int i, int j) {return ids[static_cast<std::size_t>(j * (nx + 1) + i)];};
   for (int j = 0; j < ny; ++j) {
     for (int i = 0; i < nx; ++i) {
       if (keep && !keep(x0 + (i + 0.5f) * r, y0 + (j + 0.5f) * r)) {continue;}
@@ -351,6 +365,60 @@ TEST_F(TerrainPlannerTest, LinksJoinSurfacesByTheirKind)
   set_map(down);
   EXPECT_TRUE(plan(0.55f, 1.05f, 0.0f, 4.45f, 1.05f, 3.0f).poses.empty());
   EXPECT_FALSE(plan(4.45f, 1.05f, 3.0f, 0.55f, 1.05f, 0.0f).poses.empty());
+}
+
+TEST_F(TerrainPlannerTest, AShortcutDoesNotCrossAGapOverAnotherFloor)
+{
+  // Ground floor 6 x 4 m; 2 m above it, a floor shaped as a U: open over x < 5, 1 < y < 3 (the
+  // gap beside a ramp, the well of a stair). From one arm of the U to the other the way is round
+  // its base (x > 5): the straight segment across the gap is over the ground floor, 2 m down, and
+  // not traversable (a shortcut found it "on" the ground floor and put its samples there)
+  NavMap nm;
+  add_grid(nm, 60, 40, 0.0f, 0.0f, flat);
+  add_grid(
+    nm, 60, 40, 0.0f, 0.0f, [](float, float) {return 2.0f;},
+    [](float x, float y) {return !(x < 5.0f && y > 1.0f && y < 3.0f);});
+  nm.rebuild_geometry_accels();
+  make();
+  set_map(nm);
+  const auto p = plan(0.55f, 0.55f, 2.0f, 0.55f, 3.45f, 2.0f);
+  ASSERT_FALSE(p.poses.empty());
+  double max_x = 0.0;
+  for (const auto & ps : p.poses) {
+    EXPECT_NEAR(ps.pose.position.z, 2.0, 0.05) << ps.pose.position.x << " " << ps.pose.position.y;
+    max_x = std::max(max_x, ps.pose.position.x);
+  }
+  EXPECT_GT(max_x, 5.0) << "round the base of the U";
+}
+
+TEST_F(TerrainPlannerTest, AShortcutDoesNotEndUnderTheGoalOnAnotherFloor)
+{
+  // Ground floor: y < 1.5, and x < 0.5 up to y = 3; from there, at y in [2, 3] (a gap between), a
+  // ramp up to 1 m at x = 2.5, and an upper floor, x in [2.5, 6], over the ground floor. From the
+  // ground floor to right over it, on the upper one: round and up the ramp. Most of the way is on
+  // the ground floor: a shortcut tried there to the goal walked the ground floor all the way to
+  // right under it, and took it (the multi-floor garage, paper/RESULTADOS.md)
+  NavMap nm;
+  SharedVertices shared;
+  add_grid(
+    nm, 60, 30, 0.0f, 0.0f, flat, [](float x, float y) {return x < 0.5f || y < 1.5f;}, &shared);
+  add_grid(nm, 20, 10, 0.5f, 2.0f, [](float x, float) {
+      return (x - 0.5f) / 2.0f;
+    }, nullptr, &shared);
+  add_grid(nm, 35, 30, 2.5f, 0.0f, [](float, float) {return 1.0f;}, nullptr, &shared);
+  nm.rebuild_geometry_accels();
+  make();
+  set_map(nm);
+  const auto p = plan(5.95f, 0.15f, 0.0f, 3.05f, 1.05f, 1.0f);
+  ASSERT_FALSE(p.poses.empty());
+  double max_y = 0.0;
+  for (std::size_t k = 1; k < p.poses.size(); ++k) {
+    const auto & a = p.poses[k - 1].pose.position;
+    const auto & b = p.poses[k].pose.position;
+    EXPECT_LT(std::abs(b.z - a.z), 0.2) << b.x << " " << b.y << " " << b.z;
+    max_y = std::max(max_y, b.y);
+  }
+  EXPECT_GT(max_y, 2.0) << "up the ramp";
 }
 
 TEST_F(TerrainPlannerTest, NewLimitsAndNewTerrainApplyOnTheNextPlan)
