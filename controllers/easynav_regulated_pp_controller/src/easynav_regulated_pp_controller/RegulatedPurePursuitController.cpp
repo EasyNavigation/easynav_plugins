@@ -483,7 +483,14 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
   const double yaw_goal = tf2::getYaw(goal_pose.orientation);
   const double e_theta_goal = normalizeAngle(yaw_goal - robot_yaw);
 
-  const bool at_goal_xy = dist_to_goal <= xy_tol;
+  // With floors over each other, the robot can pass right above or below the goal (on the floor
+  // over it, on its way down): it is not at the goal there. The system's height tolerance (the
+  // GoalManager's; 10000 m by default, so the height is ignored as before unless it is set)
+  // decides; without one in the NavState, the height is ignored too.
+  const bool on_goal_floor = !nav_state.has("goal_tolerance.height") ||
+    std::fabs(goal_pose.position.z - robot_pose.position.z) <=
+    nav_state.get_safe<double>("goal_tolerance.height");
+  const bool at_goal_xy = on_goal_floor && dist_to_goal <= xy_tol;
 
   // Drive to half the tolerance before turning to the goal heading, and keep turning until
   // the robot leaves the whole tolerance: localization noise at the border must not make it
@@ -496,7 +503,7 @@ RegulatedPurePursuitController::update_rt(NavState & nav_state)
     aligning_to_goal_ = false;
     aligning_goal_ = goal_pose;
   }
-  if (dist_to_goal <= 0.5 * xy_tol) {
+  if (on_goal_floor && dist_to_goal <= 0.5 * xy_tol) {
     aligning_to_goal_ = true;
   } else if (!at_goal_xy) {
     aligning_to_goal_ = false;
