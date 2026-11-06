@@ -267,6 +267,57 @@ TEST_F(NavMapPlannerTest, CostWeightIsAParameterWithADefault)
   EXPECT_DOUBLE_EQ(node_->get_parameter("planner.cost_weight").as_double(), 5.0);
 }
 
+TEST_F(NavMapPlannerTest, HeuristicWeightDefaultsToAdmissibleAStar)
+{
+  EXPECT_DOUBLE_EQ(node_->get_parameter("planner.heuristic_weight").as_double(), 1.0);
+}
+
+// A weighted heuristic still finds a path to a reachable goal, and a weight below 1 is taken as 1.
+// Weighted A* (without re-opening) keeps its bound: the path costs at most `weight` times the
+// optimal one; with no cost but the length, it is at most `weight` times as long.
+TEST_F(NavMapPlannerTest, WeightedPathIsWithinTheWeightOfTheOptimalOne)
+{
+  auto plan_length = [&](double w) {
+      node_->set_parameter(rclcpp::Parameter("planner.heuristic_weight", w));
+      planner_ = std::make_shared<easynav::navmap::AStarPlanner>();
+      planner_->initialize(node_, "planner");
+      // a wall with an opening and no other cost: the cost of a path is proportional to its length
+      set_robot(0.55, 0.55);
+      inscribe([](float x, float y) {return x > 1.8f && x < 2.2f && (y < 1.5f || y > 2.5f);});
+      set_goal(3.06, 3.04);
+      planner_->update(nav_state_);
+      const auto & poses = path().poses;
+      double len = 0.0;
+      for (std::size_t k = 1; k < poses.size(); ++k) {
+        len += std::hypot(poses[k].pose.position.x - poses[k - 1].pose.position.x,
+          poses[k].pose.position.y - poses[k - 1].pose.position.y);
+      }
+      return len;
+    };
+  const double optimal = plan_length(1.0);
+  ASSERT_GT(optimal, 0.0);
+  for (double w : {1.25, 2.0, 4.0}) {
+    EXPECT_LE(plan_length(w), w * optimal + 1e-6) << "weight " << w;
+  }
+}
+
+TEST_F(NavMapPlannerTest, WeightedHeuristicStillReachesTheGoal)
+{
+  for (double w : {0.5, 1.5, 3.0}) {
+    node_->set_parameter(rclcpp::Parameter("planner.heuristic_weight", w));
+    planner_ = std::make_shared<easynav::navmap::AStarPlanner>();
+    planner_->initialize(node_, "planner");
+    set_robot(0.55, 2.0);
+    inflate(costly_box);
+    set_goal(3.45, 2.0);
+    planner_->update(nav_state_);
+    ASSERT_FALSE(path().poses.empty()) << "weight " << w;
+    const auto & last = path().poses.back().pose.position;
+    EXPECT_NEAR(last.x, 3.45, 1e-6) << "weight " << w;
+    EXPECT_NEAR(last.y, 2.0, 1e-6) << "weight " << w;
+  }
+}
+
 // A costly (not inscribed) band on the straight line: the path goes around it.
 TEST_F(NavMapPlannerTest, InflationCostKeepsThePathAwayFromObstacles)
 {
@@ -538,4 +589,300 @@ TEST_F(NavMapPlannerTest, AChangedMapWithTheSameSizeIsNotPlannedOnTheOldGraph)
   const auto p = path();
   ASSERT_FALSE(p.poses.empty());
   EXPECT_GT(p.poses.front().pose.position.x, 10.0);
+}
+
+namespace
+{
+// The planner with its protected parts reachable
+class OpenPlanner : public easynav::navmap::AStarPlanner
+{
+public:
+  using easynav::navmap::AStarPlanner::a_star_path;
+  using easynav::navmap::AStarPlanner::choose_path;
+  using easynav::navmap::AStarPlanner::last_search_stats_;
+};
+
+geometry_msgs::msg::Pose at(double x, double y)
+{
+  geometry_msgs::msg::Pose p;
+  p.position.x = x;
+  p.position.y = y;
+  p.orientation.w = 1.0;
+  return p;
+}
+
+// A straight polyline from (x0, y) to (x1, y), a pose every 0.1 m
+geometry_msgs::msg::Pose at(double x, double y, double z)
+{
+  auto p = at(x, y);
+  p.position.z = z;
+  return p;
+}
+
+std::vector<geometry_msgs::msg::Pose> straight(double x0, double x1, double y)
+{
+  std::vector<geometry_msgs::msg::Pose> out;
+  for (double x = x0; x <= x1 + 1e-9; x += 0.1) {
+    out.push_back(at(x, y));
+  }
+  return out;
+}
+}  // namespace
+
+TEST_F(NavMapPlannerTest, ManyPlansInARowAreTheSameAsTheFirstPlanOfANewPlanner)
+{
+  // The search buffers are reused from plan to plan (no reset of the whole map): what a plan
+  // left behind must never change the next one
+  wall_off(2.0, 2.0, 4);
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_reused");
+  const std::vector<std::pair<double, double>> goals = {
+    {3.45, 3.45}, {0.55, 3.45}, {2.0, 2.0} /* inside the ring: unreachable */, {3.45, 0.55},
+    {3.45, 3.45}};
+  for (int round = 0; round < 3; ++round) {
+    for (const auto & [gx, gy] : goals) {
+      const auto reused = planner->a_star_path(map, at(0.55, 0.55), at(gx, gy));
+      auto fresh_planner = std::make_shared<OpenPlanner>();
+      fresh_planner->initialize(node_, "planner_fresh_" + std::to_string(round));
+      const auto fresh = fresh_planner->a_star_path(map, at(0.55, 0.55), at(gx, gy));
+      ASSERT_EQ(reused.size(), fresh.size()) << gx << ", " << gy;
+      for (std::size_t k = 0; k < fresh.size(); ++k) {
+        ASSERT_EQ(reused[k].position.x, fresh[k].position.x);
+        ASSERT_EQ(reused[k].position.y, fresh[k].position.y);
+      }
+    }
+  }
+}
+
+TEST_F(NavMapPlannerTest, ACostLayerThatIsNotUint8IsStillRead)
+{
+  // The planner reads a uint8 layer of the map's size directly; any other is converted. The float
+  // layer is "inflated_obstacles", which the planner prefers to "obstacles": a layer with a name of
+  // its own, because one that changes type under the same name (float "obstacles" over the uint8
+  // one the map in the NavState has) makes NavMap::operator= of a map of the same geometry
+  // dereference a null layer.
+  auto navmap = nav_state_.get<::navmap::NavMap>("map.navmap");
+  for (std::size_t c = 0; c < navmap.navcels.size(); ++c) {
+    const auto cid = static_cast<::navmap::NavCelId>(c);
+    const auto p = navmap.navcel_centroid(cid);
+    // a wall across x = 2 m, as float costs
+    navmap.layer_set<float>(
+      "inflated_obstacles", cid, std::abs(p.x() - 2.0f) < 0.15f ? 254.0f : 0.0f);
+  }
+  nav_state_.set("map.navmap", navmap);
+  set_goal(3.45, 0.55);
+  planner_->update(nav_state_);
+  EXPECT_TRUE(path().poses.empty()) << "the float wall blocks";
+}
+
+TEST_F(NavMapPlannerTest, WithHysteresisTheFollowedPathIsKeptUnlessANewOneIsClearlyShorter)
+{
+  node_->declare_parameter("planner_h.replan_hysteresis", 0.2);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_h");
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  const auto goal = at(3.5, 1.0);
+  // the path being followed: 3 m along y = 1
+  auto followed = planner->choose_path(map, at(0.5, 1.0), goal, straight(0.5, 3.5, 1.0));
+  ASSERT_EQ(followed.size(), 31u);
+  // a new one 5 % shorter: kept the followed one (what is left from the robot)
+  auto almost = straight(0.6, 3.5, 1.2);
+  auto kept = planner->choose_path(map, at(0.6, 1.0), goal, almost);
+  ASSERT_FALSE(kept.empty());
+  EXPECT_NEAR(kept.front().position.y, 1.0, 1e-9) << "the followed path, not the new one";
+  EXPECT_NEAR(kept.front().position.x, 0.6, 1e-9);
+  // a new one 40 % shorter: taken
+  auto much = straight(1.8, 3.5, 0.5);
+  auto taken = planner->choose_path(map, at(0.6, 1.0), goal, much);
+  EXPECT_NEAR(taken.front().position.y, 0.5, 1e-9);
+  // another goal: the new path whatever its length
+  auto other = planner->choose_path(map, at(0.6, 1.0), at(3.5, 3.5), straight(0.6, 3.5, 3.0));
+  EXPECT_NEAR(other.front().position.y, 3.0, 1e-9);
+}
+
+TEST_F(NavMapPlannerTest, WithHysteresisABlockedFollowedPathIsDropped)
+{
+  node_->declare_parameter("planner_hb.replan_hysteresis", 0.5);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_hb");
+  const auto goal = at(3.5, 1.0);
+  planner->choose_path(
+    nav_state_.get<::navmap::NavMap>("map.navmap"), at(0.5, 1.0), goal, straight(0.5, 3.5, 1.0));
+  // an obstacle on the followed path (x = 2.5 m): it is no longer traversable
+  vertical_wall(2.5);
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  auto longer = straight(0.5, 3.5, 3.3);   // even a much longer path replaces it
+  longer.insert(longer.begin(), at(0.5, 1.0));
+  const auto chosen = planner->choose_path(map, at(0.5, 1.0), goal, longer);
+  ASSERT_FALSE(chosen.empty());
+  EXPECT_NEAR(chosen.back().position.y, 3.3, 1e-9);
+}
+
+TEST_F(NavMapPlannerTest, WithoutHysteresisTheNewPathIsAlwaysTaken)
+{
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_noh");   // replan_hysteresis: 0 by default
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  const auto goal = at(3.5, 1.0);
+  planner->choose_path(map, at(0.5, 1.0), goal, straight(0.5, 3.5, 1.0));
+  const auto chosen = planner->choose_path(map, at(0.6, 1.0), goal, straight(0.6, 3.5, 1.2));
+  EXPECT_NEAR(chosen.front().position.y, 1.2, 1e-9);
+}
+
+TEST_F(NavMapPlannerTest, WithHysteresisWhatIsLeftOfTheFollowedPathNeverStartsBehindTheRobot)
+{
+  // The poses of a shortcut path are metres apart: the one nearest the robot can be behind it.
+  // The rest of the path starts after the segment the robot is on, or the robot would go back to
+  // that pose, forward, back again... (found by a benchmark: a 0.2 m oscillation for ever)
+  node_->declare_parameter("planner_hs.replan_hysteresis", 0.2);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_hs");
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  const auto goal = at(3.5, 1.0);
+  planner->choose_path(map, at(0.5, 1.0), goal, {at(0.5, 1.0), at(2.0, 1.0), at(3.5, 1.0)});
+  // the robot 0.6 m along: the pose at 0.5 m is the nearest, but behind
+  const auto kept = planner->choose_path(map, at(1.1, 1.0), goal, {});
+  ASSERT_FALSE(kept.empty());
+  EXPECT_NEAR(kept.front().position.x, 2.0, 1e-9);
+  EXPECT_EQ(kept.size(), 2u);
+}
+
+TEST_F(NavMapPlannerTest, WithAHorizonOnlyTheNearPartOfTheFollowedPathMustStillBeTraversable)
+{
+  // A level-of-detail map changes far from the robot with every re-mesh: the far part of the
+  // followed path is checked when the robot gets near, not now
+  node_->declare_parameter("planner_hz.replan_hysteresis", 0.2);
+  node_->declare_parameter("planner_hz.replan_hysteresis_horizon", 1.5);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_hz");
+  const auto goal = at(3.5, 1.0);
+  planner->choose_path(
+    nav_state_.get<::navmap::NavMap>("map.navmap"), at(0.5, 1.0), goal, straight(0.5, 3.5, 1.0));
+  vertical_wall(2.5);   // 2 m ahead: beyond the horizon
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  auto longer = straight(0.5, 3.5, 3.3);
+  longer.insert(longer.begin(), at(0.5, 1.0));
+  const auto kept = planner->choose_path(map, at(0.5, 1.0), goal, longer);
+  ASSERT_FALSE(kept.empty());
+  EXPECT_NEAR(kept.back().position.y, 1.0, 1e-9) << "the followed path, blocked only far";
+  // the robot 1.3 m from the wall (beyond the first metre, within the horizon): dropped
+  const auto near = planner->choose_path(map, at(1.2, 1.0), goal, longer);
+  EXPECT_NEAR(near.back().position.y, 3.3, 1e-9);
+}
+
+TEST_F(NavMapPlannerTest, WithHysteresisASegmentOfTheFollowedPathThroughAnObstacleDropsIt)
+{
+  // The poses of the followed path are clear, the segment between two of them is not (an obstacle
+  // appeared between them): the followed path is not kept, even within the first metre
+  node_->declare_parameter("planner_hg.replan_hysteresis", 0.5);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_hg");
+  const auto goal = at(3.5, 1.0);
+  planner->choose_path(
+    nav_state_.get<::navmap::NavMap>("map.navmap"), at(0.5, 1.0), goal,
+    {at(0.5, 1.0), at(3.5, 1.0)});
+  vertical_wall(1.2);   // 0.7 m ahead, between the two poses
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  auto longer = straight(0.5, 3.5, 3.3);
+  longer.insert(longer.begin(), at(0.5, 1.0));
+  const auto chosen = planner->choose_path(map, at(0.5, 1.0), goal, longer);
+  ASSERT_FALSE(chosen.empty());
+  EXPECT_NEAR(chosen.back().position.y, 3.3, 1e-9);
+}
+
+TEST_F(NavMapPlannerTest, TheSearchStatsCountWhatTheLastPlanExpandedAndGrowWithTheDistance)
+{
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_stats");
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  ASSERT_FALSE(planner->a_star_path(map, at(0.5, 0.5), at(1.0, 0.5)).empty());
+  const auto near = planner->last_search_stats_;
+  EXPECT_GT(near.expanded, 0u);
+  EXPECT_GE(near.pushed, near.expanded);   // every expanded entry was pushed once
+  ASSERT_FALSE(planner->a_star_path(map, at(0.5, 0.5), at(3.5, 3.5)).empty());
+  const auto far = planner->last_search_stats_;
+  EXPECT_GT(far.expanded, near.expanded);
+  // a plan that does not search (an empty map) leaves them at zero, not at the previous plan's
+  ::navmap::NavMap empty;
+  EXPECT_TRUE(planner->a_star_path(empty, at(0.5, 0.5), at(3.5, 3.5)).empty());
+  EXPECT_EQ(planner->last_search_stats_.expanded, 0u);
+  EXPECT_EQ(planner->last_search_stats_.pushed, 0u);
+}
+
+TEST_F(NavMapPlannerTest, WithHysteresisWhatIsLeftOfTheFollowedPathIsFoundInHeightToo)
+{
+  // A garage: the followed path goes along this floor and later passes right under the robot
+  // (its end on the floor 2.3 m below). The rest of the path is what follows the part the robot
+  // is on (0.1 m away in the plane), not the part under it (0 m away in the plane, 2.3 m in
+  // height): found in the plane, the robot would be "at" that part and stay over the goal
+  node_->declare_parameter("planner_h3.replan_hysteresis", 0.2);
+  node_->declare_parameter("planner_h3.replan_hysteresis_horizon", 1.5);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_h3");
+  const auto & map = nav_state_.get<::navmap::NavMap>("map.navmap");
+  const auto goal = at(0.5, 1.1, -2.3);
+  planner->choose_path(
+    map, at(0.5, 1.0), goal,
+    {at(0.5, 1.0), at(3.5, 1.0), at(3.5, 1.0, -2.3), at(1.1, 1.1, -2.3), goal});
+  const auto kept = planner->choose_path(map, at(1.1, 1.1), goal, {});
+  ASSERT_FALSE(kept.empty()) << "the followed path is kept from the part on this floor";
+  EXPECT_NEAR(kept.front().position.x, 3.5, 1e-9);
+  EXPECT_NEAR(kept.front().position.z, 0.0, 1e-9);
+  EXPECT_EQ(kept.size(), 4u);
+}
+
+TEST_F(NavMapPlannerTest, WeightedAStarStillPlansWhenTheMapChangesSizeAndComesBack)
+{
+  // A level-of-detail map changes size all the time. A plan that returns before searching (here,
+  // the goal is on an obstacle) must not leave the closed stamps of the first map to the third
+  node_->declare_parameter("planner_ws.heuristic_weight", 1.5);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_ws");
+  const auto big = nav_state_.get<::navmap::NavMap>("map.navmap");   // 40 x 40 cells
+  const auto start = at(0.55, 0.55);
+  const auto goal = at(3.45, 0.55);
+  const auto first = planner->a_star_path(big, start, goal);
+  ASSERT_FALSE(first.empty());
+
+  auto grid = grid_;
+  grid.info.width = 30;
+  grid.info.height = 30;
+  grid.data.assign(30 * 30, 0);
+  grid.data[5 * 30 + 25] = 100;   // the cell of (2.55, 0.55)
+  auto small = navmap_ros::from_occupancy_grid(grid);
+  for (std::size_t c = 0; c < small.navcels.size(); ++c) {
+    const auto cid = static_cast<::navmap::NavCelId>(c);
+    small.layer_set<std::uint8_t>(
+      "obstacles", cid, small.layer_get<std::uint8_t>("occupancy", cid, 0));
+  }
+  EXPECT_TRUE(planner->a_star_path(small, start, at(2.55, 0.55)).empty());
+
+  const auto again = planner->a_star_path(big, start, goal);
+  ASSERT_FALSE(again.empty()) << "NavCels of the first search read as closed";
+  EXPECT_EQ(again.size(), first.size());
+}
+
+TEST_F(NavMapPlannerTest, WithHysteresisAnObstacleOfAFloatCostLayerOnTheFollowedPathDropsIt)
+{
+  node_->declare_parameter("planner_hf.replan_hysteresis", 0.5);
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_hf");
+  const auto goal = at(3.5, 1.0);
+  planner->choose_path(
+    nav_state_.get<::navmap::NavMap>("map.navmap"), at(0.5, 1.0), goal, straight(0.5, 3.5, 1.0));
+
+  // a wall across x = 2.5 m in a float layer, the type the planner converts instead of reading
+  auto walled = nav_state_.get<::navmap::NavMap>("map.navmap");
+  for (std::size_t c = 0; c < walled.navcels.size(); ++c) {
+    const auto cid = static_cast<::navmap::NavCelId>(c);
+    const auto p = walled.navcel_centroid(cid);
+    walled.layer_set<float>(
+      "inflated_obstacles", cid, std::abs(p.x() - 2.5f) < 0.15f ? 254.0f : 0.0f);
+  }
+  auto longer = straight(0.5, 3.5, 3.3);
+  longer.insert(longer.begin(), at(0.5, 1.0));
+  const auto chosen = planner->choose_path(walled, at(0.5, 1.0), goal, longer);
+  ASSERT_FALSE(chosen.empty());
+  EXPECT_NEAR(chosen.back().position.y, 3.3, 1e-9) << "the followed path crosses the wall";
 }
