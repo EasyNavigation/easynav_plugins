@@ -1,0 +1,5 @@
+<map id="AStarPlanner::SearchStats" name="AStarPlanner::SearchStats">
+<area shape="rect" id="Node000001" title="What the last a_star_path() did (for measurements): NavCels taken from the open list (expanded,..." alt="" coords="5,122,182,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="66,5,121,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,47,96,122,91,122,91,47"/>
+</map>
