@@ -45,6 +45,8 @@ constexpr double kEscapeDistance = 1.0;
 constexpr double kMaxPathOffset = 2.0;
 // A point is on a surface if the surface is within this height (m) of it: floors over each other.
 constexpr float kSurfaceHeightTolerance = 0.5f;
+// Largest step (m) between two points of the path, however large the NavCels.
+constexpr double kMaxPathSpacing = 0.25;
 
 static double compute_path_length(const nav_msgs::msg::Path & path)
 {
@@ -83,6 +85,8 @@ void AStarPlanner::on_initialize()
     *node, plugin_name + ".replan_hysteresis_horizon", replan_hysteresis_horizon_);
 
   node->get_parameter(plugin_name + ".cost_factor", cost_factor_);
+  easynav::declare_parameter_if_absent<std::string>(*node, plugin_name + ".map_key", map_key_);
+  node->get_parameter(plugin_name + ".map_key", map_key_);
   // Weighted A*: the heuristic is multiplied by this weight (>= 1). 1 keeps A* admissible (optimal
   // paths); a larger weight expands fewer NavCels and may return paths up to that factor longer.
   easynav::declare_parameter_if_absent<double>(*node, plugin_name + ".heuristic_weight", 1.0);
@@ -145,17 +149,17 @@ void AStarPlanner::on_initialize()
 void AStarPlanner::update(NavState & nav_state)
 {
   current_path_.poses.clear();
-  if (!nav_state.has("goals") || !nav_state.has("robot_pose") || !nav_state.has("map.navmap")) {
+  if (!nav_state.has("goals") || !nav_state.has("robot_pose") || !nav_state.has(map_key_)) {
     return;
   }
 
   const auto & goals = nav_state.get<nav_msgs::msg::Goals>("goals");
-  if (goals.goals.empty() || !nav_state.has("map.navmap")) {
+  if (goals.goals.empty() || !nav_state.has(map_key_)) {
     clear_path(nav_state);
     return;
   }
 
-  const auto & navmap = nav_state.get<::navmap::NavMap>("map.navmap");
+  const auto & navmap = nav_state.get<::navmap::NavMap>(map_key_);
 
   const auto & robot_pose = nav_state.get_safe<nav_msgs::msg::Odometry>("robot_pose");
   const auto & goal = goals.goals.front().pose;
@@ -614,6 +618,8 @@ std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
   using ::navmap::NavCelId;
   const std::size_t n = points.size();
   if (n < 2) {return points;}
+  // Large NavCels (a merged map) give a large mean spacing: the path stays dense anyway
+  const double spacing = std::min(cel_spacing_, kMaxPathSpacing);
 
   auto vertices = [&nm](NavCelId c) {
       const auto & t = nm.navcels[c];
@@ -674,7 +680,7 @@ std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
       allowed_slope = allowed_slope * 1.05f + 1e-3f;
       const Eigen::Vector3f a = points[i], b = points[j];
       const double len = (b - a).head<2>().norm();
-      const int steps = std::max(1, static_cast<int>(std::ceil(len / (0.25 * cel_spacing_))));
+      const int steps = std::max(1, static_cast<int>(std::ceil(len / (0.25 * spacing))));
       NavCelId cur = cels[i];
       for (int s = 1; s < steps; ++s) {
         const Eigen::Vector3f p = a + (b - a) * (static_cast<float>(s) / steps);
@@ -728,7 +734,7 @@ std::vector<Eigen::Vector3f> AStarPlanner::shortcut_path(
       continue;
     }
     const double len = (b - a).head<2>().norm();
-    const int steps = std::max(1, static_cast<int>(std::round(len / cel_spacing_)));
+    const int steps = std::max(1, static_cast<int>(std::ceil(len / spacing - 1e-6)));
     NavCelId cur = cels[kept[k - 1]];
     for (int s = 1; s <= steps; ++s) {
       Eigen::Vector3f p = a + (b - a) * (static_cast<float>(s) / steps);
@@ -997,6 +1003,18 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
   points.reserve(cels.size());
   for (const auto c : cels) {
     points.push_back(centroids_[c]);
+  }
+  // Starts at the robot, not at its NavCel's centroid (off the map: from the closest NavCel)
+  if (okS) {
+    const auto & t = nm.navcels[cid_start];
+    points.front() = Eigen::Vector3f(
+      pS.x(), pS.y(), height_at(
+        pS, nm.positions.at(t.v[0]), nm.positions.at(t.v[1]), nm.positions.at(t.v[2])));
+  }
+  // The goal in the start NavCel (a large merged one): from there to the goal
+  if (points.size() < 2) {
+    points.push_back(points.back());
+    cels.push_back(cels.back());
   }
   // Ends exactly at the goal, not at its NavCel's centroid
   points.back().x() = static_cast<float>(goal.position.x);
