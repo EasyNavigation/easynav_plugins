@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_navmap_maps_manager">
+    <class name="easynav_navmap_maps_manager/NavMapMapsManager/FractalFilter"  type="easynav::navmap::FractalFilter" base_class_type="easynav::navmap::NavMapFilter">
+      <description>
+      A filter which keeps a copy of the NavMap with same-cost NavCels merged, for planning
+      </description>
+    </class>
+  </library>
+</class_libraries>

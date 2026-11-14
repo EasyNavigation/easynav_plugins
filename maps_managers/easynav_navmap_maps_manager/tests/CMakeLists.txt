@@ -21,3 +21,9 @@ target_link_libraries(navmap_incremental_filters_tests ${PROJECT_NAME})
 
 ament_add_gtest(navmap_obstacle_memory_tests navmap_obstacle_memory_tests.cpp)
 target_link_libraries(navmap_obstacle_memory_tests ${PROJECT_NAME})
+
+ament_add_gtest(navmap_fractal_rtin_tests navmap_fractal_rtin_tests.cpp)
+target_link_libraries(navmap_fractal_rtin_tests ${PROJECT_NAME})
+
+ament_add_gtest(navmap_fractal_filter_tests navmap_fractal_filter_tests.cpp)
+target_link_libraries(navmap_fractal_filter_tests ${PROJECT_NAME})
