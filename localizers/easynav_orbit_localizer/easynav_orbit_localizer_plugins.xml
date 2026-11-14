@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_orbit_localizer">
+    <class name="easynav_orbit_localizer/OrbitLocalizer" type="easynav::orbit::OrbitLocalizer" base_class_type="easynav::LocalizerMethodBase">
+      <description>
+      Localizer with a few Gaussian hypotheses on SE(3), the poses the map's own symmetries make indistinguishable, each corrected by Gauss-Newton against the map's distance field; tolerant to dynamic obstacles, odometry slips, sensor dropouts and kidnapping.
+      </description>
+    </class>
+  </library>
+</class_libraries>

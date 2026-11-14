@@ -1,0 +1,105 @@
+# OrbitLocalizer: one configuration per kind of robot. Only the parameters that differ from
+# the defaults are needed; the rest are shown with their defaults.
+localizer_node:
+  ros__parameters:
+    localizer_types: [orbit]
+    orbit:
+      rt_freq: 50.0
+      freq: 5.0
+      plugin: easynav_orbit_localizer/OrbitLocalizer
+      mode: planar                  # planar | planar_terrain (NavMap surface) | free (6 DoF)
+      map_type: costmap             # costmap (map.base) | bonxai (map.bonxai)
+      # Inputs, from the NavState: the sensors' names in sensors_node
+      odometry_source: tf           # tf (odom -> base_footprint) | navstate (odom_key) | dvl_imu
+      odom_key: odom                # an Odometry sensor
+      dvl_key: dvl                  # a Twist sensor (dvl_imu: dead reckoning with the IMU)
+      depth_key: ""                 # a Pose sensor whose z is the depth in the map frame
+      imu_key: imu
+      gps_key: gps                  # or the "gnss" group, if the GNSS sensors have it
+      # Process noise per correction: fractions of the motion plus a floor
+      noise_translation: 0.1
+      noise_rotation: 0.1
+      noise_translation_to_rotation: 0.05
+      min_noise_xy: 0.02
+      min_noise_z: 0.02
+      min_noise_yaw: 0.01
+      min_noise_roll_pitch: 0.005
+      initial_pose: {x: 0.0, y: 0.0, z: 0.0, yaw: 0.0, std_dev_xy: 0.5, std_dev_z: 0.5,
+                     std_dev_yaw: 0.3, use_last_known: true}
+      global_init: false            # true: no initial pose, the first scan is matched globally
+      # Points of the scans (robot footprint frame)
+      use_points: true              # false: absolute measurements and odometry only
+      max_points: 400
+      min_evidence_points: 20   # a scan with fewer points corrects the pose but judges nothing: no weights, no slip retry, no loss of track (sparse sonar echoes)
+      min_height: 0.05
+      max_height: 2.0
+      max_range: 30.0
+      downsample: 0.0               # m, 0: the map's resolution
+      sonar_mode: false             # imaging sonar: the elevation of each echo is unknown
+      sonar_vertical_fov: 0.35      # rad
+      # Measurement model
+      sigma_point: 0.1              # m
+      cauchy_c: 0.3                 # m, where a point stops pulling (dynamic obstacles)
+      inlier_distance: 0.0          # m, 0: 1.5 cells
+      max_iterations: 12
+      # Hypotheses
+      max_hypotheses: 8
+      weight_sharpness: 8.0
+      score_deadband: 0.05          # a score gap below it does not move the weights (twins stay even)
+      credit_max: 100.0             # updates (0.1 m each) the estimate holds after it stops fitting
+      min_weight: 0.01
+      merge_distance: 0.5
+      merge_angle: 0.3
+      min_winner_time: 1.0          # s a challenger must lead before it becomes the estimate
+      lost_score: 0.3               # inlier fraction under which the estimate is doubted
+      lost_cycles: 5
+      slip_sigmas: 4.0
+      update_min_distance: 0.1      # m of odometry before the pose is corrected again and the weights move (standing, the scan is only scored in place)
+      update_min_angle: 0.1         # rad
+      terrain_max_step: 1.0         # m, planar_terrain: a surface farther in z is another level
+      relocalize: {candidates: 30, yaw_seeds: 3, min_score: 0.5, min_travel: 0.5}  # min_travel: m moved before another search (one per kidnap, not one a second standing in a crowd)
+      # The map's symmetries
+      symmetry:
+        enabled: true
+        sample_step: 0.5            # m between the sampled places
+        range: 12.0                 # m, the sensor's reach for the virtual views
+        z_min: 0.2                  # 3D maps: height band of the views over the place
+        z_max: 3.0
+        altitudes: []               # 3D maps: heights of the places; empty: on the ground
+        sensor_height: 0.5          # m, the lidar over the footprint: where the 3D views are cast from
+        azimuths: 90                # the simulated lidar of the 3D views (and the scan's range image)
+        elevations: 12
+        elevation_min: -0.44        # rad
+        elevation_max: 0.26
+        ground_height: 0.0          # 3D maps: the place over the lowest map point
+        candidates: 12
+        yaw_seeds: 2
+        min_score: 0.95             # of the place's own score, for an alternative (the views are the map's own: no noise)
+        merge_distance: 1.0
+        merge_angle: 0.5
+        threads: 4
+        cache_file: ""              # empty: <map>.orbit next to the map (or under ~/.cache/easynav/orbit if
+                                    # that folder is read-only), loaded when it exists and matches the map
+        spawn_weight: 0.1
+      gps:
+        enabled: false
+        latitude_origin: 0.0
+        longitude_origin: 0.0
+        altitude_origin: 0.0
+        projection: utm             # utm | enu
+        sigma_scale: 1.0
+        gate: 16.0                  # chi-square of a fix against the prediction
+        use_z: false
+        map_yaw: 0.0                # rad, rotation of the map's axes from east-north (a SLAM map)
+      imu:
+        attitude: false             # roll and pitch from the IMU (free mode)
+        yaw: false                  # its yaw too (an absolute IMU)
+        sigma_roll_pitch: 0.02
+        sigma_yaw: 0.05
+      depth: {sigma: 0.1, gate: 16.0}
+      sensor_fov:                   # what the sensor can see: the map's view is judged only there
+        azimuth: 6.2832             # rad about the heading (a 130 deg sonar: 2.27; a 190 deg laser: 3.32)
+        elevation_min: -1.5708      # rad (a sonar looking 20 deg down with 20 deg of aperture: -0.52..-0.17)
+        elevation_max: 1.5708
+      debug:
+        markers: false          # RViz2 markers: hypotheses, the scan fit, status, the graph
