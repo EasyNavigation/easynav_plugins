@@ -600,7 +600,32 @@ public:
   using easynav::navmap::AStarPlanner::a_star_path;
   using easynav::navmap::AStarPlanner::choose_path;
   using easynav::navmap::AStarPlanner::last_search_stats_;
+  using easynav::navmap::AStarPlanner::ensure_graph_cache;
+  using easynav::navmap::AStarPlanner::neighbors_;
 };
+
+// A copy of \p src with the NavCels where \p keep is true, \p degenerate more NavCels on its
+// vertex 0 (no area) and a free "obstacles" layer
+template<typename Keep>
+::navmap::NavMap remade(const ::navmap::NavMap & src, Keep keep, std::size_t degenerate = 0)
+{
+  ::navmap::NavMap out;
+  out.positions = src.positions;
+  const auto s = out.create_surface("map");
+  for (std::size_t c = 0; c < src.navcels.size(); ++c) {
+    const auto cid = static_cast<::navmap::NavCelId>(c);
+    const auto q = src.navcel_centroid(cid);
+    if (!keep(q.x(), q.y())) {continue;}
+    const auto & v = src.navcels[c].v;
+    out.add_navcel_to_surface(s, out.add_navcel(v[0], v[1], v[2]));
+  }
+  for (std::size_t k = 0; k < degenerate; ++k) {
+    out.add_navcel_to_surface(s, out.add_navcel(0, 0, 0));
+  }
+  out.add_layer<std::uint8_t>("obstacles", "", "", 0);
+  out.rebuild_geometry_accels();
+  return out;
+}
 
 geometry_msgs::msg::Pose at(double x, double y)
 {
@@ -885,4 +910,47 @@ TEST_F(NavMapPlannerTest, WithHysteresisAnObstacleOfAFloatCostLayerOnTheFollowed
   const auto chosen = planner->choose_path(walled, at(0.5, 1.0), goal, longer);
   ASSERT_FALSE(chosen.empty());
   EXPECT_NEAR(chosen.back().position.y, 3.3, 1e-9) << "the followed path crosses the wall";
+}
+
+TEST_F(NavMapPlannerTest, HolesTouchingAtACornerAreAWall)
+{
+  // A diagonal line of cells without NavCels (holes: e.g. buildings cut out of the map), each
+  // touching the next only at a corner, across the map. The free NavCels on both sides share
+  // those corners, but a robot cannot go through a point
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_holes");
+  const auto & grid = nav_state_.get<::navmap::NavMap>("map.navmap");
+  auto cell = [](float m) {return static_cast<int>(std::floor(m / kResolution));};
+  const auto rising = remade(grid, [&](float x, float y) {return cell(x) != cell(y);});
+  EXPECT_TRUE(planner->a_star_path(rising, at(2.55, 0.55), at(0.55, 2.55)).empty());
+  EXPECT_FALSE(planner->a_star_path(rising, at(2.55, 0.55), at(3.45, 1.55)).empty())
+    << "on the same side there is a path";
+
+  // the other way (against the mesh's split diagonal)
+  const auto falling = remade(
+    grid, [&](float x, float y) {return cell(x) != kCells - 1 - cell(y);});
+  EXPECT_TRUE(planner->a_star_path(falling, at(0.55, 0.55), at(3.45, 3.45)).empty());
+}
+
+TEST_F(NavMapPlannerTest, DegenerateNavCelsAreLeftOutOfTheGraph)
+{
+  // NavCels with no area all on one vertex (what a filter that removes NavCels may leave): they
+  // are nobody's neighbours, or each would be a neighbour of all the others (quadratic)
+  const std::size_t kDegenerate = 2000;
+  const auto & grid = nav_state_.get<::navmap::NavMap>("map.navmap");
+  const auto map = remade(grid, [](float, float) {return true;}, kDegenerate);
+  const std::size_t first = map.navcels.size() - kDegenerate;
+  auto planner = std::make_shared<OpenPlanner>();
+  planner->initialize(node_, "planner_degenerate");
+  planner->ensure_graph_cache(map);
+  for (std::size_t c = 0; c < map.navcels.size(); ++c) {
+    if (c >= first) {
+      EXPECT_TRUE(planner->neighbors_[c].empty()) << "degenerate NavCel " << c;
+      continue;
+    }
+    for (const auto & n : planner->neighbors_[c]) {
+      EXPECT_LT(static_cast<std::size_t>(n.cid), first) << "NavCel " << c;
+    }
+  }
+  EXPECT_FALSE(planner->a_star_path(map, at(0.05, 0.05), at(3.45, 3.45)).empty());
 }

@@ -129,6 +129,9 @@ protected:
   /// Cached neighbors of each NavCel, and NavCels around each vertex.
   std::vector<std::vector<Neighbor>> neighbors_;
   std::vector<std::vector<::navmap::NavCelId>> vertex_cels_;
+  // 1 = the vertex is on the border of the map (the corner of a hole, its outer edge): no step
+  // through it from one NavCel to another that only shares it (that would cut the hole's corner)
+  std::vector<std::uint8_t> border_vertex_;
 
   /// Distance between the centroids of neighbor NavCels (mean): the path's spacing.
   double cel_spacing_ {0.1};
