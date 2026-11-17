@@ -527,10 +527,40 @@ void AStarPlanner::ensure_graph_cache(const ::navmap::NavMap & map)
       centroids_[c] = Eigen::Vector3f{cc.x(), cc.y(), cc.z()};
     }
 
+    // Degenerate NavCels (a repeated vertex: no area) are left out of the graph: they have no
+    // neighbours. A map can have many, e.g. NavCels a filter removed by collapsing them onto one
+    // vertex; in vertex_cels_ they would make every one of them a neighbour of every other
+    // (quadratic in their number).
+    auto degenerate = [&map](NavCelId c) {
+        const auto & v = map.navcels[c].v;
+        return v[0] == v[1] || v[1] == v[2] || v[0] == v[2];
+      };
+
     vertex_cels_.assign(V, {});
     for (NavCelId c = 0; c < static_cast<NavCelId>(N); ++c) {
+      if (degenerate(c)) {continue;}
       for (const auto v : map.navcels[c].v) {
         if (v < V) {vertex_cels_[v].push_back(c);}
+      }
+    }
+
+    // A vertex is on the border when some edge at it belongs to one NavCel only: the NavCels
+    // around it do not close a fan
+    border_vertex_.assign(V, 0);
+    std::vector<std::uint32_t> ends;
+    for (std::size_t v = 0; v < V; ++v) {
+      ends.clear();
+      for (const auto c : vertex_cels_[v]) {
+        for (const auto w : map.navcels[c].v) {
+          if (w != v) {ends.push_back(w);}
+        }
+      }
+      std::sort(ends.begin(), ends.end());
+      for (std::size_t i = 0; i < ends.size(); ) {
+        std::size_t j = i;
+        while (j < ends.size() && ends[j] == ends[i]) {++j;}
+        if (j - i == 1) {border_vertex_[v] = 1; break;}
+        i = j;
       }
     }
 
@@ -539,6 +569,7 @@ void AStarPlanner::ensure_graph_cache(const ::navmap::NavMap & map)
     double spacing_sum = 0.0;
     std::size_t spacing_count = 0;
     for (NavCelId c = 0; c < static_cast<NavCelId>(N); ++c) {
+      if (degenerate(c)) {continue;}
       auto & out = neighbors_[c];
       for (const auto v : map.navcels[c].v) {
         if (v >= V) {continue;}
@@ -933,8 +964,11 @@ std::vector<geometry_msgs::msg::Pose> AStarPlanner::a_star_path(
         (centroids_[v] - centroids_[cid_start]).norm() < kEscapeDistance;
       if (!traversable(v) && !escaping) {continue;}
 
-      // Only a vertex in common: no cutting a corner, every NavCel around it must be passable
+      // Only a vertex in common: no cutting a corner, every NavCel around it must be passable,
+      // and the vertex must not be on the border of the map (the corner of a hole: the step would
+      // go through it)
       if (nb.shared_vertex != kNoVertex) {
+        if (border_vertex_[nb.shared_vertex]) {continue;}
         const auto & around = vertex_cels_[nb.shared_vertex];
         const bool clear = std::all_of(
           around.begin(), around.end(), [&](NavCelId c) {
