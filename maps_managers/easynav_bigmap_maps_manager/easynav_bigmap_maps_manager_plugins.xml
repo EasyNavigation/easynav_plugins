@@ -1,0 +1,9 @@
+<class_libraries>
+  <library path="easynav_bigmap_maps_manager">
+    <class name="easynav_bigmap_maps_manager/BigMapMapsManager" type="easynav::bigmap::BigMapMapsManager" base_class_type="easynav::MapsManagerBase">
+      <description>
+      Maps manager for large NavMaps: fine around the robot and coarse far from it (tiles simplified at several levels of detail), with the sensed obstacles near the robot.
+      </description>
+    </class>
+  </library>
+</class_libraries>
