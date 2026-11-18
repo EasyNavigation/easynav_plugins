@@ -15,6 +15,7 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <functional>
@@ -194,6 +195,46 @@ TEST(TiledLod, EveryPlaceOfTheMapIsInExactlyOneTile)
     }
     EXPECT_NEAR(area, map_area, 0.03 * map_area) << robot.transpose();
     EXPECT_EQ(pieces_and_border(nm).first, 1) << robot.transpose();
+  }
+}
+
+TEST(TiledLod, FloorsOverEachOtherStaySeparate)
+{
+  // Two floors 2.5 m apart over the same 100 x 100 m, with buildings in different places, so
+  // their tiles keep different vertices on the same grid lines
+  NavMap map = town(100.0f, 0.5f, blocks);
+  const NavMap upper = town(100.0f, 0.5f, [](float x, float y) {return blocks(y, x + 7.0f);});
+  const auto base = static_cast<uint32_t>(map.positions.size());
+  for (std::size_t i = 0; i < upper.positions.size(); ++i) {
+    map.positions.x.push_back(upper.positions.x[i]);
+    map.positions.y.push_back(upper.positions.y[i]);
+    map.positions.z.push_back(upper.positions.z[i] + 2.5f);
+  }
+  const auto s = map.create_surface("upper");
+  for (const auto & c : upper.navcels) {
+    map.add_navcel_to_surface(s, map.add_navcel(base + c.v[0], base + c.v[1], base + c.v[2]));
+  }
+  map.rebuild_geometry_accels();
+  const auto [map_pieces, map_border] = pieces_and_border(map);
+  ASSERT_EQ(map_pieces, 2);
+
+  TiledLod lod;
+  lod.build(map, params(), 4);
+  for (const auto & robot : {Eigen::Vector2d(1.0, 1.0), Eigen::Vector2d(50.0, 50.0)}) {
+    const auto tiles = lod.select(robot.x(), robot.y());
+    NavMap nm = lod.assemble(tiles);
+    lod.detail(nm, robot.x(), robot.y(), {}, 0.6);
+    // No NavCel joins the floors, and each floor is whole (no cracks between its tiles)
+    double span = 0.0;
+    for (const auto & c : nm.navcels) {
+      const float z0 = nm.positions.z[c.v[0]], z1 = nm.positions.z[c.v[1]],
+        z2 = nm.positions.z[c.v[2]];
+      span = std::max(span, static_cast<double>(std::max({z0, z1, z2}) - std::min({z0, z1, z2})));
+    }
+    EXPECT_LT(span, 1.0) << robot.transpose();
+    const auto [pieces, border] = pieces_and_border(nm);
+    EXPECT_EQ(pieces, 2) << robot.transpose();
+    EXPECT_NEAR(border, map_border, 0.05 * map_border) << robot.transpose();
   }
 }
 

@@ -604,31 +604,125 @@ NavMap TiledLod::stitch(const std::vector<std::uint32_t> & nodes, bool accels) c
     }
   }
 
-  // Stitching: an edge on a grid line gets the vertices other tiles have on it, between its ends
-  const float ztol = static_cast<float>(0.5 + cell(top_) / 2.0);
-  auto between = [&](std::uint32_t a, std::uint32_t b, std::vector<std::uint32_t> & out) {
-      out.clear();
-      const Eigen::Vector3f pa = P[a], pb = P[b];
-      const std::vector<OnLine> * line = nullptr;
-      float sa, sb;
+  // Stitching: an edge on a grid line gets the vertices that the tiles on the other side of the
+  // line have on it, between its ends. All the vertices are the source's own (a simplified side
+  // only loses vertices along it), and along a line the ground of the source is made of chains of
+  // edges whose ends (where a border crosses the line) and tile corners are kept at every level.
+  // Floors over each other have edges on the same stretch of a line: a vertex goes into an edge
+  // of another chain (a chain whose ends were simplified away on one side) only if it is within
+  // kSameFloor of it in height, so floors, or a floor that ends at the line above another, are
+  // never joined; on each side it goes into the covering edge nearest in height.
+  constexpr float kSameFloor = 0.5f;   // m: floors are farther apart than this
+  struct LineEdge
+  {
+    std::uint32_t a, b;   // ends
+    float sa, sb;         // their coordinates along the line
+    const std::vector<OnLine> * line;
+    std::uint64_t lid;    // the line: vertical ones first, then horizontal
+    int side;             // 0 / 1: the side of the line its NavCel is on
+  };
+  std::vector<LineEdge> ledges;
+  std::vector<std::array<int, 3>> tri_edge(tris.size(), {-1, -1, -1});
+  for (std::size_t t = 0; t < tris.size(); ++t) {
+    const auto & g = tris[t];
+    for (int k = 0; k < 3; ++k) {
+      const std::uint32_t a = g[k], b = g[(k + 1) % 3];
+      const Eigen::Vector3f pa = P[a], pb = P[b], po = P[g[(k + 2) % 3]];
+      LineEdge e{a, b, 0.0f, 0.0f, nullptr, 0, 0};
       if (pa.x() == pb.x()) {
         const int ix = line_index(xs_, pa.x());
-        if (ix >= 0) {line = &vlines[ix]; sa = pa.y(); sb = pb.y();}
+        if (ix >= 0) {
+          e = {a, b, pa.y(), pb.y(), &vlines[ix], static_cast<std::uint64_t>(ix),
+            po.x() > pa.x() ? 1 : 0};
+        }
       }
-      if (!line && pa.y() == pb.y()) {
+      if (!e.line && pa.y() == pb.y()) {
         const int iy = line_index(ys_, pa.y());
-        if (iy >= 0) {line = &hlines[iy]; sa = pa.x(); sb = pb.x();}
+        if (iy >= 0) {
+          e = {a, b, pa.x(), pb.x(), &hlines[iy], xs_.size() + static_cast<std::uint64_t>(iy),
+            po.y() > pa.y() ? 1 : 0};
+        }
       }
-      if (!line || sa == sb) {return;}
-      const float lo = std::min(sa, sb), hi = std::max(sa, sb);
-      auto it = std::upper_bound(
-        line->begin(), line->end(), lo, [](float s, const OnLine & o) {return s < o.s;});
-      for (; it != line->end() && it->s < hi; ++it) {
-        const float t = (it->s - sa) / (sb - sa);
-        if (std::abs(P[it->v].z() - (pa.z() + t * (pb.z() - pa.z()))) > ztol) {continue;}
-        out.push_back(it->v);
+      if (!e.line || e.sa == e.sb) {continue;}
+      tri_edge[t][k] = static_cast<int>(ledges.size());
+      ledges.push_back(e);
+    }
+  }
+  // The chains: the edges on each line, joined at their shared vertices (a vertex at a crossing
+  // of two lines is on two: keyed by the line too)
+  std::unordered_map<std::uint64_t, std::uint32_t> on_line;   // (line, vertex) -> index
+  auto line_vertex = [](std::uint64_t lid, std::uint32_t v) {
+      return (lid << 32) | static_cast<std::uint64_t>(v);
+    };
+  std::vector<std::uint32_t> chain;
+  auto index_of = [&](std::uint64_t lid, std::uint32_t v) {
+      auto [it, fresh] = on_line.try_emplace(line_vertex(lid, v), 0u);
+      if (fresh) {
+        it->second = static_cast<std::uint32_t>(chain.size());
+        chain.push_back(it->second);
       }
-      if (sa > sb) {std::reverse(out.begin(), out.end());}   // from a to b
+      return it->second;
+    };
+  std::function<std::uint32_t(std::uint32_t)> find = [&](std::uint32_t x) {
+      while (chain[x] != x) {
+        chain[x] = chain[chain[x]];
+        x = chain[x];
+      }
+      return x;
+    };
+  for (const auto & e : ledges) {
+    const auto ia = index_of(e.lid, e.a), ib = index_of(e.lid, e.b);
+    chain[find(ia)] = find(ib);
+  }
+  auto chain_of = [&](std::uint64_t lid, std::uint32_t v) -> std::int64_t {
+      const auto it = on_line.find(line_vertex(lid, v));
+      return it == on_line.end() ? -1 : static_cast<std::int64_t>(find(it->second));
+    };
+  // For each vertex and side of a line, the edge of its chain on that side that covers it
+  struct Best
+  {
+    float dz;
+    int edge;   // -1: an edge on that side ends at the vertex, nothing to do
+  };
+  std::unordered_map<std::uint64_t, Best> best;
+  auto best_key = [](const LineEdge & e, std::uint32_t v) {
+      return (e.lid << 33) | (static_cast<std::uint64_t>(v) << 1) |
+             static_cast<std::uint64_t>(e.side);
+    };
+  auto offer = [&](std::uint64_t k, float dz, int edge) {
+      auto [it, fresh] = best.try_emplace(k, Best{dz, edge});
+      if (!fresh && dz < it->second.dz) {it->second = Best{dz, edge};}
+    };
+  for (std::size_t i = 0; i < ledges.size(); ++i) {
+    const auto & e = ledges[i];
+    offer(best_key(e, e.a), 0.0f, -1);
+    offer(best_key(e, e.b), 0.0f, -1);
+    const std::int64_t own = chain_of(e.lid, e.a);
+    const float lo = std::min(e.sa, e.sb), hi = std::max(e.sa, e.sb);
+    auto it = std::upper_bound(
+      e.line->begin(), e.line->end(), lo, [](float s, const OnLine & o) {return s < o.s;});
+    for (; it != e.line->end() && it->s < hi; ++it) {
+      const float t = (it->s - e.sa) / (e.sb - e.sa);
+      const float dz = std::abs(P[it->v].z() - (P[e.a].z() + t * (P[e.b].z() - P[e.a].z())));
+      if (dz > kSameFloor && chain_of(e.lid, it->v) != own) {continue;}
+      offer(best_key(e, it->v), dz, static_cast<int>(i));
+    }
+  }
+  std::vector<std::vector<std::uint32_t>> inserted(ledges.size());
+  for (std::size_t i = 0; i < ledges.size(); ++i) {
+    const auto & e = ledges[i];
+    const float lo = std::min(e.sa, e.sb), hi = std::max(e.sa, e.sb);
+    auto it = std::upper_bound(
+      e.line->begin(), e.line->end(), lo, [](float s, const OnLine & o) {return s < o.s;});
+    for (; it != e.line->end() && it->s < hi; ++it) {
+      const auto b = best.find(best_key(e, it->v));
+      if (b != best.end() && b->second.edge == static_cast<int>(i)) {inserted[i].push_back(it->v);}
+    }
+    if (e.sa > e.sb) {std::reverse(inserted[i].begin(), inserted[i].end());}   // from a to b
+  }
+  auto between = [&](std::size_t t, int k, std::vector<std::uint32_t> & out) {
+      out.clear();
+      if (tri_edge[t][k] >= 0) {out = inserted[tri_edge[t][k]];}
     };
 
   std::vector<std::array<std::uint32_t, 3>> out_tris;
@@ -640,7 +734,7 @@ NavMap TiledLod::stitch(const std::vector<std::uint32_t> & nodes, bool accels) c
     const auto & g = tris[t];
     int edges_with = 0, which = -1;
     for (int k = 0; k < 3; ++k) {
-      between(g[k], g[(k + 1) % 3], ins[k]);
+      between(t, k, ins[k]);
       if (!ins[k].empty()) {++edges_with; which = k;}
     }
     if (edges_with == 0) {
