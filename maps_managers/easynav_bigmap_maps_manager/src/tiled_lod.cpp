@@ -144,6 +144,32 @@ NavMap subset(
   return out;
 }
 
+// What a tile keeps of a NavMap: its geometry, surfaces, layers and colours. Not the
+// accelerations (BVH, adjacency, locate grids), which only the assembled map needs: with tens of
+// thousands of tiles they would be most of the memory
+NavMap slim(NavMap && m)
+{
+  NavMap out;
+  out.positions = std::move(m.positions);
+  out.positions.x.shrink_to_fit();
+  out.positions.y.shrink_to_fit();
+  out.positions.z.shrink_to_fit();
+  out.colors = std::move(m.colors);
+  out.navcels.resize(m.navcels.size());
+  for (std::size_t i = 0; i < m.navcels.size(); ++i) {
+    for (int k = 0; k < 3; ++k) {
+      out.navcels[i].v[k] = m.navcels[i].v[k];
+    }
+  }
+  for (auto & s : m.surfaces) {
+    out.create_surface(s.frame_id);
+    out.surfaces.back().navcels = std::move(s.navcels);
+  }
+  out.layers = std::move(m.layers);
+  out.layer_meta = std::move(m.layer_meta);
+  return out;
+}
+
 // Exact position of a vertex, as a hash key
 struct Key
 {
@@ -191,7 +217,7 @@ int TiledLod::level_at(double d) const
   return k;
 }
 
-TiledLod::Stats TiledLod::build(const NavMap & map, const LodParams & params, unsigned threads)
+TiledLod::Stats TiledLod::build(NavMap map, const LodParams & params, unsigned threads)
 {
   const auto t0 = std::chrono::steady_clock::now();
   p_ = params;
@@ -230,7 +256,7 @@ TiledLod::Stats TiledLod::build(const NavMap & map, const LodParams & params, un
       lines.push_back(static_cast<float>(origin[a] + i * tile));
     }
   }
-  NavMap cut = map;
+  NavMap cut = std::move(map);   // cut in place
   ::navmap::cut_along_lines(
     cut, {{xs_.begin() + 1, xs_.end() - 1}, {ys_.begin() + 1, ys_.end() - 1}});
 
@@ -243,16 +269,25 @@ TiledLod::Stats TiledLod::build(const NavMap & map, const LodParams & params, un
     squares[{i, j}].push_back(c);
   }
   const auto surf = surface_of(cut);
-  for (const auto & [ij, cels] : squares) {
+  std::vector<std::vector<NavCelId>> cels_of;
+  for (auto & [ij, cels] : squares) {
     Node node;
     node.level = 0;
     node.lines = {ij.first, ij.first + 1, ij.second, ij.second + 1};
-    node.mesh = subset(cut, cels, surf);
     nodes_.push_back(std::move(node));
+    cels_of.push_back(std::move(cels));
   }
+  squares.clear();
   st.tiles = nodes_.size();
+  // each tile taken from the cut map just before it is simplified: the unsimplified tiles are
+  // never all in memory at once
+  parallel_for(
+    nodes_.size(), threads, [this, &cut, &cels_of, &surf](std::size_t i) {
+      nodes_[i].mesh = subset(cut, cels_of[i], surf);
+      cels_of[i] = {};
+      simplify_node(nodes_[i]);
+    });
   cut = NavMap();
-  parallel_for(nodes_.size(), threads, [this](std::size_t i) {simplify_node(nodes_[i]);});
 
   // Each level from the one below: four tiles put together, simplified with twice the error
   std::size_t level_begin = 0;
@@ -342,6 +377,7 @@ void TiledLod::simplify_node(Node & n) const
   sp.max_edge_length = static_cast<float>(p_.cell_max);
   sp.keep_vertices = border_locks(n);
   ::navmap::simplify(n.mesh, sp);
+  n.mesh = slim(std::move(n.mesh));
 }
 
 double TiledLod::distance(const Node & n, double x, double y) const

@@ -43,10 +43,15 @@ maps_manager_node:
         cost_scaling_factor: 1.5
 ```
 
-That is all it needs. Three more parameters have defaults that suit most robots:
-`obstacle_min_height` (0.1 m: points lower above the map's surface are the ground),
-`obstacle_max_height` (2.0 m: higher points do not touch the robot) and `sensor_range` (30 m, at most
-`forget_distance`).
+That is all it needs. A few more parameters have defaults that suit most robots:
+
+| Parameter | Default | |
+|---|---|---|
+| `obstacle_max_height` | 2.0 m | higher points do not touch the robot: set it to the robot's height (e.g. so that the shelves of a rack it passes under are not obstacles) |
+| `obstacle_min_height` | 0.1 m | lower points above the map's surface are the ground |
+| `obstacle_min_height_per_meter` | 0.02 | `obstacle_min_height` grows this much per metre from the robot: a slight tilt of the robot or the sensor puts the far ground above it |
+| `sensor_range` | `min_radius` | points farther from the robot are not used (at most `forget_distance`) |
+| `rebuild_period` | 0.5 s | the map is made again at most this often |
 
 The filters are those of `easynav_navmap_maps_manager`, run on the map every cycle. The inflation
 radius also sets how far around an obstacle the NavCels are fine (see below).
@@ -89,9 +94,11 @@ twice a second):
 | Detail | 30 ms | 70-190 ms |
 
 **Sensed obstacles**: the points of the perceptions within `sensor_range`, in the robot's footprint
-frame, between `obstacle_min_height` and `obstacle_max_height` above the map's surface under them.
-A point over no surface (a hole: a rack, a building) is the map's own obstacle and is left out. They
-are remembered by cells of `cell_size.min / 2` until the robot is `forget_distance` from them.
+frame, between `obstacle_min_height` (plus `obstacle_min_height_per_meter` per metre) and
+`obstacle_max_height` above the map's surface under them. A point over no surface, or within
+`cell_size.min` of a place with none (a rack, a building, seen from the side), is the map's own
+obstacle and is left out. They are remembered by cells of `cell_size.min / 2` until the robot is
+`forget_distance` from them.
 
 ## Topics
 

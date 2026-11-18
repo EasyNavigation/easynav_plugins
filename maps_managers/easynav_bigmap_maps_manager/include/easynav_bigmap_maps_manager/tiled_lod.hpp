@@ -63,8 +63,10 @@ public:
     double seconds{0.0};
   };
 
-  /// Cuts @p map into tiles and simplifies every level of them (on @p threads threads).
-  Stats build(const ::navmap::NavMap & map, const LodParams & params, unsigned threads = 1);
+  /// Cuts @p map into tiles and simplifies every level of them (on @p threads threads). The map
+  /// is taken by value: pass it with std::move when it is no longer needed, so that it is cut in
+  /// place instead of copied (a large map would be in memory twice).
+  Stats build(::navmap::NavMap map, const LodParams & params, unsigned threads = 1);
 
   bool empty() const {return nodes_.empty();}
   int levels() const {return top_ + 1;}
