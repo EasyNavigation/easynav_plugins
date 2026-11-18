@@ -79,6 +79,38 @@ std::string town_file()
   return path;
 }
 
+// 60 x 20 m at 0.5 m: flat up to x = 20, a ramp down to x = 40 (1 in 4: 14 deg), flat again
+float ramp_z(float x) {return x < 20.0f ? 0.0f : (x > 40.0f ? -5.0f : -0.25f * (x - 20.0f));}
+
+std::string ramp_file()
+{
+  NavMap nm;
+  const auto s = nm.create_surface("map");
+  const float res = 0.5f;
+  const int nx = 120, ny = 40;
+  for (int j = 0; j <= ny; ++j) {
+    for (int i = 0; i <= nx; ++i) {
+      nm.positions.x.push_back(i * res);
+      nm.positions.y.push_back(j * res - 10.0f);
+      nm.positions.z.push_back(ramp_z(i * res));
+    }
+  }
+  for (int j = 0; j < ny; ++j) {
+    for (int i = 0; i < nx; ++i) {
+      const uint32_t a = j * (nx + 1) + i, b = a + 1, c = a + nx + 1, d = c + 1;
+      nm.add_navcel_to_surface(s, nm.add_navcel(a, b, d));
+      nm.add_navcel_to_surface(s, nm.add_navcel(a, d, c));
+    }
+  }
+  const auto path = (std::filesystem::temp_directory_path() /
+    ("bigmap_plugin_ramp_" + std::to_string(::getpid()) + ".navmap")).string();
+  std::error_code ec;
+  if (!navmap_ros::io::save_to_file(nm, path, {}, &ec)) {
+    throw std::runtime_error("cannot write " + path + ": " + ec.message());
+  }
+  return path;
+}
+
 float longest_edge(const NavMap & nm, NavCelId c)
 {
   float l = 0.0f;
@@ -98,7 +130,6 @@ protected:
     if (!rclcpp::ok()) {rclcpp::init(0, nullptr);}
     easynav::RTTFBuffer::getInstance()->clear();
     map_file_ = town_file();
-    set("navmap_path_file", map_file_);
     set("cell_size.min", 0.5);
     set("cell_size.max", 4.0);
     set("min_radius", 10.0);
@@ -121,6 +152,7 @@ protected:
   std::shared_ptr<BigMapMapsManager> make()
   {
     static int count = 0;
+    overrides_.emplace_back("bigmap.navmap_path_file", rclcpp::ParameterValue(map_file_));
     node_ = rclcpp_lifecycle::LifecycleNode::make_shared(
       "bigmap_plugin_test_" + std::to_string(count++),
       rclcpp::NodeOptions().parameter_overrides(overrides_));
@@ -129,23 +161,30 @@ protected:
     return p;
   }
 
-  void robot_at(double x, double y)
+  void robot_at(double x, double y, double z = 0.0)
   {
     nav_msgs::msg::Odometry o;
     o.header.frame_id = "map";
     o.pose.pose.position.x = x;
     o.pose.pose.position.y = y;
+    o.pose.pose.position.z = z;
     o.pose.pose.orientation.w = 1.0;   // facing +x
     nav_state_.set("robot_pose", o);
   }
 
   // What the robot sees in its footprint frame: a box 0.6 x 0.6 x 1 m 3 m ahead, or the ground
+  // (with ground_ahead, the ground from 1 to 6 m ahead, 2 m wide, at height 0 in that frame)
   void see(bool box)
   {
     easynav::PointPerception p;
     p.frame_id = easynav::RTTFBuffer::getInstance()->get_tf_info().robot_footprint_frame;
     p.stamp = node_->now();
     p.valid = true;
+    if (ground_ahead_) {
+      for (float x = 1.0f; x <= 6.0f; x += 0.1f) {
+        for (float y = -1.0f; y <= 1.0f; y += 0.1f) {p.data.push_back(pcl::PointXYZ(x, y, 0.0f));}
+      }
+    }
     if (box) {
       for (float x = 2.7f; x <= 3.3f; x += 0.05f) {
         for (float y = -0.3f; y <= 0.3f; y += 0.05f) {
@@ -181,6 +220,7 @@ protected:
   }
 
   std::string map_file_;
+  bool ground_ahead_ = false;
   std::vector<rclcpp::Parameter> overrides_;
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
   easynav::NavState nav_state_;
@@ -254,6 +294,23 @@ TEST_F(BigMapPluginTest, ASensedObstacleIsAddedFineAndForgottenFarAway)
   run(*p, false, 0.7);
   ASSERT_TRUE(at(13.0, 20.0, c));
   EXPECT_EQ(map().layer_get<std::uint8_t>("obstacles", c), 0);
+}
+
+TEST_F(BigMapPluginTest, GoingDownARampTheRampAheadIsNotAnObstacle)
+{
+  // On a ramp the robot is tilted like it, and its footprint frame (flat in TF) too: the ramp
+  // ahead is at height 0 in it, below the robot's own ground height
+  std::filesystem::remove(map_file_);
+  map_file_ = ramp_file();
+  auto p = make();
+  ground_ahead_ = true;
+  robot_at(25.0, 0.0, ramp_z(25.0f));   // on the ramp, facing down it (+x)
+  run(*p, false, 0.8);
+  EXPECT_EQ(p->sensed().size(), 0u);
+  // An obstacle on the ramp is still seen
+  robot_at(25.0, 0.0, ramp_z(25.0f) + 0.01);
+  run(*p, true, 0.8);
+  EXPECT_GT(p->sensed().size(), 0u);
 }
 
 TEST_F(BigMapPluginTest, ThePublishedMapHasTheFiltersLayersAndTheLevelsAreDrawn)

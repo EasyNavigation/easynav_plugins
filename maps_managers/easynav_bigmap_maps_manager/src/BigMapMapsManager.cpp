@@ -175,18 +175,34 @@ bool BigMapMapsManager::sense(
       get_plugin_name().c_str(), e.what());
     return false;
   }
-  // The ground under the robot, on the map
+  // The ground under the robot, on the map, and its tilt: the robot stands on it, so on a ramp its
+  // footprint frame (flat in TF: the odometry is 2D) is tilted like the ramp, and the ramp ahead
+  // is at height 0 in it (going down a ramp, it would otherwise be taken for an obstacle above
+  // the ramp's lower part)
   std::size_t s;
   ::navmap::NavCelId cid;
   Eigen::Vector3f bary, hit;
-  float ground = static_cast<float>(robot.z());
-  if (map_.locate_navcel(robot.cast<float>(), s, cid, bary, &hit)) {ground = hit.z();}
-  const float c = static_cast<float>(std::cos(yaw)), sn = static_cast<float>(std::sin(yaw));
+  Eigen::Vector3f ground(
+    static_cast<float>(robot.x()), static_cast<float>(robot.y()), static_cast<float>(robot.z()));
+  Eigen::Quaternionf tilt = Eigen::Quaternionf::Identity();
+  if (map_.locate_navcel(robot.cast<float>(), s, cid, bary, &hit)) {
+    ground.z() = hit.z();
+    const auto & v = map_.navcels[cid].v;
+    const Eigen::Vector3f a = map_.positions.at(v[0]), b = map_.positions.at(v[1]),
+      d = map_.positions.at(v[2]);
+    Eigen::Vector3f n = (b - a).cross(d - a);
+    if (n.norm() > 1e-9f) {
+      n.normalize();
+      if (n.z() < 0.0f) {n = -n;}
+      tilt = Eigen::Quaternionf::FromTwoVectors(Eigen::Vector3f::UnitZ(), n);
+    }
+  }
+  const Eigen::Quaternionf heading(
+    Eigen::AngleAxisf(static_cast<float>(yaw), Eigen::Vector3f::UnitZ()));
+  const Eigen::Quaternionf to_map = tilt * heading;
   bool added = false;
   for (const auto & pt : cloud.points) {
-    const Eigen::Vector3f q(
-      static_cast<float>(robot.x()) + c * pt.x - sn * pt.y,
-      static_cast<float>(robot.y()) + sn * pt.x + c * pt.y, ground + pt.z);
+    const Eigen::Vector3f q = ground + to_map * Eigen::Vector3f(pt.x, pt.y, pt.z);
     // An obstacle is above the map's surface: over no surface (a hole, a building) it is
     // the map's own
     if (!map_.locate_navcel(q, s, cid, bary, &hit)) {continue;}
@@ -367,7 +383,9 @@ void BigMapMapsManager::update(::easynav::NavState & nav_state)
   for (const auto & filter : filters_) {
     filter->set_map_resolution(static_cast<float>(lod_.cell(0)));
     filter->update(nav_state);
-    if (subscribers == 0 || !filter->is_adding_layer()) {continue;}
+    // A map not published yet carries its layers itself: an update now would be of a geometry
+    // the subscribers do not have yet
+    if (subscribers == 0 || publish_pending_ || !filter->is_adding_layer()) {continue;}
     const auto & nm = nav_state.get<::navmap::NavMap>("map.navmap");
     const auto layer = nm.layers.get(filter->get_layer_name());
     if (!layer || (!layer->has_changes() && !new_subscriber)) {continue;}
