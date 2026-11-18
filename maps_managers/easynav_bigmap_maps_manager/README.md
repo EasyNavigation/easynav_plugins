@@ -5,20 +5,24 @@ fine around the robot and coarse far from it, and the obstacles the sensors see 
 robot and forgotten when it is far from them.
 
 Planning on it, against planning on the full map: 2 x 2 km around the Puerta del Sol, Madrid
-(ground from the IGN, buildings from the Catastro, 13.8 M NavCels at 0.5 m), 30 routes of 200 to
-1500 m, the same A*, the robot replanning every 30 m on the map made around it:
+(ground from the IGN, buildings from the Catastro, 13.8 M NavCels at 0.5 m), 30 routes of 230 to
+1481 m, the same A* and safety band on every map, the robot replanning every 30 m on the map made
+around it (the `city_routes` campaign of
+[bigmap_experiments](https://github.com/jmguerreroh/bigmap_experiments)):
 
 | Map | NavCels | MB | Success | Through a building | Length | A* per plan | NavCels expanded |
 |---|---|---|---|---|---|---|---|
-| full, 0.5 m | 13,765,636 | 321 | 30/30 | 0 | 1.000 | 620 ms | 1,166,402 |
-| grid 1 m | 3,275,294 | 77 | 21/30 | 0 | 1.006 | 90 ms | 190,060 |
-| grid 2 m | 744,768 | 18 | 28/30 | 0 | 1.008 | 25 ms | 71,510 |
-| grid 4 m | 156,118 | 3.9 | 13/30 | 0 | 1.354 | 10 ms | 24,202 |
-| bigmap (0.8 to 8 m, 20 to 300 m) | ~135,000 | 3.5 | 30/30 | 0 | 1.007 | 6.8 ms | 8,528 |
+| full, 0.5 m | 13,765,636 | 321 | 30/30 | 0 | 1.000 | 351 ms | 1,166,402 |
+| grid 1 m | 3,275,294 | 77 | 21/30 | 0 | 1.006 | 58 ms | 190,060 |
+| grid 2 m | 744,768 | 18 | 28/30 | 0 | 1.008 | 16 ms | 71,510 |
+| grid 4 m | 156,118 | 3.9 | 13/30 | 0 | 1.354 | 6.7 ms | 24,202 |
+| full map simplified once (0.4 m) | 393,251 | 10.3 | 30/30 | 0 | 1.022 | 14 ms | 35,082 |
+| bigmap (0.8 to 8 m, 20 to 300 m) | ~135,000 | 3.5 | 30/30 | 0 | 1.007 | 5.6 ms | 8,528 |
 
-The same paths as on the full map, 90 times faster, expanding 137 times fewer NavCels, on a map
-92 times smaller, made again in ~0.3 s every 30 m. Coarser fixed grids close streets (1 m and 4 m
-fail routes) or go around them (4 m: 35 % longer).
+Paths within 1 % of those on the full map, planned 63 times faster, expanding 137 times fewer
+NavCels, on a map 92 times smaller, made again (with the planner's graph) in 226 ms every 30 m.
+Coarser fixed grids close streets (1, 2 and 4 m fail routes) or go around them (4 m: 35 % longer);
+the map simplified once as a whole finds every route, 2.5 times slower to plan on.
 
 ## Configuration
 
@@ -58,8 +62,8 @@ radius also sets how far around an obstacle the NavCels are fine (see below).
 
 ## How
 
-**Once, at start** (seconds: 12 s for the 2.5 M NavCels of the warehouse, 40 s for the 13.8 M of
-Madrid, on every core):
+**Once, at start** (seconds, on every core: 9 s for the 2.5 M NavCels of the warehouse, 45 s for the
+14 M of 2 x 2 km of Madrid, with cells of 0.5 to 16 m in the benchmark of bigmap_experiments):
 
 1. The NavMap is cut along a grid (`navmap::cut_along_lines`) into square tiles of `min_radius / 2`.
 2. Each tile is simplified (`navmap::simplify`) within `cell_size.min / 2`, no edge longer than
