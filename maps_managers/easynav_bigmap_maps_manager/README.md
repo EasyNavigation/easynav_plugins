@@ -56,6 +56,9 @@ That is all it needs. A few more parameters have defaults that suit most robots:
 | `obstacle_min_height_per_meter` | 0.02 | `obstacle_min_height` grows this much per metre from the robot: a slight tilt of the robot or the sensor puts the far ground above it |
 | `sensor_range` | `min_radius` | points farther from the robot are not used (at most `forget_distance`) |
 | `rebuild_period` | 0.5 s | the map is made again at most this often |
+| `memory.clearing` | true | the rays from the robot to what it sees clear the sensed obstacles they cross (one that moves away stops blocking) |
+| `memory.p_hit`, `memory.p_miss` | 0.7, 0.4 | probability that a cell is an obstacle after a point on it, and after a ray through it (as OctoMap): how many sightings mark it, and clear it |
+| `memory.decay_time` | 0 s | a sensed obstacle not seen again for this long is forgotten (0: only `forget_distance` and the clearing forget it) |
 
 The filters are those of `easynav_navmap_maps_manager`, run on the map every cycle. The inflation
 radius also sets how far around an obstacle the NavCels are fine (see below).
@@ -101,8 +104,12 @@ twice a second):
 frame, between `obstacle_min_height` (plus `obstacle_min_height_per_meter` per metre) and
 `obstacle_max_height` above the map's surface under them. A point over no surface, or within
 `cell_size.min` of a place with none (a rack, a building, seen from the side), is the map's own
-obstacle and is left out. They are remembered by cells of `cell_size.min / 2` until the robot is
-`forget_distance` from them.
+obstacle and is left out. They are remembered by cells of `cell_size.min / 2` as evidence in
+log-odds, as the NavMap maps manager's obstacle memory: a point on a cell is a hit, a ray from the
+robot through it (to the ground or to an obstacle beyond) a miss, so an obstacle that moves away is
+cleared once the robot sees through where it was. A cell is an obstacle while it is more likely
+occupied than not; it is forgotten when the robot is `forget_distance` from it (or, with
+`memory.decay_time`, when it is not seen again for that long).
 
 ## Topics
 
@@ -121,4 +128,4 @@ It is built on NavMap's tools: `simplify` (with `keep_vertices`), `cut_along_lin
 `colcon test --packages-select easynav_bigmap_maps_manager`: the engine (`test_tiled_lod`: levels,
 no cracks, holes and narrow passages kept far away, layers) and the plugin as EasyNav runs it
 (`test_bigmap_plugin`: fine at the borders near the robot and coarse far, the map follows the robot,
-a sensed obstacle is added fine, inflated and forgotten far away).
+a sensed obstacle is added fine, inflated and forgotten far away, and cleared when it moves away).

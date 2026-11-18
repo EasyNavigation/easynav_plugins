@@ -92,6 +92,19 @@ void BigMapMapsManager::on_initialize()
   if (sensor_range_ <= 0.0) {sensor_range_ = lp.min_radius;}
   sensor_range_ = std::min(sensor_range_, forget_distance_);
   rebuild_period_ = param("rebuild_period", rebuild_period_);
+  // The memory of sensed obstacles, as the NavMap maps manager's obstacle filter
+  MemoryParams mp;
+  mp.clearing = param("memory.clearing", mp.clearing);
+  mp.decay_time = std::max(0.0, param("memory.decay_time", mp.decay_time));
+  mp.p_hit = param("memory.p_hit", mp.p_hit);
+  mp.p_miss = param("memory.p_miss", mp.p_miss);
+  if (!(mp.p_hit > 0.5 && mp.p_hit < 1.0) || !(mp.p_miss > 0.0 && mp.p_miss < 0.5)) {
+    RCLCPP_WARN(
+      node->get_logger(), "[%s] memory.p_hit must be in (0.5, 1) and memory.p_miss in (0, 0.5): "
+      "0.7 and 0.4", name.c_str());
+    mp.p_hit = 0.7;
+    mp.p_miss = 0.4;
+  }
 
   // Built once, on every core: a startup step, not part of the cycle
   const std::size_t source_navcels = source.navcels.size();
@@ -113,7 +126,7 @@ void BigMapMapsManager::on_initialize()
     node->get_logger(), "[%s] %s: %zu NavCels, %zu tiles, in %.1f s. Levels: %s", name.c_str(),
     path.c_str(), source_navcels, st.tiles, st.seconds, levels.c_str());
   // As fine as the points are thinned: every NavCel an obstacle covers gets one
-  sensed_ = SensedObstacles(lod_.cell(0) / 2.0);
+  sensed_ = SensedObstacles(lod_.cell(0) / 2.0, mp);
   known_ = static_cast<float>(lod_.cell(0));
 
   // Filters, as in the NavMap maps manager
@@ -200,7 +213,11 @@ bool BigMapMapsManager::sense(
   const Eigen::Quaternionf heading(
     Eigen::AngleAxisf(static_cast<float>(yaw), Eigen::Vector3f::UnitZ()));
   const Eigen::Quaternionf to_map = tilt * heading;
-  bool added = false;
+  // The evidence of this cycle: the obstacles (on the ground under them), and a ray from the
+  // robot to every point on the ground or on an obstacle (what it crosses is free)
+  std::vector<Eigen::Vector3f> hits;
+  std::vector<SensedObstacles::Ray> rays;
+  rays.reserve(cloud.points.size());
   for (const auto & pt : cloud.points) {
     const Eigen::Vector3f q = ground + to_map * Eigen::Vector3f(pt.x, pt.y, pt.z);
     // An obstacle is above the map's surface: over no surface (a hole, a building) it is
@@ -210,7 +227,12 @@ bool BigMapMapsManager::sense(
     // far ground above it
     const float h = q.z() - hit.z();
     const double range = std::hypot(pt.x, pt.y);
-    if (h < min_height_ + min_height_per_m_ * range || h > max_height_) {continue;}
+    if (h > max_height_) {continue;}   // over the robot: neither an obstacle nor free ground
+    if (h < min_height_ + min_height_per_m_ * range) {
+      rays.push_back({hit, true});   // the ground: free up to it, and it too
+      continue;
+    }
+    rays.push_back({hit, false});
     // Next to a place with no ground (within cell_min: what the map and the localization are
     // sure of) it is the map's own obstacle, seen from the side
     bool known = false;
@@ -222,9 +244,9 @@ bool BigMapMapsManager::sense(
       known = !map_.locate_navcel(n, s, cid, nb, &nh);
     }
     if (known) {continue;}
-    added |= sensed_.add(hit);
+    hits.push_back(hit);
   }
-  return added;
+  return sensed_.update(hits, ground, rays, get_node()->now().seconds());
 }
 
 void BigMapMapsManager::rebuild(

@@ -296,6 +296,47 @@ TEST_F(BigMapPluginTest, ASensedObstacleIsAddedFineAndForgottenFarAway)
   EXPECT_EQ(map().layer_get<std::uint8_t>("obstacles", c), 0);
 }
 
+TEST_F(BigMapPluginTest, AnObstacleThatMovesAwayIsCleared)
+{
+  auto p = make();
+  robot_at(10.0, 20.0);   // facing +x along the street: the box at (13, 20)
+  run(*p, true, 0.8);
+  ASSERT_GT(p->sensed().size(), 0u);
+  NavCelId c;
+  ASSERT_TRUE(at(13.0, 20.0, c));
+  ASSERT_EQ(map().layer_get<std::uint8_t>("obstacles", c), navmap::LETHAL_OBSTACLE);
+  // It goes away: the robot sees the ground where it was (rays through its cells)
+  ground_ahead_ = true;
+  run(*p, false, 0.8);
+  EXPECT_EQ(p->sensed().size(), 0u);
+  ASSERT_TRUE(at(13.0, 20.0, c));
+  EXPECT_NE(map().layer_get<std::uint8_t>("obstacles", c), navmap::LETHAL_OBSTACLE);
+}
+
+TEST_F(BigMapPluginTest, WithoutClearingAnObstacleIsRemembered)
+{
+  set("memory.clearing", false);
+  auto p = make();
+  robot_at(10.0, 20.0);
+  run(*p, true, 0.8);
+  ASSERT_GT(p->sensed().size(), 0u);
+  ground_ahead_ = true;
+  run(*p, false, 0.8);
+  EXPECT_GT(p->sensed().size(), 0u) << "only the distance forgets it";
+}
+
+TEST_F(BigMapPluginTest, AnObstacleNotSeenAgainDecays)
+{
+  set("memory.decay_time", 0.3);
+  auto p = make();
+  robot_at(10.0, 20.0);
+  run(*p, true, 0.5);
+  ASSERT_GT(p->sensed().size(), 0u);
+  // Out of sight (the sensor sees only the ground at its feet): forgotten after 0.3 s
+  run(*p, false, 0.8);
+  EXPECT_EQ(p->sensed().size(), 0u);
+}
+
 TEST_F(BigMapPluginTest, GoingDownARampTheRampAheadIsNotAnObstacle)
 {
   // On a ramp the robot is tilted like it, and its footprint frame (flat in TF) too: the ramp
