@@ -205,12 +205,16 @@ NavMapMapsManager::on_initialize()
     navmap_pub_->publish(navmap_msg_);
   }
 
-  if (!package_name.empty() && !navmap_path_file.empty()) {
-    try {
-      const std::string pkgpath = easynav::get_package_share_path(package_name);
-      map_path_ = pkgpath + std::string("/") + navmap_path_file;
-    } catch (ament_index_cpp::PackageNotFoundError & ex) {
-      throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
+  if (!navmap_path_file.empty()) {
+    // relative to the package's share directory, or as it is without a package (e.g. absolute)
+    map_path_ = navmap_path_file;
+    if (!package_name.empty()) {
+      try {
+        const std::string pkgpath = easynav::get_package_share_path(package_name);
+        map_path_ = pkgpath + std::string("/") + navmap_path_file;
+      } catch (ament_index_cpp::PackageNotFoundError & ex) {
+        throw std::runtime_error("Package " + package_name + " not found. Error: " + ex.what());
+      }
     }
 
     if (navmap_ros::io::load_from_file(map_path_, navmap_)) {
