@@ -196,9 +196,10 @@ bool BigMapMapsManager::sense(
     return false;
   }
   // The ground under the robot, on the map, and its tilt: the robot stands on it, so on a ramp the
-  // sensor is tilted like the ramp while TF is flat (the odometry is 2D), and the ramp ahead
-  // comes at the robot's own height (going down a ramp, it would otherwise be taken for an
-  // obstacle above the ramp's lower part): each point is turned about the robot by the tilt
+  // sensor is tilted like the ramp. With a flat TF (2D odometry) the ramp ahead comes at the
+  // robot's own height (going down a ramp, it would otherwise be taken for an obstacle above the
+  // ramp's lower part): each point is turned about the robot by what TF lacks of that tilt
+  // (nothing, if the robot's pose in TF has it already, e.g. a 3D localization)
   std::size_t s;
   ::navmap::NavCelId cid;
   Eigen::Vector3f bary, hit;
@@ -214,7 +215,18 @@ bool BigMapMapsManager::sense(
     if (n.norm() > 1e-9f) {
       n.normalize();
       if (n.z() < 0.0f) {n = -n;}
-      tilt = Eigen::Quaternionf::FromTwoVectors(Eigen::Vector3f::UnitZ(), n);
+      Eigen::Vector3f up = Eigen::Vector3f::UnitZ();   // the robot's up in TF
+      try {
+        const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
+        const auto t = RTTFBuffer::getInstance()->lookupTransform(
+          tf_info.map_frame, tf_info.robot_footprint_frame, tf2::TimePointZero);
+        const auto & r = t.transform.rotation;
+        up = Eigen::Quaternionf(
+          static_cast<float>(r.w), static_cast<float>(r.x), static_cast<float>(r.y),
+          static_cast<float>(r.z)) * Eigen::Vector3f::UnitZ();
+      } catch (const std::exception &) {
+      }
+      tilt = Eigen::Quaternionf::FromTwoVectors(up, n);
     }
   }
   (void)yaw;   // the heading comes with each perception's TF
