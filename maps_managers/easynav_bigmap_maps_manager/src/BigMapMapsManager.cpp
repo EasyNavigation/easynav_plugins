@@ -177,13 +177,15 @@ bool BigMapMapsManager::sense(
   pcl::PointCloud<pcl::PointXYZ> cloud;
   try {
     // In the map frame, each perception with the robot's pose when it was taken (TF at its
-    // stamp): with the pose of now, a cloud taken while the robot turns lands rotated, and walls
-    // seen a fraction of a second ago fall on free ground as obstacles. Cut to the box around the
-    // robot first (heights from its ground, the TF being flat), then thinned.
+    // stamp, exact_time): with the latest pose, a cloud taken while the robot turns lands rotated
+    // (a cloud may be up to the sensors' forget_time old, and is used in every cycle until the
+    // next one arrives), and walls seen a fraction of a second ago fall on free ground as
+    // obstacles. Cut to the box around the robot first (heights from its ground, the TF being
+    // flat), then thinned.
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
     const double r = sensor_range_;
     PointPerceptionsOpsView view(perceptions);
-    view.fuse(tf_info.map_frame);
+    view.fuse(tf_info.map_frame, true);
     view.filter(
       {robot.x() - r, robot.y() - r, robot.z() + min_height_ - 1.0},
       {robot.x() + r, robot.y() + r, robot.z() + max_height_ + 1.0}, false);
