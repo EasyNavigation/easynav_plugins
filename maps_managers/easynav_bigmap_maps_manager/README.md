@@ -117,6 +117,7 @@ occupied than not; it is forgotten when the robot is `forget_distance` from it (
 |---|---|---|
 | `<node>/<plugin>/map` | `navmap_ros_interfaces/msg/NavMap` | the map, when it changes (at most once a second) |
 | `<node>/<plugin>/map_updates` | `navmap_ros_interfaces/msg/NavMapLayer` | what the filters change, as the NavMap maps manager |
+| `<node>/<plugin>/stats` | `std_msgs/msg/Float64MultiArray` | every cycle, while someone listens: time (s), rebuilds so far, the last rebuild's select, assemble and detail (ms) and NavCels, this cycle's sensing and filters (ms), sensed obstacles |
 
 ## From NavMap
 

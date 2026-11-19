@@ -19,6 +19,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <filesystem>
 #if defined(__GLIBC__)
 #include <malloc.h>
@@ -153,6 +154,8 @@ void BigMapMapsManager::on_initialize()
     base + "/map_updates", rclcpp::QoS(100));
   markers_pub_ = node->create_publisher<visualization_msgs::msg::MarkerArray>(
     base + "/markers", rclcpp::QoS(1).transient_local().reliable());
+  stats_pub_ = node->create_publisher<std_msgs::msg::Float64MultiArray>(
+    base + "/stats", rclcpp::QoS(10));
 }
 
 bool BigMapMapsManager::robot_pose(
@@ -173,13 +176,17 @@ bool BigMapMapsManager::sense(
   if (perceptions.empty() || !has_map_) {return false;}
   pcl::PointCloud<pcl::PointXYZ> cloud;
   try {
-    // In the robot's footprint frame (z: height over the ground under the robot), cut to the
-    // box around it first, then thinned
+    // In the map frame, each perception with the robot's pose when it was taken (TF at its
+    // stamp): with the pose of now, a cloud taken while the robot turns lands rotated, and walls
+    // seen a fraction of a second ago fall on free ground as obstacles. Cut to the box around the
+    // robot first (heights from its ground, the TF being flat), then thinned.
     const auto & tf_info = RTTFBuffer::getInstance()->get_tf_info();
     const double r = sensor_range_;
     PointPerceptionsOpsView view(perceptions);
-    view.fuse(tf_info.robot_footprint_frame);
-    view.filter({-r, -r, min_height_ - 1.0}, {r, r, max_height_ + 1.0}, false);
+    view.fuse(tf_info.map_frame);
+    view.filter(
+      {robot.x() - r, robot.y() - r, robot.z() + min_height_ - 1.0},
+      {robot.x() + r, robot.y() + r, robot.z() + max_height_ + 1.0}, false);
     view.downsample(lod_.cell(0) / 2.0);
     cloud = view.as_points();
   } catch (const std::exception & e) {
@@ -188,10 +195,10 @@ bool BigMapMapsManager::sense(
       get_plugin_name().c_str(), e.what());
     return false;
   }
-  // The ground under the robot, on the map, and its tilt: the robot stands on it, so on a ramp its
-  // footprint frame (flat in TF: the odometry is 2D) is tilted like the ramp, and the ramp ahead
-  // is at height 0 in it (going down a ramp, it would otherwise be taken for an obstacle above
-  // the ramp's lower part)
+  // The ground under the robot, on the map, and its tilt: the robot stands on it, so on a ramp the
+  // sensor is tilted like the ramp while TF is flat (the odometry is 2D), and the ramp ahead
+  // comes at the robot's own height (going down a ramp, it would otherwise be taken for an
+  // obstacle above the ramp's lower part): each point is turned about the robot by the tilt
   std::size_t s;
   ::navmap::NavCelId cid;
   Eigen::Vector3f bary, hit;
@@ -210,23 +217,23 @@ bool BigMapMapsManager::sense(
       tilt = Eigen::Quaternionf::FromTwoVectors(Eigen::Vector3f::UnitZ(), n);
     }
   }
-  const Eigen::Quaternionf heading(
-    Eigen::AngleAxisf(static_cast<float>(yaw), Eigen::Vector3f::UnitZ()));
-  const Eigen::Quaternionf to_map = tilt * heading;
+  (void)yaw;   // the heading comes with each perception's TF
+  const Eigen::Vector3f at = robot.cast<float>();
   // The evidence of this cycle: the obstacles (on the ground under them), and a ray from the
   // robot to every point on the ground or on an obstacle (what it crosses is free)
   std::vector<Eigen::Vector3f> hits;
   std::vector<SensedObstacles::Ray> rays;
   rays.reserve(cloud.points.size());
   for (const auto & pt : cloud.points) {
-    const Eigen::Vector3f q = ground + to_map * Eigen::Vector3f(pt.x, pt.y, pt.z);
+    const Eigen::Vector3f o = Eigen::Vector3f(pt.x, pt.y, pt.z) - at;   // from the robot
+    const Eigen::Vector3f q = ground + tilt * o;
     // An obstacle is above the map's surface: over no surface (a hole, a building) it is
     // the map's own
     if (!map_.locate_navcel(q, s, cid, bary, &hit)) {continue;}
     // the farther, the higher a point must be: a slight tilt of the robot or the sensor puts the
     // far ground above it
     const float h = q.z() - hit.z();
-    const double range = std::hypot(pt.x, pt.y);
+    const double range = std::hypot(o.x(), o.y());
     if (h > max_height_) {continue;}   // over the robot: neither an obstacle nor free ground
     if (h < min_height_ + min_height_per_m_ * range) {
       rays.push_back({hit, true});   // the ground: free up to it, and it too
@@ -264,6 +271,11 @@ void BigMapMapsManager::rebuild(
     map_.navcels.size(), tiles.size(), sensed_.size(),
     std::chrono::duration<double, std::milli>(t1 - t0).count(),
     std::chrono::duration<double, std::milli>(t2 - t1).count());
+  stats_[0] += 1.0;
+  stats_[1] = select_ms_;
+  stats_[2] = std::chrono::duration<double, std::milli>(t1 - t0).count();
+  stats_[3] = std::chrono::duration<double, std::milli>(t2 - t1).count();
+  stats_[4] = static_cast<double>(map_.navcels.size());
   tiles_ = tiles;
   built_at_ = robot.head<2>();
   built_z_ = robot.z();
@@ -375,6 +387,8 @@ void BigMapMapsManager::update(::easynav::NavState & nav_state)
     if (has_map_) {robot << built_at_, 0.0;} else {robot.setZero();}
   }
 
+  using Ms = std::chrono::duration<double, std::milli>;
+  const auto ts = std::chrono::steady_clock::now();
   if (located) {
     sensed_changed_ |= sense(nav_state, robot, yaw);
     sensed_changed_ |= sensed_.forget_beyond(robot.x(), robot.y(), forget_distance_) > 0;
@@ -382,7 +396,10 @@ void BigMapMapsManager::update(::easynav::NavState & nav_state)
 
   // The map again when the tiles change, the robot has gone a few metres (the detail moves with
   // it) or the sensed obstacles change; not more often than rebuild_period_
+  stats_[5] = Ms(std::chrono::steady_clock::now() - ts).count();
+  const auto tsel = std::chrono::steady_clock::now();
   const auto tiles = lod_.select(robot.x(), robot.y());
+  select_ms_ = Ms(std::chrono::steady_clock::now() - tsel).count();
   const bool moved = (robot.head<2>() - built_at_).norm() > lod_.params().min_radius / 4.0;
   if (!has_map_ ||
     ((tiles != tiles_ || moved || sensed_changed_) && now - last_build_ >= rebuild_period_))
@@ -402,6 +419,7 @@ void BigMapMapsManager::update(::easynav::NavState & nav_state)
   std_msgs::msg::Header header;
   header.frame_id = RTTFBuffer::getInstance()->get_tf_info().map_frame;
   header.stamp = get_node()->now();
+  const auto tf = std::chrono::steady_clock::now();
   for (const auto & filter : filters_) {
     filter->set_map_resolution(static_cast<float>(lod_.cell(0)));
     filter->update(nav_state);
@@ -414,6 +432,18 @@ void BigMapMapsManager::update(::easynav::NavState & nav_state)
     layer_updates_pub_->publish(
       navmap_ros::to_layer_update_msg(
         nm, filter->get_layer_name(), header, new_subscriber ? 0.0f : 0.25f));
+  }
+  stats_[6] = Ms(std::chrono::steady_clock::now() - tf).count();
+  nav_state.set("map.bigmap_stats", stats_);
+  if (stats_pub_->get_subscription_count() > 0) {
+    // [time (s), rebuilds, select, assemble, detail (ms), NavCels, sensing, filters (ms),
+    //  sensed obstacles]
+    std_msgs::msg::Float64MultiArray m;
+    m.data.reserve(stats_.size() + 2);
+    m.data.push_back(now);
+    m.data.insert(m.data.end(), stats_.begin(), stats_.end());
+    m.data.push_back(static_cast<double>(sensed_.size()));
+    stats_pub_->publish(m);
   }
   if (nav_state.has("map.navmap")) {
     const auto & nm = nav_state.get<::navmap::NavMap>("map.navmap");

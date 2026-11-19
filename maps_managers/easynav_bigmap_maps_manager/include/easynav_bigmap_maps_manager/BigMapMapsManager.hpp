@@ -42,6 +42,7 @@
 #include "navmap_ros_interfaces/msg/nav_map_layer.hpp"
 #include "pluginlib/class_loader.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/float64_multi_array.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
 
 namespace easynav
@@ -85,6 +86,11 @@ private:
   double last_publish_{-1e18};           ///< s
   bool publish_pending_{false};
   bool sensed_changed_{false};
+  /// For measurements, in the NavState as "map.bigmap_stats" every cycle: rebuilds so far, and
+  /// the last rebuild's select, assemble, detail (ms) and NavCels; this cycle's sensing and
+  /// filters (ms)
+  std::vector<double> stats_ = std::vector<double>(7, 0.0);
+  double select_ms_{0.0};
 
   // Parameters
   double forget_distance_{60.0};   ///< m: the sensed obstacles farther than this are forgotten
@@ -102,6 +108,8 @@ private:
   rclcpp::Publisher<navmap_ros_interfaces::msg::NavMap>::SharedPtr map_pub_;
   rclcpp::Publisher<navmap_ros_interfaces::msg::NavMapLayer>::SharedPtr layer_updates_pub_;
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr markers_pub_;
+  /// stats_ every cycle, with the time (s) first: what a cycle costs, for measurements
+  rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr stats_pub_;
   std::size_t last_subscribers_{0};
 };
 

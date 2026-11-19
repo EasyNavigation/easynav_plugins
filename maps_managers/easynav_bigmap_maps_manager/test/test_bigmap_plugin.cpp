@@ -33,6 +33,7 @@
 #include "easynav_bigmap_maps_manager/BigMapMapsManager.hpp"
 #include "easynav_common/RTTFBuffer.hpp"
 #include "easynav_sensors/types/PointPerception.hpp"
+#include "geometry_msgs/msg/transform_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "navmap_core/Costs.hpp"
 #include "navmap_ros/navmap_io.hpp"
@@ -170,6 +171,16 @@ protected:
     o.pose.pose.position.z = z;
     o.pose.pose.orientation.w = 1.0;   // facing +x
     nav_state_.set("robot_pose", o);
+    // and in TF (the perceptions are taken to the map frame with it)
+    const auto & tf_info = easynav::RTTFBuffer::getInstance()->get_tf_info();
+    geometry_msgs::msg::TransformStamped t;
+    t.header.frame_id = tf_info.map_frame;
+    t.child_frame_id = tf_info.robot_footprint_frame;
+    t.transform.translation.x = x;
+    t.transform.translation.y = y;
+    t.transform.translation.z = z;
+    t.transform.rotation.w = 1.0;
+    easynav::RTTFBuffer::getInstance()->setTransform(t, "test", true);
   }
 
   // What the robot sees in its footprint frame: a box 0.6 x 0.6 x 1 m 3 m ahead, or the ground
