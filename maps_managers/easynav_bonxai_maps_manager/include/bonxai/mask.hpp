@@ -32,6 +32,7 @@ public:
 
   Mask(const Mask & other);
   Mask(Mask && other);
+  Mask & operator=(Mask && other);
 
   ~Mask();
 
@@ -319,6 +320,30 @@ inline Mask::Mask(Mask && other)
   } else {
     std::swap(words_, other.words_);
   }
+}
+
+inline Mask & Mask::operator=(Mask && other)
+{
+  if (this == &other) {
+    return *this;
+  }
+  if (WORD_COUNT > 8) {
+    delete[] words_;
+  }
+  SIZE = other.SIZE;
+  WORD_COUNT = other.WORD_COUNT;
+  if (WORD_COUNT <= 8) {
+    words_ = static_words_;
+    for (uint32_t i = 0; i < WORD_COUNT; ++i) {
+      words_[i] = other.words_[i];
+    }
+  } else {
+    words_ = other.words_;
+    other.words_ = other.static_words_;
+    other.SIZE = 0;
+    other.WORD_COUNT = 0;
+  }
+  return *this;
 }
 
 inline Mask::~Mask()
