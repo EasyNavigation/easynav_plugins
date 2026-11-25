@@ -54,6 +54,7 @@ All parameters are declared under the plugin namespace, i.e.
 
 | Name | Type | Default | Description |
 |---|---|---:|---|
+| `<plugin>.map_key` | `string` | `"map.navmap"` | NavState key of the NavMap to plan on, e.g. `map.navmap.lod`, the map of the maps manager's `fractal` filter. |
 | `<plugin>.cost_factor` | `double` | `2.0` | Multiplicative weight for geometric distance; values > 1 increase the relative importance of distance. |
 | `<plugin>.heuristic_weight` | `double` | `1.0` | Weighted A*: the heuristic is multiplied by this weight (values below 1 are taken as 1). `1` keeps A* admissible (shortest paths); a larger weight expands fewer NavCels and may return paths up to that factor longer (weighted A* without re-opening: each NavCel is expanded once). |
 | `<plugin>.replan_hysteresis` | `double` | `0.0` | If above 0, the path being followed is kept while it stays traversable, unless a new one is shorter by this fraction (`0.2`: 20 %); what is left of it (from the robot, in 3D) is published. Against the oscillation of replanning on a map that changes with the robot's position (a level-of-detail map). `0`: always the new path. |
@@ -86,7 +87,7 @@ This plugin does not create subscriptions or services directly; it retrieves all
 |---|---|---|---|
 | `goals` | `nav_msgs::msg::Goals` | **Read** | Target pose(s) for path planning. |
 | `robot_pose` | `nav_msgs::msg::Odometry` | **Read** | Current robot pose (start position). |
-| `map.navmap` | `::navmap::NavMap` | **Read** | NavMap containing geometry and cost layer. The planner reads costs from the layer specified in `<plugin>.layer` (default: `"inflated_obstacles"`). If that layer does not exist, it automatically falls back to `"obstacles"`. |
+| `map.navmap` (`<plugin>.map_key`) | `::navmap::NavMap` | **Read** | NavMap containing geometry and cost layer. The planner reads costs from the layer specified in `<plugin>.layer` (default: `"inflated_obstacles"`). If that layer does not exist, it automatically falls back to `"obstacles"`. |
 | `path` | `nav_msgs::msg::Path` | **Write** | Output path, computed as the lowest-cost route. |
 
 ## TF Frames

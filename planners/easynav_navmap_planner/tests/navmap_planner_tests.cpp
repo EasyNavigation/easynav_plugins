@@ -17,6 +17,7 @@
 /// \brief Tests for the NavMap A* planner: a failed plan leaves an empty path, not the previous
 /// one.
 
+#include <array>
 #include <cmath>
 #include <cstdint>
 #include <memory>
@@ -628,6 +629,112 @@ std::vector<geometry_msgs::msg::Pose> straight(double x0, double x1, double y)
   return out;
 }
 }  // namespace
+
+TEST_F(NavMapPlannerTest, AGoalInTheRobotsOwnLargeNavCelIsADensePathFromTheRobot)
+{
+  // 5 m cells, as a merged map gives far from obstacles: robot and goal 2 m apart, same NavCel
+  grid_.info.resolution = 5.0;
+  grid_.info.width = 4;
+  grid_.info.height = 4;
+  grid_.data.assign(16, 0);
+  update_map();
+  for (const auto & [sx, sy, gx, gy] : std::vector<std::array<double, 4>>{
+    {1.5, 0.3, 3.5, 0.3}, {3.5, 0.3, 1.5, 0.3}, {1.5, 0.3, 1.6, 0.35}})
+  {
+    set_robot(sx, sy);
+    set_goal(gx, gy);
+    planner_->update(nav_state_);
+    const auto p = path();
+    ASSERT_GE(p.poses.size(), 2u) << sx << " -> " << gx;
+    EXPECT_NEAR(p.poses.front().pose.position.x, sx, 1e-5);
+    EXPECT_NEAR(p.poses.front().pose.position.y, sy, 1e-5);
+    EXPECT_DOUBLE_EQ(p.poses.back().pose.position.x, gx);
+    EXPECT_DOUBLE_EQ(p.poses.back().pose.position.y, gy);
+    double len = 0.0;
+    for (std::size_t i = 1; i < p.poses.size(); ++i) {
+      const auto & a = p.poses[i - 1].pose.position;
+      const auto & b = p.poses[i].pose.position;
+      EXPECT_LE(std::hypot(b.x - a.x, b.y - a.y), 0.25 + 1e-4) << i;
+      len += std::hypot(b.x - a.x, b.y - a.y);
+    }
+    EXPECT_NEAR(len, std::hypot(gx - sx, gy - sy), 1e-3);
+  }
+}
+
+TEST_F(NavMapPlannerTest, LargeNavCelsStillGiveADensePath)
+{
+  grid_.info.resolution = 5.0;
+  grid_.info.width = 4;
+  grid_.info.height = 4;
+  grid_.data.assign(16, 0);
+  update_map();
+  set_robot(2.5, 2.5);
+  set_goal(17.5, 12.5);
+  planner_->update(nav_state_);
+  const auto p = path();
+  ASSERT_GE(p.poses.size(), 2u);
+  for (std::size_t i = 1; i < p.poses.size(); ++i) {
+    const auto & a = p.poses[i - 1].pose.position;
+    const auto & b = p.poses[i].pose.position;
+    EXPECT_LE(std::hypot(b.x - a.x, b.y - a.y), 0.25 + 1e-4) << i;
+  }
+}
+
+TEST_F(NavMapPlannerTest, ThePathStartsAtTheRobot)
+{
+  set_robot(0.57, 0.52);   // off its NavCel's centroid
+  set_goal(3.05, 3.05);
+  planner_->update(nav_state_);
+  const auto p = path();
+  ASSERT_GE(p.poses.size(), 2u);
+  EXPECT_NEAR(p.poses.front().pose.position.x, 0.57, 1e-5);
+  EXPECT_NEAR(p.poses.front().pose.position.y, 0.52, 1e-5);
+}
+
+TEST_F(NavMapPlannerTest, ARobotOffTheMapStillGetsAPath)
+{
+  // Off the map: the planner starts from the closest NavCel
+  for (const auto & [gx, gy] : std::vector<std::pair<double, double>>{{3.05, 3.05}, {0.05, 0.55}}) {
+    set_robot(-0.3, 0.55);
+    set_goal(gx, gy);
+    planner_->update(nav_state_);
+    const auto p = path();
+    ASSERT_GE(p.poses.size(), 2u) << gx;
+    EXPECT_DOUBLE_EQ(p.poses.back().pose.position.x, gx);
+    EXPECT_DOUBLE_EQ(p.poses.back().pose.position.y, gy);
+  }
+}
+
+TEST_F(NavMapPlannerTest, MapKeyChoosesTheNavMapToPlanOn)
+{
+  // The default planner only reads map.navmap
+  auto lod = nav_state_.get<::navmap::NavMap>("map.navmap");
+  easynav::NavState only_lod;
+  only_lod.set("map.navmap.lod", lod);
+  only_lod.set("robot_pose", nav_state_.get<nav_msgs::msg::Odometry>("robot_pose"));
+  set_goal(3.05, 3.05);
+  only_lod.set("goals", nav_state_.get<nav_msgs::msg::Goals>("goals"));
+  planner_->update(only_lod);
+  EXPECT_FALSE(only_lod.has("path") && !only_lod.get<nav_msgs::msg::Path>("path").poses.empty());
+
+  rclcpp::NodeOptions options;
+  options.parameter_overrides({{"planner.map_key", "map.navmap.lod"}});
+  auto node = rclcpp_lifecycle::LifecycleNode::make_shared("navmap_planner_map_key", options);
+  auto planner = std::make_shared<easynav::navmap::AStarPlanner>();
+  planner->initialize(node, "planner");
+  planner->update(only_lod);
+  ASSERT_TRUE(only_lod.has("path"));
+  const auto p = only_lod.get<nav_msgs::msg::Path>("path");
+  ASSERT_FALSE(p.poses.empty());
+  EXPECT_DOUBLE_EQ(p.poses.back().pose.position.x, 3.05);
+  EXPECT_DOUBLE_EQ(p.poses.back().pose.position.y, 3.05);
+
+  // A wall in map.navmap does not change the plan on map.navmap.lod
+  vertical_wall(2.0);
+  only_lod.set("map.navmap", nav_state_.get<::navmap::NavMap>("map.navmap"));
+  planner->update(only_lod);
+  EXPECT_FALSE(only_lod.get<nav_msgs::msg::Path>("path").poses.empty());
+}
 
 TEST_F(NavMapPlannerTest, ManyPlansInARowAreTheSameAsTheFirstPlanOfANewPlanner)
 {

@@ -35,6 +35,8 @@ add_library(${PROJECT_NAME} SHARED
   src/easynav_navmap_maps_manager/filters/NavMapFilter.cpp
   src/easynav_navmap_maps_manager/filters/ObstacleFilter.cpp
   src/easynav_navmap_maps_manager/filters/InflationFilter.cpp
+  src/easynav_navmap_maps_manager/filters/FractalFilter.cpp
+  src/easynav_navmap_maps_manager/filters/rtin_lod.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -105,6 +107,7 @@ pluginlib_export_plugin_description_file(easynav_core easynav_navmap_maps_manage
 
 pluginlib_export_plugin_description_file(easynav_navmap_maps_manager easynav_navmap_maps_manager_obstacle_filter.xml)
 pluginlib_export_plugin_description_file(easynav_navmap_maps_manager easynav_navmap_maps_manager_inflation_filter.xml)
+pluginlib_export_plugin_description_file(easynav_navmap_maps_manager easynav_navmap_maps_manager_fractal_filter.xml)
 
 ament_export_dependencies(
   easynav_common

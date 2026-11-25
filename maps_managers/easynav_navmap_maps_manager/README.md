@@ -4,7 +4,7 @@
 
 Maps Manager that maintains a [NavMap](https://github.com/EasyNavigation/NavMap) (triangulated 3D surface) and publishes full maps and layer updates; supports importing from YAML OccupancyGrid or point clouds.
 
-This package also includes map filters implemented as plugins (`ObstacleFilter` and `InflationFilter`) that operate on NavMap layers to detect obstacles and inflate their costs, enabling cost-aware path planning.
+This package also includes map filters implemented as plugins (`ObstacleFilter`, `InflationFilter` and `FractalFilter`) that operate on NavMap layers to detect obstacles and inflate their costs, enabling cost-aware path planning, and keep a simplified copy of the map for planning on large maps.
 
 ## Authors and Maintainers
 
@@ -101,6 +101,37 @@ With `<plugin>.local.enabled`, the maps manager keeps a NavMap around the robot,
 | **Input Layer:** | | | Reads from `"obstacles"`. |
 | **Output Layer:** | | | Writes to `"inflated_obstacles"`. |
 
+#### **FractalFilter**
+
+- **Plugin Name:** `easynav_navmap_maps_manager/NavMapMapsManager/FractalFilter`
+- **Type:** `easynav::navmap::FractalFilter`
+- **Description:**  
+  Keeps a simplified copy of `map.navmap` for planning on large maps: neighbour NavCels with the same value of `layer` merge into larger triangles, and split back down to the source resolution where the value changes. Free space far from obstacles becomes a few large NavCels, while obstacles, the inflation band around them and changes of slope stay at full resolution, so the planner explores far fewer NavCels and still sees every narrow passage.  
+  `map.navmap` is not modified: the other filters keep working on it at full resolution, and the simplified map is written to another NavState key (`output_key`, `map.navmap.lod`). The planner reads it through its own `map_key` parameter (e.g. `easynav_navmap_planner/AStarPlanner`'s `map_key: map.navmap.lod`).  
+  It goes **after** the filters that write its `layer` (`filters: [obstacles, inflation, fractal]`).
+
+  How it works: a binary triangle tree (RTIN) is laid over the source map. Two sibling triangles merge into their parent (twice the area) when every cell below has the same value of `layer` (strict equality), is flat (slopes within `max_angle_deg`, vertices within `height_tolerance` of the merged plane) and has no hole. Otherwise the triangle is split along its hypotenuse; a split forces the neighbour across the hypotenuse to split too, so the mesh has no T-junctions and the planner can cross between levels. Each cycle only reads the costs within `window_radius` of the robot (where the sensors change them) plus `sweep` NavCels of the whole map, taken in turns (what changes far away, such as obstacles an obstacle memory forgets, is caught within a few seconds). The cost per cycle does not depend on the size of the map. The output map is rebuilt in place by tiles of about 50 m: only the tiles where something changed are walked and written again.
+
+  Requirements: the source must be a regular grid of right isosceles triangles (two per square cell), as `pointcloud_to_navmap` and `navmap_ros::from_occupancy_grid` produce, and `layer` must be a `uint8` layer. Otherwise the filter logs an error and writes no output.
+
+  For RViz, the simplified map is published on `<node_fqn>/<map_type>/<filter>/map` (e.g. `/maps_manager_node/navmap/fractal/map`), and between two full maps only what changed is published on `.../map_patch` (`navmap_ros_interfaces/msg/NavMapPatch`), which the NavMap display applies. Nothing is published without subscribers. The `lod_level` layer (merges per NavCel, 0 = source resolution) and the `modified` layer show how much was simplified; turn on the display's *Draw Edges* to see the triangles.
+
+| Parameter | Type | Default | Description |
+|---|---|---:|---|
+| `<plugin>.output_key` | `string` | `"map.navmap.lod"` | NavState key of the simplified map; must not be `map.navmap`. |
+| `<plugin>.layer` | `string` | `"inflated_obstacles"` | `uint8` layer whose value decides what merges; it is copied to the simplified map. |
+| `<plugin>.max_angle_deg` | `double` | `5.0` | NavCels merge only if their slopes differ at most this (deg). |
+| `<plugin>.height_tolerance` | `double` | `0.05` | Source vertices at most this far (m) from the plane of a merged NavCel. |
+| `<plugin>.window_radius` | `double` | `8.0` | Costs read every cycle within this distance (m) of the robot: at least the sensor range plus the inflation radius. |
+| `<plugin>.sweep` | `int` | `100000` | NavCels of the whole map read per cycle, in turns; `0` reads only the window. |
+| `<plugin>.rebuild_period` | `double` | `0.5` | Minimum time (s) between two rebuilds of the simplified map. |
+| `<plugin>.tile_size` | `double` | `50.0` | Side (m, about) of the tiles the simplified map is rebuilt by. |
+| `<plugin>.publish_period` | `double` | `2.0` | Minimum time (s) between two publications for RViz (map or patch). |
+| `<plugin>.full_period` | `double` | `0.0` | Time (s) between two full maps (resync); `0`: only for a new subscriber or a rebuilt map, patches otherwise. |
+| `<plugin>.log_period` | `double` | `10.0` | Time (s) between two logs of the simplified map's statistics; `0`: every rebuild. |
+| **Input:** | | | Reads `map.navmap` and its `layer`, and `robot_pose` for the window. |
+| **Output Key:** | | | Writes `output_key` (`::navmap::NavMap`), with layers `<layer>`, `lod_level` and `modified`. |
+
 The filters update the map in `NavState` in place and record which cells they change; the maps manager publishes those changes and clears them at the end of each cycle.
 
 ## Interfaces (Topics and Services)
@@ -126,6 +157,7 @@ The filters update the map in `NavState` in place and record which cells they ch
 |---|---|---|---|
 | `map.navmap` | `::navmap::NavMap` | **Read** | Reads the NavMap if already present in NavState. |
 | `map.navmap` | `::navmap::NavMap` | **Write** | Stores the maintained NavMap, including generated layers `"obstacles"` and `"inflated_obstacles"`. |
+| `map.navmap.lod` | `::navmap::NavMap` | **Write** | With `FractalFilter`: the simplified map for planning (its `output_key`). |
 
 ## TF Frames
 
@@ -147,13 +179,57 @@ maps_manager_node:
       navmap_path_file: maps/excavation_urjc.navmap
       filters: [obstacles, inflation]
       obstacles:
-        plugin: easynav_navmap_maps_manager/NavMapMapsManager/ObstacleFilter
+        plugin: easynav_navmap_maps_manager/NavMapMapsManager/ObstaclesFilter
         height_threshold: 0.25
       inflation:
         plugin: easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter
         inflation_radius: 1.0
         cost_scaling_factor: 2.0
 ```
+
+### With FractalFilter (large maps)
+
+The maps manager keeps the full map and its simplified copy; A* plans on the copy:
+
+```yaml
+maps_manager_node:
+  ros__parameters:
+    map_types: [navmap]
+    navmap:
+      freq: 10.0
+      plugin: easynav_navmap_maps_manager/NavMapMapsManager
+      package: my_robot_maps
+      navmap_path_file: maps/warehouse.navmap
+      filters: [obstacles, inflation, fractal]   # fractal after the filters that write its layer
+      obstacles:
+        plugin: easynav_navmap_maps_manager/NavMapMapsManager/ObstaclesFilter
+        max_range: 6.0
+        max_height: 1.5            # m: ignore what the robot passes under (door lintels)
+      inflation:
+        plugin: easynav_navmap_maps_manager/NavMapMapsManager/InflationFilter
+        inflation_radius: 1.5
+        cost_scaling_factor: 2.0
+      fractal:
+        plugin: easynav_navmap_maps_manager/NavMapMapsManager/FractalFilter
+        output_key: map.navmap.lod   # where A* reads (its map_key)
+        layer: inflated_obstacles    # neighbour NavCels with the same value merge
+        max_angle_deg: 5.0
+        height_tolerance: 0.05
+        window_radius: 8.0           # sensor range (6 m) + inflation radius (1.5 m)
+        sweep: 100000                # the whole map is read again every few seconds
+        rebuild_period: 0.5
+        publish_period: 2.0          # for RViz: full map, then patches
+
+planner_node:
+  ros__parameters:
+    planner_types: [astar]
+    astar:
+      freq: 1.0
+      plugin: easynav_navmap_planner/AStarPlanner
+      map_key: map.navmap.lod      # plan on the simplified map
+```
+
+In RViz, show `/maps_manager_node/navmap/fractal/map` with the NavMap display (its *Patch Topic* defaults to `<topic>_patch`).
 
 ## License
 

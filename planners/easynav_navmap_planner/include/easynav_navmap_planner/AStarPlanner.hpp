@@ -84,6 +84,7 @@ protected:
   double cost_axial_ {1.0};         ///< Cost multiplier for axial (horizontal/vertical) moves.
   double cost_diagonal_ {1.0};      ///< Cost multiplier for diagonal moves.
   std::string layer_name_;
+  std::string map_key_{"map.navmap"};  ///< NavState key of the NavMap to plan on.
   bool continuous_replan_ {true};     ///< Whether to replan the path at control frequency.
 
   // Terrain: all off by default
