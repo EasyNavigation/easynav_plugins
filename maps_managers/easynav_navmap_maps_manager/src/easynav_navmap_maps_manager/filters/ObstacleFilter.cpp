@@ -153,12 +153,15 @@ void ObstacleFilter::update(::easynav::NavState & nav_state)
   std::vector<::navmap::NavCelId> marked;
 
   // Only the points around the robot and below its height (robot frame), downsampled first
-  // (indices only) so that fewer points are transformed.
+  // (indices only) so that fewer points are transformed. Each perception with the robot's pose
+  // when it was taken (TF at its stamp, exact_time): with the latest pose, a cloud taken while the
+  // robot turns lands rotated, and walls seen a fraction of a second ago fall on free ground as
+  // obstacles (out of the sensor's range they are never cleared).
   const auto & points = PointPerceptionsOpsView(perceptions)
     .downsample(downsample_resolution_)
-    .fuse(tf_info.robot_frame)
+    .fuse(tf_info.robot_frame, true)
     .filter({-max_range_, -max_range_, NAN}, {max_range_, max_range_, max_height_}, false)
-    .fuse(map_frame)
+    .fuse(map_frame, true)
     .as_points();
 
   // The robot's position, for min_height_per_meter and for the clearing rays

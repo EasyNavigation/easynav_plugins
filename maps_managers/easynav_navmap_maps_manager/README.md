@@ -39,7 +39,7 @@ All parameters are declared under the plugin namespace, i.e.
 |---|---|---:|---|
 | `<plugin>.package` | `string` | `""` | Package name to resolve relative paths via `ament_index`. |
 | `<plugin>.freq` | `double` | `10.0` | Update frequency (Hz) for map publishing and filter execution. |
-| `<plugin>.navmap_path_file` | `string` | `""` | Relative path (inside the package) to a `.navmap` file to load at startup. |
+| `<plugin>.navmap_path_file` | `string` | `""` | The `.navmap` file to load at startup: relative to the share directory of `<plugin>.package`, or as it is (e.g. absolute) without a package. |
 | `<plugin>.occmap_path_file` | `string` | `""` | Relative path (inside the package) to a ROS YAML OccupancyGrid to import as NavMap. |
 | `<plugin>.pcd_path_file` | `string` | `""` | Relative path (inside the package) to a point cloud (PCD/PLY) used to build a NavMap surface. |
 | `<plugin>.filters` | `list<string>` | `[]` | Ordered list of filter plugin names to be applied after map loading (e.g. `["obstacles", "inflation"]`). |
